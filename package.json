@@ -16,7 +16,7 @@
 	"contributors": [
 		"AL_1 <allen.m.lantz@gmail.com> (https://al1l.com/)"
 	],
-	"license": "ISC",
+	"license": "MIT",
 	"dependencies": {
 		"@raxor1234/typer": "^1.0.0",
 		"argparse": "^1.0.10",

@@ -87,6 +87,11 @@ export default class Bot extends EventEmitter {
 		 * Setup the Discord client's events
 		 */
 		this.setupEvents();
+
+		/**
+		 * Load commands
+		 */
+		this.commandLoader.loadAll();
 	}
 
 	setupEvents() {

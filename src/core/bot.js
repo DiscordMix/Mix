@@ -1,6 +1,5 @@
 import CommandParser from "../commands/command-parser";
 import CommandExecutionContext from "../commands/command-execution-context";
-import Database from "../database/database";
 import ConsoleInterface from "../console/console-interface";
 import EmojiMenuManager from "../emoji-ui/emoji-menu-manager";
 import CommandManager from "../commands/command-manager";
@@ -15,16 +14,12 @@ const Discord = require("discord.js");
 const EventEmitter = require("events");
 const fs = require("fs");
 
-export default class Bot {
+export default class Bot extends EventEmitter {
 	/**
 	 * @param {Object} data
 	 */
 	constructor(data) {
-		/**
-		 * @type {module:events.internal}
-		 * @private
-		 */
-		this.events = new EventEmitter();
+		super();
 
 		// Setup the class
 		this.setup(data);
@@ -45,7 +40,7 @@ export default class Bot {
 		/**
 		 * @type {EmojiCollection}
 		 */
-		this.ec = EmojiCollection.fromFile(data.paths.emojis);
+		this.emojis = EmojiCollection.fromFile(data.paths.emojis);
 
 		/**
 		 * @type {UserConfig}
@@ -73,11 +68,6 @@ export default class Bot {
 		this.commandLoader = new CommandLoader(data.paths.commands);
 
 		/**
-		 * @type {Database}
-		 */
-		this.database = new Database(data.paths.database);
-
-		/**
 		 * @type {ConsoleInterface}
 		 */
 		this.console = new ConsoleInterface();
@@ -85,7 +75,7 @@ export default class Bot {
 		/**
 		 * @type {EmojiMenuManager}
 		 */
-		this.emojis = new EmojiMenuManager(this.client);
+		this.menus = new EmojiMenuManager(this.client);
 
 		/**
 		 * @type {Log}
@@ -111,7 +101,7 @@ export default class Bot {
 							CommandParser.resolveArguments(CommandParser.getArguments(message.content), CommandManager.getTypes(), resolvers),
 							this,
 							this.commands.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),
-							this.ec
+							this.emojis
 						),
 
 						CommandParser.parse(

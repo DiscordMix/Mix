@@ -126,7 +126,7 @@ export default class CommandManager /* extends Collection */ {
 	 * @returns {AccessLevelType}
 	 */
 	getAccessLevelByRole(guildId, role) {
-		const accessLevels = this.bot.userConfig.get("access-levels", guildId);
+		const accessLevels = this.bot.dataAdapter.get("access-levels", guildId);
 		const keys = Object.keys(accessLevels);
 
 		for (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {
@@ -145,7 +145,7 @@ export default class CommandManager /* extends Collection */ {
 	 * @returns {Boolean}
 	 */
 	isDeveloper(userId) {
-		return this.bot.userConfig.get("global.developers").includes(userId);
+		return this.bot.dataAdapter.get("global.developers").includes(userId);
 	}
 
 	/**
@@ -158,7 +158,7 @@ export default class CommandManager /* extends Collection */ {
 			return AccessLevelType.Developer;
 		}
 
-		const accessLevels = this.bot.userConfig.get("access-levels", guildId);
+		const accessLevels = this.bot.dataAdapter.get("access-levels", guildId);
 		const keys = Object.keys(accessLevels);
 
 		for (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {

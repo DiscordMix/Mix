@@ -18,31 +18,31 @@ export default class ObjectAdapter extends DataAdapter {
 
 	/**
 	 * Retrieve guild data
-	 * @param {Snowflake} guildId
 	 * @param {String} path
+	 * @param {(Snowflake|Null)} guildId
 	 * @returns {Object}
 	 */
-	get(guildId, path) {
-		return _.get(this.data, `${guildId}.${path}`);
+	get(path, guildId = null) {
+		return _.get(this.data, DataAdapter.resolvePath(path, guildId));
 	}
 
 	/**
 	 * Set guild data
-	 * @param {Snowflake} guildId
 	 * @param {String} path
 	 * @param {*} value
+	 * @param {(Snowflake|Null)} guildId
 	 */
-	set(guildId, path, value) {
-		_.set(this.data, `${guildId}.${path}`, value);
+	set(path, value, guildId = null) {
+		_.set(this.data, DataAdapter.resolvePath(path, guildId), value);
 	}
 
 	/**
-	 * Merge data
-	 * @param {Snowflake} guildId
+	 * Merge guild data
 	 * @param {String} path
 	 * @param {*} value
+	 * @param {(Snowflake|Null)} guildId
 	 */
-	merge(guildId, path, value) {
+	merge(path, value, guildId = null) {
 		throw new Error("[ObjectAdapter.merge] Method not implemented.");
 	}
 }

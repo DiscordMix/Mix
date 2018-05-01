@@ -39,23 +39,12 @@ export default class CommandExecutionContext {
 	}
 
 	/**
-	 * @returns {boolean}
-	 */
-	get muted() {
-		return this.bot.userConfig.get("mute", this.message.guild.id);
-	}
-
-	/**
 	 * @param {*} stream
 	 * @param {String} name
-	 * @returns {(Promise<EditableMessage>|null)}
+	 * @returns {(Promise<EditableMessage>|Null)}
 	 */
 	async fileStream(stream, name) {
-		if (!this.muted) {
-			return await this.message.channel.send(new Discord.Attachment(stream, name));
-		}
-
-		return null;
+		return await this.message.channel.send(new Discord.Attachment(stream, name));
 	}
 
 	/**
@@ -64,54 +53,50 @@ export default class CommandExecutionContext {
 	 * @returns {(Promise<EditableMessage>|null)}
 	 */
 	async respond(content, autoDelete = false) {
-		if (!this.muted) {
-			let embed = null;
+		let embed = null;
 
-			if (content.text) {
-				if (content.text.toString().trim() === "" || content.text === undefined || content.text === null) {
-					content.text = ":thinking: *Empty response.*";
-				}
+		if (content.text) {
+			if (content.text.toString().trim() === "" || content.text === undefined || content.text === null) {
+				content.text = ":thinking: *Empty response.*";
 			}
-
-			if (content instanceof EmbedBuilder) {
-				embed = content;
-			}
-			else {
-				if (!content.color) {
-					content.color = "GREEN";
-				}
-
-				if (!content.footer) {
-					content.footer = {
-						text: `Requested by ${this.sender.username}`,
-						icon: this.sender.avatarURL
-					};
-				}
-
-				embed = EmbedBuilder.fromObject(content);
-			}
-
-			const messageResult = await this.message.channel.send(embed.build()).catch((error) => {
-				// TODO: Temporarily disabled due to spamming on unwanted servers.
-				// this.privateReply(`Oh noes! For some reason, I was unable to reply to you in that channel. (${error.message})`);
-			});
-
-			if (autoDelete && messageResult) {
-				// TODO: Cannot access .length in embeds
-				// also static time for images, probably need function
-				const timeInSeconds = (4000 + (100 * embed.build() * 1000)) / 1000;
-
-				messageResult.delete(4000 + (100 * messageResult.content.length * 1000));
-
-				// TODO
-				// this.bot.log.info(messageResult.content.length);
-				// this.bot.log.info(`time : ${timeInSeconds}`);
-			}
-
-			return (messageResult !== undefined ? new EditableMessage(messageResult) : null);
 		}
 
-		return null;
+		if (content instanceof EmbedBuilder) {
+			embed = content;
+		}
+		else {
+			if (!content.color) {
+				content.color = "GREEN";
+			}
+
+			if (!content.footer) {
+				content.footer = {
+					text: `Requested by ${this.sender.username}`,
+					icon: this.sender.avatarURL
+				};
+			}
+
+			embed = EmbedBuilder.fromObject(content);
+		}
+
+		const messageResult = await this.message.channel.send(embed.build()).catch((error) => {
+			// TODO: Temporarily disabled due to spamming on unwanted servers.
+			// this.privateReply(`Oh noes! For some reason, I was unable to reply to you in that channel. (${error.message})`);
+		});
+
+		if (autoDelete && messageResult) {
+			// TODO: Cannot access .length in embeds
+			// also static time for images, probably need function
+			const timeInSeconds = (4000 + (100 * embed.build() * 1000)) / 1000;
+
+			messageResult.delete(4000 + (100 * messageResult.content.length * 1000));
+
+			// TODO
+			// this.bot.log.info(messageResult.content.length);
+			// this.bot.log.info(`time : ${timeInSeconds}`);
+		}
+
+		return (messageResult !== undefined ? new EditableMessage(messageResult) : null);
 	}
 
 	/**
@@ -182,11 +167,7 @@ export default class CommandExecutionContext {
 	 * @returns {(Promise<Message>|null)}
 	 */
 	async reply(message) {
-		if (!this.bot.userConfig.get("mute", this.message.guild.id)) {
-			return await this.message.reply(message);
-		}
-
-		return null;
+		return await this.message.reply(message);
 	}
 
 	/**

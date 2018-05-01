@@ -49,11 +49,6 @@ export default class Bot extends EventEmitter {
 		this.emojis = EmojiCollection.fromFile(data.paths.emojis);
 
 		/**
-		 * @type {UserConfig}
-		 */
-		this.userConfig = new UserConfig(data.paths.userConfig);
-
-		/**
 		 * @type {Discord.Client}
 		 */
 		this.client = new Discord.Client();

@@ -51,7 +51,7 @@ export default class Log {
   }
 
   channel(content, options) {
-      const guildLog = this.bot.userConfig.get("global.guild-log");
+      const guildLog = this.bot.dataAdapter.get("global.guild-log");
       if (!guildLog.enabled) {
           return;
       }

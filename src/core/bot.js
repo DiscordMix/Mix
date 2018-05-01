@@ -34,8 +34,6 @@ export default class Bot {
 			this.log.info("Ready");
 			this.console.init(this);
 		});
-
-		global.b = this;
 	}
 
 	setup(data) {

@@ -9,6 +9,7 @@ import Settings from "./settings";
 import UserConfig from "./user-config";
 import FeatureManager from "../features/feature-manager";
 import CommandLoader from "../commands/command-loader";
+import Log from "./log";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -80,7 +81,12 @@ export default class Bot extends EventEmitter {
 		/**
 		 * @type {Log}
 		 */
-		// this.log = new Log(this, debug, verbose);
+		this.log = new Log(this);
+
+		/**
+		 * Setup the Discord client's events
+		 */
+		this.setupEvents();
 	}
 
 	setupEvents() {

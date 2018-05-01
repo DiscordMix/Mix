@@ -7,7 +7,7 @@ import EmojiMenuManager from "../emoji-ui/emoji-menu-manager";
 import EmbedBuilder from "./embed-builder";
 import CommandManager from "../commands/command-manager";
 import Utils from "./utils";
-import EmojiCollection from "./emoji-collection";
+import EmojiCollection from "../collections/emoji-collection";
 
 const DBL = require("dblapi.js");
 const snekfetch = require("snekfetch");

@@ -46,6 +46,7 @@ module.exports = {
 
 	// Data Adapters
 	DataAdapter: require("./data-adapters/data-adapter"),
+	ObjectAdapter: require("./data-adapters/object-adapter"),
 	JsonAdapter: require("./data-adapters/json-adapter"),
 	SqliteAdapter: require("./data-adapters/sqlite-adapter"),
 

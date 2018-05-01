@@ -1,25 +1,20 @@
 import DataAdapter from "./data-adapter";
+import ObjectAdapter from "./object-adapter";
 
 const fs = require("fs");
 
-export default class JsonAdapter extends DataAdapter {
+export default class JsonAdapter extends ObjectAdapter {
 	/**
 	 * @param {String} path
 	 */
 	constructor(path) {
-		super();
+		super(null);
 
 		/**
 		 * @type {String}
 		 * @private
 		 */
 		this.path = path;
-
-		/**
-		 * @type {(Object|Null)}
-		 * @private
-		 */
-		this.data = null;
 	}
 
 	/**

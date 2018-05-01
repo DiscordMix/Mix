@@ -56,11 +56,11 @@ export default class Utils {
 	}
 
 	/**
-	 * @param {object} options
+	 * @param {Object} options
 	 * @param {User} requester
-	 * @param channel
-	 * @param {string} footerSuffix
-	 * @returns {Promise<Message>}
+	 * @param {Discord.Channel} channel
+	 * @param {String} footerSuffix
+	 * @returns {Promise<Discord.Message>}
 	 */
 	static async send(options, requester, channel, footerSuffix = "") {
 		const optionsCpy = options;
@@ -81,32 +81,32 @@ export default class Utils {
 	}
 
 	/**
-	 * @param {number} milliseconds
-	 * @param {number} seconds
-	 * @param {number} minutes
-	 * @param {number} hours
-	 * @param {number} days
-	 * @param {number} months
-	 * @param {number} years
-	 * @returns {number}
+	 * @param {Number} milliseconds
+	 * @param {Number} seconds
+	 * @param {Number} minutes
+	 * @param {Number} hours
+	 * @param {Number} days
+	 * @param {Number} months
+	 * @param {Number} years
+	 * @returns {Number}
 	 */
 	static timeFromNow(milliseconds, seconds = 0, minutes = 0, hours = 0, days = 0, months = 0, years = 0) {
 		const now = new Date();
 
-		Log.info(now.getDate());
+		Log.info(now.getDate().toString());
 
 		return new Date(years + now.getFullYear(), months + now.getMonth(), days + now.getDate(), hours + now.getHours(), minutes + now.getMinutes(), seconds + now.getSeconds(), milliseconds + now.getMilliseconds()).getTime();
 	}
 
 	/**
-	 * @param {number} timestamp
+	 * @param {Number} timestamp
 	 */
 	static timeAgo(timestamp) {
 		return timeAgo.format(timestamp);
 	}
 
 	/**
-	 * @param {string} state
+	 * @param {String} state
 	 */
 	static translateState(state) {
 		return /^(1|true|on|y|yes)$/i.test(state);

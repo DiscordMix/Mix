@@ -32,7 +32,8 @@ export default class Bot extends EventEmitter {
 		});
 	}
 
-	setup(data) {
+	async setup(data) {
+		// TODO: Should use the Typer library (Typer needs update)
 		if (!Schema.validate(data, {
 			"paths.settings": "string",
 			"paths.emojis": "string",
@@ -93,15 +94,12 @@ export default class Bot extends EventEmitter {
 		 */
 		this.log = new Log(this);
 
-		/**
-		 * Setup the Discord client's events
-		 */
+		// Setup the Discord client's events
 		this.setupEvents();
 
-		/**
-		 * Load commands
-		 */
-		this.commandLoader.loadAll();
+		// Load commands
+		await this.commandLoader.loadAll();
+		Log.verbose("Bot setup completed");
 	}
 
 	setupEvents() {

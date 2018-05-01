@@ -1,3 +1,5 @@
+import Log from "../core/log";
+
 const readline = require("readline");
 
 export default class ConsoleInterface {
@@ -41,5 +43,7 @@ export default class ConsoleInterface {
 			/* bot.disconnect();
 			process.exit(0); */
 		});
+
+		Log.verbose("Console interface setup completed");
 	}
 }

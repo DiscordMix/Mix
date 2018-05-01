@@ -17,36 +17,35 @@ export default class CommandLoader {
 		this.commandManager = commandManager;
 	}
 
-	loadAll() {
-		Log.info("Loadall");
+	async loadAll() {
+		return new Promise((resolve) => {
+			fs.readdir(this.commandManager.commandsPath, (error, files) => {
+				files.forEach((file) => {
+					if (!file.startsWith("@")) {
+						const modulePath = path.join(this.commandManager.commandsPath, path.basename(file, ".js"));
 
-		fs.readdir(this.commandManager.commandsPath, (error, files) => {
-			Log.verbose("Readdir");
+						let module = require(modulePath);
 
-			files.forEach((file) => {
-				if (!file.startsWith("@")) {
-					const modulePath = path.join(this.commandManager.commandsPath, path.basename(file, ".js"));
+						// Support for ES6 compiled
+						if (module.default && typeof module.default === "object") {
+							module = module.default;
+						}
 
-					let module = require(modulePath);
-
-					// Support for ES6 compiled
-					if (module.default && typeof module.default === "object") {
-						module = module.default;
-					}
-
-					if (CommandLoader.validate(module)) {
-						this.commandManager.register(Command.fromModule(module));
+						if (CommandLoader.validate(module)) {
+							this.commandManager.register(Command.fromModule(module));
+						}
+						else {
+							Log.warn(`Skipping invalid command: ${path.basename(file, ".js")}`);
+						}
 					}
 					else {
-						Log.warn(`Skipping invalid command: ${path.basename(file, ".js")}`);
+						Log.verbose(`Skipping command: ${path.basename(file, ".js")}`);
 					}
-				}
-				else {
-					Log.verbose(`Skipping command: ${path.basename(file, ".js")}`);
-				}
-			});
+				});
 
-			Log.verbose(`Loaded a total of ${files.length} commands`);
+				Log.verbose(`Loaded a total of ${files.length} commands`);
+				resolve();
+			});
 		});
 	}
 

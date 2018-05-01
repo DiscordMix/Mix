@@ -17,10 +17,8 @@ module.exports = {
     BadgeInfo: require("./core/badge-info").default,
     BadgeType: require("./core/badge-type").default,
     Bot: require("./core/bot").default,
-    Collecton: require("./collections/collection").default,
     EditableMessage: require("./core/editable-message").default,
     EmbedBuilder: require("./core/embed-builder").default,
-    EmojiCollection: require("./collections/emoji-collection").default,
     Log: require("./core/log").default,
     MessageBuilder: require("./core/message-builder").default,
     RGB: require("./core/rgb").default,
@@ -31,6 +29,10 @@ module.exports = {
     TradeState: require("./core/trade-state").default,
     UserConfig: require("./core/user-config").default,
     Utils: require("./core/utils").default,
+
+    // Collections
+	Collecton: require("./collections/collection").default,
+	EmojiCollection: require("./collections/emoji-collection").default,
 
     // Database
     Database: require("./database/database").default,

@@ -8,6 +8,10 @@ import EmbedBuilder from "./embed-builder";
 import CommandManager from "../commands/command-manager";
 import Utils from "./utils";
 import EmojiCollection from "../collections/emoji-collection";
+import Settings from "./settings";
+import UserConfig from "./user-config";
+import FeatureManager from "../features/feature-manager";
+import CommandLoader from "../commands/command-loader";
 
 const DBL = require("dblapi.js");
 const snekfetch = require("snekfetch");
@@ -17,83 +21,25 @@ const fs = require("fs");
 
 export default class Bot {
 	/**
-	 * @param {Settings} settings
-	 * @param {String} emojisPath
-	 * @param {UserConfig} userConfig
-	 * @param {Discord.Client} client
-	 * @param {string} accessLevelsPath
-	 * @param {FeatureManager} featureManager
-	 * @param {CommandLoader} commandLoader
+	 * @param {Object} data
 	 */
-	constructor(settings, emojisPath, userConfig, client, accessLevelsPath, featureManager, commandLoader, debug, verbose) {
+	constructor(data) {
 		/**
 		 * @type {module:events.internal}
 		 * @private
 		 */
 		this.events = new EventEmitter();
 
-		/**
-		 * @type {Settings}
-		 */
-		this.settings = settings;
-
-		/**
-		 * @type {EmojiCollection}
-		 */
-		this.ec = EmojiCollection.fromFile(emojisPath);
-
-		/**
-		 * @type {UserConfig}
-		 */
-		this.userConfig = userConfig;
-
-		/**
-		 * @type {Discord.Client}
-		 */
-		this.client = client;
-
-		/**
-		 * @type {CommandManager}
-		 */
-		this.commands = new CommandManager(this, accessLevelsPath);
-
-		/**
-		 * @type {FeatureManager}
-		 */
-		this.features = featureManager;
-
-		/**
-		 * @type {CommandLoader}
-		 */
-		this.commandLoader = commandLoader;
-
-		/**
-		 * @type {Database}
-		 */
-		this.database = new Database(this.settings.general.databasePath);
-
-		/**
-		 * @type {ConsoleInterface}
-		 */
-		this.console = new ConsoleInterface();
-
-		/**
-		 * @type {EmojiMenuManager}
-		 */
-		this.emojis = new EmojiMenuManager(this.client);
-
-		/**
-		 * @type {Log}
-		 */
-		this.log = new Log(this, debug, verbose);
+		// Setup the class
+		this.setup(data);
 
 		// TODO
-		if (settings.keys.dbl) {
-			/**
-			 * @type {DBLAPI}
-			 */
-			this.dbl = new DBL(settings.keys.dbl);
-		}
+		// if (settings.keys.dbl) {
+		/**
+		 * @type {DBLAPI}
+		 */
+		// this.dbl = new DBL(settings.keys.dbl);
+		// }
 
 		// TODO: Move from here on to the connect function
 		// and make sure there aren't any errors on restart
@@ -132,12 +78,13 @@ export default class Bot {
 		};
 
 		this.userMessagePoints = {};
+
 		setInterval(() => {
 			this.userMessagePoints = {};
 		}, 60000);
 		this.client.on("message", async (message) => {
 			if (!message.author.bot) {
-				this.log.verbose(`MSG ${message.channel.id}-${message.id} FROM ${message.author.id}`);
+				/* this.log.verbose(`MSG ${message.channel.id}-${message.id} FROM ${message.author.id}`);
 				// TODO: Position so only given to command uses, and position it after command executed to avoid blocking
 				if (this.userMessagePoints[message.author.id] === undefined) {
 					this.userMessagePoints[message.author.id] = 0;
@@ -162,15 +109,15 @@ export default class Bot {
 							}
 						}
 					}
-				}
+				} */
 
-				if (global.trivAns) {
+				/* if (global.trivAns) {
 					if (message.channel.id === global.trivAns.channel.id && message.content.toLowerCase() === global.trivAns.answer) {
 						this.database.addUserPoints(message.author.id, 5);
 						message.channel.send(`**${message.author.username}** answered correctly! The answer is **${global.trivAns.answer}**. You won **+5** coins!`);
 						global.trivAns = null;
 					}
-				}
+				} */
 
 				if (CommandParser.isValid(message.content, this.commands, this.settings.general.commandTrigger)) {
 					this.commands.handle(
@@ -194,12 +141,12 @@ export default class Bot {
 				}
 			}
 
-			if (this.userConfig.get("global.log")) {
+			/* if (this.userConfig.get("global.log")) {
 				this.database.addMessage(message);
-			}
+			} */
 		});
 
-		this.client.on("guildCreate", (guild) => {
+		/* this.client.on("guildCreate", (guild) => {
 			this.postStats();
 			this.userConfig.createGuild(guild.id);
 
@@ -253,9 +200,9 @@ export default class Bot {
 					// TODO: Default to admins
 				}
 			}
-		});
+		}); */
 
-		this.client.on("guildDelete", (guild) => {
+		/* this.client.on("guildDelete", (guild) => {
 			this.postStats();
 			this.userConfig.removeGuild(guild.id);
 
@@ -267,13 +214,66 @@ export default class Bot {
 				.field('Owner', guild.owner.user.toString())
 				.thumbnail(guild.iconURL)
 				.build());
-		});
+		}); */
 
 		global.b = this;
+	}
 
-		// TODO: DEBUG -----------------------
-		this.events.on("commandExecuted", (e) => this.log.info(`${e.context.sender.username}@${e.context.message.guild.name}: ${e.context.message.content}`));
-		// -----------------------------------
+	setup(data) {
+		/**
+		 * @type {Settings}
+		 */
+		this.settings = new Settings(data.paths.settings);
+
+		/**
+		 * @type {EmojiCollection}
+		 */
+		this.ec = EmojiCollection.fromFile(data.paths.emojis);
+
+		/**
+		 * @type {UserConfig}
+		 */
+		this.userConfig = new UserConfig(data.paths.userConfig);
+
+		/**
+		 * @type {Discord.Client}
+		 */
+		this.client = client;
+
+		/**
+		 * @type {CommandManager}
+		 */
+		this.commands = new CommandManager(this, data.paths.accessLevels);
+
+		/**
+		 * @type {FeatureManager}
+		 */
+		this.features = new FeatureManager();
+
+		/**
+		 * @type {CommandLoader}
+		 */
+		this.commandLoader = new CommandLoader(data.paths.commands);
+
+		/**
+		 * @type {Database}
+		 */
+		this.database = new Database(data.paths.database);
+
+		/**
+		 * @type {ConsoleInterface}
+		 */
+		this.console = new ConsoleInterface();
+
+		/**
+		 * @type {EmojiMenuManager}
+		 */
+		this.emojis = new EmojiMenuManager(this.client);
+
+		/**
+		 * @type {Log}
+		 */
+		// this.log = new Log(this, debug, verbose);
 	}
 
 	postStats() {
@@ -301,7 +301,7 @@ export default class Bot {
 	}
 
 	connect() {
-		this.log.info('Starting');
+		this.log.info("Starting");
 		this.client.login(this.settings.general.token);
 	}
 

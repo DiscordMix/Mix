@@ -3,7 +3,7 @@ import Utils from "./utils";
 
 export default class TimeParser {
 	/**
-	 * @param {string} timeString
+	 * @param {String} timeString
 	 */
 	constructor(timeString) {
 		this.timeString = timeString;
@@ -21,14 +21,14 @@ export default class TimeParser {
 	}
 
 	/**
-	 * @returns {number}
+	 * @returns {Number}
 	 */
 	get amount() {
 		return parseInt(this.getMatch()[1]);
 	}
 
 	/**
-	 * @returns {number}
+	 * @returns {Number}
 	 */
 	getTimeFromNow() {
 		switch (this.suffix) {

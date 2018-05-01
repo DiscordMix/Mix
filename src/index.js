@@ -26,20 +26,12 @@ module.exports = {
     Settings: require("./core/settings").default,
     TimeParser: require("./core/time-parser").default,
     TimeSuffixType: require("./core/time-suffix-type").default,
-    TradeState: require("./core/trade-state").default,
     UserConfig: require("./core/user-config").default,
     Utils: require("./core/utils").default,
 
     // Collections
 	Collecton: require("./collections/collection").default,
 	EmojiCollection: require("./collections/emoji-collection").default,
-
-    // Database
-    Database: require("./database/database").default,
-    DbItem: require("./database/db-item").default,
-    DbMessage: require("./database/db-message").default,
-    DbTrade: require("./database/db-trade").default,
-    DbUser: require("./database/db-user").default,
 
     // Emoji UI
     EmojiButton: require("./emoji-ui/emoji-button").default,

@@ -8,7 +8,7 @@ const TimeSuffixType = {
 	Year: 6,
 
 	/**
-	 * @param {string} short The short suffix
+	 * @param {String} short The short suffix
 	 * @returns {TimeSuffixType}
 	 */
 	fromShort(short) {

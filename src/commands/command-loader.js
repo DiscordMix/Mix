@@ -2,29 +2,31 @@ import Command from "./command";
 import Log from "../core/log";
 
 const fs = require("fs");
+const path = require("path");
 const Typer = require("@raxor1234/typer");
 
 export default class CommandLoader {
 	/**
-	 * @param {string} commandsPath
-	 */
-	constructor(commandsPath) {
-		this.path = commandsPath;
-	}
-
-	/**
 	 * @param {CommandManager} commandManager
 	 */
-	loadAll(commandManager) {
-		fs.readdir(this.path, (error, files) => {
+	constructor(commandManager) {
+		/**
+		 * @type {CommandManager}
+		 * @private
+		 */
+		this.commandManager = commandManager;
+	}
+
+	loadAll() {
+		fs.readdir(this.commandManager.commandsPath, (error, files) => {
 			files.forEach((file) => {
 				if (!file.startsWith("@")) {
 					// TODO: Path is hard coded
 					// const module = require(path.join(this.path, path.basename(file, ".js")));
-					const module = require(`../data/commands/${file}`).default;
+					const module = require(path.join(this.commandManager.commandsPath, file)).default;
 
 					if (CommandLoader.validate(module)) {
-						commandManager.register(Command.fromModule(module));
+						this.commandManager.register(Command.fromModule(module));
 					}
 				}
 				else {
@@ -36,13 +38,13 @@ export default class CommandLoader {
 		});
 	}
 
-	load(path) {
+	load(pth) {
 		// TODO
 	}
 
 	/**
-	 * @param {object} module
-	 * @returns {boolean}
+	 * @param {Object} module
+	 * @returns {Boolean}
 	 */
 	static validate(module) {
 		Typer.validate({

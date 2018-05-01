@@ -56,7 +56,7 @@ export default class Bot extends EventEmitter {
 		/**
 		 * @type {CommandManager}
 		 */
-		this.commands = new CommandManager(this, data.paths.accessLevels);
+		this.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels);
 
 		/**
 		 * @type {FeatureManager}
@@ -66,7 +66,7 @@ export default class Bot extends EventEmitter {
 		/**
 		 * @type {CommandLoader}
 		 */
-		this.commandLoader = new CommandLoader(data.paths.commands);
+		this.commandLoader = new CommandLoader(this.commands);
 
 		/**
 		 * @type {ConsoleInterface}

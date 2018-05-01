@@ -10,14 +10,20 @@ const fs = require("fs");
 export default class CommandManager /* extends Collection */ {
 	/**
 	 * @param {Bot} bot
-	 * @param {string} accessLevelsPath
+	 * @param {String} commandsPath
+	 * @param {String} accessLevelsPath
 	 */
-	constructor(bot, accessLevelsPath) {
+	constructor(bot, commandsPath, accessLevelsPath) {
 		/**
 		 * @type {Bot}
 		 * @private
 		 */
 		this.bot = bot;
+
+		/**
+		 * @type {String}
+		 */
+		this.commandsPath = commandsPath;
 
 		/**
 		 * @type {Array<Command>}
@@ -45,7 +51,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {String} commandBase
-	 * @returns {boolean}
+	 * @returns {Boolean}
 	 */
 	removeByBase(commandBase) {
 		return this.remove(this.getByBase(commandBase));
@@ -53,7 +59,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {Command} command
-	 * @returns {boolean}
+	 * @returns {Boolean}
 	 */
 	remove(command) {
 		return this.removeAt(this.commands.indexOf(command));
@@ -61,7 +67,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {Number} index
-	 * @returns {boolean}
+	 * @returns {Boolean}
 	 */
 	removeAt(index) {
 		if (this.commands[index]) {
@@ -75,14 +81,14 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {String} commandBase
-	 * @returns {boolean}
+	 * @returns {Boolean}
 	 */
 	contains(commandBase) {
 		return this.getByBase(commandBase) !== null;
 	}
 
 	/**
-	 * @param {array<Command>} commands
+	 * @param {Array<Command>} commands
 	 */
 	registerMultiple(commands) {
 		for (let i = 0; i < commands.length; i++) {
@@ -91,15 +97,15 @@ export default class CommandManager /* extends Collection */ {
 	}
 
 	/**
-	 * @param {string} commandBase
-	 * @returns {boolean}
+	 * @param {String} commandBase
+	 * @returns {Boolean}
 	 */
 	isRegistered(commandBase) {
 		return this.getByBase(commandBase) != null;
 	}
 
 	/**
-	 * @param {string} commandBase
+	 * @param {String} commandBase
 	 * @returns {(Command|null)}
 	 */
 	getByBase(commandBase) {
@@ -114,7 +120,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {Snowflake} guildId
-	 * @param {string} role
+	 * @param {String} role
 	 * @returns {AccessLevelType}
 	 */
 	getAccessLevelByRole(guildId, role) {
@@ -134,7 +140,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {Snowflake} userId
-	 * @returns {boolean}
+	 * @returns {Boolean}
 	 */
 	isDeveloper(userId) {
 		return this.bot.userConfig.get("global.developers").includes(userId);
@@ -170,7 +176,7 @@ export default class CommandManager /* extends Collection */ {
 	// TODO: Move to the corresponding file/class
 	/**
 	 * @param {*} message
-	 * @param {string} role
+	 * @param {String} role
 	 * @returns {*}
 	 */
 	hasRole(message, role) {
@@ -181,8 +187,8 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {*} message
-	 * @param {array<string>} roles
-	 * @returns {boolean}
+	 * @param {Array<string>} roles
+	 * @returns {Boolean}
 	 */
 	hasRoles(message, roles) {
 		for (let i = 0; i < roles.length; i++) {
@@ -196,7 +202,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {Snowflake} guildId
-	 * @param {array<string>} roles
+	 * @param {Array<string>} roles
 	 * @returns {AccessLevelType}
 	 */
 	getHighestAccessLevelByRoles(guildId, roles) {
@@ -217,7 +223,7 @@ export default class CommandManager /* extends Collection */ {
 	 * @param {Snowflake} guildId
 	 * @param {Message} message
 	 * @param {AccessLevelType} accessLevel
-	 * @returns {boolean}
+	 * @returns {Boolean}
 	 */
 	hasAuthority(guildId, message, accessLevel) {
 		return this.getAuthority(guildId, message.member.roles.array().map((role) => role.name), message.author.id) >= accessLevel;
@@ -228,7 +234,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {Snowflake} guildId
-	 * @param {array<string>} roles
+	 * @param {Array<string>} roles
 	 * @param {Snowflake} userId
 	 * @returns {AccessLevelType}
 	 */
@@ -244,9 +250,9 @@ export default class CommandManager /* extends Collection */ {
 	}
 
 	/**
-	 * @param {object} rules
-	 * @param {array<string>} args
-	 * @returns {object}
+	 * @param {Object} rules
+	 * @param {Array<string>} args
+	 * @returns {Object}
 	 */
 	assembleArguments(rules, args) {
 		const result = {};

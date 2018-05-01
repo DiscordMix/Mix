@@ -33,13 +33,15 @@ export default class Bot extends EventEmitter {
 	}
 
 	setup(data) {
-		Schema.validate(data, {
+		if (!Schema.validate(data, {
 			"paths.settings": "string",
 			"paths.emojis": "string",
 			"paths.commands": "string",
 			"paths.accessLevels": "string",
 			argumentTypes: "object"
-		});
+		})) {
+			Log.throw("[Bot.setup] Invalid data provided.");
+		}
 
 		/**
 		 * @type {Settings}

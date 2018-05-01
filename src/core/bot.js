@@ -9,6 +9,7 @@ import Settings from "./settings";
 import FeatureManager from "../features/feature-manager";
 import CommandLoader from "../commands/command-loader";
 import Log from "./log";
+import Schema from "../schema/schema";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -32,6 +33,14 @@ export default class Bot extends EventEmitter {
 	}
 
 	setup(data) {
+		Schema.validate(data, {
+			"paths.settings": "string",
+			"paths.emojis": "string",
+			"paths.commands": "string",
+			"paths.accessLevels": "string",
+			argumentTypes: "object"
+		});
+
 		/**
 		 * @type {Settings}
 		 */

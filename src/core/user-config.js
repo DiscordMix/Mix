@@ -5,7 +5,7 @@ const _ = require("lodash");
 
 export default class UserConfig {
 	/**
-	 * @param {string} path
+	 * @param {String} path
 	 */
 	constructor(path) {
 		if (fs.existsSync(path)) {
@@ -18,10 +18,10 @@ export default class UserConfig {
 	}
 
 	/**
-	 * @param {string} path
+	 * @param {String} path
 	 * @param {*} value
-	 * @param {(Snowflake|null)} guildId
-	 * @param {string} template
+	 * @param {(Snowflake|Null)} guildId
+	 * @param {String} template
 	 */
 	set(path, value, guildId = null, template = "default") {
 		const finalPath = guildId ? `${guildId}.${path}` : path;
@@ -40,9 +40,9 @@ export default class UserConfig {
 	}
 
 	/**
-	 * @param {string} path
-	 * @param {(Snowflake|null)} guildId
-	 * @param {string} template
+	 * @param {String} path
+	 * @param {(Snowflake|Null)} guildId
+	 * @param {String} template
 	 * @returns {*}
 	 */
 	get(path, guildId = null, template = "default") {
@@ -56,9 +56,9 @@ export default class UserConfig {
 	}
 
 	/**
-	 * @param {string} path
+	 * @param {String} path
 	 * @param {*} item
-	 * @param {(Snowflake|null)} guildId
+	 * @param {(Snowflake|Null)} guildId
 	 */
 	push(path, item, guildId = null) {
 		const items = this.get(path, guildId).slice(0);
@@ -68,8 +68,8 @@ export default class UserConfig {
 	}
 
 	/**
-	 * @param {string} path
-	 * @param {(Snowflake|null)} guildId
+	 * @param {String} path
+	 * @param {(Snowflake|Null)} guildId
 	 * @returns {boolean}
 	 */
 	contains(path, guildId = null) {

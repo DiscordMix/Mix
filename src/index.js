@@ -51,5 +51,5 @@ module.exports = {
 	SqliteAdapter: require("./data-adapters/sqlite-adapter"),
 
 	// Schema
-	SchemaValidator: require("./schema/schema-validator").default,
+	Schema: require("./schema/schema").default,
 };

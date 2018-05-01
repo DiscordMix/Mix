@@ -14,8 +14,6 @@ module.exports = {
 
     // Core
     AccessLevelType: require("./core/access-level-type").default,
-    BadgeInfo: require("./core/badge-info").default,
-    BadgeType: require("./core/badge-type").default,
     Bot: require("./core/bot").default,
     EditableMessage: require("./core/editable-message").default,
     EmbedBuilder: require("./core/embed-builder").default,

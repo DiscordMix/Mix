@@ -1,5 +1,5 @@
 {
-	"name": "anvil-discord",
+	"name": "discord-anvil",
 	"version": "1.0.4",
 	"description": "Discord chat bot frameword",
 	"main": "dist/index.js",

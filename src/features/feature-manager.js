@@ -1,12 +1,15 @@
-import Collection from "../collections/collection";
+// import Collection from "../collections/collection";
 
-export default class FeatureManager extends Collection {
+// TODO: Implement the Collection class.
+export default class FeatureManager /* extends Collection */ {
 	/**
 	 * @param {Bot} bot
 	 * @param {Array<Feature>} features
 	 */
 	constructor(bot, features = []) {
-		super(features);
+		// super(features);
+
+		this.features = features;
 
 		/**
 		 * @type {Bot}

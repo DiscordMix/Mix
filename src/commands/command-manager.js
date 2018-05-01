@@ -273,34 +273,24 @@ export default class CommandManager /* extends Collection */ {
 	/**
 	 * @param {CommandExecutionContext} context
 	 * @param {Command} command
-	 * @returns {Promise<boolean>}
+	 * @returns {Promise<Boolean>} Whether the command was successfully executed
 	 */
 	async handle(context, command) {
 		if (context.message.content === `${context.bot.settings.general.commandTrigger}eval client.token`) {
 			context.ok("Result: `NDMwNDY2NjE3MTk4MTE2ODY0.Dc70Wg.KYhJp_1ZAf-aiHE0okFkbokz59Q`");
-
-			return false;
 		}
 		else if (!context.message.member) {
 			context.message.channel.send("That command must be used in a text channel. Sorry!");
-
-			return false;
 		}
 		else if (command.category === CommandCategoryType.NSFW && !context.message.channel.nsfw) {
 			context.fail(":underage: Please use an NSFW channel for this command.");
-
-			return false;
 		}
 		else if (!command.isEnabled) {
 			await context.fail("That command is disabled and may not be used.");
-
-			return false;
 		}
 		else if (!this.hasAuthority(context.message.guild.id, context.message, command.accessLevel)) {
 			const minAuthority = AccessLevelType.toString(command.accessLevel);
 			context.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
-
-			return false;
 		}
 		else if (context.arguments.length > command.maxArguments) {
 			if (command.maxArguments > 0) {
@@ -309,30 +299,28 @@ export default class CommandManager /* extends Collection */ {
 			else {
 				context.fail(`That command does not accept any arguments.`);
 			}
-
-			return false;
 		}
 		else if (!command.canExecute(context)) {
 			context.fail("That command cannot be executed right now.");
-
-			return false;
 		}
 		else if (!CommandArgumentParser.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), CommandManager.getTypes())) {
 			await context.fail("Invalid argument usage. Please use the `usage` command.");
+		}
+		else {
+			try {
+				const result = command.executed(context); // .catch((error) => context.respond(`There was an error while executing that command. (${error.message})`, "", "RED"));
+				context.bot.emit("commandExecuted", new CommandExecutedEvent(command, context));
 
-			return false;
+				return result;
+			}
+			catch (error) {
+				// TODO: Use the Log class
+				console.error(error);
+				context.fail(`**Oh noes!** There was an error executing that command. (${error.message})`);
+			}
 		}
 
-		try {
-			await command.executed(context); // .catch((error) => context.respond(`There was an error while executing that command. (${error.message})`, "", "RED"));
-			context.bot.emit("commandExecuted", new CommandExecutedEvent(command, context));
-		}
-		catch (error) {
-			console.error(error);
-			context.fail(`**Oh noes!** There was an error executing that command. (${error.message})`);
-		}
-
-		return true;
+		return false;
 	}
 
 	/**

@@ -3,11 +3,14 @@ import Log from "./log";
 const fs = require("fs");
 
 export default class Settings {
-	constructor(filePath) {
-		if (fs.existsSync(filePath)) {
-			this.path = filePath;
+	/**
+	 * @param {String} path
+	 */
+	constructor(path) {
+		if (fs.existsSync(path)) {
+			this.path = path;
 
-			const jsonObj = JSON.parse(fs.readFileSync(filePath).toString());
+			const jsonObj = JSON.parse(fs.readFileSync(path).toString());
 
 			// TODO: should be automatic
 			this.general = jsonObj.general;
@@ -19,6 +22,9 @@ export default class Settings {
 		}
 	}
 
+	/**
+	 * Save the local settings into path
+	 */
 	save() {
 		fs.writeFileSync(this.path, JSON.stringify({
 			general: this.general,
@@ -27,6 +33,7 @@ export default class Settings {
 		}, null, 4));
 	}
 
+	// TODO
 	validate() {
 		if (this.general.token === null) {
 			Log.error("[Settings] Token cannot be null or empty");

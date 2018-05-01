@@ -236,7 +236,7 @@ export default class CommandManager /* extends Collection */ {
 	 * @param {Snowflake} guildId
 	 * @param {Array<String>} roles
 	 * @param {Snowflake} userId
-	 * @returns {AccessLevelType}
+	 * @returns {AccessLevelType} The authority of the user
 	 */
 	getAuthority(guildId, roles = ["@everyone"], userId) {
 		const byRoles = this.getHighestAccessLevelByRoles(guildId, roles);
@@ -252,7 +252,7 @@ export default class CommandManager /* extends Collection */ {
 	/**
 	 * @param {Object} rules
 	 * @param {Array<String>} args
-	 * @returns {Object}
+	 * @returns {Object} The assembled arguments
 	 */
 	assembleArguments(rules, args) {
 		const result = {};
@@ -272,7 +272,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {CommandExecutionContext} context
-	 * @param {Command} command
+	 * @param {Command} command The command to handle
 	 * @returns {Promise<Boolean>} Whether the command was successfully executed
 	 */
 	async handle(context, command) {

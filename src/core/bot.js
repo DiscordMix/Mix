@@ -92,8 +92,6 @@ export default class Bot extends EventEmitter {
 		 * Load commands
 		 */
 		this.commandLoader.loadAll();
-
-		console.log("Hello");
 	}
 
 	setupEvents() {
@@ -131,24 +129,24 @@ export default class Bot extends EventEmitter {
 		});
 	}
 
-	connect() {
+	async connect() {
 		this.log.info("Starting");
-		this.client.login(this.settings.general.token);
+		await this.client.login(this.settings.general.token);
 	}
 
-	restart() {
+	async restart() {
 		this.log.info("Restarting");
 
 		// TODO
 		// this.features.reloadAll(this);
 
-		this.disconnect();
-		this.connect();
+		await this.disconnect();
+		await this.connect();
 	}
 
-	disconnect() {
+	async disconnect() {
 		this.settings.save();
-		this.client.destroy();
+		await this.client.destroy();
 		this.log.info("Disconnected");
 	}
 

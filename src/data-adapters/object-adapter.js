@@ -1,5 +1,7 @@
 import DataAdapter from "./data-adapter";
 
+const _ = require("lodash");
+
 export default class ObjectAdapter extends DataAdapter {
 	/**
 	 * @param {Object} data
@@ -17,27 +19,30 @@ export default class ObjectAdapter extends DataAdapter {
 	/**
 	 * Retrieve guild data
 	 * @param {Snowflake} guildId
+	 * @param {String} path
 	 * @returns {Object}
 	 */
-	get(guildId) {
-		return this.data[guildId];
+	get(guildId, path) {
+		return _.get(this.data, `${guildId}.${path}`);
 	}
 
 	/**
 	 * Set guild data
 	 * @param {Snowflake} guildId
-	 * @param {Object} data
+	 * @param {String} path
+	 * @param {*} value
 	 */
-	set(guildId, data) {
-		this.data[guildId] = data;
+	set(guildId, path, value) {
+		_.set(this.data, `${guildId}.${path}`, value);
 	}
 
 	/**
 	 * Merge data
-	 * @param guildId
-	 * @param data
+	 * @param {Snowflake} guildId
+	 * @param {String} path
+	 * @param {*} value
 	 */
-	merge(guildId, data) {
+	merge(guildId, path, value) {
 		throw new Error("[ObjectAdapter.merge] Method not implemented.");
 	}
 }

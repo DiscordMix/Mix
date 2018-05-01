@@ -39,6 +39,11 @@ export default class Bot extends EventEmitter {
 		this.settings = new Settings(data.paths.settings);
 
 		/**
+		 * @type {DataAdapter}
+		 */
+		this.dataAdapter = data.dataAdapter;
+
+		/**
 		 * @type {EmojiCollection}
 		 */
 		this.emojis = EmojiCollection.fromFile(data.paths.emojis);

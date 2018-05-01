@@ -8,27 +8,30 @@ export default class SqliteAdapter extends DataAdapter {
 	/**
 	 * Retrieve guild data
 	 * @param {Snowflake} guildId
-	 * @returns {Object}
+	 * @param {String} path
+	 * @returns {*}
 	 */
-	get(guildId) {
-		throw new Error("[DataAdapter.get] Method not implemented.");
+	get(guildId, path) {
+		throw new Error("[SqliteAdapter.get] Method not implemented.");
 	}
 
 	/**
 	 * Set guild data
 	 * @param {Snowflake} guildId
-	 * @param {Object} data
+	 * @param {String} path
+	 * @param {*} data
 	 */
-	set(guildId, data) {
-		throw new Error("[DataAdapter.set] Method not implemented.");
+	set(guildId, path, data) {
+		throw new Error("[SqliteAdapter.set] Method not implemented.");
 	}
 
 	/**
-	 * Merge data
-	 * @param guildId
-	 * @param data
+	 * Merge guild data
+	 * @param {Snowflake} guildId
+	 * @param {String} path
+	 * @param {*} data
 	 */
-	merge(guildId, data) {
-		throw new Error("[DataAdapter.set] Method not implemented.");
+	merge(guildId, path, data) {
+		throw new Error("[SqliteAdapter.set] Method not implemented.");
 	}
 }

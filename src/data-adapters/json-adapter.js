@@ -1,7 +1,7 @@
-import DataAdapter from "./data-adapter";
 import ObjectAdapter from "./object-adapter";
 
 const fs = require("fs");
+const _ = require("lodash");
 
 export default class JsonAdapter extends ObjectAdapter {
 	/**
@@ -66,35 +66,38 @@ export default class JsonAdapter extends ObjectAdapter {
 	/**
 	 * Retrieve guild data
 	 * @param {Snowflake} guildId
-	 * @returns {Object}
+	 * @param {String} path
+	 * @returns {*}
 	 */
-	get(guildId) {
+	get(guildId, path) {
 		if (!this.loaded) {
 			throw new Error("[JsonAdapter.get] No data is currently loaded.");
 		}
 
-		return this.data[guildId];
+		return _.get(this.data, `${guildId}.${path}`);
 	}
 
 	/**
 	 * Set guild data
 	 * @param {Snowflake} guildId
-	 * @param {Object} data
+	 * @param {String} path
+	 * @param {*} value
 	 */
-	set(guildId, data) {
+	set(guildId, path, value) {
 		if (!this.loaded) {
 			throw new Error("[JsonAdapter.set] No data is currently loaded.");
 		}
 
-		this.data[guildId] = data;
+		_.set(this.data, `${guildId}.${path}`, value);
 	}
 
 	/**
-	 * Merge data
-	 * @param guildId
-	 * @param data
+	 * Merge guild data
+	 * @param {Snowflake} guildId
+	 * @param {String} path
+	 * @param {*} value
 	 */
-	merge(guildId, data) {
+	merge(guildId, path, value) {
 		if (!this.loaded) {
 			throw new Error("[JsonAdapter.merge] No data is currently loaded.");
 		}

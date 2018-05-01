@@ -44,6 +44,11 @@ module.exports = {
 	FeatureManager: require("./features/feature-manager").default,
 	Feature: require("./features/feature").default,
 
+	// Data Adapters
+	DataAdapter: require("./data-adapters/data-adapter"),
+	JsonAdapter: require("./data-adapters/json-adapter"),
+	SqliteAdapter: require("./data-adapters/sqlite-adapter"),
+
 	// Schema
 	SchemaValidator: require("./schema/schema-validator").default,
 };

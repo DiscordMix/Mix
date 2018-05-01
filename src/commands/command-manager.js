@@ -2,7 +2,6 @@ import AccessLevelType from "../core/access-level-type";
 import CommandArgumentParser from "./command-argument-parser";
 import CommandExecutedEvent from "../events/command-executed-event";
 import CommandCategoryType from "./command-category-type";
-import Log from "../core/log";
 // import Collection from "../core/collection";
 
 const fs = require("fs");
@@ -32,13 +31,16 @@ export default class CommandManager /* extends Collection */ {
 		this.commands = [];
 
 		/**
-		 * @type {Array}
+		 * @type {Object}
 		 * @private
 		 */
 		this.accessLevels = [];
 
 		fs.readFile(accessLevelsPath, (error, data) => {
+			// TODO: Validate access levels
 			this.accessLevels = JSON.parse(data.toString());
+
+			console.log(this.accessLevels);
 		});
 	}
 
@@ -180,8 +182,6 @@ export default class CommandManager /* extends Collection */ {
 	 * @returns {*}
 	 */
 	hasRole(message, role) {
-		this.bot.log.info(message.member.roles.array());
-
 		return message.member.roles.find("name", role);
 	}
 

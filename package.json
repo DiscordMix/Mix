@@ -20,7 +20,6 @@
 	"dependencies": {
 		"@raxor1234/typer": "^1.0.0",
 		"argparse": "^1.0.10",
-		"cheerio": "^1.0.0-rc.2",
 		"colors": "latest",
 		"dblapi.js": "^2.0.0",
 		"discord.js": "^11.2.1",

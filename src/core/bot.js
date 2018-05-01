@@ -92,6 +92,8 @@ export default class Bot extends EventEmitter {
 		 * Load commands
 		 */
 		this.commandLoader.loadAll();
+
+		console.log("Hello");
 	}
 
 	setupEvents() {

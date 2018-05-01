@@ -18,24 +18,31 @@ export default class CommandLoader {
 	}
 
 	loadAll() {
-		Log.verbose("Loadall");
+		Log.info("Loadall");
 
 		fs.readdir(this.commandManager.commandsPath, (error, files) => {
 			Log.verbose("Readdir");
 
 			files.forEach((file) => {
 				if (!file.startsWith("@")) {
+					const modulePath = path.join(this.commandManager.commandsPath, path.basename(file, ".js"));
 
-					// TODO: Path is hard coded
-					// const module = require(path.join(this.path, path.basename(file, ".js")));
-					const module = require(path.join(this.commandManager.commandsPath, file)).default;
+					let module = require(modulePath);
+
+					// Support for ES6 compiled
+					if (module.default && typeof module.default === "object") {
+						module = module.default;
+					}
 
 					if (CommandLoader.validate(module)) {
 						this.commandManager.register(Command.fromModule(module));
 					}
+					else {
+						Log.warn(`Skipping invalid command: ${path.basename(file, ".js")}`);
+					}
 				}
 				else {
-					Log.verbose(`Skipping 1 command: ${file}`);
+					Log.verbose(`Skipping command: ${path.basename(file, ".js")}`);
 				}
 			});
 

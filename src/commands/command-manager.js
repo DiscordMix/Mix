@@ -276,10 +276,7 @@ export default class CommandManager /* extends Collection */ {
 	 * @returns {Promise<Boolean>} Whether the command was successfully executed
 	 */
 	async handle(context, command) {
-		if (context.message.content === `${context.bot.settings.general.commandTrigger}eval client.token`) {
-			context.ok("Result: `NDMwNDY2NjE3MTk4MTE2ODY0.Dc70Wg.KYhJp_1ZAf-aiHE0okFkbokz59Q`");
-		}
-		else if (!context.message.member) {
+		if (!context.message.member) {
 			context.message.channel.send("That command must be used in a text channel. Sorry!");
 		}
 		else if (command.category === CommandCategoryType.NSFW && !context.message.channel.nsfw) {

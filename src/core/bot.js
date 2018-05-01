@@ -105,7 +105,7 @@ export default class Bot extends EventEmitter {
 
 		this.client.on("message", async (message) => {
 			if (!message.author.bot) {
-				if (CommandParser.isValid(message.content, this.commands, this.settings.general.commandTrigger)) {
+				if (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
 					this.commands.handle(
 						new CommandExecutionContext(
 							message,
@@ -118,12 +118,12 @@ export default class Bot extends EventEmitter {
 						CommandParser.parse(
 							message.content,
 							this.commands,
-							this.settings.general.commandTrigger
+							this.settings.general.prefix
 						)
 					);
 				}
-				else if (message.content === "?trigger") {
-					message.channel.send(`Command trigger: **${this.settings.general.commandTrigger}**`);
+				else if (message.content === "?prefix") {
+					message.channel.send(`Command prefix: **${this.settings.general.prefix}**`);
 				}
 			}
 		});

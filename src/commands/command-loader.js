@@ -18,9 +18,14 @@ export default class CommandLoader {
 	}
 
 	loadAll() {
+		Log.verbose("Loadall");
+
 		fs.readdir(this.commandManager.commandsPath, (error, files) => {
+			Log.verbose("Readdir");
+
 			files.forEach((file) => {
 				if (!file.startsWith("@")) {
+
 					// TODO: Path is hard coded
 					// const module = require(path.join(this.path, path.basename(file, ".js")));
 					const module = require(path.join(this.commandManager.commandsPath, file)).default;

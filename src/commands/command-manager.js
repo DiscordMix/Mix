@@ -106,7 +106,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {String} commandBase
-	 * @returns {(Command|null)}
+	 * @returns {(Command|Null)}
 	 */
 	getByBase(commandBase) {
 		for (let i = 0; i < this.commands.length; i++) {
@@ -187,7 +187,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {*} message
-	 * @param {Array<string>} roles
+	 * @param {Array<String>} roles
 	 * @returns {Boolean}
 	 */
 	hasRoles(message, roles) {
@@ -202,7 +202,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {Snowflake} guildId
-	 * @param {Array<string>} roles
+	 * @param {Array<String>} roles
 	 * @returns {AccessLevelType}
 	 */
 	getHighestAccessLevelByRoles(guildId, roles) {
@@ -234,7 +234,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {Snowflake} guildId
-	 * @param {Array<string>} roles
+	 * @param {Array<String>} roles
 	 * @param {Snowflake} userId
 	 * @returns {AccessLevelType}
 	 */
@@ -251,7 +251,7 @@ export default class CommandManager /* extends Collection */ {
 
 	/**
 	 * @param {Object} rules
-	 * @param {Array<string>} args
+	 * @param {Array<String>} args
 	 * @returns {Object}
 	 */
 	assembleArguments(rules, args) {
@@ -325,20 +325,12 @@ export default class CommandManager /* extends Collection */ {
 
 		try {
 			await command.executed(context); // .catch((error) => context.respond(`There was an error while executing that command. (${error.message})`, "", "RED"));
-			context.bot.events.emit("commandExecuted", new CommandExecutedEvent(command, context));
+			context.bot.emit("commandExecuted", new CommandExecutedEvent(command, context));
 		}
 		catch (error) {
 			console.error(error);
 			context.fail(`**Oh noes!** There was an error executing that command. (${error.message})`);
-
-			// TODO: Award badge
 		}
-
-		/* Log.channel(new Discord.RichEmbed()
-			.setFooter(`Requested by ${context.message.author.username}`, context.message.author.avatarURL)
-			.setColor([50, 255, 0])
-			.setAuthor("Command Executed")
-			.addField("Command", command.base)); */
 
 		return true;
 	}

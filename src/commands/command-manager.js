@@ -11,8 +11,9 @@ export default class CommandManager /* extends Collection */ {
 	 * @param {Bot} bot
 	 * @param {String} commandsPath
 	 * @param {String} accessLevelsPath
+	 * @param {Object} argumentTypes
 	 */
-	constructor(bot, commandsPath, accessLevelsPath) {
+	constructor(bot, commandsPath, accessLevelsPath, argumentTypes) {
 		/**
 		 * @type {Bot}
 		 * @private
@@ -21,8 +22,20 @@ export default class CommandManager /* extends Collection */ {
 
 		/**
 		 * @type {String}
+		 * @private
 		 */
 		this.commandsPath = commandsPath;
+
+		/**
+		 * @type {String}
+		 * @private
+		 */
+		this.accessLevelsPath = accessLevelsPath;
+
+		/**
+		 * @type {Object}
+		 */
+		this.argumentTypes = argumentTypes;
 
 		/**
 		 * @type {Array<Command>}
@@ -36,7 +49,7 @@ export default class CommandManager /* extends Collection */ {
 		 */
 		this.accessLevels = [];
 
-		fs.readFile(accessLevelsPath, (error, data) => {
+		fs.readFile(this.accessLevelsPath, (error, data) => {
 			// TODO: Validate access levels
 			this.accessLevels = JSON.parse(data.toString());
 
@@ -300,7 +313,7 @@ export default class CommandManager /* extends Collection */ {
 		else if (!command.canExecute(context)) {
 			context.fail("That command cannot be executed right now.");
 		}
-		else if (!CommandArgumentParser.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), CommandManager.getTypes())) {
+		else if (!CommandArgumentParser.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {
 			await context.fail("Invalid argument usage. Please use the `usage` command.");
 		}
 		else {
@@ -318,26 +331,5 @@ export default class CommandManager /* extends Collection */ {
 		}
 
 		return false;
-	}
-
-	/**
-	 * @returns {Object}
-	 */
-	static getTypes() {
-		return {
-			// TODO: Bug with the USERS_PATTERN (interlaps between true and false)
-			user: /(^[0-9]{17,18}$|^<@!?[0-9]{17,18}>$)/,
-			role: /(^[0-9]{18}$|^<&[0-9]{18}>$)/,
-			channel: /(^[0-9]{18}$|^<#[0-9]{18}>$)/,
-			time: /^[0-9]+(ms|s|m|h|d|mo|y)$/i,
-			minuteTime: /^[0-9]+(m|h|d|mo|y)$/i,
-			state: /^(1|0|true|false|off|on|yes|no)$/i,
-			youtubeLink: /^https?:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9-]{11}$/i,
-			accessLevel: /^guest|member|premium|moderator|admin|owner|developer$/,
-			dataStorage: /^config|database$/,
-			guild: /^[0-9]{18}$/,
-			positiveNumber: /^[1-9]+$/,
-			hexColor: /(^[a-z0-9]{6}$|^[a-z0-9]{3}$)/i
-		};
 	}
 }

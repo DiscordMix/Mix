@@ -6,7 +6,6 @@ import CommandManager from "../commands/command-manager";
 import Utils from "./utils";
 import EmojiCollection from "../collections/emoji-collection";
 import Settings from "./settings";
-import UserConfig from "./user-config";
 import FeatureManager from "../features/feature-manager";
 import CommandLoader from "../commands/command-loader";
 import Log from "./log";
@@ -56,7 +55,7 @@ export default class Bot extends EventEmitter {
 		/**
 		 * @type {CommandManager}
 		 */
-		this.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels);
+		this.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes);
 
 		/**
 		 * @type {FeatureManager}
@@ -109,7 +108,7 @@ export default class Bot extends EventEmitter {
 					this.commands.handle(
 						new CommandExecutionContext(
 							message,
-							CommandParser.resolveArguments(CommandParser.getArguments(message.content), CommandManager.getTypes(), resolvers),
+							CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
 							this,
 							this.commands.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),
 							this.emojis

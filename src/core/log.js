@@ -11,13 +11,33 @@ export default class Log {
 		/**
 		 * @type {Bot}
 		 * @private
+		 * @readonly
 		 */
 		this.bot = bot;
-		this.debug_mode = debug;
-		this.verbose_mode = verbose;
+
+		/**
+		 * @type {Boolean}
+		 * @private
+		 * @readonly
+		 */
+		this.debugMode = debug;
+
+		/**
+		 * @type {Boolean}
+		 * @private
+		 * @readonly
+		 */
+		this.verboseMode = verbose;
+
 		Log.instance = this;
 	}
 
+	/**
+	 * @param {String} message
+	 * @param {String} color
+	 * @param {String} prefix
+	 * @param {String} throwMsg
+	 */
 	log(message, color = "white", prefix = null, throwMsg = false) {
 		Log.log(message, color, prefix, throwMsg);
 	}
@@ -39,13 +59,13 @@ export default class Log {
 	}
 
 	verbose(message) {
-		if (this.verbose_mode) {
+		if (this.verboseMode) {
 			this.log(message, "gray");
 		}
 	}
 
-	debug(message) {
-		if (this.debug_mode) {
+	debugMode(message) {
+		if (this.debugMode) {
 			this.log(message, "magenta", "dbug");
 		}
 	}
@@ -120,7 +140,7 @@ export default class Log {
 	 */
 	static verbose(message) {
 		if (Log.instance !== null) {
-			if (Log.instance.verbose_mode) {
+			if (Log.instance.verboseMode) {
 				Log.log(message, "grey");
 			}
 		} else {
@@ -133,7 +153,7 @@ export default class Log {
 	 */
 	static debug(message) {
 		if (Log.instance !== null) {
-			if (Log.instance.debug_mode) {
+			if (Log.instance.debugMode) {
 				Log.log(message, "magenta", "dbug");
 			}
 		} else {

@@ -3,13 +3,15 @@ const Discord = require("discord.js");
 export default class EmbedBuilder {
 	constructor() {
 		/**
-		 * @type {*}
+		 * @type {Discord.RichEmbed}
 		 * @private
+		 * @readonly
 		 */
 		this.embed = new Discord.RichEmbed();
 	}
 
 	/**
+	 * Set the color of the embed
 	 * @param {String} color
 	 * @returns {EmbedBuilder}
 	 */
@@ -20,6 +22,7 @@ export default class EmbedBuilder {
 	}
 
 	/**
+	 * Set the title of the embed
 	 * @param {String} title
 	 * @returns {EmbedBuilder}
 	 */
@@ -40,6 +43,7 @@ export default class EmbedBuilder {
 	}
 
 	/**
+	 * Set the thumbnail image of the embed
 	 * @param {String} url
 	 * @returns {EmbedBuilder}
 	 */
@@ -50,6 +54,7 @@ export default class EmbedBuilder {
 	}
 
 	/**
+	 * Set the footer text of the embed
 	 * @param {String} text
 	 * @param {String} icon
 	 * @returns {EmbedBuilder}
@@ -61,6 +66,7 @@ export default class EmbedBuilder {
 	}
 
 	/**
+	 * Set the image of the embed
 	 * @param {String} url
 	 * @returns {EmbedBuilder}
 	 */
@@ -72,6 +78,7 @@ export default class EmbedBuilder {
 
 	// TODO: Limit text to Discord's embed char limit
 	/**
+	 * Set the text of the embed
 	 * @param {string} text
 	 * @returns {EmbedBuilder}
 	 */
@@ -82,6 +89,7 @@ export default class EmbedBuilder {
 	}
 
 	/**
+	 * Add a field to the embed
 	 * @param {String} title
 	 * @param {*} value
 	 * @returns {EmbedBuilder}
@@ -93,6 +101,7 @@ export default class EmbedBuilder {
 	}
 
 	/**
+	 * Convert the embed to a RichEmbed
 	 * @returns {Discord.RichEmbed}
 	 */
 	build() {
@@ -100,7 +109,7 @@ export default class EmbedBuilder {
 	}
 
 	/**
-	 * @param {object} obj
+	 * @param {Object} obj
 	 * @returns {EmbedBuilder}
 	 */
 	static fromObject(obj) {
@@ -140,6 +149,11 @@ export default class EmbedBuilder {
 		return result;
 	}
 
+	/**
+	 * @param {Object} sections
+	 * @param {String} color
+	 * @return {EmbedBuilder}
+	 */
 	static sections(sections, color = null) {
 		const result = new EmbedBuilder();
 

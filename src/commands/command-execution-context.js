@@ -14,26 +14,31 @@ export default class CommandExecutionContext {
 	constructor(message, args, bot, accessLevel, emojis) {
 		/**
 		 * @type {Message}
+		 * @readonly
 		 */
 		this.message = message;
 
 		/**
 		 * @type {Array<String>}
+		 * @readonly
 		 */
 		this.arguments = args;
 
 		/**
 		 * @type {Bot}
+		 * @readonly
 		 */
 		this.bot = bot;
 
 		/**
 		 * @type {AccessLevelType}
+		 * @readonly
 		 */
 		this.accessLevel = accessLevel;
 
 		/**
 		 * @type {EmojiCollection}
+		 * @readonly
 		 */
 		this.emojis = emojis;
 	}

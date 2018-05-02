@@ -3,10 +3,10 @@ import Log from '../core/log';
 export default class CommandArgumentParser {
 	// TODO: Fully review, might contain bugs or be incomplete.
 	/**
-	 * @param {object} rules
-	 * @param {object} args
-	 * @param {object} types
-	 * @returns {boolean}
+	 * @param {Object} rules
+	 * @param {Object} args
+	 * @param {Object} types
+	 * @returns {Boolean}
 	 */
 	static validate(rules, args, types = {}) {
 		const ruleKeys = Object.keys(rules);
@@ -77,6 +77,12 @@ export default class CommandArgumentParser {
 		return true;
 	}
 
+	/**
+	 * @param {String} type
+	 * @param {String} arg
+	 * @param {Object} resolvers
+	 * @returns {*}
+	 */
 	static resolve(type, arg, resolvers) {
 		const keys = Object.keys(resolvers);
 

@@ -17,23 +17,27 @@ export default class CommandManager /* extends Collection */ {
 		/**
 		 * @type {Bot}
 		 * @private
+		 * @readonly
 		 */
 		this.bot = bot;
 
 		/**
 		 * @type {String}
 		 * @private
+		 * @readonly
 		 */
 		this.commandsPath = commandsPath;
 
 		/**
 		 * @type {String}
 		 * @private
+		 * @readonly
 		 */
 		this.accessLevelsPath = accessLevelsPath;
 
 		/**
 		 * @type {Object}
+		 * @readonly
 		 */
 		this.argumentTypes = argumentTypes;
 
@@ -188,16 +192,16 @@ export default class CommandManager /* extends Collection */ {
 
 	// TODO: Move to the corresponding file/class
 	/**
-	 * @param {*} message
+	 * @param {Discord.Message} message
 	 * @param {String} role
-	 * @returns {*}
+	 * @returns {Boolean}
 	 */
 	hasRole(message, role) {
-		return message.member.roles.find("name", role);
+		return message.member.roles.find("name", role) !== null;
 	}
 
 	/**
-	 * @param {*} message
+	 * @param {Discord.Message} message
 	 * @param {Array<String>} roles
 	 * @returns {Boolean}
 	 */

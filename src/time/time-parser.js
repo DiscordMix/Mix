@@ -1,5 +1,5 @@
 import TimeSuffixType from "./time-suffix-type";
-import Utils from "./utils";
+import Utils from "../core/utils";
 
 export default class TimeParser {
 	/**

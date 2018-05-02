@@ -93,8 +93,6 @@ export default class Utils {
 	static timeFromNow(milliseconds, seconds = 0, minutes = 0, hours = 0, days = 0, months = 0, years = 0) {
 		const now = new Date();
 
-		Log.info(now.getDate().toString());
-
 		return new Date(years + now.getFullYear(), months + now.getMonth(), days + now.getDate(), hours + now.getHours(), minutes + now.getMinutes(), seconds + now.getSeconds(), milliseconds + now.getMilliseconds()).getTime();
 	}
 

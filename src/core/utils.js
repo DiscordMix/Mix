@@ -1,6 +1,5 @@
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
-import Log from "./log";
 
 TimeAgo.locale(en);
 

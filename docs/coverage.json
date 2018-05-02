@@ -1,7 +1,7 @@
 {
-  "coverage": "58.57%",
+  "coverage": "62.13%",
   "expectCount": 309,
-  "actualCount": 181,
+  "actualCount": 192,
   "files": {
     "src/collections/collection.js": {
       "expectCount": 11,
@@ -279,30 +279,23 @@
     },
     "src/emoji-ui/emoji-button.js": {
       "expectCount": 4,
-      "actualCount": 1,
+      "actualCount": 3,
       "undocumentLines": [
-        1,
-        7,
-        8
+        1
       ]
     },
     "src/emoji-ui/emoji-menu-manager.js": {
       "expectCount": 5,
-      "actualCount": 1,
+      "actualCount": 4,
       "undocumentLines": [
-        1,
-        2,
-        3,
-        4
+        1
       ]
     },
     "src/emoji-ui/emoji-menu.js": {
       "expectCount": 4,
-      "actualCount": 1,
+      "actualCount": 3,
       "undocumentLines": [
-        1,
-        7,
-        8
+        1
       ]
     },
     "src/events/command-executed-event.js": {
@@ -321,20 +314,16 @@
     },
     "src/features/feature-manager.js": {
       "expectCount": 16,
-      "actualCount": 14,
+      "actualCount": 15,
       "undocumentLines": [
-        4,
-        12
+        4
       ]
     },
     "src/features/feature.js": {
       "expectCount": 5,
-      "actualCount": 1,
+      "actualCount": 4,
       "undocumentLines": [
-        1,
-        8,
-        9,
-        10
+        1
       ]
     },
     "src/schema/schema.js": {

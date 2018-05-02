@@ -73,11 +73,20 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/emoji-ui/emoji-menu.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default class EmojiMenu {
 	/**
-	 * @param {array&lt;EmojiButton&gt;} buttons
-	 * @param {string} content
+	 * @param {Array&lt;EmojiButton&gt;} buttons
+	 * @param {String} content
 	 */
 	constructor(buttons, content) {
+		/**
+		 * @type {Array&lt;EmojiButton&gt;}
+		 * @readonly
+		 */
 		this.buttons = buttons;
+
+		/**
+		 * @type {String}
+		 * @readonly
+		 */
 		this.content = content;
 	}
 }

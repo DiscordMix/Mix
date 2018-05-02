@@ -8652,7 +8652,7 @@
     "__docId__": 340,
     "kind": "file",
     "name": "src/emoji-ui/emoji-button.js",
-    "content": "export default class EmojiButton {\n\t/**\n\t * @param {string} emoji\n\t * @param {function} clickHandler\n\t */\n\tconstructor(emoji, clickHandler) {\n\t\tthis.emoji = emoji;\n\t\tthis.handle = clickHandler;\n\t}\n}\n",
+    "content": "export default class EmojiButton {\n\t/**\n\t * @param {String} emoji\n\t * @param {Function} clickHandler\n\t */\n\tconstructor(emoji, clickHandler) {\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.emoji = emoji;\n\n\t\t/**\n\t\t * @type {Function}\n\t\t * @readonly\n\t\t */\n\t\tthis.handle = clickHandler;\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/emoji-ui/emoji-button.js",
     "access": "public",
@@ -8691,7 +8691,7 @@
       {
         "nullable": null,
         "types": [
-          "string"
+          "String"
         ],
         "spread": false,
         "optional": false,
@@ -8701,7 +8701,7 @@
       {
         "nullable": null,
         "types": [
-          "function"
+          "Function"
         ],
         "spread": false,
         "optional": false,
@@ -8718,13 +8718,21 @@
     "static": false,
     "longname": "src/emoji-ui/emoji-button.js~EmojiButton#emoji",
     "access": "public",
-    "description": null,
-    "lineNumber": 7,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 11,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -8735,20 +8743,28 @@
     "static": false,
     "longname": "src/emoji-ui/emoji-button.js~EmojiButton#handle",
     "access": "public",
-    "description": null,
-    "lineNumber": 8,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 17,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Function"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
     "__docId__": 345,
     "kind": "file",
     "name": "src/emoji-ui/emoji-menu-manager.js",
-    "content": "export default class EmojiMenuManager {\n\tconstructor(client) {\n\t\tthis.client = client;\n\t\tthis.awaiting = [];\n\n\t\tthis.client.on(\"messageReactionAdd\", (reaction, user) => {\n\t\t\tif (!user.bot) {\n\t\t\t\tfor (let i = 0; i < this.awaiting.length; i++) {\n\t\t\t\t\tif (this.awaiting[i].messageId === reaction.message.id) {\n\t\t\t\t\t\tfor (let buttonIndex = 0; buttonIndex < this.awaiting[i].menu.buttons.length; buttonIndex++) {\n\t\t\t\t\t\t\tif (this.awaiting[i].menu.buttons[buttonIndex].emoji === reaction.emoji.name) {\n\t\t\t\t\t\t\t\tthis.awaiting[i].menu.buttons[buttonIndex].handle(reaction.message, user);\n\n\t\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t}\n\n\t/**\n\t * @param {*} channel\n\t * @param {EmojiMenu} menu\n\t */\n\tasync show(channel, menu) {\n\t\tconst sentMessage = await channel.send(menu.content);\n\n\t\tfor (let i = 0; i < menu.buttons.length; i++) {\n\t\t\tawait sentMessage.react(menu.buttons[i].emoji);\n\t\t}\n\n\t\tthis.awaiting.push({\n\t\t\tmenu: menu,\n\t\t\tchannel: channel,\n\t\t\tmessageId: sentMessage.id\n\t\t});\n\n\t\treturn sentMessage;\n\t}\n}\n",
+    "content": "export default class EmojiMenuManager {\n\t/**\n\t * @param {Discord.Client} client\n\t */\n\tconstructor(client) {\n\t\t/**\n\t\t * @type {Discord.Client}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.client = client;\n\n\t\t/**\n\t\t * @type {Array}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.awaiting = [];\n\n\t\tthis.client.on(\"messageReactionAdd\", (reaction, user) => {\n\t\t\tif (!user.bot) {\n\t\t\t\tfor (let i = 0; i < this.awaiting.length; i++) {\n\t\t\t\t\tif (this.awaiting[i].messageId === reaction.message.id) {\n\t\t\t\t\t\tfor (let buttonIndex = 0; buttonIndex < this.awaiting[i].menu.buttons.length; buttonIndex++) {\n\t\t\t\t\t\t\tif (this.awaiting[i].menu.buttons[buttonIndex].emoji === reaction.emoji.name) {\n\t\t\t\t\t\t\t\tthis.awaiting[i].menu.buttons[buttonIndex].handle(reaction.message, user);\n\n\t\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t}\n\n\t/**\n\t * @param {*} channel\n\t * @param {EmojiMenu} menu\n\t */\n\tasync show(channel, menu) {\n\t\tconst sentMessage = await channel.send(menu.content);\n\n\t\tfor (let i = 0; i < menu.buttons.length; i++) {\n\t\t\tawait sentMessage.react(menu.buttons[i].emoji);\n\t\t}\n\n\t\tthis.awaiting.push({\n\t\t\tmenu: menu,\n\t\t\tchannel: channel,\n\t\t\tmessageId: sentMessage.id\n\t\t});\n\n\t\treturn sentMessage;\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/emoji-ui/emoji-menu-manager.js",
     "access": "public",
@@ -8781,9 +8797,20 @@
     "static": false,
     "longname": "src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager#constructor",
     "access": "public",
-    "description": null,
-    "lineNumber": 2,
-    "undocument": true
+    "description": "",
+    "lineNumber": 5,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Discord.Client"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "client",
+        "description": ""
+      }
+    ]
   },
   {
     "__docId__": 348,
@@ -8792,14 +8819,22 @@
     "memberof": "src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager",
     "static": false,
     "longname": "src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager#client",
-    "access": "public",
-    "description": null,
-    "lineNumber": 3,
-    "undocument": true,
+    "access": "private",
+    "description": "",
+    "lineNumber": 11,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Discord.Client"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -8809,14 +8844,22 @@
     "memberof": "src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager",
     "static": false,
     "longname": "src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager#awaiting",
-    "access": "public",
-    "description": null,
-    "lineNumber": 4,
-    "undocument": true,
+    "access": "private",
+    "description": "",
+    "lineNumber": 18,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*[]"
-      ]
+        "Array"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -8830,7 +8873,7 @@
     "longname": "src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager#show",
     "access": "public",
     "description": "",
-    "lineNumber": 27,
+    "lineNumber": 41,
     "params": [
       {
         "nullable": null,
@@ -8863,7 +8906,7 @@
     "__docId__": 351,
     "kind": "file",
     "name": "src/emoji-ui/emoji-menu.js",
-    "content": "export default class EmojiMenu {\n\t/**\n\t * @param {array<EmojiButton>} buttons\n\t * @param {string} content\n\t */\n\tconstructor(buttons, content) {\n\t\tthis.buttons = buttons;\n\t\tthis.content = content;\n\t}\n}\n",
+    "content": "export default class EmojiMenu {\n\t/**\n\t * @param {Array<EmojiButton>} buttons\n\t * @param {String} content\n\t */\n\tconstructor(buttons, content) {\n\t\t/**\n\t\t * @type {Array<EmojiButton>}\n\t\t * @readonly\n\t\t */\n\t\tthis.buttons = buttons;\n\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.content = content;\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/emoji-ui/emoji-menu.js",
     "access": "public",
@@ -8902,7 +8945,7 @@
       {
         "nullable": null,
         "types": [
-          "array<EmojiButton>"
+          "Array<EmojiButton>"
         ],
         "spread": false,
         "optional": false,
@@ -8912,7 +8955,7 @@
       {
         "nullable": null,
         "types": [
-          "string"
+          "String"
         ],
         "spread": false,
         "optional": false,
@@ -8929,13 +8972,21 @@
     "static": false,
     "longname": "src/emoji-ui/emoji-menu.js~EmojiMenu#buttons",
     "access": "public",
-    "description": null,
-    "lineNumber": 7,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 11,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Array<EmojiButton>"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -8946,13 +8997,21 @@
     "static": false,
     "longname": "src/emoji-ui/emoji-menu.js~EmojiMenu#content",
     "access": "public",
-    "description": null,
-    "lineNumber": 8,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 17,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9188,7 +9247,7 @@
     "__docId__": 367,
     "kind": "file",
     "name": "src/features/feature-manager.js",
-    "content": "// import Collection from \"../collections/collection\";\n\n// TODO: Implement the Collection class.\nexport default class FeatureManager /* extends Collection */ {\n\t/**\n\t * @param {Bot} bot\n\t * @param {Array<Feature>} features\n\t */\n\tconstructor(bot, features = []) {\n\t\t// super(features);\n\n\t\tthis.features = features;\n\n\t\t/**\n\t\t * @type {Bot}\n\t\t * @private\n\t\t */\n\t\tthis.bot = bot;\n\t}\n\n\t/**\n\t * Enable a feature\n\t * @param {Feature} feature\n\t * @returns {Boolean}\n\t */\n\tenable(feature) {\n\t\tif (feature.canEnable(this.bot)) {\n\t\t\tfeature.enabled(this.bot);\n\t\t\tfeature.isEnabled = true;\n\n\t\t\treturn true;\n\t\t}\n\n\t\treturn false;\n\t}\n\n\t/**\n\t * Enable multiple features at once\n\t * @param {Array<Feature>}features\n\t * @returns {Number}\n\t */\n\tenableMultiple(features) {\n\t\tlet totalEnabled = 0;\n\n\t\tfor (let i = 0; i < features.length; i++) {\n\t\t\tif (this.enable(features[i])) {\n\t\t\t\ttotalEnabled++;\n\t\t\t}\n\t\t}\n\n\t\treturn totalEnabled;\n\t}\n\n\t/**\n\t * Enable all the currently registered features\n\t * @returns {Number}\n\t */\n\tenableAll() {\n\t\treturn this.enableMultiple(this.features);\n\t}\n\n\t/**\n\t * Disable a feature\n\t * @param {Feature} feature\n\t */\n\tdisable(feature) {\n\t\tfeature.disabled(this.bot);\n\t\tfeature.isEnabled = false;\n\t}\n\n\t/**\n\t * Disable multiple features at once\n\t * @param {Array<Feature>} features\n\t */\n\tdisableMultiple(features) {\n\t\tfor (let i = 0; i < features.length; i++) {\n\t\t\tthis.disable(features[i], this.bot);\n\t\t}\n\t}\n\n\t/**\n\t * Disable all the currently registered features\n\t */\n\tdisableAll() {\n\t\tthis.disableMultiple(this.features);\n\t}\n\n\t/**\n\t * Reload all currently registered and enabled features\n\t * @returns {Number}\n\t */\n\treloadAll() {\n\t\tthis.disableAll();\n\n\t\treturn this.enableAll();\n\t}\n\n\t// TODO: Replace by Collection's native methods\n\t/**\n\t * Register a feature\n\t * @param {Feature} feature\n\t */\n\tregister(feature) {\n\t\tthis.features.push(feature);\n\t}\n\n\t/**\n\t * Register multiple features at once\n\t * @param {Array<Feature>} features\n\t */\n\tregisterMultiple(features) {\n\t\tfor (let i = 0; i < features.length; i++) {\n\t\t\tthis.register(features[i]);\n\t\t}\n\t}\n\n\t/**\n\t * Determine whether a feature is registered\n\t * @param {String} key\n\t * @returns {Boolean}\n\t */\n\tisRegistered(key) {\n\t\treturn this.get(key) != null;\n\t}\n\n\t/**\n\t * Determine whether a feature is enabled\n\t * @param {String} key\n\t * @returns {Boolean}\n\t */\n\tisEnabled(key) {\n\t\treturn this.get(key).isEnabled;\n\t}\n\n\t/**\n\t * @param {String} key\n\t * @returns {(Feature|Null)}\n\t */\n\tget(key) {\n\t\t// TODO: Simplify this process into a function to prevent redundancy\n\t\tfor (let i = 0; i < this.features.length; i++) {\n\t\t\tif (this.features[i].key === key) {\n\t\t\t\treturn this.features[i];\n\t\t\t}\n\t\t}\n\n\t\treturn null;\n\t}\n}\n",
+    "content": "// import Collection from \"../collections/collection\";\n\n// TODO: Implement the Collection class.\nexport default class FeatureManager /* extends Collection */ {\n\t/**\n\t * @param {Bot} bot\n\t * @param {Array<Feature>} features\n\t */\n\tconstructor(bot, features = []) {\n\t\t// super(features);\n\n\t\t/**\n\t\t * @type {Array<Feature>}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.features = features;\n\n\t\t/**\n\t\t * @type {Bot}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.bot = bot;\n\t}\n\n\t/**\n\t * Enable a feature\n\t * @param {Feature} feature\n\t * @returns {Boolean}\n\t */\n\tenable(feature) {\n\t\tif (feature.canEnable(this.bot)) {\n\t\t\tfeature.enabled(this.bot);\n\t\t\tfeature.isEnabled = true;\n\n\t\t\treturn true;\n\t\t}\n\n\t\treturn false;\n\t}\n\n\t/**\n\t * Enable multiple features at once\n\t * @param {Array<Feature>} features\n\t * @returns {Number}\n\t */\n\tenableMultiple(features) {\n\t\tlet totalEnabled = 0;\n\n\t\tfor (let i = 0; i < features.length; i++) {\n\t\t\tif (this.enable(features[i])) {\n\t\t\t\ttotalEnabled++;\n\t\t\t}\n\t\t}\n\n\t\treturn totalEnabled;\n\t}\n\n\t/**\n\t * Enable all the currently registered features\n\t * @returns {Number}\n\t */\n\tenableAll() {\n\t\treturn this.enableMultiple(this.features);\n\t}\n\n\t/**\n\t * Disable a feature\n\t * @param {Feature} feature\n\t */\n\tdisable(feature) {\n\t\tfeature.disabled(this.bot);\n\t\tfeature.isEnabled = false;\n\t}\n\n\t/**\n\t * Disable multiple features at once\n\t * @param {Array<Feature>} features\n\t */\n\tdisableMultiple(features) {\n\t\tfor (let i = 0; i < features.length; i++) {\n\t\t\tthis.disable(features[i], this.bot);\n\t\t}\n\t}\n\n\t/**\n\t * Disable all the currently registered features\n\t */\n\tdisableAll() {\n\t\tthis.disableMultiple(this.features);\n\t}\n\n\t/**\n\t * Reload all currently registered and enabled features\n\t * @returns {Number}\n\t */\n\treloadAll() {\n\t\tthis.disableAll();\n\n\t\treturn this.enableAll();\n\t}\n\n\t// TODO: Replace by Collection's native methods\n\t/**\n\t * Register a feature\n\t * @param {Feature} feature\n\t */\n\tregister(feature) {\n\t\tthis.features.push(feature);\n\t}\n\n\t/**\n\t * Register multiple features at once\n\t * @param {Array<Feature>} features\n\t */\n\tregisterMultiple(features) {\n\t\tfor (let i = 0; i < features.length; i++) {\n\t\t\tthis.register(features[i]);\n\t\t}\n\t}\n\n\t/**\n\t * Determine whether a feature is registered\n\t * @param {String} key\n\t * @returns {Boolean}\n\t */\n\tisRegistered(key) {\n\t\treturn this.get(key) != null;\n\t}\n\n\t/**\n\t * Determine whether a feature is enabled\n\t * @param {String} key\n\t * @returns {Boolean}\n\t */\n\tisEnabled(key) {\n\t\treturn this.get(key).isEnabled;\n\t}\n\n\t/**\n\t * @param {String} key\n\t * @returns {(Feature|Null)}\n\t */\n\tget(key) {\n\t\t// TODO: Simplify this process into a function to prevent redundancy\n\t\tfor (let i = 0; i < this.features.length; i++) {\n\t\t\tif (this.features[i].key === key) {\n\t\t\t\treturn this.features[i];\n\t\t\t}\n\t\t}\n\n\t\treturn null;\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/features/feature-manager.js",
     "access": "public",
@@ -9253,14 +9312,22 @@
     "memberof": "src/features/feature-manager.js~FeatureManager",
     "static": false,
     "longname": "src/features/feature-manager.js~FeatureManager#features",
-    "access": "public",
-    "description": null,
-    "lineNumber": 12,
-    "undocument": true,
+    "access": "private",
+    "description": "",
+    "lineNumber": 17,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Array<Feature>"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9272,7 +9339,13 @@
     "longname": "src/features/feature-manager.js~FeatureManager#bot",
     "access": "private",
     "description": "",
-    "lineNumber": 18,
+    "lineNumber": 24,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -9293,7 +9366,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#enable",
     "access": "public",
     "description": "Enable a feature",
-    "lineNumber": 26,
+    "lineNumber": 32,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9332,7 +9405,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#enableMultiple",
     "access": "public",
     "description": "Enable multiple features at once",
-    "lineNumber": 42,
+    "lineNumber": 48,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9343,11 +9416,11 @@
       {
         "nullable": null,
         "types": [
-          "*"
+          "Array<Feature>"
         ],
         "spread": false,
         "optional": false,
-        "name": "{Array<Feature>}features",
+        "name": "features",
         "description": ""
       }
     ],
@@ -9371,7 +9444,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#enableAll",
     "access": "public",
     "description": "Enable all the currently registered features",
-    "lineNumber": 58,
+    "lineNumber": 64,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9399,7 +9472,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#disable",
     "access": "public",
     "description": "Disable a feature",
-    "lineNumber": 66,
+    "lineNumber": 72,
     "params": [
       {
         "nullable": null,
@@ -9425,7 +9498,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#disableMultiple",
     "access": "public",
     "description": "Disable multiple features at once",
-    "lineNumber": 75,
+    "lineNumber": 81,
     "params": [
       {
         "nullable": null,
@@ -9451,7 +9524,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#disableAll",
     "access": "public",
     "description": "Disable all the currently registered features",
-    "lineNumber": 84,
+    "lineNumber": 90,
     "params": [],
     "return": null
   },
@@ -9466,7 +9539,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#reloadAll",
     "access": "public",
     "description": "Reload all currently registered and enabled features",
-    "lineNumber": 92,
+    "lineNumber": 98,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9494,7 +9567,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#register",
     "access": "public",
     "description": "Register a feature",
-    "lineNumber": 103,
+    "lineNumber": 109,
     "params": [
       {
         "nullable": null,
@@ -9520,7 +9593,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#registerMultiple",
     "access": "public",
     "description": "Register multiple features at once",
-    "lineNumber": 111,
+    "lineNumber": 117,
     "params": [
       {
         "nullable": null,
@@ -9546,7 +9619,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#isRegistered",
     "access": "public",
     "description": "Determine whether a feature is registered",
-    "lineNumber": 122,
+    "lineNumber": 128,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9585,7 +9658,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#isEnabled",
     "access": "public",
     "description": "Determine whether a feature is enabled",
-    "lineNumber": 131,
+    "lineNumber": 137,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9624,7 +9697,7 @@
     "longname": "src/features/feature-manager.js~FeatureManager#get",
     "access": "public",
     "description": "",
-    "lineNumber": 139,
+    "lineNumber": 145,
     "unknown": [
       {
         "tagName": "@returns",
@@ -9657,7 +9730,7 @@
     "__docId__": 384,
     "kind": "file",
     "name": "src/features/feature.js",
-    "content": "export default class Feature {\r\n\t/**\r\n\t * @param {String} name\r\n\t * @param {String} key\r\n\t * @param {String} description\r\n\t */\r\n\tconstructor(name, key, description) {\r\n\t\tthis.name = name;\r\n\t\tthis.key = key;\r\n\t\tthis.description = description;\r\n\t}\r\n\r\n\t// TODO: Throw methods not implemented\r\n}\r\n",
+    "content": "export default class Feature {\r\n\t/**\r\n\t * @param {String} name The name of the feature\r\n\t * @param {String} key\r\n\t * @param {String} description The description of the feature\r\n\t */\r\n\tconstructor(name, key, description) {\r\n\t\t/**\r\n\t\t * @type {String}\r\n\t\t */\r\n\t\tthis.name = name;\r\n\r\n\t\t/**\r\n\t\t * @type {String}\r\n\t\t */\r\n\t\tthis.key = key;\r\n\r\n\t\t/**\r\n\t\t * @type {String}\r\n\t\t */\r\n\t\tthis.description = description;\r\n\t}\r\n\r\n\t// TODO: Throw methods not implemented\r\n}\r\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/features/feature.js",
     "access": "public",
@@ -9701,7 +9774,7 @@
         "spread": false,
         "optional": false,
         "name": "name",
-        "description": ""
+        "description": "The name of the feature"
       },
       {
         "nullable": null,
@@ -9721,7 +9794,7 @@
         "spread": false,
         "optional": false,
         "name": "description",
-        "description": ""
+        "description": "The description of the feature"
       }
     ]
   },
@@ -9733,13 +9806,15 @@
     "static": false,
     "longname": "src/features/feature.js~Feature#name",
     "access": "public",
-    "description": null,
-    "lineNumber": 8,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 11,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9750,13 +9825,15 @@
     "static": false,
     "longname": "src/features/feature.js~Feature#key",
     "access": "public",
-    "description": null,
-    "lineNumber": 9,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 16,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9767,13 +9844,15 @@
     "static": false,
     "longname": "src/features/feature.js~Feature#description",
     "access": "public",
-    "description": null,
-    "lineNumber": 10,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 21,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -9910,7 +9989,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\n\t\"name\": \"discord-anvil\",\n\t\"version\": \"1.0.9\",\n\t\"description\": \"Powerful Discord bot framework\",\n\t\"main\": \"dist/index.js\",\n\t\"presets\": [\n\t\t\"env\",\n\t\t\"es2015\"\n\t],\n\t\"scripts\": {\n\t\t\"build\": \"babel src --out-dir dist\",\n\t\t\"test\": \"npm run build && mocha dist/test/tests.js\",\n\t\t\"prepublish\": \"npm run build\"\n\t},\n\t\"author\": \"Phantom <private.phantom@outlook.com>\",\n\t\"contributors\": [\n\t\t\"AL_1 <allen.m.lantz@gmail.com> (https://al1l.com/)\"\n\t],\n\t\"license\": \"MIT\",\n\t\"dependencies\": {\n\t\t\"@raxor1234/typer\": \"^1.0.0\",\n\t\t\"argparse\": \"^1.0.10\",\n\t\t\"colors\": \"latest\",\n\t\t\"dblapi.js\": \"^2.0.0\",\n\t\t\"discord.js\": \"^11.2.1\",\n\t\t\"javascript-time-ago\": \"^1.0.30\",\n\t\t\"lodash\": \"^4.17.5\",\n\t\t\"minimist\": \"^1.2.0\",\n\t\t\"querystring\": \"^0.2.0\",\n\t\t\"request\": \"^2.83.0\"\n\t},\n\t\"devDependencies\": {\n\t\t\"babel-cli\": \"^6.26.0\",\n\t\t\"babel-preset-env\": \"^1.6.1\",\n\t\t\"babel-preset-es2015\": \"^6.24.1\",\n\t\t\"chai\": \"^4.1.2\",\n\t\t\"esdoc\": \"^1.1.0\",\n\t\t\"esdoc-standard-plugin\": \"^1.0.0\",\n\t\t\"eslint\": \"^4.19.1\",\n\t\t\"eslint-config-airbnb-base\": \"^12.1.0\",\n\t\t\"eslint-plugin-import\": \"^2.10.0\",\n\t\t\"mocha\": \"^5.1.1\"\n\t}\n}\n",
+    "content": "{\n\t\"name\": \"discord-anvil\",\n\t\"version\": \"1.0.9\",\n\t\"description\": \"Powerful Discord bot framework\",\n\t\"main\": \"dist/index.js\",\n\t\"presets\": [\n\t\t\"env\",\n\t\t\"es2015\"\n\t],\n\t\"scripts\": {\n\t\t\"build\": \"babel src --out-dir dist\",\n\t\t\"test\": \"npm run build && mocha dist/test/tests.js\",\n\t\t\"prepublish\": \"npm run build\"\n\t},\n\t\"author\": \"Phantom <private.phantom@outlook.com>\",\n\t\"contributors\": [\n\t\t\"AL_1 <allen.m.lantz@gmail.com> (https://al1l.com/)\"\n\t],\n\t\"license\": \"MIT\",\n\t\"dependencies\": {\n\t\t\"@raxor1234/typer\": \"^1.0.0\",\n\t\t\"argparse\": \"^1.0.10\",\n\t\t\"colors\": \"latest\",\n\t\t\"dblapi.js\": \"^2.0.0\",\n\t\t\"discord.js\": \"^11.2.1\",\n\t\t\"javascript-time-ago\": \"^1.0.30\",\n\t\t\"lodash\": \"^4.17.5\",\n\t\t\"minimist\": \"^1.2.0\",\n\t\t\"mysql\": \"^2.15.0\",\n\t\t\"querystring\": \"^0.2.0\",\n\t\t\"request\": \"^2.83.0\"\n\t},\n\t\"devDependencies\": {\n\t\t\"babel-cli\": \"^6.26.0\",\n\t\t\"babel-preset-env\": \"^1.6.1\",\n\t\t\"babel-preset-es2015\": \"^6.24.1\",\n\t\t\"chai\": \"^4.1.2\",\n\t\t\"esdoc\": \"^1.1.0\",\n\t\t\"esdoc-standard-plugin\": \"^1.0.0\",\n\t\t\"eslint\": \"^4.19.1\",\n\t\t\"eslint-config-airbnb-base\": \"^12.1.0\",\n\t\t\"eslint-plugin-import\": \"^2.10.0\",\n\t\t\"mocha\": \"^5.1.1\"\n\t}\n}\n",
     "longname": "/home/atlas/Desktop/Projects/Anvil/package.json",
     "name": "package.json",
     "static": true,

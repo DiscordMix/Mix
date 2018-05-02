@@ -73,13 +73,24 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/features/feature.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default class Feature {
 	/**
-	 * @param {String} name
+	 * @param {String} name The name of the feature
 	 * @param {String} key
-	 * @param {String} description
+	 * @param {String} description The description of the feature
 	 */
 	constructor(name, key, description) {
+		/**
+		 * @type {String}
+		 */
 		this.name = name;
+
+		/**
+		 * @type {String}
+		 */
 		this.key = key;
+
+		/**
+		 * @type {String}
+		 */
 		this.description = description;
 	}
 

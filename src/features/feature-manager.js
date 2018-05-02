@@ -42,7 +42,7 @@ export default class FeatureManager /* extends Collection */ {
 
 	/**
 	 * Enable multiple features at once
-	 * @param {Array<Feature>}features
+	 * @param {Array<Feature>} features
 	 * @returns {Number}
 	 */
 	enableMultiple(features) {

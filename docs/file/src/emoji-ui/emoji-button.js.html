@@ -73,11 +73,20 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/emoji-ui/emoji-button.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default class EmojiButton {
 	/**
-	 * @param {string} emoji
-	 * @param {function} clickHandler
+	 * @param {String} emoji
+	 * @param {Function} clickHandler
 	 */
 	constructor(emoji, clickHandler) {
+		/**
+		 * @type {String}
+		 * @readonly
+		 */
 		this.emoji = emoji;
+
+		/**
+		 * @type {Function}
+		 * @readonly
+		 */
 		this.handle = clickHandler;
 	}
 }

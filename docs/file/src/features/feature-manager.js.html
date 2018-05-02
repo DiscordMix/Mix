@@ -82,11 +82,17 @@ export default class FeatureManager /* extends Collection */ {
 	constructor(bot, features = []) {
 		// super(features);
 
+		/**
+		 * @type {Array&lt;Feature&gt;}
+		 * @private
+		 * @readonly
+		 */
 		this.features = features;
 
 		/**
 		 * @type {Bot}
 		 * @private
+		 * @readonly
 		 */
 		this.bot = bot;
 	}
@@ -109,7 +115,7 @@ export default class FeatureManager /* extends Collection */ {
 
 	/**
 	 * Enable multiple features at once
-	 * @param {Array&lt;Feature&gt;}features
+	 * @param {Array&lt;Feature&gt;} features
 	 * @returns {Number}
 	 */
 	enableMultiple(features) {

@@ -1,6 +1,9 @@
 import RGB from "./rgb";
 import Utils from "./utils";
 
+/**
+ * @extends RGB
+ */
 export default class RGBA extends RGB {
 	/**
 	 * @param {number} red

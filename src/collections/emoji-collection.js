@@ -2,6 +2,9 @@ import Collection from "./collection";
 
 const fs = require("fs");
 
+/**
+ * @extends Collection
+ */
 export default class EmojiCollection extends Collection {
 	/**
 	 * @param {Array<Object>} emojis

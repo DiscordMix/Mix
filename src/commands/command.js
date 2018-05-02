@@ -1,17 +1,17 @@
 export default class Command {
 	/**
-	 * @param {string} base
-	 * @param {string} description
-	 * @param {array<string>} aliases
-	 * @param {(string|null)} extendedDescription
-	 * @param {number} maxArguments
+	 * @param {String} base
+	 * @param {String} description
+	 * @param {Array<String>} aliases
+	 * @param {(String|Null)} extendedDescription
+	 * @param {Number} maxArguments
 	 * @param {AccessLevelType} accessLevel
-	 * @param {function} onExecuted
-	 * @param {function} canExecute
+	 * @param {Function} onExecuted
+	 * @param {Function} canExecute
 	 * @param {CommandCategoryType} category
-	 * @param {object} args
-	 * @param {boolean} isEnabled
-	 * @param {number} price
+	 * @param {Object} args
+	 * @param {Boolean} isEnabled
+	 * @param {Number} price
 	 */
 	constructor(base, description, aliases, extendedDescription, maxArguments, accessLevel, onExecuted, canExecute, category, args, isEnabled, price) {
 		this.base = base;
@@ -29,7 +29,7 @@ export default class Command {
 	}
 
 	/**
-	 * @param {object} module
+	 * @param {Object} module
 	 * @returns {Command}
 	 */
 	static fromModule(module) {

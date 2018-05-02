@@ -1,6 +1,11 @@
 const _ = require("lodash");
 
 export default class Schema {
+	/**
+	 * @param {Object} struct
+	 * @param {Object} schema
+	 * @returns {Boolean}
+	 */
 	static validate(struct, schema) {
 		const keys = Object.keys(schema);
 

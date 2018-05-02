@@ -16,6 +16,9 @@ const Discord = require("discord.js");
 const EventEmitter = require("events");
 const fs = require("fs");
 
+/**
+ * @extends EventEmitter
+ */
 export default class Bot extends EventEmitter {
 	/**
 	 * @param {Object} data

@@ -4,6 +4,9 @@ import DataAdapter from "./data-adapter";
 const fs = require("fs");
 const _ = require("lodash");
 
+/**
+ * @extends ObjectAdapter
+ */
 export default class JsonAdapter extends ObjectAdapter {
 	/**
 	 * @param {String} path

@@ -1,6 +1,9 @@
 const EventEmitter = require("events");
 const _ = require("lodash");
 
+/**
+ * @extends EventEmitter
+ */
 export default class Collection extends EventEmitter {
 	/**
 	 * @param {Array} items

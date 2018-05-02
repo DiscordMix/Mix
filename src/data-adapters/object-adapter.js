@@ -2,6 +2,9 @@ import DataAdapter from "./data-adapter";
 
 const _ = require("lodash");
 
+/**
+ * @extends DataAdapter
+ */
 export default class ObjectAdapter extends DataAdapter {
 	/**
 	 * @param {Object} data

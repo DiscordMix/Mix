@@ -1,5 +1,8 @@
 import DataAdapter from "./data-adapter";
 
+/**
+ * @extends DataAdapter
+ */
 export default class SqliteAdapter extends DataAdapter {
 	constructor() {
 		super();

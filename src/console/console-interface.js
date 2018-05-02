@@ -3,6 +3,9 @@ import Log from "../core/log";
 const readline = require("readline");
 
 export default class ConsoleInterface {
+	/**
+	 * @param {Bot} bot
+	 */
 	init(bot) {
 		const ci = readline.createInterface({
 			input: process.stdin,

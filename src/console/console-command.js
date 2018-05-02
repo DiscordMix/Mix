@@ -10,11 +10,13 @@ export default class ConsoleCommand {
 	constructor(base, args) {
 		/**
 		 * @type {String}
+		 * @readonly
 		 */
 		this.base = base;
 
 		/**
 		 * @type {Object}
+		 * @readonly
 		 */
 		this.args = args;
 	}

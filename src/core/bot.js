@@ -27,6 +27,11 @@ export default class Bot extends EventEmitter {
 		this.setup(data);
 	}
 
+	/**
+	 * Setup the bot from an object
+	 * @param {Object} data
+	 * @return {Promise}
+	 */
 	async setup(data) {
 		// TODO: Should use the Typer library (Typer needs update)
 		if (!Schema.validate(data, {
@@ -42,51 +47,61 @@ export default class Bot extends EventEmitter {
 
 		/**
 		 * @type {Settings}
+		 * @readonly
 		 */
 		this.settings = new Settings(data.paths.settings);
 
 		/**
 		 * @type {DataAdapter}
+		 * @readonly
 		 */
 		this.dataAdapter = data.dataAdapter;
 
 		/**
 		 * @type {EmojiCollection}
+		 * @readonly
 		 */
 		this.emojis = EmojiCollection.fromFile(data.paths.emojis);
 
 		/**
 		 * @type {Discord.Client}
+		 * @readonly
 		 */
 		this.client = new Discord.Client();
 
 		/**
 		 * @type {CommandManager}
+		 * @readonly
 		 */
 		this.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes);
 
 		/**
 		 * @type {FeatureManager}
+		 * @readonly
 		 */
 		this.features = new FeatureManager();
 
 		/**
 		 * @type {CommandLoader}
+		 * @readonly
 		 */
 		this.commandLoader = new CommandLoader(this.commands);
 
 		/**
 		 * @type {ConsoleInterface}
+		 * @readonly
 		 */
 		this.console = new ConsoleInterface();
 
 		/**
 		 * @type {EmojiMenuManager}
+		 * @readonly
 		 */
 		this.menus = new EmojiMenuManager(this.client);
 
 		/**
 		 * @type {Log}
+		 * @readonly
 		 */
 		this.log = new Log(this);
 
@@ -98,6 +113,9 @@ export default class Bot extends EventEmitter {
 		Log.verbose("Bot setup completed");
 	}
 
+	/**
+	 * Setup the client's events
+	 */
 	setupEvents() {
 		// TODO: Find better position
 		const resolvers = {
@@ -139,11 +157,19 @@ export default class Bot extends EventEmitter {
 		});
 	}
 
+	/**
+	 * Connect the client
+	 * @return {Promise}
+	 */
 	async connect() {
 		this.log.info("Starting");
 		await this.client.login(this.settings.general.token);
 	}
 
+	/**
+	 * Restart the bot's client
+	 * @return {Promise}
+	 */
 	async restart() {
 		this.log.info("Restarting");
 
@@ -154,12 +180,20 @@ export default class Bot extends EventEmitter {
 		await this.connect();
 	}
 
+	/**
+	 * Disconnect the client
+	 * @return {Promise}
+	 */
 	async disconnect() {
 		this.settings.save();
 		await this.client.destroy();
 		this.log.info("Disconnected");
 	}
 
+	/**
+	 * Clear all the files inside the temp folder
+	 * @return {Promise}
+	 */
 	static async clearTemp() {
 		if (fs.existsSync("./temp")) {
 			fs.readdir("./temp", (error, files) => {

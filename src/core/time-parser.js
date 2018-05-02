@@ -6,6 +6,11 @@ export default class TimeParser {
 	 * @param {String} timeString
 	 */
 	constructor(timeString) {
+		/**
+		 * @type {String}
+		 * @private
+		 * @readonly
+		 */
 		this.timeString = timeString;
 	}
 

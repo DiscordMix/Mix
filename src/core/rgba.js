@@ -6,10 +6,10 @@ import Utils from "./utils";
  */
 export default class RGBA extends RGB {
 	/**
-	 * @param {number} red
-	 * @param {number} green
-	 * @param {number} blue
-	 * @param {number} alpha
+	 * @param {Number} red
+	 * @param {Number} green
+	 * @param {Number} blue
+	 * @param {Number} alpha
 	 */
 	constructor(red, green, blue, alpha) {
 		super(red, green, blue);
@@ -18,14 +18,14 @@ export default class RGBA extends RGB {
 	}
 
 	/**
-	 * @returns {string}
+	 * @returns {String}
 	 */
 	toString() {
 		return `${this.red}, ${this.green}, ${this.blue}, ${this.alpha}`;
 	}
 
 	/**
-	 * @returns {object}
+	 * @returns {Object}
 	 */
 	toObject() {
 		return {
@@ -37,8 +37,8 @@ export default class RGBA extends RGB {
 	}
 
 	/**
-	 * @param {string} hex
-	 * @returns {(RGBA|null)}
+	 * @param {String} hex
+	 * @returns {(RGBA|Null)}
 	 */
 	static fromHex(hex) {
 		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);

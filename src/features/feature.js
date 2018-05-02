@@ -7,16 +7,19 @@ export default class Feature {
 	constructor(name, key, description) {
 		/**
 		 * @type {String}
+		 * @readonly
 		 */
 		this.name = name;
 
 		/**
 		 * @type {String}
+		 * @readonly
 		 */
 		this.key = key;
 
 		/**
 		 * @type {String}
+		 * @readonly
 		 */
 		this.description = description;
 	}

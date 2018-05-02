@@ -35,6 +35,6 @@ export default class SqliteAdapter extends DataAdapter {
 	 * @param {*} data
 	 */
 	merge(guildId, path, data) {
-		throw new Error("[SqliteAdapter.set] Method not implemented.");
+		throw new Error("[SqliteAdapter.merge] Method not implemented.");
 	}
 }

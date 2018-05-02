@@ -8,8 +8,8 @@ const timeAgo = new TimeAgo("en-US");
 
 export default class Utils {
 	/**
-	 * @param {string} mention
-	 * @returns {string}
+	 * @param {String} mention
+	 * @returns {String}
 	 */
 	static resolveId(mention) {
 		return mention
@@ -22,17 +22,17 @@ export default class Utils {
 	}
 
 	/**
-	 * @param {number} min
-	 * @param {number} max
-	 * @returns {number}
+	 * @param {Number} min
+	 * @param {Number} max
+	 * @returns {Number}
 	 */
 	static getRandomInt(min, max) {
 		return Math.floor(Math.random() * max) + min;
 	}
 
 	/**
-	 * @param array
-	 * @returns {array}
+	 * @param {Array} array
+	 * @returns {Array}
 	 */
 	static shuffle(array) {
 		let counter = array.length;
@@ -100,6 +100,7 @@ export default class Utils {
 
 	/**
 	 * @param {Number} timestamp
+	 * @returns {*}
 	 */
 	static timeAgo(timestamp) {
 		return timeAgo.format(timestamp);
@@ -107,6 +108,7 @@ export default class Utils {
 
 	/**
 	 * @param {String} state
+	 * @returns {Boolean}
 	 */
 	static translateState(state) {
 		return /^(1|true|on|y|yes)$/i.test(state);

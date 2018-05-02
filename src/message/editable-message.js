@@ -1,4 +1,4 @@
-import Log from "./log";
+import Log from "../core/log";
 
 const Discord = require("discord.js");
 

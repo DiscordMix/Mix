@@ -76,6 +76,9 @@
 const readline = require(&quot;readline&quot;);
 
 export default class ConsoleInterface {
+	/**
+	 * @param {Bot} bot
+	 */
 	init(bot) {
 		const ci = readline.createInterface({
 			input: process.stdin,

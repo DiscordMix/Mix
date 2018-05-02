@@ -3781,7 +3781,7 @@
     "__docId__": 154,
     "kind": "file",
     "name": "src/console/console-command.js",
-    "content": "import Log from '../core/log';\n\nconst parseArgs = require(\"minimist\");\n\nexport default class ConsoleCommand {\n\t/**\n\t * @param {String} base\n\t * @param {Object} args\n\t */\n\tconstructor(base, args) {\n\t\t/**\n\t\t * @type {String}\n\t\t */\n\t\tthis.base = base;\n\n\t\t/**\n\t\t * @type {Object}\n\t\t */\n\t\tthis.args = args;\n\t}\n\n\t// TODO\n\t/**\n\t * @param {String} consoleCommandString\n\t * @returns {ConsoleCommand}\n\t */\n\tstatic parse(consoleCommandString) {\n\t\tconst split = consoleCommandString.split(\" \");\n\n\t\tLog.info(split.join(\" \"));\n\n\t\treturn new ConsoleCommand(split[0], parseArgs(split.splice(1, 0).join(\" \")));\n\t}\n}\n",
+    "content": "import Log from '../core/log';\n\nconst parseArgs = require(\"minimist\");\n\nexport default class ConsoleCommand {\n\t/**\n\t * @param {String} base\n\t * @param {Object} args\n\t */\n\tconstructor(base, args) {\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.base = base;\n\n\t\t/**\n\t\t * @type {Object}\n\t\t * @readonly\n\t\t */\n\t\tthis.args = args;\n\t}\n\n\t// TODO\n\t/**\n\t * @param {String} consoleCommandString\n\t * @returns {ConsoleCommand}\n\t */\n\tstatic parse(consoleCommandString) {\n\t\tconst split = consoleCommandString.split(\" \");\n\n\t\tLog.info(split.join(\" \"));\n\n\t\treturn new ConsoleCommand(split[0], parseArgs(split.splice(1, 0).join(\" \")));\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/console/console-command.js",
     "access": "public",
@@ -3869,7 +3869,13 @@
     "longname": "src/console/console-command.js~ConsoleCommand#base",
     "access": "public",
     "description": "",
-    "lineNumber": 14,
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -3888,7 +3894,13 @@
     "longname": "src/console/console-command.js~ConsoleCommand#args",
     "access": "public",
     "description": "",
-    "lineNumber": 19,
+    "lineNumber": 21,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -3909,7 +3921,7 @@
     "longname": "src/console/console-command.js~ConsoleCommand.parse",
     "access": "public",
     "description": "",
-    "lineNumber": 27,
+    "lineNumber": 29,
     "unknown": [
       {
         "tagName": "@returns",
@@ -3941,7 +3953,7 @@
     "__docId__": 161,
     "kind": "file",
     "name": "src/console/console-interface.js",
-    "content": "import Log from \"../core/log\";\n\nconst readline = require(\"readline\");\n\nexport default class ConsoleInterface {\n\tinit(bot) {\n\t\tconst ci = readline.createInterface({\n\t\t\tinput: process.stdin,\n\t\t\toutput: process.stdout\n\t\t});\n\n\t\tci.prompt(true);\n\n\t\tci.on(\"line\", (input) => {\n\t\t\tswitch (input.trim()) {\n\t\t\t\tcase \"\": {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tcase \"stop\": {\n\t\t\t\t\tbot.disconnect();\n\t\t\t\t\tprocess.exit(0);\n\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tcase \"help\": {\n\t\t\t\t\tconsole.log(\"CLI Commands: stop, help\");\n\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tdefault: {\n\t\t\t\t\tconsole.log(`Invalid command: ${input}`);\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tci.prompt();\n\t\t});\n\n\t\tci.on(\"close\", () => {\n\t\t\t// TODO: Temp. disabled due to interferring and going straight disconnection on vps/linux\n\t\t\t/* bot.disconnect();\n\t\t\tprocess.exit(0); */\n\t\t});\n\n\t\tLog.verbose(\"Console interface setup completed\");\n\t}\n}\n",
+    "content": "import Log from \"../core/log\";\n\nconst readline = require(\"readline\");\n\nexport default class ConsoleInterface {\n\t/**\n\t * @param {Bot} bot\n\t */\n\tinit(bot) {\n\t\tconst ci = readline.createInterface({\n\t\t\tinput: process.stdin,\n\t\t\toutput: process.stdout\n\t\t});\n\n\t\tci.prompt(true);\n\n\t\tci.on(\"line\", (input) => {\n\t\t\tswitch (input.trim()) {\n\t\t\t\tcase \"\": {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tcase \"stop\": {\n\t\t\t\t\tbot.disconnect();\n\t\t\t\t\tprocess.exit(0);\n\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tcase \"help\": {\n\t\t\t\t\tconsole.log(\"CLI Commands: stop, help\");\n\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tdefault: {\n\t\t\t\t\tconsole.log(`Invalid command: ${input}`);\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tci.prompt();\n\t\t});\n\n\t\tci.on(\"close\", () => {\n\t\t\t// TODO: Temp. disabled due to interferring and going straight disconnection on vps/linux\n\t\t\t/* bot.disconnect();\n\t\t\tprocess.exit(0); */\n\t\t});\n\n\t\tLog.verbose(\"Console interface setup completed\");\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/console/console-interface.js",
     "access": "public",
@@ -3995,15 +4007,18 @@
     "static": false,
     "longname": "src/console/console-interface.js~ConsoleInterface#init",
     "access": "public",
-    "description": null,
-    "lineNumber": 6,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 9,
     "params": [
       {
-        "name": "bot",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Bot"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "bot",
+        "description": ""
       }
     ],
     "return": null
@@ -4043,7 +4058,7 @@
     "__docId__": 167,
     "kind": "file",
     "name": "src/core/bot.js",
-    "content": "import CommandParser from \"../commands/command-parser\";\nimport CommandExecutionContext from \"../commands/command-execution-context\";\nimport ConsoleInterface from \"../console/console-interface\";\nimport EmojiMenuManager from \"../emoji-ui/emoji-menu-manager\";\nimport CommandManager from \"../commands/command-manager\";\nimport Utils from \"./utils\";\nimport EmojiCollection from \"../collections/emoji-collection\";\nimport Settings from \"./settings\";\nimport FeatureManager from \"../features/feature-manager\";\nimport CommandLoader from \"../commands/command-loader\";\nimport Log from \"./log\";\nimport Schema from \"../schema/schema\";\nimport DataAdapter from \"../data-adapters/data-adapter\";\n\nconst Discord = require(\"discord.js\");\nconst EventEmitter = require(\"events\");\nconst fs = require(\"fs\");\n\nexport default class Bot extends EventEmitter {\n\t/**\n\t * @param {Object} data\n\t */\n\tconstructor(data) {\n\t\tsuper();\n\n\t\t// Setup the class\n\t\tthis.setup(data);\n\t}\n\n\tasync setup(data) {\n\t\t// TODO: Should use the Typer library (Typer needs update)\n\t\tif (!Schema.validate(data, {\n\t\t\t\"paths.settings\": \"string\",\n\t\t\t\"paths.emojis\": \"string\",\n\t\t\t\"paths.commands\": \"string\",\n\t\t\t\"paths.accessLevels\": \"string\",\n\t\t\targumentTypes: \"object\",\n\t\t\tdataAdapter: DataAdapter\n\t\t})) {\n\t\t\tLog.throw(\"[Bot.setup] Invalid data provided.\");\n\t\t}\n\n\t\t/**\n\t\t * @type {Settings}\n\t\t */\n\t\tthis.settings = new Settings(data.paths.settings);\n\n\t\t/**\n\t\t * @type {DataAdapter}\n\t\t */\n\t\tthis.dataAdapter = data.dataAdapter;\n\n\t\t/**\n\t\t * @type {EmojiCollection}\n\t\t */\n\t\tthis.emojis = EmojiCollection.fromFile(data.paths.emojis);\n\n\t\t/**\n\t\t * @type {Discord.Client}\n\t\t */\n\t\tthis.client = new Discord.Client();\n\n\t\t/**\n\t\t * @type {CommandManager}\n\t\t */\n\t\tthis.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes);\n\n\t\t/**\n\t\t * @type {FeatureManager}\n\t\t */\n\t\tthis.features = new FeatureManager();\n\n\t\t/**\n\t\t * @type {CommandLoader}\n\t\t */\n\t\tthis.commandLoader = new CommandLoader(this.commands);\n\n\t\t/**\n\t\t * @type {ConsoleInterface}\n\t\t */\n\t\tthis.console = new ConsoleInterface();\n\n\t\t/**\n\t\t * @type {EmojiMenuManager}\n\t\t */\n\t\tthis.menus = new EmojiMenuManager(this.client);\n\n\t\t/**\n\t\t * @type {Log}\n\t\t */\n\t\tthis.log = new Log(this);\n\n\t\t// Setup the Discord client's events\n\t\tthis.setupEvents();\n\n\t\t// Load commands\n\t\tawait this.commandLoader.loadAll();\n\t\tLog.verbose(\"Bot setup completed\");\n\t}\n\n\tsetupEvents() {\n\t\t// TODO: Find better position\n\t\tconst resolvers = {\n\t\t\tuser: (arg) => Utils.resolveId(arg),\n\t\t\tchannel: (arg) => Utils.resolveId(arg),\n\t\t\trole: (arg) => Utils.resolveId(arg),\n\t\t\tstate: (arg) => Utils.translateState(arg)\n\t\t};\n\n\t\t// Discord client events\n\t\tthis.client.on(\"ready\", () => {\n\t\t\tthis.log.info(\"Ready\");\n\t\t\tthis.console.init(this);\n\t\t});\n\n\t\tthis.client.on(\"message\", async (message) => {\n\t\t\tif (!message.author.bot) {\n\t\t\t\tif (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {\n\t\t\t\t\tthis.commands.handle(\n\t\t\t\t\t\tnew CommandExecutionContext(\n\t\t\t\t\t\t\tmessage,\n\t\t\t\t\t\t\tCommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),\n\t\t\t\t\t\t\tthis,\n\t\t\t\t\t\t\tthis.commands.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),\n\t\t\t\t\t\t\tthis.emojis\n\t\t\t\t\t\t),\n\n\t\t\t\t\t\tCommandParser.parse(\n\t\t\t\t\t\t\tmessage.content,\n\t\t\t\t\t\t\tthis.commands,\n\t\t\t\t\t\t\tthis.settings.general.prefix\n\t\t\t\t\t\t)\n\t\t\t\t\t);\n\t\t\t\t}\n\t\t\t\telse if (message.content === \"?prefix\") {\n\t\t\t\t\tmessage.channel.send(`Command prefix: **${this.settings.general.prefix}**`);\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t}\n\n\tasync connect() {\n\t\tthis.log.info(\"Starting\");\n\t\tawait this.client.login(this.settings.general.token);\n\t}\n\n\tasync restart() {\n\t\tthis.log.info(\"Restarting\");\n\n\t\t// TODO\n\t\t// this.features.reloadAll(this);\n\n\t\tawait this.disconnect();\n\t\tawait this.connect();\n\t}\n\n\tasync disconnect() {\n\t\tthis.settings.save();\n\t\tawait this.client.destroy();\n\t\tthis.log.info(\"Disconnected\");\n\t}\n\n\tstatic async clearTemp() {\n\t\tif (fs.existsSync(\"./temp\")) {\n\t\t\tfs.readdir(\"./temp\", (error, files) => {\n\t\t\t\tfor (let i = 0; i < files.length; i++) {\n\t\t\t\t\tfs.unlink(`./temp/${files[i]}`);\n\t\t\t\t}\n\t\t\t});\n\t\t}\n\t}\n}\n",
+    "content": "import CommandParser from \"../commands/command-parser\";\nimport CommandExecutionContext from \"../commands/command-execution-context\";\nimport ConsoleInterface from \"../console/console-interface\";\nimport EmojiMenuManager from \"../emoji-ui/emoji-menu-manager\";\nimport CommandManager from \"../commands/command-manager\";\nimport Utils from \"./utils\";\nimport EmojiCollection from \"../collections/emoji-collection\";\nimport Settings from \"./settings\";\nimport FeatureManager from \"../features/feature-manager\";\nimport CommandLoader from \"../commands/command-loader\";\nimport Log from \"./log\";\nimport Schema from \"../schema/schema\";\nimport DataAdapter from \"../data-adapters/data-adapter\";\n\nconst Discord = require(\"discord.js\");\nconst EventEmitter = require(\"events\");\nconst fs = require(\"fs\");\n\nexport default class Bot extends EventEmitter {\n\t/**\n\t * @param {Object} data\n\t */\n\tconstructor(data) {\n\t\tsuper();\n\n\t\t// Setup the class\n\t\tthis.setup(data);\n\t}\n\n\t/**\n\t * Setup the bot from an object\n\t * @param {Object} data\n\t * @return {Promise}\n\t */\n\tasync setup(data) {\n\t\t// TODO: Should use the Typer library (Typer needs update)\n\t\tif (!Schema.validate(data, {\n\t\t\t\"paths.settings\": \"string\",\n\t\t\t\"paths.emojis\": \"string\",\n\t\t\t\"paths.commands\": \"string\",\n\t\t\t\"paths.accessLevels\": \"string\",\n\t\t\targumentTypes: \"object\",\n\t\t\tdataAdapter: DataAdapter\n\t\t})) {\n\t\t\tLog.throw(\"[Bot.setup] Invalid data provided.\");\n\t\t}\n\n\t\t/**\n\t\t * @type {Settings}\n\t\t * @readonly\n\t\t */\n\t\tthis.settings = new Settings(data.paths.settings);\n\n\t\t/**\n\t\t * @type {DataAdapter}\n\t\t * @readonly\n\t\t */\n\t\tthis.dataAdapter = data.dataAdapter;\n\n\t\t/**\n\t\t * @type {EmojiCollection}\n\t\t * @readonly\n\t\t */\n\t\tthis.emojis = EmojiCollection.fromFile(data.paths.emojis);\n\n\t\t/**\n\t\t * @type {Discord.Client}\n\t\t * @readonly\n\t\t */\n\t\tthis.client = new Discord.Client();\n\n\t\t/**\n\t\t * @type {CommandManager}\n\t\t * @readonly\n\t\t */\n\t\tthis.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes);\n\n\t\t/**\n\t\t * @type {FeatureManager}\n\t\t * @readonly\n\t\t */\n\t\tthis.features = new FeatureManager();\n\n\t\t/**\n\t\t * @type {CommandLoader}\n\t\t * @readonly\n\t\t */\n\t\tthis.commandLoader = new CommandLoader(this.commands);\n\n\t\t/**\n\t\t * @type {ConsoleInterface}\n\t\t * @readonly\n\t\t */\n\t\tthis.console = new ConsoleInterface();\n\n\t\t/**\n\t\t * @type {EmojiMenuManager}\n\t\t * @readonly\n\t\t */\n\t\tthis.menus = new EmojiMenuManager(this.client);\n\n\t\t/**\n\t\t * @type {Log}\n\t\t * @readonly\n\t\t */\n\t\tthis.log = new Log(this);\n\n\t\t// Setup the Discord client's events\n\t\tthis.setupEvents();\n\n\t\t// Load commands\n\t\tawait this.commandLoader.loadAll();\n\t\tLog.verbose(\"Bot setup completed\");\n\t}\n\n\t/**\n\t * Setup the client's events\n\t */\n\tsetupEvents() {\n\t\t// TODO: Find better position\n\t\tconst resolvers = {\n\t\t\tuser: (arg) => Utils.resolveId(arg),\n\t\t\tchannel: (arg) => Utils.resolveId(arg),\n\t\t\trole: (arg) => Utils.resolveId(arg),\n\t\t\tstate: (arg) => Utils.translateState(arg)\n\t\t};\n\n\t\t// Discord client events\n\t\tthis.client.on(\"ready\", () => {\n\t\t\tthis.log.info(\"Ready\");\n\t\t\tthis.console.init(this);\n\t\t});\n\n\t\tthis.client.on(\"message\", async (message) => {\n\t\t\tif (!message.author.bot) {\n\t\t\t\tif (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {\n\t\t\t\t\tthis.commands.handle(\n\t\t\t\t\t\tnew CommandExecutionContext(\n\t\t\t\t\t\t\tmessage,\n\t\t\t\t\t\t\tCommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),\n\t\t\t\t\t\t\tthis,\n\t\t\t\t\t\t\tthis.commands.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),\n\t\t\t\t\t\t\tthis.emojis\n\t\t\t\t\t\t),\n\n\t\t\t\t\t\tCommandParser.parse(\n\t\t\t\t\t\t\tmessage.content,\n\t\t\t\t\t\t\tthis.commands,\n\t\t\t\t\t\t\tthis.settings.general.prefix\n\t\t\t\t\t\t)\n\t\t\t\t\t);\n\t\t\t\t}\n\t\t\t\telse if (message.content === \"?prefix\") {\n\t\t\t\t\tmessage.channel.send(`Command prefix: **${this.settings.general.prefix}**`);\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t}\n\n\t/**\n\t * Connect the client\n\t * @return {Promise}\n\t */\n\tasync connect() {\n\t\tthis.log.info(\"Starting\");\n\t\tawait this.client.login(this.settings.general.token);\n\t}\n\n\t/**\n\t * Restart the bot's client\n\t * @return {Promise}\n\t */\n\tasync restart() {\n\t\tthis.log.info(\"Restarting\");\n\n\t\t// TODO\n\t\t// this.features.reloadAll(this);\n\n\t\tawait this.disconnect();\n\t\tawait this.connect();\n\t}\n\n\t/**\n\t * Disconnect the client\n\t * @return {Promise}\n\t */\n\tasync disconnect() {\n\t\tthis.settings.save();\n\t\tawait this.client.destroy();\n\t\tthis.log.info(\"Disconnected\");\n\t}\n\n\t/**\n\t * Clear all the files inside the temp folder\n\t * @return {Promise}\n\t */\n\tstatic async clearTemp() {\n\t\tif (fs.existsSync(\"./temp\")) {\n\t\t\tfs.readdir(\"./temp\", (error, files) => {\n\t\t\t\tfor (let i = 0; i < files.length; i++) {\n\t\t\t\t\tfs.unlink(`./temp/${files[i]}`);\n\t\t\t\t}\n\t\t\t});\n\t\t}\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/core/bot.js",
     "access": "public",
@@ -4167,18 +4182,28 @@
     "static": false,
     "longname": "src/core/bot.js~Bot#setup",
     "access": "public",
-    "description": null,
-    "lineNumber": 30,
-    "undocument": true,
+    "description": "Setup the bot from an object",
+    "lineNumber": 35,
     "params": [
       {
-        "name": "data",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "data",
+        "description": ""
       }
     ],
-    "return": null
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    }
   },
   {
     "__docId__": 174,
@@ -4189,7 +4214,13 @@
     "longname": "src/core/bot.js~Bot#settings",
     "access": "public",
     "description": "",
-    "lineNumber": 46,
+    "lineNumber": 52,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -4208,7 +4239,13 @@
     "longname": "src/core/bot.js~Bot#dataAdapter",
     "access": "public",
     "description": "",
-    "lineNumber": 51,
+    "lineNumber": 58,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -4227,7 +4264,13 @@
     "longname": "src/core/bot.js~Bot#emojis",
     "access": "public",
     "description": "",
-    "lineNumber": 56,
+    "lineNumber": 64,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -4246,7 +4289,13 @@
     "longname": "src/core/bot.js~Bot#client",
     "access": "public",
     "description": "",
-    "lineNumber": 61,
+    "lineNumber": 70,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -4265,7 +4314,13 @@
     "longname": "src/core/bot.js~Bot#commands",
     "access": "public",
     "description": "",
-    "lineNumber": 66,
+    "lineNumber": 76,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -4284,7 +4339,13 @@
     "longname": "src/core/bot.js~Bot#features",
     "access": "public",
     "description": "",
-    "lineNumber": 71,
+    "lineNumber": 82,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -4303,7 +4364,13 @@
     "longname": "src/core/bot.js~Bot#commandLoader",
     "access": "public",
     "description": "",
-    "lineNumber": 76,
+    "lineNumber": 88,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -4322,7 +4389,13 @@
     "longname": "src/core/bot.js~Bot#console",
     "access": "public",
     "description": "",
-    "lineNumber": 81,
+    "lineNumber": 94,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -4341,7 +4414,13 @@
     "longname": "src/core/bot.js~Bot#menus",
     "access": "public",
     "description": "",
-    "lineNumber": 86,
+    "lineNumber": 100,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -4360,7 +4439,13 @@
     "longname": "src/core/bot.js~Bot#log",
     "access": "public",
     "description": "",
-    "lineNumber": 91,
+    "lineNumber": 106,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -4380,9 +4465,8 @@
     "static": false,
     "longname": "src/core/bot.js~Bot#setupEvents",
     "access": "public",
-    "description": null,
-    "lineNumber": 101,
-    "undocument": true,
+    "description": "Setup the client's events",
+    "lineNumber": 119,
     "params": [],
     "return": null
   },
@@ -4396,11 +4480,17 @@
     "static": false,
     "longname": "src/core/bot.js~Bot#connect",
     "access": "public",
-    "description": null,
-    "lineNumber": 142,
-    "undocument": true,
-    "params": [],
-    "return": null
+    "description": "Connect the client",
+    "lineNumber": 164,
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "params": []
   },
   {
     "__docId__": 186,
@@ -4412,11 +4502,17 @@
     "static": false,
     "longname": "src/core/bot.js~Bot#restart",
     "access": "public",
-    "description": null,
-    "lineNumber": 147,
-    "undocument": true,
-    "params": [],
-    "return": null
+    "description": "Restart the bot's client",
+    "lineNumber": 173,
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "params": []
   },
   {
     "__docId__": 187,
@@ -4428,11 +4524,17 @@
     "static": false,
     "longname": "src/core/bot.js~Bot#disconnect",
     "access": "public",
-    "description": null,
-    "lineNumber": 157,
-    "undocument": true,
-    "params": [],
-    "return": null
+    "description": "Disconnect the client",
+    "lineNumber": 187,
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "params": []
   },
   {
     "__docId__": 188,
@@ -4444,17 +4546,23 @@
     "static": true,
     "longname": "src/core/bot.js~Bot.clearTemp",
     "access": "public",
-    "description": null,
-    "lineNumber": 163,
-    "undocument": true,
-    "params": [],
-    "return": null
+    "description": "Clear all the files inside the temp folder",
+    "lineNumber": 197,
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "params": []
   },
   {
     "__docId__": 189,
     "kind": "file",
     "name": "src/core/editable-message.js",
-    "content": "import Log from \"./log\";\n\nconst Discord = require(\"discord.js\");\n\nexport default class EditableMessage {\n\tconstructor(message) {\n\t\tif (message.embeds.length === 0) {\n\t\t\tLog.error(\"[EditableMessage] Message parameter must contain embeds\");\n\t\t}\n\n\t\tthis.message = message;\n\t}\n\n\t/**\n\t * @param {String} message\n\t * @param {String} title\n\t * @param {String} color\n\t * @param {String} thumbnailUrl\n\t * @param {String} image\n\t * @returns {Promise<Discord.Message>}\n\t */\n\tasync edit(message, title = \"\", color = \"RANDOM\", thumbnailUrl = \"\", image = \"\") {\n\t\treturn this.message.edit(\"\", new Discord.RichEmbed()\n\t\t\t.setColor(color)\n\t\t\t.setDescription(message)\n\t\t\t.setAuthor(title, thumbnailUrl)\n\t\t\t.setImage(image));\n\t}\n}\n",
+    "content": "import Log from \"./log\";\n\nconst Discord = require(\"discord.js\");\n\nexport default class EditableMessage {\n\t/**\n\t * @param {Discord.Message} message\n\t */\n\tconstructor(message) {\n\t\tif (message.embeds.length === 0) {\n\t\t\tLog.error(\"[EditableMessage] Message parameter must contain embeds\");\n\t\t}\n\n\t\t/**\n\t\t * @type {Discord.Message}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.message = message;\n\t}\n\n\t/**\n\t * Edit an already sent message\n\t * @param {String} message\n\t * @param {String} title\n\t * @param {String} color\n\t * @param {String} thumbnailUrl\n\t * @param {String} image\n\t * @returns {Promise<Discord.Message>}\n\t */\n\tasync edit(message, title = \"\", color = \"RANDOM\", thumbnailUrl = \"\", image = \"\") {\n\t\treturn this.message.edit(\"\", new Discord.RichEmbed()\n\t\t\t.setColor(color)\n\t\t\t.setDescription(message)\n\t\t\t.setAuthor(title, thumbnailUrl)\n\t\t\t.setImage(image));\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/core/editable-message.js",
     "access": "public",
@@ -4508,9 +4616,20 @@
     "static": false,
     "longname": "src/core/editable-message.js~EditableMessage#constructor",
     "access": "public",
-    "description": null,
-    "lineNumber": 6,
-    "undocument": true
+    "description": "",
+    "lineNumber": 9,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Discord.Message"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "message",
+        "description": ""
+      }
+    ]
   },
   {
     "__docId__": 193,
@@ -4519,14 +4638,22 @@
     "memberof": "src/core/editable-message.js~EditableMessage",
     "static": false,
     "longname": "src/core/editable-message.js~EditableMessage#message",
-    "access": "public",
-    "description": null,
-    "lineNumber": 11,
-    "undocument": true,
+    "access": "private",
+    "description": "",
+    "lineNumber": 19,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Discord.Message"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -4539,8 +4666,8 @@
     "static": false,
     "longname": "src/core/editable-message.js~EditableMessage#edit",
     "access": "public",
-    "description": "",
-    "lineNumber": 22,
+    "description": "Edit an already sent message",
+    "lineNumber": 31,
     "unknown": [
       {
         "tagName": "@returns",
@@ -4612,7 +4739,7 @@
     "__docId__": 195,
     "kind": "file",
     "name": "src/core/embed-builder.js",
-    "content": "const Discord = require(\"discord.js\");\n\nexport default class EmbedBuilder {\n\tconstructor() {\n\t\t/**\n\t\t * @type {*}\n\t\t * @private\n\t\t */\n\t\tthis.embed = new Discord.RichEmbed();\n\t}\n\n\t/**\n\t * @param {String} color\n\t * @returns {EmbedBuilder}\n\t */\n\tcolor(color) {\n\t\tthis.embed.setColor(color);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * @param {String} title\n\t * @returns {EmbedBuilder}\n\t */\n\ttitle(title) {\n\t\tthis.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : null);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * @param {String} url\n\t * @returns {EmbedBuilder}\n\t */\n\ttitleIcon(url) {\n\t\tthis.embed.setAuthor(this.embed.author ? this.embed.author.name : null, url);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * @param {String} url\n\t * @returns {EmbedBuilder}\n\t */\n\tthumbnail(url) {\n\t\tthis.embed.setThumbnail(url);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * @param {String} text\n\t * @param {String} icon\n\t * @returns {EmbedBuilder}\n\t */\n\tfooter(text, icon) {\n\t\tthis.embed.setFooter(text, icon);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * @param {String} url\n\t * @returns {EmbedBuilder}\n\t */\n\timage(url) {\n\t\tthis.embed.setImage(url);\n\n\t\treturn this;\n\t}\n\n\t// TODO: Limit text to Discord's embed char limit\n\t/**\n\t * @param {string} text\n\t * @returns {EmbedBuilder}\n\t */\n\ttext(text) {\n\t\tthis.embed.setDescription(text);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * @param {String} title\n\t * @param {*} value\n\t * @returns {EmbedBuilder}\n\t */\n\tfield(title, value) {\n\t\tthis.embed.addField(title, value);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * @returns {Discord.RichEmbed}\n\t */\n\tbuild() {\n\t\treturn this.embed;\n\t}\n\n\t/**\n\t * @param {object} obj\n\t * @returns {EmbedBuilder}\n\t */\n\tstatic fromObject(obj) {\n\t\tconst result = new EmbedBuilder();\n\n\t\tif (!obj.text) {\n\t\t\tthrow new Error(\"[EmbedBuilder.fromObject] Text cannot be empty or null\");\n\t\t}\n\t\telse {\n\t\t\tresult.text(obj.text);\n\t\t}\n\n\t\tif (obj.image) {\n\t\t\tresult.image(obj.image);\n\t\t}\n\n\t\tif (obj.color) {\n\t\t\tresult.color(obj.color);\n\t\t}\n\n\t\tif (obj.title) {\n\t\t\tresult.title(obj.title);\n\t\t}\n\n\t\tif (obj.titleIcon) {\n\t\t\tresult.titleIcon(obj.titleIcon);\n\t\t}\n\n\t\tif (obj.footer) {\n\t\t\tresult.footer(obj.footer.text, obj.footer.icon);\n\t\t}\n\n\t\tif (obj.thumbnail) {\n\t\t\tresult.thumbnail(obj.thumbnail);\n\t\t}\n\n\t\treturn result;\n\t}\n\n\tstatic sections(sections, color = null) {\n\t\tconst result = new EmbedBuilder();\n\n\t\tfor (let i = 0; i < Object.keys(sections).length; i++) {\n\t\t\tresult.field(Object.keys(sections)[i], sections[Object.keys(sections)[i]]);\n\t\t}\n\n\t\tif (color) {\n\t\t\tresult.color(color);\n\t\t}\n\n\t\treturn result;\n\t}\n}\n",
+    "content": "const Discord = require(\"discord.js\");\n\nexport default class EmbedBuilder {\n\tconstructor() {\n\t\t/**\n\t\t * @type {Discord.RichEmbed}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.embed = new Discord.RichEmbed();\n\t}\n\n\t/**\n\t * Set the color of the embed\n\t * @param {String} color\n\t * @returns {EmbedBuilder}\n\t */\n\tcolor(color) {\n\t\tthis.embed.setColor(color);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Set the title of the embed\n\t * @param {String} title\n\t * @returns {EmbedBuilder}\n\t */\n\ttitle(title) {\n\t\tthis.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : null);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * @param {String} url\n\t * @returns {EmbedBuilder}\n\t */\n\ttitleIcon(url) {\n\t\tthis.embed.setAuthor(this.embed.author ? this.embed.author.name : null, url);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Set the thumbnail image of the embed\n\t * @param {String} url\n\t * @returns {EmbedBuilder}\n\t */\n\tthumbnail(url) {\n\t\tthis.embed.setThumbnail(url);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Set the footer text of the embed\n\t * @param {String} text\n\t * @param {String} icon\n\t * @returns {EmbedBuilder}\n\t */\n\tfooter(text, icon) {\n\t\tthis.embed.setFooter(text, icon);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Set the image of the embed\n\t * @param {String} url\n\t * @returns {EmbedBuilder}\n\t */\n\timage(url) {\n\t\tthis.embed.setImage(url);\n\n\t\treturn this;\n\t}\n\n\t// TODO: Limit text to Discord's embed char limit\n\t/**\n\t * Set the text of the embed\n\t * @param {string} text\n\t * @returns {EmbedBuilder}\n\t */\n\ttext(text) {\n\t\tthis.embed.setDescription(text);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Add a field to the embed\n\t * @param {String} title\n\t * @param {*} value\n\t * @returns {EmbedBuilder}\n\t */\n\tfield(title, value) {\n\t\tthis.embed.addField(title, value);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Convert the embed to a RichEmbed\n\t * @returns {Discord.RichEmbed}\n\t */\n\tbuild() {\n\t\treturn this.embed;\n\t}\n\n\t/**\n\t * @param {Object} obj\n\t * @returns {EmbedBuilder}\n\t */\n\tstatic fromObject(obj) {\n\t\tconst result = new EmbedBuilder();\n\n\t\tif (!obj.text) {\n\t\t\tthrow new Error(\"[EmbedBuilder.fromObject] Text cannot be empty or null\");\n\t\t}\n\t\telse {\n\t\t\tresult.text(obj.text);\n\t\t}\n\n\t\tif (obj.image) {\n\t\t\tresult.image(obj.image);\n\t\t}\n\n\t\tif (obj.color) {\n\t\t\tresult.color(obj.color);\n\t\t}\n\n\t\tif (obj.title) {\n\t\t\tresult.title(obj.title);\n\t\t}\n\n\t\tif (obj.titleIcon) {\n\t\t\tresult.titleIcon(obj.titleIcon);\n\t\t}\n\n\t\tif (obj.footer) {\n\t\t\tresult.footer(obj.footer.text, obj.footer.icon);\n\t\t}\n\n\t\tif (obj.thumbnail) {\n\t\t\tresult.thumbnail(obj.thumbnail);\n\t\t}\n\n\t\treturn result;\n\t}\n\n\t/**\n\t * @param {Object} sections\n\t * @param {String} color\n\t * @return {EmbedBuilder}\n\t */\n\tstatic sections(sections, color = null) {\n\t\tconst result = new EmbedBuilder();\n\n\t\tfor (let i = 0; i < Object.keys(sections).length; i++) {\n\t\t\tresult.field(Object.keys(sections)[i], sections[Object.keys(sections)[i]]);\n\t\t}\n\n\t\tif (color) {\n\t\t\tresult.color(color);\n\t\t}\n\n\t\treturn result;\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/core/embed-builder.js",
     "access": "public",
@@ -4679,11 +4806,17 @@
     "longname": "src/core/embed-builder.js~EmbedBuilder#embed",
     "access": "private",
     "description": "",
-    "lineNumber": 9,
+    "lineNumber": 10,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
-        "*"
+        "Discord.RichEmbed"
       ],
       "spread": false,
       "description": null
@@ -4699,8 +4832,8 @@
     "static": false,
     "longname": "src/core/embed-builder.js~EmbedBuilder#color",
     "access": "public",
-    "description": "",
-    "lineNumber": 16,
+    "description": "Set the color of the embed",
+    "lineNumber": 18,
     "unknown": [
       {
         "tagName": "@returns",
@@ -4738,8 +4871,8 @@
     "static": false,
     "longname": "src/core/embed-builder.js~EmbedBuilder#title",
     "access": "public",
-    "description": "",
-    "lineNumber": 26,
+    "description": "Set the title of the embed",
+    "lineNumber": 29,
     "unknown": [
       {
         "tagName": "@returns",
@@ -4778,7 +4911,7 @@
     "longname": "src/core/embed-builder.js~EmbedBuilder#titleIcon",
     "access": "public",
     "description": "",
-    "lineNumber": 36,
+    "lineNumber": 39,
     "unknown": [
       {
         "tagName": "@returns",
@@ -4816,8 +4949,8 @@
     "static": false,
     "longname": "src/core/embed-builder.js~EmbedBuilder#thumbnail",
     "access": "public",
-    "description": "",
-    "lineNumber": 46,
+    "description": "Set the thumbnail image of the embed",
+    "lineNumber": 50,
     "unknown": [
       {
         "tagName": "@returns",
@@ -4855,8 +4988,8 @@
     "static": false,
     "longname": "src/core/embed-builder.js~EmbedBuilder#footer",
     "access": "public",
-    "description": "",
-    "lineNumber": 57,
+    "description": "Set the footer text of the embed",
+    "lineNumber": 62,
     "unknown": [
       {
         "tagName": "@returns",
@@ -4904,8 +5037,8 @@
     "static": false,
     "longname": "src/core/embed-builder.js~EmbedBuilder#image",
     "access": "public",
-    "description": "",
-    "lineNumber": 67,
+    "description": "Set the image of the embed",
+    "lineNumber": 73,
     "unknown": [
       {
         "tagName": "@returns",
@@ -4943,8 +5076,8 @@
     "static": false,
     "longname": "src/core/embed-builder.js~EmbedBuilder#text",
     "access": "public",
-    "description": "",
-    "lineNumber": 78,
+    "description": "Set the text of the embed",
+    "lineNumber": 85,
     "unknown": [
       {
         "tagName": "@returns",
@@ -4982,8 +5115,8 @@
     "static": false,
     "longname": "src/core/embed-builder.js~EmbedBuilder#field",
     "access": "public",
-    "description": "",
-    "lineNumber": 89,
+    "description": "Add a field to the embed",
+    "lineNumber": 97,
     "unknown": [
       {
         "tagName": "@returns",
@@ -5031,8 +5164,8 @@
     "static": false,
     "longname": "src/core/embed-builder.js~EmbedBuilder#build",
     "access": "public",
-    "description": "",
-    "lineNumber": 98,
+    "description": "Convert the embed to a RichEmbed",
+    "lineNumber": 107,
     "unknown": [
       {
         "tagName": "@returns",
@@ -5060,7 +5193,7 @@
     "longname": "src/core/embed-builder.js~EmbedBuilder.fromObject",
     "access": "public",
     "description": "",
-    "lineNumber": 106,
+    "lineNumber": 115,
     "unknown": [
       {
         "tagName": "@returns",
@@ -5071,7 +5204,7 @@
       {
         "nullable": null,
         "types": [
-          "object"
+          "Object"
         ],
         "spread": false,
         "optional": false,
@@ -5098,36 +5231,44 @@
     "static": true,
     "longname": "src/core/embed-builder.js~EmbedBuilder.sections",
     "access": "public",
-    "description": null,
-    "lineNumber": 143,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 157,
     "params": [
       {
-        "name": "sections",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "sections",
+        "description": ""
       },
       {
-        "name": "color",
-        "optional": true,
+        "nullable": null,
         "types": [
-          "undefined"
+          "String"
         ],
-        "defaultValue": "undefined"
+        "spread": false,
+        "optional": false,
+        "name": "color",
+        "description": ""
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "EmbedBuilder"
+      ],
+      "spread": false,
+      "description": ""
     }
   },
   {
     "__docId__": 211,
     "kind": "file",
     "name": "src/core/log.js",
-    "content": "const colors = require(\"colors\");\nconst fs = require(\"fs\");\n\nexport default class Log {\n\t/**\n\t * @param {Bot} bot\n\t * @param {Boolean} debug\n\t * @param {Boolean} verbose\n\t */\n\tconstructor(bot, debug = false, verbose = false) {\n\t\t/**\n\t\t * @type {Bot}\n\t\t * @private\n\t\t */\n\t\tthis.bot = bot;\n\t\tthis.debug_mode = debug;\n\t\tthis.verbose_mode = verbose;\n\t\tLog.instance = this;\n\t}\n\n\tlog(message, color = \"white\", prefix = null, throwMsg = false) {\n\t\tLog.log(message, color, prefix, throwMsg);\n\t}\n\n\tinfo(message) {\n\t\tthis.log(message, \"cyan\", \"info\");\n\t}\n\n\tsuccess(message) {\n\t\tthis.log(message, \"green\", \"sucs\");\n\t}\n\n\twarn(message) {\n\t\tthis.log(message, \"yellow\", \"warn\");\n\t}\n\n\terror(message) {\n\t\tthis.log(message, \"red\", \"dang\");\n\t}\n\n\tverbose(message) {\n\t\tif (this.verbose_mode) {\n\t\t\tthis.log(message, \"gray\");\n\t\t}\n\t}\n\n\tdebug(message) {\n\t\tif (this.debug_mode) {\n\t\t\tthis.log(message, \"magenta\", \"dbug\");\n\t\t}\n\t}\n\n\tchannel(content, options) {\n\t\tconst guildLog = this.bot.dataAdapter.get(\"global.guild-log\");\n\t\tif (!guildLog.enabled) {\n\t\t\treturn;\n\t\t}\n\n\t\tthis.bot.client.guilds.get(guildLog.guild).channels.get(guildLog.channel).send(content, options);\n\t}\n\n\t/**\n\t * @param {String} message\n\t * @param {String} color\n\t * @param {String} prefix\n\t */\n\tstatic async log(message, color = \"white\", prefix = null) {\n\t\tconst date = new Date().toISOString().replace(/T/, \" \").replace(/\\..+/, \"\");\n\n\t\t// TODO: Make this next line work on the vps\n\t\t// process.stdout.write(`\\x1B[2D[${date}] ${colors[color](message)}\\n> `);\n\t\tconsole.log(`[${date}] ${colors[color](message)}`);\n\n\t\tif (prefix !== null) {\n\t\t\tmessage = `<${prefix.toUpperCase()}> ${message}`;\n\t\t}\n\t\tfs.writeFile(\"bot.log\", `[${date}] ${message}\\n`, {flag: \"a\"}, (err) => {\n\t\t\tif (err) throw err;\n\t\t});\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic info(message) {\n\t\tLog.log(message, \"cyan\", \"info\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic success(message) {\n\t\tLog.log(message, \"green\", \"sucs\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic warn(message) {\n\t\tLog.log(message, \"yellow\", \"warn\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic error(message) {\n\t\tLog.log(message, \"red\", \"dang\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic throw(message) {\n\t\tLog.log(message, \"red\", \"dang\");\n\t\tprocess.exit(1);\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic verbose(message) {\n\t\tif (Log.instance !== null) {\n\t\t\tif (Log.instance.verbose_mode) {\n\t\t\t\tLog.log(message, \"grey\");\n\t\t\t}\n\t\t} else {\n\t\t\tLog.log(message, \"grey\");\n\t\t}\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic debug(message) {\n\t\tif (Log.instance !== null) {\n\t\t\tif (Log.instance.debug_mode) {\n\t\t\t\tLog.log(message, \"magenta\", \"dbug\");\n\t\t\t}\n\t\t} else {\n\t\t\tLog.log(message, \"magenta\", \"dbug\");\n\t\t}\n\t}\n}\n",
+    "content": "const colors = require(\"colors\");\nconst fs = require(\"fs\");\n\nexport default class Log {\n\t/**\n\t * @param {Bot} bot\n\t * @param {Boolean} debug\n\t * @param {Boolean} verbose\n\t */\n\tconstructor(bot, debug = false, verbose = false) {\n\t\t/**\n\t\t * @type {Bot}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.bot = bot;\n\n\t\t/**\n\t\t * @type {Boolean}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.debugMode = debug;\n\n\t\t/**\n\t\t * @type {Boolean}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.verboseMode = verbose;\n\n\t\tLog.instance = this;\n\t}\n\n\t/**\n\t * @param {String} message\n\t * @param {String} color\n\t * @param {String} prefix\n\t * @param {String} throwMsg\n\t */\n\tlog(message, color = \"white\", prefix = null, throwMsg = false) {\n\t\tLog.log(message, color, prefix, throwMsg);\n\t}\n\n\tinfo(message) {\n\t\tthis.log(message, \"cyan\", \"info\");\n\t}\n\n\tsuccess(message) {\n\t\tthis.log(message, \"green\", \"sucs\");\n\t}\n\n\twarn(message) {\n\t\tthis.log(message, \"yellow\", \"warn\");\n\t}\n\n\terror(message) {\n\t\tthis.log(message, \"red\", \"dang\");\n\t}\n\n\tverbose(message) {\n\t\tif (this.verboseMode) {\n\t\t\tthis.log(message, \"gray\");\n\t\t}\n\t}\n\n\tdebugMode(message) {\n\t\tif (this.debugMode) {\n\t\t\tthis.log(message, \"magenta\", \"dbug\");\n\t\t}\n\t}\n\n\tchannel(content, options) {\n\t\tconst guildLog = this.bot.dataAdapter.get(\"global.guild-log\");\n\t\tif (!guildLog.enabled) {\n\t\t\treturn;\n\t\t}\n\n\t\tthis.bot.client.guilds.get(guildLog.guild).channels.get(guildLog.channel).send(content, options);\n\t}\n\n\t/**\n\t * @param {String} message\n\t * @param {String} color\n\t * @param {String} prefix\n\t */\n\tstatic async log(message, color = \"white\", prefix = null) {\n\t\tconst date = new Date().toISOString().replace(/T/, \" \").replace(/\\..+/, \"\");\n\n\t\t// TODO: Make this next line work on the vps\n\t\t// process.stdout.write(`\\x1B[2D[${date}] ${colors[color](message)}\\n> `);\n\t\tconsole.log(`[${date}] ${colors[color](message)}`);\n\n\t\tif (prefix !== null) {\n\t\t\tmessage = `<${prefix.toUpperCase()}> ${message}`;\n\t\t}\n\t\tfs.writeFile(\"bot.log\", `[${date}] ${message}\\n`, {flag: \"a\"}, (err) => {\n\t\t\tif (err) throw err;\n\t\t});\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic info(message) {\n\t\tLog.log(message, \"cyan\", \"info\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic success(message) {\n\t\tLog.log(message, \"green\", \"sucs\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic warn(message) {\n\t\tLog.log(message, \"yellow\", \"warn\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic error(message) {\n\t\tLog.log(message, \"red\", \"dang\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic throw(message) {\n\t\tLog.log(message, \"red\", \"dang\");\n\t\tprocess.exit(1);\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic verbose(message) {\n\t\tif (Log.instance !== null) {\n\t\t\tif (Log.instance.verboseMode) {\n\t\t\t\tLog.log(message, \"grey\");\n\t\t\t}\n\t\t} else {\n\t\t\tLog.log(message, \"grey\");\n\t\t}\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic debug(message) {\n\t\tif (Log.instance !== null) {\n\t\t\tif (Log.instance.debugMode) {\n\t\t\t\tLog.log(message, \"magenta\", \"dbug\");\n\t\t\t}\n\t\t} else {\n\t\t\tLog.log(message, \"magenta\", \"dbug\");\n\t\t}\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/core/log.js",
     "access": "public",
@@ -5246,7 +5387,13 @@
     "longname": "src/core/log.js~Log#bot",
     "access": "private",
     "description": "",
-    "lineNumber": 15,
+    "lineNumber": 16,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
       "nullable": null,
       "types": [
@@ -5257,37 +5404,28 @@
     }
   },
   {
-    "__docId__": 217,
-    "kind": "member",
-    "name": "debug_mode",
-    "memberof": "src/core/log.js~Log",
-    "static": false,
-    "longname": "src/core/log.js~Log#debug_mode",
-    "access": "public",
-    "description": null,
-    "lineNumber": 16,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
     "__docId__": 218,
     "kind": "member",
-    "name": "verbose_mode",
+    "name": "verboseMode",
     "memberof": "src/core/log.js~Log",
     "static": false,
-    "longname": "src/core/log.js~Log#verbose_mode",
-    "access": "public",
-    "description": null,
-    "lineNumber": 17,
-    "undocument": true,
+    "longname": "src/core/log.js~Log#verboseMode",
+    "access": "private",
+    "description": "",
+    "lineNumber": 30,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Boolean"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -5300,41 +5438,48 @@
     "static": false,
     "longname": "src/core/log.js~Log#log",
     "access": "public",
-    "description": null,
-    "lineNumber": 21,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 41,
     "params": [
       {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "message",
-        "types": [
-          "*"
-        ]
+        "description": ""
       },
       {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "color",
-        "optional": true,
-        "types": [
-          "string"
-        ],
-        "defaultRaw": "white",
-        "defaultValue": "white"
+        "description": ""
       },
       {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "prefix",
-        "optional": true,
-        "types": [
-          "undefined"
-        ],
-        "defaultValue": "undefined"
+        "description": ""
       },
       {
-        "name": "throwMsg",
-        "optional": true,
+        "nullable": null,
         "types": [
-          "boolean"
+          "String"
         ],
-        "defaultRaw": false,
-        "defaultValue": "false"
+        "spread": false,
+        "optional": false,
+        "name": "throwMsg",
+        "description": ""
       }
     ],
     "return": null
@@ -5350,7 +5495,7 @@
     "longname": "src/core/log.js~Log#info",
     "access": "public",
     "description": null,
-    "lineNumber": 25,
+    "lineNumber": 45,
     "undocument": true,
     "params": [
       {
@@ -5373,7 +5518,7 @@
     "longname": "src/core/log.js~Log#success",
     "access": "public",
     "description": null,
-    "lineNumber": 29,
+    "lineNumber": 49,
     "undocument": true,
     "params": [
       {
@@ -5396,7 +5541,7 @@
     "longname": "src/core/log.js~Log#warn",
     "access": "public",
     "description": null,
-    "lineNumber": 33,
+    "lineNumber": 53,
     "undocument": true,
     "params": [
       {
@@ -5419,7 +5564,7 @@
     "longname": "src/core/log.js~Log#error",
     "access": "public",
     "description": null,
-    "lineNumber": 37,
+    "lineNumber": 57,
     "undocument": true,
     "params": [
       {
@@ -5442,7 +5587,7 @@
     "longname": "src/core/log.js~Log#verbose",
     "access": "public",
     "description": null,
-    "lineNumber": 41,
+    "lineNumber": 61,
     "undocument": true,
     "params": [
       {
@@ -5457,15 +5602,15 @@
   {
     "__docId__": 225,
     "kind": "method",
-    "name": "debug",
+    "name": "debugMode",
     "memberof": "src/core/log.js~Log",
     "generator": false,
     "async": false,
     "static": false,
-    "longname": "src/core/log.js~Log#debug",
+    "longname": "src/core/log.js~Log#debugMode",
     "access": "public",
     "description": null,
-    "lineNumber": 47,
+    "lineNumber": 67,
     "undocument": true,
     "params": [
       {
@@ -5488,7 +5633,7 @@
     "longname": "src/core/log.js~Log#channel",
     "access": "public",
     "description": null,
-    "lineNumber": 53,
+    "lineNumber": 73,
     "undocument": true,
     "params": [
       {
@@ -5517,7 +5662,7 @@
     "longname": "src/core/log.js~Log.log",
     "access": "public",
     "description": "",
-    "lineNumber": 67,
+    "lineNumber": 87,
     "params": [
       {
         "nullable": null,
@@ -5563,7 +5708,7 @@
     "longname": "src/core/log.js~Log.info",
     "access": "public",
     "description": "",
-    "lineNumber": 85,
+    "lineNumber": 105,
     "params": [
       {
         "nullable": null,
@@ -5589,7 +5734,7 @@
     "longname": "src/core/log.js~Log.success",
     "access": "public",
     "description": "",
-    "lineNumber": 92,
+    "lineNumber": 112,
     "params": [
       {
         "nullable": null,
@@ -5615,7 +5760,7 @@
     "longname": "src/core/log.js~Log.warn",
     "access": "public",
     "description": "",
-    "lineNumber": 99,
+    "lineNumber": 119,
     "params": [
       {
         "nullable": null,
@@ -5641,7 +5786,7 @@
     "longname": "src/core/log.js~Log.error",
     "access": "public",
     "description": "",
-    "lineNumber": 106,
+    "lineNumber": 126,
     "params": [
       {
         "nullable": null,
@@ -5667,7 +5812,7 @@
     "longname": "src/core/log.js~Log.throw",
     "access": "public",
     "description": "",
-    "lineNumber": 113,
+    "lineNumber": 133,
     "params": [
       {
         "nullable": null,
@@ -5693,7 +5838,7 @@
     "longname": "src/core/log.js~Log.verbose",
     "access": "public",
     "description": "",
-    "lineNumber": 121,
+    "lineNumber": 141,
     "params": [
       {
         "nullable": null,
@@ -5719,7 +5864,7 @@
     "longname": "src/core/log.js~Log.debug",
     "access": "public",
     "description": "",
-    "lineNumber": 134,
+    "lineNumber": 154,
     "params": [
       {
         "nullable": null,

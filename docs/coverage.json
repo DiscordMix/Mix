@@ -1,7 +1,7 @@
 {
-  "coverage": "62.13%",
-  "expectCount": 309,
-  "actualCount": 192,
+  "coverage": "66.23%",
+  "expectCount": 308,
+  "actualCount": 204,
   "files": {
     "src/collections/collection.js": {
       "expectCount": 11,
@@ -99,11 +99,10 @@
     },
     "src/console/console-interface.js": {
       "expectCount": 3,
-      "actualCount": 0,
+      "actualCount": 1,
       "undocumentLines": [
         3,
-        5,
-        6
+        5
       ]
     },
     "src/core/access-level-type.js": {
@@ -115,57 +114,45 @@
     },
     "src/core/bot.js": {
       "expectCount": 21,
-      "actualCount": 11,
+      "actualCount": 17,
       "undocumentLines": [
         15,
         16,
         17,
-        19,
-        30,
-        101,
-        142,
-        147,
-        157,
-        163
+        19
       ]
     },
     "src/core/editable-message.js": {
       "expectCount": 5,
-      "actualCount": 1,
+      "actualCount": 3,
       "undocumentLines": [
         3,
-        5,
-        6,
-        11
+        5
       ]
     },
     "src/core/embed-builder.js": {
       "expectCount": 15,
-      "actualCount": 11,
+      "actualCount": 12,
       "undocumentLines": [
         1,
         3,
-        4,
-        143
+        4
       ]
     },
     "src/core/log.js": {
-      "expectCount": 23,
-      "actualCount": 10,
+      "expectCount": 22,
+      "actualCount": 12,
       "undocumentLines": [
         1,
         2,
         4,
-        16,
-        17,
-        21,
-        25,
-        29,
-        33,
-        37,
-        41,
-        47,
-        53
+        45,
+        49,
+        53,
+        57,
+        61,
+        67,
+        73
       ]
     },
     "src/core/message-builder.js": {

@@ -76,15 +76,24 @@
 const Discord = require(&quot;discord.js&quot;);
 
 export default class EditableMessage {
+	/**
+	 * @param {Discord.Message} message
+	 */
 	constructor(message) {
 		if (message.embeds.length === 0) {
 			Log.error(&quot;[EditableMessage] Message parameter must contain embeds&quot;);
 		}
 
+		/**
+		 * @type {Discord.Message}
+		 * @private
+		 * @readonly
+		 */
 		this.message = message;
 	}
 
 	/**
+	 * Edit an already sent message
 	 * @param {String} message
 	 * @param {String} title
 	 * @param {String} color

@@ -1320,16 +1320,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/core/log.js~log#debug",
-    "class/src/core/log.js~Log.html#instance-method-debug",
-    "src/core/log.js~Log#debug",
+    "src/core/log.js~log#debugmode",
+    "class/src/core/log.js~Log.html#instance-method-debugMode",
+    "src/core/log.js~Log#debugMode",
     "method"
-  ],
-  [
-    "src/core/log.js~log#debug_mode",
-    "class/src/core/log.js~Log.html#instance-member-debug_mode",
-    "src/core/log.js~Log#debug_mode",
-    "member"
   ],
   [
     "src/core/log.js~log#error",
@@ -1362,9 +1356,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/core/log.js~log#verbose_mode",
-    "class/src/core/log.js~Log.html#instance-member-verbose_mode",
-    "src/core/log.js~Log#verbose_mode",
+    "src/core/log.js~log#verbosemode",
+    "class/src/core/log.js~Log.html#instance-member-verboseMode",
+    "src/core/log.js~Log#verboseMode",
     "member"
   ],
   [

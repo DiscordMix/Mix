@@ -10,7 +10,8 @@
 	"scripts": {
 		"build": "babel src --out-dir dist",
 		"test": "npm run build && mocha dist/test/tests.js",
-		"prepublish": "npm run build"
+		"prepublish": "npm run build",
+		"docs": "./node_modules/.bin/esdoc"
 	},
 	"author": "Phantom <private.phantom@outlook.com>",
 	"contributors": [

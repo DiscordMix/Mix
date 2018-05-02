@@ -25,12 +25,6 @@ export default class Bot extends EventEmitter {
 
 		// Setup the class
 		this.setup(data);
-
-		// Discord client events
-		this.client.on("ready", () => {
-			this.log.info("Ready");
-			this.console.init(this);
-		});
 	}
 
 	async setup(data) {
@@ -112,6 +106,12 @@ export default class Bot extends EventEmitter {
 			role: (arg) => Utils.resolveId(arg),
 			state: (arg) => Utils.translateState(arg)
 		};
+
+		// Discord client events
+		this.client.on("ready", () => {
+			this.log.info("Ready");
+			this.console.init(this);
+		});
 
 		this.client.on("message", async (message) => {
 			if (!message.author.bot) {

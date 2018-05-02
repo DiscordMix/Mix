@@ -1,3 +1,4 @@
+[![npm version](https://badge.fury.io/js/discord-anvil.svg)](https://badge.fury.io/js/discord-anvil)
 ![Documentation](https://cloudrex.github.io/Anvil/badge.svg)
 
 ## Anvil

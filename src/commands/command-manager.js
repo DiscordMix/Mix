@@ -52,8 +52,6 @@ export default class CommandManager /* extends Collection */ {
 		fs.readFile(this.accessLevelsPath, (error, data) => {
 			// TODO: Validate access levels
 			this.accessLevels = JSON.parse(data.toString());
-
-			console.log(this.accessLevels);
 		});
 	}
 

@@ -3,7 +3,6 @@ export default class Command {
 	 * @param {String} base
 	 * @param {String} description
 	 * @param {Array<String>} aliases
-	 * @param {(String|Null)} extendedDescription
 	 * @param {Number} maxArguments
 	 * @param {AccessLevelType} accessLevel
 	 * @param {Function} onExecuted
@@ -11,21 +10,67 @@ export default class Command {
 	 * @param {CommandCategoryType} category
 	 * @param {Object} args
 	 * @param {Boolean} isEnabled
-	 * @param {Number} price
 	 */
-	constructor(base, description, aliases, extendedDescription, maxArguments, accessLevel, onExecuted, canExecute, category, args, isEnabled, price) {
+	constructor(base, description, aliases, maxArguments, accessLevel, onExecuted, canExecute, category, args, isEnabled) {
+		/**
+		 * @type {String}
+		 * @readonly
+		 */
 		this.base = base;
+
+		/**
+		 * @type {String}
+		 * @readonly
+		 */
 		this.description = description;
+
+		/**
+		 * @type {Array<String>}
+		 * @readonly
+		 */
 		this.aliases = aliases;
-		this.extendedDescription = extendedDescription !== null ? extendedDescription : description;
+
+		/**
+		 * @type {Number}
+		 * @readonly
+		 */
 		this.maxArguments = maxArguments;
+
+		/**
+		 * @type {AccessLevelType}
+		 * @readonly
+		 */
 		this.accessLevel = accessLevel;
+
+		/**
+		 * @type {Function}
+		 * @readonly
+		 */
 		this.executed = onExecuted;
+
+		/**
+		 * @type {Function}
+		 * @readonly
+		 */
 		this.canExecute = canExecute;
+
+		/**
+		 * @type {CommandCategoryType}
+		 * @readonly
+		 */
 		this.category = category;
+
+		/**
+		 * @type {Array<String>}
+		 * @readonly
+		 */
 		this.args = args;
+
+		/**
+		 * @type {Boolean}
+		 * @readonly
+		 */
 		this.isEnabled = isEnabled;
-		this.price = price;
 	}
 
 	/**
@@ -37,15 +82,13 @@ export default class Command {
 			module.meta.name,
 			module.meta.description,
 			module.meta.aliases,
-			null,
 			module.meta.maxArguments,
 			module.meta.accessLevel,
 			module.executed,
 			module.canExecute,
 			module.meta.category,
 			module.meta.args,
-			module.meta.enabled,
-			module.meta.price
+			module.meta.enabled
 		);
 	}
 }

@@ -17,6 +17,10 @@ export default class CommandLoader {
 		this.commandManager = commandManager;
 	}
 
+	/**
+	 * Load all the commands from path
+	 * @returns {Promise}
+	 */
 	async loadAll() {
 		return new Promise((resolve) => {
 			fs.readdir(this.commandManager.commandsPath, (error, files) => {
@@ -55,7 +59,7 @@ export default class CommandLoader {
 
 	/**
 	 * @param {Object} module
-	 * @returns {Boolean}
+	 * @returns {Boolean} Whether the module is valid
 	 */
 	static validate(module) {
 		Typer.validate({

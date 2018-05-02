@@ -1,4 +1,4 @@
-import AccessLevelType from "../core/access-level-type";
+import AccessLevelType from "../commands/access-level-type";
 import CommandArgumentParser from "./command-argument-parser";
 import CommandExecutedEvent from "../events/command-executed-event";
 import CommandCategoryType from "./command-category-type";

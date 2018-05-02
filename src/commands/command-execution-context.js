@@ -1,5 +1,5 @@
-import EditableMessage from "../core/editable-message";
-import EmbedBuilder from "../core/embed-builder";
+import EditableMessage from "../message/editable-message";
+import EmbedBuilder from "../message/embed-builder";
 
 const Discord = require("discord.js");
 

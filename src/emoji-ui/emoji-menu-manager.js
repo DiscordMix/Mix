@@ -1,6 +1,20 @@
 export default class EmojiMenuManager {
+	/**
+	 * @param {Discord.Client} client
+	 */
 	constructor(client) {
+		/**
+		 * @type {Discord.Client}
+		 * @private
+		 * @readonly
+		 */
 		this.client = client;
+
+		/**
+		 * @type {Array}
+		 * @private
+		 * @readonly
+		 */
 		this.awaiting = [];
 
 		this.client.on("messageReactionAdd", (reaction, user) => {

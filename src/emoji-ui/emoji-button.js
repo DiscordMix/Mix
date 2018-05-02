@@ -1,10 +1,19 @@
 export default class EmojiButton {
 	/**
-	 * @param {string} emoji
-	 * @param {function} clickHandler
+	 * @param {String} emoji
+	 * @param {Function} clickHandler
 	 */
 	constructor(emoji, clickHandler) {
+		/**
+		 * @type {String}
+		 * @readonly
+		 */
 		this.emoji = emoji;
+
+		/**
+		 * @type {Function}
+		 * @readonly
+		 */
 		this.handle = clickHandler;
 	}
 }

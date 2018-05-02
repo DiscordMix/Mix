@@ -9,11 +9,17 @@ export default class FeatureManager /* extends Collection */ {
 	constructor(bot, features = []) {
 		// super(features);
 
+		/**
+		 * @type {Array<Feature>}
+		 * @private
+		 * @readonly
+		 */
 		this.features = features;
 
 		/**
 		 * @type {Bot}
 		 * @private
+		 * @readonly
 		 */
 		this.bot = bot;
 	}

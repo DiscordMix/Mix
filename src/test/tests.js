@@ -243,7 +243,7 @@ describe("Schema.validate()", () => {
 	it("should determine whether a structure is valid", () => {
 		const result1 = Schema.validate(subjects.schema.struct, subjects.schema.schema);
 
-		subjects.schema.struct.age = 0;
+		subjects.schema.struct.age = "hai";
 
 		const result2 = Schema.validate(subjects.schema.struct, subjects.schema.schema);
 

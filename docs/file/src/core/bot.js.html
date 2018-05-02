@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/core/bot.js | discord-anvil</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Powerful Discord bot framework"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="discord-anvil"><meta property="twitter:description" content="Powerful Discord bot framework"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#collections">collections</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collections/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collections/emoji-collection.js~EmojiCollection.html">EmojiCollection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EventEmitter">EventEmitter</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#commands">commands</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-argument-parser.js~CommandArgumentParser.html">CommandArgumentParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-execution-context.js~CommandExecutionContext.html">CommandExecutionContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-loader.js~CommandLoader.html">CommandLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-manager.js~CommandManager.html">CommandManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-parser.js~CommandParser.html">CommandParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command.js~Command.html">Command</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CommandCategoryType">CommandCategoryType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#console">console</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/console/console-command.js~ConsoleCommand.html">ConsoleCommand</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/console/console-interface.js~ConsoleInterface.html">ConsoleInterface</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/bot.js~Bot.html">Bot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/editable-message.js~EditableMessage.html">EditableMessage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/embed-builder.js~EmbedBuilder.html">EmbedBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/log.js~Log.html">Log</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/message-builder.js~MessageBuilder.html">MessageBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/rgb.js~RGB.html">RGB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/rgba.js~RGBA.html">RGBA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/settings.js~Settings.html">Settings</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/time-parser.js~TimeParser.html">TimeParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/user-config.js~UserConfig.html">UserConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AccessLevelType">AccessLevelType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TimeSuffixType">TimeSuffixType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#data-adapters">data-adapters</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/data-adapter.js~DataAdapter.html">DataAdapter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/json-adapter.js~JsonAdapter.html">JsonAdapter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/object-adapter.js~ObjectAdapter.html">ObjectAdapter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/sqlite-adapter.js~SqliteAdapter.html">SqliteAdapter</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#emoji-ui">emoji-ui</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emoji-ui/emoji-button.js~EmojiButton.html">EmojiButton</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager.html">EmojiMenuManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emoji-ui/emoji-menu.js~EmojiMenu.html">EmojiMenu</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#events">events</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/command-executed-event.js~CommandExecutedEvent.html">CommandExecutedEvent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/command-will-execute-event.js~CommandWillExecuteEvent.html">CommandWillExecuteEvent</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#features">features</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/features/feature-manager.js~FeatureManager.html">FeatureManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/features/feature.js~Feature.html">Feature</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#schema">schema</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema/schema.js~Schema.html">Schema</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/core/bot.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import CommandParser from &quot;../commands/command-parser&quot;;
+import CommandExecutionContext from &quot;../commands/command-execution-context&quot;;
+import ConsoleInterface from &quot;../console/console-interface&quot;;
+import EmojiMenuManager from &quot;../emoji-ui/emoji-menu-manager&quot;;
+import CommandManager from &quot;../commands/command-manager&quot;;
+import Utils from &quot;./utils&quot;;
+import EmojiCollection from &quot;../collections/emoji-collection&quot;;
+import Settings from &quot;./settings&quot;;
+import FeatureManager from &quot;../features/feature-manager&quot;;
+import CommandLoader from &quot;../commands/command-loader&quot;;
+import Log from &quot;./log&quot;;
+import Schema from &quot;../schema/schema&quot;;
+import DataAdapter from &quot;../data-adapters/data-adapter&quot;;
+
+const Discord = require(&quot;discord.js&quot;);
+const EventEmitter = require(&quot;events&quot;);
+const fs = require(&quot;fs&quot;);
+
+export default class Bot extends EventEmitter {
+	/**
+	 * @param {Object} data
+	 */
+	constructor(data) {
+		super();
+
+		// Setup the class
+		this.setup(data);
+	}
+
+	async setup(data) {
+		// TODO: Should use the Typer library (Typer needs update)
+		if (!Schema.validate(data, {
+			&quot;paths.settings&quot;: &quot;string&quot;,
+			&quot;paths.emojis&quot;: &quot;string&quot;,
+			&quot;paths.commands&quot;: &quot;string&quot;,
+			&quot;paths.accessLevels&quot;: &quot;string&quot;,
+			argumentTypes: &quot;object&quot;,
+			dataAdapter: DataAdapter
+		})) {
+			Log.throw(&quot;[Bot.setup] Invalid data provided.&quot;);
+		}
+
+		/**
+		 * @type {Settings}
+		 */
+		this.settings = new Settings(data.paths.settings);
+
+		/**
+		 * @type {DataAdapter}
+		 */
+		this.dataAdapter = data.dataAdapter;
+
+		/**
+		 * @type {EmojiCollection}
+		 */
+		this.emojis = EmojiCollection.fromFile(data.paths.emojis);
+
+		/**
+		 * @type {Discord.Client}
+		 */
+		this.client = new Discord.Client();
+
+		/**
+		 * @type {CommandManager}
+		 */
+		this.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes);
+
+		/**
+		 * @type {FeatureManager}
+		 */
+		this.features = new FeatureManager();
+
+		/**
+		 * @type {CommandLoader}
+		 */
+		this.commandLoader = new CommandLoader(this.commands);
+
+		/**
+		 * @type {ConsoleInterface}
+		 */
+		this.console = new ConsoleInterface();
+
+		/**
+		 * @type {EmojiMenuManager}
+		 */
+		this.menus = new EmojiMenuManager(this.client);
+
+		/**
+		 * @type {Log}
+		 */
+		this.log = new Log(this);
+
+		// Setup the Discord client&apos;s events
+		this.setupEvents();
+
+		// Load commands
+		await this.commandLoader.loadAll();
+		Log.verbose(&quot;Bot setup completed&quot;);
+	}
+
+	setupEvents() {
+		// TODO: Find better position
+		const resolvers = {
+			user: (arg) =&gt; Utils.resolveId(arg),
+			channel: (arg) =&gt; Utils.resolveId(arg),
+			role: (arg) =&gt; Utils.resolveId(arg),
+			state: (arg) =&gt; Utils.translateState(arg)
+		};
+
+		// Discord client events
+		this.client.on(&quot;ready&quot;, () =&gt; {
+			this.log.info(&quot;Ready&quot;);
+			this.console.init(this);
+		});
+
+		this.client.on(&quot;message&quot;, async (message) =&gt; {
+			if (!message.author.bot) {
+				if (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
+					this.commands.handle(
+						new CommandExecutionContext(
+							message,
+							CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
+							this,
+							this.commands.getAuthority(message.guild.id, message.member.roles.array().map((role) =&gt; role.name), message.author.id),
+							this.emojis
+						),
+
+						CommandParser.parse(
+							message.content,
+							this.commands,
+							this.settings.general.prefix
+						)
+					);
+				}
+				else if (message.content === &quot;?prefix&quot;) {
+					message.channel.send(`Command prefix: **${this.settings.general.prefix}**`);
+				}
+			}
+		});
+	}
+
+	async connect() {
+		this.log.info(&quot;Starting&quot;);
+		await this.client.login(this.settings.general.token);
+	}
+
+	async restart() {
+		this.log.info(&quot;Restarting&quot;);
+
+		// TODO
+		// this.features.reloadAll(this);
+
+		await this.disconnect();
+		await this.connect();
+	}
+
+	async disconnect() {
+		this.settings.save();
+		await this.client.destroy();
+		this.log.info(&quot;Disconnected&quot;);
+	}
+
+	static async clearTemp() {
+		if (fs.existsSync(&quot;./temp&quot;)) {
+			fs.readdir(&quot;./temp&quot;, (error, files) =&gt; {
+				for (let i = 0; i &lt; files.length; i++) {
+					fs.unlink(`./temp/${files[i]}`);
+				}
+			});
+		}
+	}
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

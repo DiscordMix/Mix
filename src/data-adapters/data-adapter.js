@@ -3,6 +3,7 @@ export default class DataAdapter {
 	 * Retrieve guild data
 	 * @param {String} path
 	 * @param {(Snowflake|Null)} guildId
+	 * @abstract
 	 * @returns {*}
 	 */
 	get(path, guildId = null) {
@@ -14,6 +15,7 @@ export default class DataAdapter {
 	 * @param {String} path
 	 * @param {*} value
 	 * @param {(Snowflake|Null)} guildId
+	 * @abstract
 	 */
 	set(path, value, guildId = null) {
 		throw new Error("[DataAdapter.set] Method not implemented.");
@@ -22,6 +24,7 @@ export default class DataAdapter {
 	/**
 	 * @param {String} path
 	 * @param {(Snowflake|Null)} guildId
+	 * @abstract
 	 * @return {String}
 	 */
 	static resolvePath(path, guildId) {

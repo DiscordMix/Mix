@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/commands/command-manager.js | discord-anvil</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Powerful Discord bot framework"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="discord-anvil"><meta property="twitter:description" content="Powerful Discord bot framework"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#collections">collections</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collections/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collections/emoji-collection.js~EmojiCollection.html">EmojiCollection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EventEmitter">EventEmitter</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#commands">commands</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-argument-parser.js~CommandArgumentParser.html">CommandArgumentParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-execution-context.js~CommandExecutionContext.html">CommandExecutionContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-loader.js~CommandLoader.html">CommandLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-manager.js~CommandManager.html">CommandManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-parser.js~CommandParser.html">CommandParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command.js~Command.html">Command</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CommandCategoryType">CommandCategoryType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#console">console</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/console/console-command.js~ConsoleCommand.html">ConsoleCommand</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/console/console-interface.js~ConsoleInterface.html">ConsoleInterface</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/bot.js~Bot.html">Bot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/editable-message.js~EditableMessage.html">EditableMessage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/embed-builder.js~EmbedBuilder.html">EmbedBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/log.js~Log.html">Log</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/message-builder.js~MessageBuilder.html">MessageBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/rgb.js~RGB.html">RGB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/rgba.js~RGBA.html">RGBA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/settings.js~Settings.html">Settings</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/time-parser.js~TimeParser.html">TimeParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/user-config.js~UserConfig.html">UserConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AccessLevelType">AccessLevelType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TimeSuffixType">TimeSuffixType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#data-adapters">data-adapters</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/data-adapter.js~DataAdapter.html">DataAdapter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/json-adapter.js~JsonAdapter.html">JsonAdapter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/object-adapter.js~ObjectAdapter.html">ObjectAdapter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/sqlite-adapter.js~SqliteAdapter.html">SqliteAdapter</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#emoji-ui">emoji-ui</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emoji-ui/emoji-button.js~EmojiButton.html">EmojiButton</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager.html">EmojiMenuManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emoji-ui/emoji-menu.js~EmojiMenu.html">EmojiMenu</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#events">events</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/command-executed-event.js~CommandExecutedEvent.html">CommandExecutedEvent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/command-will-execute-event.js~CommandWillExecuteEvent.html">CommandWillExecuteEvent</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#features">features</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/features/feature-manager.js~FeatureManager.html">FeatureManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/features/feature.js~Feature.html">Feature</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#schema">schema</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema/schema.js~Schema.html">Schema</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/commands/command-manager.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import AccessLevelType from &quot;../core/access-level-type&quot;;
+import CommandArgumentParser from &quot;./command-argument-parser&quot;;
+import CommandExecutedEvent from &quot;../events/command-executed-event&quot;;
+import CommandCategoryType from &quot;./command-category-type&quot;;
+// import Collection from &quot;../core/collection&quot;;
+
+const fs = require(&quot;fs&quot;);
+
+export default class CommandManager /* extends Collection */ {
+	/**
+	 * @param {Bot} bot
+	 * @param {String} commandsPath
+	 * @param {String} accessLevelsPath
+	 * @param {Object} argumentTypes
+	 */
+	constructor(bot, commandsPath, accessLevelsPath, argumentTypes) {
+		/**
+		 * @type {Bot}
+		 * @private
+		 */
+		this.bot = bot;
+
+		/**
+		 * @type {String}
+		 * @private
+		 */
+		this.commandsPath = commandsPath;
+
+		/**
+		 * @type {String}
+		 * @private
+		 */
+		this.accessLevelsPath = accessLevelsPath;
+
+		/**
+		 * @type {Object}
+		 */
+		this.argumentTypes = argumentTypes;
+
+		/**
+		 * @type {Array&lt;Command&gt;}
+		 * @private
+		 */
+		this.commands = [];
+
+		/**
+		 * @type {Object}
+		 * @private
+		 */
+		this.accessLevels = [];
+
+		fs.readFile(this.accessLevelsPath, (error, data) =&gt; {
+			// TODO: Validate access levels
+			this.accessLevels = JSON.parse(data.toString());
+
+			console.log(this.accessLevels);
+		});
+	}
+
+	/**
+	 * @param {Command} command
+	 */
+	register(command) {
+		this.commands.push(command);
+	}
+
+	/**
+	 * @param {String} commandBase
+	 * @returns {Boolean}
+	 */
+	removeByBase(commandBase) {
+		return this.remove(this.getByBase(commandBase));
+	}
+
+	/**
+	 * @param {Command} command
+	 * @returns {Boolean}
+	 */
+	remove(command) {
+		return this.removeAt(this.commands.indexOf(command));
+	}
+
+	/**
+	 * @param {Number} index
+	 * @returns {Boolean}
+	 */
+	removeAt(index) {
+		if (this.commands[index]) {
+			this.commands.splice(index, 1);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param {String} commandBase
+	 * @returns {Boolean}
+	 */
+	contains(commandBase) {
+		return this.getByBase(commandBase) !== null;
+	}
+
+	/**
+	 * @param {Array&lt;Command&gt;} commands
+	 */
+	registerMultiple(commands) {
+		for (let i = 0; i &lt; commands.length; i++) {
+			this.register(commands[i]);
+		}
+	}
+
+	/**
+	 * @param {String} commandBase
+	 * @returns {Boolean}
+	 */
+	isRegistered(commandBase) {
+		return this.getByBase(commandBase) != null;
+	}
+
+	/**
+	 * @param {String} commandBase
+	 * @returns {(Command|Null)}
+	 */
+	getByBase(commandBase) {
+		for (let i = 0; i &lt; this.commands.length; i++) {
+			if (this.commands[i].base === commandBase || this.commands[i].aliases.includes(commandBase)) {
+				return this.commands[i];
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param {Snowflake} guildId
+	 * @param {String} role
+	 * @returns {AccessLevelType}
+	 */
+	getAccessLevelByRole(guildId, role) {
+		const accessLevels = this.bot.dataAdapter.get(&quot;access-levels&quot;, guildId);
+		const keys = Object.keys(accessLevels);
+
+		for (let keyIndex = 0; keyIndex &lt; keys.length; keyIndex++) {
+			for (let roleIndex = 0; roleIndex &lt; accessLevels[keys[keyIndex]].length; roleIndex++) {
+				if (accessLevels[keys[keyIndex]][roleIndex] === role) {
+					return AccessLevelType.fromString(keys[keyIndex]);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param {Snowflake} userId
+	 * @returns {Boolean}
+	 */
+	isDeveloper(userId) {
+		return this.bot.dataAdapter.get(&quot;global.developers&quot;).includes(userId);
+	}
+
+	/**
+	 * @param {Snowflake} guildId
+	 * @param {Snowflake} userId
+	 * @returns {AccessLevelType}
+	 */
+	getAccessLevelById(guildId, userId) {
+		if (this.isDeveloper(userId)) {
+			return AccessLevelType.Developer;
+		}
+
+		const accessLevels = this.bot.dataAdapter.get(&quot;access-levels&quot;, guildId);
+		const keys = Object.keys(accessLevels);
+
+		for (let keyIndex = 0; keyIndex &lt; keys.length; keyIndex++) {
+			// TODO: Use index of instead of looping
+			for (let roleIndex = 0; roleIndex &lt; accessLevels[keys[keyIndex]].length; roleIndex++) {
+				const value = accessLevels[keys[keyIndex]][roleIndex];
+
+				if (!isNaN(value) &amp;&amp; value === userId.toString()) {
+					return AccessLevelType.fromString(keys[keyIndex]);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	// TODO: Move to the corresponding file/class
+	/**
+	 * @param {*} message
+	 * @param {String} role
+	 * @returns {*}
+	 */
+	hasRole(message, role) {
+		return message.member.roles.find(&quot;name&quot;, role);
+	}
+
+	/**
+	 * @param {*} message
+	 * @param {Array&lt;String&gt;} roles
+	 * @returns {Boolean}
+	 */
+	hasRoles(message, roles) {
+		for (let i = 0; i &lt; roles.length; i++) {
+			if (!this.hasRole(message, roles[i])) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param {Snowflake} guildId
+	 * @param {Array&lt;String&gt;} roles
+	 * @returns {AccessLevelType}
+	 */
+	getHighestAccessLevelByRoles(guildId, roles) {
+		let highest = AccessLevelType.Guest;
+
+		for (let i = 0; i &lt; roles.length; i++) {
+			const accessLevel = this.getAccessLevelByRole(guildId, roles[i]);
+
+			if (accessLevel &gt; highest) {
+				highest = accessLevel;
+			}
+		}
+
+		return highest;
+	}
+
+	/**
+	 * @param {Snowflake} guildId
+	 * @param {Message} message
+	 * @param {AccessLevelType} accessLevel
+	 * @returns {Boolean}
+	 */
+	hasAuthority(guildId, message, accessLevel) {
+		return this.getAuthority(guildId, message.member.roles.array().map((role) =&gt; role.name), message.author.id) &gt;= accessLevel;
+
+		// TODO: Replaced by getAuthority() method
+		// return (this.getHighestAccessLevelByRoles(message.member.roles.array().map((role) =&gt; role.name)) &gt;= accessLevel) || (this.getAccessLevelById(message.author.id) &gt;= accessLevel);
+	}
+
+	/**
+	 * @param {Snowflake} guildId
+	 * @param {Array&lt;String&gt;} roles
+	 * @param {Snowflake} userId
+	 * @returns {AccessLevelType} The authority of the user
+	 */
+	getAuthority(guildId, roles = [&quot;@everyone&quot;], userId) {
+		const byRoles = this.getHighestAccessLevelByRoles(guildId, roles);
+		const byId = this.getAccessLevelById(guildId, userId);
+
+		if (byRoles &gt; byId) {
+			return byRoles;
+		}
+
+		return byId;
+	}
+
+	/**
+	 * @param {Object} rules
+	 * @param {Array&lt;String&gt;} args
+	 * @returns {Object} The assembled arguments
+	 */
+	assembleArguments(rules, args) {
+		const result = {};
+
+		if (rules.length !== args.length) {
+			this.bot.log.info(&quot;AssembleArguments: Not same length&quot;);
+		}
+
+		this.bot.log.info(args);
+
+		for (let i = 0; i &lt; rules.length; i++) {
+			result[rules[i]] = (isNaN(args[i]) ? args[i] : parseInt(args[i]));
+		}
+
+		return result;
+	}
+
+	/**
+	 * @param {CommandExecutionContext} context
+	 * @param {Command} command The command to handle
+	 * @returns {Promise&lt;Boolean&gt;} Whether the command was successfully executed
+	 */
+	async handle(context, command) {
+		if (!context.message.member) {
+			context.message.channel.send(&quot;That command must be used in a text channel. Sorry!&quot;);
+		}
+		else if (command.category === CommandCategoryType.NSFW &amp;&amp; !context.message.channel.nsfw) {
+			context.fail(&quot;:underage: Please use an NSFW channel for this command.&quot;);
+		}
+		else if (!command.isEnabled) {
+			await context.fail(&quot;That command is disabled and may not be used.&quot;);
+		}
+		else if (!this.hasAuthority(context.message.guild.id, context.message, command.accessLevel)) {
+			const minAuthority = AccessLevelType.toString(command.accessLevel);
+			context.fail(`You don&apos;t have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
+		}
+		else if (context.arguments.length &gt; command.maxArguments) {
+			if (command.maxArguments &gt; 0) {
+				context.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);
+			}
+			else {
+				context.fail(`That command does not accept any arguments.`);
+			}
+		}
+		else if (!command.canExecute(context)) {
+			context.fail(&quot;That command cannot be executed right now.&quot;);
+		}
+		else if (!CommandArgumentParser.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {
+			await context.fail(&quot;Invalid argument usage. Please use the `usage` command.&quot;);
+		}
+		else {
+			try {
+				const result = command.executed(context); // .catch((error) =&gt; context.respond(`There was an error while executing that command. (${error.message})`, &quot;&quot;, &quot;RED&quot;));
+				context.bot.emit(&quot;commandExecuted&quot;, new CommandExecutedEvent(command, context));
+
+				return result;
+			}
+			catch (error) {
+				// TODO: Use the Log class
+				console.error(error);
+				context.fail(`**Oh noes!** There was an error executing that command. (${error.message})`);
+			}
+		}
+
+		return false;
+	}
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

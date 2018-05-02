@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/core/message-builder.js | discord-anvil</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Powerful Discord bot framework"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="discord-anvil"><meta property="twitter:description" content="Powerful Discord bot framework"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#collections">collections</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collections/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collections/emoji-collection.js~EmojiCollection.html">EmojiCollection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EventEmitter">EventEmitter</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#commands">commands</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-argument-parser.js~CommandArgumentParser.html">CommandArgumentParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-execution-context.js~CommandExecutionContext.html">CommandExecutionContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-loader.js~CommandLoader.html">CommandLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-manager.js~CommandManager.html">CommandManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command-parser.js~CommandParser.html">CommandParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/commands/command.js~Command.html">Command</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CommandCategoryType">CommandCategoryType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#console">console</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/console/console-command.js~ConsoleCommand.html">ConsoleCommand</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/console/console-interface.js~ConsoleInterface.html">ConsoleInterface</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/bot.js~Bot.html">Bot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/editable-message.js~EditableMessage.html">EditableMessage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/embed-builder.js~EmbedBuilder.html">EmbedBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/log.js~Log.html">Log</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/message-builder.js~MessageBuilder.html">MessageBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/rgb.js~RGB.html">RGB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/rgba.js~RGBA.html">RGBA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/settings.js~Settings.html">Settings</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/time-parser.js~TimeParser.html">TimeParser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/user-config.js~UserConfig.html">UserConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AccessLevelType">AccessLevelType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TimeSuffixType">TimeSuffixType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#data-adapters">data-adapters</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/data-adapter.js~DataAdapter.html">DataAdapter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/json-adapter.js~JsonAdapter.html">JsonAdapter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/object-adapter.js~ObjectAdapter.html">ObjectAdapter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/data-adapters/sqlite-adapter.js~SqliteAdapter.html">SqliteAdapter</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#emoji-ui">emoji-ui</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emoji-ui/emoji-button.js~EmojiButton.html">EmojiButton</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager.html">EmojiMenuManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/emoji-ui/emoji-menu.js~EmojiMenu.html">EmojiMenu</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#events">events</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/command-executed-event.js~CommandExecutedEvent.html">CommandExecutedEvent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/command-will-execute-event.js~CommandWillExecuteEvent.html">CommandWillExecuteEvent</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#features">features</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/features/feature-manager.js~FeatureManager.html">FeatureManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/features/feature.js~Feature.html">Feature</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#schema">schema</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema/schema.js~Schema.html">Schema</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/core/message-builder.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default class MessageBuilder {
+	/**
+	 * @param {string} startingString
+	 */
+	constructor(startingString = &quot;&quot;) {
+		this.message = startingString;
+	}
+
+	/**
+	 * @param {string} string
+	 * @returns {MessageBuilder}
+	 */
+	add(string) {
+		this.message += string;
+
+		return this;
+	}
+
+	/**
+	 * @param {(string|null)} language
+	 * @param {(string|null)} code
+	 * @returns {MessageBuilder}
+	 */
+	codeBlock(language = null, code = null) {
+		let result = &quot;```&quot;;
+
+		if (language !== null) {
+			result += `${language}\n`;
+		}
+
+		if (code !== null) {
+			result += `${code}\n\`\`\``;
+		}
+
+		return this.add(result);
+	}
+
+	/**
+	 * @param {(string|null)} code
+	 * @returns {MessageBuilder}
+	 */
+	code(code = null) {
+		if (code === null) {
+			return this.add(&quot;`&quot;);
+		}
+
+		return this.add(`\`${code}\``);
+	}
+
+	/**
+	 * @param {string} text
+	 * @returns {MessageBuilder}
+	 */
+	italic(text) {
+		return this.add(`*${text}*`);
+	}
+
+	/**
+	 * @param {string} text
+	 * @returns {MessageBuilder}
+	 */
+	bold(text) {
+		return this.add(`**${text}**`);
+	}
+
+	/**
+	 * @param {string} text
+	 * @returns {MessageBuilder}
+	 */
+	underlined(text) {
+		return this.add(`__${text}__`);
+	}
+
+	/**
+	 * @returns {MessageBuilder}
+	 */
+	line() {
+		return this.add(&quot;\n&quot;);
+	}
+
+	/**
+	 * @param {string} emoji
+	 * @returns {MessageBuilder}
+	 */
+	emoji(emoji) {
+		return this.add(`:${emoji}:`);
+	}
+
+	/**
+	 * @returns {string}
+	 */
+	build() {
+		return this.message;
+	}
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

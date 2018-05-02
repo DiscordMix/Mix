@@ -1,0 +1,38 @@
+[
+  {
+    "name": "FeatureManager#enableMultiple",
+    "filePath": "src/features/feature-manager.js",
+    "lines": [
+      {
+        "lineNumber": 36,
+        "line": "\t/**"
+      },
+      {
+        "lineNumber": 37,
+        "line": "\t * Enable multiple features at once"
+      },
+      {
+        "lineNumber": 38,
+        "line": "\t * @param {Array<Feature>}features"
+      },
+      {
+        "lineNumber": 39,
+        "line": "\t * @returns {Number}"
+      },
+      {
+        "lineNumber": 40,
+        "line": "\t */"
+      },
+      {
+        "lineNumber": 41,
+        "line": "\tenableMultiple(features) {"
+      }
+    ],
+    "codeParams": [
+      "features"
+    ],
+    "docParams": [
+      "{Array<Feature>}features"
+    ]
+  }
+]

@@ -1,14 +1,35 @@
 import DataAdapter from "./data-adapter";
 
-const mysql = require('mysql');
+const mysql = require("mysql");
 const _ = require("lodash");
 
+/**
+ * @extends DataAdapter
+ */
 export default class MysqlAdapter extends DataAdapter {
+	/**
+	 * @param {Object} data
+	 */
 	constructor(data) {
 		super();
 
+		/**
+		 * @type {*}
+		 * @private
+		 */
 		this.data = data;
+
+		/**
+		 * @type {*}
+		 * @private
+		 * @readonly
+		 */
 		this.connection = mysql.createConnection(data);
+
+		/**
+		 * @type {Boolean}
+		 * @private
+		 */
 		this.connected = false;
 	}
 
@@ -17,7 +38,8 @@ export default class MysqlAdapter extends DataAdapter {
 			this.connection.connect((err) => {
 				if (err) {
 					reject(reject);
-				} else {
+				}
+				else {
 					this.connected = true;
 					resolve(this);
 				}
@@ -30,7 +52,8 @@ export default class MysqlAdapter extends DataAdapter {
 			this.connection.end((err) => {
 				if (err) {
 					reject(reject);
-				} else {
+				}
+				else {
 					this.connected = false;
 					resolve(this);
 				}
@@ -47,7 +70,8 @@ export default class MysqlAdapter extends DataAdapter {
 			}, (error, results, fields) => {
 				if (error) {
 					reject(error);
-				} else {
+				}
+				else {
 					resolve({
 						results: results,
 						fields: fields
@@ -65,7 +89,7 @@ export default class MysqlAdapter extends DataAdapter {
 	 */
 	async get(path, guildId = null) {
 		if (!this.loaded) {
-			throw new Error("[MySQLAdapter.get] No data is currently loaded.");
+			throw new Error("[MysqlAdapter.get] No data is currently loaded.");
 		}
 
 		let query = "SELECT * FROM ?? WHERE id = ?";
@@ -90,8 +114,7 @@ export default class MysqlAdapter extends DataAdapter {
 		if (fields.length === 0) {
 			return undefined;
 		}
-
-		if (splitPath.length === 2) {
+		else if (splitPath.length === 2) {
 			return results[0];
 		} else if (splitPath.length === 3) {
 			return results[0][splitPath[2]];
@@ -111,7 +134,7 @@ export default class MysqlAdapter extends DataAdapter {
 	 */
 	async set(path, value, guildId = null) {
 		if (!this.loaded) {
-			throw new Error("[MySQLAdapter.set] No data is currently loaded.");
+			throw new Error("[MysqlAdapter.set] No data is currently loaded.");
 		}
 
 		const query = "UPDATE ?? SET ??=? WHERE  `id`=?;";
@@ -119,7 +142,7 @@ export default class MysqlAdapter extends DataAdapter {
 		const splitPath = MysqlAdapter.cleanPath(path, guildId);
 
 		if (splitPath.length < 3) {
-			throw new Error("[MySQLAdapter.set] Invalid path.");
+			throw new Error(`[MysqlAdapter.set] Invalid path: ${path}`);
 		}
 
 		const { results, fields } = await this.query(query, [
@@ -140,16 +163,24 @@ export default class MysqlAdapter extends DataAdapter {
 	 */
 	merge(path, value, guildId = null) {
 		if (!this.loaded) {
-			throw new Error("[MySQLAdapter.merge] No data is currently loaded.");
+			throw new Error("[MysqlAdapter.merge] No data is currently loaded.");
 		}
 
-		throw new Error("[MySQLAdapter.set] Method not implemented.");
+		throw new Error("[MysqlAdapter.merge] Method not implemented.");
 	}
 
+	/**
+	 * @param {String} path
+	 * @param {Snowflake} guildId
+	 * @returns {Array<String>}
+	 */
 	static cleanPath(path, guildId) {
-		return `${guildId ? `guilds.${guildId}.` : ""}${path}`.split('.');
+		return `${guildId ? `guilds.${guildId}.` : ""}${path}`.split(".");
 	}
 
+	/**
+	 * @returns {Boolean} Whether any data is currently loaded
+	 */
 	get loaded() {
 		return this.data !== null && this.connected;
 	}

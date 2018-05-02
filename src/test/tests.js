@@ -1,6 +1,7 @@
 import Utils from "../core/utils";
 import RGB from "../core/rgb";
 import RGBA from "../core/rgba";
+import Collection from "../collections/collection";
 
 const { expect } = require("chai");
 
@@ -12,7 +13,8 @@ const subjects = {
 	],
 
 	rgb: new RGB(5, 10, 15),
-	rgba: new RGBA(5, 10, 15, 20)
+	rgba: new RGBA(5, 10, 15, 20),
+	collection: new Collection(["hello", "it's me"])
 };
 
 describe("Utils.resolveId()", () => {
@@ -103,5 +105,61 @@ describe("RGBA.toString()", () => {
 
 		expect(result).to.be.an("string");
 		expect(result).to.equal("5, 10, 15, 20");
+	});
+});
+
+describe("Collection.at()", () => {
+	it("should return the item located in the specified index", () => {
+		const result1 = subjects.collection.at(0);
+		const result2 = subjects.collection.at(1);
+
+		// Result 1
+		expect(result1).to.be.an("string");
+		expect(result1).to.equal("hello");
+
+		// Result 2
+		expect(result2).to.be.an("string");
+		expect(result2).to.equal("it's me");
+	});
+});
+
+describe("Collection.removeAt()", () => {
+	it("should remove the item located in the specified index", () => {
+		const result1 = subjects.collection.removeAt(0);
+		const result2 = subjects.collection.removeAt(5);
+
+		// Result 1
+		expect(result1).to.be.an("boolean");
+		expect(result1).to.equal(true);
+		expect(subjects.collection.at(0)).to.be.an("string");
+		expect(subjects.collection.at(0)).to.equal("it's me");
+
+		// Result 2
+		expect(result2).to.be.an("boolean");
+		expect(result2).to.equal(false);
+	});
+});
+
+describe("Collection.add()", () => {
+	it("should add an item to the collection", () => {
+		subjects.collection.add("john doe");
+		expect(subjects.collection.at(1)).to.be.an("string");
+		expect(subjects.collection.at(1)).to.equal("john doe");
+		expect(subjects.collection.items.join(" ")).to.equal("it's me john doe");
+	});
+});
+
+describe("Collection.contains()", () => {
+	it("should determine whether the collection contains an item", () => {
+		const result1 = subjects.collection.contains("john doe");
+		const result2 = subjects.collection.contains("nope");
+
+		// Result 1
+		expect(result1).to.be.an("boolean");
+		expect(result1).to.equal(true);
+
+		// Result 2
+		expect(result2).to.be.an("boolean");
+		expect(result2).to.equal(false);
 	});
 });

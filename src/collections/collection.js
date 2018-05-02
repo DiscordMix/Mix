@@ -48,7 +48,7 @@ export default class Collection extends EventEmitter {
 	 * @param {*} item
 	 */
 	add(item) {
-		this.items.push();
+		this.items.push(item);
 		this.emit("itemAdded", item);
 	}
 

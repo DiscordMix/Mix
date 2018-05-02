@@ -1,3 +1,7 @@
+/**
+ * @enum {Number}
+ * @readonly
+ */
 const AccessLevelType = {
 	Guest: 0,
 	Member: 1,
@@ -9,28 +13,29 @@ const AccessLevelType = {
 
 	/**
 	 * @param {AccessLevelType} type
+	 * @returns {String}
 	 */
 	toString(type) {
 		switch (type) {
-			case AccessLevelType.Guest:
+			case this.Guest:
 				return "Guest";
 
-			case AccessLevelType.Member:
+			case this.Member:
 				return "Member";
 
-			case AccessLevelType.Premium:
+			case this.Premium:
 				return "Premium";
 
-			case AccessLevelType.Moderator:
+			case this.Moderator:
 				return "Moderator";
 
-			case AccessLevelType.Admin:
+			case this.Admin:
 				return "Admin";
 
-			case AccessLevelType.Owner:
+			case this.Owner:
 				return "Owner";
 
-			case AccessLevelType.Developer:
+			case this.Developer:
 				return "Developer";
 
 			default:
@@ -39,31 +44,31 @@ const AccessLevelType = {
 	},
 
 	/**
-	 * @param {string} string
+	 * @param {String} string
 	 * @returns {AccessLevelType}
 	 */
 	fromString(string) {
 		switch (string.toLowerCase()) {
 			case "guest":
-				return AccessLevelType.Guest;
+				return this.Guest;
 
 			case "member":
-				return AccessLevelType.Member;
+				return this.Member;
 
 			case "premium":
-				return AccessLevelType.Premium;
+				return this.Premium;
 
 			case "moderator":
-				return AccessLevelType.Moderator;
+				return this.Moderator;
 
 			case "admin":
-				return AccessLevelType.Admin;
+				return this.Admin;
 
 			case "owner":
-				return AccessLevelType.Owner;
+				return this.Owner;
 
 			case "developer":
-				return AccessLevelType.Developer;
+				return this.Developer;
 
 			default:
 				return -1;

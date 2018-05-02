@@ -1,3 +1,7 @@
+/**
+ * @enum {Number}
+ * @readonly
+ */
 const TimeSuffixType = {
 	Millisecond: 0,
 	Second: 1,

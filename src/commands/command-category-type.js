@@ -1,3 +1,7 @@
+/**
+ * @enum {Number}
+ * @readonly
+ */
 const CommandCategoryType = {
 	General: 0,
 	Fun: 1,

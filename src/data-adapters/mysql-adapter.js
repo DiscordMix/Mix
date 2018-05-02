@@ -14,7 +14,7 @@ export default class MysqlAdapter extends DataAdapter {
 		super();
 
 		/**
-		 * @type {*}
+		 * @type {Object}
 		 * @private
 		 */
 		this.data = data;

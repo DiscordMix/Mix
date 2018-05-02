@@ -9,7 +9,17 @@ export default class UserConfig {
 	 */
 	constructor(path) {
 		if (fs.existsSync(path)) {
+			/**
+			 * @type {String}
+			 * @private
+			 * @readonly
+			 */
 			this.path = path;
+
+			/**
+			 * @type {any}
+			 * @private
+			 */
 			this.config = JSON.parse(fs.readFileSync(path).toString());
 		}
 		else {

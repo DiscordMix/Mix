@@ -16,6 +16,7 @@ export default class DataAdapter {
 	 * @param {*} value
 	 * @param {(Snowflake|Null)} guildId
 	 * @abstract
+	 * @returns {*}
 	 */
 	set(path, value, guildId = null) {
 		throw new Error("[DataAdapter.set] Method not implemented.");

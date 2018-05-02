@@ -93,7 +93,7 @@ export default class UserConfig {
 		delete this.config[id];
 		this.save();
 	}
-	
+
 	save() {
 		fs.writeFileSync(this.path, JSON.stringify(this.config, null, 4));
 	}

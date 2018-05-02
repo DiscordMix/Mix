@@ -1,3 +1,5 @@
+![Documentation](https://cloudrex.github.io/Anvil/badge.svg)
+
 ## Anvil
 Anvil is a powerful fully-modular, self-contained bot development framework.
 

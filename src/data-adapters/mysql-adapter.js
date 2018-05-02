@@ -33,6 +33,10 @@ export default class MysqlAdapter extends DataAdapter {
 		this.connected = false;
 	}
 
+    /**
+     * Connect to the database
+     * @returns {Promise<MysqlAdapter>}
+     */
 	connect() {
 		return new Promise((resolve, reject) => {
 			this.connection.connect((err) => {
@@ -47,6 +51,10 @@ export default class MysqlAdapter extends DataAdapter {
 		});
 	}
 
+    /**
+     * Disconnect from the database
+     * @returns {Promise<MysqlAdapter>}
+     */
 	disconnect() {
 		return new Promise((resolve, reject) => {
 			this.connection.end((err) => {
@@ -61,6 +69,13 @@ export default class MysqlAdapter extends DataAdapter {
 		});
 	}
 
+    /**
+     * Execute a query in the database
+     * @param {String} query
+     * @param {*} args
+     * @param {Number} timeout
+     * @returns {Promise<Object>}
+     */
 	query(query, args = [], timeout = 5000) {
 		return new Promise((resolve, reject) => {
 			this.connection.query({
@@ -83,8 +98,8 @@ export default class MysqlAdapter extends DataAdapter {
 
 	/**
 	 * Retrieve guild data
-	 * @param {Snowflake} guildId
 	 * @param {String} path
+     * @param {(Snowflake|Null)} guildId
 	 * @returns {Promise}
 	 */
 	async get(path, guildId = null) {
@@ -127,10 +142,10 @@ export default class MysqlAdapter extends DataAdapter {
 	}
 
 	/**
-	 * Set guild data
-	 * @param {Snowflake} guildId
-	 * @param {String} path
-	 * @param {*} data
+     * Set guild data
+     * @param {String} path
+	 * @param {*} value
+     * @param {(Snowflake|Null)} guildId
 	 */
 	async set(path, value, guildId = null) {
 		if (!this.loaded) {
@@ -157,9 +172,9 @@ export default class MysqlAdapter extends DataAdapter {
 
 	/**
 	 * Merge guild data
-	 * @param {Snowflake} guildId
+     * @param {*} value
 	 * @param {String} path
-	 * @param {*} data
+     * @param {(Snowflake|Null)} guildId
 	 */
 	merge(path, value, guildId = null) {
 		if (!this.loaded) {

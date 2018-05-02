@@ -1,1 +1,46 @@
-[]
+[
+  {
+    "name": "MysqlAdapter#merge",
+    "filePath": "src/data-adapters/mysql-adapter.js",
+    "lines": [
+      {
+        "lineNumber": 172,
+        "line": "\t/**\r"
+      },
+      {
+        "lineNumber": 173,
+        "line": "\t * Merge guild data\r"
+      },
+      {
+        "lineNumber": 174,
+        "line": "     * @param {*} value\r"
+      },
+      {
+        "lineNumber": 175,
+        "line": "\t * @param {String} path\r"
+      },
+      {
+        "lineNumber": 176,
+        "line": "     * @param {(Snowflake|Null)} guildId\r"
+      },
+      {
+        "lineNumber": 177,
+        "line": "\t */\r"
+      },
+      {
+        "lineNumber": 178,
+        "line": "\tmerge(path, value, guildId = null) {\r"
+      }
+    ],
+    "codeParams": [
+      "path",
+      "value",
+      "guildId"
+    ],
+    "docParams": [
+      "value",
+      "path",
+      "guildId"
+    ]
+  }
+]

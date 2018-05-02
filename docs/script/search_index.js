@@ -1,8 +1,8 @@
 window.esdocSearchIndex = [
   [
-    "discord-anvil/src/core/access-level-type.js~accessleveltype",
+    "discord-anvil/src/commands/access-level-type.js~accessleveltype",
     "variable/index.html#static-variable-AccessLevelType",
-    "<span>AccessLevelType</span> <span class=\"search-result-import-path\">discord-anvil/src/core/access-level-type.js</span>",
+    "<span>AccessLevelType</span> <span class=\"search-result-import-path\">discord-anvil/src/commands/access-level-type.js</span>",
     "variable"
   ],
   [
@@ -90,15 +90,15 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "discord-anvil/src/core/editable-message.js~editablemessage",
-    "class/src/core/editable-message.js~EditableMessage.html",
-    "<span>EditableMessage</span> <span class=\"search-result-import-path\">discord-anvil/src/core/editable-message.js</span>",
+    "discord-anvil/src/message/editable-message.js~editablemessage",
+    "class/src/message/editable-message.js~EditableMessage.html",
+    "<span>EditableMessage</span> <span class=\"search-result-import-path\">discord-anvil/src/message/editable-message.js</span>",
     "class"
   ],
   [
-    "discord-anvil/src/core/embed-builder.js~embedbuilder",
-    "class/src/core/embed-builder.js~EmbedBuilder.html",
-    "<span>EmbedBuilder</span> <span class=\"search-result-import-path\">discord-anvil/src/core/embed-builder.js</span>",
+    "discord-anvil/src/message/embed-builder.js~embedbuilder",
+    "class/src/message/embed-builder.js~EmbedBuilder.html",
+    "<span>EmbedBuilder</span> <span class=\"search-result-import-path\">discord-anvil/src/message/embed-builder.js</span>",
     "class"
   ],
   [
@@ -126,12 +126,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "discord-anvil/src/collections/collection.js~eventemitter",
-    "variable/index.html#static-variable-EventEmitter",
-    "<span>EventEmitter</span> <span class=\"search-result-import-path\">discord-anvil/src/collections/collection.js</span>",
-    "variable"
-  ],
-  [
     "discord-anvil/src/features/feature.js~feature",
     "class/src/features/feature.js~Feature.html",
     "<span>Feature</span> <span class=\"search-result-import-path\">discord-anvil/src/features/feature.js</span>",
@@ -156,9 +150,21 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "discord-anvil/src/core/message-builder.js~messagebuilder",
-    "class/src/core/message-builder.js~MessageBuilder.html",
-    "<span>MessageBuilder</span> <span class=\"search-result-import-path\">discord-anvil/src/core/message-builder.js</span>",
+    "discord-anvil/src/message/message-builder.js~messagebuilder",
+    "class/src/message/message-builder.js~MessageBuilder.html",
+    "<span>MessageBuilder</span> <span class=\"search-result-import-path\">discord-anvil/src/message/message-builder.js</span>",
+    "class"
+  ],
+  [
+    "discord-anvil/src/data-adapters/mongodb-adapter.js~mongodbadapter",
+    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html",
+    "<span>MongoDbAdapter</span> <span class=\"search-result-import-path\">discord-anvil/src/data-adapters/mongodb-adapter.js</span>",
+    "class"
+  ],
+  [
+    "discord-anvil/src/data-adapters/mysql-adapter.js~mysqladapter",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html",
+    "<span>MysqlAdapter</span> <span class=\"search-result-import-path\">discord-anvil/src/data-adapters/mysql-adapter.js</span>",
     "class"
   ],
   [
@@ -198,15 +204,15 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "discord-anvil/src/core/time-parser.js~timeparser",
-    "class/src/core/time-parser.js~TimeParser.html",
-    "<span>TimeParser</span> <span class=\"search-result-import-path\">discord-anvil/src/core/time-parser.js</span>",
+    "discord-anvil/src/time/time-parser.js~timeparser",
+    "class/src/time/time-parser.js~TimeParser.html",
+    "<span>TimeParser</span> <span class=\"search-result-import-path\">discord-anvil/src/time/time-parser.js</span>",
     "class"
   ],
   [
-    "discord-anvil/src/core/time-suffix-type.js~timesuffixtype",
+    "discord-anvil/src/time/time-suffix-type.js~timesuffixtype",
     "variable/index.html#static-variable-TimeSuffixType",
-    "<span>TimeSuffixType</span> <span class=\"search-result-import-path\">discord-anvil/src/core/time-suffix-type.js</span>",
+    "<span>TimeSuffixType</span> <span class=\"search-result-import-path\">discord-anvil/src/time/time-suffix-type.js</span>",
     "variable"
   ],
   [
@@ -580,6 +586,12 @@ window.esdocSearchIndex = [
     "class/src/collections/emoji-collection.js~EmojiCollection.html#static-method-fromFile",
     "src/collections/emoji-collection.js~EmojiCollection.fromFile",
     "method"
+  ],
+  [
+    "src/commands/access-level-type.js",
+    "file/src/commands/access-level-type.js.html",
+    "src/commands/access-level-type.js",
+    "file"
   ],
   [
     "src/commands/command-argument-parser.js",
@@ -1002,12 +1014,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/commands/command.js~command#extendeddescription",
-    "class/src/commands/command.js~Command.html#instance-member-extendedDescription",
-    "src/commands/command.js~Command#extendedDescription",
-    "member"
-  ],
-  [
     "src/commands/command.js~command#isenabled",
     "class/src/commands/command.js~Command.html#instance-member-isEnabled",
     "src/commands/command.js~Command#isEnabled",
@@ -1017,12 +1023,6 @@ window.esdocSearchIndex = [
     "src/commands/command.js~command#maxarguments",
     "class/src/commands/command.js~Command.html#instance-member-maxArguments",
     "src/commands/command.js~Command#maxArguments",
-    "member"
-  ],
-  [
-    "src/commands/command.js~command#price",
-    "class/src/commands/command.js~Command.html#instance-member-price",
-    "src/commands/command.js~Command#price",
     "member"
   ],
   [
@@ -1072,12 +1072,6 @@ window.esdocSearchIndex = [
     "class/src/console/console-interface.js~ConsoleInterface.html#instance-method-init",
     "src/console/console-interface.js~ConsoleInterface#init",
     "method"
-  ],
-  [
-    "src/core/access-level-type.js",
-    "file/src/core/access-level-type.js.html",
-    "src/core/access-level-type.js",
-    "file"
   ],
   [
     "src/core/bot.js",
@@ -1185,114 +1179,6 @@ window.esdocSearchIndex = [
     "src/core/bot.js~bot.cleartemp",
     "class/src/core/bot.js~Bot.html#static-method-clearTemp",
     "src/core/bot.js~Bot.clearTemp",
-    "method"
-  ],
-  [
-    "src/core/editable-message.js",
-    "file/src/core/editable-message.js.html",
-    "src/core/editable-message.js",
-    "file"
-  ],
-  [
-    "src/core/editable-message.js~editablemessage#constructor",
-    "class/src/core/editable-message.js~EditableMessage.html#instance-constructor-constructor",
-    "src/core/editable-message.js~EditableMessage#constructor",
-    "method"
-  ],
-  [
-    "src/core/editable-message.js~editablemessage#edit",
-    "class/src/core/editable-message.js~EditableMessage.html#instance-method-edit",
-    "src/core/editable-message.js~EditableMessage#edit",
-    "method"
-  ],
-  [
-    "src/core/editable-message.js~editablemessage#message",
-    "class/src/core/editable-message.js~EditableMessage.html#instance-member-message",
-    "src/core/editable-message.js~EditableMessage#message",
-    "member"
-  ],
-  [
-    "src/core/embed-builder.js",
-    "file/src/core/embed-builder.js.html",
-    "src/core/embed-builder.js",
-    "file"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#build",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-method-build",
-    "src/core/embed-builder.js~EmbedBuilder#build",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#color",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-method-color",
-    "src/core/embed-builder.js~EmbedBuilder#color",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#constructor",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-constructor-constructor",
-    "src/core/embed-builder.js~EmbedBuilder#constructor",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#embed",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-member-embed",
-    "src/core/embed-builder.js~EmbedBuilder#embed",
-    "member"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#field",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-method-field",
-    "src/core/embed-builder.js~EmbedBuilder#field",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#footer",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-method-footer",
-    "src/core/embed-builder.js~EmbedBuilder#footer",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#image",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-method-image",
-    "src/core/embed-builder.js~EmbedBuilder#image",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#text",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-method-text",
-    "src/core/embed-builder.js~EmbedBuilder#text",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#thumbnail",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-method-thumbnail",
-    "src/core/embed-builder.js~EmbedBuilder#thumbnail",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#title",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-method-title",
-    "src/core/embed-builder.js~EmbedBuilder#title",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder#titleicon",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#instance-method-titleIcon",
-    "src/core/embed-builder.js~EmbedBuilder#titleIcon",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder.fromobject",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#static-method-fromObject",
-    "src/core/embed-builder.js~EmbedBuilder.fromObject",
-    "method"
-  ],
-  [
-    "src/core/embed-builder.js~embedbuilder.sections",
-    "class/src/core/embed-builder.js~EmbedBuilder.html#static-method-sections",
-    "src/core/embed-builder.js~EmbedBuilder.sections",
     "method"
   ],
   [
@@ -1416,78 +1302,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/core/message-builder.js",
-    "file/src/core/message-builder.js.html",
-    "src/core/message-builder.js",
-    "file"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#add",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-method-add",
-    "src/core/message-builder.js~MessageBuilder#add",
-    "method"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#bold",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-method-bold",
-    "src/core/message-builder.js~MessageBuilder#bold",
-    "method"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#build",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-method-build",
-    "src/core/message-builder.js~MessageBuilder#build",
-    "method"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#code",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-method-code",
-    "src/core/message-builder.js~MessageBuilder#code",
-    "method"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#codeblock",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-method-codeBlock",
-    "src/core/message-builder.js~MessageBuilder#codeBlock",
-    "method"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#constructor",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-constructor-constructor",
-    "src/core/message-builder.js~MessageBuilder#constructor",
-    "method"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#emoji",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-method-emoji",
-    "src/core/message-builder.js~MessageBuilder#emoji",
-    "method"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#italic",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-method-italic",
-    "src/core/message-builder.js~MessageBuilder#italic",
-    "method"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#line",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-method-line",
-    "src/core/message-builder.js~MessageBuilder#line",
-    "method"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#message",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-member-message",
-    "src/core/message-builder.js~MessageBuilder#message",
-    "member"
-  ],
-  [
-    "src/core/message-builder.js~messagebuilder#underlined",
-    "class/src/core/message-builder.js~MessageBuilder.html#instance-method-underlined",
-    "src/core/message-builder.js~MessageBuilder#underlined",
-    "method"
-  ],
-  [
     "src/core/rgb.js",
     "file/src/core/rgb.js.html",
     "src/core/rgb.js",
@@ -1606,54 +1420,6 @@ window.esdocSearchIndex = [
     "class/src/core/settings.js~Settings.html#instance-method-validate",
     "src/core/settings.js~Settings#validate",
     "method"
-  ],
-  [
-    "src/core/time-parser.js",
-    "file/src/core/time-parser.js.html",
-    "src/core/time-parser.js",
-    "file"
-  ],
-  [
-    "src/core/time-parser.js~timeparser#amount",
-    "class/src/core/time-parser.js~TimeParser.html#instance-get-amount",
-    "src/core/time-parser.js~TimeParser#amount",
-    "member"
-  ],
-  [
-    "src/core/time-parser.js~timeparser#constructor",
-    "class/src/core/time-parser.js~TimeParser.html#instance-constructor-constructor",
-    "src/core/time-parser.js~TimeParser#constructor",
-    "method"
-  ],
-  [
-    "src/core/time-parser.js~timeparser#getmatch",
-    "class/src/core/time-parser.js~TimeParser.html#instance-method-getMatch",
-    "src/core/time-parser.js~TimeParser#getMatch",
-    "method"
-  ],
-  [
-    "src/core/time-parser.js~timeparser#gettimefromnow",
-    "class/src/core/time-parser.js~TimeParser.html#instance-method-getTimeFromNow",
-    "src/core/time-parser.js~TimeParser#getTimeFromNow",
-    "method"
-  ],
-  [
-    "src/core/time-parser.js~timeparser#suffix",
-    "class/src/core/time-parser.js~TimeParser.html#instance-get-suffix",
-    "src/core/time-parser.js~TimeParser#suffix",
-    "member"
-  ],
-  [
-    "src/core/time-parser.js~timeparser#timestring",
-    "class/src/core/time-parser.js~TimeParser.html#instance-member-timeString",
-    "src/core/time-parser.js~TimeParser#timeString",
-    "member"
-  ],
-  [
-    "src/core/time-suffix-type.js",
-    "file/src/core/time-suffix-type.js.html",
-    "src/core/time-suffix-type.js",
-    "file"
   ],
   [
     "src/core/user-config.js",
@@ -1857,6 +1623,138 @@ window.esdocSearchIndex = [
     "src/data-adapters/json-adapter.js~jsonadapter#validate",
     "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-method-validate",
     "src/data-adapters/json-adapter.js~JsonAdapter#validate",
+    "method"
+  ],
+  [
+    "src/data-adapters/mongodb-adapter.js",
+    "file/src/data-adapters/mongodb-adapter.js.html",
+    "src/data-adapters/mongodb-adapter.js",
+    "file"
+  ],
+  [
+    "src/data-adapters/mongodb-adapter.js~mongodbadapter#client",
+    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-member-client",
+    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#client",
+    "member"
+  ],
+  [
+    "src/data-adapters/mongodb-adapter.js~mongodbadapter#connect",
+    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-method-connect",
+    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#connect",
+    "method"
+  ],
+  [
+    "src/data-adapters/mongodb-adapter.js~mongodbadapter#constructor",
+    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-constructor-constructor",
+    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#constructor",
+    "method"
+  ],
+  [
+    "src/data-adapters/mongodb-adapter.js~mongodbadapter#db",
+    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-member-db",
+    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#db",
+    "member"
+  ],
+  [
+    "src/data-adapters/mongodb-adapter.js~mongodbadapter#get",
+    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-method-get",
+    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#get",
+    "method"
+  ],
+  [
+    "src/data-adapters/mongodb-adapter.js~mongodbadapter#merge",
+    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-method-merge",
+    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#merge",
+    "method"
+  ],
+  [
+    "src/data-adapters/mongodb-adapter.js~mongodbadapter#set",
+    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-method-set",
+    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#set",
+    "method"
+  ],
+  [
+    "src/data-adapters/mongodb-adapter.js~mongodbadapter#url",
+    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-member-url",
+    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#url",
+    "member"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js",
+    "file/src/data-adapters/mysql-adapter.js.html",
+    "src/data-adapters/mysql-adapter.js",
+    "file"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#connect",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-connect",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#connect",
+    "method"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#connected",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-member-connected",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#connected",
+    "member"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#connection",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-member-connection",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#connection",
+    "member"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#constructor",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-constructor-constructor",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#constructor",
+    "method"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#data",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-member-data",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#data",
+    "member"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#disconnect",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-disconnect",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#disconnect",
+    "method"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#get",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-get",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#get",
+    "method"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#loaded",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-get-loaded",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#loaded",
+    "member"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#merge",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-merge",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#merge",
+    "method"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#query",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-query",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#query",
+    "method"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter#set",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-set",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter#set",
+    "method"
+  ],
+  [
+    "src/data-adapters/mysql-adapter.js~mysqladapter.cleanpath",
+    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#static-method-cleanPath",
+    "src/data-adapters/mysql-adapter.js~MysqlAdapter.cleanPath",
     "method"
   ],
   [
@@ -2190,6 +2088,186 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/message/editable-message.js",
+    "file/src/message/editable-message.js.html",
+    "src/message/editable-message.js",
+    "file"
+  ],
+  [
+    "src/message/editable-message.js~editablemessage#constructor",
+    "class/src/message/editable-message.js~EditableMessage.html#instance-constructor-constructor",
+    "src/message/editable-message.js~EditableMessage#constructor",
+    "method"
+  ],
+  [
+    "src/message/editable-message.js~editablemessage#edit",
+    "class/src/message/editable-message.js~EditableMessage.html#instance-method-edit",
+    "src/message/editable-message.js~EditableMessage#edit",
+    "method"
+  ],
+  [
+    "src/message/editable-message.js~editablemessage#message",
+    "class/src/message/editable-message.js~EditableMessage.html#instance-member-message",
+    "src/message/editable-message.js~EditableMessage#message",
+    "member"
+  ],
+  [
+    "src/message/embed-builder.js",
+    "file/src/message/embed-builder.js.html",
+    "src/message/embed-builder.js",
+    "file"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#build",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-method-build",
+    "src/message/embed-builder.js~EmbedBuilder#build",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#color",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-method-color",
+    "src/message/embed-builder.js~EmbedBuilder#color",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#constructor",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-constructor-constructor",
+    "src/message/embed-builder.js~EmbedBuilder#constructor",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#embed",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-member-embed",
+    "src/message/embed-builder.js~EmbedBuilder#embed",
+    "member"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#field",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-method-field",
+    "src/message/embed-builder.js~EmbedBuilder#field",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#footer",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-method-footer",
+    "src/message/embed-builder.js~EmbedBuilder#footer",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#image",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-method-image",
+    "src/message/embed-builder.js~EmbedBuilder#image",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#text",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-method-text",
+    "src/message/embed-builder.js~EmbedBuilder#text",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#thumbnail",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-method-thumbnail",
+    "src/message/embed-builder.js~EmbedBuilder#thumbnail",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#title",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-method-title",
+    "src/message/embed-builder.js~EmbedBuilder#title",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder#titleicon",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#instance-method-titleIcon",
+    "src/message/embed-builder.js~EmbedBuilder#titleIcon",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder.fromobject",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#static-method-fromObject",
+    "src/message/embed-builder.js~EmbedBuilder.fromObject",
+    "method"
+  ],
+  [
+    "src/message/embed-builder.js~embedbuilder.sections",
+    "class/src/message/embed-builder.js~EmbedBuilder.html#static-method-sections",
+    "src/message/embed-builder.js~EmbedBuilder.sections",
+    "method"
+  ],
+  [
+    "src/message/message-builder.js",
+    "file/src/message/message-builder.js.html",
+    "src/message/message-builder.js",
+    "file"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#add",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-method-add",
+    "src/message/message-builder.js~MessageBuilder#add",
+    "method"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#bold",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-method-bold",
+    "src/message/message-builder.js~MessageBuilder#bold",
+    "method"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#build",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-method-build",
+    "src/message/message-builder.js~MessageBuilder#build",
+    "method"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#code",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-method-code",
+    "src/message/message-builder.js~MessageBuilder#code",
+    "method"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#codeblock",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-method-codeBlock",
+    "src/message/message-builder.js~MessageBuilder#codeBlock",
+    "method"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#constructor",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-constructor-constructor",
+    "src/message/message-builder.js~MessageBuilder#constructor",
+    "method"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#emoji",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-method-emoji",
+    "src/message/message-builder.js~MessageBuilder#emoji",
+    "method"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#italic",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-method-italic",
+    "src/message/message-builder.js~MessageBuilder#italic",
+    "method"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#line",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-method-line",
+    "src/message/message-builder.js~MessageBuilder#line",
+    "method"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#message",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-member-message",
+    "src/message/message-builder.js~MessageBuilder#message",
+    "member"
+  ],
+  [
+    "src/message/message-builder.js~messagebuilder#underlined",
+    "class/src/message/message-builder.js~MessageBuilder.html#instance-method-underlined",
+    "src/message/message-builder.js~MessageBuilder#underlined",
+    "method"
+  ],
+  [
     "src/schema/schema.js",
     "file/src/schema/schema.js.html",
     "src/schema/schema.js",
@@ -2205,6 +2283,54 @@ window.esdocSearchIndex = [
     "src/test/tests.js",
     "file/src/test/tests.js.html",
     "src/test/tests.js",
+    "file"
+  ],
+  [
+    "src/time/time-parser.js",
+    "file/src/time/time-parser.js.html",
+    "src/time/time-parser.js",
+    "file"
+  ],
+  [
+    "src/time/time-parser.js~timeparser#amount",
+    "class/src/time/time-parser.js~TimeParser.html#instance-get-amount",
+    "src/time/time-parser.js~TimeParser#amount",
+    "member"
+  ],
+  [
+    "src/time/time-parser.js~timeparser#constructor",
+    "class/src/time/time-parser.js~TimeParser.html#instance-constructor-constructor",
+    "src/time/time-parser.js~TimeParser#constructor",
+    "method"
+  ],
+  [
+    "src/time/time-parser.js~timeparser#getmatch",
+    "class/src/time/time-parser.js~TimeParser.html#instance-method-getMatch",
+    "src/time/time-parser.js~TimeParser#getMatch",
+    "method"
+  ],
+  [
+    "src/time/time-parser.js~timeparser#gettimefromnow",
+    "class/src/time/time-parser.js~TimeParser.html#instance-method-getTimeFromNow",
+    "src/time/time-parser.js~TimeParser#getTimeFromNow",
+    "method"
+  ],
+  [
+    "src/time/time-parser.js~timeparser#suffix",
+    "class/src/time/time-parser.js~TimeParser.html#instance-get-suffix",
+    "src/time/time-parser.js~TimeParser#suffix",
+    "member"
+  ],
+  [
+    "src/time/time-parser.js~timeparser#timestring",
+    "class/src/time/time-parser.js~TimeParser.html#instance-member-timeString",
+    "src/time/time-parser.js~TimeParser#timeString",
+    "member"
+  ],
+  [
+    "src/time/time-suffix-type.js",
+    "file/src/time/time-suffix-type.js.html",
+    "src/time/time-suffix-type.js",
     "file"
   ]
 ]

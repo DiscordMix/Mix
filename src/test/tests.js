@@ -14,7 +14,9 @@ const subjects = {
 
 	rgb: new RGB(5, 10, 15),
 	rgba: new RGBA(5, 10, 15, 20),
-	collection: new Collection(["hello", "it's me"])
+	collection: new Collection(["hello", "it's me", {
+		name: "John Doe"
+	}])
 };
 
 describe("Utils.resolveId()", () => {
@@ -143,9 +145,24 @@ describe("Collection.removeAt()", () => {
 describe("Collection.add()", () => {
 	it("should add an item to the collection", () => {
 		subjects.collection.add("john doe");
-		expect(subjects.collection.at(1)).to.be.an("string");
-		expect(subjects.collection.at(1)).to.equal("john doe");
-		expect(subjects.collection.items.join(" ")).to.equal("it's me john doe");
+		expect(subjects.collection.at(0)).to.be.an("string");
+		expect(subjects.collection.at(0)).to.equal("it's me");
+		expect(subjects.collection.at(1)).to.be.an("object");
+	});
+});
+
+describe("Collection.addUnique()", () => {
+	it("should add an unique item", () => {
+		const result1 = subjects.collection.addUnique("doe");
+		const result2 = subjects.collection.addUnique("doe");
+
+		// Result 1
+		expect(result1).to.be.an("boolean");
+		expect(result1).to.equal(true);
+
+		// Result 2
+		expect(result2).to.be.an("boolean");
+		expect(result2).to.equal(false);
 	});
 });
 
@@ -161,5 +178,15 @@ describe("Collection.contains()", () => {
 		// Result 2
 		expect(result2).to.be.an("boolean");
 		expect(result2).to.equal(false);
+	});
+});
+
+describe("Collection.find()", () => {
+	it("should find an item by its property", () => {
+		const result = subjects.collection.find("name", "John Doe");
+
+		expect(result).to.be.an("object");
+		expect(result.name).to.be.an("string");
+		expect(result.name).to.equal("John Doe");
 	});
 });

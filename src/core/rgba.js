@@ -1,5 +1,4 @@
 import RGB from "./rgb";
-import Utils from "./utils";
 
 /**
  * @extends RGB

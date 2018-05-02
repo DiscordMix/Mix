@@ -14,6 +14,9 @@ export default class TimeParser {
 		this.timeString = timeString;
 	}
 
+	/**
+	 * @returns {*}
+	 */
 	getMatch() {
 		return /^([0-9]+)(ms|s|m|h|d|mo|y)$/.exec(this.timeString);
 	}

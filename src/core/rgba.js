@@ -14,6 +14,10 @@ export default class RGBA extends RGB {
 	constructor(red, green, blue, alpha) {
 		super(red, green, blue);
 
+		/**
+		 * @type {Number}
+		 * @readonly
+		 */
 		this.alpha = alpha;
 	}
 

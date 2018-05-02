@@ -22,7 +22,7 @@ export default class ObjectAdapter extends DataAdapter {
 	/**
 	 * Retrieve guild data
 	 * @param {String} path
-	 * @param {(Snowflake|Null)} guildId
+	 * @param {(Snowflake|Null)} [guildId=null]
 	 * @returns {Object}
 	 */
 	get(path, guildId = null) {
@@ -33,7 +33,7 @@ export default class ObjectAdapter extends DataAdapter {
 	 * Set guild data
 	 * @param {String} path
 	 * @param {*} value
-	 * @param {(Snowflake|Null)} guildId
+	 * @param {(Snowflake|Null)} [guildId=null]
 	 */
 	set(path, value, guildId = null) {
 		_.set(this.data, DataAdapter.resolvePath(path, guildId), value);
@@ -43,7 +43,7 @@ export default class ObjectAdapter extends DataAdapter {
 	 * Merge guild data
 	 * @param {String} path
 	 * @param {*} value
-	 * @param {(Snowflake|Null)} guildId
+	 * @param {(Snowflake|Null)} [guildId=null]
 	 */
 	merge(path, value, guildId = null) {
 		throw new Error("[ObjectAdapter.merge] Method not implemented.");

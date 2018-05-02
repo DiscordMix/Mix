@@ -58,7 +58,7 @@ export default class Utils {
 	 * @param {Object} options
 	 * @param {User} requester
 	 * @param {Discord.Channel} channel
-	 * @param {String} footerSuffix
+	 * @param {String} [footerSuffix=""]
 	 * @returns {Promise<Discord.Message>}
 	 */
 	static async send(options, requester, channel, footerSuffix = "") {
@@ -81,12 +81,12 @@ export default class Utils {
 
 	/**
 	 * @param {Number} milliseconds
-	 * @param {Number} seconds
-	 * @param {Number} minutes
-	 * @param {Number} hours
-	 * @param {Number} days
-	 * @param {Number} months
-	 * @param {Number} years
+	 * @param {Number} [seconds=0]
+	 * @param {Number} [minutes=0]
+	 * @param {Number} [hours=0]
+	 * @param {Number} [days=0]
+	 * @param {Number} [months=0]
+	 * @param {Number} [years=0]
 	 * @returns {Number}
 	 */
 	static timeFromNow(milliseconds, seconds = 0, minutes = 0, hours = 0, days = 0, months = 0, years = 0) {

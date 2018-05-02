@@ -1,6 +1,6 @@
 export default class MessageBuilder {
 	/**
-	 * @param {string} startingString
+	 * @param {string} [startingString=""]
 	 */
 	constructor(startingString = "") {
 		this.message = startingString;
@@ -17,8 +17,8 @@ export default class MessageBuilder {
 	}
 
 	/**
-	 * @param {(string|null)} language
-	 * @param {(string|null)} code
+	 * @param {(String|Null)} language
+	 * @param {(String|Null)} [code=null]
 	 * @returns {MessageBuilder}
 	 */
 	codeBlock(language = null, code = null) {

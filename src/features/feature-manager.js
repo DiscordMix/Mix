@@ -143,7 +143,6 @@ export default class FeatureManager /* extends Collection */ {
 	 * @returns {(Feature|Null)}
 	 */
 	get(key) {
-		// TODO: Simplify this process into a function to prevent redundancy
 		for (let i = 0; i < this.features.length; i++) {
 			if (this.features[i].key === key) {
 				return this.features[i];

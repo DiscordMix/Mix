@@ -25,7 +25,7 @@ export default class EditableMessage {
 	 * @param {String} title
 	 * @param {String} color
 	 * @param {String} thumbnailUrl
-	 * @param {String} image
+	 * @param {String} [image=""]
 	 * @returns {Promise<Discord.Message>}
 	 */
 	async edit(message, title = "", color = "RANDOM", thumbnailUrl = "", image = "") {

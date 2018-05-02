@@ -54,7 +54,7 @@ export default class CommandExecutionContext {
 
 	/**
 	 * @param {(Object|EmbedBuilder)} content
-	 * @param {Boolean} autoDelete
+	 * @param {Boolean} [autoDelete=false]
 	 * @returns {(Promise<EditableMessage>|null)}
 	 */
 	async respond(content, autoDelete = false) {

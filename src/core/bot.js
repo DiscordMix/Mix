@@ -176,7 +176,7 @@ export default class Bot extends EventEmitter {
 	async restart() {
 		this.log.info("Restarting");
 
-		// TODO
+		// TODO: Actually reload all the features and commands
 		// this.features.reloadAll(this);
 
 		await this.disconnect();

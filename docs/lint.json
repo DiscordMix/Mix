@@ -4,31 +4,31 @@
     "filePath": "src/data-adapters/mysql-adapter.js",
     "lines": [
       {
-        "lineNumber": 172,
+        "lineNumber": 174,
         "line": "\t/**\r"
       },
       {
-        "lineNumber": 173,
+        "lineNumber": 175,
         "line": "\t * Merge guild data\r"
       },
       {
-        "lineNumber": 174,
-        "line": "     * @param {*} value\r"
-      },
-      {
-        "lineNumber": 175,
-        "line": "\t * @param {String} path\r"
-      },
-      {
         "lineNumber": 176,
-        "line": "     * @param {(Snowflake|Null)} guildId\r"
+        "line": "\t * @param {*} value\r"
       },
       {
         "lineNumber": 177,
-        "line": "\t */\r"
+        "line": "\t * @param {String} path\r"
       },
       {
         "lineNumber": 178,
+        "line": "\t * @param {(Snowflake|Null)} [guildId=null]\r"
+      },
+      {
+        "lineNumber": 179,
+        "line": "\t */\r"
+      },
+      {
+        "lineNumber": 180,
         "line": "\tmerge(path, value, guildId = null) {\r"
       }
     ],

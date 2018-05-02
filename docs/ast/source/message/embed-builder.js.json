@@ -2547,29 +2547,13 @@
                 ],
                 "trailingComments": [
                   {
-                    "type": "CommentLine",
-                    "value": " TODO: Limit text to Discord's embed char limit",
-                    "start": 1377,
-                    "end": 1426,
-                    "loc": {
-                      "start": {
-                        "line": 79,
-                        "column": 1
-                      },
-                      "end": {
-                        "line": 79,
-                        "column": 50
-                      }
-                    }
-                  },
-                  {
                     "type": "CommentBlock",
-                    "value": "*\r\n\t * Set the text of the embed\r\n\t * @param {string} text\r\n\t * @returns {EmbedBuilder}\r\n\t ",
-                    "start": 1429,
+                    "value": "*\r\n\t * Set the text of the embed\r\n\t * @todo Limit text to Discord's embed char limit\r\n\t * @param {string} text\r\n\t * @returns {EmbedBuilder}\r\n\t ",
+                    "start": 1377,
                     "end": 1524,
                     "loc": {
                       "start": {
-                        "line": 80,
+                        "line": 79,
                         "column": 1
                       },
                       "end": {
@@ -2819,29 +2803,13 @@
                 },
                 "leadingComments": [
                   {
-                    "type": "CommentLine",
-                    "value": " TODO: Limit text to Discord's embed char limit",
-                    "start": 1377,
-                    "end": 1426,
-                    "loc": {
-                      "start": {
-                        "line": 79,
-                        "column": 1
-                      },
-                      "end": {
-                        "line": 79,
-                        "column": 50
-                      }
-                    }
-                  },
-                  {
                     "type": "CommentBlock",
-                    "value": "*\r\n\t * Set the text of the embed\r\n\t * @param {string} text\r\n\t * @returns {EmbedBuilder}\r\n\t ",
-                    "start": 1429,
+                    "value": "*\r\n\t * Set the text of the embed\r\n\t * @todo Limit text to Discord's embed char limit\r\n\t * @param {string} text\r\n\t * @returns {EmbedBuilder}\r\n\t ",
+                    "start": 1377,
                     "end": 1524,
                     "loc": {
                       "start": {
-                        "line": 80,
+                        "line": 79,
                         "column": 1
                       },
                       "end": {
@@ -6464,29 +6432,13 @@
       }
     },
     {
-      "type": "CommentLine",
-      "value": " TODO: Limit text to Discord's embed char limit",
-      "start": 1377,
-      "end": 1426,
-      "loc": {
-        "start": {
-          "line": 79,
-          "column": 1
-        },
-        "end": {
-          "line": 79,
-          "column": 50
-        }
-      }
-    },
-    {
       "type": "CommentBlock",
-      "value": "*\r\n\t * Set the text of the embed\r\n\t * @param {string} text\r\n\t * @returns {EmbedBuilder}\r\n\t ",
-      "start": 1429,
+      "value": "*\r\n\t * Set the text of the embed\r\n\t * @todo Limit text to Discord's embed char limit\r\n\t * @param {string} text\r\n\t * @returns {EmbedBuilder}\r\n\t ",
+      "start": 1377,
       "end": 1524,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 79,
           "column": 1
         },
         "end": {
@@ -11190,29 +11142,13 @@
       }
     },
     {
-      "type": "CommentLine",
-      "value": " TODO: Limit text to Discord's embed char limit",
-      "start": 1377,
-      "end": 1426,
-      "loc": {
-        "start": {
-          "line": 79,
-          "column": 1
-        },
-        "end": {
-          "line": 79,
-          "column": 50
-        }
-      }
-    },
-    {
       "type": "CommentBlock",
-      "value": "*\r\n\t * Set the text of the embed\r\n\t * @param {string} text\r\n\t * @returns {EmbedBuilder}\r\n\t ",
-      "start": 1429,
+      "value": "*\r\n\t * Set the text of the embed\r\n\t * @todo Limit text to Discord's embed char limit\r\n\t * @param {string} text\r\n\t * @returns {EmbedBuilder}\r\n\t ",
+      "start": 1377,
       "end": 1524,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 79,
           "column": 1
         },
         "end": {

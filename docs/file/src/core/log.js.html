@@ -168,7 +168,7 @@ export default class Log {
 		if (prefix !== null) {
 			message = `&lt;${prefix.toUpperCase()}&gt; ${message}`;
 		}
-		fs.writeFile(&quot;bot.log&quot;, `[${date}] ${message}\n`, {flag: &quot;a&quot;}, (err) =&gt; {
+		fs.writeFile(&quot;bot.log&quot;, `[${date}] ${message}\n`, { flag: &quot;a&quot; }, (err) =&gt; {
 			if (err) throw err;
 		});
 	}

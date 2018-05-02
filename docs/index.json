@@ -1282,7 +1282,7 @@
     "__docId__": 74,
     "kind": "file",
     "name": "src/commands/command-execution-context.js",
-    "content": "import EditableMessage from \"../core/editable-message\";\r\nimport EmbedBuilder from \"../core/embed-builder\";\r\n\r\nconst Discord = require(\"discord.js\");\r\n\r\nexport default class CommandExecutionContext {\r\n\t/**\r\n\t * @param {Message} message\r\n\t * @param {Array<String>} args\r\n\t * @param {Bot} bot\r\n\t * @param {AccessLevelType} accessLevel\r\n\t * @param {EmojiCollection} emojis\r\n\t */\r\n\tconstructor(message, args, bot, accessLevel, emojis) {\r\n\t\t/**\r\n\t\t * @type {Message}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.message = message;\r\n\r\n\t\t/**\r\n\t\t * @type {Array<String>}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.arguments = args;\r\n\r\n\t\t/**\r\n\t\t * @type {Bot}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.bot = bot;\r\n\r\n\t\t/**\r\n\t\t * @type {AccessLevelType}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.accessLevel = accessLevel;\r\n\r\n\t\t/**\r\n\t\t * @type {EmojiCollection}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.emojis = emojis;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {*} stream\r\n\t * @param {String} name\r\n\t * @returns {(Promise<EditableMessage>|Null)}\r\n\t */\r\n\tasync fileStream(stream, name) {\r\n\t\treturn await this.message.channel.send(new Discord.Attachment(stream, name));\r\n\t}\r\n\r\n\t/**\r\n\t * @param {(Object|EmbedBuilder)} content\r\n\t * @param {Boolean} autoDelete\r\n\t * @returns {(Promise<EditableMessage>|null)}\r\n\t */\r\n\tasync respond(content, autoDelete = false) {\r\n\t\tlet embed = null;\r\n\r\n\t\tif (content.text) {\r\n\t\t\tif (content.text.toString().trim() === \"\" || content.text === undefined || content.text === null) {\r\n\t\t\t\tcontent.text = \":thinking: *Empty response.*\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tif (content instanceof EmbedBuilder) {\r\n\t\t\tembed = content;\r\n\t\t}\r\n\t\telse {\r\n\t\t\tif (!content.color) {\r\n\t\t\t\tcontent.color = \"GREEN\";\r\n\t\t\t}\r\n\r\n\t\t\tif (!content.footer) {\r\n\t\t\t\tcontent.footer = {\r\n\t\t\t\t\ttext: `Requested by ${this.sender.username}`,\r\n\t\t\t\t\ticon: this.sender.avatarURL\r\n\t\t\t\t};\r\n\t\t\t}\r\n\r\n\t\t\tembed = EmbedBuilder.fromObject(content);\r\n\t\t}\r\n\r\n\t\tconst messageResult = await this.message.channel.send(embed.build()).catch((error) => {\r\n\t\t\t// TODO: Temporarily disabled due to spamming on unwanted servers.\r\n\t\t\t// this.privateReply(`Oh noes! For some reason, I was unable to reply to you in that channel. (${error.message})`);\r\n\t\t});\r\n\r\n\t\tif (autoDelete && messageResult) {\r\n\t\t\t// TODO: Cannot access .length in embeds\r\n\t\t\t// also static time for images, probably need function\r\n\t\t\tconst timeInSeconds = (4000 + (100 * embed.build() * 1000)) / 1000;\r\n\r\n\t\t\tmessageResult.delete(4000 + (100 * messageResult.content.length * 1000));\r\n\r\n\t\t\t// TODO\r\n\t\t\t// this.bot.log.info(messageResult.content.length);\r\n\t\t\t// this.bot.log.info(`time : ${timeInSeconds}`);\r\n\t\t}\r\n\r\n\t\treturn (messageResult !== undefined ? new EditableMessage(messageResult) : null);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} userId\r\n\t * @returns {AccessLevelType}\r\n\t */\r\n\tgetAuth(userId) {\r\n\t\treturn this.bot.commands.getAuthority(this.message.guild.id, this.message.guild.member(userId).roles.array().map((role) => role.name), userId);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {AccessLevelType}\r\n\t */\r\n\tget auth() {\r\n\t\treturn this.getAuth(this.sender.id);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Object} sections\r\n\t * @param {String} color\r\n\t * @returns {Promise<EditableMessage>}\r\n\t */\r\n\tasync sections(sections, color = \"GREEN\") {\r\n\t\treturn await this.respond(EmbedBuilder.sections(sections, color));\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} text\r\n\t * @returns {Promise<EditableMessage>}\r\n\t */\r\n\tasync ok(text) {\r\n\t\treturn await this.respond({\r\n\t\t\ttext: `${this.emojis.get(\"check\")} ${text}`\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} text\r\n\t * @returns {Promise<EditableMessage>}\r\n\t */\r\n\tasync loading(text) {\r\n\t\treturn await this.respond({\r\n\t\t\ttext: `${this.emojis.get(\"loading\")} ${text}`,\r\n\t\t\tcolor: \"BLUE\"\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} text\r\n\t * @returns {Promise<EditableMessage>}\r\n\t */\r\n\tasync fail(text) {\r\n\t\treturn await this.respond({\r\n\t\t\ttext: `:thinking: ${text}`,\r\n\t\t\tcolor: \"RED\"\r\n\t\t}, true);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {User}\r\n\t */\r\n\tget sender() {\r\n\t\treturn this.message.author;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t * @returns {(Promise<Message>|null)}\r\n\t */\r\n\tasync reply(message) {\r\n\t\treturn await this.message.reply(message);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tasync privateReply(message) {\r\n\t\treturn await this.message.author.send(message);\r\n\t}\r\n}\r\n",
+    "content": "import EditableMessage from \"../message/editable-message\";\r\nimport EmbedBuilder from \"../message/embed-builder\";\r\n\r\nconst Discord = require(\"discord.js\");\r\n\r\nexport default class CommandExecutionContext {\r\n\t/**\r\n\t * @param {Message} message\r\n\t * @param {Array<String>} args\r\n\t * @param {Bot} bot\r\n\t * @param {AccessLevelType} accessLevel\r\n\t * @param {EmojiCollection} emojis\r\n\t */\r\n\tconstructor(message, args, bot, accessLevel, emojis) {\r\n\t\t/**\r\n\t\t * @type {Message}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.message = message;\r\n\r\n\t\t/**\r\n\t\t * @type {Array<String>}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.arguments = args;\r\n\r\n\t\t/**\r\n\t\t * @type {Bot}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.bot = bot;\r\n\r\n\t\t/**\r\n\t\t * @type {AccessLevelType}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.accessLevel = accessLevel;\r\n\r\n\t\t/**\r\n\t\t * @type {EmojiCollection}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.emojis = emojis;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {*} stream\r\n\t * @param {String} name\r\n\t * @returns {(Promise<EditableMessage>|Null)}\r\n\t */\r\n\tasync fileStream(stream, name) {\r\n\t\treturn await this.message.channel.send(new Discord.Attachment(stream, name));\r\n\t}\r\n\r\n\t/**\r\n\t * @param {(Object|EmbedBuilder)} content\r\n\t * @param {Boolean} [autoDelete=false]\r\n\t * @returns {(Promise<EditableMessage>|null)}\r\n\t */\r\n\tasync respond(content, autoDelete = false) {\r\n\t\tlet embed = null;\r\n\r\n\t\tif (content.text) {\r\n\t\t\tif (content.text.toString().trim() === \"\" || content.text === undefined || content.text === null) {\r\n\t\t\t\tcontent.text = \":thinking: *Empty response.*\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tif (content instanceof EmbedBuilder) {\r\n\t\t\tembed = content;\r\n\t\t}\r\n\t\telse {\r\n\t\t\tif (!content.color) {\r\n\t\t\t\tcontent.color = \"GREEN\";\r\n\t\t\t}\r\n\r\n\t\t\tif (!content.footer) {\r\n\t\t\t\tcontent.footer = {\r\n\t\t\t\t\ttext: `Requested by ${this.sender.username}`,\r\n\t\t\t\t\ticon: this.sender.avatarURL\r\n\t\t\t\t};\r\n\t\t\t}\r\n\r\n\t\t\tembed = EmbedBuilder.fromObject(content);\r\n\t\t}\r\n\r\n\t\tconst messageResult = await this.message.channel.send(embed.build()).catch((error) => {\r\n\t\t\t// TODO: Temporarily disabled due to spamming on unwanted servers.\r\n\t\t\t// this.privateReply(`Oh noes! For some reason, I was unable to reply to you in that channel. (${error.message})`);\r\n\t\t});\r\n\r\n\t\tif (autoDelete && messageResult) {\r\n\t\t\t// TODO: Cannot access .length in embeds\r\n\t\t\t// also static time for images, probably need function\r\n\t\t\tconst timeInSeconds = (4000 + (100 * embed.build() * 1000)) / 1000;\r\n\r\n\t\t\tmessageResult.delete(4000 + (100 * messageResult.content.length * 1000));\r\n\r\n\t\t\t// TODO\r\n\t\t\t// this.bot.log.info(messageResult.content.length);\r\n\t\t\t// this.bot.log.info(`time : ${timeInSeconds}`);\r\n\t\t}\r\n\r\n\t\treturn (messageResult !== undefined ? new EditableMessage(messageResult) : null);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} userId\r\n\t * @returns {AccessLevelType}\r\n\t */\r\n\tgetAuth(userId) {\r\n\t\treturn this.bot.commands.getAuthority(this.message.guild.id, this.message.guild.member(userId).roles.array().map((role) => role.name), userId);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {AccessLevelType}\r\n\t */\r\n\tget auth() {\r\n\t\treturn this.getAuth(this.sender.id);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Object} sections\r\n\t * @param {String} color\r\n\t * @returns {Promise<EditableMessage>}\r\n\t */\r\n\tasync sections(sections, color = \"GREEN\") {\r\n\t\treturn await this.respond(EmbedBuilder.sections(sections, color));\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} text\r\n\t * @returns {Promise<EditableMessage>}\r\n\t */\r\n\tasync ok(text) {\r\n\t\treturn await this.respond({\r\n\t\t\ttext: `${this.emojis.get(\"check\")} ${text}`\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} text\r\n\t * @returns {Promise<EditableMessage>}\r\n\t */\r\n\tasync loading(text) {\r\n\t\treturn await this.respond({\r\n\t\t\ttext: `${this.emojis.get(\"loading\")} ${text}`,\r\n\t\t\tcolor: \"BLUE\"\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} text\r\n\t * @returns {Promise<EditableMessage>}\r\n\t */\r\n\tasync fail(text) {\r\n\t\treturn await this.respond({\r\n\t\t\ttext: `:thinking: ${text}`,\r\n\t\t\tcolor: \"RED\"\r\n\t\t}, true);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {User}\r\n\t */\r\n\tget sender() {\r\n\t\treturn this.message.author;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t * @returns {(Promise<Message>|null)}\r\n\t */\r\n\tasync reply(message) {\r\n\t\treturn await this.message.reply(message);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tasync privateReply(message) {\r\n\t\treturn await this.message.author.send(message);\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/commands/command-execution-context.js",
     "access": "public",
@@ -1602,7 +1602,9 @@
           "Boolean"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
         "name": "autoDelete",
         "description": ""
       }
@@ -2184,7 +2186,7 @@
     "__docId__": 104,
     "kind": "file",
     "name": "src/commands/command-manager.js",
-    "content": "import AccessLevelType from \"../core/access-level-type\";\r\nimport CommandArgumentParser from \"./command-argument-parser\";\r\nimport CommandExecutedEvent from \"../events/command-executed-event\";\r\nimport CommandCategoryType from \"./command-category-type\";\r\n// import Collection from \"../core/collection\";\r\n\r\nconst fs = require(\"fs\");\r\n\r\nexport default class CommandManager /* extends Collection */ {\r\n\t/**\r\n\t * @param {Bot} bot\r\n\t * @param {String} commandsPath\r\n\t * @param {String} accessLevelsPath\r\n\t * @param {Object} argumentTypes\r\n\t */\r\n\tconstructor(bot, commandsPath, accessLevelsPath, argumentTypes) {\r\n\t\t/**\r\n\t\t * @type {Bot}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.bot = bot;\r\n\r\n\t\t/**\r\n\t\t * @type {String}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.commandsPath = commandsPath;\r\n\r\n\t\t/**\r\n\t\t * @type {String}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.accessLevelsPath = accessLevelsPath;\r\n\r\n\t\t/**\r\n\t\t * @type {Object}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.argumentTypes = argumentTypes;\r\n\r\n\t\t/**\r\n\t\t * @type {Array<Command>}\r\n\t\t * @private\r\n\t\t */\r\n\t\tthis.commands = [];\r\n\r\n\t\t/**\r\n\t\t * @type {Object}\r\n\t\t * @private\r\n\t\t */\r\n\t\tthis.accessLevels = [];\r\n\r\n\t\tfs.readFile(this.accessLevelsPath, (error, data) => {\r\n\t\t\t// TODO: Validate access levels\r\n\t\t\tthis.accessLevels = JSON.parse(data.toString());\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Command} command\r\n\t */\r\n\tregister(command) {\r\n\t\tthis.commands.push(command);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} commandBase\r\n\t * @returns {Boolean}\r\n\t */\r\n\tremoveByBase(commandBase) {\r\n\t\treturn this.remove(this.getByBase(commandBase));\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Command} command\r\n\t * @returns {Boolean}\r\n\t */\r\n\tremove(command) {\r\n\t\treturn this.removeAt(this.commands.indexOf(command));\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Number} index\r\n\t * @returns {Boolean}\r\n\t */\r\n\tremoveAt(index) {\r\n\t\tif (this.commands[index]) {\r\n\t\t\tthis.commands.splice(index, 1);\r\n\r\n\t\t\treturn true;\r\n\t\t}\r\n\r\n\t\treturn false;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} commandBase\r\n\t * @returns {Boolean}\r\n\t */\r\n\tcontains(commandBase) {\r\n\t\treturn this.getByBase(commandBase) !== null;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Array<Command>} commands\r\n\t */\r\n\tregisterMultiple(commands) {\r\n\t\tfor (let i = 0; i < commands.length; i++) {\r\n\t\t\tthis.register(commands[i]);\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} commandBase\r\n\t * @returns {Boolean}\r\n\t */\r\n\tisRegistered(commandBase) {\r\n\t\treturn this.getByBase(commandBase) != null;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} commandBase\r\n\t * @returns {(Command|Null)}\r\n\t */\r\n\tgetByBase(commandBase) {\r\n\t\tfor (let i = 0; i < this.commands.length; i++) {\r\n\t\t\tif (this.commands[i].base === commandBase || this.commands[i].aliases.includes(commandBase)) {\r\n\t\t\t\treturn this.commands[i];\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn null;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} guildId\r\n\t * @param {String} role\r\n\t * @returns {AccessLevelType}\r\n\t */\r\n\tgetAccessLevelByRole(guildId, role) {\r\n\t\tconst accessLevels = this.bot.dataAdapter.get(\"access-levels\", guildId);\r\n\t\tconst keys = Object.keys(accessLevels);\r\n\r\n\t\tfor (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {\r\n\t\t\tfor (let roleIndex = 0; roleIndex < accessLevels[keys[keyIndex]].length; roleIndex++) {\r\n\t\t\t\tif (accessLevels[keys[keyIndex]][roleIndex] === role) {\r\n\t\t\t\t\treturn AccessLevelType.fromString(keys[keyIndex]);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn null;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} userId\r\n\t * @returns {Boolean}\r\n\t */\r\n\tisDeveloper(userId) {\r\n\t\treturn this.bot.dataAdapter.get(\"global.developers\").includes(userId);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} guildId\r\n\t * @param {Snowflake} userId\r\n\t * @returns {AccessLevelType}\r\n\t */\r\n\tgetAccessLevelById(guildId, userId) {\r\n\t\tif (this.isDeveloper(userId)) {\r\n\t\t\treturn AccessLevelType.Developer;\r\n\t\t}\r\n\r\n\t\tconst accessLevels = this.bot.dataAdapter.get(\"access-levels\", guildId);\r\n\t\tconst keys = Object.keys(accessLevels);\r\n\r\n\t\tfor (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {\r\n\t\t\t// TODO: Use index of instead of looping\r\n\t\t\tfor (let roleIndex = 0; roleIndex < accessLevels[keys[keyIndex]].length; roleIndex++) {\r\n\t\t\t\tconst value = accessLevels[keys[keyIndex]][roleIndex];\r\n\r\n\t\t\t\tif (!isNaN(value) && value === userId.toString()) {\r\n\t\t\t\t\treturn AccessLevelType.fromString(keys[keyIndex]);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn null;\r\n\t}\r\n\r\n\t// TODO: Move to the corresponding file/class\r\n\t/**\r\n\t * @param {Discord.Message} message\r\n\t * @param {String} role\r\n\t * @returns {Boolean}\r\n\t */\r\n\thasRole(message, role) {\r\n\t\treturn message.member.roles.find(\"name\", role) !== null;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Discord.Message} message\r\n\t * @param {Array<String>} roles\r\n\t * @returns {Boolean}\r\n\t */\r\n\thasRoles(message, roles) {\r\n\t\tfor (let i = 0; i < roles.length; i++) {\r\n\t\t\tif (!this.hasRole(message, roles[i])) {\r\n\t\t\t\treturn false;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn true;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} guildId\r\n\t * @param {Array<String>} roles\r\n\t * @returns {AccessLevelType}\r\n\t */\r\n\tgetHighestAccessLevelByRoles(guildId, roles) {\r\n\t\tlet highest = AccessLevelType.Guest;\r\n\r\n\t\tfor (let i = 0; i < roles.length; i++) {\r\n\t\t\tconst accessLevel = this.getAccessLevelByRole(guildId, roles[i]);\r\n\r\n\t\t\tif (accessLevel > highest) {\r\n\t\t\t\thighest = accessLevel;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn highest;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} guildId\r\n\t * @param {Message} message\r\n\t * @param {AccessLevelType} accessLevel\r\n\t * @returns {Boolean}\r\n\t */\r\n\thasAuthority(guildId, message, accessLevel) {\r\n\t\treturn this.getAuthority(guildId, message.member.roles.array().map((role) => role.name), message.author.id) >= accessLevel;\r\n\r\n\t\t// TODO: Replaced by getAuthority() method\r\n\t\t// return (this.getHighestAccessLevelByRoles(message.member.roles.array().map((role) => role.name)) >= accessLevel) || (this.getAccessLevelById(message.author.id) >= accessLevel);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} guildId\r\n\t * @param {Array<String>} roles\r\n\t * @param {Snowflake} userId\r\n\t * @returns {AccessLevelType} The authority of the user\r\n\t */\r\n\tgetAuthority(guildId, roles = [\"@everyone\"], userId) {\r\n\t\tconst byRoles = this.getHighestAccessLevelByRoles(guildId, roles);\r\n\t\tconst byId = this.getAccessLevelById(guildId, userId);\r\n\r\n\t\tif (byRoles > byId) {\r\n\t\t\treturn byRoles;\r\n\t\t}\r\n\r\n\t\treturn byId;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Object} rules\r\n\t * @param {Array<String>} args\r\n\t * @returns {Object} The assembled arguments\r\n\t */\r\n\tassembleArguments(rules, args) {\r\n\t\tconst result = {};\r\n\r\n\t\tif (rules.length !== args.length) {\r\n\t\t\tthis.bot.log.info(\"AssembleArguments: Not same length\");\r\n\t\t}\r\n\r\n\t\tthis.bot.log.info(args);\r\n\r\n\t\tfor (let i = 0; i < rules.length; i++) {\r\n\t\t\tresult[rules[i]] = (isNaN(args[i]) ? args[i] : parseInt(args[i]));\r\n\t\t}\r\n\r\n\t\treturn result;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {CommandExecutionContext} context\r\n\t * @param {Command} command The command to handle\r\n\t * @returns {Promise<Boolean>} Whether the command was successfully executed\r\n\t */\r\n\tasync handle(context, command) {\r\n\t\tif (!context.message.member) {\r\n\t\t\tcontext.message.channel.send(\"That command must be used in a text channel. Sorry!\");\r\n\t\t}\r\n\t\telse if (command.category === CommandCategoryType.NSFW && !context.message.channel.nsfw) {\r\n\t\t\tcontext.fail(\":underage: Please use an NSFW channel for this command.\");\r\n\t\t}\r\n\t\telse if (!command.isEnabled) {\r\n\t\t\tawait context.fail(\"That command is disabled and may not be used.\");\r\n\t\t}\r\n\t\telse if (!this.hasAuthority(context.message.guild.id, context.message, command.accessLevel)) {\r\n\t\t\tconst minAuthority = AccessLevelType.toString(command.accessLevel);\r\n\t\t\tcontext.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);\r\n\t\t}\r\n\t\telse if (context.arguments.length > command.maxArguments) {\r\n\t\t\tif (command.maxArguments > 0) {\r\n\t\t\t\tcontext.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);\r\n\t\t\t}\r\n\t\t\telse {\r\n\t\t\t\tcontext.fail(`That command does not accept any arguments.`);\r\n\t\t\t}\r\n\t\t}\r\n\t\telse if (!command.canExecute(context)) {\r\n\t\t\tcontext.fail(\"That command cannot be executed right now.\");\r\n\t\t}\r\n\t\telse if (!CommandArgumentParser.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {\r\n\t\t\tawait context.fail(\"Invalid argument usage. Please use the `usage` command.\");\r\n\t\t}\r\n\t\telse {\r\n\t\t\ttry {\r\n\t\t\t\tconst result = command.executed(context); // .catch((error) => context.respond(`There was an error while executing that command. (${error.message})`, \"\", \"RED\"));\r\n\t\t\t\tcontext.bot.emit(\"commandExecuted\", new CommandExecutedEvent(command, context));\r\n\r\n\t\t\t\treturn result;\r\n\t\t\t}\r\n\t\t\tcatch (error) {\r\n\t\t\t\t// TODO: Use the Log class\r\n\t\t\t\tconsole.error(error);\r\n\t\t\t\tcontext.fail(`**Oh noes!** There was an error executing that command. (${error.message})`);\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn false;\r\n\t}\r\n}\r\n",
+    "content": "import AccessLevelType from \"../commands/access-level-type\";\r\nimport CommandArgumentParser from \"./command-argument-parser\";\r\nimport CommandExecutedEvent from \"../events/command-executed-event\";\r\nimport CommandCategoryType from \"./command-category-type\";\r\n// import Collection from \"../core/collection\";\r\n\r\nconst fs = require(\"fs\");\r\n\r\nexport default class CommandManager /* extends Collection */ {\r\n\t/**\r\n\t * @param {Bot} bot\r\n\t * @param {String} commandsPath\r\n\t * @param {String} accessLevelsPath\r\n\t * @param {Object} argumentTypes\r\n\t */\r\n\tconstructor(bot, commandsPath, accessLevelsPath, argumentTypes) {\r\n\t\t/**\r\n\t\t * @type {Bot}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.bot = bot;\r\n\r\n\t\t/**\r\n\t\t * @type {String}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.commandsPath = commandsPath;\r\n\r\n\t\t/**\r\n\t\t * @type {String}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.accessLevelsPath = accessLevelsPath;\r\n\r\n\t\t/**\r\n\t\t * @type {Object}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.argumentTypes = argumentTypes;\r\n\r\n\t\t/**\r\n\t\t * @type {Array<Command>}\r\n\t\t * @private\r\n\t\t */\r\n\t\tthis.commands = [];\r\n\r\n\t\t/**\r\n\t\t * @type {Object}\r\n\t\t * @private\r\n\t\t */\r\n\t\tthis.accessLevels = [];\r\n\r\n\t\tfs.readFile(this.accessLevelsPath, (error, data) => {\r\n\t\t\t// TODO: Validate access levels\r\n\t\t\tthis.accessLevels = JSON.parse(data.toString());\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Command} command\r\n\t */\r\n\tregister(command) {\r\n\t\tthis.commands.push(command);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} commandBase\r\n\t * @returns {Boolean}\r\n\t */\r\n\tremoveByBase(commandBase) {\r\n\t\treturn this.remove(this.getByBase(commandBase));\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Command} command\r\n\t * @returns {Boolean}\r\n\t */\r\n\tremove(command) {\r\n\t\treturn this.removeAt(this.commands.indexOf(command));\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Number} index\r\n\t * @returns {Boolean}\r\n\t */\r\n\tremoveAt(index) {\r\n\t\tif (this.commands[index]) {\r\n\t\t\tthis.commands.splice(index, 1);\r\n\r\n\t\t\treturn true;\r\n\t\t}\r\n\r\n\t\treturn false;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} commandBase\r\n\t * @returns {Boolean}\r\n\t */\r\n\tcontains(commandBase) {\r\n\t\treturn this.getByBase(commandBase) !== null;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Array<Command>} commands\r\n\t */\r\n\tregisterMultiple(commands) {\r\n\t\tfor (let i = 0; i < commands.length; i++) {\r\n\t\t\tthis.register(commands[i]);\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} commandBase\r\n\t * @returns {Boolean}\r\n\t */\r\n\tisRegistered(commandBase) {\r\n\t\treturn this.getByBase(commandBase) != null;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} commandBase\r\n\t * @returns {(Command|Null)}\r\n\t */\r\n\tgetByBase(commandBase) {\r\n\t\tfor (let i = 0; i < this.commands.length; i++) {\r\n\t\t\tif (this.commands[i].base === commandBase || this.commands[i].aliases.includes(commandBase)) {\r\n\t\t\t\treturn this.commands[i];\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn null;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} guildId\r\n\t * @param {String} role\r\n\t * @returns {AccessLevelType}\r\n\t */\r\n\tgetAccessLevelByRole(guildId, role) {\r\n\t\tconst accessLevels = this.bot.dataAdapter.get(\"access-levels\", guildId);\r\n\t\tconst keys = Object.keys(accessLevels);\r\n\r\n\t\tfor (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {\r\n\t\t\tfor (let roleIndex = 0; roleIndex < accessLevels[keys[keyIndex]].length; roleIndex++) {\r\n\t\t\t\tif (accessLevels[keys[keyIndex]][roleIndex] === role) {\r\n\t\t\t\t\treturn AccessLevelType.fromString(keys[keyIndex]);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn null;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} userId\r\n\t * @returns {Boolean}\r\n\t */\r\n\tisDeveloper(userId) {\r\n\t\treturn this.bot.dataAdapter.get(\"global.developers\").includes(userId);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} guildId\r\n\t * @param {Snowflake} userId\r\n\t * @returns {AccessLevelType}\r\n\t */\r\n\tgetAccessLevelById(guildId, userId) {\r\n\t\tif (this.isDeveloper(userId)) {\r\n\t\t\treturn AccessLevelType.Developer;\r\n\t\t}\r\n\r\n\t\tconst accessLevels = this.bot.dataAdapter.get(\"access-levels\", guildId);\r\n\t\tconst keys = Object.keys(accessLevels);\r\n\r\n\t\tfor (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {\r\n\t\t\t// TODO: Use index of instead of looping\r\n\t\t\tfor (let roleIndex = 0; roleIndex < accessLevels[keys[keyIndex]].length; roleIndex++) {\r\n\t\t\t\tconst value = accessLevels[keys[keyIndex]][roleIndex];\r\n\r\n\t\t\t\tif (!isNaN(value) && value === userId.toString()) {\r\n\t\t\t\t\treturn AccessLevelType.fromString(keys[keyIndex]);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn null;\r\n\t}\r\n\r\n\t// TODO: Move to the corresponding file/class\r\n\t/**\r\n\t * @param {Discord.Message} message\r\n\t * @param {String} role\r\n\t * @returns {Boolean}\r\n\t */\r\n\thasRole(message, role) {\r\n\t\treturn message.member.roles.find(\"name\", role) !== null;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Discord.Message} message\r\n\t * @param {Array<String>} roles\r\n\t * @returns {Boolean}\r\n\t */\r\n\thasRoles(message, roles) {\r\n\t\tfor (let i = 0; i < roles.length; i++) {\r\n\t\t\tif (!this.hasRole(message, roles[i])) {\r\n\t\t\t\treturn false;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn true;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} guildId\r\n\t * @param {Array<String>} roles\r\n\t * @returns {AccessLevelType}\r\n\t */\r\n\tgetHighestAccessLevelByRoles(guildId, roles) {\r\n\t\tlet highest = AccessLevelType.Guest;\r\n\r\n\t\tfor (let i = 0; i < roles.length; i++) {\r\n\t\t\tconst accessLevel = this.getAccessLevelByRole(guildId, roles[i]);\r\n\r\n\t\t\tif (accessLevel > highest) {\r\n\t\t\t\thighest = accessLevel;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn highest;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} guildId\r\n\t * @param {Message} message\r\n\t * @param {AccessLevelType} accessLevel\r\n\t * @returns {Boolean}\r\n\t */\r\n\thasAuthority(guildId, message, accessLevel) {\r\n\t\treturn this.getAuthority(guildId, message.member.roles.array().map((role) => role.name), message.author.id) >= accessLevel;\r\n\r\n\t\t// TODO: Replaced by getAuthority() method\r\n\t\t// return (this.getHighestAccessLevelByRoles(message.member.roles.array().map((role) => role.name)) >= accessLevel) || (this.getAccessLevelById(message.author.id) >= accessLevel);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} guildId\r\n\t * @param {Array<String>} roles\r\n\t * @param {Snowflake} userId\r\n\t * @returns {AccessLevelType} The authority of the user\r\n\t */\r\n\tgetAuthority(guildId, roles = [\"@everyone\"], userId) {\r\n\t\tconst byRoles = this.getHighestAccessLevelByRoles(guildId, roles);\r\n\t\tconst byId = this.getAccessLevelById(guildId, userId);\r\n\r\n\t\tif (byRoles > byId) {\r\n\t\t\treturn byRoles;\r\n\t\t}\r\n\r\n\t\treturn byId;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Object} rules\r\n\t * @param {Array<String>} args\r\n\t * @returns {Object} The assembled arguments\r\n\t */\r\n\tassembleArguments(rules, args) {\r\n\t\tconst result = {};\r\n\r\n\t\tif (rules.length !== args.length) {\r\n\t\t\tthis.bot.log.info(\"AssembleArguments: Not same length\");\r\n\t\t}\r\n\r\n\t\tthis.bot.log.info(args);\r\n\r\n\t\tfor (let i = 0; i < rules.length; i++) {\r\n\t\t\tresult[rules[i]] = (isNaN(args[i]) ? args[i] : parseInt(args[i]));\r\n\t\t}\r\n\r\n\t\treturn result;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {CommandExecutionContext} context\r\n\t * @param {Command} command The command to handle\r\n\t * @returns {Promise<Boolean>} Whether the command was successfully executed\r\n\t */\r\n\tasync handle(context, command) {\r\n\t\tif (!context.message.member) {\r\n\t\t\tcontext.message.channel.send(\"That command must be used in a text channel. Sorry!\");\r\n\t\t}\r\n\t\telse if (command.category === CommandCategoryType.NSFW && !context.message.channel.nsfw) {\r\n\t\t\tcontext.fail(\":underage: Please use an NSFW channel for this command.\");\r\n\t\t}\r\n\t\telse if (!command.isEnabled) {\r\n\t\t\tawait context.fail(\"That command is disabled and may not be used.\");\r\n\t\t}\r\n\t\telse if (!this.hasAuthority(context.message.guild.id, context.message, command.accessLevel)) {\r\n\t\t\tconst minAuthority = AccessLevelType.toString(command.accessLevel);\r\n\t\t\tcontext.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);\r\n\t\t}\r\n\t\telse if (context.arguments.length > command.maxArguments) {\r\n\t\t\tif (command.maxArguments > 0) {\r\n\t\t\t\tcontext.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);\r\n\t\t\t}\r\n\t\t\telse {\r\n\t\t\t\tcontext.fail(`That command does not accept any arguments.`);\r\n\t\t\t}\r\n\t\t}\r\n\t\telse if (!command.canExecute(context)) {\r\n\t\t\tcontext.fail(\"That command cannot be executed right now.\");\r\n\t\t}\r\n\t\telse if (!CommandArgumentParser.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {\r\n\t\t\tawait context.fail(\"Invalid argument usage. Please use the `usage` command.\");\r\n\t\t}\r\n\t\telse {\r\n\t\t\ttry {\r\n\t\t\t\tconst result = command.executed(context); // .catch((error) => context.respond(`There was an error while executing that command. (${error.message})`, \"\", \"RED\"));\r\n\t\t\t\tcontext.bot.emit(\"commandExecuted\", new CommandExecutedEvent(command, context));\r\n\r\n\t\t\t\treturn result;\r\n\t\t\t}\r\n\t\t\tcatch (error) {\r\n\t\t\t\t// TODO: Use the Log class\r\n\t\t\t\tconsole.error(error);\r\n\t\t\t\tcontext.fail(`**Oh noes!** There was an error executing that command. (${error.message})`);\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn false;\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/commands/command-manager.js",
     "access": "public",
@@ -4181,7 +4183,7 @@
     "__docId__": 165,
     "kind": "file",
     "name": "src/core/bot.js",
-    "content": "import CommandParser from \"../commands/command-parser\";\r\nimport CommandExecutionContext from \"../commands/command-execution-context\";\r\nimport ConsoleInterface from \"../console/console-interface\";\r\nimport EmojiMenuManager from \"../emoji-ui/emoji-menu-manager\";\r\nimport CommandManager from \"../commands/command-manager\";\r\nimport Utils from \"./utils\";\r\nimport EmojiCollection from \"../collections/emoji-collection\";\r\nimport Settings from \"./settings\";\r\nimport FeatureManager from \"../features/feature-manager\";\r\nimport CommandLoader from \"../commands/command-loader\";\r\nimport Log from \"./log\";\r\nimport Schema from \"../schema/schema\";\r\nimport DataAdapter from \"../data-adapters/data-adapter\";\r\n\r\nconst Discord = require(\"discord.js\");\r\nconst EventEmitter = require(\"events\");\r\nconst fs = require(\"fs\");\r\n\r\n/**\r\n * @extends EventEmitter\r\n */\r\nexport default class Bot extends EventEmitter {\r\n\t/**\r\n\t * @param {Object} data\r\n\t */\r\n\tconstructor(data) {\r\n\t\tsuper();\r\n\r\n\t\t// Setup the class\r\n\t\tthis.setup(data);\r\n\t}\r\n\r\n\t/**\r\n\t * Setup the bot from an object\r\n\t * @param {Object} data\r\n\t * @return {Promise}\r\n\t */\r\n\tasync setup(data) {\r\n\t\t// TODO: Should use the Typer library (Typer needs update)\r\n\t\tif (!Schema.validate(data, {\r\n\t\t\t\"paths.settings\": \"string\",\r\n\t\t\t\"paths.emojis\": \"string\",\r\n\t\t\t\"paths.commands\": \"string\",\r\n\t\t\t\"paths.accessLevels\": \"string\",\r\n\t\t\targumentTypes: \"object\",\r\n\t\t\tdataAdapter: DataAdapter\r\n\t\t})) {\r\n\t\t\tLog.throw(\"[Bot.setup] Invalid data provided.\");\r\n\t\t}\r\n\r\n\t\t/**\r\n\t\t * @type {Settings}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.settings = new Settings(data.paths.settings);\r\n\r\n\t\t/**\r\n\t\t * @type {DataAdapter}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.dataAdapter = data.dataAdapter;\r\n\r\n\t\t/**\r\n\t\t * @type {EmojiCollection}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.emojis = EmojiCollection.fromFile(data.paths.emojis);\r\n\r\n\t\t/**\r\n\t\t * @type {Discord.Client}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.client = new Discord.Client();\r\n\r\n\t\t/**\r\n\t\t * @type {CommandManager}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes);\r\n\r\n\t\t/**\r\n\t\t * @type {FeatureManager}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.features = new FeatureManager();\r\n\r\n\t\t/**\r\n\t\t * @type {CommandLoader}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.commandLoader = new CommandLoader(this.commands);\r\n\r\n\t\t/**\r\n\t\t * @type {ConsoleInterface}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.console = new ConsoleInterface();\r\n\r\n\t\t/**\r\n\t\t * @type {EmojiMenuManager}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.menus = new EmojiMenuManager(this.client);\r\n\r\n\t\t/**\r\n\t\t * @type {Log}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.log = new Log(this);\r\n\r\n\t\t// Setup the Discord client's events\r\n\t\tthis.setupEvents();\r\n\r\n\t\t// Load commands\r\n\t\tawait this.commandLoader.loadAll();\r\n\t\tLog.verbose(\"Bot setup completed\");\r\n\t}\r\n\r\n\t/**\r\n\t * Setup the client's events\r\n\t */\r\n\tsetupEvents() {\r\n\t\t// TODO: Find better position\r\n\t\tconst resolvers = {\r\n\t\t\tuser: (arg) => Utils.resolveId(arg),\r\n\t\t\tchannel: (arg) => Utils.resolveId(arg),\r\n\t\t\trole: (arg) => Utils.resolveId(arg),\r\n\t\t\tstate: (arg) => Utils.translateState(arg)\r\n\t\t};\r\n\r\n\t\t// Discord client events\r\n\t\tthis.client.on(\"ready\", () => {\r\n\t\t\tthis.log.info(\"Ready\");\r\n\t\t\tthis.console.init(this);\r\n\t\t});\r\n\r\n\t\tthis.client.on(\"message\", async (message) => {\r\n\t\t\tif (!message.author.bot) {\r\n\t\t\t\tif (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {\r\n\t\t\t\t\tthis.commands.handle(\r\n\t\t\t\t\t\tnew CommandExecutionContext(\r\n\t\t\t\t\t\t\tmessage,\r\n\t\t\t\t\t\t\tCommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),\r\n\t\t\t\t\t\t\tthis,\r\n\t\t\t\t\t\t\tthis.commands.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),\r\n\t\t\t\t\t\t\tthis.emojis\r\n\t\t\t\t\t\t),\r\n\r\n\t\t\t\t\t\tCommandParser.parse(\r\n\t\t\t\t\t\t\tmessage.content,\r\n\t\t\t\t\t\t\tthis.commands,\r\n\t\t\t\t\t\t\tthis.settings.general.prefix\r\n\t\t\t\t\t\t)\r\n\t\t\t\t\t);\r\n\t\t\t\t}\r\n\t\t\t\telse if (message.content === \"?prefix\") {\r\n\t\t\t\t\tmessage.channel.send(`Command prefix: **${this.settings.general.prefix}**`);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * Connect the client\r\n\t * @return {Promise}\r\n\t */\r\n\tasync connect() {\r\n\t\tthis.log.info(\"Starting\");\r\n\t\tawait this.client.login(this.settings.general.token);\r\n\t}\r\n\r\n\t/**\r\n\t * Restart the bot's client\r\n\t * @return {Promise}\r\n\t */\r\n\tasync restart() {\r\n\t\tthis.log.info(\"Restarting\");\r\n\r\n\t\t// TODO\r\n\t\t// this.features.reloadAll(this);\r\n\r\n\t\tawait this.disconnect();\r\n\t\tawait this.connect();\r\n\t}\r\n\r\n\t/**\r\n\t * Disconnect the client\r\n\t * @return {Promise}\r\n\t */\r\n\tasync disconnect() {\r\n\t\tthis.settings.save();\r\n\t\tawait this.client.destroy();\r\n\t\tthis.log.info(\"Disconnected\");\r\n\t}\r\n\r\n\t/**\r\n\t * Clear all the files inside the temp folder\r\n\t * @return {Promise}\r\n\t */\r\n\tstatic async clearTemp() {\r\n\t\tif (fs.existsSync(\"./temp\")) {\r\n\t\t\tfs.readdir(\"./temp\", (error, files) => {\r\n\t\t\t\tfor (let i = 0; i < files.length; i++) {\r\n\t\t\t\t\tfs.unlink(`./temp/${files[i]}`);\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t}\r\n\t}\r\n}\r\n",
+    "content": "import CommandParser from \"../commands/command-parser\";\r\nimport CommandExecutionContext from \"../commands/command-execution-context\";\r\nimport ConsoleInterface from \"../console/console-interface\";\r\nimport EmojiMenuManager from \"../emoji-ui/emoji-menu-manager\";\r\nimport CommandManager from \"../commands/command-manager\";\r\nimport Utils from \"./utils\";\r\nimport EmojiCollection from \"../collections/emoji-collection\";\r\nimport Settings from \"./settings\";\r\nimport FeatureManager from \"../features/feature-manager\";\r\nimport CommandLoader from \"../commands/command-loader\";\r\nimport Log from \"./log\";\r\nimport Schema from \"../schema/schema\";\r\nimport DataAdapter from \"../data-adapters/data-adapter\";\r\n\r\nconst Discord = require(\"discord.js\");\r\nconst EventEmitter = require(\"events\");\r\nconst fs = require(\"fs\");\r\n\r\n/**\r\n * @extends EventEmitter\r\n */\r\nexport default class Bot extends EventEmitter {\r\n\t/**\r\n\t * @param {Object} data\r\n\t */\r\n\tconstructor(data) {\r\n\t\tsuper();\r\n\r\n\t\t// Setup the class\r\n\t\tthis.setup(data);\r\n\t}\r\n\r\n\t/**\r\n\t * Setup the bot from an object\r\n\t * @param {Object} data\r\n\t * @return {Promise}\r\n\t */\r\n\tasync setup(data) {\r\n\t\t// TODO: Should use the Typer library (Typer needs update)\r\n\t\tif (!Schema.validate(data, {\r\n\t\t\t\"paths.settings\": \"string\",\r\n\t\t\t\"paths.emojis\": \"string\",\r\n\t\t\t\"paths.commands\": \"string\",\r\n\t\t\t\"paths.accessLevels\": \"string\",\r\n\t\t\targumentTypes: \"object\",\r\n\t\t\tdataAdapter: DataAdapter\r\n\t\t})) {\r\n\t\t\tLog.throw(\"[Bot.setup] Invalid data provided.\");\r\n\t\t}\r\n\r\n\t\t/**\r\n\t\t * @type {Settings}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.settings = new Settings(data.paths.settings);\r\n\r\n\t\t/**\r\n\t\t * @type {DataAdapter}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.dataAdapter = data.dataAdapter;\r\n\r\n\t\t/**\r\n\t\t * @type {EmojiCollection}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.emojis = EmojiCollection.fromFile(data.paths.emojis);\r\n\r\n\t\t/**\r\n\t\t * @type {Discord.Client}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.client = new Discord.Client();\r\n\r\n\t\t/**\r\n\t\t * @type {CommandManager}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes);\r\n\r\n\t\t/**\r\n\t\t * @type {FeatureManager}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.features = new FeatureManager();\r\n\r\n\t\t/**\r\n\t\t * @type {CommandLoader}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.commandLoader = new CommandLoader(this.commands);\r\n\r\n\t\t/**\r\n\t\t * @type {ConsoleInterface}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.console = new ConsoleInterface();\r\n\r\n\t\t/**\r\n\t\t * @type {EmojiMenuManager}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.menus = new EmojiMenuManager(this.client);\r\n\r\n\t\t/**\r\n\t\t * @type {Log}\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.log = new Log(this);\r\n\r\n\t\t// Setup the Discord client's events\r\n\t\tthis.setupEvents();\r\n\r\n\t\t// Load commands\r\n\t\tawait this.commandLoader.loadAll();\r\n\t\tLog.verbose(\"Bot setup completed\");\r\n\t}\r\n\r\n\t/**\r\n\t * Setup the client's events\r\n\t */\r\n\tsetupEvents() {\r\n\t\t// TODO: Find better position\r\n\t\tconst resolvers = {\r\n\t\t\tuser: (arg) => Utils.resolveId(arg),\r\n\t\t\tchannel: (arg) => Utils.resolveId(arg),\r\n\t\t\trole: (arg) => Utils.resolveId(arg),\r\n\t\t\tstate: (arg) => Utils.translateState(arg)\r\n\t\t};\r\n\r\n\t\t// Discord client events\r\n\t\tthis.client.on(\"ready\", () => {\r\n\t\t\tthis.log.info(\"Ready\");\r\n\t\t\tthis.console.init(this);\r\n\t\t});\r\n\r\n\t\tthis.client.on(\"message\", async (message) => {\r\n\t\t\tif (!message.author.bot) {\r\n\t\t\t\tif (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {\r\n\t\t\t\t\tthis.commands.handle(\r\n\t\t\t\t\t\tnew CommandExecutionContext(\r\n\t\t\t\t\t\t\tmessage,\r\n\t\t\t\t\t\t\tCommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),\r\n\t\t\t\t\t\t\tthis,\r\n\t\t\t\t\t\t\tthis.commands.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),\r\n\t\t\t\t\t\t\tthis.emojis\r\n\t\t\t\t\t\t),\r\n\r\n\t\t\t\t\t\tCommandParser.parse(\r\n\t\t\t\t\t\t\tmessage.content,\r\n\t\t\t\t\t\t\tthis.commands,\r\n\t\t\t\t\t\t\tthis.settings.general.prefix\r\n\t\t\t\t\t\t)\r\n\t\t\t\t\t);\r\n\t\t\t\t}\r\n\t\t\t\telse if (message.content === \"?prefix\") {\r\n\t\t\t\t\tmessage.channel.send(`Command prefix: **${this.settings.general.prefix}**`);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * Connect the client\r\n\t * @return {Promise}\r\n\t */\r\n\tasync connect() {\r\n\t\tthis.log.info(\"Starting\");\r\n\t\tawait this.client.login(this.settings.general.token);\r\n\t}\r\n\r\n\t/**\r\n\t * Restart the bot's client\r\n\t * @return {Promise}\r\n\t */\r\n\tasync restart() {\r\n\t\tthis.log.info(\"Restarting\");\r\n\r\n\t\t// TODO: Actually reload all the features and commands\r\n\t\t// this.features.reloadAll(this);\r\n\r\n\t\tawait this.disconnect();\r\n\t\tawait this.connect();\r\n\t}\r\n\r\n\t/**\r\n\t * Disconnect the client\r\n\t * @return {Promise}\r\n\t */\r\n\tasync disconnect() {\r\n\t\tthis.settings.save();\r\n\t\tawait this.client.destroy();\r\n\t\tthis.log.info(\"Disconnected\");\r\n\t}\r\n\r\n\t/**\r\n\t * Clear all the files inside the temp folder\r\n\t * @return {Promise}\r\n\t */\r\n\tstatic async clearTemp() {\r\n\t\tif (fs.existsSync(\"./temp\")) {\r\n\t\t\tfs.readdir(\"./temp\", (error, files) => {\r\n\t\t\t\tfor (let i = 0; i < files.length; i++) {\r\n\t\t\t\t\tfs.unlink(`./temp/${files[i]}`);\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t}\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/core/bot.js",
     "access": "public",
@@ -4684,7 +4686,7 @@
     "__docId__": 187,
     "kind": "file",
     "name": "src/core/log.js",
-    "content": "const colors = require(\"colors\");\r\nconst fs = require(\"fs\");\r\n\r\nexport default class Log {\r\n\t/**\r\n\t * @param {Bot} bot\r\n\t * @param {Boolean} debug\r\n\t * @param {Boolean} verbose\r\n\t */\r\n\tconstructor(bot, debug = false, verbose = false) {\r\n\t\t/**\r\n\t\t * @type {Bot}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.bot = bot;\r\n\r\n\t\t/**\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.debugMode = debug;\r\n\r\n\t\t/**\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.verboseMode = verbose;\r\n\r\n\t\tLog.instance = this;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t * @param {String} color\r\n\t * @param {String} prefix\r\n\t * @param {String} throwMsg\r\n\t */\r\n\tlog(message, color = \"white\", prefix = null, throwMsg = false) {\r\n\t\tLog.log(message, color, prefix, throwMsg);\r\n\t}\r\n\r\n\tinfo(message) {\r\n\t\tthis.log(message, \"cyan\", \"info\");\r\n\t}\r\n\r\n\tsuccess(message) {\r\n\t\tthis.log(message, \"green\", \"sucs\");\r\n\t}\r\n\r\n\twarn(message) {\r\n\t\tthis.log(message, \"yellow\", \"warn\");\r\n\t}\r\n\r\n\terror(message) {\r\n\t\tthis.log(message, \"red\", \"dang\");\r\n\t}\r\n\r\n\tverbose(message) {\r\n\t\tif (this.verboseMode) {\r\n\t\t\tthis.log(message, \"gray\");\r\n\t\t}\r\n\t}\r\n\r\n\tdebugMode(message) {\r\n\t\tif (this.debugMode) {\r\n\t\t\tthis.log(message, \"magenta\", \"dbug\");\r\n\t\t}\r\n\t}\r\n\r\n\tchannel(content, options) {\r\n\t\tconst guildLog = this.bot.dataAdapter.get(\"global.guild-log\");\r\n\t\tif (!guildLog.enabled) {\r\n\t\t\treturn;\r\n\t\t}\r\n\r\n\t\tthis.bot.client.guilds.get(guildLog.guild).channels.get(guildLog.channel).send(content, options);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t * @param {String} color\r\n\t * @param {String} prefix\r\n\t */\r\n\tstatic async log(message, color = \"white\", prefix = null) {\r\n\t\tconst date = new Date().toISOString().replace(/T/, \" \").replace(/\\..+/, \"\");\r\n\r\n\t\t// TODO: Make this next line work on the vps\r\n\t\t// process.stdout.write(`\\x1B[2D[${date}] ${colors[color](message)}\\n> `);\r\n\t\tconsole.log(`[${date}] ${colors[color](message)}`);\r\n\r\n\t\tif (prefix !== null) {\r\n\t\t\tmessage = `<${prefix.toUpperCase()}> ${message}`;\r\n\t\t}\r\n\t\tfs.writeFile(\"bot.log\", `[${date}] ${message}\\n`, {flag: \"a\"}, (err) => {\r\n\t\t\tif (err) throw err;\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic info(message) {\r\n\t\tLog.log(message, \"cyan\", \"info\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic success(message) {\r\n\t\tLog.log(message, \"green\", \"sucs\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic warn(message) {\r\n\t\tLog.log(message, \"yellow\", \"warn\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic error(message) {\r\n\t\tLog.log(message, \"red\", \"dang\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic throw(message) {\r\n\t\tLog.log(message, \"red\", \"dang\");\r\n\t\tprocess.exit(1);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic verbose(message) {\r\n\t\tif (Log.instance !== null) {\r\n\t\t\tif (Log.instance.verboseMode) {\r\n\t\t\t\tLog.log(message, \"grey\");\r\n\t\t\t}\r\n\t\t} else {\r\n\t\t\tLog.log(message, \"grey\");\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic debug(message) {\r\n\t\tif (Log.instance !== null) {\r\n\t\t\tif (Log.instance.debugMode) {\r\n\t\t\t\tLog.log(message, \"magenta\", \"dbug\");\r\n\t\t\t}\r\n\t\t} else {\r\n\t\t\tLog.log(message, \"magenta\", \"dbug\");\r\n\t\t}\r\n\t}\r\n}\r\n",
+    "content": "const colors = require(\"colors\");\r\nconst fs = require(\"fs\");\r\n\r\nexport default class Log {\r\n\t/**\r\n\t * @param {Bot} bot\r\n\t * @param {Boolean} debug\r\n\t * @param {Boolean} verbose\r\n\t */\r\n\tconstructor(bot, debug = false, verbose = false) {\r\n\t\t/**\r\n\t\t * @type {Bot}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.bot = bot;\r\n\r\n\t\t/**\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.debugMode = debug;\r\n\r\n\t\t/**\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.verboseMode = verbose;\r\n\r\n\t\tLog.instance = this;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t * @param {String} color\r\n\t * @param {String} prefix\r\n\t * @param {String} throwMsg\r\n\t */\r\n\tlog(message, color = \"white\", prefix = null, throwMsg = false) {\r\n\t\tLog.log(message, color, prefix, throwMsg);\r\n\t}\r\n\r\n\tinfo(message) {\r\n\t\tthis.log(message, \"cyan\", \"info\");\r\n\t}\r\n\r\n\tsuccess(message) {\r\n\t\tthis.log(message, \"green\", \"sucs\");\r\n\t}\r\n\r\n\twarn(message) {\r\n\t\tthis.log(message, \"yellow\", \"warn\");\r\n\t}\r\n\r\n\terror(message) {\r\n\t\tthis.log(message, \"red\", \"dang\");\r\n\t}\r\n\r\n\tverbose(message) {\r\n\t\tif (this.verboseMode) {\r\n\t\t\tthis.log(message, \"gray\");\r\n\t\t}\r\n\t}\r\n\r\n\tdebugMode(message) {\r\n\t\tif (this.debugMode) {\r\n\t\t\tthis.log(message, \"magenta\", \"dbug\");\r\n\t\t}\r\n\t}\r\n\r\n\tchannel(content, options) {\r\n\t\tconst guildLog = this.bot.dataAdapter.get(\"global.guild-log\");\r\n\t\tif (!guildLog.enabled) {\r\n\t\t\treturn;\r\n\t\t}\r\n\r\n\t\tthis.bot.client.guilds.get(guildLog.guild).channels.get(guildLog.channel).send(content, options);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t * @param {String} color\r\n\t * @param {String} prefix\r\n\t */\r\n\tstatic async log(message, color = \"white\", prefix = null) {\r\n\t\tconst date = new Date().toISOString().replace(/T/, \" \").replace(/\\..+/, \"\");\r\n\r\n\t\t// TODO: Make this next line work on the vps\r\n\t\t// process.stdout.write(`\\x1B[2D[${date}] ${colors[color](message)}\\n> `);\r\n\t\tconsole.log(`[${date}] ${colors[color](message)}`);\r\n\r\n\t\tif (prefix !== null) {\r\n\t\t\tmessage = `<${prefix.toUpperCase()}> ${message}`;\r\n\t\t}\r\n\t\tfs.writeFile(\"bot.log\", `[${date}] ${message}\\n`, { flag: \"a\" }, (err) => {\r\n\t\t\tif (err) throw err;\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic info(message) {\r\n\t\tLog.log(message, \"cyan\", \"info\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic success(message) {\r\n\t\tLog.log(message, \"green\", \"sucs\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic warn(message) {\r\n\t\tLog.log(message, \"yellow\", \"warn\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic error(message) {\r\n\t\tLog.log(message, \"red\", \"dang\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic throw(message) {\r\n\t\tLog.log(message, \"red\", \"dang\");\r\n\t\tprocess.exit(1);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic verbose(message) {\r\n\t\tif (Log.instance !== null) {\r\n\t\t\tif (Log.instance.verboseMode) {\r\n\t\t\t\tLog.log(message, \"grey\");\r\n\t\t\t}\r\n\t\t} else {\r\n\t\t\tLog.log(message, \"grey\");\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} message\r\n\t */\r\n\tstatic debug(message) {\r\n\t\tif (Log.instance !== null) {\r\n\t\t\tif (Log.instance.debugMode) {\r\n\t\t\t\tLog.log(message, \"magenta\", \"dbug\");\r\n\t\t\t}\r\n\t\t} else {\r\n\t\t\tLog.log(message, \"magenta\", \"dbug\");\r\n\t\t}\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/core/log.js",
     "access": "public",
@@ -5679,7 +5681,7 @@
     "__docId__": 225,
     "kind": "file",
     "name": "src/core/settings.js",
-    "content": "import Log from \"./log\";\r\n\r\nconst fs = require(\"fs\");\r\n\r\nexport default class Settings {\r\n\t/**\r\n\t * @param {String} path\r\n\t */\r\n\tconstructor(path) {\r\n\t\tif (fs.existsSync(path)) {\r\n\t\t\tthis.path = path;\r\n\r\n\t\t\tconst jsonObj = JSON.parse(fs.readFileSync(path).toString());\r\n\r\n\t\t\t// TODO: should be automatic\r\n\t\t\tthis.general = jsonObj.general;\r\n\t\t\tthis.keys = jsonObj.keys;\r\n\t\t\tthis.log = jsonObj.log;\r\n\t\t}\r\n\t\telse {\r\n\t\t\tLog.error(\"Could not load settings: File does not exist\");\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * Save the local settings into path\r\n\t */\r\n\tsave() {\r\n\t\tfs.writeFileSync(this.path, JSON.stringify({\r\n\t\t\tgeneral: this.general,\r\n\t\t\tlog: this.log,\r\n\t\t\tkeys: this.keys\r\n\t\t}, null, 4));\r\n\t}\r\n\r\n\t// TODO\r\n\tvalidate() {\r\n\t\tif (this.general.token === null) {\r\n\t\t\tLog.error(\"[Settings] Token cannot be null or empty\");\r\n\t\t}\r\n\t}\r\n}\r\n",
+    "content": "import Log from \"./log\";\r\n\r\nconst fs = require(\"fs\");\r\n\r\nexport default class Settings {\r\n\t/**\r\n\t * @param {String} path\r\n\t */\r\n\tconstructor(path) {\r\n\t\tif (fs.existsSync(path)) {\r\n\t\t\t/**\r\n\t\t\t * @type {String}\r\n\t\t\t * @private\r\n\t\t\t * @readonly\r\n\t\t\t */\r\n\t\t\tthis.path = path;\r\n\r\n\t\t\tconst jsonObj = JSON.parse(fs.readFileSync(path).toString());\r\n\r\n\t\t\t// TODO: Should be automatic\r\n\t\t\t// TODO: Should be validated using Schema\r\n\t\t\t/**\r\n\t\t\t * @type {Object}\r\n\t\t\t * @readonly\r\n\t\t\t */\r\n\t\t\tthis.general = jsonObj.general;\r\n\r\n\t\t\t/**\r\n\t\t\t * @type {Object}\r\n\t\t\t * @readonly\r\n\t\t\t */\r\n\t\t\tthis.keys = jsonObj.keys;\r\n\r\n\t\t\t/**\r\n\t\t\t * @type {Object}\r\n\t\t\t * @readonly\r\n\t\t\t */\r\n\t\t\tthis.log = jsonObj.log;\r\n\t\t}\r\n\t\telse {\r\n\t\t\tLog.error(\"Could not load settings: File does not exist\");\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * Save the local settings into path\r\n\t */\r\n\tsave() {\r\n\t\tfs.writeFileSync(this.path, JSON.stringify({\r\n\t\t\tgeneral: this.general,\r\n\t\t\tlog: this.log,\r\n\t\t\tkeys: this.keys\r\n\t\t}, null, 4));\r\n\t}\r\n\r\n\t// TODO\r\n\tvalidate() {\r\n\t\tif (this.general.token === null) {\r\n\t\t\tLog.error(\"[Settings] Token cannot be null or empty\");\r\n\t\t}\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/core/settings.js",
     "access": "public",
@@ -5755,14 +5757,22 @@
     "memberof": "src/core/settings.js~Settings",
     "static": false,
     "longname": "src/core/settings.js~Settings#path",
-    "access": "public",
-    "description": null,
-    "lineNumber": 11,
-    "undocument": true,
+    "access": "private",
+    "description": "",
+    "lineNumber": 16,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -5773,13 +5783,21 @@
     "static": false,
     "longname": "src/core/settings.js~Settings#general",
     "access": "public",
-    "description": null,
-    "lineNumber": 16,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 26,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Object"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -5790,13 +5808,21 @@
     "static": false,
     "longname": "src/core/settings.js~Settings#keys",
     "access": "public",
-    "description": null,
-    "lineNumber": 17,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 32,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Object"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -5807,13 +5833,21 @@
     "static": false,
     "longname": "src/core/settings.js~Settings#log",
     "access": "public",
-    "description": null,
-    "lineNumber": 18,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 38,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Object"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -5827,7 +5861,7 @@
     "longname": "src/core/settings.js~Settings#save",
     "access": "public",
     "description": "Save the local settings into path",
-    "lineNumber": 28,
+    "lineNumber": 48,
     "params": [],
     "return": null
   },
@@ -5842,7 +5876,7 @@
     "longname": "src/core/settings.js~Settings#validate",
     "access": "public",
     "description": null,
-    "lineNumber": 37,
+    "lineNumber": 57,
     "undocument": true,
     "params": [],
     "return": null
@@ -5851,7 +5885,7 @@
     "__docId__": 235,
     "kind": "file",
     "name": "src/core/user-config.js",
-    "content": "import Log from \"./log\";\r\n\r\nconst fs = require(\"fs\");\r\nconst _ = require(\"lodash\");\r\n\r\nexport default class UserConfig {\r\n\t/**\r\n\t * @param {String} path\r\n\t */\r\n\tconstructor(path) {\r\n\t\tif (fs.existsSync(path)) {\r\n\t\t\tthis.path = path;\r\n\t\t\tthis.config = JSON.parse(fs.readFileSync(path).toString());\r\n\t\t}\r\n\t\telse {\r\n\t\t\tLog.error(\"Could not load user config: File does not exist\");\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {*} value\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @param {String} template\r\n\t */\r\n\tset(path, value, guildId = null, template = \"default\") {\r\n\t\tconst finalPath = guildId ? `${guildId}.${path}` : path;\r\n\r\n\t\tLog.info(finalPath);\r\n\r\n\t\tif (this.get(`${template}.${path}`, guildId) === value) {\r\n\t\t\t_.unset(this.config, finalPath);\r\n\t\t}\r\n\t\telse {\r\n\t\t\t_.set(this.config, finalPath, value);\r\n\t\t\tLog.info(`set ${finalPath} to ${value}`);\r\n\t\t}\r\n\r\n\t\tthis.save();\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @param {String} template\r\n\t * @returns {*}\r\n\t */\r\n\tget(path, guildId = null, template = \"default\") {\r\n\t\tconst finalPath = guildId ? `${guildId}.${path}` : path;\r\n\r\n\t\tif (!this.contains(path, guildId)) {\r\n\t\t\treturn _.get(this.config, `${template}.${path}`);\r\n\t\t}\r\n\r\n\t\treturn _.get(this.config, finalPath);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {*} item\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t */\r\n\tpush(path, item, guildId = null) {\r\n\t\tconst items = this.get(path, guildId).slice(0);\r\n\r\n\t\titems.push(item);\r\n\t\tthis.set(path, items, guildId);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @returns {boolean}\r\n\t */\r\n\tcontains(path, guildId = null) {\r\n\t\tconst finalPath = guildId ? `${guildId}.${path}` : path;\r\n\r\n\t\treturn _.has(this.config, finalPath);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} id\r\n\t */\r\n\tcreateGuild(id) {\r\n\t\tthis.set(id, {});\r\n\t\tthis.save();\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} id\r\n\t */\r\n\tremoveGuild(id) {\r\n\t\tdelete this.config[id];\r\n\t\tthis.save();\r\n\t}\r\n\t\r\n\tsave() {\r\n\t\tfs.writeFileSync(this.path, JSON.stringify(this.config, null, 4));\r\n\t}\r\n}\r\n",
+    "content": "import Log from \"./log\";\r\n\r\nconst fs = require(\"fs\");\r\nconst _ = require(\"lodash\");\r\n\r\nexport default class UserConfig {\r\n\t/**\r\n\t * @param {String} path\r\n\t */\r\n\tconstructor(path) {\r\n\t\tif (fs.existsSync(path)) {\r\n\t\t\t/**\r\n\t\t\t * @type {String}\r\n\t\t\t * @private\r\n\t\t\t * @readonly\r\n\t\t\t */\r\n\t\t\tthis.path = path;\r\n\r\n\t\t\t/**\r\n\t\t\t * @type {any}\r\n\t\t\t * @private\r\n\t\t\t */\r\n\t\t\tthis.config = JSON.parse(fs.readFileSync(path).toString());\r\n\t\t}\r\n\t\telse {\r\n\t\t\tLog.error(\"Could not load user config: File does not exist\");\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {*} value\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @param {String} template\r\n\t */\r\n\tset(path, value, guildId = null, template = \"default\") {\r\n\t\tconst finalPath = guildId ? `${guildId}.${path}` : path;\r\n\r\n\t\tLog.info(finalPath);\r\n\r\n\t\tif (this.get(`${template}.${path}`, guildId) === value) {\r\n\t\t\t_.unset(this.config, finalPath);\r\n\t\t}\r\n\t\telse {\r\n\t\t\t_.set(this.config, finalPath, value);\r\n\t\t\tLog.info(`set ${finalPath} to ${value}`);\r\n\t\t}\r\n\r\n\t\tthis.save();\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @param {String} template\r\n\t * @returns {*}\r\n\t */\r\n\tget(path, guildId = null, template = \"default\") {\r\n\t\tconst finalPath = guildId ? `${guildId}.${path}` : path;\r\n\r\n\t\tif (!this.contains(path, guildId)) {\r\n\t\t\treturn _.get(this.config, `${template}.${path}`);\r\n\t\t}\r\n\r\n\t\treturn _.get(this.config, finalPath);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {*} item\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t */\r\n\tpush(path, item, guildId = null) {\r\n\t\tconst items = this.get(path, guildId).slice(0);\r\n\r\n\t\titems.push(item);\r\n\t\tthis.set(path, items, guildId);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @returns {boolean}\r\n\t */\r\n\tcontains(path, guildId = null) {\r\n\t\tconst finalPath = guildId ? `${guildId}.${path}` : path;\r\n\r\n\t\treturn _.has(this.config, finalPath);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} id\r\n\t */\r\n\tcreateGuild(id) {\r\n\t\tthis.set(id, {});\r\n\t\tthis.save();\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Snowflake} id\r\n\t */\r\n\tremoveGuild(id) {\r\n\t\tdelete this.config[id];\r\n\t\tthis.save();\r\n\t}\r\n\r\n\tsave() {\r\n\t\tfs.writeFileSync(this.path, JSON.stringify(this.config, null, 4));\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/core/user-config.js",
     "access": "public",
@@ -5948,14 +5982,22 @@
     "memberof": "src/core/user-config.js~UserConfig",
     "static": false,
     "longname": "src/core/user-config.js~UserConfig#path",
-    "access": "public",
-    "description": null,
-    "lineNumber": 12,
-    "undocument": true,
+    "access": "private",
+    "description": "",
+    "lineNumber": 17,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -5965,14 +6007,16 @@
     "memberof": "src/core/user-config.js~UserConfig",
     "static": false,
     "longname": "src/core/user-config.js~UserConfig#config",
-    "access": "public",
-    "description": null,
-    "lineNumber": 13,
-    "undocument": true,
+    "access": "private",
+    "description": "",
+    "lineNumber": 23,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "any"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -5986,7 +6030,7 @@
     "longname": "src/core/user-config.js~UserConfig#set",
     "access": "public",
     "description": "",
-    "lineNumber": 26,
+    "lineNumber": 36,
     "params": [
       {
         "nullable": null,
@@ -6043,7 +6087,7 @@
     "longname": "src/core/user-config.js~UserConfig#get",
     "access": "public",
     "description": "",
-    "lineNumber": 48,
+    "lineNumber": 58,
     "unknown": [
       {
         "tagName": "@returns",
@@ -6103,7 +6147,7 @@
     "longname": "src/core/user-config.js~UserConfig#push",
     "access": "public",
     "description": "",
-    "lineNumber": 63,
+    "lineNumber": 73,
     "params": [
       {
         "nullable": null,
@@ -6150,7 +6194,7 @@
     "longname": "src/core/user-config.js~UserConfig#contains",
     "access": "public",
     "description": "",
-    "lineNumber": 75,
+    "lineNumber": 85,
     "unknown": [
       {
         "tagName": "@returns",
@@ -6200,7 +6244,7 @@
     "longname": "src/core/user-config.js~UserConfig#createGuild",
     "access": "public",
     "description": "",
-    "lineNumber": 84,
+    "lineNumber": 94,
     "params": [
       {
         "nullable": null,
@@ -6226,7 +6270,7 @@
     "longname": "src/core/user-config.js~UserConfig#removeGuild",
     "access": "public",
     "description": "",
-    "lineNumber": 92,
+    "lineNumber": 102,
     "params": [
       {
         "nullable": null,
@@ -6252,7 +6296,7 @@
     "longname": "src/core/user-config.js~UserConfig#save",
     "access": "public",
     "description": null,
-    "lineNumber": 97,
+    "lineNumber": 107,
     "undocument": true,
     "params": [],
     "return": null
@@ -6261,7 +6305,7 @@
     "__docId__": 249,
     "kind": "file",
     "name": "src/core/utils.js",
-    "content": "import TimeAgo from \"javascript-time-ago\";\r\nimport en from \"javascript-time-ago/locale/en\";\r\nimport Log from \"./log\";\r\n\r\nTimeAgo.locale(en);\r\n\r\nconst timeAgo = new TimeAgo(\"en-US\");\r\n\r\nexport default class Utils {\r\n\t/**\r\n\t * @param {String} mention\r\n\t * @returns {String}\r\n\t */\r\n\tstatic resolveId(mention) {\r\n\t\treturn mention\r\n\t\t\t.replace(\"<\", \"\")\r\n\t\t\t.replace(\">\", \"\")\r\n\t\t\t.replace(\"@\", \"\")\r\n\t\t\t.replace(\"!\", \"\")\r\n\t\t\t.replace(\"&\", \"\")\r\n\t\t\t.replace(\"#\", \"\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Number} min\r\n\t * @param {Number} max\r\n\t * @returns {Number}\r\n\t */\r\n\tstatic getRandomInt(min, max) {\r\n\t\treturn Math.floor(Math.random() * max) + min;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Array} array\r\n\t * @returns {Array}\r\n\t */\r\n\tstatic shuffle(array) {\r\n\t\tlet counter = array.length;\r\n\r\n\t\t// While there are elements in the array\r\n\t\twhile (counter > 0) {\r\n\t\t\t// Pick a random index\r\n\t\t\tconst index = Math.floor(Math.random() * counter);\r\n\r\n\t\t\t// Decrease counter by 1\r\n\t\t\tcounter--;\r\n\r\n\t\t\t// And swap the last element with it\r\n\t\t\tconst temp = array[counter];\r\n\r\n\t\t\tarray[counter] = array[index];\r\n\t\t\tarray[index] = temp;\r\n\t\t}\r\n\r\n\t\treturn array;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Object} options\r\n\t * @param {User} requester\r\n\t * @param {Discord.Channel} channel\r\n\t * @param {String} footerSuffix\r\n\t * @returns {Promise<Discord.Message>}\r\n\t */\r\n\tstatic async send(options, requester, channel, footerSuffix = \"\") {\r\n\t\tconst optionsCpy = options;\r\n\r\n\t\toptionsCpy.footer = {\r\n\t\t\ticon_url: requester.avatarURL,\r\n\t\t\ttext: `Requested by ${requester.username} ${footerSuffix}`\r\n\t\t};\r\n\r\n\t\tif (!optionsCpy.color) {\r\n\t\t\t// TODO: Color is literal hex, not string (gives error)\r\n\t\t\toptionsCpy.color = \"GREEN\";\r\n\t\t}\r\n\r\n\t\treturn await channel.send({\r\n\t\t\tembed: options\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Number} milliseconds\r\n\t * @param {Number} seconds\r\n\t * @param {Number} minutes\r\n\t * @param {Number} hours\r\n\t * @param {Number} days\r\n\t * @param {Number} months\r\n\t * @param {Number} years\r\n\t * @returns {Number}\r\n\t */\r\n\tstatic timeFromNow(milliseconds, seconds = 0, minutes = 0, hours = 0, days = 0, months = 0, years = 0) {\r\n\t\tconst now = new Date();\r\n\r\n\t\tLog.info(now.getDate().toString());\r\n\r\n\t\treturn new Date(years + now.getFullYear(), months + now.getMonth(), days + now.getDate(), hours + now.getHours(), minutes + now.getMinutes(), seconds + now.getSeconds(), milliseconds + now.getMilliseconds()).getTime();\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Number} timestamp\r\n\t * @returns {*}\r\n\t */\r\n\tstatic timeAgo(timestamp) {\r\n\t\treturn timeAgo.format(timestamp);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} state\r\n\t * @returns {Boolean}\r\n\t */\r\n\tstatic translateState(state) {\r\n\t\treturn /^(1|true|on|y|yes)$/i.test(state);\r\n\t}\r\n}\r\n",
+    "content": "import TimeAgo from \"javascript-time-ago\";\r\nimport en from \"javascript-time-ago/locale/en\";\r\n\r\nTimeAgo.locale(en);\r\n\r\nconst timeAgo = new TimeAgo(\"en-US\");\r\n\r\nexport default class Utils {\r\n\t/**\r\n\t * @param {String} mention\r\n\t * @returns {String}\r\n\t */\r\n\tstatic resolveId(mention) {\r\n\t\treturn mention\r\n\t\t\t.replace(\"<\", \"\")\r\n\t\t\t.replace(\">\", \"\")\r\n\t\t\t.replace(\"@\", \"\")\r\n\t\t\t.replace(\"!\", \"\")\r\n\t\t\t.replace(\"&\", \"\")\r\n\t\t\t.replace(\"#\", \"\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Number} min\r\n\t * @param {Number} max\r\n\t * @returns {Number}\r\n\t */\r\n\tstatic getRandomInt(min, max) {\r\n\t\treturn Math.floor(Math.random() * max) + min;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Array} array\r\n\t * @returns {Array}\r\n\t */\r\n\tstatic shuffle(array) {\r\n\t\tlet counter = array.length;\r\n\r\n\t\t// While there are elements in the array\r\n\t\twhile (counter > 0) {\r\n\t\t\t// Pick a random index\r\n\t\t\tconst index = Math.floor(Math.random() * counter);\r\n\r\n\t\t\t// Decrease counter by 1\r\n\t\t\tcounter--;\r\n\r\n\t\t\t// And swap the last element with it\r\n\t\t\tconst temp = array[counter];\r\n\r\n\t\t\tarray[counter] = array[index];\r\n\t\t\tarray[index] = temp;\r\n\t\t}\r\n\r\n\t\treturn array;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Object} options\r\n\t * @param {User} requester\r\n\t * @param {Discord.Channel} channel\r\n\t * @param {String} [footerSuffix=\"\"]\r\n\t * @returns {Promise<Discord.Message>}\r\n\t */\r\n\tstatic async send(options, requester, channel, footerSuffix = \"\") {\r\n\t\tconst optionsCpy = options;\r\n\r\n\t\toptionsCpy.footer = {\r\n\t\t\ticon_url: requester.avatarURL,\r\n\t\t\ttext: `Requested by ${requester.username} ${footerSuffix}`\r\n\t\t};\r\n\r\n\t\tif (!optionsCpy.color) {\r\n\t\t\t// TODO: Color is literal hex, not string (gives error)\r\n\t\t\toptionsCpy.color = \"GREEN\";\r\n\t\t}\r\n\r\n\t\treturn await channel.send({\r\n\t\t\tembed: options\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Number} milliseconds\r\n\t * @param {Number} [seconds=0]\r\n\t * @param {Number} [minutes=0]\r\n\t * @param {Number} [hours=0]\r\n\t * @param {Number} [days=0]\r\n\t * @param {Number} [months=0]\r\n\t * @param {Number} [years=0]\r\n\t * @returns {Number}\r\n\t */\r\n\tstatic timeFromNow(milliseconds, seconds = 0, minutes = 0, hours = 0, days = 0, months = 0, years = 0) {\r\n\t\tconst now = new Date();\r\n\r\n\t\treturn new Date(years + now.getFullYear(), months + now.getMonth(), days + now.getDate(), hours + now.getHours(), minutes + now.getMinutes(), seconds + now.getSeconds(), milliseconds + now.getMilliseconds()).getTime();\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Number} timestamp\r\n\t * @returns {*}\r\n\t */\r\n\tstatic timeAgo(timestamp) {\r\n\t\treturn timeAgo.format(timestamp);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} state\r\n\t * @returns {Boolean}\r\n\t */\r\n\tstatic translateState(state) {\r\n\t\treturn /^(1|true|on|y|yes)$/i.test(state);\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/core/utils.js",
     "access": "public",
@@ -6280,7 +6324,7 @@
     "importPath": "discord-anvil/src/core/utils.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 7,
+    "lineNumber": 6,
     "undocument": true,
     "type": {
       "types": [
@@ -6301,7 +6345,7 @@
     "importPath": "discord-anvil/src/core/utils.js",
     "importStyle": "Utils",
     "description": null,
-    "lineNumber": 9,
+    "lineNumber": 8,
     "undocument": true,
     "interface": false
   },
@@ -6316,7 +6360,7 @@
     "longname": "src/core/utils.js~Utils.resolveId",
     "access": "public",
     "description": "",
-    "lineNumber": 14,
+    "lineNumber": 13,
     "unknown": [
       {
         "tagName": "@returns",
@@ -6355,7 +6399,7 @@
     "longname": "src/core/utils.js~Utils.getRandomInt",
     "access": "public",
     "description": "",
-    "lineNumber": 29,
+    "lineNumber": 28,
     "unknown": [
       {
         "tagName": "@returns",
@@ -6404,7 +6448,7 @@
     "longname": "src/core/utils.js~Utils.shuffle",
     "access": "public",
     "description": "",
-    "lineNumber": 37,
+    "lineNumber": 36,
     "unknown": [
       {
         "tagName": "@returns",
@@ -6443,7 +6487,7 @@
     "longname": "src/core/utils.js~Utils.send",
     "access": "public",
     "description": "",
-    "lineNumber": 65,
+    "lineNumber": 64,
     "unknown": [
       {
         "tagName": "@returns",
@@ -6487,7 +6531,9 @@
           "String"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "\"\"",
+        "defaultRaw": "",
         "name": "footerSuffix",
         "description": ""
       }
@@ -6512,7 +6558,7 @@
     "longname": "src/core/utils.js~Utils.timeFromNow",
     "access": "public",
     "description": "",
-    "lineNumber": 93,
+    "lineNumber": 92,
     "unknown": [
       {
         "tagName": "@returns",
@@ -6536,7 +6582,9 @@
           "Number"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "0",
+        "defaultRaw": 0,
         "name": "seconds",
         "description": ""
       },
@@ -6546,7 +6594,9 @@
           "Number"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "0",
+        "defaultRaw": 0,
         "name": "minutes",
         "description": ""
       },
@@ -6556,7 +6606,9 @@
           "Number"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "0",
+        "defaultRaw": 0,
         "name": "hours",
         "description": ""
       },
@@ -6566,7 +6618,9 @@
           "Number"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "0",
+        "defaultRaw": 0,
         "name": "days",
         "description": ""
       },
@@ -6576,7 +6630,9 @@
           "Number"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "0",
+        "defaultRaw": 0,
         "name": "months",
         "description": ""
       },
@@ -6586,7 +6642,9 @@
           "Number"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "0",
+        "defaultRaw": 0,
         "name": "years",
         "description": ""
       }
@@ -6611,7 +6669,7 @@
     "longname": "src/core/utils.js~Utils.timeAgo",
     "access": "public",
     "description": "",
-    "lineNumber": 105,
+    "lineNumber": 102,
     "unknown": [
       {
         "tagName": "@returns",
@@ -6650,7 +6708,7 @@
     "longname": "src/core/utils.js~Utils.translateState",
     "access": "public",
     "description": "",
-    "lineNumber": 113,
+    "lineNumber": 110,
     "unknown": [
       {
         "tagName": "@returns",
@@ -6682,7 +6740,7 @@
     "__docId__": 259,
     "kind": "file",
     "name": "src/data-adapters/data-adapter.js",
-    "content": "export default class DataAdapter {\r\n\t/**\r\n\t * Retrieve guild data\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @abstract\r\n\t * @returns {*}\r\n\t */\r\n\tget(path, guildId = null) {\r\n\t\tthrow new Error(\"[DataAdapter.get] Method not implemented.\");\r\n\t}\r\n\r\n\t/**\r\n\t * Set guild data\r\n\t * @param {String} path\r\n\t * @param {*} value\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @abstract\r\n\t */\r\n\tset(path, value, guildId = null) {\r\n\t\tthrow new Error(\"[DataAdapter.set] Method not implemented.\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @abstract\r\n\t * @return {String}\r\n\t */\r\n\tstatic resolvePath(path, guildId) {\r\n\t\treturn `${guildId ? `${guildId}.` : \"\"}${path}`;\r\n\t}\r\n}\r\n",
+    "content": "export default class DataAdapter {\r\n\t/**\r\n\t * Retrieve guild data\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @abstract\r\n\t * @returns {*}\r\n\t */\r\n\tget(path, guildId = null) {\r\n\t\tthrow new Error(\"[DataAdapter.get] Method not implemented.\");\r\n\t}\r\n\r\n\t/**\r\n\t * Set guild data\r\n\t * @param {String} path\r\n\t * @param {*} value\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @abstract\r\n\t * @returns {*}\r\n\t */\r\n\tset(path, value, guildId = null) {\r\n\t\tthrow new Error(\"[DataAdapter.set] Method not implemented.\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @abstract\r\n\t * @return {String}\r\n\t */\r\n\tstatic resolvePath(path, guildId) {\r\n\t\treturn `${guildId ? `${guildId}.` : \"\"}${path}`;\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/data-adapters/data-adapter.js",
     "access": "public",
@@ -6767,7 +6825,13 @@
     "longname": "src/data-adapters/data-adapter.js~DataAdapter#set",
     "access": "public",
     "description": "Set guild data",
-    "lineNumber": 20,
+    "lineNumber": 21,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{*}"
+      }
+    ],
     "params": [
       {
         "nullable": null,
@@ -6801,8 +6865,15 @@
         "description": ""
       }
     ],
-    "abstract": true,
-    "return": null
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "abstract": true
   },
   {
     "__docId__": 263,
@@ -6815,7 +6886,7 @@
     "longname": "src/data-adapters/data-adapter.js~DataAdapter.resolvePath",
     "access": "public",
     "description": "",
-    "lineNumber": 30,
+    "lineNumber": 31,
     "params": [
       {
         "nullable": null,
@@ -7503,7 +7574,7 @@
     "__docId__": 289,
     "kind": "file",
     "name": "src/data-adapters/mysql-adapter.js",
-    "content": "import DataAdapter from \"./data-adapter\";\r\n\r\nconst mysql = require(\"mysql\");\r\nconst _ = require(\"lodash\");\r\n\r\n/**\r\n * @extends DataAdapter\r\n */\r\nexport default class MysqlAdapter extends DataAdapter {\r\n\t/**\r\n\t * @param {Object} data\r\n\t */\r\n\tconstructor(data) {\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * @type {Object}\r\n\t\t * @private\r\n\t\t */\r\n\t\tthis.data = data;\r\n\r\n\t\t/**\r\n\t\t * @type {*}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.connection = mysql.createConnection(data);\r\n\r\n\t\t/**\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t */\r\n\t\tthis.connected = false;\r\n\t}\r\n\r\n    /**\r\n     * Connect to the database\r\n     * @returns {Promise<MysqlAdapter>}\r\n     */\r\n\tconnect() {\r\n\t\treturn new Promise((resolve, reject) => {\r\n\t\t\tthis.connection.connect((err) => {\r\n\t\t\t\tif (err) {\r\n\t\t\t\t\treject(reject);\r\n\t\t\t\t}\r\n\t\t\t\telse {\r\n\t\t\t\t\tthis.connected = true;\r\n\t\t\t\t\tresolve(this);\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t});\r\n\t}\r\n\r\n    /**\r\n     * Disconnect from the database\r\n     * @returns {Promise<MysqlAdapter>}\r\n     */\r\n\tdisconnect() {\r\n\t\treturn new Promise((resolve, reject) => {\r\n\t\t\tthis.connection.end((err) => {\r\n\t\t\t\tif (err) {\r\n\t\t\t\t\treject(reject);\r\n\t\t\t\t}\r\n\t\t\t\telse {\r\n\t\t\t\t\tthis.connected = false;\r\n\t\t\t\t\tresolve(this);\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t});\r\n\t}\r\n\r\n    /**\r\n     * Execute a query in the database\r\n     * @param {String} query\r\n     * @param {*} args\r\n     * @param {Number} timeout\r\n     * @returns {Promise<Object>}\r\n     */\r\n\tquery(query, args = [], timeout = 5000) {\r\n\t\treturn new Promise((resolve, reject) => {\r\n\t\t\tthis.connection.query({\r\n\t\t\t\tsql: query,\r\n\t\t\t\tvalues: args,\r\n\t\t\t\ttimeout: timeout\r\n\t\t\t}, (error, results, fields) => {\r\n\t\t\t\tif (error) {\r\n\t\t\t\t\treject(error);\r\n\t\t\t\t}\r\n\t\t\t\telse {\r\n\t\t\t\t\tresolve({\r\n\t\t\t\t\t\tresults: results,\r\n\t\t\t\t\t\tfields: fields\r\n\t\t\t\t\t});\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve guild data\r\n\t * @param {String} path\r\n     * @param {(Snowflake|Null)} guildId\r\n\t * @returns {Promise}\r\n\t */\r\n\tasync get(path, guildId = null) {\r\n\t\tif (!this.loaded) {\r\n\t\t\tthrow new Error(\"[MysqlAdapter.get] No data is currently loaded.\");\r\n\t\t}\r\n\r\n\t\tlet query = \"SELECT * FROM ?? WHERE id = ?\";\r\n\r\n\t\tconst splitPath = MysqlAdapter.cleanPath(path, guildId);\r\n\r\n\t\tif (splitPath.length === 1) {\r\n\t\t\tquery = \"SELECT * FROM ??\";\r\n\t\t}\r\n\r\n\t\tconst { results, fields } = await this.query(query, splitPath);\r\n\r\n\t\tif (splitPath.length === 1) {\r\n\t\t\tconst rtn = [];\r\n\t\t\tfor (let i = 0; i < results.length; i++) {\r\n\t\t\t\tconst row = results[i];\r\n\t\t\t\trtn[row.id] = row;\r\n\t\t\t}\r\n\t\t\treturn rtn;\r\n\t\t}\r\n\r\n\t\tif (fields.length === 0) {\r\n\t\t\treturn undefined;\r\n\t\t}\r\n\t\telse if (splitPath.length === 2) {\r\n\t\t\treturn results[0];\r\n\t\t} else if (splitPath.length === 3) {\r\n\t\t\treturn results[0][splitPath[2]];\r\n\t\t}\r\n\r\n\t\tconst column = results[0][splitPath[2]];\r\n\t\tconst obj = JSON.parse(column);\r\n\r\n\t\treturn _.get(obj, path.substr(path.substr(26).indexOf(\".\") + 27));\r\n\t}\r\n\r\n\t/**\r\n     * Set guild data\r\n     * @param {String} path\r\n\t * @param {*} value\r\n     * @param {(Snowflake|Null)} guildId\r\n\t */\r\n\tasync set(path, value, guildId = null) {\r\n\t\tif (!this.loaded) {\r\n\t\t\tthrow new Error(\"[MysqlAdapter.set] No data is currently loaded.\");\r\n\t\t}\r\n\r\n\t\tconst query = \"UPDATE ?? SET ??=? WHERE  `id`=?;\";\r\n\r\n\t\tconst splitPath = MysqlAdapter.cleanPath(path, guildId);\r\n\r\n\t\tif (splitPath.length < 3) {\r\n\t\t\tthrow new Error(`[MysqlAdapter.set] Invalid path: ${path}`);\r\n\t\t}\r\n\r\n\t\tconst { results, fields } = await this.query(query, [\r\n\t\t\tsplitPath[0],\r\n\t\t\tsplitPath[2],\r\n\t\t\tvalue,\r\n\t\t\tsplitPath[1]\r\n\t\t]);\r\n\r\n\t\treturn { results, fields };\r\n\t}\r\n\r\n\t/**\r\n\t * Merge guild data\r\n     * @param {*} value\r\n\t * @param {String} path\r\n     * @param {(Snowflake|Null)} guildId\r\n\t */\r\n\tmerge(path, value, guildId = null) {\r\n\t\tif (!this.loaded) {\r\n\t\t\tthrow new Error(\"[MysqlAdapter.merge] No data is currently loaded.\");\r\n\t\t}\r\n\r\n\t\tthrow new Error(\"[MysqlAdapter.merge] Method not implemented.\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {Snowflake} guildId\r\n\t * @returns {Array<String>}\r\n\t */\r\n\tstatic cleanPath(path, guildId) {\r\n\t\treturn `${guildId ? `guilds.${guildId}.` : \"\"}${path}`.split(\".\");\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {Boolean} Whether any data is currently loaded\r\n\t */\r\n\tget loaded() {\r\n\t\treturn this.data !== null && this.connected;\r\n\t}\r\n}\r\n",
+    "content": "import DataAdapter from \"./data-adapter\";\r\n\r\nconst mysql = require(\"mysql\");\r\nconst _ = require(\"lodash\");\r\n\r\n/**\r\n * @extends DataAdapter\r\n */\r\nexport default class MysqlAdapter extends DataAdapter {\r\n\t/**\r\n\t * @param {Object} data\r\n\t */\r\n\tconstructor(data) {\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * @type {Object}\r\n\t\t * @private\r\n\t\t */\r\n\t\tthis.data = data;\r\n\r\n\t\t/**\r\n\t\t * @type {*}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.connection = mysql.createConnection(data);\r\n\r\n\t\t/**\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t */\r\n\t\tthis.connected = false;\r\n\t}\r\n\r\n\t/**\r\n\t * Connect to the database\r\n\t * @returns {Promise<MysqlAdapter>}\r\n\t */\r\n\tconnect() {\r\n\t\treturn new Promise((resolve, reject) => {\r\n\t\t\tthis.connection.connect((err) => {\r\n\t\t\t\tif (err) {\r\n\t\t\t\t\treject(reject);\r\n\t\t\t\t}\r\n\t\t\t\telse {\r\n\t\t\t\t\tthis.connected = true;\r\n\t\t\t\t\tresolve(this);\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * Disconnect from the database\r\n\t * @returns {Promise<MysqlAdapter>}\r\n\t */\r\n\tdisconnect() {\r\n\t\treturn new Promise((resolve, reject) => {\r\n\t\t\tthis.connection.end((err) => {\r\n\t\t\t\tif (err) {\r\n\t\t\t\t\treject(reject);\r\n\t\t\t\t}\r\n\t\t\t\telse {\r\n\t\t\t\t\tthis.connected = false;\r\n\t\t\t\t\tresolve(this);\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * Execute a query in the database\r\n\t * @param {String} query\r\n\t * @param {*} args\r\n\t * @param {Number} [timeout=5000]\r\n\t * @returns {Promise<Object>}\r\n\t */\r\n\tquery(query, args = [], timeout = 5000) {\r\n\t\treturn new Promise((resolve, reject) => {\r\n\t\t\tthis.connection.query({\r\n\t\t\t\tsql: query,\r\n\t\t\t\tvalues: args,\r\n\t\t\t\ttimeout: timeout\r\n\t\t\t}, (error, results, fields) => {\r\n\t\t\t\tif (error) {\r\n\t\t\t\t\treject(error);\r\n\t\t\t\t}\r\n\t\t\t\telse {\r\n\t\t\t\t\tresolve({\r\n\t\t\t\t\t\tresults: results,\r\n\t\t\t\t\t\tfields: fields\r\n\t\t\t\t\t});\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t});\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve guild data\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} [guildId=null]\r\n\t * @returns {Promise}\r\n\t */\r\n\tasync get(path, guildId = null) {\r\n\t\tif (!this.loaded) {\r\n\t\t\tthrow new Error(\"[MysqlAdapter.get] No data is currently loaded.\");\r\n\t\t}\r\n\r\n\t\tlet query = \"SELECT * FROM ?? WHERE id = ?\";\r\n\r\n\t\tconst splitPath = MysqlAdapter.cleanPath(path, guildId);\r\n\r\n\t\tif (splitPath.length === 1) {\r\n\t\t\tquery = \"SELECT * FROM ??\";\r\n\t\t}\r\n\r\n\t\tconst { results, fields } = await this.query(query, splitPath);\r\n\r\n\t\tif (splitPath.length === 1) {\r\n\t\t\tconst rtn = [];\r\n\t\t\tfor (let i = 0; i < results.length; i++) {\r\n\t\t\t\tconst row = results[i];\r\n\t\t\t\trtn[row.id] = row;\r\n\t\t\t}\r\n\t\t\treturn rtn;\r\n\t\t}\r\n\r\n\t\tif (fields.length === 0) {\r\n\t\t\treturn undefined;\r\n\t\t}\r\n\t\telse if (splitPath.length === 2) {\r\n\t\t\treturn results[0];\r\n\t\t}\r\n\t\telse if (splitPath.length === 3) {\r\n\t\t\treturn results[0][splitPath[2]];\r\n\t\t}\r\n\r\n\t\tconst column = results[0][splitPath[2]];\r\n\t\tconst obj = JSON.parse(column);\r\n\r\n\t\treturn _.get(obj, path.substr(path.substr(26).indexOf(\".\") + 27));\r\n\t}\r\n\r\n\t/**\r\n\t * Set guild data\r\n\t * @param {String} path\r\n\t * @param {*} value\r\n\t * @param {(Snowflake|Null)} [guildId=null]\r\n\t * @returns {Promise<Object>}\r\n\t */\r\n\tasync set(path, value, guildId = null) {\r\n\t\tif (!this.loaded) {\r\n\t\t\tthrow new Error(\"[MysqlAdapter.set] No data is currently loaded.\");\r\n\t\t}\r\n\r\n\t\tconst query = \"UPDATE ?? SET ??=? WHERE  `id`=?;\";\r\n\r\n\t\tconst splitPath = MysqlAdapter.cleanPath(path, guildId);\r\n\r\n\t\tif (splitPath.length < 3) {\r\n\t\t\tthrow new Error(`[MysqlAdapter.set] Invalid path: ${path}`);\r\n\t\t}\r\n\r\n\t\tconst { results, fields } = await this.query(query, [\r\n\t\t\tsplitPath[0],\r\n\t\t\tsplitPath[2],\r\n\t\t\tvalue,\r\n\t\t\tsplitPath[1]\r\n\t\t]);\r\n\r\n\t\treturn { results, fields };\r\n\t}\r\n\r\n\t/**\r\n\t * Merge guild data\r\n\t * @param {*} value\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} [guildId=null]\r\n\t */\r\n\tmerge(path, value, guildId = null) {\r\n\t\tif (!this.loaded) {\r\n\t\t\tthrow new Error(\"[MysqlAdapter.merge] No data is currently loaded.\");\r\n\t\t}\r\n\r\n\t\tthrow new Error(\"[MysqlAdapter.merge] Method not implemented.\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} path\r\n\t * @param {Snowflake} guildId\r\n\t * @returns {Array<String>}\r\n\t */\r\n\tstatic cleanPath(path, guildId) {\r\n\t\treturn `${guildId ? `guilds.${guildId}.` : \"\"}${path}`.split(\".\");\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {Boolean} Whether any data is currently loaded\r\n\t */\r\n\tget loaded() {\r\n\t\treturn this.data !== null && this.connected;\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/data-adapters/mysql-adapter.js",
     "access": "public",
@@ -7759,7 +7830,9 @@
           "Number"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "5000",
+        "defaultRaw": 5000,
         "name": "timeout",
         "description": ""
       }
@@ -7809,7 +7882,9 @@
           "Null"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "null",
+        "defaultRaw": null,
         "name": "guildId",
         "description": ""
       }
@@ -7834,7 +7909,13 @@
     "longname": "src/data-adapters/mysql-adapter.js~MysqlAdapter#set",
     "access": "public",
     "description": "Set guild data",
-    "lineNumber": 150,
+    "lineNumber": 152,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise<Object>}"
+      }
+    ],
     "params": [
       {
         "nullable": null,
@@ -7863,15 +7944,20 @@
           "Null"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "null",
+        "defaultRaw": null,
         "name": "guildId",
         "description": ""
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "{\"results\": *, \"fields\": *}"
-      ]
+        "Promise<Object>"
+      ],
+      "spread": false,
+      "description": ""
     }
   },
   {
@@ -7885,7 +7971,7 @@
     "longname": "src/data-adapters/mysql-adapter.js~MysqlAdapter#merge",
     "access": "public",
     "description": "Merge guild data",
-    "lineNumber": 179,
+    "lineNumber": 181,
     "params": [
       {
         "nullable": null,
@@ -7914,7 +8000,9 @@
           "Null"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "null",
+        "defaultRaw": null,
         "name": "guildId",
         "description": ""
       }
@@ -7932,7 +8020,7 @@
     "longname": "src/data-adapters/mysql-adapter.js~MysqlAdapter.cleanPath",
     "access": "public",
     "description": "",
-    "lineNumber": 192,
+    "lineNumber": 194,
     "unknown": [
       {
         "tagName": "@returns",
@@ -7981,7 +8069,7 @@
     "longname": "src/data-adapters/mysql-adapter.js~MysqlAdapter#loaded",
     "access": "public",
     "description": "",
-    "lineNumber": 199,
+    "lineNumber": 201,
     "unknown": [
       {
         "tagName": "@returns",
@@ -8006,7 +8094,7 @@
     "__docId__": 307,
     "kind": "file",
     "name": "src/data-adapters/object-adapter.js",
-    "content": "import DataAdapter from \"./data-adapter\";\r\n\r\nconst _ = require(\"lodash\");\r\n\r\n/**\r\n * @extends DataAdapter\r\n */\r\nexport default class ObjectAdapter extends DataAdapter {\r\n\t/**\r\n\t * @param {Object} data\r\n\t */\r\n\tconstructor(data) {\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * @type {(Object|Null)}\r\n\t\t * @private\r\n\t\t */\r\n\t\tthis.data = data;\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve guild data\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t * @returns {Object}\r\n\t */\r\n\tget(path, guildId = null) {\r\n\t\treturn _.get(this.data, DataAdapter.resolvePath(path, guildId));\r\n\t}\r\n\r\n\t/**\r\n\t * Set guild data\r\n\t * @param {String} path\r\n\t * @param {*} value\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t */\r\n\tset(path, value, guildId = null) {\r\n\t\t_.set(this.data, DataAdapter.resolvePath(path, guildId), value);\r\n\t}\r\n\r\n\t/**\r\n\t * Merge guild data\r\n\t * @param {String} path\r\n\t * @param {*} value\r\n\t * @param {(Snowflake|Null)} guildId\r\n\t */\r\n\tmerge(path, value, guildId = null) {\r\n\t\tthrow new Error(\"[ObjectAdapter.merge] Method not implemented.\");\r\n\t}\r\n}\r\n",
+    "content": "import DataAdapter from \"./data-adapter\";\r\n\r\nconst _ = require(\"lodash\");\r\n\r\n/**\r\n * @extends DataAdapter\r\n */\r\nexport default class ObjectAdapter extends DataAdapter {\r\n\t/**\r\n\t * @param {Object} data\r\n\t */\r\n\tconstructor(data) {\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * @type {(Object|Null)}\r\n\t\t * @private\r\n\t\t */\r\n\t\tthis.data = data;\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve guild data\r\n\t * @param {String} path\r\n\t * @param {(Snowflake|Null)} [guildId=null]\r\n\t * @returns {Object}\r\n\t */\r\n\tget(path, guildId = null) {\r\n\t\treturn _.get(this.data, DataAdapter.resolvePath(path, guildId));\r\n\t}\r\n\r\n\t/**\r\n\t * Set guild data\r\n\t * @param {String} path\r\n\t * @param {*} value\r\n\t * @param {(Snowflake|Null)} [guildId=null]\r\n\t */\r\n\tset(path, value, guildId = null) {\r\n\t\t_.set(this.data, DataAdapter.resolvePath(path, guildId), value);\r\n\t}\r\n\r\n\t/**\r\n\t * Merge guild data\r\n\t * @param {String} path\r\n\t * @param {*} value\r\n\t * @param {(Snowflake|Null)} [guildId=null]\r\n\t */\r\n\tmerge(path, value, guildId = null) {\r\n\t\tthrow new Error(\"[ObjectAdapter.merge] Method not implemented.\");\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/data-adapters/object-adapter.js",
     "access": "public",
@@ -8133,7 +8221,9 @@
           "Null"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "null",
+        "defaultRaw": null,
         "name": "guildId",
         "description": ""
       }
@@ -8187,7 +8277,9 @@
           "Null"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "null",
+        "defaultRaw": null,
         "name": "guildId",
         "description": ""
       }
@@ -8234,7 +8326,9 @@
           "Null"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "null",
+        "defaultRaw": null,
         "name": "guildId",
         "description": ""
       }
@@ -9024,7 +9118,7 @@
     "__docId__": 348,
     "kind": "file",
     "name": "src/features/feature-manager.js",
-    "content": "// import Collection from \"../collections/collection\";\r\n\r\n// TODO: Implement the Collection class.\r\nexport default class FeatureManager /* extends Collection */ {\r\n\t/**\r\n\t * @param {Bot} bot\r\n\t * @param {Array<Feature>} features\r\n\t */\r\n\tconstructor(bot, features = []) {\r\n\t\t// super(features);\r\n\r\n\t\t/**\r\n\t\t * @type {Array<Feature>}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.features = features;\r\n\r\n\t\t/**\r\n\t\t * @type {Bot}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.bot = bot;\r\n\t}\r\n\r\n\t/**\r\n\t * Enable a feature\r\n\t * @param {Feature} feature\r\n\t * @returns {Boolean}\r\n\t */\r\n\tenable(feature) {\r\n\t\tif (feature.canEnable(this.bot)) {\r\n\t\t\tfeature.enabled(this.bot);\r\n\t\t\tfeature.isEnabled = true;\r\n\r\n\t\t\treturn true;\r\n\t\t}\r\n\r\n\t\treturn false;\r\n\t}\r\n\r\n\t/**\r\n\t * Enable multiple features at once\r\n\t * @param {Array<Feature>} features\r\n\t * @returns {Number}\r\n\t */\r\n\tenableMultiple(features) {\r\n\t\tlet totalEnabled = 0;\r\n\r\n\t\tfor (let i = 0; i < features.length; i++) {\r\n\t\t\tif (this.enable(features[i])) {\r\n\t\t\t\ttotalEnabled++;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn totalEnabled;\r\n\t}\r\n\r\n\t/**\r\n\t * Enable all the currently registered features\r\n\t * @returns {Number}\r\n\t */\r\n\tenableAll() {\r\n\t\treturn this.enableMultiple(this.features);\r\n\t}\r\n\r\n\t/**\r\n\t * Disable a feature\r\n\t * @param {Feature} feature\r\n\t */\r\n\tdisable(feature) {\r\n\t\tfeature.disabled(this.bot);\r\n\t\tfeature.isEnabled = false;\r\n\t}\r\n\r\n\t/**\r\n\t * Disable multiple features at once\r\n\t * @param {Array<Feature>} features\r\n\t */\r\n\tdisableMultiple(features) {\r\n\t\tfor (let i = 0; i < features.length; i++) {\r\n\t\t\tthis.disable(features[i], this.bot);\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * Disable all the currently registered features\r\n\t */\r\n\tdisableAll() {\r\n\t\tthis.disableMultiple(this.features);\r\n\t}\r\n\r\n\t/**\r\n\t * Reload all currently registered and enabled features\r\n\t * @returns {Number}\r\n\t */\r\n\treloadAll() {\r\n\t\tthis.disableAll();\r\n\r\n\t\treturn this.enableAll();\r\n\t}\r\n\r\n\t// TODO: Replace by Collection's native methods\r\n\t/**\r\n\t * Register a feature\r\n\t * @param {Feature} feature\r\n\t */\r\n\tregister(feature) {\r\n\t\tthis.features.push(feature);\r\n\t}\r\n\r\n\t/**\r\n\t * Register multiple features at once\r\n\t * @param {Array<Feature>} features\r\n\t */\r\n\tregisterMultiple(features) {\r\n\t\tfor (let i = 0; i < features.length; i++) {\r\n\t\t\tthis.register(features[i]);\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * Determine whether a feature is registered\r\n\t * @param {String} key\r\n\t * @returns {Boolean}\r\n\t */\r\n\tisRegistered(key) {\r\n\t\treturn this.get(key) != null;\r\n\t}\r\n\r\n\t/**\r\n\t * Determine whether a feature is enabled\r\n\t * @param {String} key\r\n\t * @returns {Boolean}\r\n\t */\r\n\tisEnabled(key) {\r\n\t\treturn this.get(key).isEnabled;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} key\r\n\t * @returns {(Feature|Null)}\r\n\t */\r\n\tget(key) {\r\n\t\t// TODO: Simplify this process into a function to prevent redundancy\r\n\t\tfor (let i = 0; i < this.features.length; i++) {\r\n\t\t\tif (this.features[i].key === key) {\r\n\t\t\t\treturn this.features[i];\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn null;\r\n\t}\r\n}\r\n",
+    "content": "// import Collection from \"../collections/collection\";\r\n\r\n// TODO: Implement the Collection class.\r\nexport default class FeatureManager /* extends Collection */ {\r\n\t/**\r\n\t * @param {Bot} bot\r\n\t * @param {Array<Feature>} features\r\n\t */\r\n\tconstructor(bot, features = []) {\r\n\t\t// super(features);\r\n\r\n\t\t/**\r\n\t\t * @type {Array<Feature>}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.features = features;\r\n\r\n\t\t/**\r\n\t\t * @type {Bot}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.bot = bot;\r\n\t}\r\n\r\n\t/**\r\n\t * Enable a feature\r\n\t * @param {Feature} feature\r\n\t * @returns {Boolean}\r\n\t */\r\n\tenable(feature) {\r\n\t\tif (feature.canEnable(this.bot)) {\r\n\t\t\tfeature.enabled(this.bot);\r\n\t\t\tfeature.isEnabled = true;\r\n\r\n\t\t\treturn true;\r\n\t\t}\r\n\r\n\t\treturn false;\r\n\t}\r\n\r\n\t/**\r\n\t * Enable multiple features at once\r\n\t * @param {Array<Feature>} features\r\n\t * @returns {Number}\r\n\t */\r\n\tenableMultiple(features) {\r\n\t\tlet totalEnabled = 0;\r\n\r\n\t\tfor (let i = 0; i < features.length; i++) {\r\n\t\t\tif (this.enable(features[i])) {\r\n\t\t\t\ttotalEnabled++;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn totalEnabled;\r\n\t}\r\n\r\n\t/**\r\n\t * Enable all the currently registered features\r\n\t * @returns {Number}\r\n\t */\r\n\tenableAll() {\r\n\t\treturn this.enableMultiple(this.features);\r\n\t}\r\n\r\n\t/**\r\n\t * Disable a feature\r\n\t * @param {Feature} feature\r\n\t */\r\n\tdisable(feature) {\r\n\t\tfeature.disabled(this.bot);\r\n\t\tfeature.isEnabled = false;\r\n\t}\r\n\r\n\t/**\r\n\t * Disable multiple features at once\r\n\t * @param {Array<Feature>} features\r\n\t */\r\n\tdisableMultiple(features) {\r\n\t\tfor (let i = 0; i < features.length; i++) {\r\n\t\t\tthis.disable(features[i], this.bot);\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * Disable all the currently registered features\r\n\t */\r\n\tdisableAll() {\r\n\t\tthis.disableMultiple(this.features);\r\n\t}\r\n\r\n\t/**\r\n\t * Reload all currently registered and enabled features\r\n\t * @returns {Number}\r\n\t */\r\n\treloadAll() {\r\n\t\tthis.disableAll();\r\n\r\n\t\treturn this.enableAll();\r\n\t}\r\n\r\n\t// TODO: Replace by Collection's native methods\r\n\t/**\r\n\t * Register a feature\r\n\t * @param {Feature} feature\r\n\t */\r\n\tregister(feature) {\r\n\t\tthis.features.push(feature);\r\n\t}\r\n\r\n\t/**\r\n\t * Register multiple features at once\r\n\t * @param {Array<Feature>} features\r\n\t */\r\n\tregisterMultiple(features) {\r\n\t\tfor (let i = 0; i < features.length; i++) {\r\n\t\t\tthis.register(features[i]);\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * Determine whether a feature is registered\r\n\t * @param {String} key\r\n\t * @returns {Boolean}\r\n\t */\r\n\tisRegistered(key) {\r\n\t\treturn this.get(key) != null;\r\n\t}\r\n\r\n\t/**\r\n\t * Determine whether a feature is enabled\r\n\t * @param {String} key\r\n\t * @returns {Boolean}\r\n\t */\r\n\tisEnabled(key) {\r\n\t\treturn this.get(key).isEnabled;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} key\r\n\t * @returns {(Feature|Null)}\r\n\t */\r\n\tget(key) {\r\n\t\tfor (let i = 0; i < this.features.length; i++) {\r\n\t\t\tif (this.features[i].key === key) {\r\n\t\t\t\treturn this.features[i];\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn null;\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/features/feature-manager.js",
     "access": "public",
@@ -9665,7 +9759,7 @@
     "__docId__": 372,
     "kind": "file",
     "name": "src/message/editable-message.js",
-    "content": "import Log from \"./log\";\r\n\r\nconst Discord = require(\"discord.js\");\r\n\r\nexport default class EditableMessage {\r\n\t/**\r\n\t * @param {Discord.Message} message\r\n\t */\r\n\tconstructor(message) {\r\n\t\tif (message.embeds.length === 0) {\r\n\t\t\tLog.error(\"[EditableMessage] Message parameter must contain embeds\");\r\n\t\t}\r\n\r\n\t\t/**\r\n\t\t * @type {Discord.Message}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.message = message;\r\n\t}\r\n\r\n\t/**\r\n\t * Edit an already sent message\r\n\t * @param {String} message\r\n\t * @param {String} title\r\n\t * @param {String} color\r\n\t * @param {String} thumbnailUrl\r\n\t * @param {String} image\r\n\t * @returns {Promise<Discord.Message>}\r\n\t */\r\n\tasync edit(message, title = \"\", color = \"RANDOM\", thumbnailUrl = \"\", image = \"\") {\r\n\t\treturn this.message.edit(\"\", new Discord.RichEmbed()\r\n\t\t\t.setColor(color)\r\n\t\t\t.setDescription(message)\r\n\t\t\t.setAuthor(title, thumbnailUrl)\r\n\t\t\t.setImage(image));\r\n\t}\r\n}\r\n",
+    "content": "import Log from \"../core/log\";\r\n\r\nconst Discord = require(\"discord.js\");\r\n\r\nexport default class EditableMessage {\r\n\t/**\r\n\t * @param {Discord.Message} message\r\n\t */\r\n\tconstructor(message) {\r\n\t\tif (message.embeds.length === 0) {\r\n\t\t\tLog.error(\"[EditableMessage] Message parameter must contain embeds\");\r\n\t\t}\r\n\r\n\t\t/**\r\n\t\t * @type {Discord.Message}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.message = message;\r\n\t}\r\n\r\n\t/**\r\n\t * Edit an already sent message\r\n\t * @param {String} message\r\n\t * @param {String} title\r\n\t * @param {String} color\r\n\t * @param {String} thumbnailUrl\r\n\t * @param {String} [image=\"\"]\r\n\t * @returns {Promise<Discord.Message>}\r\n\t */\r\n\tasync edit(message, title = \"\", color = \"RANDOM\", thumbnailUrl = \"\", image = \"\") {\r\n\t\treturn this.message.edit(\"\", new Discord.RichEmbed()\r\n\t\t\t.setColor(color)\r\n\t\t\t.setDescription(message)\r\n\t\t\t.setAuthor(title, thumbnailUrl)\r\n\t\t\t.setImage(image));\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/message/editable-message.js",
     "access": "public",
@@ -9824,7 +9918,9 @@
           "String"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "\"\"",
+        "defaultRaw": "",
         "name": "image",
         "description": ""
       }
@@ -9842,7 +9938,7 @@
     "__docId__": 378,
     "kind": "file",
     "name": "src/message/embed-builder.js",
-    "content": "const Discord = require(\"discord.js\");\r\n\r\nexport default class EmbedBuilder {\r\n\tconstructor() {\r\n\t\t/**\r\n\t\t * @type {Discord.RichEmbed}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.embed = new Discord.RichEmbed();\r\n\t}\r\n\r\n\t/**\r\n\t * Set the color of the embed\r\n\t * @param {String} color\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\tcolor(color) {\r\n\t\tthis.embed.setColor(color);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the title of the embed\r\n\t * @param {String} title\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\ttitle(title) {\r\n\t\tthis.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : null);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} url\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\ttitleIcon(url) {\r\n\t\tthis.embed.setAuthor(this.embed.author ? this.embed.author.name : null, url);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the thumbnail image of the embed\r\n\t * @param {String} url\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\tthumbnail(url) {\r\n\t\tthis.embed.setThumbnail(url);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the footer text of the embed\r\n\t * @param {String} text\r\n\t * @param {String} icon\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\tfooter(text, icon) {\r\n\t\tthis.embed.setFooter(text, icon);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the image of the embed\r\n\t * @param {String} url\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\timage(url) {\r\n\t\tthis.embed.setImage(url);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t// TODO: Limit text to Discord's embed char limit\r\n\t/**\r\n\t * Set the text of the embed\r\n\t * @param {string} text\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\ttext(text) {\r\n\t\tthis.embed.setDescription(text);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Add a field to the embed\r\n\t * @param {String} title\r\n\t * @param {*} value\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\tfield(title, value) {\r\n\t\tthis.embed.addField(title, value);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Convert the embed to a RichEmbed\r\n\t * @returns {Discord.RichEmbed}\r\n\t */\r\n\tbuild() {\r\n\t\treturn this.embed;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Object} obj\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\tstatic fromObject(obj) {\r\n\t\tconst result = new EmbedBuilder();\r\n\r\n\t\tif (!obj.text) {\r\n\t\t\tthrow new Error(\"[EmbedBuilder.fromObject] Text cannot be empty or null\");\r\n\t\t}\r\n\t\telse {\r\n\t\t\tresult.text(obj.text);\r\n\t\t}\r\n\r\n\t\tif (obj.image) {\r\n\t\t\tresult.image(obj.image);\r\n\t\t}\r\n\r\n\t\tif (obj.color) {\r\n\t\t\tresult.color(obj.color);\r\n\t\t}\r\n\r\n\t\tif (obj.title) {\r\n\t\t\tresult.title(obj.title);\r\n\t\t}\r\n\r\n\t\tif (obj.titleIcon) {\r\n\t\t\tresult.titleIcon(obj.titleIcon);\r\n\t\t}\r\n\r\n\t\tif (obj.footer) {\r\n\t\t\tresult.footer(obj.footer.text, obj.footer.icon);\r\n\t\t}\r\n\r\n\t\tif (obj.thumbnail) {\r\n\t\t\tresult.thumbnail(obj.thumbnail);\r\n\t\t}\r\n\r\n\t\treturn result;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Object} sections\r\n\t * @param {String} color\r\n\t * @return {EmbedBuilder}\r\n\t */\r\n\tstatic sections(sections, color = null) {\r\n\t\tconst result = new EmbedBuilder();\r\n\r\n\t\tfor (let i = 0; i < Object.keys(sections).length; i++) {\r\n\t\t\tresult.field(Object.keys(sections)[i], sections[Object.keys(sections)[i]]);\r\n\t\t}\r\n\r\n\t\tif (color) {\r\n\t\t\tresult.color(color);\r\n\t\t}\r\n\r\n\t\treturn result;\r\n\t}\r\n}\r\n",
+    "content": "const Discord = require(\"discord.js\");\r\n\r\nexport default class EmbedBuilder {\r\n\tconstructor() {\r\n\t\t/**\r\n\t\t * @type {Discord.RichEmbed}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.embed = new Discord.RichEmbed();\r\n\t}\r\n\r\n\t/**\r\n\t * Set the color of the embed\r\n\t * @param {String} color\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\tcolor(color) {\r\n\t\tthis.embed.setColor(color);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the title of the embed\r\n\t * @param {String} title\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\ttitle(title) {\r\n\t\tthis.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : null);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {String} url\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\ttitleIcon(url) {\r\n\t\tthis.embed.setAuthor(this.embed.author ? this.embed.author.name : null, url);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the thumbnail image of the embed\r\n\t * @param {String} url\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\tthumbnail(url) {\r\n\t\tthis.embed.setThumbnail(url);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the footer text of the embed\r\n\t * @param {String} text\r\n\t * @param {String} icon\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\tfooter(text, icon) {\r\n\t\tthis.embed.setFooter(text, icon);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the image of the embed\r\n\t * @param {String} url\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\timage(url) {\r\n\t\tthis.embed.setImage(url);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the text of the embed\r\n\t * @todo Limit text to Discord's embed char limit\r\n\t * @param {string} text\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\ttext(text) {\r\n\t\tthis.embed.setDescription(text);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Add a field to the embed\r\n\t * @param {String} title\r\n\t * @param {*} value\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\tfield(title, value) {\r\n\t\tthis.embed.addField(title, value);\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * Convert the embed to a RichEmbed\r\n\t * @returns {Discord.RichEmbed}\r\n\t */\r\n\tbuild() {\r\n\t\treturn this.embed;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Object} obj\r\n\t * @returns {EmbedBuilder}\r\n\t */\r\n\tstatic fromObject(obj) {\r\n\t\tconst result = new EmbedBuilder();\r\n\r\n\t\tif (!obj.text) {\r\n\t\t\tthrow new Error(\"[EmbedBuilder.fromObject] Text cannot be empty or null\");\r\n\t\t}\r\n\t\telse {\r\n\t\t\tresult.text(obj.text);\r\n\t\t}\r\n\r\n\t\tif (obj.image) {\r\n\t\t\tresult.image(obj.image);\r\n\t\t}\r\n\r\n\t\tif (obj.color) {\r\n\t\t\tresult.color(obj.color);\r\n\t\t}\r\n\r\n\t\tif (obj.title) {\r\n\t\t\tresult.title(obj.title);\r\n\t\t}\r\n\r\n\t\tif (obj.titleIcon) {\r\n\t\t\tresult.titleIcon(obj.titleIcon);\r\n\t\t}\r\n\r\n\t\tif (obj.footer) {\r\n\t\t\tresult.footer(obj.footer.text, obj.footer.icon);\r\n\t\t}\r\n\r\n\t\tif (obj.thumbnail) {\r\n\t\t\tresult.thumbnail(obj.thumbnail);\r\n\t\t}\r\n\r\n\t\treturn result;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {Object} sections\r\n\t * @param {String} color\r\n\t * @return {EmbedBuilder}\r\n\t */\r\n\tstatic sections(sections, color = null) {\r\n\t\tconst result = new EmbedBuilder();\r\n\r\n\t\tfor (let i = 0; i < Object.keys(sections).length; i++) {\r\n\t\t\tresult.field(Object.keys(sections)[i], sections[Object.keys(sections)[i]]);\r\n\t\t}\r\n\r\n\t\tif (color) {\r\n\t\t\tresult.color(color);\r\n\t\t}\r\n\r\n\t\treturn result;\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/message/embed-builder.js",
     "access": "public",
@@ -10181,6 +10277,9 @@
     "access": "public",
     "description": "Set the text of the embed",
     "lineNumber": 85,
+    "todo": [
+      "Limit text to Discord's embed char limit"
+    ],
     "unknown": [
       {
         "tagName": "@returns",
@@ -10371,7 +10470,7 @@
     "__docId__": 394,
     "kind": "file",
     "name": "src/message/message-builder.js",
-    "content": "export default class MessageBuilder {\r\n\t/**\r\n\t * @param {string} startingString\r\n\t */\r\n\tconstructor(startingString = \"\") {\r\n\t\tthis.message = startingString;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {string} string\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tadd(string) {\r\n\t\tthis.message += string;\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {(string|null)} language\r\n\t * @param {(string|null)} code\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tcodeBlock(language = null, code = null) {\r\n\t\tlet result = \"```\";\r\n\r\n\t\tif (language !== null) {\r\n\t\t\tresult += `${language}\\n`;\r\n\t\t}\r\n\r\n\t\tif (code !== null) {\r\n\t\t\tresult += `${code}\\n\\`\\`\\``;\r\n\t\t}\r\n\r\n\t\treturn this.add(result);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {(string|null)} code\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tcode(code = null) {\r\n\t\tif (code === null) {\r\n\t\t\treturn this.add(\"`\");\r\n\t\t}\r\n\r\n\t\treturn this.add(`\\`${code}\\``);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {string} text\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\titalic(text) {\r\n\t\treturn this.add(`*${text}*`);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {string} text\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tbold(text) {\r\n\t\treturn this.add(`**${text}**`);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {string} text\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tunderlined(text) {\r\n\t\treturn this.add(`__${text}__`);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tline() {\r\n\t\treturn this.add(\"\\n\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {string} emoji\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\temoji(emoji) {\r\n\t\treturn this.add(`:${emoji}:`);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {string}\r\n\t */\r\n\tbuild() {\r\n\t\treturn this.message;\r\n\t}\r\n}\r\n",
+    "content": "export default class MessageBuilder {\r\n\t/**\r\n\t * @param {string} [startingString=\"\"]\r\n\t */\r\n\tconstructor(startingString = \"\") {\r\n\t\tthis.message = startingString;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {string} string\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tadd(string) {\r\n\t\tthis.message += string;\r\n\r\n\t\treturn this;\r\n\t}\r\n\r\n\t/**\r\n\t * @param {(String|Null)} language\r\n\t * @param {(String|Null)} [code=null]\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tcodeBlock(language = null, code = null) {\r\n\t\tlet result = \"```\";\r\n\r\n\t\tif (language !== null) {\r\n\t\t\tresult += `${language}\\n`;\r\n\t\t}\r\n\r\n\t\tif (code !== null) {\r\n\t\t\tresult += `${code}\\n\\`\\`\\``;\r\n\t\t}\r\n\r\n\t\treturn this.add(result);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {(string|null)} code\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tcode(code = null) {\r\n\t\tif (code === null) {\r\n\t\t\treturn this.add(\"`\");\r\n\t\t}\r\n\r\n\t\treturn this.add(`\\`${code}\\``);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {string} text\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\titalic(text) {\r\n\t\treturn this.add(`*${text}*`);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {string} text\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tbold(text) {\r\n\t\treturn this.add(`**${text}**`);\r\n\t}\r\n\r\n\t/**\r\n\t * @param {string} text\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tunderlined(text) {\r\n\t\treturn this.add(`__${text}__`);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\tline() {\r\n\t\treturn this.add(\"\\n\");\r\n\t}\r\n\r\n\t/**\r\n\t * @param {string} emoji\r\n\t * @returns {MessageBuilder}\r\n\t */\r\n\temoji(emoji) {\r\n\t\treturn this.add(`:${emoji}:`);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {string}\r\n\t */\r\n\tbuild() {\r\n\t\treturn this.message;\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/message/message-builder.js",
     "access": "public",
@@ -10413,7 +10512,9 @@
           "string"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "\"\"",
+        "defaultRaw": "",
         "name": "startingString",
         "description": ""
       }
@@ -10497,8 +10598,8 @@
       {
         "nullable": null,
         "types": [
-          "string",
-          "null"
+          "String",
+          "Null"
         ],
         "spread": false,
         "optional": false,
@@ -10508,11 +10609,13 @@
       {
         "nullable": null,
         "types": [
-          "string",
-          "null"
+          "String",
+          "Null"
         ],
         "spread": false,
-        "optional": false,
+        "optional": true,
+        "defaultValue": "null",
+        "defaultRaw": null,
         "name": "code",
         "description": ""
       }
@@ -10911,7 +11014,7 @@
     "__docId__": 414,
     "kind": "file",
     "name": "src/time/time-parser.js",
-    "content": "import TimeSuffixType from \"./time-suffix-type\";\r\nimport Utils from \"./utils\";\r\n\r\nexport default class TimeParser {\r\n\t/**\r\n\t * @param {String} timeString\r\n\t */\r\n\tconstructor(timeString) {\r\n\t\t/**\r\n\t\t * @type {String}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.timeString = timeString;\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {*}\r\n\t */\r\n\tgetMatch() {\r\n\t\treturn /^([0-9]+)(ms|s|m|h|d|mo|y)$/.exec(this.timeString);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {TimeSuffixType}\r\n\t */\r\n\tget suffix() {\r\n\t\treturn TimeSuffixType.fromShort(this.getMatch()[2]);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {Number}\r\n\t */\r\n\tget amount() {\r\n\t\treturn parseInt(this.getMatch()[1]);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {Number}\r\n\t */\r\n\tgetTimeFromNow() {\r\n\t\tswitch (this.suffix) {\r\n\t\t\tcase TimeSuffixType.Millisecond: {\r\n\t\t\t\treturn Utils.timeFromNow(this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Second: {\r\n\t\t\t\treturn Utils.timeFromNow(0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Minute: {\r\n\t\t\t\treturn Utils.timeFromNow(0, 0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Hour: {\r\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Day: {\r\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, 0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Month: {\r\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, 0, 0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Year: {\r\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, 0, 0, 0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tdefault: {\r\n\t\t\t\tthrow new Error(`[TimeParser.getTimeFromNow] Invalid suffix: ${this.suffix}`);\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n",
+    "content": "import TimeSuffixType from \"./time-suffix-type\";\r\nimport Utils from \"../core/utils\";\r\n\r\nexport default class TimeParser {\r\n\t/**\r\n\t * @param {String} timeString\r\n\t */\r\n\tconstructor(timeString) {\r\n\t\t/**\r\n\t\t * @type {String}\r\n\t\t * @private\r\n\t\t * @readonly\r\n\t\t */\r\n\t\tthis.timeString = timeString;\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {*}\r\n\t */\r\n\tgetMatch() {\r\n\t\treturn /^([0-9]+)(ms|s|m|h|d|mo|y)$/.exec(this.timeString);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {TimeSuffixType}\r\n\t */\r\n\tget suffix() {\r\n\t\treturn TimeSuffixType.fromShort(this.getMatch()[2]);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {Number}\r\n\t */\r\n\tget amount() {\r\n\t\treturn parseInt(this.getMatch()[1]);\r\n\t}\r\n\r\n\t/**\r\n\t * @returns {Number}\r\n\t */\r\n\tgetTimeFromNow() {\r\n\t\tswitch (this.suffix) {\r\n\t\t\tcase TimeSuffixType.Millisecond: {\r\n\t\t\t\treturn Utils.timeFromNow(this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Second: {\r\n\t\t\t\treturn Utils.timeFromNow(0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Minute: {\r\n\t\t\t\treturn Utils.timeFromNow(0, 0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Hour: {\r\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Day: {\r\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, 0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Month: {\r\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, 0, 0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tcase TimeSuffixType.Year: {\r\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, 0, 0, 0, this.amount);\r\n\t\t\t}\r\n\r\n\t\t\tdefault: {\r\n\t\t\t\tthrow new Error(`[TimeParser.getTimeFromNow] Invalid suffix: ${this.suffix}`);\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n",
     "static": true,
     "longname": "C:/Users/Y15707110/Documents/Projects/Anvil/src/time/time-parser.js",
     "access": "public",

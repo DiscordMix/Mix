@@ -1,7 +1,7 @@
 {
-  "coverage": "77.27%",
+  "coverage": "79.09%",
   "expectCount": 330,
-  "actualCount": 255,
+  "actualCount": 261,
   "files": {
     "src/collections/collection.js": {
       "expectCount": 11,
@@ -131,35 +131,29 @@
     },
     "src/core/settings.js": {
       "expectCount": 9,
-      "actualCount": 2,
+      "actualCount": 6,
       "undocumentLines": [
         3,
         5,
-        11,
-        16,
-        17,
-        18,
-        37
+        57
       ]
     },
     "src/core/user-config.js": {
       "expectCount": 13,
-      "actualCount": 7,
+      "actualCount": 9,
       "undocumentLines": [
         3,
         4,
         6,
-        12,
-        13,
-        97
+        107
       ]
     },
     "src/core/utils.js": {
       "expectCount": 9,
       "actualCount": 7,
       "undocumentLines": [
-        7,
-        9
+        6,
+        8
       ]
     },
     "src/data-adapters/data-adapter.js": {

@@ -72,8 +72,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/commands/command-execution-context.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import EditableMessage from &quot;../core/editable-message&quot;;
-import EmbedBuilder from &quot;../core/embed-builder&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import EditableMessage from &quot;../message/editable-message&quot;;
+import EmbedBuilder from &quot;../message/embed-builder&quot;;
 
 const Discord = require(&quot;discord.js&quot;);
 
@@ -128,7 +128,7 @@ export default class CommandExecutionContext {
 
 	/**
 	 * @param {(Object|EmbedBuilder)} content
-	 * @param {Boolean} autoDelete
+	 * @param {Boolean} [autoDelete=false]
 	 * @returns {(Promise&lt;EditableMessage&gt;|null)}
 	 */
 	async respond(content, autoDelete = false) {

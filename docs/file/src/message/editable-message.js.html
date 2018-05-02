@@ -72,7 +72,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/message/editable-message.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Log from &quot;./log&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Log from &quot;../core/log&quot;;
 
 const Discord = require(&quot;discord.js&quot;);
 
@@ -99,7 +99,7 @@ export default class EditableMessage {
 	 * @param {String} title
 	 * @param {String} color
 	 * @param {String} thumbnailUrl
-	 * @param {String} image
+	 * @param {String} [image=&quot;&quot;]
 	 * @returns {Promise&lt;Discord.Message&gt;}
 	 */
 	async edit(message, title = &quot;&quot;, color = &quot;RANDOM&quot;, thumbnailUrl = &quot;&quot;, image = &quot;&quot;) {

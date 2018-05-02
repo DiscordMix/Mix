@@ -74,7 +74,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/message/message-builder.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default class MessageBuilder {
 	/**
-	 * @param {string} startingString
+	 * @param {string} [startingString=&quot;&quot;]
 	 */
 	constructor(startingString = &quot;&quot;) {
 		this.message = startingString;
@@ -91,8 +91,8 @@
 	}
 
 	/**
-	 * @param {(string|null)} language
-	 * @param {(string|null)} code
+	 * @param {(String|Null)} language
+	 * @param {(String|Null)} [code=null]
 	 * @returns {MessageBuilder}
 	 */
 	codeBlock(language = null, code = null) {

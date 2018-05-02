@@ -28,7 +28,7 @@ module.exports = {
 	Utils: require("./core/utils").default,
 
 	// Collections
-	Collecton: require("./collections/collection").default,
+	Collection: require("./collections/collection").default,
 	EmojiCollection: require("./collections/emoji-collection").default,
 
 	// Emoji UI

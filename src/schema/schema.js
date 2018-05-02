@@ -1,5 +1,3 @@
-import Log from "../core/log";
-
 const _ = require("lodash");
 
 export default class Schema {

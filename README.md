@@ -1,5 +1,5 @@
-[![npm version](https://badge.fury.io/js/discord-anvil.svg)](https://badge.fury.io/js/discord-anvil)
 [![Build Status](https://travis-ci.org/CloudRex/Anvil.svg?branch=master)](https://travis-ci.org/CloudRex/Anvil)
+[![npm version](https://badge.fury.io/js/discord-anvil.svg)](https://badge.fury.io/js/discord-anvil)
 ![Documentation](https://cloudrex.github.io/Anvil/badge.svg)
 
 ## Anvil

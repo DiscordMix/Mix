@@ -2,6 +2,8 @@ import Utils from "../core/utils";
 import RGB from "../core/rgb";
 import RGBA from "../core/rgba";
 import Collection from "../collections/collection";
+import ObjectAdapter from "../data-adapters/object-adapter";
+import Schema from "../schema/schema";
 
 const { expect } = require("chai");
 
@@ -14,9 +16,34 @@ const subjects = {
 
 	rgb: new RGB(5, 10, 15),
 	rgba: new RGBA(5, 10, 15, 20),
+
 	collection: new Collection(["hello", "it's me", {
 		name: "John Doe"
-	}])
+	}]),
+
+	objAdapter: new ObjectAdapter({
+		person: {
+			doe: {
+				name: "John Doe"
+			}
+		}
+	}),
+
+	schema: {
+		struct: {
+			name: "John Doe",
+			age: 69,
+			other: {
+				notes: "I liek turtles"
+			}
+		},
+
+		schema: {
+			name: "string",
+			age: "number",
+			"other.notes": "string"
+		}
+	}
 };
 
 describe("Utils.resolveId()", () => {
@@ -188,5 +215,44 @@ describe("Collection.find()", () => {
 		expect(result).to.be.an("object");
 		expect(result.name).to.be.an("string");
 		expect(result.name).to.equal("John Doe");
+	});
+});
+
+describe("ObjectAdapter.get()", () => {
+	it("should return the item in the specified path", () => {
+		const result = subjects.objAdapter.get("person.doe");
+
+		expect(result).to.be.an("object");
+		expect(result.name).to.be.an("string");
+		expect(result.name).to.equal("John Doe");
+	});
+});
+
+describe("ObjectAdapter.set()", () => {
+	it("should set data in the item at the specified path", () => {
+		subjects.objAdapter.set("person.doe.name", "Doe John");
+
+		const result = subjects.objAdapter.get("person.doe.name");
+
+		expect(result).to.be.an("string");
+		expect(result).to.equal("Doe John");
+	});
+});
+
+describe("Schema.validate()", () => {
+	it("should determine whether a structure is valid", () => {
+		const result1 = Schema.validate(subjects.schema.struct, subjects.schema.schema);
+
+		subjects.schema.struct.age = 0;
+
+		const result2 = Schema.validate(subjects.schema.struct, subjects.schema.schema);
+
+		// Result 1
+		expect(result1).to.be.an("boolean");
+		expect(result1).to.equal(true);
+
+		// Result 2
+		expect(result2).to.be.an("boolean");
+		expect(result2).to.equal(false);
 	});
 });

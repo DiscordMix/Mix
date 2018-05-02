@@ -4,7 +4,7 @@ export default class Schema {
 	/**
 	 * @param {Object} struct
 	 * @param {Object} schema
-	 * @returns {Boolean}
+	 * @returns {Boolean} Whether the schema is valid
 	 */
 	static validate(struct, schema) {
 		const keys = Object.keys(schema);

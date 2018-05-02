@@ -49,6 +49,7 @@ module.exports = {
 	ObjectAdapter: require("./data-adapters/object-adapter").default,
 	JsonAdapter: require("./data-adapters/json-adapter").default,
 	SqliteAdapter: require("./data-adapters/sqlite-adapter").default,
+	MysqlAdapter: require("./data-adapters/mysql-adapter").default,
 
 	// Schema
 	Schema: require("./schema/schema").default,

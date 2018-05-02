@@ -73,20 +73,58 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/test/tests.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Utils from &quot;../core/utils&quot;;
+import RGB from &quot;../core/rgb&quot;;
+import RGBA from &quot;../core/rgba&quot;;
+import Collection from &quot;../collections/collection&quot;;
+import ObjectAdapter from &quot;../data-adapters/object-adapter&quot;;
+import Schema from &quot;../schema/schema&quot;;
 
 const { expect } = require(&quot;chai&quot;);
 
+const subjects = {
+	ids: [
+		&quot;&lt;@285578743324606482&gt;&quot;,
+		&quot;&lt;#432269407654248459&gt;&quot;,
+		&quot;285578743324606482&quot;
+	],
+
+	rgb: new RGB(5, 10, 15),
+	rgba: new RGBA(5, 10, 15, 20),
+
+	collection: new Collection([&quot;hello&quot;, &quot;it&apos;s me&quot;, {
+		name: &quot;John Doe&quot;
+	}]),
+
+	objAdapter: new ObjectAdapter({
+		person: {
+			doe: {
+				name: &quot;John Doe&quot;
+			}
+		}
+	}),
+
+	schema: {
+		struct: {
+			name: &quot;John Doe&quot;,
+			age: 69,
+			other: {
+				notes: &quot;I liek turtles&quot;
+			}
+		},
+
+		schema: {
+			name: &quot;string&quot;,
+			age: &quot;number&quot;,
+			&quot;other.notes&quot;: &quot;string&quot;
+		}
+	}
+};
+
 describe(&quot;Utils.resolveId()&quot;, () =&gt; {
 	it(&quot;should return the resolved ids&quot;, () =&gt; {
-		const subjects = [
-			&quot;&lt;@285578743324606482&gt;&quot;,
-			&quot;&lt;#432269407654248459&gt;&quot;,
-			&quot;285578743324606482&quot;
-		];
-
 		// Review
-		for (let i = 0; i &lt; subjects.length; i++) {
-			const result = Utils.resolveId(subjects[i]);
+		for (let i = 0; i &lt; subjects.ids.length; i++) {
+			const result = Utils.resolveId(subjects.ids[i]);
 
 			expect(result).to.be.an(&quot;string&quot;);
 			expect(result).to.have.lengthOf(18);
@@ -125,6 +163,171 @@ describe(&quot;Utils.translateState()&quot;, () =&gt; {
 			expect(result).to.be.an(&quot;boolean&quot;);
 			expect(result).to.be.equal(true);
 		}
+	});
+});
+
+describe(&quot;Utils.timeFromNow()&quot;, () =&gt; {
+	it(&quot;should time from now in milliseconds&quot;, () =&gt; {
+		const result = Utils.timeFromNow(0, 0, 50);
+
+		expect(result).to.be.an(&quot;number&quot;);
+		expect(result.toString()).to.have.lengthOf(13);
+	});
+});
+
+describe(&quot;Utils.shuffle()&quot;, () =&gt; {
+	it(&quot;should shuffle an array&quot;, () =&gt; {
+		const result = Utils.shuffle([&quot;hello&quot;, &quot;my&quot;, &quot;name&quot;, &quot;is&quot;, &quot;john doe&quot;]);
+
+		expect(result).to.be.an(&quot;array&quot;);
+		expect(result.join(&quot; &quot;)).to.not.equal(&quot;hello my name is john doe&quot;);
+	});
+});
+
+describe(&quot;Utils.shuffle()&quot;, () =&gt; {
+	it(&quot;should shuffle an array&quot;, () =&gt; {
+		const result = Utils.shuffle([&quot;hello&quot;, &quot;my&quot;, &quot;name&quot;, &quot;is&quot;, &quot;john doe&quot;]);
+
+		expect(result).to.be.an(&quot;array&quot;);
+		expect(result.join(&quot; &quot;)).to.not.equal(&quot;hello my name is john doe&quot;);
+	});
+});
+
+describe(&quot;RGB.toString()&quot;, () =&gt; {
+	it(&quot;should return the RGB in string format&quot;, () =&gt; {
+		const result = subjects.rgb.toString();
+
+		expect(result).to.be.an(&quot;string&quot;);
+		expect(result).to.equal(&quot;5, 10, 15&quot;);
+	});
+});
+
+describe(&quot;RGBA.toString()&quot;, () =&gt; {
+	it(&quot;should return the RGBA in string format&quot;, () =&gt; {
+		const result = subjects.rgba.toString();
+
+		expect(result).to.be.an(&quot;string&quot;);
+		expect(result).to.equal(&quot;5, 10, 15, 20&quot;);
+	});
+});
+
+describe(&quot;Collection.at()&quot;, () =&gt; {
+	it(&quot;should return the item located in the specified index&quot;, () =&gt; {
+		const result1 = subjects.collection.at(0);
+		const result2 = subjects.collection.at(1);
+
+		// Result 1
+		expect(result1).to.be.an(&quot;string&quot;);
+		expect(result1).to.equal(&quot;hello&quot;);
+
+		// Result 2
+		expect(result2).to.be.an(&quot;string&quot;);
+		expect(result2).to.equal(&quot;it&apos;s me&quot;);
+	});
+});
+
+describe(&quot;Collection.removeAt()&quot;, () =&gt; {
+	it(&quot;should remove the item located in the specified index&quot;, () =&gt; {
+		const result1 = subjects.collection.removeAt(0);
+		const result2 = subjects.collection.removeAt(5);
+
+		// Result 1
+		expect(result1).to.be.an(&quot;boolean&quot;);
+		expect(result1).to.equal(true);
+		expect(subjects.collection.at(0)).to.be.an(&quot;string&quot;);
+		expect(subjects.collection.at(0)).to.equal(&quot;it&apos;s me&quot;);
+
+		// Result 2
+		expect(result2).to.be.an(&quot;boolean&quot;);
+		expect(result2).to.equal(false);
+	});
+});
+
+describe(&quot;Collection.add()&quot;, () =&gt; {
+	it(&quot;should add an item to the collection&quot;, () =&gt; {
+		subjects.collection.add(&quot;john doe&quot;);
+		expect(subjects.collection.at(0)).to.be.an(&quot;string&quot;);
+		expect(subjects.collection.at(0)).to.equal(&quot;it&apos;s me&quot;);
+		expect(subjects.collection.at(1)).to.be.an(&quot;object&quot;);
+	});
+});
+
+describe(&quot;Collection.addUnique()&quot;, () =&gt; {
+	it(&quot;should add an unique item&quot;, () =&gt; {
+		const result1 = subjects.collection.addUnique(&quot;doe&quot;);
+		const result2 = subjects.collection.addUnique(&quot;doe&quot;);
+
+		// Result 1
+		expect(result1).to.be.an(&quot;boolean&quot;);
+		expect(result1).to.equal(true);
+
+		// Result 2
+		expect(result2).to.be.an(&quot;boolean&quot;);
+		expect(result2).to.equal(false);
+	});
+});
+
+describe(&quot;Collection.contains()&quot;, () =&gt; {
+	it(&quot;should determine whether the collection contains an item&quot;, () =&gt; {
+		const result1 = subjects.collection.contains(&quot;john doe&quot;);
+		const result2 = subjects.collection.contains(&quot;nope&quot;);
+
+		// Result 1
+		expect(result1).to.be.an(&quot;boolean&quot;);
+		expect(result1).to.equal(true);
+
+		// Result 2
+		expect(result2).to.be.an(&quot;boolean&quot;);
+		expect(result2).to.equal(false);
+	});
+});
+
+describe(&quot;Collection.find()&quot;, () =&gt; {
+	it(&quot;should find an item by its property&quot;, () =&gt; {
+		const result = subjects.collection.find(&quot;name&quot;, &quot;John Doe&quot;);
+
+		expect(result).to.be.an(&quot;object&quot;);
+		expect(result.name).to.be.an(&quot;string&quot;);
+		expect(result.name).to.equal(&quot;John Doe&quot;);
+	});
+});
+
+describe(&quot;ObjectAdapter.get()&quot;, () =&gt; {
+	it(&quot;should return the item in the specified path&quot;, () =&gt; {
+		const result = subjects.objAdapter.get(&quot;person.doe&quot;);
+
+		expect(result).to.be.an(&quot;object&quot;);
+		expect(result.name).to.be.an(&quot;string&quot;);
+		expect(result.name).to.equal(&quot;John Doe&quot;);
+	});
+});
+
+describe(&quot;ObjectAdapter.set()&quot;, () =&gt; {
+	it(&quot;should set data in the item at the specified path&quot;, () =&gt; {
+		subjects.objAdapter.set(&quot;person.doe.name&quot;, &quot;Doe John&quot;);
+
+		const result = subjects.objAdapter.get(&quot;person.doe.name&quot;);
+
+		expect(result).to.be.an(&quot;string&quot;);
+		expect(result).to.equal(&quot;Doe John&quot;);
+	});
+});
+
+describe(&quot;Schema.validate()&quot;, () =&gt; {
+	it(&quot;should determine whether a structure is valid&quot;, () =&gt; {
+		const result1 = Schema.validate(subjects.schema.struct, subjects.schema.schema);
+
+		subjects.schema.struct.age = &quot;hai&quot;;
+
+		const result2 = Schema.validate(subjects.schema.struct, subjects.schema.schema);
+
+		// Result 1
+		expect(result1).to.be.an(&quot;boolean&quot;);
+		expect(result1).to.equal(true);
+
+		// Result 2
+		expect(result2).to.be.an(&quot;boolean&quot;);
+		expect(result2).to.equal(false);
 	});
 });
 </code></pre>

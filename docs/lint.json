@@ -5,31 +5,31 @@
     "lines": [
       {
         "lineNumber": 174,
-        "line": "\t/**\r"
+        "line": "\t/**"
       },
       {
         "lineNumber": 175,
-        "line": "\t * Merge guild data\r"
+        "line": "\t * Merge guild data"
       },
       {
         "lineNumber": 176,
-        "line": "\t * @param {*} value\r"
+        "line": "\t * @param {*} value"
       },
       {
         "lineNumber": 177,
-        "line": "\t * @param {String} path\r"
+        "line": "\t * @param {String} path"
       },
       {
         "lineNumber": 178,
-        "line": "\t * @param {(Snowflake|Null)} [guildId=null]\r"
+        "line": "\t * @param {(Snowflake|Null)} [guildId=null]"
       },
       {
         "lineNumber": 179,
-        "line": "\t */\r"
+        "line": "\t */"
       },
       {
         "lineNumber": 180,
-        "line": "\tmerge(path, value, guildId = null) {\r"
+        "line": "\tmerge(path, value, guildId = null) {"
       }
     ],
     "codeParams": [

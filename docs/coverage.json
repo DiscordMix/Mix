@@ -1,6 +1,6 @@
 {
-  "coverage": "79.09%",
-  "expectCount": 330,
+  "coverage": "78.85%",
+  "expectCount": 331,
   "actualCount": 261,
   "files": {
     "src/collections/collection.js": {
@@ -283,10 +283,11 @@
       ]
     },
     "src/test/tests.js": {
-      "expectCount": 1,
+      "expectCount": 2,
       "actualCount": 0,
       "undocumentLines": [
-        3
+        8,
+        10
       ]
     },
     "src/time/time-parser.js": {

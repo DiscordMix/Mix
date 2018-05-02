@@ -10,3 +10,10 @@ Anvil is a powerful fully-modular, self-contained bot development framework.
 => [Click here to view the docs](https://cloudrex.github.io/Anvil/)
 
 *Powering the Tux and War bots.*
+
+#### Building
+To build the project, use `npm run build`.
+
+To build the docs, use `npm run docs`.
+
+Make sure that you have previously installed the project dependencies (`npm install`).

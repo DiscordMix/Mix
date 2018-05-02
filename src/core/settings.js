@@ -8,13 +8,33 @@ export default class Settings {
 	 */
 	constructor(path) {
 		if (fs.existsSync(path)) {
+			/**
+			 * @type {String}
+			 * @private
+			 * @readonly
+			 */
 			this.path = path;
 
 			const jsonObj = JSON.parse(fs.readFileSync(path).toString());
 
-			// TODO: should be automatic
+			// TODO: Should be automatic
+			// TODO: Should be validated using Schema
+			/**
+			 * @type {Object}
+			 * @readonly
+			 */
 			this.general = jsonObj.general;
+
+			/**
+			 * @type {Object}
+			 * @readonly
+			 */
 			this.keys = jsonObj.keys;
+
+			/**
+			 * @type {Object}
+			 * @readonly
+			 */
 			this.log = jsonObj.log;
 		}
 		else {

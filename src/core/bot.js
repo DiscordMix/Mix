@@ -10,6 +10,7 @@ import FeatureManager from "../features/feature-manager";
 import CommandLoader from "../commands/command-loader";
 import Log from "./log";
 import Schema from "../schema/schema";
+import DataAdapter from "../data-adapters/data-adapter";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -39,7 +40,8 @@ export default class Bot extends EventEmitter {
 			"paths.emojis": "string",
 			"paths.commands": "string",
 			"paths.accessLevels": "string",
-			argumentTypes: "object"
+			argumentTypes: "object",
+			dataAdapter: DataAdapter
 		})) {
 			Log.throw("[Bot.setup] Invalid data provided.");
 		}

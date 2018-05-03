@@ -6,6 +6,8 @@
   <img alt="Documentation" src="https://cloudrex.github.io/Anvil/badge.svg">
 </p>
 
+<br/>
+
 Anvil is a powerful fully-modular, self-contained bot development framework.
 
 **Note**: Anvil is a Discord client wrapper and not a Discord API library.

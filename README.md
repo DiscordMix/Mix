@@ -59,6 +59,7 @@ commands/hello.js:
 const AccessLevelType = require("discord-anvil").AccessLevelType;
 const CommandCategoryType = require("discord-anvil").CommandCategoryType;
 
+// Export the command to be automatically loaded
 module.exports = {
 	// When the command is executed
 	executed(context) {

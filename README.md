@@ -3,7 +3,7 @@
 [![Documentation](https://cloudrex.github.io/Anvil/badge.svg)](https://cloudrex.github.io/Anvil/)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/CloudRex/Anvil/master/logo.png">
+  <img src="https://raw.githubusercontent.com/CloudRex/Anvil/master/logo2.png">
 </p>
 
 Anvil is a powerful fully-modular, self-contained bot development framework.

@@ -61,10 +61,10 @@ export default class Bot extends EventEmitter {
 		this.dataAdapter = data.dataAdapter;
 
 		/**
-		 * @type {EmojiCollection}
+		 * @type {(EmojiCollection|Null)}
 		 * @readonly
 		 */
-		this.emojis = EmojiCollection.fromFile(data.paths.emojis);
+		this.emojis = data.paths.emojis ? EmojiCollection.fromFile(data.paths.emojis) : null;
 
 		/**
 		 * @type {Discord.Client}

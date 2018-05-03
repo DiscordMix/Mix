@@ -14,19 +14,20 @@ export default class Schema {
 
 			let type = schema[keys[i]];
 
-			if (type && type.startsWith("?")) {
-				type = type.substring(1);
-
-				if (value === undefined) {
-					continue;
-				}
-			}
 			if (typeof type === "string") {
+				if (type.startsWith("?")) {
+					type = type.substring(1);
+
+					if (value === undefined) {
+						continue;
+					}
+				}
+
 				if (typeof value !== type) {
 					return false;
 				}
 			}
-			else if (typeof type === "object") {
+			else if (typeof type === "object" || typeof type === "function") {
 				if (!(value instanceof type)) {
 					return false;
 				}

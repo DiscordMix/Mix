@@ -25,17 +25,22 @@ First, make sure to install Anvil: `npm install discord-anvil --save`
 index.js:
 ```js
 const { Bot, ObjectAdapter } = require("discord-anvil");
+const path = require("path");
 
+// Create the bot
 const bot = new Bot({
     paths: {
     	settings: "settings.json",
     	accessLevels: "access-levels.json",
-    	commands: "commands"
+    	commands: path.join(__dirname, "commands")
     },
-    
+
     argumentTypes: {},
     dataAdapter: new ObjectAdapter()
 });
+
+// Connect the client
+bot.connect();
 ```
 
 settings.json: ([Click here](https://discordapp.com/developers/applications/me) to find your bot's token)

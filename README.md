@@ -3,7 +3,7 @@
 [![Documentation](https://cloudrex.github.io/Anvil/badge.svg)](https://cloudrex.github.io/Anvil/)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/CloudRex/Anvil/master/logo2.png">
+  <img alt="Anvil Logo" src="https://raw.githubusercontent.com/CloudRex/Anvil/master/logo2.png">
 </p>
 
 Anvil is a powerful fully-modular, self-contained bot development framework.
@@ -99,3 +99,7 @@ To build the project, use `npm run build`.
 To build the docs, use `npm run docs`.
 
 Make sure that you have previously installed the project dependencies (`npm install`).
+
+
+#### Versioning
+When contributing, please follow the [Semantic Versioning](https://semver.org/) guidelines.

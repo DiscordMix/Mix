@@ -77,7 +77,6 @@
 	 * @param {String} base
 	 * @param {String} description
 	 * @param {Array&lt;String&gt;} aliases
-	 * @param {Number} maxArguments
 	 * @param {AccessLevelType} accessLevel
 	 * @param {Function} onExecuted
 	 * @param {Function} canExecute
@@ -85,7 +84,7 @@
 	 * @param {Object} args
 	 * @param {Boolean} isEnabled
 	 */
-	constructor(base, description, aliases, maxArguments, accessLevel, onExecuted, canExecute, category, args, isEnabled) {
+	constructor(base, description, aliases, accessLevel, onExecuted, canExecute, category, args, isEnabled) {
 		/**
 		 * @type {String}
 		 * @readonly
@@ -103,12 +102,6 @@
 		 * @readonly
 		 */
 		this.aliases = aliases;
-
-		/**
-		 * @type {Number}
-		 * @readonly
-		 */
-		this.maxArguments = maxArguments;
 
 		/**
 		 * @type {AccessLevelType}
@@ -147,6 +140,20 @@
 		this.isEnabled = isEnabled;
 	}
 
+	get maxArguments() {
+		const keys = Object.keys(this.args);
+
+		let result = 0;
+
+		for (let i = 0; i &lt; keys.length; i++) {
+			if (this.args[keys[i]].startsWith(&quot;!&quot;)) {
+				result++;
+			}
+		}
+
+		return result;
+	}
+
 	/**
 	 * @param {Object} module
 	 * @returns {Command}
@@ -156,7 +163,6 @@
 			module.meta.name,
 			module.meta.description,
 			module.meta.aliases,
-			module.meta.maxArguments,
 			module.meta.accessLevel,
 			module.executed,
 			module.canExecute,

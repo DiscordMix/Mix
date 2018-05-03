@@ -83,15 +83,16 @@
 <p><br></p>
 <p>Anvil is a powerful fully-modular, self-contained bot development framework.</p>
 <p><strong>Note</strong>: Anvil is a Discord client wrapper and not a Discord API library.</p>
+<p>=&gt; <a href="https://www.npmjs.com/package/discord-anvil">Click here to view the NPM package</a></p>
 <p>=&gt; <a href="https://cloudrex.github.io/Anvil/">Click here to view the docs</a></p>
 <p><em>Powering the <a href="https://github.com/CloudRex/Tux">Tux</a> and <a href="https://github.com/CloudRex/War">War</a> bots. | Powered by <a href="https://discord.js.org/">Discord.js</a></em></p>
-<h4 id="quick-start">Quick Start</h4><p>index.js:</p>
+<h4 id="quick-start">Quick Start</h4><p>First, make sure to install Anvil: <code>npm install discord-anvil --save</code></p>
+<p>index.js:</p>
 <pre><code class="lang-js"><code class="source-code prettyprint">const { Bot, ObjectAdapter } = require(&quot;discord-anvil&quot;);
 
 const bot = new Bot({
     paths: {
         settings: &quot;settings.json&quot;,
-        emojis: &quot;emojis.json&quot;,
         accessLevels: &quot;access-levels.json&quot;,
         commands: &quot;commands&quot;
     },
@@ -142,15 +143,11 @@ module.exports = {
         description: &quot;Hello world&quot;, // The description of the command
         accessLevel: AccessLevelType.Member, // Who can issue this command
         aliases: [], // Aliases of this command
-        maxArguments: 0, // The maximum argument that this command can accept
         args: {},
         category: CommandCategoryType.Utility, // The category of the command
         enabled: true // Whether this command is enabled and can be executed
     }
 };</code>
-</code></pre>
-<p>emojis.json:</p>
-<pre><code class="lang-json"><code class="source-code prettyprint">[]</code>
 </code></pre>
 <h4 id="building">Building</h4><p>To build the project, use <code>npm run build</code>.</p>
 <p>To build the docs, use <code>npm run docs</code>.</p>

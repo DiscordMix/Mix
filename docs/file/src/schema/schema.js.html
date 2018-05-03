@@ -84,18 +84,29 @@ export default class Schema {
 		const keys = Object.keys(schema);
 
 		for (let i = 0; i &lt; keys.length; i++) {
-			if (typeof schema[keys[i]] === &quot;string&quot;) {
-				if (typeof _.get(struct, keys[i]) !== schema[keys[i]]) {
+			const value = _.get(struct, keys[i]);
+
+			let type = schema[keys[i]];
+
+			if (type.startsWith(&quot;?&quot;)) {
+				type = type.substring(1);
+
+				if (value === undefined) {
+					continue;
+				}
+			}
+			if (typeof type === &quot;string&quot;) {
+				if (typeof value !== type) {
 					return false;
 				}
 			}
-			else if (typeof schema[keys[i]] === &quot;object&quot;) {
-				if (!(_.get(struct, keys[i]) instanceof schema[keys[i]])) {
+			else if (typeof type === &quot;object&quot;) {
+				if (!(value instanceof type)) {
 					return false;
 				}
 			}
 			else {
-				throw new Error(`[Schema.validate] Expecting string or object type but got &apos;${typeof schema[keys[i]]}&apos;`);
+				throw new Error(`[Schema.validate] Expecting string or object type but got &apos;${typeof type}&apos;`);
 			}
 		}
 

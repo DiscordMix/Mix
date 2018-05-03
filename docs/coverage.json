@@ -1,7 +1,7 @@
 {
-  "coverage": "78.85%",
+  "coverage": "78.54%",
   "expectCount": 331,
-  "actualCount": 261,
+  "actualCount": 260,
   "files": {
     "src/collections/collection.js": {
       "expectCount": 11,
@@ -71,9 +71,10 @@
     },
     "src/commands/command.js": {
       "expectCount": 13,
-      "actualCount": 12,
+      "actualCount": 11,
       "undocumentLines": [
-        1
+        1,
+        69
       ]
     },
     "src/console/console-command.js": {

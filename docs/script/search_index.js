@@ -1021,7 +1021,7 @@ window.esdocSearchIndex = [
   ],
   [
     "src/commands/command.js~command#maxarguments",
-    "class/src/commands/command.js~Command.html#instance-member-maxArguments",
+    "class/src/commands/command.js~Command.html#instance-get-maxArguments",
     "src/commands/command.js~Command#maxArguments",
     "member"
   ],

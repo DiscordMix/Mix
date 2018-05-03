@@ -24,6 +24,8 @@
 		"no-restricted-globals": "off",
 		"no-mixed-operators": "off",
 		"no-bitwise": "off",
-		"no-param-reassign": "off"
+		"no-param-reassign": "off",
+		"valid-typeof": "off",
+		"no-continue": "off"
 	}
 }

@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl">
-  <title data-ice="title">Home | discord-anvil</title>
+  <title data-ice="title">Home | Anvil</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
-<meta name="description" content="Powerful Discord bot framework"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="discord-anvil"><meta property="twitter:description" content="Powerful Discord bot framework"></head>
+<meta name="description" content="Powerful Discord bot-making framework"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="Anvil"><meta property="twitter:description" content="Powerful Discord bot-making framework"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
-  <a href="./">Home</a>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
   
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/CloudRex/Anvil"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -71,20 +71,91 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><p><a href="https://travis-ci.org/CloudRex/Anvil"><img src="https://travis-ci.org/CloudRex/Anvil.svg?branch=master" alt="Build Status"></a>
-<a href="https://badge.fury.io/js/discord-anvil"><img src="https://badge.fury.io/js/discord-anvil.svg" alt="npm version"></a>
-<img src="https://cloudrex.github.io/Anvil/badge.svg" alt="Documentation"></p>
-<h2 id="anvil">Anvil</h2><p>Anvil is a powerful fully-modular, self-contained bot development framework.</p>
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><p></p><p>
+  <img src="https://raw.githubusercontent.com/CloudRex/Anvil/master/logo2.png">
+  <br>
+  <img src="https://travis-ci.org/CloudRex/Anvil.svg?branch=master">
+  <img src="https://badge.fury.io/js/discord-anvil.svg">
+  <img src="https://cloudrex.github.io/Anvil/badge.svg">
+</p>
+
+<p></p>
+<p><br></p>
+<p>Anvil is a powerful fully-modular, self-contained bot development framework.</p>
 <p><strong>Note</strong>: Anvil is a Discord client wrapper and not a Discord API library.</p>
 <p>=&gt; <a href="https://cloudrex.github.io/Anvil/">Click here to view the docs</a></p>
 <p><em>Powering the <a href="https://github.com/CloudRex/Tux">Tux</a> and <a href="https://github.com/CloudRex/War">War</a> bots. | Powered by <a href="https://discord.js.org/">Discord.js</a></em></p>
-<h4 id="quick-start">Quick Start</h4><pre><code class="lang-js"><code class="source-code prettyprint">const Anvil = require(&quot;discord-anvil&quot;);
+<h4 id="quick-start">Quick Start</h4><p>index.js:</p>
+<pre><code class="lang-js"><code class="source-code prettyprint">const { Bot, ObjectAdapter } = require(&quot;discord-anvil&quot;);
 
-</code>
+const bot = new Bot({
+    paths: {
+        settings: &quot;settings.json&quot;,
+        emojis: &quot;emojis.json&quot;,
+        accessLevels: &quot;access-levels.json&quot;,
+        commands: &quot;commands&quot;
+    },
+
+    argumentTypes: {},
+    dataAdapter: new ObjectAdapter()
+});</code>
+</code></pre>
+<p>settings.json: (<a href="https://discordapp.com/developers/applications/me">Click here</a> to find your bot&apos;s token)</p>
+<pre><code class="lang-json"><code class="source-code prettyprint">{
+    &quot;general&quot;: {
+        &quot;token&quot;: &quot;&lt;Your bot&apos;s token here&gt;&quot;,
+        &quot;commandTrigger&quot;: &quot;!&quot;
+    }
+}</code>
+</code></pre>
+<p>access-levels.json:</p>
+<pre><code class="lang-json"><code class="source-code prettyprint">{
+    &quot;Guest&quot;: [],
+    &quot;Member&quot;: [
+        &quot;@everyone&quot;
+    ],
+    &quot;Premium&quot;: [],
+    &quot;Moderator&quot;: [],
+    &quot;Admin&quot;: [],
+    &quot;Owner&quot;: [],
+    &quot;Developer&quot;: [&quot;&lt;Your Discord user ID here&gt;&quot;]
+}</code>
+</code></pre>
+<p>commands/hello.js:</p>
+<pre><code class="lang-js"><code class="source-code prettyprint">const { AccessLevelType, CommandCategoryType } = require(&quot;discord-anvil&quot;);
+
+// Export the command to be automatically loaded
+module.exports = {
+    // When the command is executed
+    executed(context) {
+        context.ok(&quot;Hello world!&quot;);
+    },
+
+    // Whether the command can execute in the current state
+    canExecute(context) {
+        return true;
+    },
+
+    // Information about the command
+    meta: {
+        name: &quot;hello&quot;, // The name of the command
+        description: &quot;Hello world&quot;, // The description of the command
+        accessLevel: AccessLevelType.Member, // Who can issue this command
+        aliases: [], // Aliases of this command
+        maxArguments: 0, // The maximum argument that this command can accept
+        args: {},
+        category: CommandCategoryType.Utility, // The category of the command
+        enabled: true // Whether this command is enabled and can be executed
+    }
+};</code>
+</code></pre>
+<p>emojis.json:</p>
+<pre><code class="lang-json"><code class="source-code prettyprint">[]</code>
 </code></pre>
 <h4 id="building">Building</h4><p>To build the project, use <code>npm run build</code>.</p>
 <p>To build the docs, use <code>npm run docs</code>.</p>
 <p>Make sure that you have previously installed the project dependencies (<code>npm install</code>).</p>
+<h4 id="versioning">Versioning</h4><p>When contributing, please follow the <a href="https://semver.org/">Semantic Versioning</a> guidelines.</p>
 </div>
 </div>
 

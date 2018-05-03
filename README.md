@@ -2,7 +2,9 @@
 [![npm version](https://badge.fury.io/js/discord-anvil.svg)](https://badge.fury.io/js/discord-anvil)
 [![Documentation](https://cloudrex.github.io/Anvil/badge.svg)](https://cloudrex.github.io/Anvil/)
 
-![](https://raw.githubusercontent.com/CloudRex/Anvil/master/logo.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/CloudRex/Anvil/master/logo.png">
+</p>
 
 Anvil is a powerful fully-modular, self-contained bot development framework.
 

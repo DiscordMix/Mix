@@ -29,11 +29,11 @@ const bot = new Anvil.Bot({
 });
 ```
 
-settings.json:
+settings.json: ([Click here](https://discordapp.com/developers/applications/me) to find your bot's token)
 ```json
 {
     "general": {
-        "token": "<Your token here>",
+        "token": "<Your bot token here>",
         "commandTrigger": "!"
     }
 }

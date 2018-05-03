@@ -66,6 +66,20 @@ export default class Command {
 		this.isEnabled = isEnabled;
 	}
 
+	get maxArguments() {
+		const keys = Object.keys(this.args);
+
+		let result = 0;
+
+		for (let i = 0; i < keys.length; i++) {
+			if (this.args[keys[i]].startsWith("!")) {
+				result++;
+			}
+		}
+
+		return result;
+	}
+
 	/**
 	 * @param {Object} module
 	 * @returns {Command}

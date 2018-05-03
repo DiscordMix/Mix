@@ -3,7 +3,6 @@ import RGB from "../core/rgb";
 import RGBA from "../core/rgba";
 import Collection from "../collections/collection";
 import ObjectStore from "../data-stores/object-store";
-import Schema from "../schema/schema";
 
 const { expect } = require("chai");
 
@@ -27,24 +26,7 @@ const subjects = {
 				name: "John Doe"
 			}
 		}
-	}),
-
-	schema: {
-		struct: {
-			name: "John Doe",
-			age: 69,
-			other: {
-				notes: "I liek turtles"
-			}
-		},
-
-		schema: {
-			name: "string",
-			age: "number",
-			"other.notes": "string",
-			"other.about": "?string"
-		}
-	}
+	})
 };
 
 describe("Utils.resolveId()", () => {
@@ -237,23 +219,5 @@ describe("ObjectStore.set()", () => {
 
 		expect(result).to.be.an("string");
 		expect(result).to.equal("Doe John");
-	});
-});
-
-describe("Schema.validate()", () => {
-	it("should determine whether a structure is valid", () => {
-		const result1 = Schema.validate(subjects.schema.struct, subjects.schema.schema);
-
-		subjects.schema.struct.age = "hai";
-
-		const result2 = Schema.validate(subjects.schema.struct, subjects.schema.schema);
-
-		// Result 1
-		expect(result1).to.be.an("boolean");
-		expect(result1).to.equal(true);
-
-		// Result 2
-		expect(result2).to.be.an("boolean");
-		expect(result2).to.equal(false);
 	});
 });

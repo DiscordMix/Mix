@@ -9,10 +9,10 @@ import Settings from "./settings";
 import FeatureManager from "../features/feature-manager";
 import CommandLoader from "../commands/command-loader";
 import Log from "./log";
-import Schema from "../schema/schema";
 import DataStore from "../data-stores/data-store";
 
 const Discord = require("discord.js");
+const Typer = require("@raxor1234/typer");
 const EventEmitter = require("events");
 const fs = require("fs");
 
@@ -36,16 +36,22 @@ export default class Bot extends EventEmitter {
 	 * @return {Promise}
 	 */
 	async setup(data) {
-		// TODO: Should use the Typer library (Typer needs update)
-		if (!Schema.validate(data, {
-			"paths.settings": "string",
-			"paths.emojis": "?string",
-			"paths.commands": "string",
-			"paths.authLevels": "string",
+		if (!Typer.validate({
+			paths: "!object",
 			argumentTypes: "object",
-			dataAdapter: DataStore
+			dataAdapter: ":dataStore"
+		}, data, {
+			dataStore: (val) => val instanceof DataStore
 		})) {
 			Log.throw("[Bot.setup] Invalid data provided.");
+		}
+		else if (!Typer.validate({
+			settings: "!string",
+			commands: "!string",
+			authLevels: "!string",
+			emojis: "string"
+		}, data.paths)) {
+			Log.throw("[Bot.setup] Invalid paths object.");
 		}
 
 		/**

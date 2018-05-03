@@ -19,7 +19,7 @@
 	],
 	"license": "MIT",
 	"dependencies": {
-		"@raxor1234/typer": "^1.0.0",
+		"@raxor1234/typer": "^1.0.1",
 		"argparse": "^1.0.10",
 		"colors": "latest",
 		"dblapi.js": "^2.0.0",

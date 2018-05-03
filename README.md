@@ -17,9 +17,9 @@ Anvil is a powerful fully-modular, self-contained bot development framework.
 #### Quick Start
 index.js:
 ```js
-const Anvil = require("discord-anvil");
+const { Bot, ObjectAdapter } = require("discord-anvil");
 
-const bot = new Anvil.Bot({
+const bot = new Bot({
     paths: {
     	settings: "settings.json",
     	emojis: "emojis.json",
@@ -28,7 +28,7 @@ const bot = new Anvil.Bot({
     },
     
     argumentTypes: {},
-    dataAdapter: new Anvil.ObjectAdapter()
+    dataAdapter: new ObjectAdapter()
 });
 ```
 
@@ -59,8 +59,7 @@ access-levels.json:
 
 commands/hello.js:
 ```js
-const AccessLevelType = require("discord-anvil").AccessLevelType;
-const CommandCategoryType = require("discord-anvil").CommandCategoryType;
+const { AccessLevelType, CommandCategoryType } = require("discord-anvil");
 
 // Export the command to be automatically loaded
 module.exports = {

@@ -3,7 +3,6 @@ export default class Command {
 	 * @param {String} base
 	 * @param {String} description
 	 * @param {Array<String>} aliases
-	 * @param {Number} maxArguments
 	 * @param {AccessLevelType} accessLevel
 	 * @param {Function} onExecuted
 	 * @param {Function} canExecute
@@ -11,7 +10,7 @@ export default class Command {
 	 * @param {Object} args
 	 * @param {Boolean} isEnabled
 	 */
-	constructor(base, description, aliases, maxArguments, accessLevel, onExecuted, canExecute, category, args, isEnabled) {
+	constructor(base, description, aliases, accessLevel, onExecuted, canExecute, category, args, isEnabled) {
 		/**
 		 * @type {String}
 		 * @readonly
@@ -29,12 +28,6 @@ export default class Command {
 		 * @readonly
 		 */
 		this.aliases = aliases;
-
-		/**
-		 * @type {Number}
-		 * @readonly
-		 */
-		this.maxArguments = maxArguments;
 
 		/**
 		 * @type {AccessLevelType}
@@ -82,7 +75,6 @@ export default class Command {
 			module.meta.name,
 			module.meta.description,
 			module.meta.aliases,
-			module.meta.maxArguments,
 			module.meta.accessLevel,
 			module.executed,
 			module.canExecute,

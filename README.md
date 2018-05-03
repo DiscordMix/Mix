@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.org/CloudRex/Anvil.svg?branch=master)](https://travis-ci.org/CloudRex/Anvil)
-[![npm version](https://badge.fury.io/js/discord-anvil.svg)](https://badge.fury.io/js/discord-anvil)
-[![Documentation](https://cloudrex.github.io/Anvil/badge.svg)](https://cloudrex.github.io/Anvil/)
-
 <p align="center">
   <img alt="Anvil Logo" src="https://raw.githubusercontent.com/CloudRex/Anvil/master/logo2.png">
+  <br />
+  <img alt="Build Status" src="https://travis-ci.org/CloudRex/Anvil.svg?branch=master">
+  <img alt="NPM Version" src="https://badge.fury.io/js/discord-anvil.svg">
+  <img alt="Documentation" src="https://cloudrex.github.io/Anvil/badge.svg">
 </p>
 
 Anvil is a powerful fully-modular, self-contained bot development framework.

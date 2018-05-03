@@ -26,7 +26,7 @@ export default class CommandLoader {
 			fs.readdir(this.commandManager.commandsPath, (error, files) => {
 				files.forEach((file) => {
 					if (!file.startsWith("@")) {
-						const modulePath = path.join(__dirname, this.commandManager.commandsPath, path.basename(file, ".js"));
+						const modulePath = path.join(this.commandManager.commandsPath, path.basename(file, ".js"));
 
 						console.log(modulePath);
 

@@ -60,23 +60,26 @@ const AccessLevelType = require("discord-anvil").AccessLevelType;
 const CommandCategoryType = require("discord-anvil").CommandCategoryType;
 
 module.exports = {
+	// When the command is executed
 	executed(context) {
 		context.ok("Hello world!");
 	},
-
+	
+	// Whether the command can execute in the current state
 	canExecute(context) {
 		return true;
 	},
-
+	
+	// Information about the command
 	meta: {
-		name: "hello",
-		description: "Hello world",
-		accessLevel: AccessLevelType.Member,
-		aliases: [],
-		maxArguments: 0,
+		name: "hello", // The name of the command
+		description: "Hello world", // The description of the command
+		accessLevel: AccessLevelType.Member, // Who can issue this command
+		aliases: [], // Aliases of this command
+		maxArguments: 0, // The maximum argument that this command can accept
 		args: {},
-		category: CommandCategoryType.Utility,
-		enabled: true
+		category: CommandCategoryType.Utility, // The category of the command
+		enabled: true // Whether this command is enabled and can be executed
 	}
 };
 ```

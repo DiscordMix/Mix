@@ -14,7 +14,7 @@ export default class Schema {
 
 			let type = schema[keys[i]];
 
-			if (type.startsWith("?")) {
+			if (type && type.startsWith("?")) {
 				type = type.substring(1);
 
 				if (value === undefined) {

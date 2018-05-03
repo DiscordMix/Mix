@@ -28,8 +28,6 @@ export default class CommandLoader {
 					if (!file.startsWith("@")) {
 						const modulePath = path.join(this.commandManager.commandsPath, path.basename(file, ".js"));
 
-						console.log(modulePath);
-
 						let module = require(modulePath);
 
 						// Support for ES6 compiled

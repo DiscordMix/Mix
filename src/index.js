@@ -13,17 +13,17 @@ module.exports = {
 	ConsoleCommand: require("./console/console-command").default,
 
 	// Core
-	AccessLevelType: require("./core/access-level-type").default,
+	AccessLevelType: require("./commands/access-level-type").default,
 	Bot: require("./core/bot").default,
-	EditableMessage: require("./core/editable-message").default,
-	EmbedBuilder: require("./core/embed-builder").default,
+	EditableMessage: require("./message/editable-message").default,
+	EmbedBuilder: require("./message/embed-builder").default,
 	Log: require("./core/log").default,
-	MessageBuilder: require("./core/message-builder").default,
+	MessageBuilder: require("./message/message-builder").default,
 	RGB: require("./core/rgb").default,
 	RGBA: require("./core/rgba").default,
 	Settings: require("./core/settings").default,
-	TimeParser: require("./core/time-parser").default,
-	TimeSuffixType: require("./core/time-suffix-type").default,
+	TimeParser: require("./time/time-parser").default,
+	TimeSuffixType: require("./time/time-suffix-type").default,
 	UserConfig: require("./core/user-config").default,
 	Utils: require("./core/utils").default,
 

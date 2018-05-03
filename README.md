@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/CloudRex/Anvil.svg?branch=master)](https://travis-ci.org/CloudRex/Anvil)
 [![npm version](https://badge.fury.io/js/discord-anvil.svg)](https://badge.fury.io/js/discord-anvil)
-![Documentation](https://cloudrex.github.io/Anvil/badge.svg)
+[![Documentation](https://cloudrex.github.io/Anvil/badge.svg)](https://cloudrex.github.io/Anvil/)
 
 ## Anvil
 Anvil is a powerful fully-modular, self-contained bot development framework.
@@ -33,7 +33,7 @@ settings.json: ([Click here](https://discordapp.com/developers/applications/me) 
 ```json
 {
     "general": {
-        "token": "<Your bot token here>",
+        "token": "<Your bot's token here>",
         "commandTrigger": "!"
     }
 }

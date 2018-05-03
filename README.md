@@ -54,6 +54,33 @@ access-levels.json:
 }
 ```
 
+commands/hello.js:
+```js
+const AccessLevelType = require("discord-anvil").AccessLevelType;
+const CommandCategoryType = require("discord-anvil").CommandCategoryType;
+
+module.exports = {
+	executed(context) {
+		context.ok("Hello world!");
+	},
+
+	canExecute(context) {
+		return true;
+	},
+
+	meta: {
+		name: "hello",
+		description: "Hello world",
+		accessLevel: AccessLevelType.Member,
+		aliases: [],
+		maxArguments: 0,
+		args: {},
+		category: CommandCategoryType.Utility,
+		enabled: true
+	}
+};
+```
+
 emojis.json:
 ```json
 []

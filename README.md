@@ -86,7 +86,6 @@ module.exports = {
 		description: "Hello world", // The description of the command
 		accessLevel: AccessLevelType.Member, // Who can issue this command
 		aliases: [], // Aliases of this command
-		maxArguments: 0, // The maximum argument that this command can accept
 		args: {},
 		category: CommandCategoryType.Utility, // The category of the command
 		enabled: true // Whether this command is enabled and can be executed

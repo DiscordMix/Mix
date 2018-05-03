@@ -41,7 +41,8 @@ const subjects = {
 		schema: {
 			name: "string",
 			age: "number",
-			"other.notes": "string"
+			"other.notes": "string",
+			"other.about": "?string"
 		}
 	}
 };

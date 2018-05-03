@@ -17,7 +17,7 @@ export default class Schema {
 			if (type.startsWith("?")) {
 				type = type.substring(1);
 
-				if (value === null) {
+				if (value === undefined) {
 					continue;
 				}
 			}

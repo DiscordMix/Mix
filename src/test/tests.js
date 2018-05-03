@@ -2,7 +2,7 @@ import Utils from "../core/utils";
 import RGB from "../core/rgb";
 import RGBA from "../core/rgba";
 import Collection from "../collections/collection";
-import ObjectAdapter from "../data-adapters/object-adapter";
+import ObjectStore from "../data-stores/object-store";
 import Schema from "../schema/schema";
 
 const { expect } = require("chai");
@@ -21,7 +21,7 @@ const subjects = {
 		name: "John Doe"
 	}]),
 
-	objAdapter: new ObjectAdapter({
+	objAdapter: new ObjectStore({
 		person: {
 			doe: {
 				name: "John Doe"
@@ -219,7 +219,7 @@ describe("Collection.find()", () => {
 	});
 });
 
-describe("ObjectAdapter.get()", () => {
+describe("ObjectStore.get()", () => {
 	it("should return the item in the specified path", () => {
 		const result = subjects.objAdapter.get("person.doe");
 
@@ -229,7 +229,7 @@ describe("ObjectAdapter.get()", () => {
 	});
 });
 
-describe("ObjectAdapter.set()", () => {
+describe("ObjectStore.set()", () => {
 	it("should set data in the item at the specified path", () => {
 		subjects.objAdapter.set("person.doe.name", "Doe John");
 

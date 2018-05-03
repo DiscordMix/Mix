@@ -70,15 +70,6 @@ export default class Log {
 		}
 	}
 
-	channel(content, options) {
-		const guildLog = this.bot.dataAdapter.get("global.guild-log");
-		if (!guildLog.enabled) {
-			return;
-		}
-
-		this.bot.client.guilds.get(guildLog.guild).channels.get(guildLog.channel).send(content, options);
-	}
-
 	/**
 	 * @param {String} message
 	 * @param {String} color

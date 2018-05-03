@@ -1,13 +1,12 @@
-import ObjectAdapter from "./object-adapter";
-import DataAdapter from "./data-adapter";
+import ObjectStore from "./object-store";
 
 const fs = require("fs");
 const _ = require("lodash");
 
 /**
- * @extends ObjectAdapter
+ * @extends ObjectStore
  */
-export default class JsonAdapter extends ObjectAdapter {
+export default class JsonStore extends ObjectStore {
 	/**
 	 * @param {String} path
 	 */
@@ -70,43 +69,40 @@ export default class JsonAdapter extends ObjectAdapter {
 	/**
 	 * Retrieve guild data
 	 * @param {String} path
-	 * @param {(Snowflake|Null)} guildId
 	 * @returns {*}
 	 */
-	get(path, guildId = null) {
+	get(path) {
 		if (!this.loaded) {
-			throw new Error("[JsonAdapter.get] No data is currently loaded.");
+			throw new Error("[JsonStore.get] No data is currently loaded.");
 		}
 
-		return _.get(this.data, DataAdapter.resolvePath(path, guildId));
+		return _.get(this.data, path);
 	}
 
 	/**
 	 * Set guild data
 	 * @param {String} path
 	 * @param {*} value
-	 * @param {(Snowflake|Null)} guildId
 	 */
-	set(path, value, guildId = null) {
+	set(path, value) {
 		if (!this.loaded) {
-			throw new Error("[JsonAdapter.set] No data is currently loaded.");
+			throw new Error("[JsonStore.set] No data is currently loaded.");
 		}
 
-		_.set(this.data, DataAdapter.resolvePath(path, guildId), value);
+		_.set(this.data, path, value);
 	}
 
 	/**
 	 * Merge guild data
 	 * @param {String} path
 	 * @param {*} value
-	 * @param {(Snowflake|Null)} guildId
 	 */
-	merge(path, value, guildId = null) {
+	merge(path, value) {
 		if (!this.loaded) {
-			throw new Error("[JsonAdapter.merge] No data is currently loaded.");
+			throw new Error("[JsonStore.merge] No data is currently loaded.");
 		}
 
-		throw new Error("[JsonAdapter.merge] Method not implemented.");
+		throw new Error("[JsonStore.merge] Method not implemented.");
 	}
 
 	get loaded() {

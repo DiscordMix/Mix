@@ -1,9 +1,11 @@
-import DataAdapter from "./data-adapter";
+import DataStore from "./data-store";
+
+const mongodb = require("mongodb");
 
 /**
- * @extends DataAdapter
+ * @extends DataStore
  */
-export default class MongoDbAdapter extends DataAdapter {
+export default class MongodbStore extends DataStore {
 	/**
 	 * @param {String} url
 	 */
@@ -22,7 +24,7 @@ export default class MongoDbAdapter extends DataAdapter {
 		 * @private
 		 * @readonly
 		 */
-		this.client = require("mongodb").MongoClient;
+		this.client = mongodb.MongoClient;
 
 		/**
 		 * @type {*}
@@ -46,31 +48,28 @@ export default class MongoDbAdapter extends DataAdapter {
 
 	/**
 	 * Retrieve guild data
-	 * @param {Snowflake} guildId
 	 * @param {String} path
 	 * @returns {*}
 	 */
-	get(guildId, path) {
+	get(path) {
 		throw new Error("[MongoDb.get] Method not implemented.");
 	}
 
 	/**
 	 * Set guild data
-	 * @param {Snowflake} guildId
 	 * @param {String} path
 	 * @param {*} data
 	 */
-	set(guildId, path, data) {
+	set(path, data) {
 		throw new Error("[MongoDb.set] Method not implemented.");
 	}
 
 	/**
 	 * Merge guild data
-	 * @param {Snowflake} guildId
 	 * @param {String} path
 	 * @param {*} data
 	 */
-	merge(guildId, path, data) {
+	merge(path, data) {
 		throw new Error("[MongoDb.merge] Method not implemented.");
 	}
 }

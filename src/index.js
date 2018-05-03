@@ -45,11 +45,11 @@ module.exports = {
 	Feature: require("./features/feature").default,
 
 	// Data Adapters
-	DataAdapter: require("./data-adapters/data-adapter").default,
-	ObjectAdapter: require("./data-adapters/object-adapter").default,
-	JsonAdapter: require("./data-adapters/json-adapter").default,
-	SqliteAdapter: require("./data-adapters/sqlite-adapter").default,
-	MysqlAdapter: require("./data-adapters/mysql-adapter").default,
+	DataAdapter: require("./data-stores/data-store").default,
+	ObjectAdapter: require("./data-stores/object-store").default,
+	JsonAdapter: require("./data-stores/json-store").default,
+	SqliteAdapter: require("./data-stores/sqlite-store").default,
+	MysqlAdapter: require("./data-stores/mysql-store").default,
 
 	// Schema
 	Schema: require("./schema/schema").default,

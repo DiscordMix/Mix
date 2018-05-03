@@ -1,12 +1,12 @@
-import DataAdapter from "./data-adapter";
+import DataStore from "./data-store";
 
 const mysql = require("mysql");
 const _ = require("lodash");
 
 /**
- * @extends DataAdapter
+ * @extends DataStore
  */
-export default class MysqlAdapter extends DataAdapter {
+export default class MysqlStore extends DataStore {
 	/**
 	 * @param {Object} data
 	 */
@@ -35,7 +35,7 @@ export default class MysqlAdapter extends DataAdapter {
 
 	/**
 	 * Connect to the database
-	 * @returns {Promise<MysqlAdapter>}
+	 * @returns {Promise<MysqlStore>}
 	 */
 	connect() {
 		return new Promise((resolve, reject) => {
@@ -53,7 +53,7 @@ export default class MysqlAdapter extends DataAdapter {
 
 	/**
 	 * Disconnect from the database
-	 * @returns {Promise<MysqlAdapter>}
+	 * @returns {Promise<MysqlStore>}
 	 */
 	disconnect() {
 		return new Promise((resolve, reject) => {
@@ -104,12 +104,12 @@ export default class MysqlAdapter extends DataAdapter {
 	 */
 	async get(path, guildId = null) {
 		if (!this.loaded) {
-			throw new Error("[MysqlAdapter.get] No data is currently loaded.");
+			throw new Error("[MysqlStore.get] No data is currently loaded.");
 		}
 
 		let query = "SELECT * FROM ?? WHERE id = ?";
 
-		const splitPath = MysqlAdapter.cleanPath(path, guildId);
+		const splitPath = MysqlStore.cleanPath(path, guildId);
 
 		if (splitPath.length === 1) {
 			query = "SELECT * FROM ??";
@@ -151,12 +151,11 @@ export default class MysqlAdapter extends DataAdapter {
 	 */
 	async set(path, value, guildId = null) {
 		if (!this.loaded) {
-			throw new Error("[MysqlAdapter.set] No data is currently loaded.");
+			throw new Error("[MysqlStore.set] No data is currently loaded.");
 		}
 
 		const query = "UPDATE ?? SET ??=? WHERE  `id`=?;";
-
-		const splitPath = MysqlAdapter.cleanPath(path, guildId);
+		const splitPath = MysqlStore.cleanPath(path, guildId);
 
 		if (splitPath.length < 3) {
 			throw new Error(`[MysqlAdapter.set] Invalid path: ${path}`);
@@ -180,10 +179,10 @@ export default class MysqlAdapter extends DataAdapter {
 	 */
 	merge(path, value, guildId = null) {
 		if (!this.loaded) {
-			throw new Error("[MysqlAdapter.merge] No data is currently loaded.");
+			throw new Error("[MysqlStore.merge] No data is currently loaded.");
 		}
 
-		throw new Error("[MysqlAdapter.merge] Method not implemented.");
+		throw new Error("[MysqlStore.merge] Method not implemented.");
 	}
 
 	/**

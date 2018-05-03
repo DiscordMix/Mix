@@ -10,7 +10,7 @@ import FeatureManager from "../features/feature-manager";
 import CommandLoader from "../commands/command-loader";
 import Log from "./log";
 import Schema from "../schema/schema";
-import DataAdapter from "../data-adapters/data-adapter";
+import DataStore from "../data-stores/data-store";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -41,9 +41,9 @@ export default class Bot extends EventEmitter {
 			"paths.settings": "string",
 			"paths.emojis": "?string",
 			"paths.commands": "string",
-			"paths.accessLevels": "string",
+			"paths.authLevels": "string",
 			argumentTypes: "object",
-			dataAdapter: DataAdapter
+			dataAdapter: DataStore
 		})) {
 			Log.throw("[Bot.setup] Invalid data provided.");
 		}
@@ -55,7 +55,7 @@ export default class Bot extends EventEmitter {
 		this.settings = new Settings(data.paths.settings);
 
 		/**
-		 * @type {DataAdapter}
+		 * @type {DataStore}
 		 * @readonly
 		 */
 		this.dataAdapter = data.dataAdapter;
@@ -154,6 +154,8 @@ export default class Bot extends EventEmitter {
 					);
 				}
 				else if (message.content === "?prefix") {
+					console.log(this.settings.general);
+
 					message.channel.send(`Command prefix: **${this.settings.general.prefix}**`);
 				}
 			}
@@ -165,7 +167,7 @@ export default class Bot extends EventEmitter {
 	 * @return {Promise}
 	 */
 	async connect() {
-		this.log.info("Starting");
+		this.log.verbose("Starting");
 		await this.client.login(this.settings.general.token);
 	}
 
@@ -174,7 +176,7 @@ export default class Bot extends EventEmitter {
 	 * @return {Promise}
 	 */
 	async restart() {
-		this.log.info("Restarting");
+		this.log.verbose("Restarting");
 
 		// TODO: Actually reload all the features and commands
 		// this.features.reloadAll(this);

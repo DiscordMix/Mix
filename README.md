@@ -29,7 +29,6 @@ const { Bot, ObjectAdapter } = require("discord-anvil");
 const bot = new Bot({
     paths: {
     	settings: "settings.json",
-    	emojis: "emojis.json",
     	accessLevels: "access-levels.json",
     	commands: "commands"
     },
@@ -91,11 +90,6 @@ module.exports = {
 		enabled: true // Whether this command is enabled and can be executed
 	}
 };
-```
-
-emojis.json:
-```json
-[]
 ```
 
 #### Building

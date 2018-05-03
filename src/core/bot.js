@@ -39,7 +39,7 @@ export default class Bot extends EventEmitter {
 		// TODO: Should use the Typer library (Typer needs update)
 		if (!Schema.validate(data, {
 			"paths.settings": "string",
-			"paths.emojis": "string",
+			"paths.emojis": "?string",
 			"paths.commands": "string",
 			"paths.accessLevels": "string",
 			argumentTypes: "object",

@@ -74,8 +74,7 @@ export default class CommandLoader {
 			name: "string",
 			description: "string",
 			accessLevel: "number",
-			aliases: "object",
-			maxArguments: "number"
+			aliases: "object"
 		}, module.meta);
 
 		// TODO

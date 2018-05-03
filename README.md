@@ -48,7 +48,7 @@ settings.json: ([Click here](https://discordapp.com/developers/applications/me) 
 {
     "general": {
         "token": "<Your bot's token here>",
-        "commandTrigger": "!"
+        "prefix": "!"
     }
 }
 ```

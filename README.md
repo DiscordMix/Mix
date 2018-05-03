@@ -12,10 +12,51 @@ Anvil is a powerful fully-modular, self-contained bot development framework.
 *Powering the [Tux](https://github.com/CloudRex/Tux) and [War](https://github.com/CloudRex/War) bots. | Powered by [Discord.js](https://discord.js.org/)*
 
 #### Quick Start
+index.js:
 ```js
 const Anvil = require("discord-anvil");
 
+const bot = new Anvil.Bot({
+    paths: {
+    	settings: "settings.json",
+    	emojis: "emojis.json",
+    	accessLevels: "access-levels.json",
+    	commands: "commands"
+    },
+    
+    argumentTypes: {},
+    dataAdapter: new Anvil.ObjectAdapter()
+});
+```
 
+settings.json:
+```json
+{
+    "general": {
+        "token": "<Your token here>",
+        "commandTrigger": "!"
+    }
+}
+```
+
+access-levels.json:
+```json
+{
+	"Guest": [],
+	"Member": [
+		"@everyone"
+	],
+	"Premium": [],
+	"Moderator": [],
+	"Admin": [],
+	"Owner": [],
+	"Developer": ["<Your Discord user ID here>"]
+}
+```
+
+emojis.json:
+```json
+[]
 ```
 
 #### Building

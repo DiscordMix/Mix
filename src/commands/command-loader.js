@@ -47,7 +47,7 @@ export default class CommandLoader {
 					}
 				});
 
-				Log.verbose(`Loaded a total of ${files.length} commands`);
+				Log.success(`Loaded a total of ${files.length} commands`);
 				resolve();
 			});
 		});

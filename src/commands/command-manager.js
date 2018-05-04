@@ -136,8 +136,6 @@ export default class CommandManager /* extends Collection */ {
 			Log.debug("AssembleArguments: Not same length");
 		}
 
-		Log.debug(args);
-
 		for (let i = 0; i < rules.length; i++) {
 			result[rules[i]] = (isNaN(args[i]) ? args[i] : parseInt(args[i]));
 		}

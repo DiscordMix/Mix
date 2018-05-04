@@ -30,6 +30,25 @@ Below are the properties you may use to create your bot:
 | argumentTypes  | object    | Your custom argument types             | No        | {}            |
 | dataStore      | [DataStore](https://cloudrex.github.io/Anvil/class/src/data-stores/data-store.js~DataStore.html) | Your data store                        | No        | null          |
 
+Example:
+
+```js
+const { Bot, JsonAuthStore, JsonStore } = require("discord-anvil");
+
+const bot = new Bot({
+    paths: {
+    	settings: "settings.json",
+    	commands: "commands",
+    	emojis: "emojis.json"
+    },
+    
+    authStore: new JsonAuthStore("auth-schema.json", "auth-store.json"),
+    dataStore: new JsonStore("data-store.json")
+});
+
+...
+```
+
 ## Commands
 #### Creating Commands
 Commands are automatically loaded as modules. Below are the properties you may use to define your commands:
@@ -45,3 +64,28 @@ Commands are automatically loaded as modules. Below are the properties you may u
 | meta.args      | object        | The types of arguments that your command accepts | No        | {}            |
 | meta.enabled   | boolean       | Whether your command is enabled                  | No        | true          |
 | meta.aliases   | array(string) | Your command's aliases                           | No        | []            |
+
+Example:
+
+```js
+module.exports = {
+	executed(context) {
+		context.ok("Hello world!");
+	},
+	
+	canExecute(context) {
+		// Determine whether your command may execute
+		
+		return true;
+	},
+	
+	meta: {
+		name: "hello",
+		desc: "Display hello world",
+		authLevel: 0,
+		args: {},
+		enabled: true,
+		aliases: ["hi", "hey"]
+	}
+};
+```

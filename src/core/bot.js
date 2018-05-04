@@ -53,7 +53,6 @@ export default class Bot extends EventEmitter {
 		else if (!Typer.validate({
 			settings: "!string",
 			commands: "!string",
-			authLevels: "!string",
 			emojis: "string"
 		}, data.paths)) {
 			Log.throw("[Bot.setup] Invalid paths object");

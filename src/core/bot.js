@@ -36,6 +36,8 @@ export default class Bot extends EventEmitter {
 	 * @return {Promise}
 	 */
 	async setup(data) {
+		Log.verbose("[Bot.setup] Validating data object");
+
 		if (!Typer.validate({
 			paths: "!object",
 			argumentTypes: "object",
@@ -43,7 +45,7 @@ export default class Bot extends EventEmitter {
 		}, data, {
 			dataStore: (val) => val instanceof DataStore
 		})) {
-			Log.throw("[Bot.setup] Invalid data provided.");
+			Log.throw("[Bot.setup] Invalid data object provided");
 		}
 		else if (!Typer.validate({
 			settings: "!string",
@@ -51,7 +53,7 @@ export default class Bot extends EventEmitter {
 			authLevels: "!string",
 			emojis: "string"
 		}, data.paths)) {
-			Log.throw("[Bot.setup] Invalid paths object.");
+			Log.throw("[Bot.setup] Invalid paths object");
 		}
 
 		/**
@@ -82,7 +84,7 @@ export default class Bot extends EventEmitter {
 		 * @type {CommandManager}
 		 * @readonly
 		 */
-		this.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes);
+		this.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes ? data.argumentTypes : {});
 
 		/**
 		 * @type {FeatureManager}
@@ -119,7 +121,7 @@ export default class Bot extends EventEmitter {
 
 		// Load commands
 		await this.commandLoader.loadAll();
-		Log.verbose("Bot setup completed");
+		Log.success("Bot setup completed");
 	}
 
 	/**
@@ -127,6 +129,8 @@ export default class Bot extends EventEmitter {
 	 */
 	setupEvents() {
 		// TODO: Find better position
+		// TODO: Merge this resolvers with the (if provided) provided
+		// ones by the user.
 		const resolvers = {
 			user: (arg) => Utils.resolveId(arg),
 			channel: (arg) => Utils.resolveId(arg),
@@ -179,9 +183,11 @@ export default class Bot extends EventEmitter {
 
 	/**
 	 * Restart the bot's client
+	 * @todo Use the reload modules param
+	 * @param {Boolean} reloadModules Whether to reload all modules
 	 * @return {Promise}
 	 */
-	async restart() {
+	async restart(reloadModules = true) {
 		this.log.verbose("Restarting");
 
 		// TODO: Actually reload all the features and commands

@@ -1,7 +1,8 @@
 import AccessLevelType from "../commands/access-level-type";
-import CommandArgumentParser from "./command-argument-parser";
 import CommandExecutedEvent from "../events/command-executed-event";
 import CommandCategoryType from "./command-category-type";
+
+const Typer = require("@raxor1234/typer/typer");
 // import Collection from "../core/collection";
 
 export default class CommandManager /* extends Collection */ {
@@ -173,7 +174,7 @@ export default class CommandManager /* extends Collection */ {
 		else if (!command.canExecute(context)) {
 			context.fail("That command cannot be executed right now.");
 		}
-		else if (!CommandArgumentParser.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {
+		else if (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {
 			await context.fail("Invalid argument usage. Please use the `usage` command.");
 		}
 		else {

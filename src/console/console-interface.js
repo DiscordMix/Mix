@@ -47,6 +47,7 @@ export default class ConsoleInterface {
 			process.exit(0); */
 		});
 
+		// TODO: Should log before setting the prompt
 		Log.verbose("Console interface setup completed");
 	}
 }

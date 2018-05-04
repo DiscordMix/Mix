@@ -11,7 +11,8 @@
 		"build": "babel src --out-dir dist",
 		"test": "npm run build && mocha dist/test/tests.js",
 		"prepublish": "npm run build",
-		"docs": "./node_modules/.bin/esdoc"
+		"docs": "./node_modules/.bin/esdoc",
+		"rdocs": "npm run docs && git add docs/* && git commit -m 'Regenerated docs' && git push"
 	},
 	"author": "Phantom <private.phantom@outlook.com>",
 	"contributors": [

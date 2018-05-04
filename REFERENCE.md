@@ -3,11 +3,13 @@
     1. [Notes](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#notes)
 2. [Bot](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#bot)
     1. [Creating the bot](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#creating-the-bot)
+    2. [Events](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#events)
 3. [Commands](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#commands)
     1. [Creating Commands](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#creating-commands)
 
 ## Introduction
 #### Notes
+
 This file is intended to give you an in-depth guide to understanding and working with the Anvil framework.
 
 Here's some basic stuff you should know about Anvil:
@@ -19,6 +21,7 @@ Here's some basic stuff you should know about Anvil:
 
 ## Bot
 #### Creating the Bot
+
 Below are the properties you may use to create your bot:
 
 | Property       | Type      | Description                            | Required? | Default value |
@@ -49,8 +52,29 @@ const bot = new Bot({
 ...
 ```
 
+#### Events
+
+| Name               | Description                              | Event object                                                                                                                            |
+|--------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| commandWillExecute | Fired when before a command will execute | [CommandWillExecuteEvent](https://cloudrex.github.io/Anvil/class/src/events/command-will-execute-event.js~CommandWillExecuteEvent.html) |
+| commandExecuted    | Fired after a command has been executed  | [CommandExecutedEvent](https://cloudrex.github.io/Anvil/class/src/events/command-executed-event.js~CommandExecutedEvent.html)           |
+
+Example:
+
+```js
+...
+
+bot.on("commandWillExecute", (e) => {
+	if (e.command.name === "hello") {
+		e.prevent();
+		e.context.fail("You may not use this command!");
+	}
+});
+```
+
 ## Commands
 #### Creating Commands
+
 Commands are automatically loaded as modules. Below are the properties you may use to define your commands:
 
 

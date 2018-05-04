@@ -44,4 +44,4 @@ Commands are automatically loaded as modules. Below are the properties you may u
 | meta.authLevel | number        | The required authorization level of your command | No        | 0             |
 | meta.args      | object        | The types of arguments that your command accepts | No        | {}            |
 | meta.enabled   | boolean       | Whether your command is enabled                  | No        | true          |
-| meta.aliases   | array<string> | Your command's aliases                           | No        | []            |
+| meta.aliases   | array(string) | Your command's aliases                           | No        | []            |

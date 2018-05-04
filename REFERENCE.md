@@ -26,9 +26,9 @@ Below are the properties you may use to create your bot:
 | paths.settings | string    | The location of your settings file     | **Yes**   | -             |
 | paths.commands | string    | The directory containing your commands | **Yes**   | -             |
 | paths.emojis   | string    | The location of your emojis file       | No        | null          |
-| authStore      | AuthStore | Your authorization store               | **Yes**   | -             |
+| authStore      | [CommandAuthStore](https://cloudrex.github.io/Anvil/class/src/commands/command-auth-store.js~CommandAuthStore.html) | Your authorization store               | **Yes**   | -             |
 | argumentTypes  | object    | Your custom argument types             | No        | {}            |
-| dataStore      | DataStore | Your data store                        | No        | null          |
+| dataStore      | [DataStore](https://cloudrex.github.io/Anvil/class/src/data-stores/data-store.js~DataStore.html) | Your data store                        | No        | null          |
 
 ## Commands
 #### Creating Commands

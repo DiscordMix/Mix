@@ -44,7 +44,7 @@ const bot = new Bot({
      * it will be automatically created if it doesn't
      * exist.
      */
-    authStore: new JsonAuthStore("./auth-store.json")
+    authStore: new JsonAuthStore("auth-schema.json", "auth-store.json")
 });
 
 // Connect the client

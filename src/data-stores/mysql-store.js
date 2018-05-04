@@ -195,6 +195,7 @@ export default class MysqlStore extends DataStore {
 	}
 
 	/**
+	 * Determine whether any data is loaded
 	 * @returns {Boolean} Whether any data is currently loaded
 	 */
 	get loaded() {

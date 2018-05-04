@@ -105,6 +105,10 @@ export default class JsonStore extends ObjectStore {
 		throw new Error("[JsonStore.merge] Method not implemented.");
 	}
 
+	/**
+	 * Determine whether any data is loaded
+	 * @return {Boolean} Whether any data is currently loaded
+	 */
 	get loaded() {
 		return this.data !== null;
 	}

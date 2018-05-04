@@ -1,6 +1,7 @@
 import CommandAuthStore from "./command-auth-store";
 import Log from "../core/log";
-import * as Typer from "@raxor1234/typer/typer";
+
+const Typer = require("@raxor1234/typer");
 
 export default class ObjectAuthStore extends CommandAuthStore {
 	/**

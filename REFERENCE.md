@@ -1,10 +1,10 @@
 ## Table of Contents
-1. Introduction
-    1. Notes
-2. Bot
-    1. Creating the bot
-3. Commands
-    1. Creating Commands
+1. [Introduction](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#introduction)
+    1. [Notes](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#notes)
+2. [Bot](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#bot)
+    1. [Creating the bot](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#creating-the-bot)
+3. [Commands](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#commands)
+    1. [Creating Commands](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#creating-commands)
 
 ## Introduction
 #### Notes

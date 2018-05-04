@@ -1,6 +1,7 @@
 import Log from "./log";
 
 const fs = require("fs");
+const Typer = require("@raxor1234/typer/typer");
 
 export default class Settings {
 	/**
@@ -30,9 +31,12 @@ export default class Settings {
 			 * @readonly
 			 */
 			this.keys = jsonObj.keys;
+
+			// Validate settings after loading them
+			this.validate();
 		}
 		else {
-			Log.error("Could not load settings: File does not exist");
+			Log.throw("Could not load settings: File does not exist");
 		}
 	}
 
@@ -48,8 +52,11 @@ export default class Settings {
 
 	// TODO
 	validate() {
-		if (this.general.token === null) {
-			Log.error("[Settings] Token cannot be null or empty");
+		if (!Typer.validate({
+			token: "!string",
+			prefix: "!string"
+		}, this.general)) {
+			Log.throw("[Settings.validate] Invalid settings provided");
 		}
 	}
 }

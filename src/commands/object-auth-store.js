@@ -116,6 +116,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
 			}
 
 			this.data[guildId] = entry;
+			this.emit("guildCreated", guildId);
 
 			return true;
 		}

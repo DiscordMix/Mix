@@ -194,4 +194,15 @@ export default class CommandManager /* extends Collection */ {
 
 		return false;
 	}
+
+	/**
+	 * Unload all commands
+	 */
+	unloadAll() {
+		if (this.commands.length > 0) {
+			const count = this.commands.length;
+			this.commands = [];
+			Log.success(`[CommandManager.unloadAll] Unloaded ${count} command(s)`);
+		}
+	}
 }

@@ -22,12 +22,18 @@ export default class CommandLoader {
 	 */
 	async loadAll() {
 		return new Promise((resolve) => {
+			Log.verbose(`[CommandLoader.loadAll] Loading commands`);
+
+			this.commandManager.unloadAll();
+
 			fs.readdir(this.commandManager.path, (error, files) => {
 				let loaded = 0;
 
 				files.forEach((file) => {
+					const moduleName = path.basename(file, ".js");
+
 					if (!file.startsWith("@")) {
-						const modulePath = path.join(this.commandManager.path, path.basename(file, ".js"));
+						const modulePath = path.join(this.commandManager.path, moduleName);
 
 						let module = require(modulePath);
 
@@ -42,11 +48,11 @@ export default class CommandLoader {
 							loaded++;
 						}
 						else {
-							Log.warn(`[CommandLoader.loadAll] Skipping invalid command: ${path.basename(file, ".js")}`);
+							Log.warn(`[CommandLoader.loadAll] Skipping invalid command: ${moduleName}`);
 						}
 					}
 					else {
-						Log.verbose(`[CommandLoader.loadAll] Skipping command: ${path.basename(file, ".js")}`);
+						Log.verbose(`[CommandLoader.loadAll] Skipping command: ${moduleName}`);
 					}
 				});
 

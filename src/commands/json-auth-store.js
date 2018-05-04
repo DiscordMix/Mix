@@ -28,7 +28,13 @@ export default class JsonAuthStore extends ObjectAuthStore {
 		 */
 		this.storePath = storePath;
 
+		// Initially load the data
 		this.reload();
+
+		// Automatically save the currently loaded data when a guild is created
+		this.on("guildCreated", () => {
+			this.save();
+		});
 	}
 
 	/**
@@ -51,6 +57,15 @@ export default class JsonAuthStore extends ObjectAuthStore {
 	}
 
 	/**
+	 * Save the currently loaded data into the store file
+	 * @return {Promise}
+	 */
+	async save() {
+		await Utils.writeJson(this.storePath, this.data);
+	}
+
+	/**
+	 * Determine whether the store file exists
 	 * @return {Boolean} Whether the store file exists
 	 */
 	get exists() {

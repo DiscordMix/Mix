@@ -119,11 +119,12 @@ export default class Bot extends EventEmitter {
 		 */
 		this.menus = new EmojiMenuManager(this.client);
 
+		// Load commands
+		await this.commandLoader.loadAll();
+
 		// Setup the Discord client's events
 		this.setupEvents();
 
-		// Load commands
-		await this.commandLoader.loadAll();
 		Log.success("[Bot.setup] Bot setup completed");
 	}
 
@@ -143,7 +144,14 @@ export default class Bot extends EventEmitter {
 
 		// Discord client events
 		this.client.on("ready", () => {
-			this.console.setup(this);
+			if (!this.console.ready) {
+				// Setup the console command interface
+				this.console.setup(this);
+			}
+
+			// Setup the command auth store
+			this.setupAuthStore();
+
 			Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag}`);
 			Log.success("[Bot.setupEvents] Ready");
 		});
@@ -187,7 +195,7 @@ export default class Bot extends EventEmitter {
 		}
 
 		if (entries > 0) {
-			Log.success(`[Bot.setupAuthStore] Added a total of ${entries} auth store entries`);
+			Log.success(`[Bot.setupAuthStore] Added a total of ${entries} new auth store entries`);
 		}
 
 		Log.success("[Bot.setupAuthStore] Auth store setup completed");
@@ -200,9 +208,6 @@ export default class Bot extends EventEmitter {
 	async connect() {
 		Log.verbose("[Bot.connect] Starting");
 		await this.client.login(this.settings.general.token);
-
-		// Setup the command auth store
-		this.setupAuthStore();
 	}
 
 	/**
@@ -214,8 +219,11 @@ export default class Bot extends EventEmitter {
 	async restart(reloadModules = true) {
 		Log.verbose("[Bot.restart] Restarting");
 
-		// TODO: Actually reload all the features and commands
-		// this.features.reloadAll(this);
+		if (reloadModules) {
+			// TODO: Actually reload all the features and commands
+			// this.features.reloadAll(this);
+			await this.commandLoader.loadAll();
+		}
 
 		await this.disconnect();
 		await this.connect();

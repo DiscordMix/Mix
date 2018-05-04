@@ -3,10 +3,20 @@ import Log from "../core/log";
 const readline = require("readline");
 
 export default class ConsoleInterface {
+	constructor() {
+		/**
+		 * Whether the console interface has been successfully setup
+		 * @type {Boolean}
+		 */
+		this.ready = false;
+	}
+
 	/**
 	 * @param {Bot} bot
 	 */
 	setup(bot) {
+		Log.verbose("[ConsoleInterface] Setting up console interface");
+
 		const ci = readline.createInterface({
 			input: process.stdin,
 			output: process.stdout
@@ -33,6 +43,12 @@ export default class ConsoleInterface {
 					break;
 				}
 
+				case "restart": {
+					bot.restart();
+
+					break;
+				}
+
 				default: {
 					console.log(`Invalid command: ${input}`);
 				}
@@ -48,6 +64,7 @@ export default class ConsoleInterface {
 		});
 
 		// TODO: Should log before setting the prompt
-		Log.verbose("[ConsoleInterface.setup] Console interface setup completed");
+		this.ready = true;
+		Log.success("[ConsoleInterface.setup] Console interface setup completed");
 	}
 }

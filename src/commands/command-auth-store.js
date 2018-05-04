@@ -1,31 +1,13 @@
-import JsonStore from "../data-stores/json-store";
 import Log from "../core/log";
 
-export default class CommandAuthStore extends JsonStore {
-	/**
-	 * @param {String} path
-	 */
-	constructor(path) {
-		super(path);
-	}
-
+export default class CommandAuthStore {
 	/**
 	 * @abstract
 	 * @param {Snowflake} guildId
-	 * @param {Snowflake} userId
+	 * @param {*} identifier
 	 * @returns {Number}
 	 */
-	getAuthLevelById(guildId, userId) {
-		Log.throw("[CommandAuthStore] Method not implemented");
-	}
-
-	/**
-	 * @abstract
-	 * @param {Snowflake} guildId
-	 * @param {String} role
-	 * @returns {Number}
-	 */
-	getAuthLevelByRole(guildId, role) {
+	getAuthLevel(guildId, identifier) {
 		Log.throw("[CommandAuthStore] Method not implemented");
 	}
 
@@ -51,7 +33,6 @@ export default class CommandAuthStore extends JsonStore {
 	}
 
 	/**
-	 * @abstract
 	 * @param {Snowflake} guildId
 	 * @param {Discord.Message} message
 	 * @param {Number} authLevel

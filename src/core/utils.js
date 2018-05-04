@@ -3,6 +3,7 @@ import en from "javascript-time-ago/locale/en";
 
 TimeAgo.locale(en);
 
+const fs = require("fs");
 const timeAgo = new TimeAgo("en-US");
 
 export default class Utils {
@@ -23,7 +24,7 @@ export default class Utils {
 	/**
 	 * @param {Number} min
 	 * @param {Number} max
-	 * @returns {Number}
+	 * @return {Number}
 	 */
 	static getRandomInt(min, max) {
 		return Math.floor(Math.random() * max) + min;
@@ -31,7 +32,7 @@ export default class Utils {
 
 	/**
 	 * @param {Array} array
-	 * @returns {Array}
+	 * @return {Array}
 	 */
 	static shuffle(array) {
 		let counter = array.length;
@@ -59,7 +60,7 @@ export default class Utils {
 	 * @param {User} requester
 	 * @param {Discord.Channel} channel
 	 * @param {String} [footerSuffix=""]
-	 * @returns {Promise<Discord.Message>}
+	 * @return {Promise<Discord.Message>}
 	 */
 	static async send(options, requester, channel, footerSuffix = "") {
 		const optionsCpy = options;
@@ -87,7 +88,7 @@ export default class Utils {
 	 * @param {Number} [days=0]
 	 * @param {Number} [months=0]
 	 * @param {Number} [years=0]
-	 * @returns {Number}
+	 * @return {Number}
 	 */
 	static timeFromNow(milliseconds, seconds = 0, minutes = 0, hours = 0, days = 0, months = 0, years = 0) {
 		const now = new Date();
@@ -97,7 +98,7 @@ export default class Utils {
 
 	/**
 	 * @param {Number} timestamp
-	 * @returns {*}
+	 * @return {*}
 	 */
 	static timeAgo(timestamp) {
 		return timeAgo.format(timestamp);
@@ -105,9 +106,42 @@ export default class Utils {
 
 	/**
 	 * @param {String} state
-	 * @returns {Boolean}
+	 * @return {Boolean}
 	 */
 	static translateState(state) {
 		return /^(1|true|on|y|yes)$/i.test(state);
+	}
+
+	/**
+	 * @param {String} path
+	 * @param {Object} data
+	 * @return {Promise}
+	 */
+	static async writeJson(path, data) {
+		return new Promise((resolve) => {
+			fs.writeFile(path, JSON.stringify(data), (error) => {
+				if (error) {
+					throw error;
+				}
+
+				resolve();
+			});
+		});
+	}
+
+	/**
+	 * @param {String} path
+	 * @return {Promise<Object>}
+	 */
+	static async readJson(path) {
+		return new Promise((resolve) => {
+			fs.readFile(path, (error, data) => {
+				if (error) {
+					throw error;
+				}
+
+				resolve(JSON.parse(data.toString()));
+			});
+		});
 	}
 }

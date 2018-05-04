@@ -27,7 +27,7 @@ export default class FeatureManager /* extends Collection */ {
 	/**
 	 * Enable a feature
 	 * @param {Feature} feature
-	 * @returns {Boolean}
+	 * @return {Boolean}
 	 */
 	enable(feature) {
 		if (feature.canEnable(this.bot)) {
@@ -43,7 +43,7 @@ export default class FeatureManager /* extends Collection */ {
 	/**
 	 * Enable multiple features at once
 	 * @param {Array<Feature>} features
-	 * @returns {Number}
+	 * @return {Number}
 	 */
 	enableMultiple(features) {
 		let totalEnabled = 0;
@@ -59,7 +59,7 @@ export default class FeatureManager /* extends Collection */ {
 
 	/**
 	 * Enable all the currently registered features
-	 * @returns {Number}
+	 * @return {Number}
 	 */
 	enableAll() {
 		return this.enableMultiple(this.features);
@@ -93,7 +93,7 @@ export default class FeatureManager /* extends Collection */ {
 
 	/**
 	 * Reload all currently registered and enabled features
-	 * @returns {Number}
+	 * @return {Number}
 	 */
 	reloadAll() {
 		this.disableAll();
@@ -123,7 +123,7 @@ export default class FeatureManager /* extends Collection */ {
 	/**
 	 * Determine whether a feature is registered
 	 * @param {String} key
-	 * @returns {Boolean}
+	 * @return {Boolean}
 	 */
 	isRegistered(key) {
 		return this.get(key) != null;
@@ -132,7 +132,7 @@ export default class FeatureManager /* extends Collection */ {
 	/**
 	 * Determine whether a feature is enabled
 	 * @param {String} key
-	 * @returns {Boolean}
+	 * @return {Boolean}
 	 */
 	isEnabled(key) {
 		return this.get(key).isEnabled;
@@ -140,7 +140,7 @@ export default class FeatureManager /* extends Collection */ {
 
 	/**
 	 * @param {String} key
-	 * @returns {(Feature|Null)}
+	 * @return {(Feature|Null)}
 	 */
 	get(key) {
 		for (let i = 0; i < this.features.length; i++) {

@@ -138,6 +138,7 @@ export default class Bot extends EventEmitter {
 		// Discord client events
 		this.client.on("ready", () => {
 			this.console.init(this);
+			Log.info(`Logged in as ${this.client.user.tag}`);
 			Log.success("Ready");
 		});
 

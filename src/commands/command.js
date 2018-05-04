@@ -19,25 +19,25 @@ export default class Command {
 		 * @type {String}
 		 * @readonly
 		 */
-		this.name = data.name;
+		this.name = data.meta.name;
 
 		/**
 		 * @type {String}
 		 * @readonly
 		 */
-		this.description = data.desc;
+		this.description = data.meta.desc;
 
 		/**
 		 * @type {Array<String>}
 		 * @readonly
 		 */
-		this.aliases = data.aliases ? data.aliases : [];
+		this.aliases = data.meta.aliases ? data.meta.aliases : [];
 
 		/**
 		 * @type {AccessLevelType}
 		 * @readonly
 		 */
-		this.authLevel = data.authLevel;
+		this.authLevel = data.meta.authLevel;
 
 		/**
 		 * @type {Function}
@@ -55,19 +55,19 @@ export default class Command {
 		 * @type {CommandCategoryType}
 		 * @readonly
 		 */
-		this.category = data.category;
+		this.category = data.meta.category;
 
 		/**
 		 * @type {Object}
 		 * @readonly
 		 */
-		this.args = data.args ? data.args : {};
+		this.args = data.meta.args ? data.meta.args : {};
 
 		/**
 		 * @type {Boolean}
 		 * @readonly
 		 */
-		this.isEnabled = data.isEnabled !== null ? module.meta.enabled : true;
+		this.isEnabled = data.meta.enabled !== null ? data.meta.enabled : true;
 	}
 
 	/**
@@ -93,18 +93,24 @@ export default class Command {
 	 * @return {Boolean} Whether the module is valid
 	 */
 	static validate(data) {
-		return Typer.validate({
+		const methods = Typer.validate({
+			executed: "!function",
+			meta: "!object",
+			canExecute: "function"
+		}, data);
+
+		const meta = Typer.validate({
 			name: "!string",
 			desc: "!string",
 			authLevel: "!number",
 			category: "!number",
-			executed: "!function",
-			canExecute: "function",
 			args: "object",
 			aliases: ":array",
 			isEnabled: "boolean",
-		}, data, {
+		}, data.meta, {
 			array: (val) => val instanceof Array
 		});
+
+		return (methods && meta);
 	}
 }

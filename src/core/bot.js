@@ -113,12 +113,6 @@ export default class Bot extends EventEmitter {
 		 */
 		this.menus = new EmojiMenuManager(this.client);
 
-		/**
-		 * @type {Log}
-		 * @readonly
-		 */
-		this.log = new Log(this);
-
 		// Setup the Discord client's events
 		this.setupEvents();
 
@@ -143,8 +137,8 @@ export default class Bot extends EventEmitter {
 
 		// Discord client events
 		this.client.on("ready", () => {
-			this.log.success("Ready");
 			this.console.init(this);
+			Log.success("Ready");
 		});
 
 		this.client.on("message", async (message) => {
@@ -178,7 +172,7 @@ export default class Bot extends EventEmitter {
 	 * @return {Promise}
 	 */
 	async connect() {
-		this.log.verbose("Starting");
+		Log.verbose("Starting");
 		await this.client.login(this.settings.general.token);
 	}
 
@@ -189,7 +183,7 @@ export default class Bot extends EventEmitter {
 	 * @return {Promise}
 	 */
 	async restart(reloadModules = true) {
-		this.log.verbose("Restarting");
+		Log.verbose("Restarting");
 
 		// TODO: Actually reload all the features and commands
 		// this.features.reloadAll(this);
@@ -205,7 +199,7 @@ export default class Bot extends EventEmitter {
 	async disconnect() {
 		this.settings.save();
 		await this.client.destroy();
-		this.log.info("Disconnected");
+		Log.info("Disconnected");
 	}
 
 	/**

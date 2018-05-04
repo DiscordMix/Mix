@@ -44,13 +44,15 @@ module.exports = {
 	FeatureManager: require("./features/feature-manager").default,
 	Feature: require("./features/feature").default,
 
-	// Data Adapters
-	DataAdapter: require("./data-stores/data-store").default,
-	ObjectAdapter: require("./data-stores/object-store").default,
-	JsonAdapter: require("./data-stores/json-store").default,
-	SqliteAdapter: require("./data-stores/sqlite-store").default,
-	MysqlAdapter: require("./data-stores/mysql-store").default,
+	// Data Stores
+	DataStore: require("./data-stores/data-store").default,
+	ObjectStore: require("./data-stores/object-store").default,
+	JsonStore: require("./data-stores/json-store").default,
+	SqliteStore: require("./data-stores/sqlite-store").default,
+	MysqlStore: require("./data-stores/mysql-store").default,
 
-	// Schema
-	Schema: require("./schema/schema").default,
+	// Auth Stores
+	CommandAuthStore: require("./commands/command-auth-store").default,
+	ObjectAuthStore: require("./commands/object-auth-store").default,
+	JsonAuthStore: require("./commands/json-auth-store").default
 };

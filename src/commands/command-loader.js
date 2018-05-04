@@ -23,6 +23,8 @@ export default class CommandLoader {
 	async loadAll() {
 		return new Promise((resolve) => {
 			fs.readdir(this.commandManager.path, (error, files) => {
+				let loaded = 0;
+
 				files.forEach((file) => {
 					if (!file.startsWith("@")) {
 						const modulePath = path.join(this.commandManager.path, path.basename(file, ".js"));
@@ -37,6 +39,7 @@ export default class CommandLoader {
 						// Validate the command before registering it
 						if (Command.validate(module)) {
 							this.commandManager.register(new Command(module));
+							loaded++;
 						}
 						else {
 							Log.warn(`Skipping invalid command: ${path.basename(file, ".js")}`);
@@ -47,7 +50,7 @@ export default class CommandLoader {
 					}
 				});
 
-				Log.success(`Loaded a total of ${files.length} commands`);
+				Log.success(`Loaded a total of ${loaded} command(s)`);
 				resolve();
 			});
 		});

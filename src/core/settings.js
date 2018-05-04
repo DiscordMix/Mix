@@ -30,12 +30,6 @@ export default class Settings {
 			 * @readonly
 			 */
 			this.keys = jsonObj.keys;
-
-			/**
-			 * @type {Object}
-			 * @readonly
-			 */
-			this.log = jsonObj.log;
 		}
 		else {
 			Log.error("Could not load settings: File does not exist");
@@ -48,7 +42,6 @@ export default class Settings {
 	save() {
 		fs.writeFileSync(this.path, JSON.stringify({
 			general: this.general,
-			log: this.log,
 			keys: this.keys
 		}, null, 4));
 	}

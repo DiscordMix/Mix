@@ -24,19 +24,27 @@ First, make sure to install Anvil: `npm install discord-anvil --save`
 
 index.js:
 ```js
-const { Bot, ObjectStore } = require("discord-anvil");
+const { Bot, ObjectStore, JsonAuthStore } = require("discord-anvil");
 const path = require("path");
 
 // Create the bot
 const bot = new Bot({
     paths: {
+    	// The file containing our bot token and prefix
     	settings: "settings.json",
-    	accessLevels: "access-levels.json",
+    	
+    	authLevels: "auth-levels.json",
+    	
+    	// The directory containing our command files
     	commands: path.join(__dirname, "commands")
     },
-
-    argumentTypes: {},
-    dataAdapter: new ObjectStore()
+    
+    /**
+     * This file will store our per-guild auth data,
+     * it will be automatically created if it doesn't
+     * exist.
+     */
+    authStore: new JsonAuthStore("./auth-store.json")
 });
 
 // Connect the client

@@ -30,6 +30,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "discord-anvil/src/commands/command-auth-store.js~commandauthstore",
+    "class/src/commands/command-auth-store.js~CommandAuthStore.html",
+    "<span>CommandAuthStore</span> <span class=\"search-result-import-path\">discord-anvil/src/commands/command-auth-store.js</span>",
+    "class"
+  ],
+  [
     "discord-anvil/src/commands/command-category-type.js~commandcategorytype",
     "variable/index.html#static-variable-CommandCategoryType",
     "<span>CommandCategoryType</span> <span class=\"search-result-import-path\">discord-anvil/src/commands/command-category-type.js</span>",
@@ -84,9 +90,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "discord-anvil/src/data-adapters/data-adapter.js~dataadapter",
-    "class/src/data-adapters/data-adapter.js~DataAdapter.html",
-    "<span>DataAdapter</span> <span class=\"search-result-import-path\">discord-anvil/src/data-adapters/data-adapter.js</span>",
+    "discord-anvil/src/data-stores/data-store.js~datastore",
+    "class/src/data-stores/data-store.js~DataStore.html",
+    "<span>DataStore</span> <span class=\"search-result-import-path\">discord-anvil/src/data-stores/data-store.js</span>",
     "class"
   ],
   [
@@ -138,9 +144,15 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "discord-anvil/src/data-adapters/json-adapter.js~jsonadapter",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html",
-    "<span>JsonAdapter</span> <span class=\"search-result-import-path\">discord-anvil/src/data-adapters/json-adapter.js</span>",
+    "discord-anvil/src/commands/json-auth-store.js~jsonauthstore",
+    "class/src/commands/json-auth-store.js~JsonAuthStore.html",
+    "<span>JsonAuthStore</span> <span class=\"search-result-import-path\">discord-anvil/src/commands/json-auth-store.js</span>",
+    "class"
+  ],
+  [
+    "discord-anvil/src/data-stores/json-store.js~jsonstore",
+    "class/src/data-stores/json-store.js~JsonStore.html",
+    "<span>JsonStore</span> <span class=\"search-result-import-path\">discord-anvil/src/data-stores/json-store.js</span>",
     "class"
   ],
   [
@@ -156,21 +168,27 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "discord-anvil/src/data-adapters/mongodb-adapter.js~mongodbadapter",
-    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html",
-    "<span>MongoDbAdapter</span> <span class=\"search-result-import-path\">discord-anvil/src/data-adapters/mongodb-adapter.js</span>",
+    "discord-anvil/src/data-stores/mongodb-store.js~mongodbstore",
+    "class/src/data-stores/mongodb-store.js~MongodbStore.html",
+    "<span>MongodbStore</span> <span class=\"search-result-import-path\">discord-anvil/src/data-stores/mongodb-store.js</span>",
     "class"
   ],
   [
-    "discord-anvil/src/data-adapters/mysql-adapter.js~mysqladapter",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html",
-    "<span>MysqlAdapter</span> <span class=\"search-result-import-path\">discord-anvil/src/data-adapters/mysql-adapter.js</span>",
+    "discord-anvil/src/data-stores/mysql-store.js~mysqlstore",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html",
+    "<span>MysqlStore</span> <span class=\"search-result-import-path\">discord-anvil/src/data-stores/mysql-store.js</span>",
     "class"
   ],
   [
-    "discord-anvil/src/data-adapters/object-adapter.js~objectadapter",
-    "class/src/data-adapters/object-adapter.js~ObjectAdapter.html",
-    "<span>ObjectAdapter</span> <span class=\"search-result-import-path\">discord-anvil/src/data-adapters/object-adapter.js</span>",
+    "discord-anvil/src/commands/object-auth-store.js~objectauthstore",
+    "class/src/commands/object-auth-store.js~ObjectAuthStore.html",
+    "<span>ObjectAuthStore</span> <span class=\"search-result-import-path\">discord-anvil/src/commands/object-auth-store.js</span>",
+    "class"
+  ],
+  [
+    "discord-anvil/src/data-stores/object-store.js~objectstore",
+    "class/src/data-stores/object-store.js~ObjectStore.html",
+    "<span>ObjectStore</span> <span class=\"search-result-import-path\">discord-anvil/src/data-stores/object-store.js</span>",
     "class"
   ],
   [
@@ -186,21 +204,15 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "discord-anvil/src/schema/schema.js~schema",
-    "class/src/schema/schema.js~Schema.html",
-    "<span>Schema</span> <span class=\"search-result-import-path\">discord-anvil/src/schema/schema.js</span>",
-    "class"
-  ],
-  [
     "discord-anvil/src/core/settings.js~settings",
     "class/src/core/settings.js~Settings.html",
     "<span>Settings</span> <span class=\"search-result-import-path\">discord-anvil/src/core/settings.js</span>",
     "class"
   ],
   [
-    "discord-anvil/src/data-adapters/sqlite-adapter.js~sqliteadapter",
-    "class/src/data-adapters/sqlite-adapter.js~SqliteAdapter.html",
-    "<span>SqliteAdapter</span> <span class=\"search-result-import-path\">discord-anvil/src/data-adapters/sqlite-adapter.js</span>",
+    "discord-anvil/src/data-stores/sqlite-store.js~sqlitestore",
+    "class/src/data-stores/sqlite-store.js~SqliteStore.html",
+    "<span>SqliteStore</span> <span class=\"search-result-import-path\">discord-anvil/src/data-stores/sqlite-store.js</span>",
     "class"
   ],
   [
@@ -606,9 +618,33 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/commands/command-argument-parser.js~commandargumentparser.validate",
-    "class/src/commands/command-argument-parser.js~CommandArgumentParser.html#static-method-validate",
-    "src/commands/command-argument-parser.js~CommandArgumentParser.validate",
+    "src/commands/command-auth-store.js",
+    "file/src/commands/command-auth-store.js.html",
+    "src/commands/command-auth-store.js",
+    "file"
+  ],
+  [
+    "src/commands/command-auth-store.js~commandauthstore#getauthlevel",
+    "class/src/commands/command-auth-store.js~CommandAuthStore.html#instance-method-getAuthLevel",
+    "src/commands/command-auth-store.js~CommandAuthStore#getAuthLevel",
+    "method"
+  ],
+  [
+    "src/commands/command-auth-store.js~commandauthstore#getauthority",
+    "class/src/commands/command-auth-store.js~CommandAuthStore.html#instance-method-getAuthority",
+    "src/commands/command-auth-store.js~CommandAuthStore#getAuthority",
+    "method"
+  ],
+  [
+    "src/commands/command-auth-store.js~commandauthstore#gethighestauthlevelbyroles",
+    "class/src/commands/command-auth-store.js~CommandAuthStore.html#instance-method-getHighestAuthLevelByRoles",
+    "src/commands/command-auth-store.js~CommandAuthStore#getHighestAuthLevelByRoles",
+    "method"
+  ],
+  [
+    "src/commands/command-auth-store.js~commandauthstore#hasauthority",
+    "class/src/commands/command-auth-store.js~CommandAuthStore.html#instance-method-hasAuthority",
+    "src/commands/command-auth-store.js~CommandAuthStore#hasAuthority",
     "method"
   ],
   [
@@ -756,28 +792,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/commands/command-loader.js~commandloader.validate",
-    "class/src/commands/command-loader.js~CommandLoader.html#static-method-validate",
-    "src/commands/command-loader.js~CommandLoader.validate",
-    "method"
-  ],
-  [
     "src/commands/command-manager.js",
     "file/src/commands/command-manager.js.html",
     "src/commands/command-manager.js",
     "file"
-  ],
-  [
-    "src/commands/command-manager.js~commandmanager#accesslevels",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-member-accessLevels",
-    "src/commands/command-manager.js~CommandManager#accessLevels",
-    "member"
-  ],
-  [
-    "src/commands/command-manager.js~commandmanager#accesslevelspath",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-member-accessLevelsPath",
-    "src/commands/command-manager.js~CommandManager#accessLevelsPath",
-    "member"
   ],
   [
     "src/commands/command-manager.js~commandmanager#argumenttypes",
@@ -792,6 +810,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/commands/command-manager.js~commandmanager#authstore",
+    "class/src/commands/command-manager.js~CommandManager.html#instance-member-authStore",
+    "src/commands/command-manager.js~CommandManager#authStore",
+    "member"
+  ],
+  [
     "src/commands/command-manager.js~commandmanager#bot",
     "class/src/commands/command-manager.js~CommandManager.html#instance-member-bot",
     "src/commands/command-manager.js~CommandManager#bot",
@@ -801,12 +825,6 @@ window.esdocSearchIndex = [
     "src/commands/command-manager.js~commandmanager#commands",
     "class/src/commands/command-manager.js~CommandManager.html#instance-member-commands",
     "src/commands/command-manager.js~CommandManager#commands",
-    "member"
-  ],
-  [
-    "src/commands/command-manager.js~commandmanager#commandspath",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-member-commandsPath",
-    "src/commands/command-manager.js~CommandManager#commandsPath",
     "member"
   ],
   [
@@ -822,33 +840,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/commands/command-manager.js~commandmanager#getaccesslevelbyid",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-method-getAccessLevelById",
-    "src/commands/command-manager.js~CommandManager#getAccessLevelById",
-    "method"
-  ],
-  [
-    "src/commands/command-manager.js~commandmanager#getaccesslevelbyrole",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-method-getAccessLevelByRole",
-    "src/commands/command-manager.js~CommandManager#getAccessLevelByRole",
-    "method"
-  ],
-  [
-    "src/commands/command-manager.js~commandmanager#getauthority",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-method-getAuthority",
-    "src/commands/command-manager.js~CommandManager#getAuthority",
-    "method"
-  ],
-  [
-    "src/commands/command-manager.js~commandmanager#getbybase",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-method-getByBase",
-    "src/commands/command-manager.js~CommandManager#getByBase",
-    "method"
-  ],
-  [
-    "src/commands/command-manager.js~commandmanager#gethighestaccesslevelbyroles",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-method-getHighestAccessLevelByRoles",
-    "src/commands/command-manager.js~CommandManager#getHighestAccessLevelByRoles",
+    "src/commands/command-manager.js~commandmanager#getbyname",
+    "class/src/commands/command-manager.js~CommandManager.html#instance-method-getByName",
+    "src/commands/command-manager.js~CommandManager#getByName",
     "method"
   ],
   [
@@ -858,34 +852,16 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/commands/command-manager.js~commandmanager#hasauthority",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-method-hasAuthority",
-    "src/commands/command-manager.js~CommandManager#hasAuthority",
-    "method"
-  ],
-  [
-    "src/commands/command-manager.js~commandmanager#hasrole",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-method-hasRole",
-    "src/commands/command-manager.js~CommandManager#hasRole",
-    "method"
-  ],
-  [
-    "src/commands/command-manager.js~commandmanager#hasroles",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-method-hasRoles",
-    "src/commands/command-manager.js~CommandManager#hasRoles",
-    "method"
-  ],
-  [
-    "src/commands/command-manager.js~commandmanager#isdeveloper",
-    "class/src/commands/command-manager.js~CommandManager.html#instance-method-isDeveloper",
-    "src/commands/command-manager.js~CommandManager#isDeveloper",
-    "method"
-  ],
-  [
     "src/commands/command-manager.js~commandmanager#isregistered",
     "class/src/commands/command-manager.js~CommandManager.html#instance-method-isRegistered",
     "src/commands/command-manager.js~CommandManager#isRegistered",
     "method"
+  ],
+  [
+    "src/commands/command-manager.js~commandmanager#path",
+    "class/src/commands/command-manager.js~CommandManager.html#instance-member-path",
+    "src/commands/command-manager.js~CommandManager#path",
+    "member"
   ],
   [
     "src/commands/command-manager.js~commandmanager#register",
@@ -960,12 +936,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/commands/command.js~command#accesslevel",
-    "class/src/commands/command.js~Command.html#instance-member-accessLevel",
-    "src/commands/command.js~Command#accessLevel",
-    "member"
-  ],
-  [
     "src/commands/command.js~command#aliases",
     "class/src/commands/command.js~Command.html#instance-member-aliases",
     "src/commands/command.js~Command#aliases",
@@ -978,9 +948,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/commands/command.js~command#base",
-    "class/src/commands/command.js~Command.html#instance-member-base",
-    "src/commands/command.js~Command#base",
+    "src/commands/command.js~command#authlevel",
+    "class/src/commands/command.js~Command.html#instance-member-authLevel",
+    "src/commands/command.js~Command#authLevel",
     "member"
   ],
   [
@@ -1026,9 +996,93 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/commands/command.js~command.frommodule",
-    "class/src/commands/command.js~Command.html#static-method-fromModule",
-    "src/commands/command.js~Command.fromModule",
+    "src/commands/command.js~command#name",
+    "class/src/commands/command.js~Command.html#instance-member-name",
+    "src/commands/command.js~Command#name",
+    "member"
+  ],
+  [
+    "src/commands/command.js~command#setup",
+    "class/src/commands/command.js~Command.html#instance-method-setup",
+    "src/commands/command.js~Command#setup",
+    "method"
+  ],
+  [
+    "src/commands/command.js~command.validate",
+    "class/src/commands/command.js~Command.html#static-method-validate",
+    "src/commands/command.js~Command.validate",
+    "method"
+  ],
+  [
+    "src/commands/json-auth-store.js",
+    "file/src/commands/json-auth-store.js.html",
+    "src/commands/json-auth-store.js",
+    "file"
+  ],
+  [
+    "src/commands/json-auth-store.js~jsonauthstore#constructor",
+    "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-constructor-constructor",
+    "src/commands/json-auth-store.js~JsonAuthStore#constructor",
+    "method"
+  ],
+  [
+    "src/commands/json-auth-store.js~jsonauthstore#data",
+    "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-member-data",
+    "src/commands/json-auth-store.js~JsonAuthStore#data",
+    "member"
+  ],
+  [
+    "src/commands/json-auth-store.js~jsonauthstore#exists",
+    "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-get-exists",
+    "src/commands/json-auth-store.js~JsonAuthStore#exists",
+    "member"
+  ],
+  [
+    "src/commands/json-auth-store.js~jsonauthstore#path",
+    "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-member-path",
+    "src/commands/json-auth-store.js~JsonAuthStore#path",
+    "member"
+  ],
+  [
+    "src/commands/json-auth-store.js~jsonauthstore#reload",
+    "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-method-reload",
+    "src/commands/json-auth-store.js~JsonAuthStore#reload",
+    "method"
+  ],
+  [
+    "src/commands/object-auth-store.js",
+    "file/src/commands/object-auth-store.js.html",
+    "src/commands/object-auth-store.js",
+    "file"
+  ],
+  [
+    "src/commands/object-auth-store.js~objectauthstore#constructor",
+    "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-constructor-constructor",
+    "src/commands/object-auth-store.js~ObjectAuthStore#constructor",
+    "method"
+  ],
+  [
+    "src/commands/object-auth-store.js~objectauthstore#data",
+    "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-member-data",
+    "src/commands/object-auth-store.js~ObjectAuthStore#data",
+    "member"
+  ],
+  [
+    "src/commands/object-auth-store.js~objectauthstore#getauthlevel",
+    "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-method-getAuthLevel",
+    "src/commands/object-auth-store.js~ObjectAuthStore#getAuthLevel",
+    "method"
+  ],
+  [
+    "src/commands/object-auth-store.js~objectauthstore#getauthority",
+    "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-method-getAuthority",
+    "src/commands/object-auth-store.js~ObjectAuthStore#getAuthority",
+    "method"
+  ],
+  [
+    "src/commands/object-auth-store.js~objectauthstore#gethighestauthlevelbyroles",
+    "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-method-getHighestAuthLevelByRoles",
+    "src/commands/object-auth-store.js~ObjectAuthStore#getHighestAuthLevelByRoles",
     "method"
   ],
   [
@@ -1140,12 +1194,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/core/bot.js~bot#log",
-    "class/src/core/bot.js~Bot.html#instance-member-log",
-    "src/core/bot.js~Bot#log",
-    "member"
-  ],
-  [
     "src/core/bot.js~bot#menus",
     "class/src/core/bot.js~Bot.html#instance-member-menus",
     "src/core/bot.js~Bot#menus",
@@ -1186,72 +1234,6 @@ window.esdocSearchIndex = [
     "file/src/core/log.js.html",
     "src/core/log.js",
     "file"
-  ],
-  [
-    "src/core/log.js~log#bot",
-    "class/src/core/log.js~Log.html#instance-member-bot",
-    "src/core/log.js~Log#bot",
-    "member"
-  ],
-  [
-    "src/core/log.js~log#channel",
-    "class/src/core/log.js~Log.html#instance-method-channel",
-    "src/core/log.js~Log#channel",
-    "method"
-  ],
-  [
-    "src/core/log.js~log#constructor",
-    "class/src/core/log.js~Log.html#instance-constructor-constructor",
-    "src/core/log.js~Log#constructor",
-    "method"
-  ],
-  [
-    "src/core/log.js~log#debugmode",
-    "class/src/core/log.js~Log.html#instance-method-debugMode",
-    "src/core/log.js~Log#debugMode",
-    "method"
-  ],
-  [
-    "src/core/log.js~log#error",
-    "class/src/core/log.js~Log.html#instance-method-error",
-    "src/core/log.js~Log#error",
-    "method"
-  ],
-  [
-    "src/core/log.js~log#info",
-    "class/src/core/log.js~Log.html#instance-method-info",
-    "src/core/log.js~Log#info",
-    "method"
-  ],
-  [
-    "src/core/log.js~log#log",
-    "class/src/core/log.js~Log.html#instance-method-log",
-    "src/core/log.js~Log#log",
-    "method"
-  ],
-  [
-    "src/core/log.js~log#success",
-    "class/src/core/log.js~Log.html#instance-method-success",
-    "src/core/log.js~Log#success",
-    "method"
-  ],
-  [
-    "src/core/log.js~log#verbose",
-    "class/src/core/log.js~Log.html#instance-method-verbose",
-    "src/core/log.js~Log#verbose",
-    "method"
-  ],
-  [
-    "src/core/log.js~log#verbosemode",
-    "class/src/core/log.js~Log.html#instance-member-verboseMode",
-    "src/core/log.js~Log#verboseMode",
-    "member"
-  ],
-  [
-    "src/core/log.js~log#warn",
-    "class/src/core/log.js~Log.html#instance-method-warn",
-    "src/core/log.js~Log#warn",
-    "method"
   ],
   [
     "src/core/log.js~log.debug",
@@ -1398,12 +1380,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/core/settings.js~settings#log",
-    "class/src/core/settings.js~Settings.html#instance-member-log",
-    "src/core/settings.js~Settings#log",
-    "member"
-  ],
-  [
     "src/core/settings.js~settings#path",
     "class/src/core/settings.js~Settings.html#instance-member-path",
     "src/core/settings.js~Settings#path",
@@ -1500,6 +1476,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/core/utils.js~utils.readjson",
+    "class/src/core/utils.js~Utils.html#static-method-readJson",
+    "src/core/utils.js~Utils.readJson",
+    "method"
+  ],
+  [
     "src/core/utils.js~utils.resolveid",
     "class/src/core/utils.js~Utils.html#static-method-resolveId",
     "src/core/utils.js~Utils.resolveId",
@@ -1536,291 +1518,291 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/data-adapters/data-adapter.js",
-    "file/src/data-adapters/data-adapter.js.html",
-    "src/data-adapters/data-adapter.js",
+    "src/core/utils.js~utils.writejson",
+    "class/src/core/utils.js~Utils.html#static-method-writeJson",
+    "src/core/utils.js~Utils.writeJson",
+    "method"
+  ],
+  [
+    "src/data-stores/data-store.js",
+    "file/src/data-stores/data-store.js.html",
+    "src/data-stores/data-store.js",
     "file"
   ],
   [
-    "src/data-adapters/data-adapter.js~dataadapter#get",
-    "class/src/data-adapters/data-adapter.js~DataAdapter.html#instance-method-get",
-    "src/data-adapters/data-adapter.js~DataAdapter#get",
+    "src/data-stores/data-store.js~datastore#get",
+    "class/src/data-stores/data-store.js~DataStore.html#instance-method-get",
+    "src/data-stores/data-store.js~DataStore#get",
     "method"
   ],
   [
-    "src/data-adapters/data-adapter.js~dataadapter#set",
-    "class/src/data-adapters/data-adapter.js~DataAdapter.html#instance-method-set",
-    "src/data-adapters/data-adapter.js~DataAdapter#set",
+    "src/data-stores/data-store.js~datastore#set",
+    "class/src/data-stores/data-store.js~DataStore.html#instance-method-set",
+    "src/data-stores/data-store.js~DataStore#set",
     "method"
   ],
   [
-    "src/data-adapters/data-adapter.js~dataadapter.resolvepath",
-    "class/src/data-adapters/data-adapter.js~DataAdapter.html#static-method-resolvePath",
-    "src/data-adapters/data-adapter.js~DataAdapter.resolvePath",
-    "method"
-  ],
-  [
-    "src/data-adapters/json-adapter.js",
-    "file/src/data-adapters/json-adapter.js.html",
-    "src/data-adapters/json-adapter.js",
+    "src/data-stores/json-store.js",
+    "file/src/data-stores/json-store.js.html",
+    "src/data-stores/json-store.js",
     "file"
   ],
   [
-    "src/data-adapters/json-adapter.js~jsonadapter#constructor",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-constructor-constructor",
-    "src/data-adapters/json-adapter.js~JsonAdapter#constructor",
+    "src/data-stores/json-store.js~jsonstore#constructor",
+    "class/src/data-stores/json-store.js~JsonStore.html#instance-constructor-constructor",
+    "src/data-stores/json-store.js~JsonStore#constructor",
     "method"
   ],
   [
-    "src/data-adapters/json-adapter.js~jsonadapter#data",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-member-data",
-    "src/data-adapters/json-adapter.js~JsonAdapter#data",
+    "src/data-stores/json-store.js~jsonstore#data",
+    "class/src/data-stores/json-store.js~JsonStore.html#instance-member-data",
+    "src/data-stores/json-store.js~JsonStore#data",
     "member"
   ],
   [
-    "src/data-adapters/json-adapter.js~jsonadapter#get",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-method-get",
-    "src/data-adapters/json-adapter.js~JsonAdapter#get",
+    "src/data-stores/json-store.js~jsonstore#get",
+    "class/src/data-stores/json-store.js~JsonStore.html#instance-method-get",
+    "src/data-stores/json-store.js~JsonStore#get",
     "method"
   ],
   [
-    "src/data-adapters/json-adapter.js~jsonadapter#loaded",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-get-loaded",
-    "src/data-adapters/json-adapter.js~JsonAdapter#loaded",
+    "src/data-stores/json-store.js~jsonstore#loaded",
+    "class/src/data-stores/json-store.js~JsonStore.html#instance-get-loaded",
+    "src/data-stores/json-store.js~JsonStore#loaded",
     "member"
   ],
   [
-    "src/data-adapters/json-adapter.js~jsonadapter#merge",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-method-merge",
-    "src/data-adapters/json-adapter.js~JsonAdapter#merge",
+    "src/data-stores/json-store.js~jsonstore#merge",
+    "class/src/data-stores/json-store.js~JsonStore.html#instance-method-merge",
+    "src/data-stores/json-store.js~JsonStore#merge",
     "method"
   ],
   [
-    "src/data-adapters/json-adapter.js~jsonadapter#path",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-member-path",
-    "src/data-adapters/json-adapter.js~JsonAdapter#path",
+    "src/data-stores/json-store.js~jsonstore#path",
+    "class/src/data-stores/json-store.js~JsonStore.html#instance-member-path",
+    "src/data-stores/json-store.js~JsonStore#path",
     "member"
   ],
   [
-    "src/data-adapters/json-adapter.js~jsonadapter#reload",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-method-reload",
-    "src/data-adapters/json-adapter.js~JsonAdapter#reload",
+    "src/data-stores/json-store.js~jsonstore#reload",
+    "class/src/data-stores/json-store.js~JsonStore.html#instance-method-reload",
+    "src/data-stores/json-store.js~JsonStore#reload",
     "method"
   ],
   [
-    "src/data-adapters/json-adapter.js~jsonadapter#save",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-method-save",
-    "src/data-adapters/json-adapter.js~JsonAdapter#save",
+    "src/data-stores/json-store.js~jsonstore#save",
+    "class/src/data-stores/json-store.js~JsonStore.html#instance-method-save",
+    "src/data-stores/json-store.js~JsonStore#save",
     "method"
   ],
   [
-    "src/data-adapters/json-adapter.js~jsonadapter#set",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-method-set",
-    "src/data-adapters/json-adapter.js~JsonAdapter#set",
+    "src/data-stores/json-store.js~jsonstore#set",
+    "class/src/data-stores/json-store.js~JsonStore.html#instance-method-set",
+    "src/data-stores/json-store.js~JsonStore#set",
     "method"
   ],
   [
-    "src/data-adapters/json-adapter.js~jsonadapter#validate",
-    "class/src/data-adapters/json-adapter.js~JsonAdapter.html#instance-method-validate",
-    "src/data-adapters/json-adapter.js~JsonAdapter#validate",
+    "src/data-stores/json-store.js~jsonstore#validate",
+    "class/src/data-stores/json-store.js~JsonStore.html#instance-method-validate",
+    "src/data-stores/json-store.js~JsonStore#validate",
     "method"
   ],
   [
-    "src/data-adapters/mongodb-adapter.js",
-    "file/src/data-adapters/mongodb-adapter.js.html",
-    "src/data-adapters/mongodb-adapter.js",
+    "src/data-stores/mongodb-store.js",
+    "file/src/data-stores/mongodb-store.js.html",
+    "src/data-stores/mongodb-store.js",
     "file"
   ],
   [
-    "src/data-adapters/mongodb-adapter.js~mongodbadapter#client",
-    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-member-client",
-    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#client",
+    "src/data-stores/mongodb-store.js~mongodbstore#client",
+    "class/src/data-stores/mongodb-store.js~MongodbStore.html#instance-member-client",
+    "src/data-stores/mongodb-store.js~MongodbStore#client",
     "member"
   ],
   [
-    "src/data-adapters/mongodb-adapter.js~mongodbadapter#connect",
-    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-method-connect",
-    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#connect",
+    "src/data-stores/mongodb-store.js~mongodbstore#connect",
+    "class/src/data-stores/mongodb-store.js~MongodbStore.html#instance-method-connect",
+    "src/data-stores/mongodb-store.js~MongodbStore#connect",
     "method"
   ],
   [
-    "src/data-adapters/mongodb-adapter.js~mongodbadapter#constructor",
-    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-constructor-constructor",
-    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#constructor",
+    "src/data-stores/mongodb-store.js~mongodbstore#constructor",
+    "class/src/data-stores/mongodb-store.js~MongodbStore.html#instance-constructor-constructor",
+    "src/data-stores/mongodb-store.js~MongodbStore#constructor",
     "method"
   ],
   [
-    "src/data-adapters/mongodb-adapter.js~mongodbadapter#db",
-    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-member-db",
-    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#db",
+    "src/data-stores/mongodb-store.js~mongodbstore#db",
+    "class/src/data-stores/mongodb-store.js~MongodbStore.html#instance-member-db",
+    "src/data-stores/mongodb-store.js~MongodbStore#db",
     "member"
   ],
   [
-    "src/data-adapters/mongodb-adapter.js~mongodbadapter#get",
-    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-method-get",
-    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#get",
+    "src/data-stores/mongodb-store.js~mongodbstore#get",
+    "class/src/data-stores/mongodb-store.js~MongodbStore.html#instance-method-get",
+    "src/data-stores/mongodb-store.js~MongodbStore#get",
     "method"
   ],
   [
-    "src/data-adapters/mongodb-adapter.js~mongodbadapter#merge",
-    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-method-merge",
-    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#merge",
+    "src/data-stores/mongodb-store.js~mongodbstore#merge",
+    "class/src/data-stores/mongodb-store.js~MongodbStore.html#instance-method-merge",
+    "src/data-stores/mongodb-store.js~MongodbStore#merge",
     "method"
   ],
   [
-    "src/data-adapters/mongodb-adapter.js~mongodbadapter#set",
-    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-method-set",
-    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#set",
+    "src/data-stores/mongodb-store.js~mongodbstore#set",
+    "class/src/data-stores/mongodb-store.js~MongodbStore.html#instance-method-set",
+    "src/data-stores/mongodb-store.js~MongodbStore#set",
     "method"
   ],
   [
-    "src/data-adapters/mongodb-adapter.js~mongodbadapter#url",
-    "class/src/data-adapters/mongodb-adapter.js~MongoDbAdapter.html#instance-member-url",
-    "src/data-adapters/mongodb-adapter.js~MongoDbAdapter#url",
+    "src/data-stores/mongodb-store.js~mongodbstore#url",
+    "class/src/data-stores/mongodb-store.js~MongodbStore.html#instance-member-url",
+    "src/data-stores/mongodb-store.js~MongodbStore#url",
     "member"
   ],
   [
-    "src/data-adapters/mysql-adapter.js",
-    "file/src/data-adapters/mysql-adapter.js.html",
-    "src/data-adapters/mysql-adapter.js",
+    "src/data-stores/mysql-store.js",
+    "file/src/data-stores/mysql-store.js.html",
+    "src/data-stores/mysql-store.js",
     "file"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#connect",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-connect",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#connect",
+    "src/data-stores/mysql-store.js~mysqlstore#connect",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-method-connect",
+    "src/data-stores/mysql-store.js~MysqlStore#connect",
     "method"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#connected",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-member-connected",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#connected",
+    "src/data-stores/mysql-store.js~mysqlstore#connected",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-member-connected",
+    "src/data-stores/mysql-store.js~MysqlStore#connected",
     "member"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#connection",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-member-connection",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#connection",
+    "src/data-stores/mysql-store.js~mysqlstore#connection",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-member-connection",
+    "src/data-stores/mysql-store.js~MysqlStore#connection",
     "member"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#constructor",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-constructor-constructor",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#constructor",
+    "src/data-stores/mysql-store.js~mysqlstore#constructor",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-constructor-constructor",
+    "src/data-stores/mysql-store.js~MysqlStore#constructor",
     "method"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#data",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-member-data",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#data",
+    "src/data-stores/mysql-store.js~mysqlstore#data",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-member-data",
+    "src/data-stores/mysql-store.js~MysqlStore#data",
     "member"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#disconnect",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-disconnect",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#disconnect",
+    "src/data-stores/mysql-store.js~mysqlstore#disconnect",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-method-disconnect",
+    "src/data-stores/mysql-store.js~MysqlStore#disconnect",
     "method"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#get",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-get",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#get",
+    "src/data-stores/mysql-store.js~mysqlstore#get",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-method-get",
+    "src/data-stores/mysql-store.js~MysqlStore#get",
     "method"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#loaded",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-get-loaded",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#loaded",
+    "src/data-stores/mysql-store.js~mysqlstore#loaded",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-get-loaded",
+    "src/data-stores/mysql-store.js~MysqlStore#loaded",
     "member"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#merge",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-merge",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#merge",
+    "src/data-stores/mysql-store.js~mysqlstore#merge",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-method-merge",
+    "src/data-stores/mysql-store.js~MysqlStore#merge",
     "method"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#query",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-query",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#query",
+    "src/data-stores/mysql-store.js~mysqlstore#query",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-method-query",
+    "src/data-stores/mysql-store.js~MysqlStore#query",
     "method"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter#set",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#instance-method-set",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter#set",
+    "src/data-stores/mysql-store.js~mysqlstore#set",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#instance-method-set",
+    "src/data-stores/mysql-store.js~MysqlStore#set",
     "method"
   ],
   [
-    "src/data-adapters/mysql-adapter.js~mysqladapter.cleanpath",
-    "class/src/data-adapters/mysql-adapter.js~MysqlAdapter.html#static-method-cleanPath",
-    "src/data-adapters/mysql-adapter.js~MysqlAdapter.cleanPath",
+    "src/data-stores/mysql-store.js~mysqlstore.cleanpath",
+    "class/src/data-stores/mysql-store.js~MysqlStore.html#static-method-cleanPath",
+    "src/data-stores/mysql-store.js~MysqlStore.cleanPath",
     "method"
   ],
   [
-    "src/data-adapters/object-adapter.js",
-    "file/src/data-adapters/object-adapter.js.html",
-    "src/data-adapters/object-adapter.js",
+    "src/data-stores/object-store.js",
+    "file/src/data-stores/object-store.js.html",
+    "src/data-stores/object-store.js",
     "file"
   ],
   [
-    "src/data-adapters/object-adapter.js~objectadapter#constructor",
-    "class/src/data-adapters/object-adapter.js~ObjectAdapter.html#instance-constructor-constructor",
-    "src/data-adapters/object-adapter.js~ObjectAdapter#constructor",
+    "src/data-stores/object-store.js~objectstore#constructor",
+    "class/src/data-stores/object-store.js~ObjectStore.html#instance-constructor-constructor",
+    "src/data-stores/object-store.js~ObjectStore#constructor",
     "method"
   ],
   [
-    "src/data-adapters/object-adapter.js~objectadapter#data",
-    "class/src/data-adapters/object-adapter.js~ObjectAdapter.html#instance-member-data",
-    "src/data-adapters/object-adapter.js~ObjectAdapter#data",
+    "src/data-stores/object-store.js~objectstore#data",
+    "class/src/data-stores/object-store.js~ObjectStore.html#instance-member-data",
+    "src/data-stores/object-store.js~ObjectStore#data",
     "member"
   ],
   [
-    "src/data-adapters/object-adapter.js~objectadapter#get",
-    "class/src/data-adapters/object-adapter.js~ObjectAdapter.html#instance-method-get",
-    "src/data-adapters/object-adapter.js~ObjectAdapter#get",
+    "src/data-stores/object-store.js~objectstore#get",
+    "class/src/data-stores/object-store.js~ObjectStore.html#instance-method-get",
+    "src/data-stores/object-store.js~ObjectStore#get",
     "method"
   ],
   [
-    "src/data-adapters/object-adapter.js~objectadapter#merge",
-    "class/src/data-adapters/object-adapter.js~ObjectAdapter.html#instance-method-merge",
-    "src/data-adapters/object-adapter.js~ObjectAdapter#merge",
+    "src/data-stores/object-store.js~objectstore#merge",
+    "class/src/data-stores/object-store.js~ObjectStore.html#instance-method-merge",
+    "src/data-stores/object-store.js~ObjectStore#merge",
     "method"
   ],
   [
-    "src/data-adapters/object-adapter.js~objectadapter#set",
-    "class/src/data-adapters/object-adapter.js~ObjectAdapter.html#instance-method-set",
-    "src/data-adapters/object-adapter.js~ObjectAdapter#set",
+    "src/data-stores/object-store.js~objectstore#set",
+    "class/src/data-stores/object-store.js~ObjectStore.html#instance-method-set",
+    "src/data-stores/object-store.js~ObjectStore#set",
     "method"
   ],
   [
-    "src/data-adapters/sqlite-adapter.js",
-    "file/src/data-adapters/sqlite-adapter.js.html",
-    "src/data-adapters/sqlite-adapter.js",
+    "src/data-stores/sqlite-store.js",
+    "file/src/data-stores/sqlite-store.js.html",
+    "src/data-stores/sqlite-store.js",
     "file"
   ],
   [
-    "src/data-adapters/sqlite-adapter.js~sqliteadapter#constructor",
-    "class/src/data-adapters/sqlite-adapter.js~SqliteAdapter.html#instance-constructor-constructor",
-    "src/data-adapters/sqlite-adapter.js~SqliteAdapter#constructor",
+    "src/data-stores/sqlite-store.js~sqlitestore#constructor",
+    "class/src/data-stores/sqlite-store.js~SqliteStore.html#instance-constructor-constructor",
+    "src/data-stores/sqlite-store.js~SqliteStore#constructor",
     "method"
   ],
   [
-    "src/data-adapters/sqlite-adapter.js~sqliteadapter#get",
-    "class/src/data-adapters/sqlite-adapter.js~SqliteAdapter.html#instance-method-get",
-    "src/data-adapters/sqlite-adapter.js~SqliteAdapter#get",
+    "src/data-stores/sqlite-store.js~sqlitestore#get",
+    "class/src/data-stores/sqlite-store.js~SqliteStore.html#instance-method-get",
+    "src/data-stores/sqlite-store.js~SqliteStore#get",
     "method"
   ],
   [
-    "src/data-adapters/sqlite-adapter.js~sqliteadapter#merge",
-    "class/src/data-adapters/sqlite-adapter.js~SqliteAdapter.html#instance-method-merge",
-    "src/data-adapters/sqlite-adapter.js~SqliteAdapter#merge",
+    "src/data-stores/sqlite-store.js~sqlitestore#merge",
+    "class/src/data-stores/sqlite-store.js~SqliteStore.html#instance-method-merge",
+    "src/data-stores/sqlite-store.js~SqliteStore#merge",
     "method"
   ],
   [
-    "src/data-adapters/sqlite-adapter.js~sqliteadapter#set",
-    "class/src/data-adapters/sqlite-adapter.js~SqliteAdapter.html#instance-method-set",
-    "src/data-adapters/sqlite-adapter.js~SqliteAdapter#set",
+    "src/data-stores/sqlite-store.js~sqlitestore#set",
+    "class/src/data-stores/sqlite-store.js~SqliteStore.html#instance-method-set",
+    "src/data-stores/sqlite-store.js~SqliteStore#set",
     "method"
   ],
   [
@@ -2265,18 +2247,6 @@ window.esdocSearchIndex = [
     "src/message/message-builder.js~messagebuilder#underlined",
     "class/src/message/message-builder.js~MessageBuilder.html#instance-method-underlined",
     "src/message/message-builder.js~MessageBuilder#underlined",
-    "method"
-  ],
-  [
-    "src/schema/schema.js",
-    "file/src/schema/schema.js.html",
-    "src/schema/schema.js",
-    "file"
-  ],
-  [
-    "src/schema/schema.js~schema.validate",
-    "class/src/schema/schema.js~Schema.html#static-method-validate",
-    "src/schema/schema.js~Schema.validate",
     "method"
   ],
   [

@@ -1,22 +1,32 @@
 import Utils from "../core/utils";
 import ObjectAuthStore from "./object-auth-store";
+import Log from "../core/log";
 
 const fs = require("fs");
 
 export default class JsonAuthStore extends ObjectAuthStore {
 	/**
-	 * @param {String} path
+	 * @param {String} schemaPath
+	 * @param {String} storePath
 	 */
-	constructor(path) {
-		super(null);
+	constructor(schemaPath, storePath) {
+		super(null, null);
 
 		/**
-		 * The path of the source file
+		 * The path of the schema file
 		 * @type {String}
 		 * @private
 		 * @readonly
 		 */
-		this.path = path;
+		this.schemaPath = schemaPath;
+
+		/**
+		 * The path of the store file
+		 * @type {String}
+		 * @private
+		 * @readonly
+		 */
+		this.storePath = storePath;
 
 		this.reload();
 	}
@@ -26,18 +36,24 @@ export default class JsonAuthStore extends ObjectAuthStore {
 	 */
 	async reload() {
 		if (!this.exists) {
-			await Utils.writeJson(this.path, {});
+			await Utils.writeJson(this.storePath, {});
 			this.data = {};
 		}
 		else {
-			this.data = await Utils.readJson(this.path);
+			this.data = await Utils.readJson(this.storePath);
 		}
+
+		if (!fs.existsSync(this.schemaPath)) {
+			Log.throw(`[JsonAuthStore] Schema file path does not exist: ${this.schemaPath}`);
+		}
+
+		this.schema = await Utils.readJson(this.schemaPath);
 	}
 
 	/**
-	 * @return {Boolean} Whether the source file exists
+	 * @return {Boolean} Whether the store file exists
 	 */
 	get exists() {
-		return fs.existsSync(this.path);
+		return fs.existsSync(this.storePath);
 	}
 }

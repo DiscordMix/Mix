@@ -49,7 +49,7 @@ export default class Command {
 		 * @type {Function}
 		 * @readonly
 		 */
-		this.canExecute = data.canExecute ? data.canExecute : true;
+		this.canExecute = data.canExecute ? data.canExecute : null;
 
 		/**
 		 * @type {CommandCategoryType}
@@ -67,7 +67,7 @@ export default class Command {
 		 * @type {Boolean}
 		 * @readonly
 		 */
-		this.isEnabled = data.meta.enabled !== null ? data.meta.enabled : true;
+		this.isEnabled = data.meta.enabled !== undefined ? data.meta.enabled : true;
 	}
 
 	/**

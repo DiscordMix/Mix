@@ -6,7 +6,7 @@ export default class ConsoleInterface {
 	/**
 	 * @param {Bot} bot
 	 */
-	init(bot) {
+	setup(bot) {
 		const ci = readline.createInterface({
 			input: process.stdin,
 			output: process.stdout
@@ -48,6 +48,6 @@ export default class ConsoleInterface {
 		});
 
 		// TODO: Should log before setting the prompt
-		Log.verbose("Console interface setup completed");
+		Log.verbose("[ConsoleInterface.setup] Console interface setup completed");
 	}
 }

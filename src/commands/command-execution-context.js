@@ -8,10 +8,10 @@ export default class CommandExecutionContext {
 	 * @param {Message} message
 	 * @param {Array<String>} args
 	 * @param {Bot} bot
-	 * @param {AccessLevelType} accessLevel
+	 * @param {Number} authLevel
 	 * @param {EmojiCollection} emojis
 	 */
-	constructor(message, args, bot, accessLevel, emojis) {
+	constructor(message, args, bot, authLevel, emojis) {
 		/**
 		 * @type {Message}
 		 * @readonly
@@ -34,7 +34,7 @@ export default class CommandExecutionContext {
 		 * @type {AccessLevelType}
 		 * @readonly
 		 */
-		this.accessLevel = accessLevel;
+		this.accessLevel = authLevel;
 
 		/**
 		 * @type {EmojiCollection}
@@ -109,7 +109,7 @@ export default class CommandExecutionContext {
 	 * @returns {AccessLevelType}
 	 */
 	getAuth(userId) {
-		return this.bot.commands.getAuthority(this.message.guild.id, this.message.guild.member(userId).roles.array().map((role) => role.name), userId);
+		return this.bot.authStore.getAuthority(this.message.guild.id, this.message.guild.member(userId).roles.array().map((role) => role.name), userId);
 	}
 
 	/**
@@ -134,7 +134,7 @@ export default class CommandExecutionContext {
 	 */
 	async ok(text) {
 		return await this.respond({
-			text: `${this.emojis.get("check")} ${text}`
+			text: `${text}`
 		});
 	}
 
@@ -144,7 +144,7 @@ export default class CommandExecutionContext {
 	 */
 	async loading(text) {
 		return await this.respond({
-			text: `${this.emojis.get("loading")} ${text}`,
+			text: `${text}`,
 			color: "BLUE"
 		});
 	}

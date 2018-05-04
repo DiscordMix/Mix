@@ -8,7 +8,7 @@ export default class CommandAuthStore {
 	 * @returns {Number}
 	 */
 	getAuthLevel(guildId, identifier) {
-		Log.throw("[CommandAuthStore] Method not implemented");
+		Log.throw("[CommandAuthStore.getAuthLevel] Method not implemented");
 	}
 
 	/**
@@ -18,7 +18,7 @@ export default class CommandAuthStore {
 	 * @returns {Number}
 	 */
 	getHighestAuthLevelByRoles(guildId, roles) {
-		Log.throw("[CommandAuthStore] Method not implemented");
+		Log.throw("[CommandAuthStore.getHighestAuthLevelByRoles] Method not implemented");
 	}
 
 	/**
@@ -29,7 +29,36 @@ export default class CommandAuthStore {
 	 * @returns {Number} The authority of the user
 	 */
 	getAuthority(guildId, userId, roles = ["@everyone"]) {
-		Log.throw("[CommandAuthStore] Method not implemented");
+		Log.throw("[CommandAuthStore.getAuthority] Method not implemented");
+	}
+
+	/**
+	 * Create a default auth store entry
+	 * @abstract
+	 * @param {Snowflake} guildId
+	 * @return {Boolean} Whether the entry was created
+	 */
+	create(guildId) {
+		Log.throw("[CommandAuthStore.create] Method not implemented");
+	}
+
+	/**
+	 * Remove an auth store entry
+	 * @abstract
+	 * @param {Snowflake} guildId
+	 * @return {Boolean} Whether the entry was removed
+	 */
+	remove(guildId) {
+		Log.throw("[CommandAuthStore.remove] Method not implemented");
+	}
+
+	/**
+	 * Determine whether this auth store contains an entry
+	 * @param {Snowflake} guildId
+	 * @return {Boolean} Whether the entry exists
+	 */
+	contains(guildId) {
+		return this.data[guildId] !== undefined;
 	}
 
 	/**

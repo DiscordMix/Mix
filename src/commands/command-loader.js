@@ -42,15 +42,15 @@ export default class CommandLoader {
 							loaded++;
 						}
 						else {
-							Log.warn(`Skipping invalid command: ${path.basename(file, ".js")}`);
+							Log.warn(`[CommandLoader.loadAll] Skipping invalid command: ${path.basename(file, ".js")}`);
 						}
 					}
 					else {
-						Log.verbose(`Skipping command: ${path.basename(file, ".js")}`);
+						Log.verbose(`[CommandLoader.loadAll] Skipping command: ${path.basename(file, ".js")}`);
 					}
 				});
 
-				Log.success(`Loaded a total of ${loaded} command(s)`);
+				Log.success(`[CommandLoader.loadAll] Loaded a total of ${loaded} command(s)`);
 				resolve();
 			});
 		});

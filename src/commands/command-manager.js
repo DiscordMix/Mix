@@ -133,10 +133,10 @@ export default class CommandManager /* extends Collection */ {
 		const result = {};
 
 		if (rules.length !== args.length) {
-			this.bot.log.info("AssembleArguments: Not same length");
+			Log.debug("AssembleArguments: Not same length");
 		}
 
-		this.bot.log.info(args);
+		Log.debug(args);
 
 		for (let i = 0; i < rules.length; i++) {
 			result[rules[i]] = (isNaN(args[i]) ? args[i] : parseInt(args[i]));
@@ -174,7 +174,7 @@ export default class CommandManager /* extends Collection */ {
 				context.fail(`That command does not accept any arguments.`);
 			}
 		}
-		else if (!command.canExecute(context)) {
+		else if (command.canExecute !== null && !command.canExecute(context)) {
 			context.fail("That command cannot be executed right now.");
 		}
 		else if (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {

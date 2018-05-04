@@ -14,6 +14,6 @@ export default class CommandArgumentParser {
 			}
 		}
 
-		throw new Error(`[CommandArgumentParser] Missing argument resolver: ${type}`);
+		throw new Error(`[CommandArgumentParser.resolve] Missing argument resolver: ${type}`);
 	}
 }

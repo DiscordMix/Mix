@@ -115,7 +115,7 @@ export default class CommandManager /* extends Collection */ {
 	 */
 	getByBase(commandBase) {
 		for (let i = 0; i < this.commands.length; i++) {
-			if (this.commands[i].base === commandBase || this.commands[i].aliases.includes(commandBase)) {
+			if (this.commands[i].name === commandBase || this.commands[i].aliases.includes(commandBase)) {
 				return this.commands[i];
 			}
 		}
@@ -159,8 +159,8 @@ export default class CommandManager /* extends Collection */ {
 		else if (!command.isEnabled) {
 			await context.fail("That command is disabled and may not be used.");
 		}
-		else if (!this.hasAuthority(context.message.guild.id, context.message, command.accessLevel)) {
-			const minAuthority = AccessLevelType.toString(command.accessLevel);
+		else if (!this.hasAuthority(context.message.guild.id, context.message, command.authLevel)) {
+			const minAuthority = AccessLevelType.toString(command.authLevel);
 			context.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
 		}
 		else if (context.arguments.length > command.maxArguments) {

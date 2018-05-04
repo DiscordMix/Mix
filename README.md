@@ -16,7 +16,7 @@ Anvil is a powerful fully-modular, self-contained bot development framework.
 
 => [Click here to view the docs](https://cloudrex.github.io/Anvil/)
 
-*Powering the [Tux](https://github.com/CloudRex/Tux) and [War](https://github.com/CloudRex/War) bots. | Powered by [Discord.js](https://discord.js.org/)*
+*Powering the [Tux](https://github.com/CloudRex/Tux) and [War](https://github.com/CloudRex/War) bots | Powered by [Discord.js](https://discord.js.org/)*
 
 #### Quick Start
 
@@ -53,18 +53,17 @@ settings.json: ([Click here](https://discordapp.com/developers/applications/me) 
 }
 ```
 
-access-levels.json:
+auth-levels.json:
 ```json
 {
-	"Guest": [],
-	"Member": [
-		"@everyone"
-	],
-	"Premium": [],
-	"Moderator": [],
-	"Admin": [],
-	"Owner": [],
-	"Developer": ["<Your Discord user ID here>"]
+    "default": {
+        "rank": 0
+    },
+    
+	"developer": {
+	    "rank": 1,
+	    "global": true
+	}
 }
 ```
 
@@ -79,20 +78,12 @@ module.exports = {
 		context.ok("Hello world!");
 	},
 	
-	// Whether the command can execute in the current state
-	canExecute(context) {
-		return true;
-	},
-	
 	// Information about the command
 	meta: {
 		name: "hello", // The name of the command
-		description: "Hello world", // The description of the command
-		accessLevel: AccessLevelType.Member, // Who can issue this command
-		aliases: [], // Aliases of this command
-		args: {},
+		desc: "Hello world", // The description of the command
+		authLevel: AccessLevelType.Member, // Who can issue this command
 		category: CommandCategoryType.Utility, // The category of the command
-		enabled: true // Whether this command is enabled and can be executed
 	}
 };
 ```

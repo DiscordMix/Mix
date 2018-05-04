@@ -3,7 +3,6 @@ import Log from "../core/log";
 
 const fs = require("fs");
 const path = require("path");
-const Typer = require("@raxor1234/typer");
 
 export default class CommandLoader {
 	/**
@@ -30,13 +29,14 @@ export default class CommandLoader {
 
 						let module = require(modulePath);
 
-						// Support for ES6 compiled
+						// Support for ES6-compiled modules
 						if (module.default && typeof module.default === "object") {
 							module = module.default;
 						}
 
-						if (CommandLoader.validate(module)) {
-							this.commandManager.register(Command.fromModule(module));
+						// Validate the command before registering it
+						if (Command.validate(module)) {
+							this.commandManager.register(new Command(module));
 						}
 						else {
 							Log.warn(`Skipping invalid command: ${path.basename(file, ".js")}`);
@@ -55,27 +55,5 @@ export default class CommandLoader {
 
 	load(pth) {
 		// TODO
-	}
-
-	/**
-	 * @param {Object} module
-	 * @returns {Boolean} Whether the module is valid
-	 */
-	static validate(module) {
-		Typer.validate({
-			executed: "function",
-			canExecute: "function",
-			meta: "object"
-		}, module);
-
-		Typer.validate({
-			name: "string",
-			description: "string",
-			accessLevel: "number",
-			aliases: "object"
-		}, module.meta);
-
-		// TODO
-		return true;
 	}
 }

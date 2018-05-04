@@ -7,7 +7,7 @@ export default class CommandParser {
 	 */
 	static parse(commandString, manager, trigger) {
 		if (this.isValid(commandString, manager, trigger)) {
-			return manager.getByBase(this.getCommandBase(commandString, trigger));
+			return manager.getByName(this.getCommandBase(commandString, trigger));
 		}
 
 		return null;

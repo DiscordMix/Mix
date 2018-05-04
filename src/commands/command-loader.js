@@ -22,10 +22,10 @@ export default class CommandLoader {
 	 */
 	async loadAll() {
 		return new Promise((resolve) => {
-			fs.readdir(this.commandManager.commandsPath, (error, files) => {
+			fs.readdir(this.commandManager.path, (error, files) => {
 				files.forEach((file) => {
 					if (!file.startsWith("@")) {
-						const modulePath = path.join(this.commandManager.commandsPath, path.basename(file, ".js"));
+						const modulePath = path.join(this.commandManager.path, path.basename(file, ".js"));
 
 						let module = require(modulePath);
 

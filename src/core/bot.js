@@ -10,6 +10,7 @@ import FeatureManager from "../features/feature-manager";
 import CommandLoader from "../commands/command-loader";
 import Log from "./log";
 import DataStore from "../data-stores/data-store";
+import CommandAuthStore from "../commands/command-auth-store";
 
 const Discord = require("discord.js");
 const Typer = require("@raxor1234/typer");
@@ -40,9 +41,11 @@ export default class Bot extends EventEmitter {
 
 		if (!Typer.validate({
 			paths: "!object",
-			argumentTypes: "object",
-			dataAdapter: ":dataStore"
+			authStore: ":authStore",
+			dataStore: ":dataStore",
+			argumentTypes: "object"
 		}, data, {
+			authStore: (val) => val instanceof CommandAuthStore,
 			dataStore: (val) => val instanceof DataStore
 		})) {
 			Log.throw("[Bot.setup] Invalid data object provided");
@@ -164,8 +167,6 @@ export default class Bot extends EventEmitter {
 					);
 				}
 				else if (message.content === "?prefix") {
-					console.log(this.settings.general);
-
 					message.channel.send(`Command prefix: **${this.settings.general.prefix}**`);
 				}
 			}

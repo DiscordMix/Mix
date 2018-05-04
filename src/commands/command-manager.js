@@ -1,6 +1,7 @@
 import AccessLevelType from "../commands/access-level-type";
 import CommandExecutedEvent from "../events/command-executed-event";
 import CommandCategoryType from "./command-category-type";
+import Log from "../core/log";
 
 const Typer = require("@raxor1234/typer/typer");
 // import Collection from "../core/collection";
@@ -8,11 +9,11 @@ const Typer = require("@raxor1234/typer/typer");
 export default class CommandManager /* extends Collection */ {
 	/**
 	 * @param {Bot} bot
-	 * @param {String} commandsPath
-	 * @param {String} accessLevelsPath
+	 * @param {String} path
+	 * @param {CommandAuthStore} authStore
 	 * @param {Object} argumentTypes
 	 */
-	constructor(bot, commandsPath, accessLevelsPath, argumentTypes) {
+	constructor(bot, path, authStore, argumentTypes) {
 		/**
 		 * @type {Bot}
 		 * @private
@@ -25,14 +26,14 @@ export default class CommandManager /* extends Collection */ {
 		 * @private
 		 * @readonly
 		 */
-		this.commandsPath = commandsPath;
+		this.path = path;
 
 		/**
-		 * @type {String}
+		 * @type {CommandAuthStore}
 		 * @private
 		 * @readonly
 		 */
-		this.accessLevelsPath = accessLevelsPath;
+		this.authStore = authStore;
 
 		/**
 		 * @type {Object}
@@ -59,7 +60,7 @@ export default class CommandManager /* extends Collection */ {
 	 * @returns {Boolean}
 	 */
 	removeByBase(commandBase) {
-		return this.remove(this.getByBase(commandBase));
+		return this.remove(this.getByName(commandBase));
 	}
 
 	/**
@@ -89,7 +90,7 @@ export default class CommandManager /* extends Collection */ {
 	 * @returns {Boolean}
 	 */
 	contains(commandBase) {
-		return this.getByBase(commandBase) !== null;
+		return this.getByName(commandBase) !== null;
 	}
 
 	/**
@@ -106,16 +107,16 @@ export default class CommandManager /* extends Collection */ {
 	 * @returns {Boolean}
 	 */
 	isRegistered(commandBase) {
-		return this.getByBase(commandBase) != null;
+		return this.getByName(commandBase) != null;
 	}
 
 	/**
-	 * @param {String} commandBase
+	 * @param {String} name
 	 * @returns {(Command|Null)}
 	 */
-	getByBase(commandBase) {
+	getByName(name) {
 		for (let i = 0; i < this.commands.length; i++) {
-			if (this.commands[i].name === commandBase || this.commands[i].aliases.includes(commandBase)) {
+			if (this.commands[i].name === name || this.commands[i].aliases.includes(name)) {
 				return this.commands[i];
 			}
 		}
@@ -154,13 +155,15 @@ export default class CommandManager /* extends Collection */ {
 			context.message.channel.send("That command must be used in a text channel. Sorry!");
 		}
 		else if (command.category === CommandCategoryType.NSFW && !context.message.channel.nsfw) {
-			context.fail(":underage: Please use an NSFW channel for this command.");
+			context.fail(":underage: Please use a NSFW channel for this command.");
 		}
 		else if (!command.isEnabled) {
 			await context.fail("That command is disabled and may not be used.");
 		}
-		else if (!this.hasAuthority(context.message.guild.id, context.message, command.authLevel)) {
+		else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.authLevel)) {
+			// TODO: New AuthStore system
 			const minAuthority = AccessLevelType.toString(command.authLevel);
+
 			context.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
 		}
 		else if (context.arguments.length > command.maxArguments) {
@@ -179,15 +182,15 @@ export default class CommandManager /* extends Collection */ {
 		}
 		else {
 			try {
-				const result = command.executed(context); // .catch((error) => context.respond(`There was an error while executing that command. (${error.message})`, "", "RED"));
+				const result = command.executed(context);
 				context.bot.emit("commandExecuted", new CommandExecutedEvent(command, context));
 
 				return result;
 			}
 			catch (error) {
-				// TODO: Use the Log class
-				console.error(error);
-				context.fail(`**Oh noes!** There was an error executing that command. (${error.message})`);
+				// TODO: Include stack trace
+				Log.error(`There was an error while executing the ${command.name} command: ${error.message}`);
+				context.fail(`There was an error executing that command. (${error.message})`);
 			}
 		}
 

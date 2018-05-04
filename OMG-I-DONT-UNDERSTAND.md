@@ -53,20 +53,10 @@ export default {
 		context.respond("Hello World!");
 	},
 	
-	canExecute(context) {
-		return true;
-	},
-	
 	meta: {
 		name: "hello", // The name of our command
-		description: "Responds with hello world", // A brief description of our command
-		accessLevel: AccessLevelType.Guest,
-		aliases: [], // Aliases of our command (strings)
-		maxArguments: 0, // The total amount of possible arguments that our command can take
-		args: {},
-		category: CommandCategoryType.Fun, // The category of our command
-		enabled: true, // Whether our command is enabled
-		price: 0
+		desc: "Responds with hello world", // A brief description of our command
+		authLevel: 0, // The required authorization to access this command
 	}
 };
 ````

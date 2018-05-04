@@ -1,6 +1,5 @@
 import AccessLevelType from "../commands/access-level-type";
 import CommandExecutedEvent from "../events/command-executed-event";
-import CommandCategoryType from "./command-category-type";
 import Log from "../core/log";
 
 const Typer = require("@raxor1234/typer/typer");
@@ -151,9 +150,6 @@ export default class CommandManager /* extends Collection */ {
 	async handle(context, command) {
 		if (!context.message.member) {
 			context.message.channel.send("That command must be used in a text channel. Sorry!");
-		}
-		else if (command.category === CommandCategoryType.NSFW && !context.message.channel.nsfw) {
-			context.fail(":underage: Please use a NSFW channel for this command.");
 		}
 		else if (!command.isEnabled) {
 			await context.fail("That command is disabled and may not be used.");

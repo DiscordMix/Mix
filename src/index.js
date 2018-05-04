@@ -1,7 +1,6 @@
 module.exports = {
 	// Commands
 	CommandArgumentParser: require("./commands/command-argument-parser").default,
-	CommandCategoryType: require("./commands/command-category-type").default,
 	CommandExecutionContext: require("./commands/command-execution-context").default,
 	CommandLoader: require("./commands/command-loader").default,
 	CommandManager: require("./commands/command-manager").default,
@@ -19,8 +18,8 @@ module.exports = {
 	EmbedBuilder: require("./message/embed-builder").default,
 	Log: require("./core/log").default,
 	MessageBuilder: require("./message/message-builder").default,
-	RGB: require("./core/rgb").default,
-	RGBA: require("./core/rgba").default,
+	RGB: require("./misc/rgb").default,
+	RGBA: require("./misc/rgba").default,
 	Settings: require("./core/settings").default,
 	TimeParser: require("./time/time-parser").default,
 	TimeSuffixType: require("./time/time-suffix-type").default,

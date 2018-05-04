@@ -1,6 +1,6 @@
 import Utils from "../core/utils";
-import RGB from "../core/rgb";
-import RGBA from "../core/rgba";
+import RGB from "../misc/rgb";
+import RGBA from "../misc/rgba";
 import Collection from "../collections/collection";
 import ObjectStore from "../data-stores/object-store";
 

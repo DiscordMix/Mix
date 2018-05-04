@@ -52,12 +52,6 @@ export default class Command {
 		this.canExecute = data.canExecute ? data.canExecute : null;
 
 		/**
-		 * @type {CommandCategoryType}
-		 * @readonly
-		 */
-		this.category = data.meta.category;
-
-		/**
 		 * @type {Object}
 		 * @readonly
 		 */
@@ -103,7 +97,6 @@ export default class Command {
 			name: "!string",
 			desc: "!string",
 			authLevel: "!number",
-			category: "!number",
 			args: "object",
 			aliases: ":array",
 			isEnabled: "boolean",

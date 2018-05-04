@@ -1186,7 +1186,7 @@
     "__docId__": 71,
     "kind": "file",
     "name": "src/commands/command-auth-store.js",
-    "content": "import Log from \"../core/log\";\n\nexport default class CommandAuthStore {\n\t/**\n\t * @abstract\n\t * @param {Snowflake} guildId\n\t * @param {*} identifier\n\t * @returns {Number}\n\t */\n\tgetAuthLevel(guildId, identifier) {\n\t\tLog.throw(\"[CommandAuthStore] Method not implemented\");\n\t}\n\n\t/**\n\t * @abstract\n\t * @param {Snowflake} guildId\n\t * @param {Array<String>} roles\n\t * @returns {Number}\n\t */\n\tgetHighestAuthLevelByRoles(guildId, roles) {\n\t\tLog.throw(\"[CommandAuthStore] Method not implemented\");\n\t}\n\n\t/**\n\t * @abstract\n\t * @param {Snowflake} guildId\n\t * @param {Snowflake} userId\n\t * @param {Array<String>} roles\n\t * @returns {Number} The authority of the user\n\t */\n\tgetAuthority(guildId, userId, roles = [\"@everyone\"]) {\n\t\tLog.throw(\"[CommandAuthStore] Method not implemented\");\n\t}\n\n\t/**\n\t * @param {Snowflake} guildId\n\t * @param {Discord.Message} message\n\t * @param {Number} authLevel\n\t * @returns {Boolean}\n\t */\n\thasAuthority(guildId, message, authLevel) {\n\t\treturn this.getAuthority(guildId, message.author.id, message.member.roles.array().map((role) => role.name)) >= authLevel;\n\t}\n}\n",
+    "content": "import Log from \"../core/log\";\n\nexport default class CommandAuthStore {\n\t/**\n\t * @abstract\n\t * @param {Snowflake} guildId\n\t * @param {*} identifier\n\t * @returns {Number}\n\t */\n\tgetAuthLevel(guildId, identifier) {\n\t\tLog.throw(\"[CommandAuthStore.getAuthLevel] Method not implemented\");\n\t}\n\n\t/**\n\t * @abstract\n\t * @param {Snowflake} guildId\n\t * @param {Array<String>} roles\n\t * @returns {Number}\n\t */\n\tgetHighestAuthLevelByRoles(guildId, roles) {\n\t\tLog.throw(\"[CommandAuthStore.getHighestAuthLevelByRoles] Method not implemented\");\n\t}\n\n\t/**\n\t * @abstract\n\t * @param {Snowflake} guildId\n\t * @param {Snowflake} userId\n\t * @param {Array<String>} roles\n\t * @returns {Number} The authority of the user\n\t */\n\tgetAuthority(guildId, userId, roles = [\"@everyone\"]) {\n\t\tLog.throw(\"[CommandAuthStore.getAuthority] Method not implemented\");\n\t}\n\n\t/**\n\t * Create a default auth store entry\n\t * @abstract\n\t * @param {Snowflake} guildId\n\t * @return {Boolean} Whether the entry was created\n\t */\n\tcreate(guildId) {\n\t\tLog.throw(\"[CommandAuthStore.create] Method not implemented\");\n\t}\n\n\t/**\n\t * Remove an auth store entry\n\t * @abstract\n\t * @param {Snowflake} guildId\n\t * @return {Boolean} Whether the entry was removed\n\t */\n\tremove(guildId) {\n\t\tLog.throw(\"[CommandAuthStore.remove] Method not implemented\");\n\t}\n\n\t/**\n\t * Determine whether this auth store contains an entry\n\t * @param {Snowflake} guildId\n\t * @return {Boolean} Whether the entry exists\n\t */\n\tcontains(guildId) {\n\t\treturn this.data[guildId] !== undefined;\n\t}\n\n\t/**\n\t * @param {Snowflake} guildId\n\t * @param {Discord.Message} message\n\t * @param {Number} authLevel\n\t * @returns {Boolean}\n\t */\n\thasAuthority(guildId, message, authLevel) {\n\t\treturn this.getAuthority(guildId, message.author.id, message.member.roles.array().map((role) => role.name)) >= authLevel;\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/commands/command-auth-store.js",
     "access": "public",
@@ -1372,6 +1372,107 @@
   {
     "__docId__": 76,
     "kind": "method",
+    "name": "create",
+    "memberof": "src/commands/command-auth-store.js~CommandAuthStore",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/commands/command-auth-store.js~CommandAuthStore#create",
+    "access": "public",
+    "description": "Create a default auth store entry",
+    "lineNumber": 41,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Snowflake"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "guildId",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Boolean"
+      ],
+      "spread": false,
+      "description": "Whether the entry was created"
+    },
+    "abstract": true
+  },
+  {
+    "__docId__": 77,
+    "kind": "method",
+    "name": "remove",
+    "memberof": "src/commands/command-auth-store.js~CommandAuthStore",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/commands/command-auth-store.js~CommandAuthStore#remove",
+    "access": "public",
+    "description": "Remove an auth store entry",
+    "lineNumber": 51,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Snowflake"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "guildId",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Boolean"
+      ],
+      "spread": false,
+      "description": "Whether the entry was removed"
+    },
+    "abstract": true
+  },
+  {
+    "__docId__": 78,
+    "kind": "method",
+    "name": "contains",
+    "memberof": "src/commands/command-auth-store.js~CommandAuthStore",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/commands/command-auth-store.js~CommandAuthStore#contains",
+    "access": "public",
+    "description": "Determine whether this auth store contains an entry",
+    "lineNumber": 60,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Snowflake"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "guildId",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Boolean"
+      ],
+      "spread": false,
+      "description": "Whether the entry exists"
+    }
+  },
+  {
+    "__docId__": 79,
+    "kind": "method",
     "name": "hasAuthority",
     "memberof": "src/commands/command-auth-store.js~CommandAuthStore",
     "generator": false,
@@ -1380,7 +1481,7 @@
     "longname": "src/commands/command-auth-store.js~CommandAuthStore#hasAuthority",
     "access": "public",
     "description": "",
-    "lineNumber": 41,
+    "lineNumber": 70,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1429,7 +1530,7 @@
     }
   },
   {
-    "__docId__": 77,
+    "__docId__": 80,
     "kind": "file",
     "name": "src/commands/command-category-type.js",
     "content": "/**\n * @enum {Number}\n * @readonly\n */\nconst CommandCategoryType = {\n\tGeneral: 0,\n\tFun: 1,\n\tUtility: 2,\n\tNSFW: 3,\n\tModeration: 4,\n\tMusic: 5,\n\tEconomy: 6,\n\tDeveloper: 7\n};\n\nexport default CommandCategoryType;\n",
@@ -1440,7 +1541,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 78,
+    "__docId__": 81,
     "kind": "variable",
     "name": "CommandCategoryType",
     "memberof": "src/commands/command-category-type.js",
@@ -1469,10 +1570,10 @@
     }
   },
   {
-    "__docId__": 79,
+    "__docId__": 82,
     "kind": "file",
     "name": "src/commands/command-execution-context.js",
-    "content": "import EditableMessage from \"../message/editable-message\";\nimport EmbedBuilder from \"../message/embed-builder\";\n\nconst Discord = require(\"discord.js\");\n\nexport default class CommandExecutionContext {\n\t/**\n\t * @param {Message} message\n\t * @param {Array<String>} args\n\t * @param {Bot} bot\n\t * @param {AccessLevelType} accessLevel\n\t * @param {EmojiCollection} emojis\n\t */\n\tconstructor(message, args, bot, accessLevel, emojis) {\n\t\t/**\n\t\t * @type {Message}\n\t\t * @readonly\n\t\t */\n\t\tthis.message = message;\n\n\t\t/**\n\t\t * @type {Array<String>}\n\t\t * @readonly\n\t\t */\n\t\tthis.arguments = args;\n\n\t\t/**\n\t\t * @type {Bot}\n\t\t * @readonly\n\t\t */\n\t\tthis.bot = bot;\n\n\t\t/**\n\t\t * @type {AccessLevelType}\n\t\t * @readonly\n\t\t */\n\t\tthis.accessLevel = accessLevel;\n\n\t\t/**\n\t\t * @type {EmojiCollection}\n\t\t * @readonly\n\t\t */\n\t\tthis.emojis = emojis;\n\t}\n\n\t/**\n\t * @param {*} stream\n\t * @param {String} name\n\t * @returns {(Promise<EditableMessage>|Null)}\n\t */\n\tasync fileStream(stream, name) {\n\t\treturn await this.message.channel.send(new Discord.Attachment(stream, name));\n\t}\n\n\t/**\n\t * @param {(Object|EmbedBuilder)} content\n\t * @param {Boolean} [autoDelete=false]\n\t * @returns {(Promise<EditableMessage>|null)}\n\t */\n\tasync respond(content, autoDelete = false) {\n\t\tlet embed = null;\n\n\t\tif (content.text) {\n\t\t\tif (content.text.toString().trim() === \"\" || content.text === undefined || content.text === null) {\n\t\t\t\tcontent.text = \":thinking: *Empty response.*\";\n\t\t\t}\n\t\t}\n\n\t\tif (content instanceof EmbedBuilder) {\n\t\t\tembed = content;\n\t\t}\n\t\telse {\n\t\t\tif (!content.color) {\n\t\t\t\tcontent.color = \"GREEN\";\n\t\t\t}\n\n\t\t\tif (!content.footer) {\n\t\t\t\tcontent.footer = {\n\t\t\t\t\ttext: `Requested by ${this.sender.username}`,\n\t\t\t\t\ticon: this.sender.avatarURL\n\t\t\t\t};\n\t\t\t}\n\n\t\t\tembed = EmbedBuilder.fromObject(content);\n\t\t}\n\n\t\tconst messageResult = await this.message.channel.send(embed.build()).catch((error) => {\n\t\t\t// TODO: Temporarily disabled due to spamming on unwanted servers.\n\t\t\t// this.privateReply(`Oh noes! For some reason, I was unable to reply to you in that channel. (${error.message})`);\n\t\t});\n\n\t\tif (autoDelete && messageResult) {\n\t\t\t// TODO: Cannot access .length in embeds\n\t\t\t// also static time for images, probably need function\n\t\t\tconst timeInSeconds = (4000 + (100 * embed.build() * 1000)) / 1000;\n\n\t\t\tmessageResult.delete(4000 + (100 * messageResult.content.length * 1000));\n\n\t\t\t// TODO\n\t\t\t// this.bot.log.info(messageResult.content.length);\n\t\t\t// this.bot.log.info(`time : ${timeInSeconds}`);\n\t\t}\n\n\t\treturn (messageResult !== undefined ? new EditableMessage(messageResult) : null);\n\t}\n\n\t/**\n\t * @param {Snowflake} userId\n\t * @returns {AccessLevelType}\n\t */\n\tgetAuth(userId) {\n\t\treturn this.bot.commands.getAuthority(this.message.guild.id, this.message.guild.member(userId).roles.array().map((role) => role.name), userId);\n\t}\n\n\t/**\n\t * @returns {AccessLevelType}\n\t */\n\tget auth() {\n\t\treturn this.getAuth(this.sender.id);\n\t}\n\n\t/**\n\t * @param {Object} sections\n\t * @param {String} color\n\t * @returns {Promise<EditableMessage>}\n\t */\n\tasync sections(sections, color = \"GREEN\") {\n\t\treturn await this.respond(EmbedBuilder.sections(sections, color));\n\t}\n\n\t/**\n\t * @param {String} text\n\t * @returns {Promise<EditableMessage>}\n\t */\n\tasync ok(text) {\n\t\treturn await this.respond({\n\t\t\ttext: `${this.emojis.get(\"check\")} ${text}`\n\t\t});\n\t}\n\n\t/**\n\t * @param {String} text\n\t * @returns {Promise<EditableMessage>}\n\t */\n\tasync loading(text) {\n\t\treturn await this.respond({\n\t\t\ttext: `${this.emojis.get(\"loading\")} ${text}`,\n\t\t\tcolor: \"BLUE\"\n\t\t});\n\t}\n\n\t/**\n\t * @param {String} text\n\t * @returns {Promise<EditableMessage>}\n\t */\n\tasync fail(text) {\n\t\treturn await this.respond({\n\t\t\ttext: `:thinking: ${text}`,\n\t\t\tcolor: \"RED\"\n\t\t}, true);\n\t}\n\n\t/**\n\t * @returns {User}\n\t */\n\tget sender() {\n\t\treturn this.message.author;\n\t}\n\n\t/**\n\t * @param {String} message\n\t * @returns {(Promise<Message>|null)}\n\t */\n\tasync reply(message) {\n\t\treturn await this.message.reply(message);\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tasync privateReply(message) {\n\t\treturn await this.message.author.send(message);\n\t}\n}\n",
+    "content": "import EditableMessage from \"../message/editable-message\";\nimport EmbedBuilder from \"../message/embed-builder\";\n\nconst Discord = require(\"discord.js\");\n\nexport default class CommandExecutionContext {\n\t/**\n\t * @param {Message} message\n\t * @param {Array<String>} args\n\t * @param {Bot} bot\n\t * @param {Number} authLevel\n\t * @param {EmojiCollection} emojis\n\t */\n\tconstructor(message, args, bot, authLevel, emojis) {\n\t\t/**\n\t\t * @type {Message}\n\t\t * @readonly\n\t\t */\n\t\tthis.message = message;\n\n\t\t/**\n\t\t * @type {Array<String>}\n\t\t * @readonly\n\t\t */\n\t\tthis.arguments = args;\n\n\t\t/**\n\t\t * @type {Bot}\n\t\t * @readonly\n\t\t */\n\t\tthis.bot = bot;\n\n\t\t/**\n\t\t * @type {AccessLevelType}\n\t\t * @readonly\n\t\t */\n\t\tthis.accessLevel = authLevel;\n\n\t\t/**\n\t\t * @type {EmojiCollection}\n\t\t * @readonly\n\t\t */\n\t\tthis.emojis = emojis;\n\t}\n\n\t/**\n\t * @param {*} stream\n\t * @param {String} name\n\t * @returns {(Promise<EditableMessage>|Null)}\n\t */\n\tasync fileStream(stream, name) {\n\t\treturn await this.message.channel.send(new Discord.Attachment(stream, name));\n\t}\n\n\t/**\n\t * @param {(Object|EmbedBuilder)} content\n\t * @param {Boolean} [autoDelete=false]\n\t * @returns {(Promise<EditableMessage>|null)}\n\t */\n\tasync respond(content, autoDelete = false) {\n\t\tlet embed = null;\n\n\t\tif (content.text) {\n\t\t\tif (content.text.toString().trim() === \"\" || content.text === undefined || content.text === null) {\n\t\t\t\tcontent.text = \":thinking: *Empty response.*\";\n\t\t\t}\n\t\t}\n\n\t\tif (content instanceof EmbedBuilder) {\n\t\t\tembed = content;\n\t\t}\n\t\telse {\n\t\t\tif (!content.color) {\n\t\t\t\tcontent.color = \"GREEN\";\n\t\t\t}\n\n\t\t\tif (!content.footer) {\n\t\t\t\tcontent.footer = {\n\t\t\t\t\ttext: `Requested by ${this.sender.username}`,\n\t\t\t\t\ticon: this.sender.avatarURL\n\t\t\t\t};\n\t\t\t}\n\n\t\t\tembed = EmbedBuilder.fromObject(content);\n\t\t}\n\n\t\tconst messageResult = await this.message.channel.send(embed.build()).catch((error) => {\n\t\t\t// TODO: Temporarily disabled due to spamming on unwanted servers.\n\t\t\t// this.privateReply(`Oh noes! For some reason, I was unable to reply to you in that channel. (${error.message})`);\n\t\t});\n\n\t\tif (autoDelete && messageResult) {\n\t\t\t// TODO: Cannot access .length in embeds\n\t\t\t// also static time for images, probably need function\n\t\t\tconst timeInSeconds = (4000 + (100 * embed.build() * 1000)) / 1000;\n\n\t\t\tmessageResult.delete(4000 + (100 * messageResult.content.length * 1000));\n\n\t\t\t// TODO\n\t\t\t// this.bot.log.info(messageResult.content.length);\n\t\t\t// this.bot.log.info(`time : ${timeInSeconds}`);\n\t\t}\n\n\t\treturn (messageResult !== undefined ? new EditableMessage(messageResult) : null);\n\t}\n\n\t/**\n\t * @param {Snowflake} userId\n\t * @returns {AccessLevelType}\n\t */\n\tgetAuth(userId) {\n\t\treturn this.bot.authStore.getAuthority(this.message.guild.id, this.message.guild.member(userId).roles.array().map((role) => role.name), userId);\n\t}\n\n\t/**\n\t * @returns {AccessLevelType}\n\t */\n\tget auth() {\n\t\treturn this.getAuth(this.sender.id);\n\t}\n\n\t/**\n\t * @param {Object} sections\n\t * @param {String} color\n\t * @returns {Promise<EditableMessage>}\n\t */\n\tasync sections(sections, color = \"GREEN\") {\n\t\treturn await this.respond(EmbedBuilder.sections(sections, color));\n\t}\n\n\t/**\n\t * @param {String} text\n\t * @returns {Promise<EditableMessage>}\n\t */\n\tasync ok(text) {\n\t\treturn await this.respond({\n\t\t\ttext: `${text}`\n\t\t});\n\t}\n\n\t/**\n\t * @param {String} text\n\t * @returns {Promise<EditableMessage>}\n\t */\n\tasync loading(text) {\n\t\treturn await this.respond({\n\t\t\ttext: `${text}`,\n\t\t\tcolor: \"BLUE\"\n\t\t});\n\t}\n\n\t/**\n\t * @param {String} text\n\t * @returns {Promise<EditableMessage>}\n\t */\n\tasync fail(text) {\n\t\treturn await this.respond({\n\t\t\ttext: `:thinking: ${text}`,\n\t\t\tcolor: \"RED\"\n\t\t}, true);\n\t}\n\n\t/**\n\t * @returns {User}\n\t */\n\tget sender() {\n\t\treturn this.message.author;\n\t}\n\n\t/**\n\t * @param {String} message\n\t * @returns {(Promise<Message>|null)}\n\t */\n\tasync reply(message) {\n\t\treturn await this.message.reply(message);\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tasync privateReply(message) {\n\t\treturn await this.message.author.send(message);\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/commands/command-execution-context.js",
     "access": "public",
@@ -1480,7 +1581,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 80,
+    "__docId__": 83,
     "kind": "variable",
     "name": "Discord",
     "memberof": "src/commands/command-execution-context.js",
@@ -1501,7 +1602,7 @@
     "ignore": true
   },
   {
-    "__docId__": 81,
+    "__docId__": 84,
     "kind": "class",
     "name": "CommandExecutionContext",
     "memberof": "src/commands/command-execution-context.js",
@@ -1517,7 +1618,7 @@
     "interface": false
   },
   {
-    "__docId__": 82,
+    "__docId__": 85,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1562,11 +1663,11 @@
       {
         "nullable": null,
         "types": [
-          "AccessLevelType"
+          "Number"
         ],
         "spread": false,
         "optional": false,
-        "name": "accessLevel",
+        "name": "authLevel",
         "description": ""
       },
       {
@@ -1582,7 +1683,7 @@
     ]
   },
   {
-    "__docId__": 83,
+    "__docId__": 86,
     "kind": "member",
     "name": "message",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1607,7 +1708,7 @@
     }
   },
   {
-    "__docId__": 84,
+    "__docId__": 87,
     "kind": "member",
     "name": "arguments",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1632,7 +1733,7 @@
     }
   },
   {
-    "__docId__": 85,
+    "__docId__": 88,
     "kind": "member",
     "name": "bot",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1657,7 +1758,7 @@
     }
   },
   {
-    "__docId__": 86,
+    "__docId__": 89,
     "kind": "member",
     "name": "accessLevel",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1682,7 +1783,7 @@
     }
   },
   {
-    "__docId__": 87,
+    "__docId__": 90,
     "kind": "member",
     "name": "emojis",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1707,7 +1808,7 @@
     }
   },
   {
-    "__docId__": 88,
+    "__docId__": 91,
     "kind": "method",
     "name": "fileStream",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1757,7 +1858,7 @@
     }
   },
   {
-    "__docId__": 89,
+    "__docId__": 92,
     "kind": "method",
     "name": "respond",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1810,7 +1911,7 @@
     }
   },
   {
-    "__docId__": 90,
+    "__docId__": 93,
     "kind": "method",
     "name": "getAuth",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1849,7 +1950,7 @@
     }
   },
   {
-    "__docId__": 91,
+    "__docId__": 94,
     "kind": "get",
     "name": "auth",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1881,7 +1982,7 @@
     }
   },
   {
-    "__docId__": 92,
+    "__docId__": 95,
     "kind": "method",
     "name": "sections",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1930,7 +2031,7 @@
     }
   },
   {
-    "__docId__": 93,
+    "__docId__": 96,
     "kind": "method",
     "name": "ok",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -1969,7 +2070,7 @@
     }
   },
   {
-    "__docId__": 94,
+    "__docId__": 97,
     "kind": "method",
     "name": "loading",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -2008,7 +2109,7 @@
     }
   },
   {
-    "__docId__": 95,
+    "__docId__": 98,
     "kind": "method",
     "name": "fail",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -2047,7 +2148,7 @@
     }
   },
   {
-    "__docId__": 96,
+    "__docId__": 99,
     "kind": "get",
     "name": "sender",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -2079,7 +2180,7 @@
     }
   },
   {
-    "__docId__": 97,
+    "__docId__": 100,
     "kind": "method",
     "name": "reply",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -2119,7 +2220,7 @@
     }
   },
   {
-    "__docId__": 98,
+    "__docId__": 101,
     "kind": "method",
     "name": "privateReply",
     "memberof": "src/commands/command-execution-context.js~CommandExecutionContext",
@@ -2149,10 +2250,10 @@
     }
   },
   {
-    "__docId__": 99,
+    "__docId__": 102,
     "kind": "file",
     "name": "src/commands/command-loader.js",
-    "content": "import Command from \"./command\";\nimport Log from \"../core/log\";\n\nconst fs = require(\"fs\");\nconst path = require(\"path\");\n\nexport default class CommandLoader {\n\t/**\n\t * @param {CommandManager} commandManager\n\t */\n\tconstructor(commandManager) {\n\t\t/**\n\t\t * @type {CommandManager}\n\t\t * @private\n\t\t */\n\t\tthis.commandManager = commandManager;\n\t}\n\n\t/**\n\t * Load all the commands from path\n\t * @returns {Promise}\n\t */\n\tasync loadAll() {\n\t\treturn new Promise((resolve) => {\n\t\t\tfs.readdir(this.commandManager.path, (error, files) => {\n\t\t\t\tlet loaded = 0;\n\n\t\t\t\tfiles.forEach((file) => {\n\t\t\t\t\tif (!file.startsWith(\"@\")) {\n\t\t\t\t\t\tconst modulePath = path.join(this.commandManager.path, path.basename(file, \".js\"));\n\n\t\t\t\t\t\tlet module = require(modulePath);\n\n\t\t\t\t\t\t// Support for ES6-compiled modules\n\t\t\t\t\t\tif (module.default && typeof module.default === \"object\") {\n\t\t\t\t\t\t\tmodule = module.default;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t// Validate the command before registering it\n\t\t\t\t\t\tif (Command.validate(module)) {\n\t\t\t\t\t\t\tthis.commandManager.register(new Command(module));\n\t\t\t\t\t\t\tloaded++;\n\t\t\t\t\t\t}\n\t\t\t\t\t\telse {\n\t\t\t\t\t\t\tLog.warn(`Skipping invalid command: ${path.basename(file, \".js\")}`);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\telse {\n\t\t\t\t\t\tLog.verbose(`Skipping command: ${path.basename(file, \".js\")}`);\n\t\t\t\t\t}\n\t\t\t\t});\n\n\t\t\t\tLog.success(`Loaded a total of ${loaded} command(s)`);\n\t\t\t\tresolve();\n\t\t\t});\n\t\t});\n\t}\n\n\tload(pth) {\n\t\t// TODO\n\t}\n}\n",
+    "content": "import Command from \"./command\";\nimport Log from \"../core/log\";\n\nconst fs = require(\"fs\");\nconst path = require(\"path\");\n\nexport default class CommandLoader {\n\t/**\n\t * @param {CommandManager} commandManager\n\t */\n\tconstructor(commandManager) {\n\t\t/**\n\t\t * @type {CommandManager}\n\t\t * @private\n\t\t */\n\t\tthis.commandManager = commandManager;\n\t}\n\n\t/**\n\t * Load all the commands from path\n\t * @returns {Promise}\n\t */\n\tasync loadAll() {\n\t\treturn new Promise((resolve) => {\n\t\t\tfs.readdir(this.commandManager.path, (error, files) => {\n\t\t\t\tlet loaded = 0;\n\n\t\t\t\tfiles.forEach((file) => {\n\t\t\t\t\tif (!file.startsWith(\"@\")) {\n\t\t\t\t\t\tconst modulePath = path.join(this.commandManager.path, path.basename(file, \".js\"));\n\n\t\t\t\t\t\tlet module = require(modulePath);\n\n\t\t\t\t\t\t// Support for ES6-compiled modules\n\t\t\t\t\t\tif (module.default && typeof module.default === \"object\") {\n\t\t\t\t\t\t\tmodule = module.default;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t// Validate the command before registering it\n\t\t\t\t\t\tif (Command.validate(module)) {\n\t\t\t\t\t\t\tthis.commandManager.register(new Command(module));\n\t\t\t\t\t\t\tloaded++;\n\t\t\t\t\t\t}\n\t\t\t\t\t\telse {\n\t\t\t\t\t\t\tLog.warn(`[CommandLoader.loadAll] Skipping invalid command: ${path.basename(file, \".js\")}`);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\telse {\n\t\t\t\t\t\tLog.verbose(`[CommandLoader.loadAll] Skipping command: ${path.basename(file, \".js\")}`);\n\t\t\t\t\t}\n\t\t\t\t});\n\n\t\t\t\tLog.success(`[CommandLoader.loadAll] Loaded a total of ${loaded} command(s)`);\n\t\t\t\tresolve();\n\t\t\t});\n\t\t});\n\t}\n\n\tload(pth) {\n\t\t// TODO\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/commands/command-loader.js",
     "access": "public",
@@ -2160,7 +2261,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 100,
+    "__docId__": 103,
     "kind": "variable",
     "name": "fs",
     "memberof": "src/commands/command-loader.js",
@@ -2181,7 +2282,7 @@
     "ignore": true
   },
   {
-    "__docId__": 101,
+    "__docId__": 104,
     "kind": "variable",
     "name": "path",
     "memberof": "src/commands/command-loader.js",
@@ -2202,7 +2303,7 @@
     "ignore": true
   },
   {
-    "__docId__": 102,
+    "__docId__": 105,
     "kind": "class",
     "name": "CommandLoader",
     "memberof": "src/commands/command-loader.js",
@@ -2218,7 +2319,7 @@
     "interface": false
   },
   {
-    "__docId__": 103,
+    "__docId__": 106,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/commands/command-loader.js~CommandLoader",
@@ -2243,7 +2344,7 @@
     ]
   },
   {
-    "__docId__": 104,
+    "__docId__": 107,
     "kind": "member",
     "name": "commandManager",
     "memberof": "src/commands/command-loader.js~CommandLoader",
@@ -2262,7 +2363,7 @@
     }
   },
   {
-    "__docId__": 105,
+    "__docId__": 108,
     "kind": "method",
     "name": "loadAll",
     "memberof": "src/commands/command-loader.js~CommandLoader",
@@ -2290,7 +2391,7 @@
     "params": []
   },
   {
-    "__docId__": 106,
+    "__docId__": 109,
     "kind": "method",
     "name": "load",
     "memberof": "src/commands/command-loader.js~CommandLoader",
@@ -2313,10 +2414,10 @@
     "return": null
   },
   {
-    "__docId__": 107,
+    "__docId__": 110,
     "kind": "file",
     "name": "src/commands/command-manager.js",
-    "content": "import AccessLevelType from \"../commands/access-level-type\";\nimport CommandExecutedEvent from \"../events/command-executed-event\";\nimport CommandCategoryType from \"./command-category-type\";\nimport Log from \"../core/log\";\n\nconst Typer = require(\"@raxor1234/typer/typer\");\n// import Collection from \"../core/collection\";\n\nexport default class CommandManager /* extends Collection */ {\n\t/**\n\t * @param {Bot} bot\n\t * @param {String} path\n\t * @param {CommandAuthStore} authStore\n\t * @param {Object} argumentTypes\n\t */\n\tconstructor(bot, path, authStore, argumentTypes) {\n\t\t/**\n\t\t * @type {Bot}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.bot = bot;\n\n\t\t/**\n\t\t * @type {String}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.path = path;\n\n\t\t/**\n\t\t * @type {CommandAuthStore}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.authStore = authStore;\n\n\t\t/**\n\t\t * @type {Object}\n\t\t * @readonly\n\t\t */\n\t\tthis.argumentTypes = argumentTypes;\n\n\t\t/**\n\t\t * @type {Array<Command>}\n\t\t * @private\n\t\t */\n\t\tthis.commands = [];\n\t}\n\n\t/**\n\t * @param {Command} command\n\t */\n\tregister(command) {\n\t\tthis.commands.push(command);\n\t}\n\n\t/**\n\t * @param {String} commandBase\n\t * @returns {Boolean}\n\t */\n\tremoveByBase(commandBase) {\n\t\treturn this.remove(this.getByName(commandBase));\n\t}\n\n\t/**\n\t * @param {Command} command\n\t * @returns {Boolean}\n\t */\n\tremove(command) {\n\t\treturn this.removeAt(this.commands.indexOf(command));\n\t}\n\n\t/**\n\t * @param {Number} index\n\t * @returns {Boolean}\n\t */\n\tremoveAt(index) {\n\t\tif (this.commands[index]) {\n\t\t\tthis.commands.splice(index, 1);\n\n\t\t\treturn true;\n\t\t}\n\n\t\treturn false;\n\t}\n\n\t/**\n\t * @param {String} commandBase\n\t * @returns {Boolean}\n\t */\n\tcontains(commandBase) {\n\t\treturn this.getByName(commandBase) !== null;\n\t}\n\n\t/**\n\t * @param {Array<Command>} commands\n\t */\n\tregisterMultiple(commands) {\n\t\tfor (let i = 0; i < commands.length; i++) {\n\t\t\tthis.register(commands[i]);\n\t\t}\n\t}\n\n\t/**\n\t * @param {String} commandBase\n\t * @returns {Boolean}\n\t */\n\tisRegistered(commandBase) {\n\t\treturn this.getByName(commandBase) != null;\n\t}\n\n\t/**\n\t * @param {String} name\n\t * @returns {(Command|Null)}\n\t */\n\tgetByName(name) {\n\t\tfor (let i = 0; i < this.commands.length; i++) {\n\t\t\tif (this.commands[i].name === name || this.commands[i].aliases.includes(name)) {\n\t\t\t\treturn this.commands[i];\n\t\t\t}\n\t\t}\n\n\t\treturn null;\n\t}\n\n\t/**\n\t * @param {Object} rules\n\t * @param {Array<String>} args\n\t * @returns {Object} The assembled arguments\n\t */\n\tassembleArguments(rules, args) {\n\t\tconst result = {};\n\n\t\tif (rules.length !== args.length) {\n\t\t\tthis.bot.log.info(\"AssembleArguments: Not same length\");\n\t\t}\n\n\t\tthis.bot.log.info(args);\n\n\t\tfor (let i = 0; i < rules.length; i++) {\n\t\t\tresult[rules[i]] = (isNaN(args[i]) ? args[i] : parseInt(args[i]));\n\t\t}\n\n\t\treturn result;\n\t}\n\n\t/**\n\t * @param {CommandExecutionContext} context\n\t * @param {Command} command The command to handle\n\t * @returns {Promise<Boolean>} Whether the command was successfully executed\n\t */\n\tasync handle(context, command) {\n\t\tif (!context.message.member) {\n\t\t\tcontext.message.channel.send(\"That command must be used in a text channel. Sorry!\");\n\t\t}\n\t\telse if (command.category === CommandCategoryType.NSFW && !context.message.channel.nsfw) {\n\t\t\tcontext.fail(\":underage: Please use a NSFW channel for this command.\");\n\t\t}\n\t\telse if (!command.isEnabled) {\n\t\t\tawait context.fail(\"That command is disabled and may not be used.\");\n\t\t}\n\t\telse if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.authLevel)) {\n\t\t\t// TODO: New AuthStore system\n\t\t\tconst minAuthority = AccessLevelType.toString(command.authLevel);\n\n\t\t\tcontext.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);\n\t\t}\n\t\telse if (context.arguments.length > command.maxArguments) {\n\t\t\tif (command.maxArguments > 0) {\n\t\t\t\tcontext.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);\n\t\t\t}\n\t\t\telse {\n\t\t\t\tcontext.fail(`That command does not accept any arguments.`);\n\t\t\t}\n\t\t}\n\t\telse if (!command.canExecute(context)) {\n\t\t\tcontext.fail(\"That command cannot be executed right now.\");\n\t\t}\n\t\telse if (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {\n\t\t\tawait context.fail(\"Invalid argument usage. Please use the `usage` command.\");\n\t\t}\n\t\telse {\n\t\t\ttry {\n\t\t\t\tconst result = command.executed(context);\n\t\t\t\tcontext.bot.emit(\"commandExecuted\", new CommandExecutedEvent(command, context));\n\n\t\t\t\treturn result;\n\t\t\t}\n\t\t\tcatch (error) {\n\t\t\t\t// TODO: Include stack trace\n\t\t\t\tLog.error(`There was an error while executing the ${command.name} command: ${error.message}`);\n\t\t\t\tcontext.fail(`There was an error executing that command. (${error.message})`);\n\t\t\t}\n\t\t}\n\n\t\treturn false;\n\t}\n}\n",
+    "content": "import AccessLevelType from \"../commands/access-level-type\";\nimport CommandExecutedEvent from \"../events/command-executed-event\";\nimport CommandCategoryType from \"./command-category-type\";\nimport Log from \"../core/log\";\n\nconst Typer = require(\"@raxor1234/typer/typer\");\n// import Collection from \"../core/collection\";\n\nexport default class CommandManager /* extends Collection */ {\n\t/**\n\t * @param {Bot} bot\n\t * @param {String} path\n\t * @param {CommandAuthStore} authStore\n\t * @param {Object} argumentTypes\n\t */\n\tconstructor(bot, path, authStore, argumentTypes) {\n\t\t/**\n\t\t * @type {Bot}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.bot = bot;\n\n\t\t/**\n\t\t * @type {String}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.path = path;\n\n\t\t/**\n\t\t * @type {CommandAuthStore}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.authStore = authStore;\n\n\t\t/**\n\t\t * @type {Object}\n\t\t * @readonly\n\t\t */\n\t\tthis.argumentTypes = argumentTypes;\n\n\t\t/**\n\t\t * @type {Array<Command>}\n\t\t * @private\n\t\t */\n\t\tthis.commands = [];\n\t}\n\n\t/**\n\t * @param {Command} command\n\t */\n\tregister(command) {\n\t\tthis.commands.push(command);\n\t}\n\n\t/**\n\t * @param {String} commandBase\n\t * @returns {Boolean}\n\t */\n\tremoveByBase(commandBase) {\n\t\treturn this.remove(this.getByName(commandBase));\n\t}\n\n\t/**\n\t * @param {Command} command\n\t * @returns {Boolean}\n\t */\n\tremove(command) {\n\t\treturn this.removeAt(this.commands.indexOf(command));\n\t}\n\n\t/**\n\t * @param {Number} index\n\t * @returns {Boolean}\n\t */\n\tremoveAt(index) {\n\t\tif (this.commands[index]) {\n\t\t\tthis.commands.splice(index, 1);\n\n\t\t\treturn true;\n\t\t}\n\n\t\treturn false;\n\t}\n\n\t/**\n\t * @param {String} commandBase\n\t * @returns {Boolean}\n\t */\n\tcontains(commandBase) {\n\t\treturn this.getByName(commandBase) !== null;\n\t}\n\n\t/**\n\t * @param {Array<Command>} commands\n\t */\n\tregisterMultiple(commands) {\n\t\tfor (let i = 0; i < commands.length; i++) {\n\t\t\tthis.register(commands[i]);\n\t\t}\n\t}\n\n\t/**\n\t * @param {String} commandBase\n\t * @returns {Boolean}\n\t */\n\tisRegistered(commandBase) {\n\t\treturn this.getByName(commandBase) != null;\n\t}\n\n\t/**\n\t * @param {String} name\n\t * @returns {(Command|Null)}\n\t */\n\tgetByName(name) {\n\t\tfor (let i = 0; i < this.commands.length; i++) {\n\t\t\tif (this.commands[i].name === name || this.commands[i].aliases.includes(name)) {\n\t\t\t\treturn this.commands[i];\n\t\t\t}\n\t\t}\n\n\t\treturn null;\n\t}\n\n\t/**\n\t * @param {Object} rules\n\t * @param {Array<String>} args\n\t * @returns {Object} The assembled arguments\n\t */\n\tassembleArguments(rules, args) {\n\t\tconst result = {};\n\n\t\tif (rules.length !== args.length) {\n\t\t\tLog.debug(\"AssembleArguments: Not same length\");\n\t\t}\n\n\t\tLog.debug(args);\n\n\t\tfor (let i = 0; i < rules.length; i++) {\n\t\t\tresult[rules[i]] = (isNaN(args[i]) ? args[i] : parseInt(args[i]));\n\t\t}\n\n\t\treturn result;\n\t}\n\n\t/**\n\t * @param {CommandExecutionContext} context\n\t * @param {Command} command The command to handle\n\t * @returns {Promise<Boolean>} Whether the command was successfully executed\n\t */\n\tasync handle(context, command) {\n\t\tif (!context.message.member) {\n\t\t\tcontext.message.channel.send(\"That command must be used in a text channel. Sorry!\");\n\t\t}\n\t\telse if (command.category === CommandCategoryType.NSFW && !context.message.channel.nsfw) {\n\t\t\tcontext.fail(\":underage: Please use a NSFW channel for this command.\");\n\t\t}\n\t\telse if (!command.isEnabled) {\n\t\t\tawait context.fail(\"That command is disabled and may not be used.\");\n\t\t}\n\t\telse if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.authLevel)) {\n\t\t\t// TODO: New AuthStore system\n\t\t\tconst minAuthority = AccessLevelType.toString(command.authLevel);\n\n\t\t\tcontext.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);\n\t\t}\n\t\telse if (context.arguments.length > command.maxArguments) {\n\t\t\tif (command.maxArguments > 0) {\n\t\t\t\tcontext.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);\n\t\t\t}\n\t\t\telse {\n\t\t\t\tcontext.fail(`That command does not accept any arguments.`);\n\t\t\t}\n\t\t}\n\t\telse if (command.canExecute !== null && !command.canExecute(context)) {\n\t\t\tcontext.fail(\"That command cannot be executed right now.\");\n\t\t}\n\t\telse if (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {\n\t\t\tawait context.fail(\"Invalid argument usage. Please use the `usage` command.\");\n\t\t}\n\t\telse {\n\t\t\ttry {\n\t\t\t\tconst result = command.executed(context);\n\t\t\t\tcontext.bot.emit(\"commandExecuted\", new CommandExecutedEvent(command, context));\n\n\t\t\t\treturn result;\n\t\t\t}\n\t\t\tcatch (error) {\n\t\t\t\t// TODO: Include stack trace\n\t\t\t\tLog.error(`There was an error while executing the ${command.name} command: ${error.message}`);\n\t\t\t\tcontext.fail(`There was an error executing that command. (${error.message})`);\n\t\t\t}\n\t\t}\n\n\t\treturn false;\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/commands/command-manager.js",
     "access": "public",
@@ -2324,7 +2425,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 108,
+    "__docId__": 111,
     "kind": "variable",
     "name": "Typer",
     "memberof": "src/commands/command-manager.js",
@@ -2345,7 +2446,7 @@
     "ignore": true
   },
   {
-    "__docId__": 109,
+    "__docId__": 112,
     "kind": "class",
     "name": "CommandManager",
     "memberof": "src/commands/command-manager.js",
@@ -2361,7 +2462,7 @@
     "interface": false
   },
   {
-    "__docId__": 110,
+    "__docId__": 113,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2416,7 +2517,7 @@
     ]
   },
   {
-    "__docId__": 111,
+    "__docId__": 114,
     "kind": "member",
     "name": "bot",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2441,7 +2542,7 @@
     }
   },
   {
-    "__docId__": 112,
+    "__docId__": 115,
     "kind": "member",
     "name": "path",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2466,7 +2567,7 @@
     }
   },
   {
-    "__docId__": 113,
+    "__docId__": 116,
     "kind": "member",
     "name": "authStore",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2491,7 +2592,7 @@
     }
   },
   {
-    "__docId__": 114,
+    "__docId__": 117,
     "kind": "member",
     "name": "argumentTypes",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2516,7 +2617,7 @@
     }
   },
   {
-    "__docId__": 115,
+    "__docId__": 118,
     "kind": "member",
     "name": "commands",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2535,7 +2636,7 @@
     }
   },
   {
-    "__docId__": 116,
+    "__docId__": 119,
     "kind": "method",
     "name": "register",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2561,7 +2662,7 @@
     "return": null
   },
   {
-    "__docId__": 117,
+    "__docId__": 120,
     "kind": "method",
     "name": "removeByBase",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2600,7 +2701,7 @@
     }
   },
   {
-    "__docId__": 118,
+    "__docId__": 121,
     "kind": "method",
     "name": "remove",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2639,7 +2740,7 @@
     }
   },
   {
-    "__docId__": 119,
+    "__docId__": 122,
     "kind": "method",
     "name": "removeAt",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2678,7 +2779,7 @@
     }
   },
   {
-    "__docId__": 120,
+    "__docId__": 123,
     "kind": "method",
     "name": "contains",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2717,7 +2818,7 @@
     }
   },
   {
-    "__docId__": 121,
+    "__docId__": 124,
     "kind": "method",
     "name": "registerMultiple",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2743,7 +2844,7 @@
     "return": null
   },
   {
-    "__docId__": 122,
+    "__docId__": 125,
     "kind": "method",
     "name": "isRegistered",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2782,7 +2883,7 @@
     }
   },
   {
-    "__docId__": 123,
+    "__docId__": 126,
     "kind": "method",
     "name": "getByName",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2822,7 +2923,7 @@
     }
   },
   {
-    "__docId__": 124,
+    "__docId__": 127,
     "kind": "method",
     "name": "assembleArguments",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2871,7 +2972,7 @@
     }
   },
   {
-    "__docId__": 125,
+    "__docId__": 128,
     "kind": "method",
     "name": "handle",
     "memberof": "src/commands/command-manager.js~CommandManager",
@@ -2920,7 +3021,7 @@
     }
   },
   {
-    "__docId__": 126,
+    "__docId__": 129,
     "kind": "file",
     "name": "src/commands/command-parser.js",
     "content": "export default class CommandParser {\n\t/**\n\t * @param {String} commandString\n\t * @param {CommandManager} manager\n\t * @param {String} trigger\n\t * @returns {*}\n\t */\n\tstatic parse(commandString, manager, trigger) {\n\t\tif (this.isValid(commandString, manager, trigger)) {\n\t\t\treturn manager.getByName(this.getCommandBase(commandString, trigger));\n\t\t}\n\n\t\treturn null;\n\t}\n\n\t/**\n\t * @param {String} commandString\n\t * @param {CommandManager} manager\n\t * @param {String} trigger\n\t * @returns {Boolean}\n\t */\n\tstatic isValid(commandString, manager, trigger) {\n\t\tif (commandString.startsWith(trigger)) {\n\t\t\treturn manager.isRegistered(this.getCommandBase(commandString, trigger));\n\t\t}\n\n\t\treturn false;\n\t}\n\n\t/**\n\t * @param {String} commandString\n\t * @param {String} trigger\n\t * @returns {*}\n\t */\n\tstatic getCommandBase(commandString, trigger) {\n\t\tconst regexResult = new RegExp(`^${trigger}([a-zA-Z]+)`).exec(commandString);\n\n\t\tif (regexResult) {\n\t\t\treturn regexResult[1];\n\t\t}\n\n\t\treturn null;\n\t}\n\n\t/**\n\t *\n\t * @param {String} commandString\n\t * @returns {Array<String>}\n\t */\n\tstatic getArguments(commandString) {\n\t\tconst expression = / (```((?!```).)*```|\"[^\"]+\"|'[^']+'|`[^`]+`|[^ ]+)/g;\n\t\tconst argCleanExpression = /(```|`|'|\"|)(.+)\\1/;\n\t\tconst result = [];\n\n\t\tlet match = expression.exec(commandString);\n\n\t\twhile (match != null) {\n\t\t\tresult.push(argCleanExpression.exec(match[1])[2]);\n\t\t\tmatch = expression.exec(commandString);\n\t\t}\n\n\t\treturn result;\n\t}\n\n\t// TODO: Also take in arg schema to avoid matching accidental args.\n\t/**\n\t * @param {Array<String>} args\n\t * @param {Object} types\n\t * @param {Object} resolvers\n\t * @returns {Array<String>} The resolved arguments\n\t */\n\tstatic resolveArguments(args, types, resolvers) {\n\t\tconst result = args;\n\t\tconst typeKeys = Object.keys(types);\n\n\t\tfor (let argIdx = 0; argIdx < result.length; argIdx++) {\n\t\t\tfor (let typeIdx = 0; typeIdx < typeKeys.length; typeIdx++) {\n\t\t\t\tlet match = false;\n\n\t\t\t\tif (typeof types[typeKeys[typeIdx]] === \"function\") {\n\t\t\t\t\tmatch = types[typeKeys[typeIdx]](args[argIdx]);\n\t\t\t\t}\n\t\t\t\telse if (types[typeKeys[typeIdx]] instanceof RegExp) {\n\t\t\t\t\tmatch = types[typeKeys[typeIdx]].test(args[argIdx]);\n\t\t\t\t}\n\n\t\t\t\tif (match) {\n\t\t\t\t\tif (typeof resolvers[typeKeys[typeIdx]] === \"function\") {\n\t\t\t\t\t\tresult[argIdx] = resolvers[typeKeys[typeIdx]](result[argIdx]);\n\t\t\t\t\t}\n\t\t\t\t\t// TODO: Issue further testing, there's a chance this is a bug.\n\t\t\t\t\t/* else {\n\t\t\t\t\t\tLog.error(`[CommandParser.resolveArguments] Expecting function but got '${typeof resolvers[typeKeys[typeIdx]]}'.`);\n\t\t\t\t\t} */\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn result;\n\t}\n}\n",
@@ -2931,7 +3032,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 127,
+    "__docId__": 130,
     "kind": "class",
     "name": "CommandParser",
     "memberof": "src/commands/command-parser.js",
@@ -2947,7 +3048,7 @@
     "interface": false
   },
   {
-    "__docId__": 128,
+    "__docId__": 131,
     "kind": "method",
     "name": "parse",
     "memberof": "src/commands/command-parser.js~CommandParser",
@@ -3006,7 +3107,7 @@
     }
   },
   {
-    "__docId__": 129,
+    "__docId__": 132,
     "kind": "method",
     "name": "isValid",
     "memberof": "src/commands/command-parser.js~CommandParser",
@@ -3065,7 +3166,7 @@
     }
   },
   {
-    "__docId__": 130,
+    "__docId__": 133,
     "kind": "method",
     "name": "getCommandBase",
     "memberof": "src/commands/command-parser.js~CommandParser",
@@ -3114,7 +3215,7 @@
     }
   },
   {
-    "__docId__": 131,
+    "__docId__": 134,
     "kind": "method",
     "name": "getArguments",
     "memberof": "src/commands/command-parser.js~CommandParser",
@@ -3153,7 +3254,7 @@
     }
   },
   {
-    "__docId__": 132,
+    "__docId__": 135,
     "kind": "method",
     "name": "resolveArguments",
     "memberof": "src/commands/command-parser.js~CommandParser",
@@ -3212,10 +3313,10 @@
     }
   },
   {
-    "__docId__": 133,
+    "__docId__": 136,
     "kind": "file",
     "name": "src/commands/command.js",
-    "content": "const Typer = require(\"@raxor1234/typer/typer\");\n\nexport default class Command {\n\t/**\n\t * @param {Object} data\n\t */\n\tconstructor(data) {\n\t\t// Setup the command from the provided object\n\t\tthis.setup(data);\n\t}\n\n\t/**\n\t * @todo [CRITICAL] Reflect default data changes throughout project\n\t * Setup the command from an object\n\t * @param {Object} data\n\t */\n\tsetup(data) {\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.name = data.name;\n\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.description = data.desc;\n\n\t\t/**\n\t\t * @type {Array<String>}\n\t\t * @readonly\n\t\t */\n\t\tthis.aliases = data.aliases ? data.aliases : [];\n\n\t\t/**\n\t\t * @type {AccessLevelType}\n\t\t * @readonly\n\t\t */\n\t\tthis.authLevel = data.authLevel;\n\n\t\t/**\n\t\t * @type {Function}\n\t\t * @readonly\n\t\t */\n\t\tthis.executed = data.executed;\n\n\t\t/**\n\t\t * @type {Function}\n\t\t * @readonly\n\t\t */\n\t\tthis.canExecute = data.canExecute ? data.canExecute : true;\n\n\t\t/**\n\t\t * @type {CommandCategoryType}\n\t\t * @readonly\n\t\t */\n\t\tthis.category = data.category;\n\n\t\t/**\n\t\t * @type {Object}\n\t\t * @readonly\n\t\t */\n\t\tthis.args = data.args ? data.args : {};\n\n\t\t/**\n\t\t * @type {Boolean}\n\t\t * @readonly\n\t\t */\n\t\tthis.isEnabled = data.isEnabled !== null ? module.meta.enabled : true;\n\t}\n\n\t/**\n\t * @return {Number} The maximum amount of arguments that this command can accept\n\t */\n\tget maxArguments() {\n\t\tconst keys = Object.keys(this.args);\n\n\t\tlet result = 0;\n\n\t\tfor (let i = 0; i < keys.length; i++) {\n\t\t\tif (this.args[keys[i]].startsWith(\"!\")) {\n\t\t\t\tresult++;\n\t\t\t}\n\t\t}\n\n\t\treturn result;\n\t}\n\n\t/**\n\t * Validate a command module\n\t * @param {Object} data The module to validate\n\t * @return {Boolean} Whether the module is valid\n\t */\n\tstatic validate(data) {\n\t\treturn Typer.validate({\n\t\t\tname: \"!string\",\n\t\t\tdesc: \"!string\",\n\t\t\tauthLevel: \"!number\",\n\t\t\tcategory: \"!number\",\n\t\t\texecuted: \"!function\",\n\t\t\tcanExecute: \"function\",\n\t\t\targs: \"object\",\n\t\t\taliases: \":array\",\n\t\t\tisEnabled: \"boolean\",\n\t\t}, data, {\n\t\t\tarray: (val) => val instanceof Array\n\t\t});\n\t}\n}\n",
+    "content": "const Typer = require(\"@raxor1234/typer/typer\");\n\nexport default class Command {\n\t/**\n\t * @param {Object} data\n\t */\n\tconstructor(data) {\n\t\t// Setup the command from the provided object\n\t\tthis.setup(data);\n\t}\n\n\t/**\n\t * @todo [CRITICAL] Reflect default data changes throughout project\n\t * Setup the command from an object\n\t * @param {Object} data\n\t */\n\tsetup(data) {\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.name = data.meta.name;\n\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.description = data.meta.desc;\n\n\t\t/**\n\t\t * @type {Array<String>}\n\t\t * @readonly\n\t\t */\n\t\tthis.aliases = data.meta.aliases ? data.meta.aliases : [];\n\n\t\t/**\n\t\t * @type {AccessLevelType}\n\t\t * @readonly\n\t\t */\n\t\tthis.authLevel = data.meta.authLevel;\n\n\t\t/**\n\t\t * @type {Function}\n\t\t * @readonly\n\t\t */\n\t\tthis.executed = data.executed;\n\n\t\t/**\n\t\t * @type {Function}\n\t\t * @readonly\n\t\t */\n\t\tthis.canExecute = data.canExecute ? data.canExecute : null;\n\n\t\t/**\n\t\t * @type {CommandCategoryType}\n\t\t * @readonly\n\t\t */\n\t\tthis.category = data.meta.category;\n\n\t\t/**\n\t\t * @type {Object}\n\t\t * @readonly\n\t\t */\n\t\tthis.args = data.meta.args ? data.meta.args : {};\n\n\t\t/**\n\t\t * @type {Boolean}\n\t\t * @readonly\n\t\t */\n\t\tthis.isEnabled = data.meta.enabled !== undefined ? data.meta.enabled : true;\n\t}\n\n\t/**\n\t * @return {Number} The maximum amount of arguments that this command can accept\n\t */\n\tget maxArguments() {\n\t\tconst keys = Object.keys(this.args);\n\n\t\tlet result = 0;\n\n\t\tfor (let i = 0; i < keys.length; i++) {\n\t\t\tif (this.args[keys[i]].startsWith(\"!\")) {\n\t\t\t\tresult++;\n\t\t\t}\n\t\t}\n\n\t\treturn result;\n\t}\n\n\t/**\n\t * Validate a command module\n\t * @param {Object} data The module to validate\n\t * @return {Boolean} Whether the module is valid\n\t */\n\tstatic validate(data) {\n\t\tconst methods = Typer.validate({\n\t\t\texecuted: \"!function\",\n\t\t\tmeta: \"!object\",\n\t\t\tcanExecute: \"function\"\n\t\t}, data);\n\n\t\tconst meta = Typer.validate({\n\t\t\tname: \"!string\",\n\t\t\tdesc: \"!string\",\n\t\t\tauthLevel: \"!number\",\n\t\t\tcategory: \"!number\",\n\t\t\targs: \"object\",\n\t\t\taliases: \":array\",\n\t\t\tisEnabled: \"boolean\",\n\t\t}, data.meta, {\n\t\t\tarray: (val) => val instanceof Array\n\t\t});\n\n\t\treturn (methods && meta);\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/commands/command.js",
     "access": "public",
@@ -3223,7 +3324,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 134,
+    "__docId__": 137,
     "kind": "variable",
     "name": "Typer",
     "memberof": "src/commands/command.js",
@@ -3244,7 +3345,7 @@
     "ignore": true
   },
   {
-    "__docId__": 135,
+    "__docId__": 138,
     "kind": "class",
     "name": "Command",
     "memberof": "src/commands/command.js",
@@ -3260,7 +3361,7 @@
     "interface": false
   },
   {
-    "__docId__": 136,
+    "__docId__": 139,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/commands/command.js~Command",
@@ -3285,7 +3386,7 @@
     ]
   },
   {
-    "__docId__": 137,
+    "__docId__": 140,
     "kind": "method",
     "name": "setup",
     "memberof": "src/commands/command.js~Command",
@@ -3314,7 +3415,7 @@
     "return": null
   },
   {
-    "__docId__": 138,
+    "__docId__": 141,
     "kind": "member",
     "name": "name",
     "memberof": "src/commands/command.js~Command",
@@ -3339,7 +3440,7 @@
     }
   },
   {
-    "__docId__": 139,
+    "__docId__": 142,
     "kind": "member",
     "name": "description",
     "memberof": "src/commands/command.js~Command",
@@ -3364,7 +3465,7 @@
     }
   },
   {
-    "__docId__": 140,
+    "__docId__": 143,
     "kind": "member",
     "name": "aliases",
     "memberof": "src/commands/command.js~Command",
@@ -3389,7 +3490,7 @@
     }
   },
   {
-    "__docId__": 141,
+    "__docId__": 144,
     "kind": "member",
     "name": "authLevel",
     "memberof": "src/commands/command.js~Command",
@@ -3414,7 +3515,7 @@
     }
   },
   {
-    "__docId__": 142,
+    "__docId__": 145,
     "kind": "member",
     "name": "executed",
     "memberof": "src/commands/command.js~Command",
@@ -3439,7 +3540,7 @@
     }
   },
   {
-    "__docId__": 143,
+    "__docId__": 146,
     "kind": "member",
     "name": "canExecute",
     "memberof": "src/commands/command.js~Command",
@@ -3464,7 +3565,7 @@
     }
   },
   {
-    "__docId__": 144,
+    "__docId__": 147,
     "kind": "member",
     "name": "category",
     "memberof": "src/commands/command.js~Command",
@@ -3489,7 +3590,7 @@
     }
   },
   {
-    "__docId__": 145,
+    "__docId__": 148,
     "kind": "member",
     "name": "args",
     "memberof": "src/commands/command.js~Command",
@@ -3514,7 +3615,7 @@
     }
   },
   {
-    "__docId__": 146,
+    "__docId__": 149,
     "kind": "member",
     "name": "isEnabled",
     "memberof": "src/commands/command.js~Command",
@@ -3539,7 +3640,7 @@
     }
   },
   {
-    "__docId__": 147,
+    "__docId__": 150,
     "kind": "get",
     "name": "maxArguments",
     "memberof": "src/commands/command.js~Command",
@@ -3565,7 +3666,7 @@
     }
   },
   {
-    "__docId__": 148,
+    "__docId__": 151,
     "kind": "method",
     "name": "validate",
     "memberof": "src/commands/command.js~Command",
@@ -3598,10 +3699,10 @@
     }
   },
   {
-    "__docId__": 149,
+    "__docId__": 152,
     "kind": "file",
     "name": "src/commands/json-auth-store.js",
-    "content": "import Utils from \"../core/utils\";\nimport ObjectAuthStore from \"./object-auth-store\";\n\nconst fs = require(\"fs\");\n\nexport default class JsonAuthStore extends ObjectAuthStore {\n\t/**\n\t * @param {String} path\n\t */\n\tconstructor(path) {\n\t\tsuper(null);\n\n\t\t/**\n\t\t * The path of the source file\n\t\t * @type {String}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.path = path;\n\n\t\tthis.reload();\n\t}\n\n\t/**\n\t * @return {Promise}\n\t */\n\tasync reload() {\n\t\tif (!this.exists) {\n\t\t\tawait Utils.writeJson(this.path, {});\n\t\t\tthis.data = {};\n\t\t}\n\t\telse {\n\t\t\tthis.data = await Utils.readJson(this.path);\n\t\t}\n\t}\n\n\t/**\n\t * @return {Boolean} Whether the source file exists\n\t */\n\tget exists() {\n\t\treturn fs.existsSync(this.path);\n\t}\n}\n",
+    "content": "import Utils from \"../core/utils\";\nimport ObjectAuthStore from \"./object-auth-store\";\nimport Log from \"../core/log\";\n\nconst fs = require(\"fs\");\n\nexport default class JsonAuthStore extends ObjectAuthStore {\n\t/**\n\t * @param {String} schemaPath\n\t * @param {String} storePath\n\t */\n\tconstructor(schemaPath, storePath) {\n\t\tsuper(null, null);\n\n\t\t/**\n\t\t * The path of the schema file\n\t\t * @type {String}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.schemaPath = schemaPath;\n\n\t\t/**\n\t\t * The path of the store file\n\t\t * @type {String}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.storePath = storePath;\n\n\t\tthis.reload();\n\t}\n\n\t/**\n\t * @return {Promise}\n\t */\n\tasync reload() {\n\t\tif (!this.exists) {\n\t\t\tawait Utils.writeJson(this.storePath, {});\n\t\t\tthis.data = {};\n\t\t}\n\t\telse {\n\t\t\tthis.data = await Utils.readJson(this.storePath);\n\t\t}\n\n\t\tif (!fs.existsSync(this.schemaPath)) {\n\t\t\tLog.throw(`[JsonAuthStore] Schema file path does not exist: ${this.schemaPath}`);\n\t\t}\n\n\t\tthis.schema = await Utils.readJson(this.schemaPath);\n\t}\n\n\t/**\n\t * @return {Boolean} Whether the store file exists\n\t */\n\tget exists() {\n\t\treturn fs.existsSync(this.storePath);\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/commands/json-auth-store.js",
     "access": "public",
@@ -3609,7 +3710,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 150,
+    "__docId__": 153,
     "kind": "variable",
     "name": "fs",
     "memberof": "src/commands/json-auth-store.js",
@@ -3620,7 +3721,7 @@
     "importPath": "discord-anvil/src/commands/json-auth-store.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 4,
+    "lineNumber": 5,
     "undocument": true,
     "type": {
       "types": [
@@ -3630,7 +3731,7 @@
     "ignore": true
   },
   {
-    "__docId__": 151,
+    "__docId__": 154,
     "kind": "class",
     "name": "JsonAuthStore",
     "memberof": "src/commands/json-auth-store.js",
@@ -3641,7 +3742,7 @@
     "importPath": "discord-anvil/src/commands/json-auth-store.js",
     "importStyle": "JsonAuthStore",
     "description": null,
-    "lineNumber": 6,
+    "lineNumber": 7,
     "undocument": true,
     "interface": false,
     "extends": [
@@ -3649,7 +3750,7 @@
     ]
   },
   {
-    "__docId__": 152,
+    "__docId__": 155,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/commands/json-auth-store.js~JsonAuthStore",
@@ -3659,7 +3760,7 @@
     "longname": "src/commands/json-auth-store.js~JsonAuthStore#constructor",
     "access": "public",
     "description": "",
-    "lineNumber": 10,
+    "lineNumber": 12,
     "params": [
       {
         "nullable": null,
@@ -3668,21 +3769,31 @@
         ],
         "spread": false,
         "optional": false,
-        "name": "path",
+        "name": "schemaPath",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "storePath",
         "description": ""
       }
     ]
   },
   {
-    "__docId__": 153,
+    "__docId__": 156,
     "kind": "member",
-    "name": "path",
+    "name": "schemaPath",
     "memberof": "src/commands/json-auth-store.js~JsonAuthStore",
     "static": false,
-    "longname": "src/commands/json-auth-store.js~JsonAuthStore#path",
+    "longname": "src/commands/json-auth-store.js~JsonAuthStore#schemaPath",
     "access": "private",
-    "description": "The path of the source file",
-    "lineNumber": 19,
+    "description": "The path of the schema file",
+    "lineNumber": 21,
     "unknown": [
       {
         "tagName": "@readonly",
@@ -3699,7 +3810,32 @@
     }
   },
   {
-    "__docId__": 154,
+    "__docId__": 157,
+    "kind": "member",
+    "name": "storePath",
+    "memberof": "src/commands/json-auth-store.js~JsonAuthStore",
+    "static": false,
+    "longname": "src/commands/json-auth-store.js~JsonAuthStore#storePath",
+    "access": "private",
+    "description": "The path of the store file",
+    "lineNumber": 29,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "nullable": null,
+      "types": [
+        "String"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 158,
     "kind": "method",
     "name": "reload",
     "memberof": "src/commands/json-auth-store.js~JsonAuthStore",
@@ -3709,7 +3845,7 @@
     "longname": "src/commands/json-auth-store.js~JsonAuthStore#reload",
     "access": "public",
     "description": "",
-    "lineNumber": 27,
+    "lineNumber": 37,
     "return": {
       "nullable": null,
       "types": [
@@ -3721,7 +3857,7 @@
     "params": []
   },
   {
-    "__docId__": 155,
+    "__docId__": 159,
     "kind": "member",
     "name": "data",
     "memberof": "src/commands/json-auth-store.js~JsonAuthStore",
@@ -3729,7 +3865,7 @@
     "longname": "src/commands/json-auth-store.js~JsonAuthStore#data",
     "access": "public",
     "description": null,
-    "lineNumber": 30,
+    "lineNumber": 40,
     "undocument": true,
     "type": {
       "types": [
@@ -3738,7 +3874,24 @@
     }
   },
   {
-    "__docId__": 157,
+    "__docId__": 161,
+    "kind": "member",
+    "name": "schema",
+    "memberof": "src/commands/json-auth-store.js~JsonAuthStore",
+    "static": false,
+    "longname": "src/commands/json-auth-store.js~JsonAuthStore#schema",
+    "access": "public",
+    "description": null,
+    "lineNumber": 50,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 162,
     "kind": "get",
     "name": "exists",
     "memberof": "src/commands/json-auth-store.js~JsonAuthStore",
@@ -3748,14 +3901,14 @@
     "longname": "src/commands/json-auth-store.js~JsonAuthStore#exists",
     "access": "public",
     "description": "",
-    "lineNumber": 40,
+    "lineNumber": 56,
     "return": {
       "nullable": null,
       "types": [
         "Boolean"
       ],
       "spread": false,
-      "description": "Whether the source file exists"
+      "description": "Whether the store file exists"
     },
     "type": {
       "types": [
@@ -3764,10 +3917,10 @@
     }
   },
   {
-    "__docId__": 158,
+    "__docId__": 163,
     "kind": "file",
     "name": "src/commands/object-auth-store.js",
-    "content": "import CommandAuthStore from \"./command-auth-store\";\n\nexport default class ObjectAuthStore extends CommandAuthStore {\n\t/**\n\t * @param {String} data\n\t */\n\tconstructor(data) {\n\t\tsuper();\n\n\t\t/**\n\t\t * @type {Object}\n\t\t * @protected\n\t\t */\n\t\tthis.data = data;\n\t}\n\n\t/**\n\t * @param {Snowflake} guildId\n\t * @param {*} identifier\n\t * @return {Number}\n\t */\n\tgetAuthLevel(guildId, identifier) {\n\t\tconst authLevels = this.data[guildId];\n\n\t\tfor (let i = 0; i < authLevels.length; i++) {\n\t\t\tif (authLevels[i].includes(identifier)) {\n\t\t\t\treturn i;\n\t\t\t}\n\t\t}\n\n\t\treturn null;\n\t}\n\n\t/**\n\t * @param {Snowflake} guildId\n\t * @param {Array<String>} roles\n\t * @return {Number}\n\t */\n\tgetHighestAuthLevelByRoles(guildId, roles) {\n\t\tlet highest = 0;\n\n\t\tfor (let i = 0; i < roles.length; i++) {\n\t\t\tconst authLevel = this.getAuthLevel(guildId, roles[i]);\n\n\t\t\tif (authLevel > highest) {\n\t\t\t\thighest = authLevel;\n\t\t\t}\n\t\t}\n\n\t\treturn highest;\n\t}\n\n\t/**\n\t * @param {Snowflake} guildId\n\t * @param {Snowflake} userId\n\t * @param {Array<String>} roles\n\t * @return {Number} The authority of the user\n\t */\n\tgetAuthority(guildId, userId, roles = [\"@everyone\"]) {\n\t\tconst byRoles = this.getHighestAuthLevelByRoles(guildId, roles);\n\t\tconst byId = this.getAuthLevel(guildId, userId);\n\n\t\tif (byRoles > byId) {\n\t\t\treturn byRoles;\n\t\t}\n\n\t\treturn byId;\n\t}\n}\n",
+    "content": "import CommandAuthStore from \"./command-auth-store\";\nimport Log from \"../core/log\";\nimport * as Typer from \"@raxor1234/typer/typer\";\n\nexport default class ObjectAuthStore extends CommandAuthStore {\n\t/**\n\t * @param {Object} schema\n\t * @param {Object} data\n\t */\n\tconstructor(schema, data) {\n\t\tsuper();\n\n\t\t/**\n\t\t * @type {Object}\n\t\t * @protected\n\t\t */\n\t\tthis.schema = schema;\n\n\t\t/**\n\t\t * @type {Object}\n\t\t * @protected\n\t\t */\n\t\tthis.data = data;\n\t}\n\n\t/**\n\t * @param {Snowflake} guildId\n\t * @param {*} identifier\n\t * @return {Number}\n\t */\n\tgetAuthLevel(guildId, identifier) {\n\t\tconst authLevels = this.data[guildId];\n\n\t\tfor (let i = 0; i < authLevels.length; i++) {\n\t\t\tif (authLevels[i].includes(identifier)) {\n\t\t\t\treturn i;\n\t\t\t}\n\t\t}\n\n\t\treturn null;\n\t}\n\n\t/**\n\t * @param {Snowflake} guildId\n\t * @param {Array<String>} roles\n\t * @return {Number}\n\t */\n\tgetHighestAuthLevelByRoles(guildId, roles) {\n\t\tlet highest = 0;\n\n\t\tfor (let i = 0; i < roles.length; i++) {\n\t\t\tconst authLevel = this.getAuthLevel(guildId, roles[i]);\n\n\t\t\tif (authLevel > highest) {\n\t\t\t\thighest = authLevel;\n\t\t\t}\n\t\t}\n\n\t\treturn highest;\n\t}\n\n\t/**\n\t * @param {Snowflake} guildId\n\t * @param {Snowflake} userId\n\t * @param {Array<String>} roles\n\t * @return {Number} The authority of the user\n\t */\n\tgetAuthority(guildId, userId, roles = [\"@everyone\"]) {\n\t\tconst byRoles = this.getHighestAuthLevelByRoles(guildId, roles);\n\t\tconst byId = this.getAuthLevel(guildId, userId);\n\n\t\tif (byRoles > byId) {\n\t\t\treturn byRoles;\n\t\t}\n\n\t\treturn byId;\n\t}\n\n\t/**\n\t * Create a default auth store entry\n\t * @param {Snowflake} guildId\n\t * @return {Boolean} Whether the entry was created\n\t */\n\tcreate(guildId) {\n\t\tif (!this.contains(guildId)) {\n\t\t\tconst schemaKeys = Object.keys(this.schema);\n\t\t\tconst entry = [];\n\n\t\t\tlet seenDefault = false;\n\n\t\t\tfor (let i = 0; i < schemaKeys.length; i++) {\n\t\t\t\tconst authLevel = this.schema[schemaKeys[i]];\n\n\t\t\t\tif (schemaKeys[i].toLowerCase() === \"default\") {\n\t\t\t\t\tif (seenDefault) {\n\t\t\t\t\t\tLog.throw(\"[ObjectAuthStore] Auth schema may not contain more than one default auth level\");\n\t\t\t\t\t}\n\n\t\t\t\t\tconst validDefault = Typer.validate({\n\t\t\t\t\t\trank: \"!number\"\n\t\t\t\t\t}, authLevel);\n\n\t\t\t\t\tif (!validDefault) {\n\t\t\t\t\t\tLog.throw(\"[ObjectAuthStore] Unable to create default auth store entry: Invalid default auth level\");\n\t\t\t\t\t}\n\n\t\t\t\t\tseenDefault = true;\n\t\t\t\t}\n\n\t\t\t\tentry[authLevel.rank] = [];\n\t\t\t}\n\n\t\t\tif (!seenDefault) {\n\t\t\t\tLog.throw(\"[ObjectAuthStore] Auth schema does not contain a default auth level\");\n\t\t\t}\n\n\t\t\tthis.data[guildId] = entry;\n\n\t\t\treturn true;\n\t\t}\n\n\t\tLog.error(`[ObjectAuthStore.create] Trying to create an already existing entry: ${guildId}`);\n\n\t\treturn false;\n\t}\n\n\t/**\n\t * Remove an auth store entry\n\t * @param {Snowflake} guildId\n\t * @return {Boolean} Whether the entry was removed\n\t */\n\tremove(guildId) {\n\t\tLog.throw(\"[ObjectAuthStore.remove] Method not implemented\");\n\t}\n\n\t/**\n\t * Determine whether this auth store contains an entry\n\t * @param {Snowflake} guildId\n\t * @return {Boolean} Whether the entry exists\n\t */\n\tcontains(guildId) {\n\t\treturn this.data[guildId] !== undefined;\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/commands/object-auth-store.js",
     "access": "public",
@@ -3775,7 +3928,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 159,
+    "__docId__": 164,
     "kind": "class",
     "name": "ObjectAuthStore",
     "memberof": "src/commands/object-auth-store.js",
@@ -3786,7 +3939,7 @@
     "importPath": "discord-anvil/src/commands/object-auth-store.js",
     "importStyle": "ObjectAuthStore",
     "description": null,
-    "lineNumber": 3,
+    "lineNumber": 5,
     "undocument": true,
     "interface": false,
     "extends": [
@@ -3794,7 +3947,7 @@
     ]
   },
   {
-    "__docId__": 160,
+    "__docId__": 165,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/commands/object-auth-store.js~ObjectAuthStore",
@@ -3804,12 +3957,22 @@
     "longname": "src/commands/object-auth-store.js~ObjectAuthStore#constructor",
     "access": "public",
     "description": "",
-    "lineNumber": 7,
+    "lineNumber": 10,
     "params": [
       {
         "nullable": null,
         "types": [
-          "String"
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "schema",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
         ],
         "spread": false,
         "optional": false,
@@ -3819,15 +3982,15 @@
     ]
   },
   {
-    "__docId__": 161,
+    "__docId__": 166,
     "kind": "member",
-    "name": "data",
+    "name": "schema",
     "memberof": "src/commands/object-auth-store.js~ObjectAuthStore",
     "static": false,
-    "longname": "src/commands/object-auth-store.js~ObjectAuthStore#data",
+    "longname": "src/commands/object-auth-store.js~ObjectAuthStore#schema",
     "access": "protected",
     "description": "",
-    "lineNumber": 14,
+    "lineNumber": 17,
     "type": {
       "nullable": null,
       "types": [
@@ -3838,7 +4001,26 @@
     }
   },
   {
-    "__docId__": 162,
+    "__docId__": 167,
+    "kind": "member",
+    "name": "data",
+    "memberof": "src/commands/object-auth-store.js~ObjectAuthStore",
+    "static": false,
+    "longname": "src/commands/object-auth-store.js~ObjectAuthStore#data",
+    "access": "protected",
+    "description": "",
+    "lineNumber": 23,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 168,
     "kind": "method",
     "name": "getAuthLevel",
     "memberof": "src/commands/object-auth-store.js~ObjectAuthStore",
@@ -3848,7 +4030,7 @@
     "longname": "src/commands/object-auth-store.js~ObjectAuthStore#getAuthLevel",
     "access": "public",
     "description": "",
-    "lineNumber": 22,
+    "lineNumber": 31,
     "params": [
       {
         "nullable": null,
@@ -3881,7 +4063,7 @@
     }
   },
   {
-    "__docId__": 163,
+    "__docId__": 169,
     "kind": "method",
     "name": "getHighestAuthLevelByRoles",
     "memberof": "src/commands/object-auth-store.js~ObjectAuthStore",
@@ -3891,7 +4073,7 @@
     "longname": "src/commands/object-auth-store.js~ObjectAuthStore#getHighestAuthLevelByRoles",
     "access": "public",
     "description": "",
-    "lineNumber": 39,
+    "lineNumber": 48,
     "params": [
       {
         "nullable": null,
@@ -3924,7 +4106,7 @@
     }
   },
   {
-    "__docId__": 164,
+    "__docId__": 170,
     "kind": "method",
     "name": "getAuthority",
     "memberof": "src/commands/object-auth-store.js~ObjectAuthStore",
@@ -3934,7 +4116,7 @@
     "longname": "src/commands/object-auth-store.js~ObjectAuthStore#getAuthority",
     "access": "public",
     "description": "",
-    "lineNumber": 59,
+    "lineNumber": 68,
     "params": [
       {
         "nullable": null,
@@ -3977,7 +4159,106 @@
     }
   },
   {
-    "__docId__": 165,
+    "__docId__": 171,
+    "kind": "method",
+    "name": "create",
+    "memberof": "src/commands/object-auth-store.js~ObjectAuthStore",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/commands/object-auth-store.js~ObjectAuthStore#create",
+    "access": "public",
+    "description": "Create a default auth store entry",
+    "lineNumber": 84,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Snowflake"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "guildId",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Boolean"
+      ],
+      "spread": false,
+      "description": "Whether the entry was created"
+    }
+  },
+  {
+    "__docId__": 172,
+    "kind": "method",
+    "name": "remove",
+    "memberof": "src/commands/object-auth-store.js~ObjectAuthStore",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/commands/object-auth-store.js~ObjectAuthStore#remove",
+    "access": "public",
+    "description": "Remove an auth store entry",
+    "lineNumber": 132,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Snowflake"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "guildId",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Boolean"
+      ],
+      "spread": false,
+      "description": "Whether the entry was removed"
+    }
+  },
+  {
+    "__docId__": 173,
+    "kind": "method",
+    "name": "contains",
+    "memberof": "src/commands/object-auth-store.js~ObjectAuthStore",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/commands/object-auth-store.js~ObjectAuthStore#contains",
+    "access": "public",
+    "description": "Determine whether this auth store contains an entry",
+    "lineNumber": 141,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Snowflake"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "guildId",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Boolean"
+      ],
+      "spread": false,
+      "description": "Whether the entry exists"
+    }
+  },
+  {
+    "__docId__": 174,
     "kind": "file",
     "name": "src/console/console-command.js",
     "content": "import Log from '../core/log';\n\nconst parseArgs = require(\"minimist\");\n\nexport default class ConsoleCommand {\n\t/**\n\t * @param {String} base\n\t * @param {Object} args\n\t */\n\tconstructor(base, args) {\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.base = base;\n\n\t\t/**\n\t\t * @type {Object}\n\t\t * @readonly\n\t\t */\n\t\tthis.args = args;\n\t}\n\n\t// TODO\n\t/**\n\t * @param {String} consoleCommandString\n\t * @returns {ConsoleCommand}\n\t */\n\tstatic parse(consoleCommandString) {\n\t\tconst split = consoleCommandString.split(\" \");\n\n\t\tLog.info(split.join(\" \"));\n\n\t\treturn new ConsoleCommand(split[0], parseArgs(split.splice(1, 0).join(\" \")));\n\t}\n}\n",
@@ -3988,7 +4269,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 166,
+    "__docId__": 175,
     "kind": "variable",
     "name": "parseArgs",
     "memberof": "src/console/console-command.js",
@@ -4009,7 +4290,7 @@
     "ignore": true
   },
   {
-    "__docId__": 167,
+    "__docId__": 176,
     "kind": "class",
     "name": "ConsoleCommand",
     "memberof": "src/console/console-command.js",
@@ -4025,7 +4306,7 @@
     "interface": false
   },
   {
-    "__docId__": 168,
+    "__docId__": 177,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/console/console-command.js~ConsoleCommand",
@@ -4060,7 +4341,7 @@
     ]
   },
   {
-    "__docId__": 169,
+    "__docId__": 178,
     "kind": "member",
     "name": "base",
     "memberof": "src/console/console-command.js~ConsoleCommand",
@@ -4085,7 +4366,7 @@
     }
   },
   {
-    "__docId__": 170,
+    "__docId__": 179,
     "kind": "member",
     "name": "args",
     "memberof": "src/console/console-command.js~ConsoleCommand",
@@ -4110,7 +4391,7 @@
     }
   },
   {
-    "__docId__": 171,
+    "__docId__": 180,
     "kind": "method",
     "name": "parse",
     "memberof": "src/console/console-command.js~ConsoleCommand",
@@ -4149,10 +4430,10 @@
     }
   },
   {
-    "__docId__": 172,
+    "__docId__": 181,
     "kind": "file",
     "name": "src/console/console-interface.js",
-    "content": "import Log from \"../core/log\";\n\nconst readline = require(\"readline\");\n\nexport default class ConsoleInterface {\n\t/**\n\t * @param {Bot} bot\n\t */\n\tinit(bot) {\n\t\tconst ci = readline.createInterface({\n\t\t\tinput: process.stdin,\n\t\t\toutput: process.stdout\n\t\t});\n\n\t\tci.prompt(true);\n\n\t\tci.on(\"line\", (input) => {\n\t\t\tswitch (input.trim()) {\n\t\t\t\tcase \"\": {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tcase \"stop\": {\n\t\t\t\t\tbot.disconnect();\n\t\t\t\t\tprocess.exit(0);\n\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tcase \"help\": {\n\t\t\t\t\tconsole.log(\"CLI Commands: stop, help\");\n\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tdefault: {\n\t\t\t\t\tconsole.log(`Invalid command: ${input}`);\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tci.prompt();\n\t\t});\n\n\t\tci.on(\"close\", () => {\n\t\t\t// TODO: Temp. disabled due to interferring and going straight disconnection on vps/linux\n\t\t\t/* bot.disconnect();\n\t\t\tprocess.exit(0); */\n\t\t});\n\n\t\t// TODO: Should log before setting the prompt\n\t\tLog.verbose(\"Console interface setup completed\");\n\t}\n}\n",
+    "content": "import Log from \"../core/log\";\n\nconst readline = require(\"readline\");\n\nexport default class ConsoleInterface {\n\t/**\n\t * @param {Bot} bot\n\t */\n\tsetup(bot) {\n\t\tconst ci = readline.createInterface({\n\t\t\tinput: process.stdin,\n\t\t\toutput: process.stdout\n\t\t});\n\n\t\tci.prompt(true);\n\n\t\tci.on(\"line\", (input) => {\n\t\t\tswitch (input.trim()) {\n\t\t\t\tcase \"\": {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tcase \"stop\": {\n\t\t\t\t\tbot.disconnect();\n\t\t\t\t\tprocess.exit(0);\n\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tcase \"help\": {\n\t\t\t\t\tconsole.log(\"CLI Commands: stop, help\");\n\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t\tdefault: {\n\t\t\t\t\tconsole.log(`Invalid command: ${input}`);\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tci.prompt();\n\t\t});\n\n\t\tci.on(\"close\", () => {\n\t\t\t// TODO: Temp. disabled due to interferring and going straight disconnection on vps/linux\n\t\t\t/* bot.disconnect();\n\t\t\tprocess.exit(0); */\n\t\t});\n\n\t\t// TODO: Should log before setting the prompt\n\t\tLog.verbose(\"[ConsoleInterface.setup] Console interface setup completed\");\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/console/console-interface.js",
     "access": "public",
@@ -4160,7 +4441,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 173,
+    "__docId__": 182,
     "kind": "variable",
     "name": "readline",
     "memberof": "src/console/console-interface.js",
@@ -4181,7 +4462,7 @@
     "ignore": true
   },
   {
-    "__docId__": 174,
+    "__docId__": 183,
     "kind": "class",
     "name": "ConsoleInterface",
     "memberof": "src/console/console-interface.js",
@@ -4197,14 +4478,14 @@
     "interface": false
   },
   {
-    "__docId__": 175,
+    "__docId__": 184,
     "kind": "method",
-    "name": "init",
+    "name": "setup",
     "memberof": "src/console/console-interface.js~ConsoleInterface",
     "generator": false,
     "async": false,
     "static": false,
-    "longname": "src/console/console-interface.js~ConsoleInterface#init",
+    "longname": "src/console/console-interface.js~ConsoleInterface#setup",
     "access": "public",
     "description": "",
     "lineNumber": 9,
@@ -4223,10 +4504,10 @@
     "return": null
   },
   {
-    "__docId__": 176,
+    "__docId__": 185,
     "kind": "file",
     "name": "src/core/bot.js",
-    "content": "import CommandParser from \"../commands/command-parser\";\nimport CommandExecutionContext from \"../commands/command-execution-context\";\nimport ConsoleInterface from \"../console/console-interface\";\nimport EmojiMenuManager from \"../emoji-ui/emoji-menu-manager\";\nimport CommandManager from \"../commands/command-manager\";\nimport Utils from \"./utils\";\nimport EmojiCollection from \"../collections/emoji-collection\";\nimport Settings from \"./settings\";\nimport FeatureManager from \"../features/feature-manager\";\nimport CommandLoader from \"../commands/command-loader\";\nimport Log from \"./log\";\nimport DataStore from \"../data-stores/data-store\";\nimport CommandAuthStore from \"../commands/command-auth-store\";\n\nconst Discord = require(\"discord.js\");\nconst Typer = require(\"@raxor1234/typer\");\nconst EventEmitter = require(\"events\");\nconst fs = require(\"fs\");\n\n/**\n * @extends EventEmitter\n */\nexport default class Bot extends EventEmitter {\n\t/**\n\t * @param {Object} data\n\t */\n\tconstructor(data) {\n\t\tsuper();\n\n\t\t// Setup the class\n\t\tthis.setup(data);\n\t}\n\n\t/**\n\t * Setup the bot from an object\n\t * @param {Object} data\n\t * @return {Promise}\n\t */\n\tasync setup(data) {\n\t\tLog.verbose(\"[Bot.setup] Validating data object\");\n\n\t\tif (!Typer.validate({\n\t\t\tpaths: \"!object\",\n\t\t\tauthStore: \":authStore\",\n\t\t\tdataStore: \":dataStore\",\n\t\t\targumentTypes: \"object\"\n\t\t}, data, {\n\t\t\tauthStore: (val) => val instanceof CommandAuthStore,\n\t\t\tdataStore: (val) => val instanceof DataStore\n\t\t})) {\n\t\t\tLog.throw(\"[Bot.setup] Invalid data object provided\");\n\t\t}\n\t\telse if (!Typer.validate({\n\t\t\tsettings: \"!string\",\n\t\t\tcommands: \"!string\",\n\t\t\tauthLevels: \"!string\",\n\t\t\temojis: \"string\"\n\t\t}, data.paths)) {\n\t\t\tLog.throw(\"[Bot.setup] Invalid paths object\");\n\t\t}\n\n\t\t/**\n\t\t * @type {Settings}\n\t\t * @readonly\n\t\t */\n\t\tthis.settings = new Settings(data.paths.settings);\n\n\t\t/**\n\t\t * @type {DataStore}\n\t\t * @readonly\n\t\t */\n\t\tthis.dataAdapter = data.dataAdapter;\n\n\t\t/**\n\t\t * @type {(EmojiCollection|Null)}\n\t\t * @readonly\n\t\t */\n\t\tthis.emojis = data.paths.emojis ? EmojiCollection.fromFile(data.paths.emojis) : null;\n\n\t\t/**\n\t\t * @type {Discord.Client}\n\t\t * @readonly\n\t\t */\n\t\tthis.client = new Discord.Client();\n\n\t\t/**\n\t\t * @type {CommandManager}\n\t\t * @readonly\n\t\t */\n\t\tthis.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes ? data.argumentTypes : {});\n\n\t\t/**\n\t\t * @type {FeatureManager}\n\t\t * @readonly\n\t\t */\n\t\tthis.features = new FeatureManager();\n\n\t\t/**\n\t\t * @type {CommandLoader}\n\t\t * @readonly\n\t\t */\n\t\tthis.commandLoader = new CommandLoader(this.commands);\n\n\t\t/**\n\t\t * @type {ConsoleInterface}\n\t\t * @readonly\n\t\t */\n\t\tthis.console = new ConsoleInterface();\n\n\t\t/**\n\t\t * @type {EmojiMenuManager}\n\t\t * @readonly\n\t\t */\n\t\tthis.menus = new EmojiMenuManager(this.client);\n\n\t\t// Setup the Discord client's events\n\t\tthis.setupEvents();\n\n\t\t// Load commands\n\t\tawait this.commandLoader.loadAll();\n\t\tLog.success(\"Bot setup completed\");\n\t}\n\n\t/**\n\t * Setup the client's events\n\t */\n\tsetupEvents() {\n\t\t// TODO: Find better position\n\t\t// TODO: Merge this resolvers with the (if provided) provided\n\t\t// ones by the user.\n\t\tconst resolvers = {\n\t\t\tuser: (arg) => Utils.resolveId(arg),\n\t\t\tchannel: (arg) => Utils.resolveId(arg),\n\t\t\trole: (arg) => Utils.resolveId(arg),\n\t\t\tstate: (arg) => Utils.translateState(arg)\n\t\t};\n\n\t\t// Discord client events\n\t\tthis.client.on(\"ready\", () => {\n\t\t\tthis.console.init(this);\n\t\t\tLog.success(\"Ready\");\n\t\t});\n\n\t\tthis.client.on(\"message\", async (message) => {\n\t\t\tif (!message.author.bot) {\n\t\t\t\tif (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {\n\t\t\t\t\tthis.commands.handle(\n\t\t\t\t\t\tnew CommandExecutionContext(\n\t\t\t\t\t\t\tmessage,\n\t\t\t\t\t\t\tCommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),\n\t\t\t\t\t\t\tthis,\n\t\t\t\t\t\t\tthis.commands.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),\n\t\t\t\t\t\t\tthis.emojis\n\t\t\t\t\t\t),\n\n\t\t\t\t\t\tCommandParser.parse(\n\t\t\t\t\t\t\tmessage.content,\n\t\t\t\t\t\t\tthis.commands,\n\t\t\t\t\t\t\tthis.settings.general.prefix\n\t\t\t\t\t\t)\n\t\t\t\t\t);\n\t\t\t\t}\n\t\t\t\telse if (message.content === \"?prefix\") {\n\t\t\t\t\tmessage.channel.send(`Command prefix: **${this.settings.general.prefix}**`);\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t}\n\n\t/**\n\t * Connect the client\n\t * @return {Promise}\n\t */\n\tasync connect() {\n\t\tLog.verbose(\"Starting\");\n\t\tawait this.client.login(this.settings.general.token);\n\t}\n\n\t/**\n\t * Restart the bot's client\n\t * @todo Use the reload modules param\n\t * @param {Boolean} reloadModules Whether to reload all modules\n\t * @return {Promise}\n\t */\n\tasync restart(reloadModules = true) {\n\t\tLog.verbose(\"Restarting\");\n\n\t\t// TODO: Actually reload all the features and commands\n\t\t// this.features.reloadAll(this);\n\n\t\tawait this.disconnect();\n\t\tawait this.connect();\n\t}\n\n\t/**\n\t * Disconnect the client\n\t * @return {Promise}\n\t */\n\tasync disconnect() {\n\t\tthis.settings.save();\n\t\tawait this.client.destroy();\n\t\tLog.info(\"Disconnected\");\n\t}\n\n\t/**\n\t * Clear all the files inside the temp folder\n\t * @return {Promise}\n\t */\n\tstatic async clearTemp() {\n\t\tif (fs.existsSync(\"./temp\")) {\n\t\t\tfs.readdir(\"./temp\", (error, files) => {\n\t\t\t\tfor (let i = 0; i < files.length; i++) {\n\t\t\t\t\tfs.unlink(`./temp/${files[i]}`);\n\t\t\t\t}\n\t\t\t});\n\t\t}\n\t}\n}\n",
+    "content": "import CommandParser from \"../commands/command-parser\";\nimport CommandExecutionContext from \"../commands/command-execution-context\";\nimport ConsoleInterface from \"../console/console-interface\";\nimport EmojiMenuManager from \"../emoji-ui/emoji-menu-manager\";\nimport CommandManager from \"../commands/command-manager\";\nimport Utils from \"./utils\";\nimport EmojiCollection from \"../collections/emoji-collection\";\nimport Settings from \"./settings\";\nimport FeatureManager from \"../features/feature-manager\";\nimport CommandLoader from \"../commands/command-loader\";\nimport Log from \"./log\";\nimport DataStore from \"../data-stores/data-store\";\nimport CommandAuthStore from \"../commands/command-auth-store\";\n\nconst Discord = require(\"discord.js\");\nconst Typer = require(\"@raxor1234/typer\");\nconst EventEmitter = require(\"events\");\nconst fs = require(\"fs\");\n\n/**\n * @extends EventEmitter\n */\nexport default class Bot extends EventEmitter {\n\t/**\n\t * @param {Object} data\n\t */\n\tconstructor(data) {\n\t\tsuper();\n\n\t\t// Setup the class\n\t\tthis.setup(data);\n\t}\n\n\t/**\n\t * Setup the bot from an object\n\t * @param {Object} data\n\t * @return {Promise}\n\t */\n\tasync setup(data) {\n\t\tLog.verbose(\"[Bot.setup] Validating data object\");\n\n\t\tif (!Typer.validate({\n\t\t\tpaths: \"!object\",\n\t\t\tauthStore: \":authStore\",\n\t\t\tdataStore: \":dataStore\",\n\t\t\targumentTypes: \"object\"\n\t\t}, data, {\n\t\t\tauthStore: (val) => val instanceof CommandAuthStore,\n\t\t\tdataStore: (val) => val instanceof DataStore\n\t\t})) {\n\t\t\tLog.throw(\"[Bot.setup] Invalid data object provided\");\n\t\t}\n\t\telse if (!Typer.validate({\n\t\t\tsettings: \"!string\",\n\t\t\tcommands: \"!string\",\n\t\t\tauthLevels: \"!string\",\n\t\t\temojis: \"string\"\n\t\t}, data.paths)) {\n\t\t\tLog.throw(\"[Bot.setup] Invalid paths object\");\n\t\t}\n\n\t\t/**\n\t\t * @type {Settings}\n\t\t * @readonly\n\t\t */\n\t\tthis.settings = new Settings(data.paths.settings);\n\n\t\t/**\n\t\t * @type {DataStore}\n\t\t * @readonly\n\t\t */\n\t\tthis.dataStore = data.dataStore;\n\n\t\t/**\n\t\t * @type {CommandAuthStore}\n\t\t * @readonly\n\t\t */\n\t\tthis.authStore = data.authStore;\n\n\t\t/**\n\t\t * @type {(EmojiCollection|Null)}\n\t\t * @readonly\n\t\t */\n\t\tthis.emojis = data.paths.emojis ? EmojiCollection.fromFile(data.paths.emojis) : null;\n\n\t\t/**\n\t\t * @type {Discord.Client}\n\t\t * @readonly\n\t\t */\n\t\tthis.client = new Discord.Client();\n\n\t\t/**\n\t\t * @type {CommandManager}\n\t\t * @readonly\n\t\t */\n\t\tthis.commands = new CommandManager(this, data.paths.commands, this.authStore, data.argumentTypes ? data.argumentTypes : {});\n\n\t\t/**\n\t\t * @type {FeatureManager}\n\t\t * @readonly\n\t\t */\n\t\tthis.features = new FeatureManager();\n\n\t\t/**\n\t\t * @type {CommandLoader}\n\t\t * @readonly\n\t\t */\n\t\tthis.commandLoader = new CommandLoader(this.commands);\n\n\t\t/**\n\t\t * @type {ConsoleInterface}\n\t\t * @readonly\n\t\t */\n\t\tthis.console = new ConsoleInterface();\n\n\t\t/**\n\t\t * @type {EmojiMenuManager}\n\t\t * @readonly\n\t\t */\n\t\tthis.menus = new EmojiMenuManager(this.client);\n\n\t\t// Setup the Discord client's events\n\t\tthis.setupEvents();\n\n\t\t// Load commands\n\t\tawait this.commandLoader.loadAll();\n\t\tLog.success(\"[Bot.setup] Bot setup completed\");\n\t}\n\n\t/**\n\t * Setup the client's events\n\t */\n\tsetupEvents() {\n\t\t// TODO: Find better position\n\t\t// TODO: Merge this resolvers with the (if provided) provided\n\t\t// ones by the user.\n\t\tconst resolvers = {\n\t\t\tuser: (arg) => Utils.resolveId(arg),\n\t\t\tchannel: (arg) => Utils.resolveId(arg),\n\t\t\trole: (arg) => Utils.resolveId(arg),\n\t\t\tstate: (arg) => Utils.translateState(arg)\n\t\t};\n\n\t\t// Discord client events\n\t\tthis.client.on(\"ready\", () => {\n\t\t\tthis.console.setup(this);\n\t\t\tLog.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag}`);\n\t\t\tLog.success(\"[Bot.setupEvents] Ready\");\n\t\t});\n\n\t\tthis.client.on(\"message\", async (message) => {\n\t\t\tif (!message.author.bot) {\n\t\t\t\tif (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {\n\t\t\t\t\tthis.commands.handle(\n\t\t\t\t\t\tnew CommandExecutionContext(\n\t\t\t\t\t\t\tmessage,\n\t\t\t\t\t\t\tCommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),\n\t\t\t\t\t\t\tthis,\n\t\t\t\t\t\t\tthis.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),\n\t\t\t\t\t\t\tthis.emojis\n\t\t\t\t\t\t),\n\n\t\t\t\t\t\tCommandParser.parse(\n\t\t\t\t\t\t\tmessage.content,\n\t\t\t\t\t\t\tthis.commands,\n\t\t\t\t\t\t\tthis.settings.general.prefix\n\t\t\t\t\t\t)\n\t\t\t\t\t);\n\t\t\t\t}\n\t\t\t\telse if (message.content === \"?prefix\") {\n\t\t\t\t\tmessage.channel.send(`Command prefix: **${this.settings.general.prefix}**`);\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t}\n\n\tsetupAuthStore() {\n\t\tconst guilds = this.client.guilds.array();\n\n\t\tlet entries = 0;\n\n\t\tfor (let i = 0; i < guilds.length; i++) {\n\t\t\tif (!this.authStore.contains(guilds[i].id)) {\n\t\t\t\tthis.authStore.create(guilds[i].id);\n\t\t\t\tentries++;\n\t\t\t}\n\t\t}\n\n\t\tif (entries > 0) {\n\t\t\tLog.success(`[Bot.setupAuthStore] Added a total of ${entries} auth store entries`);\n\t\t}\n\n\t\tLog.success(\"[Bot.setupAuthStore] Auth store setup completed\");\n\t}\n\n\t/**\n\t * Connect the client\n\t * @return {Promise}\n\t */\n\tasync connect() {\n\t\tLog.verbose(\"[Bot.connect] Starting\");\n\t\tawait this.client.login(this.settings.general.token);\n\n\t\t// Setup the command auth store\n\t\tthis.setupAuthStore();\n\t}\n\n\t/**\n\t * Restart the bot's client\n\t * @todo Use the reload modules param\n\t * @param {Boolean} reloadModules Whether to reload all modules\n\t * @return {Promise}\n\t */\n\tasync restart(reloadModules = true) {\n\t\tLog.verbose(\"[Bot.restart] Restarting\");\n\n\t\t// TODO: Actually reload all the features and commands\n\t\t// this.features.reloadAll(this);\n\n\t\tawait this.disconnect();\n\t\tawait this.connect();\n\t}\n\n\t/**\n\t * Disconnect the client\n\t * @return {Promise}\n\t */\n\tasync disconnect() {\n\t\tthis.settings.save();\n\t\tawait this.client.destroy();\n\t\tLog.info(\"[Bot.disconnect] Disconnected\");\n\t}\n\n\t/**\n\t * Clear all the files inside the temp folder\n\t * @return {Promise}\n\t */\n\tstatic async clearTemp() {\n\t\tif (fs.existsSync(\"./temp\")) {\n\t\t\tfs.readdir(\"./temp\", (error, files) => {\n\t\t\t\tfor (let i = 0; i < files.length; i++) {\n\t\t\t\t\tfs.unlink(`./temp/${files[i]}`);\n\t\t\t\t}\n\t\t\t});\n\t\t}\n\t}\n}\n",
     "static": true,
     "longname": "/home/atlas/Desktop/Projects/Anvil/src/core/bot.js",
     "access": "public",
@@ -4234,7 +4515,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 177,
+    "__docId__": 186,
     "kind": "variable",
     "name": "Discord",
     "memberof": "src/core/bot.js",
@@ -4255,7 +4536,7 @@
     "ignore": true
   },
   {
-    "__docId__": 178,
+    "__docId__": 187,
     "kind": "variable",
     "name": "Typer",
     "memberof": "src/core/bot.js",
@@ -4276,7 +4557,7 @@
     "ignore": true
   },
   {
-    "__docId__": 179,
+    "__docId__": 188,
     "kind": "variable",
     "name": "EventEmitter",
     "memberof": "src/core/bot.js",
@@ -4297,7 +4578,7 @@
     "ignore": true
   },
   {
-    "__docId__": 180,
+    "__docId__": 189,
     "kind": "variable",
     "name": "fs",
     "memberof": "src/core/bot.js",
@@ -4318,7 +4599,7 @@
     "ignore": true
   },
   {
-    "__docId__": 181,
+    "__docId__": 190,
     "kind": "class",
     "name": "Bot",
     "memberof": "src/core/bot.js",
@@ -4336,7 +4617,7 @@
     ]
   },
   {
-    "__docId__": 182,
+    "__docId__": 191,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/core/bot.js~Bot",
@@ -4361,7 +4642,7 @@
     ]
   },
   {
-    "__docId__": 183,
+    "__docId__": 192,
     "kind": "method",
     "name": "setup",
     "memberof": "src/core/bot.js~Bot",
@@ -4394,7 +4675,7 @@
     }
   },
   {
-    "__docId__": 184,
+    "__docId__": 193,
     "kind": "member",
     "name": "settings",
     "memberof": "src/core/bot.js~Bot",
@@ -4419,12 +4700,12 @@
     }
   },
   {
-    "__docId__": 185,
+    "__docId__": 194,
     "kind": "member",
-    "name": "dataAdapter",
+    "name": "dataStore",
     "memberof": "src/core/bot.js~Bot",
     "static": false,
-    "longname": "src/core/bot.js~Bot#dataAdapter",
+    "longname": "src/core/bot.js~Bot#dataStore",
     "access": "public",
     "description": "",
     "lineNumber": 72,
@@ -4444,7 +4725,32 @@
     }
   },
   {
-    "__docId__": 186,
+    "__docId__": 195,
+    "kind": "member",
+    "name": "authStore",
+    "memberof": "src/core/bot.js~Bot",
+    "static": false,
+    "longname": "src/core/bot.js~Bot#authStore",
+    "access": "public",
+    "description": "",
+    "lineNumber": 78,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "nullable": null,
+      "types": [
+        "CommandAuthStore"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 196,
     "kind": "member",
     "name": "emojis",
     "memberof": "src/core/bot.js~Bot",
@@ -4452,7 +4758,7 @@
     "longname": "src/core/bot.js~Bot#emojis",
     "access": "public",
     "description": "",
-    "lineNumber": 78,
+    "lineNumber": 84,
     "unknown": [
       {
         "tagName": "@readonly",
@@ -4470,7 +4776,7 @@
     }
   },
   {
-    "__docId__": 187,
+    "__docId__": 197,
     "kind": "member",
     "name": "client",
     "memberof": "src/core/bot.js~Bot",
@@ -4478,7 +4784,7 @@
     "longname": "src/core/bot.js~Bot#client",
     "access": "public",
     "description": "",
-    "lineNumber": 84,
+    "lineNumber": 90,
     "unknown": [
       {
         "tagName": "@readonly",
@@ -4495,7 +4801,7 @@
     }
   },
   {
-    "__docId__": 188,
+    "__docId__": 198,
     "kind": "member",
     "name": "commands",
     "memberof": "src/core/bot.js~Bot",
@@ -4503,7 +4809,7 @@
     "longname": "src/core/bot.js~Bot#commands",
     "access": "public",
     "description": "",
-    "lineNumber": 90,
+    "lineNumber": 96,
     "unknown": [
       {
         "tagName": "@readonly",
@@ -4520,7 +4826,7 @@
     }
   },
   {
-    "__docId__": 189,
+    "__docId__": 199,
     "kind": "member",
     "name": "features",
     "memberof": "src/core/bot.js~Bot",
@@ -4528,7 +4834,7 @@
     "longname": "src/core/bot.js~Bot#features",
     "access": "public",
     "description": "",
-    "lineNumber": 96,
+    "lineNumber": 102,
     "unknown": [
       {
         "tagName": "@readonly",
@@ -4545,7 +4851,7 @@
     }
   },
   {
-    "__docId__": 190,
+    "__docId__": 200,
     "kind": "member",
     "name": "commandLoader",
     "memberof": "src/core/bot.js~Bot",
@@ -4553,7 +4859,7 @@
     "longname": "src/core/bot.js~Bot#commandLoader",
     "access": "public",
     "description": "",
-    "lineNumber": 102,
+    "lineNumber": 108,
     "unknown": [
       {
         "tagName": "@readonly",
@@ -4570,7 +4876,7 @@
     }
   },
   {
-    "__docId__": 191,
+    "__docId__": 201,
     "kind": "member",
     "name": "console",
     "memberof": "src/core/bot.js~Bot",
@@ -4578,7 +4884,7 @@
     "longname": "src/core/bot.js~Bot#console",
     "access": "public",
     "description": "",
-    "lineNumber": 108,
+    "lineNumber": 114,
     "unknown": [
       {
         "tagName": "@readonly",
@@ -4595,7 +4901,7 @@
     }
   },
   {
-    "__docId__": 192,
+    "__docId__": 202,
     "kind": "member",
     "name": "menus",
     "memberof": "src/core/bot.js~Bot",
@@ -4603,7 +4909,7 @@
     "longname": "src/core/bot.js~Bot#menus",
     "access": "public",
     "description": "",
-    "lineNumber": 114,
+    "lineNumber": 120,
     "unknown": [
       {
         "tagName": "@readonly",
@@ -4620,7 +4926,7 @@
     }
   },
   {
-    "__docId__": 193,
+    "__docId__": 203,
     "kind": "method",
     "name": "setupEvents",
     "memberof": "src/core/bot.js~Bot",
@@ -4630,12 +4936,28 @@
     "longname": "src/core/bot.js~Bot#setupEvents",
     "access": "public",
     "description": "Setup the client's events",
-    "lineNumber": 127,
+    "lineNumber": 133,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 194,
+    "__docId__": 204,
+    "kind": "method",
+    "name": "setupAuthStore",
+    "memberof": "src/core/bot.js~Bot",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/core/bot.js~Bot#setupAuthStore",
+    "access": "public",
+    "description": null,
+    "lineNumber": 177,
+    "undocument": true,
+    "params": [],
+    "return": null
+  },
+  {
+    "__docId__": 205,
     "kind": "method",
     "name": "connect",
     "memberof": "src/core/bot.js~Bot",
@@ -4645,7 +4967,7 @@
     "longname": "src/core/bot.js~Bot#connect",
     "access": "public",
     "description": "Connect the client",
-    "lineNumber": 174,
+    "lineNumber": 200,
     "return": {
       "nullable": null,
       "types": [
@@ -4657,7 +4979,7 @@
     "params": []
   },
   {
-    "__docId__": 195,
+    "__docId__": 206,
     "kind": "method",
     "name": "restart",
     "memberof": "src/core/bot.js~Bot",
@@ -4667,7 +4989,7 @@
     "longname": "src/core/bot.js~Bot#restart",
     "access": "public",
     "description": "Restart the bot's client",
-    "lineNumber": 185,
+    "lineNumber": 214,
     "todo": [
       "Use the reload modules param"
     ],
@@ -4693,7 +5015,7 @@
     }
   },
   {
-    "__docId__": 196,
+    "__docId__": 207,
     "kind": "method",
     "name": "disconnect",
     "memberof": "src/core/bot.js~Bot",
@@ -4703,7 +5025,7 @@
     "longname": "src/core/bot.js~Bot#disconnect",
     "access": "public",
     "description": "Disconnect the client",
-    "lineNumber": 199,
+    "lineNumber": 228,
     "return": {
       "nullable": null,
       "types": [
@@ -4715,7 +5037,7 @@
     "params": []
   },
   {
-    "__docId__": 197,
+    "__docId__": 208,
     "kind": "method",
     "name": "clearTemp",
     "memberof": "src/core/bot.js~Bot",
@@ -4725,7 +5047,7 @@
     "longname": "src/core/bot.js~Bot.clearTemp",
     "access": "public",
     "description": "Clear all the files inside the temp folder",
-    "lineNumber": 209,
+    "lineNumber": 238,
     "return": {
       "nullable": null,
       "types": [
@@ -4737,7 +5059,7 @@
     "params": []
   },
   {
-    "__docId__": 198,
+    "__docId__": 209,
     "kind": "file",
     "name": "src/core/log.js",
     "content": "const colors = require(\"colors\");\nconst fs = require(\"fs\");\n\nexport default class Log {\n\t/**\n\t * @param {String} message\n\t * @param {String} color\n\t * @param {String} prefix\n\t */\n\tstatic async log(message, color = \"white\", prefix = null) {\n\t\tconst date = new Date().toISOString().replace(/T/, \" \").replace(/\\..+/, \"\");\n\n\t\t// TODO: Make this next line work on the vps\n\t\t// process.stdout.write(`\\x1B[2D[${date}] ${colors[color](message)}\\n> `);\n\t\tconsole.log(`[${date}] ${colors[color](message)}`);\n\n\t\tif (prefix !== null) {\n\t\t\tmessage = `<${prefix.toUpperCase()}> ${message}`;\n\t\t}\n\n\t\tfs.writeFile(\"bot.log\", `[${date}] ${message}\\n`, {\n\t\t\tflag: \"a\"\n\t\t}, (err) => {\n\t\t\tif (err) {\n\t\t\t\tthrow err;\n\t\t\t}\n\t\t});\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic info(message) {\n\t\tLog.log(message, \"cyan\", \"info\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic success(message) {\n\t\tLog.log(message, \"green\", \"sucs\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic warn(message) {\n\t\tLog.log(message, \"yellow\", \"warn\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic error(message) {\n\t\tLog.log(message, \"red\", \"dang\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic throw(message) {\n\t\tLog.log(message, \"red\", \"dang\");\n\t\tprocess.exit(1);\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic async verbose(message) {\n\t\tLog.log(message, \"grey\");\n\t}\n\n\t/**\n\t * @param {String} message\n\t */\n\tstatic debug(message) {\n\t\tLog.log(message, \"magenta\", \"dbug\");\n\t}\n}\n",
@@ -4748,7 +5070,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 199,
+    "__docId__": 210,
     "kind": "variable",
     "name": "colors",
     "memberof": "src/core/log.js",
@@ -4769,7 +5091,7 @@
     "ignore": true
   },
   {
-    "__docId__": 200,
+    "__docId__": 211,
     "kind": "variable",
     "name": "fs",
     "memberof": "src/core/log.js",
@@ -4790,7 +5112,7 @@
     "ignore": true
   },
   {
-    "__docId__": 201,
+    "__docId__": 212,
     "kind": "class",
     "name": "Log",
     "memberof": "src/core/log.js",
@@ -4806,7 +5128,7 @@
     "interface": false
   },
   {
-    "__docId__": 202,
+    "__docId__": 213,
     "kind": "method",
     "name": "log",
     "memberof": "src/core/log.js~Log",
@@ -4852,7 +5174,7 @@
     "return": null
   },
   {
-    "__docId__": 203,
+    "__docId__": 214,
     "kind": "method",
     "name": "info",
     "memberof": "src/core/log.js~Log",
@@ -4878,7 +5200,7 @@
     "return": null
   },
   {
-    "__docId__": 204,
+    "__docId__": 215,
     "kind": "method",
     "name": "success",
     "memberof": "src/core/log.js~Log",
@@ -4904,7 +5226,7 @@
     "return": null
   },
   {
-    "__docId__": 205,
+    "__docId__": 216,
     "kind": "method",
     "name": "warn",
     "memberof": "src/core/log.js~Log",
@@ -4930,7 +5252,7 @@
     "return": null
   },
   {
-    "__docId__": 206,
+    "__docId__": 217,
     "kind": "method",
     "name": "error",
     "memberof": "src/core/log.js~Log",
@@ -4956,7 +5278,7 @@
     "return": null
   },
   {
-    "__docId__": 207,
+    "__docId__": 218,
     "kind": "method",
     "name": "throw",
     "memberof": "src/core/log.js~Log",
@@ -4982,7 +5304,7 @@
     "return": null
   },
   {
-    "__docId__": 208,
+    "__docId__": 219,
     "kind": "method",
     "name": "verbose",
     "memberof": "src/core/log.js~Log",
@@ -5008,7 +5330,7 @@
     "return": null
   },
   {
-    "__docId__": 209,
+    "__docId__": 220,
     "kind": "method",
     "name": "debug",
     "memberof": "src/core/log.js~Log",
@@ -5034,7 +5356,7 @@
     "return": null
   },
   {
-    "__docId__": 210,
+    "__docId__": 221,
     "kind": "file",
     "name": "src/core/rgb.js",
     "content": "export default class RGB {\n\t/**\n\t * @param {Number} red\n\t * @param {Number} green\n\t * @param {Number} blue\n\t */\n\tconstructor(red, green, blue) {\n\t\t/**\n\t\t * @type {Number}\n\t\t * @readonly\n\t\t */\n\t\tthis.red = red;\n\n\t\t/**\n\t\t * @type {Number}\n\t\t * @readonly\n\t\t */\n\t\tthis.green = green;\n\n\t\t/**\n\t\t * @type {Number}\n\t\t * @readonly\n\t\t */\n\t\tthis.blue = blue;\n\t}\n\n\t/**\n\t * @returns {String}\n\t */\n\ttoString() {\n\t\treturn `${this.red}, ${this.green}, ${this.blue}`;\n\t}\n}\n",
@@ -5045,7 +5367,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 211,
+    "__docId__": 222,
     "kind": "class",
     "name": "RGB",
     "memberof": "src/core/rgb.js",
@@ -5061,7 +5383,7 @@
     "interface": false
   },
   {
-    "__docId__": 212,
+    "__docId__": 223,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/core/rgb.js~RGB",
@@ -5106,7 +5428,7 @@
     ]
   },
   {
-    "__docId__": 213,
+    "__docId__": 224,
     "kind": "member",
     "name": "red",
     "memberof": "src/core/rgb.js~RGB",
@@ -5131,7 +5453,7 @@
     }
   },
   {
-    "__docId__": 214,
+    "__docId__": 225,
     "kind": "member",
     "name": "green",
     "memberof": "src/core/rgb.js~RGB",
@@ -5156,7 +5478,7 @@
     }
   },
   {
-    "__docId__": 215,
+    "__docId__": 226,
     "kind": "member",
     "name": "blue",
     "memberof": "src/core/rgb.js~RGB",
@@ -5181,7 +5503,7 @@
     }
   },
   {
-    "__docId__": 216,
+    "__docId__": 227,
     "kind": "method",
     "name": "toString",
     "memberof": "src/core/rgb.js~RGB",
@@ -5209,7 +5531,7 @@
     "params": []
   },
   {
-    "__docId__": 217,
+    "__docId__": 228,
     "kind": "file",
     "name": "src/core/rgba.js",
     "content": "import RGB from \"./rgb\";\n\n/**\n * @extends RGB\n */\nexport default class RGBA extends RGB {\n\t/**\n\t * @param {Number} red\n\t * @param {Number} green\n\t * @param {Number} blue\n\t * @param {Number} alpha\n\t */\n\tconstructor(red, green, blue, alpha) {\n\t\tsuper(red, green, blue);\n\n\t\t/**\n\t\t * @type {Number}\n\t\t * @readonly\n\t\t */\n\t\tthis.alpha = alpha;\n\t}\n\n\t/**\n\t * @returns {String}\n\t */\n\ttoString() {\n\t\treturn `${this.red}, ${this.green}, ${this.blue}, ${this.alpha}`;\n\t}\n\n\t/**\n\t * @returns {Object}\n\t */\n\ttoObject() {\n\t\treturn {\n\t\t\tred: this.red,\n\t\t\tgreen: this.green,\n\t\t\tblue: this.blue,\n\t\t\talpha: this.alpha\n\t\t};\n\t}\n\n\t/**\n\t * @param {String} hex\n\t * @returns {(RGBA|Null)}\n\t */\n\tstatic fromHex(hex) {\n\t\tconst result = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);\n\n\t\t// TODO: Also get the Alpha value (instead of being hardcoded).\n\t\treturn result ? new RGBA(parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16), 255) : null;\n\t}\n\n\t// TODO: Support for shorthand hex:\n\t/* function hexToRgb(hex) {\n\t\t// Expand shorthand form (e.g. \"03F\") to full form (e.g. \"0033FF\")\n\t\tvar shorthandRegex = /^#?([a-f\\d])([a-f\\d])([a-f\\d])$/i;\n\t\thex = hex.replace(shorthandRegex, function(m, r, g, b) {\n\t\t\treturn r + r + g + g + b + b;\n\t\t});\n\n\t\tvar result = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);\n\t\treturn result ? {\n\t\t\tr: parseInt(result[1], 16),\n\t\t\tg: parseInt(result[2], 16),\n\t\t\tb: parseInt(result[3], 16)\n\t\t} : null;\n\t} */\n}\n",
@@ -5220,7 +5542,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 218,
+    "__docId__": 229,
     "kind": "class",
     "name": "RGBA",
     "memberof": "src/core/rgba.js",
@@ -5238,7 +5560,7 @@
     ]
   },
   {
-    "__docId__": 219,
+    "__docId__": 230,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/core/rgba.js~RGBA",
@@ -5293,7 +5615,7 @@
     ]
   },
   {
-    "__docId__": 220,
+    "__docId__": 231,
     "kind": "member",
     "name": "alpha",
     "memberof": "src/core/rgba.js~RGBA",
@@ -5318,7 +5640,7 @@
     }
   },
   {
-    "__docId__": 221,
+    "__docId__": 232,
     "kind": "method",
     "name": "toString",
     "memberof": "src/core/rgba.js~RGBA",
@@ -5346,7 +5668,7 @@
     "params": []
   },
   {
-    "__docId__": 222,
+    "__docId__": 233,
     "kind": "method",
     "name": "toObject",
     "memberof": "src/core/rgba.js~RGBA",
@@ -5374,7 +5696,7 @@
     "params": []
   },
   {
-    "__docId__": 223,
+    "__docId__": 234,
     "kind": "method",
     "name": "fromHex",
     "memberof": "src/core/rgba.js~RGBA",
@@ -5414,7 +5736,7 @@
     }
   },
   {
-    "__docId__": 224,
+    "__docId__": 235,
     "kind": "file",
     "name": "src/core/settings.js",
     "content": "import Log from \"./log\";\n\nconst fs = require(\"fs\");\n\nexport default class Settings {\n\t/**\n\t * @param {String} path\n\t */\n\tconstructor(path) {\n\t\tif (fs.existsSync(path)) {\n\t\t\t/**\n\t\t\t * @type {String}\n\t\t\t * @private\n\t\t\t * @readonly\n\t\t\t */\n\t\t\tthis.path = path;\n\n\t\t\tconst jsonObj = JSON.parse(fs.readFileSync(path).toString());\n\n\t\t\t// TODO: Should be automatic\n\t\t\t// TODO: Should be validated using Schema\n\t\t\t/**\n\t\t\t * @type {Object}\n\t\t\t * @readonly\n\t\t\t */\n\t\t\tthis.general = jsonObj.general;\n\n\t\t\t/**\n\t\t\t * @type {Object}\n\t\t\t * @readonly\n\t\t\t */\n\t\t\tthis.keys = jsonObj.keys;\n\t\t}\n\t\telse {\n\t\t\tLog.error(\"Could not load settings: File does not exist\");\n\t\t}\n\t}\n\n\t/**\n\t * Save the local settings into path\n\t */\n\tsave() {\n\t\tfs.writeFileSync(this.path, JSON.stringify({\n\t\t\tgeneral: this.general,\n\t\t\tkeys: this.keys\n\t\t}, null, 4));\n\t}\n\n\t// TODO\n\tvalidate() {\n\t\tif (this.general.token === null) {\n\t\t\tLog.error(\"[Settings] Token cannot be null or empty\");\n\t\t}\n\t}\n}\n",
@@ -5425,7 +5747,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 225,
+    "__docId__": 236,
     "kind": "variable",
     "name": "fs",
     "memberof": "src/core/settings.js",
@@ -5446,7 +5768,7 @@
     "ignore": true
   },
   {
-    "__docId__": 226,
+    "__docId__": 237,
     "kind": "class",
     "name": "Settings",
     "memberof": "src/core/settings.js",
@@ -5462,7 +5784,7 @@
     "interface": false
   },
   {
-    "__docId__": 227,
+    "__docId__": 238,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/core/settings.js~Settings",
@@ -5487,7 +5809,7 @@
     ]
   },
   {
-    "__docId__": 228,
+    "__docId__": 239,
     "kind": "member",
     "name": "path",
     "memberof": "src/core/settings.js~Settings",
@@ -5512,7 +5834,7 @@
     }
   },
   {
-    "__docId__": 229,
+    "__docId__": 240,
     "kind": "member",
     "name": "general",
     "memberof": "src/core/settings.js~Settings",
@@ -5537,7 +5859,7 @@
     }
   },
   {
-    "__docId__": 230,
+    "__docId__": 241,
     "kind": "member",
     "name": "keys",
     "memberof": "src/core/settings.js~Settings",
@@ -5562,7 +5884,7 @@
     }
   },
   {
-    "__docId__": 231,
+    "__docId__": 242,
     "kind": "method",
     "name": "save",
     "memberof": "src/core/settings.js~Settings",
@@ -5577,7 +5899,7 @@
     "return": null
   },
   {
-    "__docId__": 232,
+    "__docId__": 243,
     "kind": "method",
     "name": "validate",
     "memberof": "src/core/settings.js~Settings",
@@ -5593,7 +5915,7 @@
     "return": null
   },
   {
-    "__docId__": 233,
+    "__docId__": 244,
     "kind": "file",
     "name": "src/core/user-config.js",
     "content": "import Log from \"./log\";\n\nconst fs = require(\"fs\");\nconst _ = require(\"lodash\");\n\nexport default class UserConfig {\n\t/**\n\t * @param {String} path\n\t */\n\tconstructor(path) {\n\t\tif (fs.existsSync(path)) {\n\t\t\t/**\n\t\t\t * @type {String}\n\t\t\t * @private\n\t\t\t * @readonly\n\t\t\t */\n\t\t\tthis.path = path;\n\n\t\t\t/**\n\t\t\t * @type {any}\n\t\t\t * @private\n\t\t\t */\n\t\t\tthis.config = JSON.parse(fs.readFileSync(path).toString());\n\t\t}\n\t\telse {\n\t\t\tLog.error(\"Could not load user config: File does not exist\");\n\t\t}\n\t}\n\n\t/**\n\t * @param {String} path\n\t * @param {*} value\n\t * @param {(Snowflake|Null)} guildId\n\t * @param {String} template\n\t */\n\tset(path, value, guildId = null, template = \"default\") {\n\t\tconst finalPath = guildId ? `${guildId}.${path}` : path;\n\n\t\tLog.info(finalPath);\n\n\t\tif (this.get(`${template}.${path}`, guildId) === value) {\n\t\t\t_.unset(this.config, finalPath);\n\t\t}\n\t\telse {\n\t\t\t_.set(this.config, finalPath, value);\n\t\t\tLog.info(`set ${finalPath} to ${value}`);\n\t\t}\n\n\t\tthis.save();\n\t}\n\n\t/**\n\t * @param {String} path\n\t * @param {(Snowflake|Null)} guildId\n\t * @param {String} template\n\t * @returns {*}\n\t */\n\tget(path, guildId = null, template = \"default\") {\n\t\tconst finalPath = guildId ? `${guildId}.${path}` : path;\n\n\t\tif (!this.contains(path, guildId)) {\n\t\t\treturn _.get(this.config, `${template}.${path}`);\n\t\t}\n\n\t\treturn _.get(this.config, finalPath);\n\t}\n\n\t/**\n\t * @param {String} path\n\t * @param {*} item\n\t * @param {(Snowflake|Null)} guildId\n\t */\n\tpush(path, item, guildId = null) {\n\t\tconst items = this.get(path, guildId).slice(0);\n\n\t\titems.push(item);\n\t\tthis.set(path, items, guildId);\n\t}\n\n\t/**\n\t * @param {String} path\n\t * @param {(Snowflake|Null)} guildId\n\t * @returns {boolean}\n\t */\n\tcontains(path, guildId = null) {\n\t\tconst finalPath = guildId ? `${guildId}.${path}` : path;\n\n\t\treturn _.has(this.config, finalPath);\n\t}\n\n\t/**\n\t * @param {Snowflake} id\n\t */\n\tcreateGuild(id) {\n\t\tthis.set(id, {});\n\t\tthis.save();\n\t}\n\n\t/**\n\t * @param {Snowflake} id\n\t */\n\tremoveGuild(id) {\n\t\tdelete this.config[id];\n\t\tthis.save();\n\t}\n\n\tsave() {\n\t\tfs.writeFileSync(this.path, JSON.stringify(this.config, null, 4));\n\t}\n}\n",
@@ -5604,7 +5926,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 234,
+    "__docId__": 245,
     "kind": "variable",
     "name": "fs",
     "memberof": "src/core/user-config.js",
@@ -5625,7 +5947,7 @@
     "ignore": true
   },
   {
-    "__docId__": 235,
+    "__docId__": 246,
     "kind": "variable",
     "name": "_",
     "memberof": "src/core/user-config.js",
@@ -5646,7 +5968,7 @@
     "ignore": true
   },
   {
-    "__docId__": 236,
+    "__docId__": 247,
     "kind": "class",
     "name": "UserConfig",
     "memberof": "src/core/user-config.js",
@@ -5662,7 +5984,7 @@
     "interface": false
   },
   {
-    "__docId__": 237,
+    "__docId__": 248,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/core/user-config.js~UserConfig",
@@ -5687,7 +6009,7 @@
     ]
   },
   {
-    "__docId__": 238,
+    "__docId__": 249,
     "kind": "member",
     "name": "path",
     "memberof": "src/core/user-config.js~UserConfig",
@@ -5712,7 +6034,7 @@
     }
   },
   {
-    "__docId__": 239,
+    "__docId__": 250,
     "kind": "member",
     "name": "config",
     "memberof": "src/core/user-config.js~UserConfig",
@@ -5731,7 +6053,7 @@
     }
   },
   {
-    "__docId__": 240,
+    "__docId__": 251,
     "kind": "method",
     "name": "set",
     "memberof": "src/core/user-config.js~UserConfig",
@@ -5788,7 +6110,7 @@
     "return": null
   },
   {
-    "__docId__": 241,
+    "__docId__": 252,
     "kind": "method",
     "name": "get",
     "memberof": "src/core/user-config.js~UserConfig",
@@ -5848,7 +6170,7 @@
     }
   },
   {
-    "__docId__": 242,
+    "__docId__": 253,
     "kind": "method",
     "name": "push",
     "memberof": "src/core/user-config.js~UserConfig",
@@ -5895,7 +6217,7 @@
     "return": null
   },
   {
-    "__docId__": 243,
+    "__docId__": 254,
     "kind": "method",
     "name": "contains",
     "memberof": "src/core/user-config.js~UserConfig",
@@ -5945,7 +6267,7 @@
     }
   },
   {
-    "__docId__": 244,
+    "__docId__": 255,
     "kind": "method",
     "name": "createGuild",
     "memberof": "src/core/user-config.js~UserConfig",
@@ -5971,7 +6293,7 @@
     "return": null
   },
   {
-    "__docId__": 245,
+    "__docId__": 256,
     "kind": "method",
     "name": "removeGuild",
     "memberof": "src/core/user-config.js~UserConfig",
@@ -5997,7 +6319,7 @@
     "return": null
   },
   {
-    "__docId__": 246,
+    "__docId__": 257,
     "kind": "method",
     "name": "save",
     "memberof": "src/core/user-config.js~UserConfig",
@@ -6013,7 +6335,7 @@
     "return": null
   },
   {
-    "__docId__": 247,
+    "__docId__": 258,
     "kind": "file",
     "name": "src/core/utils.js",
     "content": "import TimeAgo from \"javascript-time-ago\";\nimport en from \"javascript-time-ago/locale/en\";\n\nTimeAgo.locale(en);\n\nconst fs = require(\"fs\");\nconst timeAgo = new TimeAgo(\"en-US\");\n\nexport default class Utils {\n\t/**\n\t * @param {String} mention\n\t * @returns {String}\n\t */\n\tstatic resolveId(mention) {\n\t\treturn mention\n\t\t\t.replace(\"<\", \"\")\n\t\t\t.replace(\">\", \"\")\n\t\t\t.replace(\"@\", \"\")\n\t\t\t.replace(\"!\", \"\")\n\t\t\t.replace(\"&\", \"\")\n\t\t\t.replace(\"#\", \"\");\n\t}\n\n\t/**\n\t * @param {Number} min\n\t * @param {Number} max\n\t * @return {Number}\n\t */\n\tstatic getRandomInt(min, max) {\n\t\treturn Math.floor(Math.random() * max) + min;\n\t}\n\n\t/**\n\t * @param {Array} array\n\t * @return {Array}\n\t */\n\tstatic shuffle(array) {\n\t\tlet counter = array.length;\n\n\t\t// While there are elements in the array\n\t\twhile (counter > 0) {\n\t\t\t// Pick a random index\n\t\t\tconst index = Math.floor(Math.random() * counter);\n\n\t\t\t// Decrease counter by 1\n\t\t\tcounter--;\n\n\t\t\t// And swap the last element with it\n\t\t\tconst temp = array[counter];\n\n\t\t\tarray[counter] = array[index];\n\t\t\tarray[index] = temp;\n\t\t}\n\n\t\treturn array;\n\t}\n\n\t/**\n\t * @param {Object} options\n\t * @param {User} requester\n\t * @param {Discord.Channel} channel\n\t * @param {String} [footerSuffix=\"\"]\n\t * @return {Promise<Discord.Message>}\n\t */\n\tstatic async send(options, requester, channel, footerSuffix = \"\") {\n\t\tconst optionsCpy = options;\n\n\t\toptionsCpy.footer = {\n\t\t\ticon_url: requester.avatarURL,\n\t\t\ttext: `Requested by ${requester.username} ${footerSuffix}`\n\t\t};\n\n\t\tif (!optionsCpy.color) {\n\t\t\t// TODO: Color is literal hex, not string (gives error)\n\t\t\toptionsCpy.color = \"GREEN\";\n\t\t}\n\n\t\treturn await channel.send({\n\t\t\tembed: options\n\t\t});\n\t}\n\n\t/**\n\t * @param {Number} milliseconds\n\t * @param {Number} [seconds=0]\n\t * @param {Number} [minutes=0]\n\t * @param {Number} [hours=0]\n\t * @param {Number} [days=0]\n\t * @param {Number} [months=0]\n\t * @param {Number} [years=0]\n\t * @return {Number}\n\t */\n\tstatic timeFromNow(milliseconds, seconds = 0, minutes = 0, hours = 0, days = 0, months = 0, years = 0) {\n\t\tconst now = new Date();\n\n\t\treturn new Date(years + now.getFullYear(), months + now.getMonth(), days + now.getDate(), hours + now.getHours(), minutes + now.getMinutes(), seconds + now.getSeconds(), milliseconds + now.getMilliseconds()).getTime();\n\t}\n\n\t/**\n\t * @param {Number} timestamp\n\t * @return {*}\n\t */\n\tstatic timeAgo(timestamp) {\n\t\treturn timeAgo.format(timestamp);\n\t}\n\n\t/**\n\t * @param {String} state\n\t * @return {Boolean}\n\t */\n\tstatic translateState(state) {\n\t\treturn /^(1|true|on|y|yes)$/i.test(state);\n\t}\n\n\t/**\n\t * @param {String} path\n\t * @param {Object} data\n\t * @return {Promise}\n\t */\n\tstatic async writeJson(path, data) {\n\t\treturn new Promise((resolve) => {\n\t\t\tfs.writeFile(path, JSON.stringify(data), (error) => {\n\t\t\t\tif (error) {\n\t\t\t\t\tthrow error;\n\t\t\t\t}\n\n\t\t\t\tresolve();\n\t\t\t});\n\t\t});\n\t}\n\n\t/**\n\t * @param {String} path\n\t * @return {Promise<Object>}\n\t */\n\tstatic async readJson(path) {\n\t\treturn new Promise((resolve) => {\n\t\t\tfs.readFile(path, (error, data) => {\n\t\t\t\tif (error) {\n\t\t\t\t\tthrow error;\n\t\t\t\t}\n\n\t\t\t\tresolve(JSON.parse(data.toString()));\n\t\t\t});\n\t\t});\n\t}\n}\n",
@@ -6024,7 +6346,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 248,
+    "__docId__": 259,
     "kind": "variable",
     "name": "fs",
     "memberof": "src/core/utils.js",
@@ -6045,7 +6367,7 @@
     "ignore": true
   },
   {
-    "__docId__": 249,
+    "__docId__": 260,
     "kind": "variable",
     "name": "timeAgo",
     "memberof": "src/core/utils.js",
@@ -6066,7 +6388,7 @@
     "ignore": true
   },
   {
-    "__docId__": 250,
+    "__docId__": 261,
     "kind": "class",
     "name": "Utils",
     "memberof": "src/core/utils.js",
@@ -6082,7 +6404,7 @@
     "interface": false
   },
   {
-    "__docId__": 251,
+    "__docId__": 262,
     "kind": "method",
     "name": "resolveId",
     "memberof": "src/core/utils.js~Utils",
@@ -6121,7 +6443,7 @@
     }
   },
   {
-    "__docId__": 252,
+    "__docId__": 263,
     "kind": "method",
     "name": "getRandomInt",
     "memberof": "src/core/utils.js~Utils",
@@ -6164,7 +6486,7 @@
     }
   },
   {
-    "__docId__": 253,
+    "__docId__": 264,
     "kind": "method",
     "name": "shuffle",
     "memberof": "src/core/utils.js~Utils",
@@ -6197,7 +6519,7 @@
     }
   },
   {
-    "__docId__": 254,
+    "__docId__": 265,
     "kind": "method",
     "name": "send",
     "memberof": "src/core/utils.js~Utils",
@@ -6262,7 +6584,7 @@
     }
   },
   {
-    "__docId__": 255,
+    "__docId__": 266,
     "kind": "method",
     "name": "timeFromNow",
     "memberof": "src/core/utils.js~Utils",
@@ -6367,7 +6689,7 @@
     }
   },
   {
-    "__docId__": 256,
+    "__docId__": 267,
     "kind": "method",
     "name": "timeAgo",
     "memberof": "src/core/utils.js~Utils",
@@ -6400,7 +6722,7 @@
     }
   },
   {
-    "__docId__": 257,
+    "__docId__": 268,
     "kind": "method",
     "name": "translateState",
     "memberof": "src/core/utils.js~Utils",
@@ -6433,7 +6755,7 @@
     }
   },
   {
-    "__docId__": 258,
+    "__docId__": 269,
     "kind": "method",
     "name": "writeJson",
     "memberof": "src/core/utils.js~Utils",
@@ -6476,7 +6798,7 @@
     }
   },
   {
-    "__docId__": 259,
+    "__docId__": 270,
     "kind": "method",
     "name": "readJson",
     "memberof": "src/core/utils.js~Utils",
@@ -6509,7 +6831,7 @@
     }
   },
   {
-    "__docId__": 260,
+    "__docId__": 271,
     "kind": "file",
     "name": "src/data-stores/data-store.js",
     "content": "export default class DataStore {\n\t/**\n\t * Retrieve guild data\n\t * @abstract\n\t * @param {String} path\n\t * @returns {*}\n\t */\n\tget(path) {\n\t\tthrow new Error(\"[DataStore.get] Method not implemented.\");\n\t}\n\n\t/**\n\t * Set guild data\n\t * @abstract\n\t * @param {String} path\n\t * @param {*} value\n\t * @returns {*}\n\t */\n\tset(path, value) {\n\t\tthrow new Error(\"[DataStore.set] Method not implemented.\");\n\t}\n}\n",
@@ -6520,7 +6842,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 261,
+    "__docId__": 272,
     "kind": "class",
     "name": "DataStore",
     "memberof": "src/data-stores/data-store.js",
@@ -6536,7 +6858,7 @@
     "interface": false
   },
   {
-    "__docId__": 262,
+    "__docId__": 273,
     "kind": "method",
     "name": "get",
     "memberof": "src/data-stores/data-store.js~DataStore",
@@ -6576,7 +6898,7 @@
     "abstract": true
   },
   {
-    "__docId__": 263,
+    "__docId__": 274,
     "kind": "method",
     "name": "set",
     "memberof": "src/data-stores/data-store.js~DataStore",
@@ -6626,7 +6948,7 @@
     "abstract": true
   },
   {
-    "__docId__": 264,
+    "__docId__": 275,
     "kind": "file",
     "name": "src/data-stores/json-store.js",
     "content": "import ObjectStore from \"./object-store\";\n\nconst fs = require(\"fs\");\nconst _ = require(\"lodash\");\n\n/**\n * @extends ObjectStore\n */\nexport default class JsonStore extends ObjectStore {\n\t/**\n\t * @param {String} path\n\t */\n\tconstructor(path) {\n\t\tsuper(null);\n\n\t\t/**\n\t\t * @type {String}\n\t\t * @private\n\t\t */\n\t\tthis.path = path;\n\t}\n\n\t/**\n\t * Reload the data from the source file\n\t * @returns {Promise}\n\t */\n\tasync reload() {\n\t\tthis.validate();\n\n\t\treturn new Promise((resolve) => {\n\t\t\tfs.readFile(this.path, (error, data) => {\n\t\t\t\tif (error) {\n\t\t\t\t\tthrow error;\n\t\t\t\t}\n\n\t\t\t\tthis.data = JSON.parse(data.toString());\n\t\t\t\tresolve();\n\t\t\t});\n\t\t});\n\t}\n\n\t/**\n\t * Save the data into the source file\n\t * @return {Promise}\n\t */\n\tasync save() {\n\t\tthis.validate();\n\n\t\treturn new Promise((resolve) => {\n\t\t\tfs.writeFile(this.path, JSON.stringify(this.data), (error) => {\n\t\t\t\tif (error) {\n\t\t\t\t\tthrow error;\n\t\t\t\t}\n\n\t\t\t\tresolve();\n\t\t\t});\n\t\t});\n\t}\n\n\t/**\n\t * Ensure that the source file exists\n\t */\n\tvalidate() {\n\t\tif (!fs.existsSync(this.path)) {\n\t\t\tthrow new Error(`[JsonAdapter] Path does not exist: ${this.path}`);\n\t\t}\n\t}\n\n\t/**\n\t * Retrieve guild data\n\t * @param {String} path\n\t * @returns {*}\n\t */\n\tget(path) {\n\t\tif (!this.loaded) {\n\t\t\tthrow new Error(\"[JsonStore.get] No data is currently loaded.\");\n\t\t}\n\n\t\treturn _.get(this.data, path);\n\t}\n\n\t/**\n\t * Set guild data\n\t * @param {String} path\n\t * @param {*} value\n\t */\n\tset(path, value) {\n\t\tif (!this.loaded) {\n\t\t\tthrow new Error(\"[JsonStore.set] No data is currently loaded.\");\n\t\t}\n\n\t\t_.set(this.data, path, value);\n\t}\n\n\t/**\n\t * Merge guild data\n\t * @param {String} path\n\t * @param {*} value\n\t */\n\tmerge(path, value) {\n\t\tif (!this.loaded) {\n\t\t\tthrow new Error(\"[JsonStore.merge] No data is currently loaded.\");\n\t\t}\n\n\t\tthrow new Error(\"[JsonStore.merge] Method not implemented.\");\n\t}\n\n\tget loaded() {\n\t\treturn this.data !== null;\n\t}\n}\n",
@@ -6637,7 +6959,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 265,
+    "__docId__": 276,
     "kind": "variable",
     "name": "fs",
     "memberof": "src/data-stores/json-store.js",
@@ -6658,7 +6980,7 @@
     "ignore": true
   },
   {
-    "__docId__": 266,
+    "__docId__": 277,
     "kind": "variable",
     "name": "_",
     "memberof": "src/data-stores/json-store.js",
@@ -6679,7 +7001,7 @@
     "ignore": true
   },
   {
-    "__docId__": 267,
+    "__docId__": 278,
     "kind": "class",
     "name": "JsonStore",
     "memberof": "src/data-stores/json-store.js",
@@ -6697,7 +7019,7 @@
     ]
   },
   {
-    "__docId__": 268,
+    "__docId__": 279,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/data-stores/json-store.js~JsonStore",
@@ -6722,7 +7044,7 @@
     ]
   },
   {
-    "__docId__": 269,
+    "__docId__": 280,
     "kind": "member",
     "name": "path",
     "memberof": "src/data-stores/json-store.js~JsonStore",
@@ -6741,7 +7063,7 @@
     }
   },
   {
-    "__docId__": 270,
+    "__docId__": 281,
     "kind": "method",
     "name": "reload",
     "memberof": "src/data-stores/json-store.js~JsonStore",
@@ -6769,7 +7091,7 @@
     "params": []
   },
   {
-    "__docId__": 271,
+    "__docId__": 282,
     "kind": "member",
     "name": "data",
     "memberof": "src/data-stores/json-store.js~JsonStore",
@@ -6786,7 +7108,7 @@
     }
   },
   {
-    "__docId__": 272,
+    "__docId__": 283,
     "kind": "method",
     "name": "save",
     "memberof": "src/data-stores/json-store.js~JsonStore",
@@ -6808,7 +7130,7 @@
     "params": []
   },
   {
-    "__docId__": 273,
+    "__docId__": 284,
     "kind": "method",
     "name": "validate",
     "memberof": "src/data-stores/json-store.js~JsonStore",
@@ -6823,7 +7145,7 @@
     "return": null
   },
   {
-    "__docId__": 274,
+    "__docId__": 285,
     "kind": "method",
     "name": "get",
     "memberof": "src/data-stores/json-store.js~JsonStore",
@@ -6862,7 +7184,7 @@
     }
   },
   {
-    "__docId__": 275,
+    "__docId__": 286,
     "kind": "method",
     "name": "set",
     "memberof": "src/data-stores/json-store.js~JsonStore",
@@ -6898,7 +7220,7 @@
     "return": null
   },
   {
-    "__docId__": 276,
+    "__docId__": 287,
     "kind": "method",
     "name": "merge",
     "memberof": "src/data-stores/json-store.js~JsonStore",
@@ -6934,7 +7256,7 @@
     "return": null
   },
   {
-    "__docId__": 277,
+    "__docId__": 288,
     "kind": "get",
     "name": "loaded",
     "memberof": "src/data-stores/json-store.js~JsonStore",
@@ -6953,7 +7275,7 @@
     }
   },
   {
-    "__docId__": 278,
+    "__docId__": 289,
     "kind": "file",
     "name": "src/data-stores/mongodb-store.js",
     "content": "import DataStore from \"./data-store\";\n\nconst mongodb = require(\"mongodb\");\n\n/**\n * @extends DataStore\n */\nexport default class MongodbStore extends DataStore {\n\t/**\n\t * @param {String} url\n\t */\n\tconstructor(url) {\n\t\tsuper();\n\n\t\t/**\n\t\t * @type {String}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.url = url;\n\n\t\t/**\n\t\t * @type {MongoClient}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.client = mongodb.MongoClient;\n\n\t\t/**\n\t\t * @type {*}\n\t\t * @private\n\t\t */\n\t\tthis.db = null;\n\t}\n\n\t/**\n\t * @param {String} database The database name\n\t */\n\tconnect(database) {\n\t\tthis.client.connect(this.url, (error, db) => {\n\t\t\tif (error) {\n\t\t\t\tthrow error;\n\t\t\t}\n\n\t\t\tthis.db = db.db(database);\n\t\t});\n\t}\n\n\t/**\n\t * Retrieve guild data\n\t * @param {String} path\n\t * @returns {*}\n\t */\n\tget(path) {\n\t\tthrow new Error(\"[MongoDb.get] Method not implemented.\");\n\t}\n\n\t/**\n\t * Set guild data\n\t * @param {String} path\n\t * @param {*} data\n\t */\n\tset(path, data) {\n\t\tthrow new Error(\"[MongoDb.set] Method not implemented.\");\n\t}\n\n\t/**\n\t * Merge guild data\n\t * @param {String} path\n\t * @param {*} data\n\t */\n\tmerge(path, data) {\n\t\tthrow new Error(\"[MongoDb.merge] Method not implemented.\");\n\t}\n}\n",
@@ -6964,7 +7286,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 279,
+    "__docId__": 290,
     "kind": "variable",
     "name": "mongodb",
     "memberof": "src/data-stores/mongodb-store.js",
@@ -6985,7 +7307,7 @@
     "ignore": true
   },
   {
-    "__docId__": 280,
+    "__docId__": 291,
     "kind": "class",
     "name": "MongodbStore",
     "memberof": "src/data-stores/mongodb-store.js",
@@ -7003,7 +7325,7 @@
     ]
   },
   {
-    "__docId__": 281,
+    "__docId__": 292,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/data-stores/mongodb-store.js~MongodbStore",
@@ -7028,7 +7350,7 @@
     ]
   },
   {
-    "__docId__": 282,
+    "__docId__": 293,
     "kind": "member",
     "name": "url",
     "memberof": "src/data-stores/mongodb-store.js~MongodbStore",
@@ -7053,7 +7375,7 @@
     }
   },
   {
-    "__docId__": 283,
+    "__docId__": 294,
     "kind": "member",
     "name": "client",
     "memberof": "src/data-stores/mongodb-store.js~MongodbStore",
@@ -7078,7 +7400,7 @@
     }
   },
   {
-    "__docId__": 284,
+    "__docId__": 295,
     "kind": "member",
     "name": "db",
     "memberof": "src/data-stores/mongodb-store.js~MongodbStore",
@@ -7097,7 +7419,7 @@
     }
   },
   {
-    "__docId__": 285,
+    "__docId__": 296,
     "kind": "method",
     "name": "connect",
     "memberof": "src/data-stores/mongodb-store.js~MongodbStore",
@@ -7123,7 +7445,7 @@
     "return": null
   },
   {
-    "__docId__": 287,
+    "__docId__": 298,
     "kind": "method",
     "name": "get",
     "memberof": "src/data-stores/mongodb-store.js~MongodbStore",
@@ -7162,7 +7484,7 @@
     }
   },
   {
-    "__docId__": 288,
+    "__docId__": 299,
     "kind": "method",
     "name": "set",
     "memberof": "src/data-stores/mongodb-store.js~MongodbStore",
@@ -7198,7 +7520,7 @@
     "return": null
   },
   {
-    "__docId__": 289,
+    "__docId__": 300,
     "kind": "method",
     "name": "merge",
     "memberof": "src/data-stores/mongodb-store.js~MongodbStore",
@@ -7234,7 +7556,7 @@
     "return": null
   },
   {
-    "__docId__": 290,
+    "__docId__": 301,
     "kind": "file",
     "name": "src/data-stores/mysql-store.js",
     "content": "import DataStore from \"./data-store\";\n\nconst mysql = require(\"mysql\");\nconst _ = require(\"lodash\");\n\n/**\n * @extends DataStore\n */\nexport default class MysqlStore extends DataStore {\n\t/**\n\t * @param {Object} data\n\t */\n\tconstructor(data) {\n\t\tsuper();\n\n\t\t/**\n\t\t * @type {Object}\n\t\t * @private\n\t\t */\n\t\tthis.data = data;\n\n\t\t/**\n\t\t * @type {*}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.connection = mysql.createConnection(data);\n\n\t\t/**\n\t\t * @type {Boolean}\n\t\t * @private\n\t\t */\n\t\tthis.connected = false;\n\t}\n\n\t/**\n\t * Connect to the database\n\t * @returns {Promise<MysqlStore>}\n\t */\n\tconnect() {\n\t\treturn new Promise((resolve, reject) => {\n\t\t\tthis.connection.connect((err) => {\n\t\t\t\tif (err) {\n\t\t\t\t\treject(reject);\n\t\t\t\t}\n\t\t\t\telse {\n\t\t\t\t\tthis.connected = true;\n\t\t\t\t\tresolve(this);\n\t\t\t\t}\n\t\t\t});\n\t\t});\n\t}\n\n\t/**\n\t * Disconnect from the database\n\t * @returns {Promise<MysqlStore>}\n\t */\n\tdisconnect() {\n\t\treturn new Promise((resolve, reject) => {\n\t\t\tthis.connection.end((err) => {\n\t\t\t\tif (err) {\n\t\t\t\t\treject(reject);\n\t\t\t\t}\n\t\t\t\telse {\n\t\t\t\t\tthis.connected = false;\n\t\t\t\t\tresolve(this);\n\t\t\t\t}\n\t\t\t});\n\t\t});\n\t}\n\n\t/**\n\t * Execute a query in the database\n\t * @param {String} query\n\t * @param {*} args\n\t * @param {Number} [timeout=5000]\n\t * @returns {Promise<Object>}\n\t */\n\tquery(query, args = [], timeout = 5000) {\n\t\treturn new Promise((resolve, reject) => {\n\t\t\tthis.connection.query({\n\t\t\t\tsql: query,\n\t\t\t\tvalues: args,\n\t\t\t\ttimeout: timeout\n\t\t\t}, (error, results, fields) => {\n\t\t\t\tif (error) {\n\t\t\t\t\treject(error);\n\t\t\t\t}\n\t\t\t\telse {\n\t\t\t\t\tresolve({\n\t\t\t\t\t\tresults: results,\n\t\t\t\t\t\tfields: fields\n\t\t\t\t\t});\n\t\t\t\t}\n\t\t\t});\n\t\t});\n\t}\n\n\t/**\n\t * Retrieve guild data\n\t * @param {String} path\n\t * @param {(Snowflake|Null)} [guildId=null]\n\t * @returns {Promise}\n\t */\n\tasync get(path, guildId = null) {\n\t\tif (!this.loaded) {\n\t\t\tthrow new Error(\"[MysqlStore.get] No data is currently loaded.\");\n\t\t}\n\n\t\tlet query = \"SELECT * FROM ?? WHERE id = ?\";\n\n\t\tconst splitPath = MysqlStore.cleanPath(path, guildId);\n\n\t\tif (splitPath.length === 1) {\n\t\t\tquery = \"SELECT * FROM ??\";\n\t\t}\n\n\t\tconst { results, fields } = await this.query(query, splitPath);\n\n\t\tif (splitPath.length === 1) {\n\t\t\tconst rtn = [];\n\t\t\tfor (let i = 0; i < results.length; i++) {\n\t\t\t\tconst row = results[i];\n\t\t\t\trtn[row.id] = row;\n\t\t\t}\n\t\t\treturn rtn;\n\t\t}\n\n\t\tif (fields.length === 0) {\n\t\t\treturn undefined;\n\t\t}\n\t\telse if (splitPath.length === 2) {\n\t\t\treturn results[0];\n\t\t}\n\t\telse if (splitPath.length === 3) {\n\t\t\treturn results[0][splitPath[2]];\n\t\t}\n\n\t\tconst column = results[0][splitPath[2]];\n\t\tconst obj = JSON.parse(column);\n\n\t\treturn _.get(obj, path.substr(path.substr(26).indexOf(\".\") + 27));\n\t}\n\n\t/**\n\t * Set guild data\n\t * @param {String} path\n\t * @param {*} value\n\t * @param {(Snowflake|Null)} [guildId=null]\n\t * @returns {Promise<Object>}\n\t */\n\tasync set(path, value, guildId = null) {\n\t\tif (!this.loaded) {\n\t\t\tthrow new Error(\"[MysqlStore.set] No data is currently loaded.\");\n\t\t}\n\n\t\tconst query = \"UPDATE ?? SET ??=? WHERE  `id`=?;\";\n\t\tconst splitPath = MysqlStore.cleanPath(path, guildId);\n\n\t\tif (splitPath.length < 3) {\n\t\t\tthrow new Error(`[MysqlAdapter.set] Invalid path: ${path}`);\n\t\t}\n\n\t\tconst { results, fields } = await this.query(query, [\n\t\t\tsplitPath[0],\n\t\t\tsplitPath[2],\n\t\t\tvalue,\n\t\t\tsplitPath[1]\n\t\t]);\n\n\t\treturn { results, fields };\n\t}\n\n\t/**\n\t * Merge guild data\n\t * @param {String} path\n\t * @param {*} value\n\t * @param {(Snowflake|Null)} [guildId=null]\n\t */\n\tmerge(path, value, guildId = null) {\n\t\tif (!this.loaded) {\n\t\t\tthrow new Error(\"[MysqlStore.merge] No data is currently loaded.\");\n\t\t}\n\n\t\tthrow new Error(\"[MysqlStore.merge] Method not implemented.\");\n\t}\n\n\t/**\n\t * @param {String} path\n\t * @param {Snowflake} guildId\n\t * @returns {Array<String>}\n\t */\n\tstatic cleanPath(path, guildId) {\n\t\treturn `${guildId ? `guilds.${guildId}.` : \"\"}${path}`.split(\".\");\n\t}\n\n\t/**\n\t * @returns {Boolean} Whether any data is currently loaded\n\t */\n\tget loaded() {\n\t\treturn this.data !== null && this.connected;\n\t}\n}\n",
@@ -7245,7 +7567,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 291,
+    "__docId__": 302,
     "kind": "variable",
     "name": "mysql",
     "memberof": "src/data-stores/mysql-store.js",
@@ -7266,7 +7588,7 @@
     "ignore": true
   },
   {
-    "__docId__": 292,
+    "__docId__": 303,
     "kind": "variable",
     "name": "_",
     "memberof": "src/data-stores/mysql-store.js",
@@ -7287,7 +7609,7 @@
     "ignore": true
   },
   {
-    "__docId__": 293,
+    "__docId__": 304,
     "kind": "class",
     "name": "MysqlStore",
     "memberof": "src/data-stores/mysql-store.js",
@@ -7305,7 +7627,7 @@
     ]
   },
   {
-    "__docId__": 294,
+    "__docId__": 305,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7330,7 +7652,7 @@
     ]
   },
   {
-    "__docId__": 295,
+    "__docId__": 306,
     "kind": "member",
     "name": "data",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7349,7 +7671,7 @@
     }
   },
   {
-    "__docId__": 296,
+    "__docId__": 307,
     "kind": "member",
     "name": "connection",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7374,7 +7696,7 @@
     }
   },
   {
-    "__docId__": 297,
+    "__docId__": 308,
     "kind": "member",
     "name": "connected",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7393,7 +7715,7 @@
     }
   },
   {
-    "__docId__": 298,
+    "__docId__": 309,
     "kind": "method",
     "name": "connect",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7421,7 +7743,7 @@
     "params": []
   },
   {
-    "__docId__": 300,
+    "__docId__": 311,
     "kind": "method",
     "name": "disconnect",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7449,7 +7771,7 @@
     "params": []
   },
   {
-    "__docId__": 302,
+    "__docId__": 313,
     "kind": "method",
     "name": "query",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7510,7 +7832,7 @@
     }
   },
   {
-    "__docId__": 303,
+    "__docId__": 314,
     "kind": "method",
     "name": "get",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7562,7 +7884,7 @@
     }
   },
   {
-    "__docId__": 304,
+    "__docId__": 315,
     "kind": "method",
     "name": "set",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7624,7 +7946,7 @@
     }
   },
   {
-    "__docId__": 305,
+    "__docId__": 316,
     "kind": "method",
     "name": "merge",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7673,7 +7995,7 @@
     "return": null
   },
   {
-    "__docId__": 306,
+    "__docId__": 317,
     "kind": "method",
     "name": "cleanPath",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7722,7 +8044,7 @@
     }
   },
   {
-    "__docId__": 307,
+    "__docId__": 318,
     "kind": "get",
     "name": "loaded",
     "memberof": "src/data-stores/mysql-store.js~MysqlStore",
@@ -7754,7 +8076,7 @@
     }
   },
   {
-    "__docId__": 308,
+    "__docId__": 319,
     "kind": "file",
     "name": "src/data-stores/object-store.js",
     "content": "import DataStore from \"./data-store\";\n\nconst _ = require(\"lodash\");\n\n/**\n * @extends DataStore\n */\nexport default class ObjectStore extends DataStore {\n\t/**\n\t * @param {Object} data\n\t */\n\tconstructor(data) {\n\t\tsuper();\n\n\t\t/**\n\t\t * @type {(Object|Null)}\n\t\t * @private\n\t\t */\n\t\tthis.data = data;\n\t}\n\n\t/**\n\t * Retrieve guild data\n\t * @param {String} path\n\t * @returns {Object}\n\t */\n\tget(path) {\n\t\treturn _.get(this.data, path);\n\t}\n\n\t/**\n\t * Set guild data\n\t * @param {String} path\n\t * @param {*} value\n\t */\n\tset(path, value) {\n\t\t_.set(this.data, path, value);\n\t}\n\n\t/**\n\t * Merge guild data\n\t * @param {String} path\n\t * @param {*} value\n\t */\n\tmerge(path, value) {\n\t\tthrow new Error(\"[ObjectStore.merge] Method not implemented.\");\n\t}\n}\n",
@@ -7765,7 +8087,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 309,
+    "__docId__": 320,
     "kind": "variable",
     "name": "_",
     "memberof": "src/data-stores/object-store.js",
@@ -7786,7 +8108,7 @@
     "ignore": true
   },
   {
-    "__docId__": 310,
+    "__docId__": 321,
     "kind": "class",
     "name": "ObjectStore",
     "memberof": "src/data-stores/object-store.js",
@@ -7804,7 +8126,7 @@
     ]
   },
   {
-    "__docId__": 311,
+    "__docId__": 322,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/data-stores/object-store.js~ObjectStore",
@@ -7829,7 +8151,7 @@
     ]
   },
   {
-    "__docId__": 312,
+    "__docId__": 323,
     "kind": "member",
     "name": "data",
     "memberof": "src/data-stores/object-store.js~ObjectStore",
@@ -7849,7 +8171,7 @@
     }
   },
   {
-    "__docId__": 313,
+    "__docId__": 324,
     "kind": "method",
     "name": "get",
     "memberof": "src/data-stores/object-store.js~ObjectStore",
@@ -7888,7 +8210,7 @@
     }
   },
   {
-    "__docId__": 314,
+    "__docId__": 325,
     "kind": "method",
     "name": "set",
     "memberof": "src/data-stores/object-store.js~ObjectStore",
@@ -7924,7 +8246,7 @@
     "return": null
   },
   {
-    "__docId__": 315,
+    "__docId__": 326,
     "kind": "method",
     "name": "merge",
     "memberof": "src/data-stores/object-store.js~ObjectStore",
@@ -7960,7 +8282,7 @@
     "return": null
   },
   {
-    "__docId__": 316,
+    "__docId__": 327,
     "kind": "file",
     "name": "src/data-stores/sqlite-store.js",
     "content": "import DataStore from \"./data-store\";\n\n/**\n * @extends DataStore\n */\nexport default class SqliteStore extends DataStore {\n\tconstructor() {\n\t\tsuper();\n\t}\n\n\t/**\n\t * Retrieve guild data\n\t * @param {String} path\n\t * @returns {*}\n\t */\n\tget(path) {\n\t\tthrow new Error(\"[SqliteStore.get] Method not implemented.\");\n\t}\n\n\t/**\n\t * Set guild data\n\t * @param {String} path\n\t * @param {*} value\n\t */\n\tset(path, value) {\n\t\tthrow new Error(\"[SqliteStore.set] Method not implemented.\");\n\t}\n\n\t/**\n\t * Merge guild data\n\t * @param {String} path\n\t * @param {*} value\n\t */\n\tmerge(path, value) {\n\t\tthrow new Error(\"[SqliteStore.merge] Method not implemented.\");\n\t}\n}\n",
@@ -7971,7 +8293,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 317,
+    "__docId__": 328,
     "kind": "class",
     "name": "SqliteStore",
     "memberof": "src/data-stores/sqlite-store.js",
@@ -7989,7 +8311,7 @@
     ]
   },
   {
-    "__docId__": 318,
+    "__docId__": 329,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/data-stores/sqlite-store.js~SqliteStore",
@@ -8003,7 +8325,7 @@
     "undocument": true
   },
   {
-    "__docId__": 319,
+    "__docId__": 330,
     "kind": "method",
     "name": "get",
     "memberof": "src/data-stores/sqlite-store.js~SqliteStore",
@@ -8042,7 +8364,7 @@
     }
   },
   {
-    "__docId__": 320,
+    "__docId__": 331,
     "kind": "method",
     "name": "set",
     "memberof": "src/data-stores/sqlite-store.js~SqliteStore",
@@ -8078,7 +8400,7 @@
     "return": null
   },
   {
-    "__docId__": 321,
+    "__docId__": 332,
     "kind": "method",
     "name": "merge",
     "memberof": "src/data-stores/sqlite-store.js~SqliteStore",
@@ -8114,7 +8436,7 @@
     "return": null
   },
   {
-    "__docId__": 322,
+    "__docId__": 333,
     "kind": "file",
     "name": "src/emoji-ui/emoji-button.js",
     "content": "export default class EmojiButton {\n\t/**\n\t * @param {String} emoji\n\t * @param {Function} clickHandler\n\t */\n\tconstructor(emoji, clickHandler) {\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.emoji = emoji;\n\n\t\t/**\n\t\t * @type {Function}\n\t\t * @readonly\n\t\t */\n\t\tthis.handle = clickHandler;\n\t}\n}\n",
@@ -8125,7 +8447,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 323,
+    "__docId__": 334,
     "kind": "class",
     "name": "EmojiButton",
     "memberof": "src/emoji-ui/emoji-button.js",
@@ -8141,7 +8463,7 @@
     "interface": false
   },
   {
-    "__docId__": 324,
+    "__docId__": 335,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/emoji-ui/emoji-button.js~EmojiButton",
@@ -8176,7 +8498,7 @@
     ]
   },
   {
-    "__docId__": 325,
+    "__docId__": 336,
     "kind": "member",
     "name": "emoji",
     "memberof": "src/emoji-ui/emoji-button.js~EmojiButton",
@@ -8201,7 +8523,7 @@
     }
   },
   {
-    "__docId__": 326,
+    "__docId__": 337,
     "kind": "member",
     "name": "handle",
     "memberof": "src/emoji-ui/emoji-button.js~EmojiButton",
@@ -8226,7 +8548,7 @@
     }
   },
   {
-    "__docId__": 327,
+    "__docId__": 338,
     "kind": "file",
     "name": "src/emoji-ui/emoji-menu-manager.js",
     "content": "export default class EmojiMenuManager {\n\t/**\n\t * @param {Discord.Client} client\n\t */\n\tconstructor(client) {\n\t\t/**\n\t\t * @type {Discord.Client}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.client = client;\n\n\t\t/**\n\t\t * @type {Array}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.awaiting = [];\n\n\t\tthis.client.on(\"messageReactionAdd\", (reaction, user) => {\n\t\t\tif (!user.bot) {\n\t\t\t\tfor (let i = 0; i < this.awaiting.length; i++) {\n\t\t\t\t\tif (this.awaiting[i].messageId === reaction.message.id) {\n\t\t\t\t\t\tfor (let buttonIndex = 0; buttonIndex < this.awaiting[i].menu.buttons.length; buttonIndex++) {\n\t\t\t\t\t\t\tif (this.awaiting[i].menu.buttons[buttonIndex].emoji === reaction.emoji.name) {\n\t\t\t\t\t\t\t\tthis.awaiting[i].menu.buttons[buttonIndex].handle(reaction.message, user);\n\n\t\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t}\n\n\t/**\n\t * @param {*} channel\n\t * @param {EmojiMenu} menu\n\t */\n\tasync show(channel, menu) {\n\t\tconst sentMessage = await channel.send(menu.content);\n\n\t\tfor (let i = 0; i < menu.buttons.length; i++) {\n\t\t\tawait sentMessage.react(menu.buttons[i].emoji);\n\t\t}\n\n\t\tthis.awaiting.push({\n\t\t\tmenu: menu,\n\t\t\tchannel: channel,\n\t\t\tmessageId: sentMessage.id\n\t\t});\n\n\t\treturn sentMessage;\n\t}\n}\n",
@@ -8237,7 +8559,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 328,
+    "__docId__": 339,
     "kind": "class",
     "name": "EmojiMenuManager",
     "memberof": "src/emoji-ui/emoji-menu-manager.js",
@@ -8253,7 +8575,7 @@
     "interface": false
   },
   {
-    "__docId__": 329,
+    "__docId__": 340,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager",
@@ -8278,7 +8600,7 @@
     ]
   },
   {
-    "__docId__": 330,
+    "__docId__": 341,
     "kind": "member",
     "name": "client",
     "memberof": "src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager",
@@ -8303,7 +8625,7 @@
     }
   },
   {
-    "__docId__": 331,
+    "__docId__": 342,
     "kind": "member",
     "name": "awaiting",
     "memberof": "src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager",
@@ -8328,7 +8650,7 @@
     }
   },
   {
-    "__docId__": 332,
+    "__docId__": 343,
     "kind": "method",
     "name": "show",
     "memberof": "src/emoji-ui/emoji-menu-manager.js~EmojiMenuManager",
@@ -8368,7 +8690,7 @@
     }
   },
   {
-    "__docId__": 333,
+    "__docId__": 344,
     "kind": "file",
     "name": "src/emoji-ui/emoji-menu.js",
     "content": "export default class EmojiMenu {\n\t/**\n\t * @param {Array<EmojiButton>} buttons\n\t * @param {String} content\n\t */\n\tconstructor(buttons, content) {\n\t\t/**\n\t\t * @type {Array<EmojiButton>}\n\t\t * @readonly\n\t\t */\n\t\tthis.buttons = buttons;\n\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.content = content;\n\t}\n}\n",
@@ -8379,7 +8701,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 334,
+    "__docId__": 345,
     "kind": "class",
     "name": "EmojiMenu",
     "memberof": "src/emoji-ui/emoji-menu.js",
@@ -8395,7 +8717,7 @@
     "interface": false
   },
   {
-    "__docId__": 335,
+    "__docId__": 346,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/emoji-ui/emoji-menu.js~EmojiMenu",
@@ -8430,7 +8752,7 @@
     ]
   },
   {
-    "__docId__": 336,
+    "__docId__": 347,
     "kind": "member",
     "name": "buttons",
     "memberof": "src/emoji-ui/emoji-menu.js~EmojiMenu",
@@ -8455,7 +8777,7 @@
     }
   },
   {
-    "__docId__": 337,
+    "__docId__": 348,
     "kind": "member",
     "name": "content",
     "memberof": "src/emoji-ui/emoji-menu.js~EmojiMenu",
@@ -8480,7 +8802,7 @@
     }
   },
   {
-    "__docId__": 338,
+    "__docId__": 349,
     "kind": "file",
     "name": "src/events/command-executed-event.js",
     "content": "export default class CommandExecutedEvent {\n\t/**\n\t * @param {Command} command\n\t * @param {CommandExecutionContext} context\n\t */\n\tconstructor(command, context) {\n\t\t/**\n\t\t * @type {Command}\n\t\t */\n\t\tthis.command = command;\n\n\t\t/**\n\t\t * @type {CommandExecutionContext}\n\t\t */\n\t\tthis.context = context;\n\t}\n}\n",
@@ -8491,7 +8813,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 339,
+    "__docId__": 350,
     "kind": "class",
     "name": "CommandExecutedEvent",
     "memberof": "src/events/command-executed-event.js",
@@ -8507,7 +8829,7 @@
     "interface": false
   },
   {
-    "__docId__": 340,
+    "__docId__": 351,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/events/command-executed-event.js~CommandExecutedEvent",
@@ -8542,7 +8864,7 @@
     ]
   },
   {
-    "__docId__": 341,
+    "__docId__": 352,
     "kind": "member",
     "name": "command",
     "memberof": "src/events/command-executed-event.js~CommandExecutedEvent",
@@ -8561,7 +8883,7 @@
     }
   },
   {
-    "__docId__": 342,
+    "__docId__": 353,
     "kind": "member",
     "name": "context",
     "memberof": "src/events/command-executed-event.js~CommandExecutedEvent",
@@ -8580,7 +8902,7 @@
     }
   },
   {
-    "__docId__": 343,
+    "__docId__": 354,
     "kind": "file",
     "name": "src/events/command-will-execute-event.js",
     "content": "export default class CommandWillExecuteEvent {\n\t/**\n\t * @param {Command} command\n\t * @param {CommandExecutionContext} context\n\t * @param {Function} prevent\n\t */\n\tconstructor(command, context, prevent) {\n\t\t/**\n\t\t * @type {Command}\n\t\t */\n\t\tthis.command = command;\n\n\t\t/**\n\t\t * @type {CommandExecutionContext}\n\t\t */\n\t\tthis.context = context;\n\n\t\t/**\n\t\t * @type {Function}\n\t\t */\n\t\tthis.prevent = prevent;\n\t}\n}\n",
@@ -8591,7 +8913,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 344,
+    "__docId__": 355,
     "kind": "class",
     "name": "CommandWillExecuteEvent",
     "memberof": "src/events/command-will-execute-event.js",
@@ -8607,7 +8929,7 @@
     "interface": false
   },
   {
-    "__docId__": 345,
+    "__docId__": 356,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/events/command-will-execute-event.js~CommandWillExecuteEvent",
@@ -8652,7 +8974,7 @@
     ]
   },
   {
-    "__docId__": 346,
+    "__docId__": 357,
     "kind": "member",
     "name": "command",
     "memberof": "src/events/command-will-execute-event.js~CommandWillExecuteEvent",
@@ -8671,7 +8993,7 @@
     }
   },
   {
-    "__docId__": 347,
+    "__docId__": 358,
     "kind": "member",
     "name": "context",
     "memberof": "src/events/command-will-execute-event.js~CommandWillExecuteEvent",
@@ -8690,7 +9012,7 @@
     }
   },
   {
-    "__docId__": 348,
+    "__docId__": 359,
     "kind": "member",
     "name": "prevent",
     "memberof": "src/events/command-will-execute-event.js~CommandWillExecuteEvent",
@@ -8709,7 +9031,7 @@
     }
   },
   {
-    "__docId__": 349,
+    "__docId__": 360,
     "kind": "file",
     "name": "src/features/feature-manager.js",
     "content": "// import Collection from \"../collections/collection\";\n\n// TODO: Implement the Collection class.\nexport default class FeatureManager /* extends Collection */ {\n\t/**\n\t * @param {Bot} bot\n\t * @param {Array<Feature>} features\n\t */\n\tconstructor(bot, features = []) {\n\t\t// super(features);\n\n\t\t/**\n\t\t * @type {Array<Feature>}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.features = features;\n\n\t\t/**\n\t\t * @type {Bot}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.bot = bot;\n\t}\n\n\t/**\n\t * Enable a feature\n\t * @param {Feature} feature\n\t * @return {Boolean}\n\t */\n\tenable(feature) {\n\t\tif (feature.canEnable(this.bot)) {\n\t\t\tfeature.enabled(this.bot);\n\t\t\tfeature.isEnabled = true;\n\n\t\t\treturn true;\n\t\t}\n\n\t\treturn false;\n\t}\n\n\t/**\n\t * Enable multiple features at once\n\t * @param {Array<Feature>} features\n\t * @return {Number}\n\t */\n\tenableMultiple(features) {\n\t\tlet totalEnabled = 0;\n\n\t\tfor (let i = 0; i < features.length; i++) {\n\t\t\tif (this.enable(features[i])) {\n\t\t\t\ttotalEnabled++;\n\t\t\t}\n\t\t}\n\n\t\treturn totalEnabled;\n\t}\n\n\t/**\n\t * Enable all the currently registered features\n\t * @return {Number}\n\t */\n\tenableAll() {\n\t\treturn this.enableMultiple(this.features);\n\t}\n\n\t/**\n\t * Disable a feature\n\t * @param {Feature} feature\n\t */\n\tdisable(feature) {\n\t\tfeature.disabled(this.bot);\n\t\tfeature.isEnabled = false;\n\t}\n\n\t/**\n\t * Disable multiple features at once\n\t * @param {Array<Feature>} features\n\t */\n\tdisableMultiple(features) {\n\t\tfor (let i = 0; i < features.length; i++) {\n\t\t\tthis.disable(features[i], this.bot);\n\t\t}\n\t}\n\n\t/**\n\t * Disable all the currently registered features\n\t */\n\tdisableAll() {\n\t\tthis.disableMultiple(this.features);\n\t}\n\n\t/**\n\t * Reload all currently registered and enabled features\n\t * @return {Number}\n\t */\n\treloadAll() {\n\t\tthis.disableAll();\n\n\t\treturn this.enableAll();\n\t}\n\n\t// TODO: Replace by Collection's native methods\n\t/**\n\t * Register a feature\n\t * @param {Feature} feature\n\t */\n\tregister(feature) {\n\t\tthis.features.push(feature);\n\t}\n\n\t/**\n\t * Register multiple features at once\n\t * @param {Array<Feature>} features\n\t */\n\tregisterMultiple(features) {\n\t\tfor (let i = 0; i < features.length; i++) {\n\t\t\tthis.register(features[i]);\n\t\t}\n\t}\n\n\t/**\n\t * Determine whether a feature is registered\n\t * @param {String} key\n\t * @return {Boolean}\n\t */\n\tisRegistered(key) {\n\t\treturn this.get(key) != null;\n\t}\n\n\t/**\n\t * Determine whether a feature is enabled\n\t * @param {String} key\n\t * @return {Boolean}\n\t */\n\tisEnabled(key) {\n\t\treturn this.get(key).isEnabled;\n\t}\n\n\t/**\n\t * @param {String} key\n\t * @return {(Feature|Null)}\n\t */\n\tget(key) {\n\t\tfor (let i = 0; i < this.features.length; i++) {\n\t\t\tif (this.features[i].key === key) {\n\t\t\t\treturn this.features[i];\n\t\t\t}\n\t\t}\n\n\t\treturn null;\n\t}\n}\n",
@@ -8720,7 +9042,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 350,
+    "__docId__": 361,
     "kind": "class",
     "name": "FeatureManager",
     "memberof": "src/features/feature-manager.js",
@@ -8736,7 +9058,7 @@
     "interface": false
   },
   {
-    "__docId__": 351,
+    "__docId__": 362,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -8771,7 +9093,7 @@
     ]
   },
   {
-    "__docId__": 352,
+    "__docId__": 363,
     "kind": "member",
     "name": "features",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -8796,7 +9118,7 @@
     }
   },
   {
-    "__docId__": 353,
+    "__docId__": 364,
     "kind": "member",
     "name": "bot",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -8821,7 +9143,7 @@
     }
   },
   {
-    "__docId__": 354,
+    "__docId__": 365,
     "kind": "method",
     "name": "enable",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -8854,7 +9176,7 @@
     }
   },
   {
-    "__docId__": 355,
+    "__docId__": 366,
     "kind": "method",
     "name": "enableMultiple",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -8887,7 +9209,7 @@
     }
   },
   {
-    "__docId__": 356,
+    "__docId__": 367,
     "kind": "method",
     "name": "enableAll",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -8909,7 +9231,7 @@
     "params": []
   },
   {
-    "__docId__": 357,
+    "__docId__": 368,
     "kind": "method",
     "name": "disable",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -8935,7 +9257,7 @@
     "return": null
   },
   {
-    "__docId__": 358,
+    "__docId__": 369,
     "kind": "method",
     "name": "disableMultiple",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -8961,7 +9283,7 @@
     "return": null
   },
   {
-    "__docId__": 359,
+    "__docId__": 370,
     "kind": "method",
     "name": "disableAll",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -8976,7 +9298,7 @@
     "return": null
   },
   {
-    "__docId__": 360,
+    "__docId__": 371,
     "kind": "method",
     "name": "reloadAll",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -8998,7 +9320,7 @@
     "params": []
   },
   {
-    "__docId__": 361,
+    "__docId__": 372,
     "kind": "method",
     "name": "register",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -9024,7 +9346,7 @@
     "return": null
   },
   {
-    "__docId__": 362,
+    "__docId__": 373,
     "kind": "method",
     "name": "registerMultiple",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -9050,7 +9372,7 @@
     "return": null
   },
   {
-    "__docId__": 363,
+    "__docId__": 374,
     "kind": "method",
     "name": "isRegistered",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -9083,7 +9405,7 @@
     }
   },
   {
-    "__docId__": 364,
+    "__docId__": 375,
     "kind": "method",
     "name": "isEnabled",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -9116,7 +9438,7 @@
     }
   },
   {
-    "__docId__": 365,
+    "__docId__": 376,
     "kind": "method",
     "name": "get",
     "memberof": "src/features/feature-manager.js~FeatureManager",
@@ -9150,7 +9472,7 @@
     }
   },
   {
-    "__docId__": 366,
+    "__docId__": 377,
     "kind": "file",
     "name": "src/features/feature.js",
     "content": "export default class Feature {\n\t/**\n\t * @param {String} name The name of the feature\n\t * @param {String} key\n\t * @param {String} description The description of the feature\n\t */\n\tconstructor(name, key, description) {\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.name = name;\n\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.key = key;\n\n\t\t/**\n\t\t * @type {String}\n\t\t * @readonly\n\t\t */\n\t\tthis.description = description;\n\t}\n\n\t// TODO: Throw methods not implemented\n}\n",
@@ -9161,7 +9483,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 367,
+    "__docId__": 378,
     "kind": "class",
     "name": "Feature",
     "memberof": "src/features/feature.js",
@@ -9177,7 +9499,7 @@
     "interface": false
   },
   {
-    "__docId__": 368,
+    "__docId__": 379,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/features/feature.js~Feature",
@@ -9222,7 +9544,7 @@
     ]
   },
   {
-    "__docId__": 369,
+    "__docId__": 380,
     "kind": "member",
     "name": "name",
     "memberof": "src/features/feature.js~Feature",
@@ -9247,7 +9569,7 @@
     }
   },
   {
-    "__docId__": 370,
+    "__docId__": 381,
     "kind": "member",
     "name": "key",
     "memberof": "src/features/feature.js~Feature",
@@ -9272,7 +9594,7 @@
     }
   },
   {
-    "__docId__": 371,
+    "__docId__": 382,
     "kind": "member",
     "name": "description",
     "memberof": "src/features/feature.js~Feature",
@@ -9297,7 +9619,7 @@
     }
   },
   {
-    "__docId__": 372,
+    "__docId__": 383,
     "kind": "file",
     "name": "src/index.js",
     "content": "module.exports = {\n\t// Commands\n\tCommandArgumentParser: require(\"./commands/command-argument-parser\").default,\n\tCommandCategoryType: require(\"./commands/command-category-type\").default,\n\tCommandExecutionContext: require(\"./commands/command-execution-context\").default,\n\tCommandLoader: require(\"./commands/command-loader\").default,\n\tCommandManager: require(\"./commands/command-manager\").default,\n\tCommandParser: require(\"./commands/command-parser\").default,\n\tCommand: require(\"./commands/command\").default,\n\n\t// Console\n\tConsoleInterface: require(\"./console/console-interface\").default,\n\tConsoleCommand: require(\"./console/console-command\").default,\n\n\t// Core\n\tAccessLevelType: require(\"./commands/access-level-type\").default,\n\tBot: require(\"./core/bot\").default,\n\tEditableMessage: require(\"./message/editable-message\").default,\n\tEmbedBuilder: require(\"./message/embed-builder\").default,\n\tLog: require(\"./core/log\").default,\n\tMessageBuilder: require(\"./message/message-builder\").default,\n\tRGB: require(\"./core/rgb\").default,\n\tRGBA: require(\"./core/rgba\").default,\n\tSettings: require(\"./core/settings\").default,\n\tTimeParser: require(\"./time/time-parser\").default,\n\tTimeSuffixType: require(\"./time/time-suffix-type\").default,\n\tUserConfig: require(\"./core/user-config\").default,\n\tUtils: require(\"./core/utils\").default,\n\n\t// Collections\n\tCollection: require(\"./collections/collection\").default,\n\tEmojiCollection: require(\"./collections/emoji-collection\").default,\n\n\t// Emoji UI\n\tEmojiButton: require(\"./emoji-ui/emoji-button\").default,\n\tEmojiMenuManager: require(\"./emoji-ui/emoji-menu-manager\").default,\n\tEmojiMenu: require(\"./emoji-ui/emoji-menu\").default,\n\n\t// Events\n\tCommandWillExecuteEvent: require(\"./events/command-will-execute-event\").default,\n\tCommandExecutedEvent: require(\"./events/command-executed-event\").default,\n\n\t// Features\n\tFeatureManager: require(\"./features/feature-manager\").default,\n\tFeature: require(\"./features/feature\").default,\n\n\t// Data Stores\n\tDataStore: require(\"./data-stores/data-store\").default,\n\tObjectStore: require(\"./data-stores/object-store\").default,\n\tJsonStore: require(\"./data-stores/json-store\").default,\n\tSqliteStore: require(\"./data-stores/sqlite-store\").default,\n\tMysqlStore: require(\"./data-stores/mysql-store\").default,\n\n\t// Auth Stores\n\tCommandAuthStore: require(\"./commands/command-auth-store\").default,\n\tObjectAuthStore: require(\"./commands/object-auth-store\").default,\n\tJsonAuthStore: require(\"./commands/json-auth-store\").default\n};\n",
@@ -9308,7 +9630,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 373,
+    "__docId__": 384,
     "kind": "file",
     "name": "src/message/editable-message.js",
     "content": "import Log from \"../core/log\";\n\nconst Discord = require(\"discord.js\");\n\nexport default class EditableMessage {\n\t/**\n\t * @param {Discord.Message} message\n\t */\n\tconstructor(message) {\n\t\tif (message.embeds.length === 0) {\n\t\t\tLog.error(\"[EditableMessage] Message parameter must contain embeds\");\n\t\t}\n\n\t\t/**\n\t\t * @type {Discord.Message}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.message = message;\n\t}\n\n\t/**\n\t * Edit an already sent message\n\t * @param {String} message\n\t * @param {String} title\n\t * @param {String} color\n\t * @param {String} thumbnailUrl\n\t * @param {String} [image=\"\"]\n\t * @returns {Promise<Discord.Message>}\n\t */\n\tasync edit(message, title = \"\", color = \"RANDOM\", thumbnailUrl = \"\", image = \"\") {\n\t\treturn this.message.edit(\"\", new Discord.RichEmbed()\n\t\t\t.setColor(color)\n\t\t\t.setDescription(message)\n\t\t\t.setAuthor(title, thumbnailUrl)\n\t\t\t.setImage(image));\n\t}\n}\n",
@@ -9319,7 +9641,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 374,
+    "__docId__": 385,
     "kind": "variable",
     "name": "Discord",
     "memberof": "src/message/editable-message.js",
@@ -9340,7 +9662,7 @@
     "ignore": true
   },
   {
-    "__docId__": 375,
+    "__docId__": 386,
     "kind": "class",
     "name": "EditableMessage",
     "memberof": "src/message/editable-message.js",
@@ -9356,7 +9678,7 @@
     "interface": false
   },
   {
-    "__docId__": 376,
+    "__docId__": 387,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/message/editable-message.js~EditableMessage",
@@ -9381,7 +9703,7 @@
     ]
   },
   {
-    "__docId__": 377,
+    "__docId__": 388,
     "kind": "member",
     "name": "message",
     "memberof": "src/message/editable-message.js~EditableMessage",
@@ -9406,7 +9728,7 @@
     }
   },
   {
-    "__docId__": 378,
+    "__docId__": 389,
     "kind": "method",
     "name": "edit",
     "memberof": "src/message/editable-message.js~EditableMessage",
@@ -9487,7 +9809,7 @@
     }
   },
   {
-    "__docId__": 379,
+    "__docId__": 390,
     "kind": "file",
     "name": "src/message/embed-builder.js",
     "content": "const Discord = require(\"discord.js\");\n\nexport default class EmbedBuilder {\n\tconstructor() {\n\t\t/**\n\t\t * @type {Discord.RichEmbed}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.embed = new Discord.RichEmbed();\n\t}\n\n\t/**\n\t * Set the color of the embed\n\t * @param {String} color\n\t * @returns {EmbedBuilder}\n\t */\n\tcolor(color) {\n\t\tthis.embed.setColor(color);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Set the title of the embed\n\t * @param {String} title\n\t * @returns {EmbedBuilder}\n\t */\n\ttitle(title) {\n\t\tthis.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : null);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * @param {String} url\n\t * @returns {EmbedBuilder}\n\t */\n\ttitleIcon(url) {\n\t\tthis.embed.setAuthor(this.embed.author ? this.embed.author.name : null, url);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Set the thumbnail image of the embed\n\t * @param {String} url\n\t * @returns {EmbedBuilder}\n\t */\n\tthumbnail(url) {\n\t\tthis.embed.setThumbnail(url);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Set the footer text of the embed\n\t * @param {String} text\n\t * @param {String} icon\n\t * @returns {EmbedBuilder}\n\t */\n\tfooter(text, icon) {\n\t\tthis.embed.setFooter(text, icon);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Set the image of the embed\n\t * @param {String} url\n\t * @returns {EmbedBuilder}\n\t */\n\timage(url) {\n\t\tthis.embed.setImage(url);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Set the text of the embed\n\t * @todo Limit text to Discord's embed char limit\n\t * @param {string} text\n\t * @returns {EmbedBuilder}\n\t */\n\ttext(text) {\n\t\tthis.embed.setDescription(text);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Add a field to the embed\n\t * @param {String} title\n\t * @param {*} value\n\t * @returns {EmbedBuilder}\n\t */\n\tfield(title, value) {\n\t\tthis.embed.addField(title, value);\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * Convert the embed to a RichEmbed\n\t * @returns {Discord.RichEmbed}\n\t */\n\tbuild() {\n\t\treturn this.embed;\n\t}\n\n\t/**\n\t * @param {Object} obj\n\t * @returns {EmbedBuilder}\n\t */\n\tstatic fromObject(obj) {\n\t\tconst result = new EmbedBuilder();\n\n\t\tif (!obj.text) {\n\t\t\tthrow new Error(\"[EmbedBuilder.fromObject] Text cannot be empty or null\");\n\t\t}\n\t\telse {\n\t\t\tresult.text(obj.text);\n\t\t}\n\n\t\tif (obj.image) {\n\t\t\tresult.image(obj.image);\n\t\t}\n\n\t\tif (obj.color) {\n\t\t\tresult.color(obj.color);\n\t\t}\n\n\t\tif (obj.title) {\n\t\t\tresult.title(obj.title);\n\t\t}\n\n\t\tif (obj.titleIcon) {\n\t\t\tresult.titleIcon(obj.titleIcon);\n\t\t}\n\n\t\tif (obj.footer) {\n\t\t\tresult.footer(obj.footer.text, obj.footer.icon);\n\t\t}\n\n\t\tif (obj.thumbnail) {\n\t\t\tresult.thumbnail(obj.thumbnail);\n\t\t}\n\n\t\treturn result;\n\t}\n\n\t/**\n\t * @param {Object} sections\n\t * @param {String} color\n\t * @return {EmbedBuilder}\n\t */\n\tstatic sections(sections, color = null) {\n\t\tconst result = new EmbedBuilder();\n\n\t\tfor (let i = 0; i < Object.keys(sections).length; i++) {\n\t\t\tresult.field(Object.keys(sections)[i], sections[Object.keys(sections)[i]]);\n\t\t}\n\n\t\tif (color) {\n\t\t\tresult.color(color);\n\t\t}\n\n\t\treturn result;\n\t}\n}\n",
@@ -9498,7 +9820,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 380,
+    "__docId__": 391,
     "kind": "variable",
     "name": "Discord",
     "memberof": "src/message/embed-builder.js",
@@ -9519,7 +9841,7 @@
     "ignore": true
   },
   {
-    "__docId__": 381,
+    "__docId__": 392,
     "kind": "class",
     "name": "EmbedBuilder",
     "memberof": "src/message/embed-builder.js",
@@ -9535,7 +9857,7 @@
     "interface": false
   },
   {
-    "__docId__": 382,
+    "__docId__": 393,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9549,7 +9871,7 @@
     "undocument": true
   },
   {
-    "__docId__": 383,
+    "__docId__": 394,
     "kind": "member",
     "name": "embed",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9574,7 +9896,7 @@
     }
   },
   {
-    "__docId__": 384,
+    "__docId__": 395,
     "kind": "method",
     "name": "color",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9613,7 +9935,7 @@
     }
   },
   {
-    "__docId__": 385,
+    "__docId__": 396,
     "kind": "method",
     "name": "title",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9652,7 +9974,7 @@
     }
   },
   {
-    "__docId__": 386,
+    "__docId__": 397,
     "kind": "method",
     "name": "titleIcon",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9691,7 +10013,7 @@
     }
   },
   {
-    "__docId__": 387,
+    "__docId__": 398,
     "kind": "method",
     "name": "thumbnail",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9730,7 +10052,7 @@
     }
   },
   {
-    "__docId__": 388,
+    "__docId__": 399,
     "kind": "method",
     "name": "footer",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9779,7 +10101,7 @@
     }
   },
   {
-    "__docId__": 389,
+    "__docId__": 400,
     "kind": "method",
     "name": "image",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9818,7 +10140,7 @@
     }
   },
   {
-    "__docId__": 390,
+    "__docId__": 401,
     "kind": "method",
     "name": "text",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9860,7 +10182,7 @@
     }
   },
   {
-    "__docId__": 391,
+    "__docId__": 402,
     "kind": "method",
     "name": "field",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9909,7 +10231,7 @@
     }
   },
   {
-    "__docId__": 392,
+    "__docId__": 403,
     "kind": "method",
     "name": "build",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9937,7 +10259,7 @@
     "params": []
   },
   {
-    "__docId__": 393,
+    "__docId__": 404,
     "kind": "method",
     "name": "fromObject",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -9976,7 +10298,7 @@
     }
   },
   {
-    "__docId__": 394,
+    "__docId__": 405,
     "kind": "method",
     "name": "sections",
     "memberof": "src/message/embed-builder.js~EmbedBuilder",
@@ -10019,7 +10341,7 @@
     }
   },
   {
-    "__docId__": 395,
+    "__docId__": 406,
     "kind": "file",
     "name": "src/message/message-builder.js",
     "content": "export default class MessageBuilder {\n\t/**\n\t * @param {string} [startingString=\"\"]\n\t */\n\tconstructor(startingString = \"\") {\n\t\tthis.message = startingString;\n\t}\n\n\t/**\n\t * @param {string} string\n\t * @returns {MessageBuilder}\n\t */\n\tadd(string) {\n\t\tthis.message += string;\n\n\t\treturn this;\n\t}\n\n\t/**\n\t * @param {(String|Null)} language\n\t * @param {(String|Null)} [code=null]\n\t * @returns {MessageBuilder}\n\t */\n\tcodeBlock(language = null, code = null) {\n\t\tlet result = \"```\";\n\n\t\tif (language !== null) {\n\t\t\tresult += `${language}\\n`;\n\t\t}\n\n\t\tif (code !== null) {\n\t\t\tresult += `${code}\\n\\`\\`\\``;\n\t\t}\n\n\t\treturn this.add(result);\n\t}\n\n\t/**\n\t * @param {(string|null)} code\n\t * @returns {MessageBuilder}\n\t */\n\tcode(code = null) {\n\t\tif (code === null) {\n\t\t\treturn this.add(\"`\");\n\t\t}\n\n\t\treturn this.add(`\\`${code}\\``);\n\t}\n\n\t/**\n\t * @param {string} text\n\t * @returns {MessageBuilder}\n\t */\n\titalic(text) {\n\t\treturn this.add(`*${text}*`);\n\t}\n\n\t/**\n\t * @param {string} text\n\t * @returns {MessageBuilder}\n\t */\n\tbold(text) {\n\t\treturn this.add(`**${text}**`);\n\t}\n\n\t/**\n\t * @param {string} text\n\t * @returns {MessageBuilder}\n\t */\n\tunderlined(text) {\n\t\treturn this.add(`__${text}__`);\n\t}\n\n\t/**\n\t * @returns {MessageBuilder}\n\t */\n\tline() {\n\t\treturn this.add(\"\\n\");\n\t}\n\n\t/**\n\t * @param {string} emoji\n\t * @returns {MessageBuilder}\n\t */\n\temoji(emoji) {\n\t\treturn this.add(`:${emoji}:`);\n\t}\n\n\t/**\n\t * @returns {string}\n\t */\n\tbuild() {\n\t\treturn this.message;\n\t}\n}\n",
@@ -10030,7 +10352,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 396,
+    "__docId__": 407,
     "kind": "class",
     "name": "MessageBuilder",
     "memberof": "src/message/message-builder.js",
@@ -10046,7 +10368,7 @@
     "interface": false
   },
   {
-    "__docId__": 397,
+    "__docId__": 408,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10073,7 +10395,7 @@
     ]
   },
   {
-    "__docId__": 398,
+    "__docId__": 409,
     "kind": "member",
     "name": "message",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10090,7 +10412,7 @@
     }
   },
   {
-    "__docId__": 399,
+    "__docId__": 410,
     "kind": "method",
     "name": "add",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10129,7 +10451,7 @@
     }
   },
   {
-    "__docId__": 401,
+    "__docId__": 412,
     "kind": "method",
     "name": "codeBlock",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10182,7 +10504,7 @@
     }
   },
   {
-    "__docId__": 402,
+    "__docId__": 413,
     "kind": "method",
     "name": "code",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10222,7 +10544,7 @@
     }
   },
   {
-    "__docId__": 403,
+    "__docId__": 414,
     "kind": "method",
     "name": "italic",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10261,7 +10583,7 @@
     }
   },
   {
-    "__docId__": 404,
+    "__docId__": 415,
     "kind": "method",
     "name": "bold",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10300,7 +10622,7 @@
     }
   },
   {
-    "__docId__": 405,
+    "__docId__": 416,
     "kind": "method",
     "name": "underlined",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10339,7 +10661,7 @@
     }
   },
   {
-    "__docId__": 406,
+    "__docId__": 417,
     "kind": "method",
     "name": "line",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10367,7 +10689,7 @@
     "params": []
   },
   {
-    "__docId__": 407,
+    "__docId__": 418,
     "kind": "method",
     "name": "emoji",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10406,7 +10728,7 @@
     }
   },
   {
-    "__docId__": 408,
+    "__docId__": 419,
     "kind": "method",
     "name": "build",
     "memberof": "src/message/message-builder.js~MessageBuilder",
@@ -10434,7 +10756,7 @@
     "params": []
   },
   {
-    "__docId__": 409,
+    "__docId__": 420,
     "kind": "file",
     "name": "src/test/tests.js",
     "content": "import Utils from \"../core/utils\";\nimport RGB from \"../core/rgb\";\nimport RGBA from \"../core/rgba\";\nimport Collection from \"../collections/collection\";\nimport ObjectStore from \"../data-stores/object-store\";\n\nconst { expect } = require(\"chai\");\n\nconst subjects = {\n\tids: [\n\t\t\"<@285578743324606482>\",\n\t\t\"<#432269407654248459>\",\n\t\t\"285578743324606482\"\n\t],\n\n\trgb: new RGB(5, 10, 15),\n\trgba: new RGBA(5, 10, 15, 20),\n\n\tcollection: new Collection([\"hello\", \"it's me\", {\n\t\tname: \"John Doe\"\n\t}]),\n\n\tobjAdapter: new ObjectStore({\n\t\tperson: {\n\t\t\tdoe: {\n\t\t\t\tname: \"John Doe\"\n\t\t\t}\n\t\t}\n\t})\n};\n\ndescribe(\"Utils.resolveId()\", () => {\n\tit(\"should return the resolved ids\", () => {\n\t\t// Review\n\t\tfor (let i = 0; i < subjects.ids.length; i++) {\n\t\t\tconst result = Utils.resolveId(subjects.ids[i]);\n\n\t\t\texpect(result).to.be.an(\"string\");\n\t\t\texpect(result).to.have.lengthOf(18);\n\t\t}\n\t});\n});\n\ndescribe(\"Utils.timeAgo()\", () => {\n\tit(\"should return a string\", () => {\n\t\texpect(Utils.timeAgo(Date.now())).to.be.an(\"string\");\n\t});\n});\n\ndescribe(\"Utils.getRandomInt()\", () => {\n\tit(\"should return a random number\", () => {\n\t\tconst result = Utils.getRandomInt(0, 2);\n\n\t\texpect(result).to.be.an(\"number\");\n\t\t// TODO: Check to be the number either 0 or 1\n\t});\n});\n\ndescribe(\"Utils.translateState()\", () => {\n\tit(\"should return the translated state\", () => {\n\t\tconst subjects = [\n\t\t\ttrue,\n\t\t\t1,\n\t\t\t\"y\",\n\t\t\t\"yes\",\n\t\t\t\"on\"\n\t\t];\n\n\t\tfor (let i = 0; i < subjects.length; i++) {\n\t\t\tconst result = Utils.translateState(subjects[i]);\n\n\t\t\texpect(result).to.be.an(\"boolean\");\n\t\t\texpect(result).to.be.equal(true);\n\t\t}\n\t});\n});\n\ndescribe(\"Utils.timeFromNow()\", () => {\n\tit(\"should time from now in milliseconds\", () => {\n\t\tconst result = Utils.timeFromNow(0, 0, 50);\n\n\t\texpect(result).to.be.an(\"number\");\n\t\texpect(result.toString()).to.have.lengthOf(13);\n\t});\n});\n\ndescribe(\"Utils.shuffle()\", () => {\n\tit(\"should shuffle an array\", () => {\n\t\tconst result = Utils.shuffle([\"hello\", \"my\", \"name\", \"is\", \"john doe\"]);\n\n\t\texpect(result).to.be.an(\"array\");\n\t\texpect(result.join(\" \")).to.not.equal(\"hello my name is john doe\");\n\t});\n});\n\ndescribe(\"Utils.shuffle()\", () => {\n\tit(\"should shuffle an array\", () => {\n\t\tconst result = Utils.shuffle([\"hello\", \"my\", \"name\", \"is\", \"john doe\"]);\n\n\t\texpect(result).to.be.an(\"array\");\n\t\texpect(result.join(\" \")).to.not.equal(\"hello my name is john doe\");\n\t});\n});\n\ndescribe(\"RGB.toString()\", () => {\n\tit(\"should return the RGB in string format\", () => {\n\t\tconst result = subjects.rgb.toString();\n\n\t\texpect(result).to.be.an(\"string\");\n\t\texpect(result).to.equal(\"5, 10, 15\");\n\t});\n});\n\ndescribe(\"RGBA.toString()\", () => {\n\tit(\"should return the RGBA in string format\", () => {\n\t\tconst result = subjects.rgba.toString();\n\n\t\texpect(result).to.be.an(\"string\");\n\t\texpect(result).to.equal(\"5, 10, 15, 20\");\n\t});\n});\n\ndescribe(\"Collection.at()\", () => {\n\tit(\"should return the item located in the specified index\", () => {\n\t\tconst result1 = subjects.collection.at(0);\n\t\tconst result2 = subjects.collection.at(1);\n\n\t\t// Result 1\n\t\texpect(result1).to.be.an(\"string\");\n\t\texpect(result1).to.equal(\"hello\");\n\n\t\t// Result 2\n\t\texpect(result2).to.be.an(\"string\");\n\t\texpect(result2).to.equal(\"it's me\");\n\t});\n});\n\ndescribe(\"Collection.removeAt()\", () => {\n\tit(\"should remove the item located in the specified index\", () => {\n\t\tconst result1 = subjects.collection.removeAt(0);\n\t\tconst result2 = subjects.collection.removeAt(5);\n\n\t\t// Result 1\n\t\texpect(result1).to.be.an(\"boolean\");\n\t\texpect(result1).to.equal(true);\n\t\texpect(subjects.collection.at(0)).to.be.an(\"string\");\n\t\texpect(subjects.collection.at(0)).to.equal(\"it's me\");\n\n\t\t// Result 2\n\t\texpect(result2).to.be.an(\"boolean\");\n\t\texpect(result2).to.equal(false);\n\t});\n});\n\ndescribe(\"Collection.add()\", () => {\n\tit(\"should add an item to the collection\", () => {\n\t\tsubjects.collection.add(\"john doe\");\n\t\texpect(subjects.collection.at(0)).to.be.an(\"string\");\n\t\texpect(subjects.collection.at(0)).to.equal(\"it's me\");\n\t\texpect(subjects.collection.at(1)).to.be.an(\"object\");\n\t});\n});\n\ndescribe(\"Collection.addUnique()\", () => {\n\tit(\"should add an unique item\", () => {\n\t\tconst result1 = subjects.collection.addUnique(\"doe\");\n\t\tconst result2 = subjects.collection.addUnique(\"doe\");\n\n\t\t// Result 1\n\t\texpect(result1).to.be.an(\"boolean\");\n\t\texpect(result1).to.equal(true);\n\n\t\t// Result 2\n\t\texpect(result2).to.be.an(\"boolean\");\n\t\texpect(result2).to.equal(false);\n\t});\n});\n\ndescribe(\"Collection.contains()\", () => {\n\tit(\"should determine whether the collection contains an item\", () => {\n\t\tconst result1 = subjects.collection.contains(\"john doe\");\n\t\tconst result2 = subjects.collection.contains(\"nope\");\n\n\t\t// Result 1\n\t\texpect(result1).to.be.an(\"boolean\");\n\t\texpect(result1).to.equal(true);\n\n\t\t// Result 2\n\t\texpect(result2).to.be.an(\"boolean\");\n\t\texpect(result2).to.equal(false);\n\t});\n});\n\ndescribe(\"Collection.find()\", () => {\n\tit(\"should find an item by its property\", () => {\n\t\tconst result = subjects.collection.find(\"name\", \"John Doe\");\n\n\t\texpect(result).to.be.an(\"object\");\n\t\texpect(result.name).to.be.an(\"string\");\n\t\texpect(result.name).to.equal(\"John Doe\");\n\t});\n});\n\ndescribe(\"ObjectStore.get()\", () => {\n\tit(\"should return the item in the specified path\", () => {\n\t\tconst result = subjects.objAdapter.get(\"person.doe\");\n\n\t\texpect(result).to.be.an(\"object\");\n\t\texpect(result.name).to.be.an(\"string\");\n\t\texpect(result.name).to.equal(\"John Doe\");\n\t});\n});\n\ndescribe(\"ObjectStore.set()\", () => {\n\tit(\"should set data in the item at the specified path\", () => {\n\t\tsubjects.objAdapter.set(\"person.doe.name\", \"Doe John\");\n\n\t\tconst result = subjects.objAdapter.get(\"person.doe.name\");\n\n\t\texpect(result).to.be.an(\"string\");\n\t\texpect(result).to.equal(\"Doe John\");\n\t});\n});\n",
@@ -10445,7 +10767,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 410,
+    "__docId__": 421,
     "kind": "variable",
     "name": "expect",
     "memberof": "src/test/tests.js",
@@ -10466,7 +10788,7 @@
     "ignore": true
   },
   {
-    "__docId__": 411,
+    "__docId__": 422,
     "kind": "variable",
     "name": "subjects",
     "memberof": "src/test/tests.js",
@@ -10487,7 +10809,7 @@
     "ignore": true
   },
   {
-    "__docId__": 412,
+    "__docId__": 423,
     "kind": "file",
     "name": "src/time/time-parser.js",
     "content": "import TimeSuffixType from \"./time-suffix-type\";\nimport Utils from \"../core/utils\";\n\nexport default class TimeParser {\n\t/**\n\t * @param {String} timeString\n\t */\n\tconstructor(timeString) {\n\t\t/**\n\t\t * @type {String}\n\t\t * @private\n\t\t * @readonly\n\t\t */\n\t\tthis.timeString = timeString;\n\t}\n\n\t/**\n\t * @returns {*}\n\t */\n\tgetMatch() {\n\t\treturn /^([0-9]+)(ms|s|m|h|d|mo|y)$/.exec(this.timeString);\n\t}\n\n\t/**\n\t * @returns {TimeSuffixType}\n\t */\n\tget suffix() {\n\t\treturn TimeSuffixType.fromShort(this.getMatch()[2]);\n\t}\n\n\t/**\n\t * @returns {Number}\n\t */\n\tget amount() {\n\t\treturn parseInt(this.getMatch()[1]);\n\t}\n\n\t/**\n\t * @returns {Number}\n\t */\n\tgetTimeFromNow() {\n\t\tswitch (this.suffix) {\n\t\t\tcase TimeSuffixType.Millisecond: {\n\t\t\t\treturn Utils.timeFromNow(this.amount);\n\t\t\t}\n\n\t\t\tcase TimeSuffixType.Second: {\n\t\t\t\treturn Utils.timeFromNow(0, this.amount);\n\t\t\t}\n\n\t\t\tcase TimeSuffixType.Minute: {\n\t\t\t\treturn Utils.timeFromNow(0, 0, this.amount);\n\t\t\t}\n\n\t\t\tcase TimeSuffixType.Hour: {\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, this.amount);\n\t\t\t}\n\n\t\t\tcase TimeSuffixType.Day: {\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, 0, this.amount);\n\t\t\t}\n\n\t\t\tcase TimeSuffixType.Month: {\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, 0, 0, this.amount);\n\t\t\t}\n\n\t\t\tcase TimeSuffixType.Year: {\n\t\t\t\treturn Utils.timeFromNow(0, 0, 0, 0, 0, 0, this.amount);\n\t\t\t}\n\n\t\t\tdefault: {\n\t\t\t\tthrow new Error(`[TimeParser.getTimeFromNow] Invalid suffix: ${this.suffix}`);\n\t\t\t}\n\t\t}\n\t}\n}\n",
@@ -10498,7 +10820,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 413,
+    "__docId__": 424,
     "kind": "class",
     "name": "TimeParser",
     "memberof": "src/time/time-parser.js",
@@ -10514,7 +10836,7 @@
     "interface": false
   },
   {
-    "__docId__": 414,
+    "__docId__": 425,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/time/time-parser.js~TimeParser",
@@ -10539,7 +10861,7 @@
     ]
   },
   {
-    "__docId__": 415,
+    "__docId__": 426,
     "kind": "member",
     "name": "timeString",
     "memberof": "src/time/time-parser.js~TimeParser",
@@ -10564,7 +10886,7 @@
     }
   },
   {
-    "__docId__": 416,
+    "__docId__": 427,
     "kind": "method",
     "name": "getMatch",
     "memberof": "src/time/time-parser.js~TimeParser",
@@ -10592,7 +10914,7 @@
     "params": []
   },
   {
-    "__docId__": 417,
+    "__docId__": 428,
     "kind": "get",
     "name": "suffix",
     "memberof": "src/time/time-parser.js~TimeParser",
@@ -10624,7 +10946,7 @@
     }
   },
   {
-    "__docId__": 418,
+    "__docId__": 429,
     "kind": "get",
     "name": "amount",
     "memberof": "src/time/time-parser.js~TimeParser",
@@ -10656,7 +10978,7 @@
     }
   },
   {
-    "__docId__": 419,
+    "__docId__": 430,
     "kind": "method",
     "name": "getTimeFromNow",
     "memberof": "src/time/time-parser.js~TimeParser",
@@ -10684,7 +11006,7 @@
     "params": []
   },
   {
-    "__docId__": 420,
+    "__docId__": 431,
     "kind": "file",
     "name": "src/time/time-suffix-type.js",
     "content": "/**\n * @enum {Number}\n * @readonly\n */\nconst TimeSuffixType = {\n\tMillisecond: 0,\n\tSecond: 1,\n\tMinute: 2,\n\tHour: 3,\n\tDay: 4,\n\tMonth: 5,\n\tYear: 6,\n\n\t/**\n\t * @param {String} short The short suffix\n\t * @returns {TimeSuffixType}\n\t */\n\tfromShort(short) {\n\t\tswitch (short) {\n\t\t\tcase \"ms\": {\n\t\t\t\treturn this.Millisecond;\n\t\t\t}\n\n\t\t\tcase \"s\": {\n\t\t\t\treturn this.Second;\n\t\t\t}\n\n\t\t\tcase \"m\": {\n\t\t\t\treturn this.Minute;\n\t\t\t}\n\n\t\t\tcase \"h\": {\n\t\t\t\treturn this.Hour;\n\t\t\t}\n\n\t\t\tcase \"d\": {\n\t\t\t\treturn this.Day;\n\t\t\t}\n\n\t\t\tcase \"mo\": {\n\t\t\t\treturn this.Month;\n\t\t\t}\n\n\t\t\tcase \"y\": {\n\t\t\t\treturn this.Year;\n\t\t\t}\n\n\t\t\tdefault: {\n\t\t\t\tthrow new Error(`[TimeSuffixType.fromShort] Invalid time suffix type: ${short}`);\n\t\t\t}\n\t\t}\n\t}\n};\n\nexport default TimeSuffixType;\n",
@@ -10695,7 +11017,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 421,
+    "__docId__": 432,
     "kind": "variable",
     "name": "TimeSuffixType",
     "memberof": "src/time/time-suffix-type.js",
@@ -10725,7 +11047,7 @@
   },
   {
     "kind": "index",
-    "content": "<p align=\"center\">\n  <img alt=\"Anvil Logo\" src=\"https://raw.githubusercontent.com/CloudRex/Anvil/master/logo2.png\">\n  <br />\n  <img alt=\"Build Status\" src=\"https://travis-ci.org/CloudRex/Anvil.svg?branch=master\">\n  <img alt=\"NPM Version\" src=\"https://badge.fury.io/js/discord-anvil.svg\">\n  <img alt=\"Documentation\" src=\"https://cloudrex.github.io/Anvil/badge.svg\">\n</p>\n\n<br/>\n\nAnvil is a powerful fully-modular, self-contained bot development framework.\n\n**Note**: Anvil is a Discord client wrapper and not a Discord API library.\n\n=> [Click here to view the NPM package](https://www.npmjs.com/package/discord-anvil)\n\n=> [Click here to view the docs](https://cloudrex.github.io/Anvil/)\n\n*Powering the [Tux](https://github.com/CloudRex/Tux) and [War](https://github.com/CloudRex/War) bots | Powered by [Discord.js](https://discord.js.org/)*\n\n#### Quick Start\n\nFirst, make sure to install Anvil: `npm install discord-anvil --save`\n\nindex.js:\n```js\nconst { Bot, ObjectStore, JsonAuthStore } = require(\"discord-anvil\");\nconst path = require(\"path\");\n\n// Create the bot\nconst bot = new Bot({\n    paths: {\n    \t// The file containing our bot token and prefix\n    \tsettings: \"settings.json\",\n    \t\n    \tauthLevels: \"auth-levels.json\",\n    \t\n    \t// The directory containing our command files\n    \tcommands: path.join(__dirname, \"commands\")\n    },\n    \n    /**\n     * This file will store our per-guild auth data,\n     * it will be automatically created if it doesn't\n     * exist.\n     */\n    authStore: new JsonAuthStore(\"./auth-store.json\")\n});\n\n// Connect the client\nbot.connect();\n```\n\nsettings.json: ([Click here](https://discordapp.com/developers/applications/me) to find your bot's token)\n```json\n{\n    \"general\": {\n        \"token\": \"<Your bot's token here>\",\n        \"prefix\": \"!\"\n    }\n}\n```\n\nauth-levels.json:\n```json\n{\n    \"default\": {\n        \"rank\": 0\n    },\n    \n\t\"developer\": {\n\t    \"rank\": 1,\n\t    \"global\": true\n\t}\n}\n```\n\ncommands/hello.js:\n```js\nconst { AccessLevelType, CommandCategoryType } = require(\"discord-anvil\");\n\n// Export the command to be automatically loaded\nmodule.exports = {\n\t// When the command is executed\n\texecuted(context) {\n\t\tcontext.ok(\"Hello world!\");\n\t},\n\t\n\t// Information about the command\n\tmeta: {\n\t\tname: \"hello\", // The name of the command\n\t\tdesc: \"Hello world\", // The description of the command\n\t\tauthLevel: AccessLevelType.Member, // Who can issue this command\n\t\tcategory: CommandCategoryType.Utility, // The category of the command\n\t}\n};\n```\n\n#### Building\nTo build the project, use `npm run build`.\n\nTo build the docs, use `npm run docs`.\n\nMake sure that you have previously installed the project dependencies (`npm install`).\n\n\n#### Versioning\nWhen contributing, please follow the [Semantic Versioning](https://semver.org/) guidelines.\n",
+    "content": "<p align=\"center\">\n  <img alt=\"Anvil Logo\" src=\"https://raw.githubusercontent.com/CloudRex/Anvil/master/logo2.png\">\n  <br />\n  <img alt=\"Build Status\" src=\"https://travis-ci.org/CloudRex/Anvil.svg?branch=master\">\n  <img alt=\"NPM Version\" src=\"https://badge.fury.io/js/discord-anvil.svg\">\n  <img alt=\"Documentation\" src=\"https://cloudrex.github.io/Anvil/badge.svg\">\n</p>\n\n<br/>\n\nAnvil is a powerful fully-modular, self-contained bot development framework.\n\n**Note**: Anvil is a Discord client wrapper and not a Discord API library.\n\n=> [Click here to view the NPM package](https://www.npmjs.com/package/discord-anvil)\n\n=> [Click here to view the docs](https://cloudrex.github.io/Anvil/)\n\n*Powering the [Tux](https://github.com/CloudRex/Tux) and [War](https://github.com/CloudRex/War) bots | Powered by [Discord.js](https://discord.js.org/)*\n\n#### Quick Start\n\nFirst, make sure to install Anvil: `npm install discord-anvil --save`\n\nindex.js:\n```js\nconst { Bot, ObjectStore, JsonAuthStore } = require(\"discord-anvil\");\nconst path = require(\"path\");\n\n// Create the bot\nconst bot = new Bot({\n    paths: {\n    \t// The file containing our bot token and prefix\n    \tsettings: \"settings.json\",\n    \t\n    \tauthLevels: \"auth-levels.json\",\n    \t\n    \t// The directory containing our command files\n    \tcommands: path.join(__dirname, \"commands\")\n    },\n    \n    /**\n     * This file will store our per-guild auth data,\n     * it will be automatically created if it doesn't\n     * exist.\n     */\n    authStore: new JsonAuthStore(\"auth-schema.json\", \"auth-store.json\")\n});\n\n// Connect the client\nbot.connect();\n```\n\nsettings.json: ([Click here](https://discordapp.com/developers/applications/me) to find your bot's token)\n```json\n{\n    \"general\": {\n        \"token\": \"<Your bot's token here>\",\n        \"prefix\": \"!\"\n    }\n}\n```\n\nauth-levels.json:\n```json\n{\n    \"default\": {\n        \"rank\": 0\n    },\n    \n\t\"developer\": {\n\t    \"rank\": 1,\n\t    \"global\": true\n\t}\n}\n```\n\ncommands/hello.js:\n```js\nconst { AccessLevelType, CommandCategoryType } = require(\"discord-anvil\");\n\n// Export the command to be automatically loaded\nmodule.exports = {\n\t// When the command is executed\n\texecuted(context) {\n\t\tcontext.ok(\"Hello world!\");\n\t},\n\t\n\t// Information about the command\n\tmeta: {\n\t\tname: \"hello\", // The name of the command\n\t\tdesc: \"Hello world\", // The description of the command\n\t\tauthLevel: AccessLevelType.Member, // Who can issue this command\n\t\tcategory: CommandCategoryType.Utility, // The category of the command\n\t}\n};\n```\n\n#### Building\nTo build the project, use `npm run build`.\n\nTo build the docs, use `npm run docs`.\n\nMake sure that you have previously installed the project dependencies (`npm install`).\n\n\n#### Versioning\nWhen contributing, please follow the [Semantic Versioning](https://semver.org/) guidelines.\n",
     "longname": "/home/atlas/Desktop/Projects/Anvil/README.md",
     "name": "./README.md",
     "static": true,
@@ -10733,7 +11055,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\n\t\"name\": \"discord-anvil\",\n\t\"version\": \"1.1.17\",\n\t\"description\": \"Powerful Discord bot framework\",\n\t\"main\": \"dist/index.js\",\n\t\"presets\": [\n\t\t\"env\",\n\t\t\"es2015\"\n\t],\n\t\"scripts\": {\n\t\t\"build\": \"babel src --out-dir dist\",\n\t\t\"test\": \"npm run build && mocha dist/test/tests.js\",\n\t\t\"prepublish\": \"npm run build\",\n\t\t\"docs\": \"./node_modules/.bin/esdoc\",\n\t\t\"rdocs\": \"npm run docs && git add docs/* && git commit -m 'Regenerated docs' && git push\"\n\t},\n\t\"author\": \"Phantom <private.phantom@outlook.com>\",\n\t\"contributors\": [\n\t\t\"AL_1 <allen.m.lantz@gmail.com> (https://al1l.com/)\"\n\t],\n\t\"license\": \"MIT\",\n\t\"dependencies\": {\n\t\t\"@raxor1234/typer\": \"^1.0.1\",\n\t\t\"argparse\": \"^1.0.10\",\n\t\t\"colors\": \"latest\",\n\t\t\"dblapi.js\": \"^2.0.0\",\n\t\t\"discord.js\": \"^11.2.1\",\n\t\t\"hoek\": \"^4.2.1\",\n\t\t\"javascript-time-ago\": \"^1.0.30\",\n\t\t\"lodash\": \"^4.17.5\",\n\t\t\"minimist\": \"^1.2.0\",\n\t\t\"mongodb\": \"^3.0.7\",\n\t\t\"mysql\": \"^2.15.0\",\n\t\t\"querystring\": \"^0.2.0\",\n\t\t\"request\": \"^2.83.0\"\n\t},\n\t\"devDependencies\": {\n\t\t\"babel-cli\": \"^6.26.0\",\n\t\t\"babel-preset-env\": \"^1.6.1\",\n\t\t\"babel-preset-es2015\": \"^6.24.1\",\n\t\t\"chai\": \"^4.1.2\",\n\t\t\"esdoc\": \"^1.1.0\",\n\t\t\"esdoc-standard-plugin\": \"^1.0.0\",\n\t\t\"eslint\": \"^4.19.1\",\n\t\t\"eslint-config-airbnb-base\": \"^12.1.0\",\n\t\t\"eslint-plugin-import\": \"^2.10.0\",\n\t\t\"mocha\": \"^5.1.1\"\n\t}\n}\n",
+    "content": "{\n\t\"name\": \"discord-anvil\",\n\t\"version\": \"1.1.18\",\n\t\"description\": \"Powerful Discord bot framework\",\n\t\"main\": \"dist/index.js\",\n\t\"presets\": [\n\t\t\"env\",\n\t\t\"es2015\"\n\t],\n\t\"scripts\": {\n\t\t\"build\": \"babel src --out-dir dist\",\n\t\t\"test\": \"npm run build && mocha dist/test/tests.js\",\n\t\t\"prepublish\": \"npm run build\",\n\t\t\"docs\": \"./node_modules/.bin/esdoc\",\n\t\t\"rdocs\": \"npm run docs && git add docs/* && git commit -m 'Regenerated docs' && git push\"\n\t},\n\t\"author\": \"Phantom <private.phantom@outlook.com>\",\n\t\"contributors\": [\n\t\t\"AL_1 <allen.m.lantz@gmail.com> (https://al1l.com/)\"\n\t],\n\t\"license\": \"MIT\",\n\t\"dependencies\": {\n\t\t\"@raxor1234/typer\": \"^1.0.1\",\n\t\t\"argparse\": \"^1.0.10\",\n\t\t\"colors\": \"latest\",\n\t\t\"dblapi.js\": \"^2.0.0\",\n\t\t\"discord.js\": \"^11.2.1\",\n\t\t\"hoek\": \"^4.2.1\",\n\t\t\"javascript-time-ago\": \"^1.0.30\",\n\t\t\"lodash\": \"^4.17.5\",\n\t\t\"minimist\": \"^1.2.0\",\n\t\t\"mongodb\": \"^3.0.7\",\n\t\t\"mysql\": \"^2.15.0\",\n\t\t\"querystring\": \"^0.2.0\",\n\t\t\"request\": \"^2.83.0\"\n\t},\n\t\"devDependencies\": {\n\t\t\"babel-cli\": \"^6.26.0\",\n\t\t\"babel-preset-env\": \"^1.6.1\",\n\t\t\"babel-preset-es2015\": \"^6.24.1\",\n\t\t\"chai\": \"^4.1.2\",\n\t\t\"esdoc\": \"^1.1.0\",\n\t\t\"esdoc-standard-plugin\": \"^1.0.0\",\n\t\t\"eslint\": \"^4.19.1\",\n\t\t\"eslint-config-airbnb-base\": \"^12.1.0\",\n\t\t\"eslint-plugin-import\": \"^2.10.0\",\n\t\t\"mocha\": \"^5.1.1\"\n\t}\n}\n",
     "longname": "/home/atlas/Desktop/Projects/Anvil/package.json",
     "name": "package.json",
     "static": true,

@@ -624,6 +624,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/commands/command-auth-store.js~commandauthstore#contains",
+    "class/src/commands/command-auth-store.js~CommandAuthStore.html#instance-method-contains",
+    "src/commands/command-auth-store.js~CommandAuthStore#contains",
+    "method"
+  ],
+  [
+    "src/commands/command-auth-store.js~commandauthstore#create",
+    "class/src/commands/command-auth-store.js~CommandAuthStore.html#instance-method-create",
+    "src/commands/command-auth-store.js~CommandAuthStore#create",
+    "method"
+  ],
+  [
     "src/commands/command-auth-store.js~commandauthstore#getauthlevel",
     "class/src/commands/command-auth-store.js~CommandAuthStore.html#instance-method-getAuthLevel",
     "src/commands/command-auth-store.js~CommandAuthStore#getAuthLevel",
@@ -645,6 +657,12 @@ window.esdocSearchIndex = [
     "src/commands/command-auth-store.js~commandauthstore#hasauthority",
     "class/src/commands/command-auth-store.js~CommandAuthStore.html#instance-method-hasAuthority",
     "src/commands/command-auth-store.js~CommandAuthStore#hasAuthority",
+    "method"
+  ],
+  [
+    "src/commands/command-auth-store.js~commandauthstore#remove",
+    "class/src/commands/command-auth-store.js~CommandAuthStore.html#instance-method-remove",
+    "src/commands/command-auth-store.js~CommandAuthStore#remove",
     "method"
   ],
   [
@@ -1038,16 +1056,28 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/commands/json-auth-store.js~jsonauthstore#path",
-    "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-member-path",
-    "src/commands/json-auth-store.js~JsonAuthStore#path",
-    "member"
-  ],
-  [
     "src/commands/json-auth-store.js~jsonauthstore#reload",
     "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-method-reload",
     "src/commands/json-auth-store.js~JsonAuthStore#reload",
     "method"
+  ],
+  [
+    "src/commands/json-auth-store.js~jsonauthstore#schema",
+    "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-member-schema",
+    "src/commands/json-auth-store.js~JsonAuthStore#schema",
+    "member"
+  ],
+  [
+    "src/commands/json-auth-store.js~jsonauthstore#schemapath",
+    "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-member-schemaPath",
+    "src/commands/json-auth-store.js~JsonAuthStore#schemaPath",
+    "member"
+  ],
+  [
+    "src/commands/json-auth-store.js~jsonauthstore#storepath",
+    "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-member-storePath",
+    "src/commands/json-auth-store.js~JsonAuthStore#storePath",
+    "member"
   ],
   [
     "src/commands/object-auth-store.js",
@@ -1059,6 +1089,18 @@ window.esdocSearchIndex = [
     "src/commands/object-auth-store.js~objectauthstore#constructor",
     "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-constructor-constructor",
     "src/commands/object-auth-store.js~ObjectAuthStore#constructor",
+    "method"
+  ],
+  [
+    "src/commands/object-auth-store.js~objectauthstore#contains",
+    "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-method-contains",
+    "src/commands/object-auth-store.js~ObjectAuthStore#contains",
+    "method"
+  ],
+  [
+    "src/commands/object-auth-store.js~objectauthstore#create",
+    "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-method-create",
+    "src/commands/object-auth-store.js~ObjectAuthStore#create",
     "method"
   ],
   [
@@ -1084,6 +1126,18 @@ window.esdocSearchIndex = [
     "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-method-getHighestAuthLevelByRoles",
     "src/commands/object-auth-store.js~ObjectAuthStore#getHighestAuthLevelByRoles",
     "method"
+  ],
+  [
+    "src/commands/object-auth-store.js~objectauthstore#remove",
+    "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-method-remove",
+    "src/commands/object-auth-store.js~ObjectAuthStore#remove",
+    "method"
+  ],
+  [
+    "src/commands/object-auth-store.js~objectauthstore#schema",
+    "class/src/commands/object-auth-store.js~ObjectAuthStore.html#instance-member-schema",
+    "src/commands/object-auth-store.js~ObjectAuthStore#schema",
+    "member"
   ],
   [
     "src/console/console-command.js",
@@ -1122,9 +1176,9 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/console/console-interface.js~consoleinterface#init",
-    "class/src/console/console-interface.js~ConsoleInterface.html#instance-method-init",
-    "src/console/console-interface.js~ConsoleInterface#init",
+    "src/console/console-interface.js~consoleinterface#setup",
+    "class/src/console/console-interface.js~ConsoleInterface.html#instance-method-setup",
+    "src/console/console-interface.js~ConsoleInterface#setup",
     "method"
   ],
   [
@@ -1132,6 +1186,12 @@ window.esdocSearchIndex = [
     "file/src/core/bot.js.html",
     "src/core/bot.js",
     "file"
+  ],
+  [
+    "src/core/bot.js~bot#authstore",
+    "class/src/core/bot.js~Bot.html#instance-member-authStore",
+    "src/core/bot.js~Bot#authStore",
+    "member"
   ],
   [
     "src/core/bot.js~bot#client",
@@ -1170,9 +1230,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/core/bot.js~bot#dataadapter",
-    "class/src/core/bot.js~Bot.html#instance-member-dataAdapter",
-    "src/core/bot.js~Bot#dataAdapter",
+    "src/core/bot.js~bot#datastore",
+    "class/src/core/bot.js~Bot.html#instance-member-dataStore",
+    "src/core/bot.js~Bot#dataStore",
     "member"
   ],
   [
@@ -1215,6 +1275,12 @@ window.esdocSearchIndex = [
     "src/core/bot.js~bot#setup",
     "class/src/core/bot.js~Bot.html#instance-method-setup",
     "src/core/bot.js~Bot#setup",
+    "method"
+  ],
+  [
+    "src/core/bot.js~bot#setupauthstore",
+    "class/src/core/bot.js~Bot.html#instance-method-setupAuthStore",
+    "src/core/bot.js~Bot#setupAuthStore",
     "method"
   ],
   [

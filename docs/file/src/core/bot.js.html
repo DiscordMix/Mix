@@ -145,7 +145,13 @@ export default class Bot extends EventEmitter {
 		 * @type {DataStore}
 		 * @readonly
 		 */
-		this.dataAdapter = data.dataAdapter;
+		this.dataStore = data.dataStore;
+
+		/**
+		 * @type {CommandAuthStore}
+		 * @readonly
+		 */
+		this.authStore = data.authStore;
 
 		/**
 		 * @type {(EmojiCollection|Null)}
@@ -163,7 +169,7 @@ export default class Bot extends EventEmitter {
 		 * @type {CommandManager}
 		 * @readonly
 		 */
-		this.commands = new CommandManager(this, data.paths.commands, data.paths.accessLevels, data.argumentTypes ? data.argumentTypes : {});
+		this.commands = new CommandManager(this, data.paths.commands, this.authStore, data.argumentTypes ? data.argumentTypes : {});
 
 		/**
 		 * @type {FeatureManager}
@@ -194,7 +200,7 @@ export default class Bot extends EventEmitter {
 
 		// Load commands
 		await this.commandLoader.loadAll();
-		Log.success(&quot;Bot setup completed&quot;);
+		Log.success(&quot;[Bot.setup] Bot setup completed&quot;);
 	}
 
 	/**
@@ -213,8 +219,9 @@ export default class Bot extends EventEmitter {
 
 		// Discord client events
 		this.client.on(&quot;ready&quot;, () =&gt; {
-			this.console.init(this);
-			Log.success(&quot;Ready&quot;);
+			this.console.setup(this);
+			Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag}`);
+			Log.success(&quot;[Bot.setupEvents] Ready&quot;);
 		});
 
 		this.client.on(&quot;message&quot;, async (message) =&gt; {
@@ -225,7 +232,7 @@ export default class Bot extends EventEmitter {
 							message,
 							CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
 							this,
-							this.commands.getAuthority(message.guild.id, message.member.roles.array().map((role) =&gt; role.name), message.author.id),
+							this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role) =&gt; role.name), message.author.id),
 							this.emojis
 						),
 
@@ -243,13 +250,35 @@ export default class Bot extends EventEmitter {
 		});
 	}
 
+	setupAuthStore() {
+		const guilds = this.client.guilds.array();
+
+		let entries = 0;
+
+		for (let i = 0; i &lt; guilds.length; i++) {
+			if (!this.authStore.contains(guilds[i].id)) {
+				this.authStore.create(guilds[i].id);
+				entries++;
+			}
+		}
+
+		if (entries &gt; 0) {
+			Log.success(`[Bot.setupAuthStore] Added a total of ${entries} auth store entries`);
+		}
+
+		Log.success(&quot;[Bot.setupAuthStore] Auth store setup completed&quot;);
+	}
+
 	/**
 	 * Connect the client
 	 * @return {Promise}
 	 */
 	async connect() {
-		Log.verbose(&quot;Starting&quot;);
+		Log.verbose(&quot;[Bot.connect] Starting&quot;);
 		await this.client.login(this.settings.general.token);
+
+		// Setup the command auth store
+		this.setupAuthStore();
 	}
 
 	/**
@@ -259,7 +288,7 @@ export default class Bot extends EventEmitter {
 	 * @return {Promise}
 	 */
 	async restart(reloadModules = true) {
-		Log.verbose(&quot;Restarting&quot;);
+		Log.verbose(&quot;[Bot.restart] Restarting&quot;);
 
 		// TODO: Actually reload all the features and commands
 		// this.features.reloadAll(this);
@@ -275,7 +304,7 @@ export default class Bot extends EventEmitter {
 	async disconnect() {
 		this.settings.save();
 		await this.client.destroy();
-		Log.info(&quot;Disconnected&quot;);
+		Log.info(&quot;[Bot.disconnect] Disconnected&quot;);
 	}
 
 	/**

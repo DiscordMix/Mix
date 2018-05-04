@@ -1,7 +1,7 @@
 {
-  "coverage": "78.89%",
-  "expectCount": 327,
-  "actualCount": 258,
+  "coverage": "78.99%",
+  "expectCount": 338,
+  "actualCount": 267,
   "files": {
     "src/collections/collection.js": {
       "expectCount": 11,
@@ -31,8 +31,8 @@
       ]
     },
     "src/commands/command-auth-store.js": {
-      "expectCount": 5,
-      "actualCount": 4,
+      "expectCount": 8,
+      "actualCount": 7,
       "undocumentLines": [
         3
       ]
@@ -84,19 +84,20 @@
       ]
     },
     "src/commands/json-auth-store.js": {
-      "expectCount": 7,
-      "actualCount": 4,
+      "expectCount": 9,
+      "actualCount": 5,
       "undocumentLines": [
-        4,
-        6,
-        30
+        5,
+        7,
+        40,
+        50
       ]
     },
     "src/commands/object-auth-store.js": {
-      "expectCount": 6,
-      "actualCount": 5,
+      "expectCount": 10,
+      "actualCount": 9,
       "undocumentLines": [
-        3
+        5
       ]
     },
     "src/console/console-command.js": {
@@ -116,13 +117,14 @@
       ]
     },
     "src/core/bot.js": {
-      "expectCount": 21,
-      "actualCount": 17,
+      "expectCount": 23,
+      "actualCount": 18,
       "undocumentLines": [
         15,
         16,
         17,
-        18
+        18,
+        177
       ]
     },
     "src/core/log.js": {

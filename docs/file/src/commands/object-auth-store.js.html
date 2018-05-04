@@ -75,13 +75,22 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/commands/object-auth-store.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import CommandAuthStore from &quot;./command-auth-store&quot;;
+import Log from &quot;../core/log&quot;;
+import * as Typer from &quot;@raxor1234/typer/typer&quot;;
 
 export default class ObjectAuthStore extends CommandAuthStore {
 	/**
-	 * @param {String} data
+	 * @param {Object} schema
+	 * @param {Object} data
 	 */
-	constructor(data) {
+	constructor(schema, data) {
 		super();
+
+		/**
+		 * @type {Object}
+		 * @protected
+		 */
+		this.schema = schema;
 
 		/**
 		 * @type {Object}
@@ -141,6 +150,72 @@ export default class ObjectAuthStore extends CommandAuthStore {
 		}
 
 		return byId;
+	}
+
+	/**
+	 * Create a default auth store entry
+	 * @param {Snowflake} guildId
+	 * @return {Boolean} Whether the entry was created
+	 */
+	create(guildId) {
+		if (!this.contains(guildId)) {
+			const schemaKeys = Object.keys(this.schema);
+			const entry = [];
+
+			let seenDefault = false;
+
+			for (let i = 0; i &lt; schemaKeys.length; i++) {
+				const authLevel = this.schema[schemaKeys[i]];
+
+				if (schemaKeys[i].toLowerCase() === &quot;default&quot;) {
+					if (seenDefault) {
+						Log.throw(&quot;[ObjectAuthStore] Auth schema may not contain more than one default auth level&quot;);
+					}
+
+					const validDefault = Typer.validate({
+						rank: &quot;!number&quot;
+					}, authLevel);
+
+					if (!validDefault) {
+						Log.throw(&quot;[ObjectAuthStore] Unable to create default auth store entry: Invalid default auth level&quot;);
+					}
+
+					seenDefault = true;
+				}
+
+				entry[authLevel.rank] = [];
+			}
+
+			if (!seenDefault) {
+				Log.throw(&quot;[ObjectAuthStore] Auth schema does not contain a default auth level&quot;);
+			}
+
+			this.data[guildId] = entry;
+
+			return true;
+		}
+
+		Log.error(`[ObjectAuthStore.create] Trying to create an already existing entry: ${guildId}`);
+
+		return false;
+	}
+
+	/**
+	 * Remove an auth store entry
+	 * @param {Snowflake} guildId
+	 * @return {Boolean} Whether the entry was removed
+	 */
+	remove(guildId) {
+		Log.throw(&quot;[ObjectAuthStore.remove] Method not implemented&quot;);
+	}
+
+	/**
+	 * Determine whether this auth store contains an entry
+	 * @param {Snowflake} guildId
+	 * @return {Boolean} Whether the entry exists
+	 */
+	contains(guildId) {
+		return this.data[guildId] !== undefined;
 	}
 }
 </code></pre>

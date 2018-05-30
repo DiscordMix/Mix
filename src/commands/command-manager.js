@@ -6,199 +6,204 @@ const Typer = require("@raxor1234/typer/typer");
 // import Collection from "../core/collection";
 
 export default class CommandManager /* extends Collection */ {
-	/**
-	 * @param {Bot} bot
-	 * @param {String} path
-	 * @param {CommandAuthStore} authStore
-	 * @param {Object} argumentTypes
-	 */
-	constructor(bot, path, authStore, argumentTypes) {
-		/**
-		 * @type {Bot}
-		 * @private
-		 * @readonly
-		 */
-		this.bot = bot;
+    /**
+     * @param {Bot} bot
+     * @param {String} path
+     * @param {CommandAuthStore} authStore
+     * @param {Object} argumentTypes
+     */
+    constructor(bot, path, authStore, argumentTypes) {
+        /**
+         * @type {Bot}
+         * @private
+         * @readonly
+         */
+        this.bot = bot;
 
-		/**
-		 * @type {String}
-		 * @private
-		 * @readonly
-		 */
-		this.path = path;
+        /**
+         * @type {String}
+         * @private
+         * @readonly
+         */
+        this.path = path;
 
-		/**
-		 * @type {CommandAuthStore}
-		 * @private
-		 * @readonly
-		 */
-		this.authStore = authStore;
+        /**
+         * @type {CommandAuthStore}
+         * @private
+         * @readonly
+         */
+        this.authStore = authStore;
 
-		/**
-		 * @type {Object}
-		 * @readonly
-		 */
-		this.argumentTypes = argumentTypes;
+        /**
+         * @type {Object}
+         * @readonly
+         */
+        this.argumentTypes = argumentTypes;
 
-		/**
-		 * @type {Array<Command>}
-		 * @private
-		 */
-		this.commands = [];
-	}
+        /**
+         * @type {Array<Command>}
+         * @private
+         */
+        this.commands = [];
+    }
 
-	/**
-	 * @param {Command} command
-	 */
-	register(command) {
-		this.commands.push(command);
-	}
+    /**
+     * @param {Command} command
+     */
+    register(command) {
+        this.commands.push(command);
+    }
 
-	/**
-	 * @param {String} commandBase
-	 * @returns {Boolean}
-	 */
-	removeByBase(commandBase) {
-		return this.remove(this.getByName(commandBase));
-	}
+    /**
+     * @param {String} commandBase
+     * @returns {Boolean}
+     */
+    removeByBase(commandBase) {
+        return this.remove(this.getByName(commandBase));
+    }
 
-	/**
-	 * @param {Command} command
-	 * @returns {Boolean}
-	 */
-	remove(command) {
-		return this.removeAt(this.commands.indexOf(command));
-	}
+    /**
+     * @param {Command} command
+     * @returns {Boolean}
+     */
+    remove(command) {
+        return this.removeAt(this.commands.indexOf(command));
+    }
 
-	/**
-	 * @param {Number} index
-	 * @returns {Boolean}
-	 */
-	removeAt(index) {
-		if (this.commands[index]) {
-			this.commands.splice(index, 1);
+    /**
+     * @param {Number} index
+     * @returns {Boolean}
+     */
+    removeAt(index) {
+        if (this.commands[index]) {
+            this.commands.splice(index, 1);
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * @param {String} commandBase
-	 * @returns {Boolean}
-	 */
-	contains(commandBase) {
-		return this.getByName(commandBase) !== null;
-	}
+    /**
+     * @param {String} commandBase
+     * @returns {Boolean}
+     */
+    contains(commandBase) {
+        return this.getByName(commandBase) !== null;
+    }
 
-	/**
-	 * @param {Array<Command>} commands
-	 */
-	registerMultiple(commands) {
-		for (let i = 0; i < commands.length; i++) {
-			this.register(commands[i]);
-		}
-	}
+    /**
+     * @param {Array<Command>} commands
+     */
+    registerMultiple(commands) {
+        for (let i = 0; i < commands.length; i++) {
+            this.register(commands[i]);
+        }
+    }
 
-	/**
-	 * @param {String} commandBase
-	 * @returns {Boolean}
-	 */
-	isRegistered(commandBase) {
-		return this.getByName(commandBase) != null;
-	}
+    /**
+     * @param {String} commandBase
+     * @returns {Boolean}
+     */
+    isRegistered(commandBase) {
+        return this.getByName(commandBase) != null;
+    }
 
-	/**
-	 * @param {String} name
-	 * @returns {(Command|Null)}
-	 */
-	getByName(name) {
-		for (let i = 0; i < this.commands.length; i++) {
-			if (this.commands[i].name === name || this.commands[i].aliases.includes(name)) {
-				return this.commands[i];
-			}
-		}
+    /**
+     * @param {String} name
+     * @returns {(Command|Null)}
+     */
+    getByName(name) {
+        for (let i = 0; i < this.commands.length; i++) {
+            if (this.commands[i].name === name || this.commands[i].aliases.includes(name)) {
+                return this.commands[i];
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * @param {Object} rules
-	 * @param {Array<String>} args
-	 * @returns {Object} The assembled arguments
-	 */
-	assembleArguments(rules, args) {
-		const result = {};
+    /**
+     * @param {Object} rules
+     * @param {Array<String>} args
+     * @returns {Object} The assembled arguments
+     */
+    assembleArguments(rules, args) {
+        const result = {};
 
-		if (rules.length !== args.length) {
-			Log.debug("AssembleArguments: Not same length");
-		}
+        if (rules.length !== args.length) {
+            Log.debug("AssembleArguments: Not same length");
+        }
 
-		for (let i = 0; i < rules.length; i++) {
-			result[rules[i]] = (isNaN(args[i]) ? args[i] : parseInt(args[i]));
-		}
+        for (let i = 0; i < rules.length; i++) {
+            result[rules[i]] = (isNaN(args[i]) ? args[i] : parseInt(args[i]));
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * @param {CommandExecutionContext} context
-	 * @param {Command} command The command to handle
-	 * @returns {Promise<Boolean>} Whether the command was successfully executed
-	 */
-	async handle(context, command) {
-		if (!context.message.member) {
-			context.message.channel.send("That command must be used in a text channel. Sorry!");
-		}
-		else if (!command.isEnabled) {
-			await context.fail("That command is disabled and may not be used.");
-		}
-		else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
-			// TODO: New AuthStore system
-			const minAuthority = AccessLevelType.toString(command.auth);
+    /**
+     * @param {CommandExecutionContext} context
+     * @param {Command} command The command to handle
+     * @returns {Promise<Boolean>} Whether the command was successfully executed
+     */
+    async handle(context, command) {
+        if (!context.message.member) {
+            context.message.channel.send("That command must be used in a text channel. Sorry!");
+        }
+        else if (!command.isEnabled) {
+            await context.fail("That command is disabled and may not be used.");
+        }
+        else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
+            // TODO: New AuthStore system
+            const minAuthority = AccessLevelType.toString(command.auth);
 
-			context.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
-		}
-		else if (context.arguments.length > command.maxArguments) {
-			if (command.maxArguments > 0) {
-				context.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);
-			}
-			else {
-				context.fail(`That command does not accept any arguments.`);
-			}
-		}
-		else if (command.canExecute !== null && !command.canExecute(context)) {
-			context.fail("That command cannot be executed right now.");
-		}
-		else if (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {
-			await context.fail("Invalid argument usage. Please use the `usage` command.");
-		}
-		else {
-			try {
-				const result = command.executed(context);
-				context.bot.emit("commandExecuted", new CommandExecutedEvent(command, context));
+            context.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
+        }
+        else if (context.arguments.length > command.maxArguments) {
+            if (command.maxArguments > 0) {
+                context.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);
+            }
+            else {
+                context.fail(`That command does not accept any arguments.`);
+            }
+        }
+        else if (command.canExecute !== null && !command.canExecute(context)) {
+            context.fail("That command cannot be executed right now.");
+        }
+        else if (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {
+            context.fail("Invalid argument usage. Please use the `usage` command.");
+        }
+        else if (command.permissions.length > 0 && !context.message.guild.me.hasPermission(command.permissions)) {
+            const permissions = command.permissions.map((permission) => `\`${permission}\``).join(", ");
 
-				return result;
-			}
-			catch (error) {
-				// TODO: Include stack trace
-				Log.error(`There was an error while executing the ${command.name} command: ${error.message}`);
-				context.fail(`There was an error executing that command. (${error.message})`);
-			}
-		}
+            context.fail(`I need the following permissions to execute that command: ${permissions}`);
+        }
+        else {
+            try {
+                const result = command.executed(context);
+                context.bot.emit("commandExecuted", new CommandExecutedEvent(command, context));
 
-		return false;
-	}
+                return result;
+            }
+            catch (error) {
+                // TODO: Include stack trace
+                Log.error(`There was an error while executing the ${command.name} command: ${error.message}`);
+                context.fail(`There was an error executing that command. (${error.message})`);
+            }
+        }
 
-	/**
-	 * Unload all commands
-	 */
-	unloadAll() {
-		if (this.commands.length > 0) {
-			const count = this.commands.length;
-			this.commands = [];
-			Log.success(`[CommandManager.unloadAll] Unloaded ${count} command(s)`);
-		}
-	}
+        return false;
+    }
+
+    /**
+     * Unload all commands
+     */
+    unloadAll() {
+        if (this.commands.length > 0) {
+            const count = this.commands.length;
+            this.commands = [];
+            Log.success(`[CommandManager.unloadAll] Unloaded ${count} command(s)`);
+        }
+    }
 }

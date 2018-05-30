@@ -5,64 +5,64 @@ const fs = require("fs");
 const path = require("path");
 
 export default class CommandLoader {
-	/**
-	 * @param {CommandManager} commandManager
-	 */
-	constructor(commandManager) {
-		/**
-		 * @type {CommandManager}
-		 * @private
-		 */
-		this.commandManager = commandManager;
-	}
+    /**
+     * @param {CommandManager} commandManager
+     */
+    constructor(commandManager) {
+        /**
+         * @type {CommandManager}
+         * @private
+         */
+        this.commandManager = commandManager;
+    }
 
-	/**
-	 * Load all the commands from path
-	 * @returns {Promise}
-	 */
-	async loadAll() {
-		return new Promise((resolve) => {
-			Log.verbose(`[CommandLoader.loadAll] Loading commands`);
+    /**
+     * Load all the commands from path
+     * @returns {Promise}
+     */
+    async loadAll() {
+        return new Promise((resolve) => {
+            Log.verbose(`[CommandLoader.loadAll] Loading commands`);
 
-			this.commandManager.unloadAll();
+            this.commandManager.unloadAll();
 
-			fs.readdir(this.commandManager.path, (error, files) => {
-				let loaded = 0;
+            fs.readdir(this.commandManager.path, (error, files) => {
+                let loaded = 0;
 
-				files.forEach((file) => {
-					const moduleName = path.basename(file, ".js");
+                files.forEach((file) => {
+                    const moduleName = path.basename(file, ".js");
 
-					if (!file.startsWith("@")) {
-						const modulePath = path.join(this.commandManager.path, moduleName);
+                    if (!file.startsWith("@")) {
+                        const modulePath = path.join(this.commandManager.path, moduleName);
 
-						let module = require(modulePath);
+                        let module = require(modulePath);
 
-						// Support for ES6-compiled modules
-						if (module.default && typeof module.default === "object") {
-							module = module.default;
-						}
+                        // Support for ES6-compiled modules
+                        if (module.default && typeof module.default === "object") {
+                            module = module.default;
+                        }
 
-						// Validate the command before registering it
-						if (Command.validate(module)) {
-							this.commandManager.register(new Command(module));
-							loaded++;
-						}
-						else {
-							Log.warn(`[CommandLoader.loadAll] Skipping invalid command: ${moduleName}`);
-						}
-					}
-					else {
-						Log.verbose(`[CommandLoader.loadAll] Skipping command: ${moduleName}`);
-					}
-				});
+                        // Validate the command before registering it
+                        if (Command.validate(module)) {
+                            this.commandManager.register(new Command(module));
+                            loaded++;
+                        }
+                        else {
+                            Log.warn(`[CommandLoader.loadAll] Skipping invalid command: ${moduleName}`);
+                        }
+                    }
+                    else {
+                        Log.verbose(`[CommandLoader.loadAll] Skipping command: ${moduleName}`);
+                    }
+                });
 
-				Log.success(`[CommandLoader.loadAll] Loaded a total of ${loaded} command(s)`);
-				resolve();
-			});
-		});
-	}
+                Log.success(`[CommandLoader.loadAll] Loaded a total of ${loaded} command(s)`);
+                resolve();
+            });
+        });
+    }
 
-	load(pth) {
-		// TODO
-	}
+    load(pth) {
+        // TODO
+    }
 }

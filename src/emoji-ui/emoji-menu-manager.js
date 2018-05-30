@@ -1,56 +1,56 @@
 export default class EmojiMenuManager {
-	/**
-	 * @param {Discord.Client} client
-	 */
-	constructor(client) {
-		/**
-		 * @type {Discord.Client}
-		 * @private
-		 * @readonly
-		 */
-		this.client = client;
+    /**
+     * @param {Discord.Client} client
+     */
+    constructor(client) {
+        /**
+         * @type {Discord.Client}
+         * @private
+         * @readonly
+         */
+        this.client = client;
 
-		/**
-		 * @type {Array}
-		 * @private
-		 * @readonly
-		 */
-		this.awaiting = [];
+        /**
+         * @type {Array}
+         * @private
+         * @readonly
+         */
+        this.awaiting = [];
 
-		this.client.on("messageReactionAdd", (reaction, user) => {
-			if (!user.bot) {
-				for (let i = 0; i < this.awaiting.length; i++) {
-					if (this.awaiting[i].messageId === reaction.message.id) {
-						for (let buttonIndex = 0; buttonIndex < this.awaiting[i].menu.buttons.length; buttonIndex++) {
-							if (this.awaiting[i].menu.buttons[buttonIndex].emoji === reaction.emoji.name) {
-								this.awaiting[i].menu.buttons[buttonIndex].handle(reaction.message, user);
+        this.client.on("messageReactionAdd", (reaction, user) => {
+            if (!user.bot) {
+                for (let i = 0; i < this.awaiting.length; i++) {
+                    if (this.awaiting[i].messageId === reaction.message.id) {
+                        for (let buttonIndex = 0; buttonIndex < this.awaiting[i].menu.buttons.length; buttonIndex++) {
+                            if (this.awaiting[i].menu.buttons[buttonIndex].emoji === reaction.emoji.name) {
+                                this.awaiting[i].menu.buttons[buttonIndex].handle(reaction.message, user);
 
-								break;
-							}
-						}
-					}
-				}
-			}
-		});
-	}
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
 
-	/**
-	 * @param {*} channel
-	 * @param {EmojiMenu} menu
-	 */
-	async show(channel, menu) {
-		const sentMessage = await channel.send(menu.content);
+    /**
+     * @param {*} channel
+     * @param {EmojiMenu} menu
+     */
+    async show(channel, menu) {
+        const sentMessage = await channel.send(menu.content);
 
-		for (let i = 0; i < menu.buttons.length; i++) {
-			await sentMessage.react(menu.buttons[i].emoji);
-		}
+        for (let i = 0; i < menu.buttons.length; i++) {
+            await sentMessage.react(menu.buttons[i].emoji);
+        }
 
-		this.awaiting.push({
-			menu: menu,
-			channel: channel,
-			messageId: sentMessage.id
-		});
+        this.awaiting.push({
+            menu: menu,
+            channel: channel,
+            messageId: sentMessage.id
+        });
 
-		return sentMessage;
-	}
+        return sentMessage;
+    }
 }

@@ -2,153 +2,153 @@
 
 // TODO: Implement the Collection class.
 export default class FeatureManager /* extends Collection */ {
-	/**
-	 * @param {Bot} bot
-	 * @param {Array<Feature>} features
-	 */
-	constructor(bot, features = []) {
-		// super(features);
+    /**
+     * @param {Bot} bot
+     * @param {Array<Feature>} features
+     */
+    constructor(bot, features = []) {
+        // super(features);
 
-		/**
-		 * @type {Array<Feature>}
-		 * @private
-		 * @readonly
-		 */
-		this.features = features;
+        /**
+         * @type {Array<Feature>}
+         * @private
+         * @readonly
+         */
+        this.features = features;
 
-		/**
-		 * @type {Bot}
-		 * @private
-		 * @readonly
-		 */
-		this.bot = bot;
-	}
+        /**
+         * @type {Bot}
+         * @private
+         * @readonly
+         */
+        this.bot = bot;
+    }
 
-	/**
-	 * Enable a feature
-	 * @param {Feature} feature
-	 * @return {Boolean}
-	 */
-	enable(feature) {
-		if (feature.canEnable(this.bot)) {
-			feature.enabled(this.bot);
-			feature.isEnabled = true;
+    /**
+     * Enable a feature
+     * @param {Feature} feature
+     * @return {Boolean}
+     */
+    enable(feature) {
+        if (feature.canEnable(this.bot)) {
+            feature.enabled(this.bot);
+            feature.isEnabled = true;
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Enable multiple features at once
-	 * @param {Array<Feature>} features
-	 * @return {Number}
-	 */
-	enableMultiple(features) {
-		let totalEnabled = 0;
+    /**
+     * Enable multiple features at once
+     * @param {Array<Feature>} features
+     * @return {Number}
+     */
+    enableMultiple(features) {
+        let totalEnabled = 0;
 
-		for (let i = 0; i < features.length; i++) {
-			if (this.enable(features[i])) {
-				totalEnabled++;
-			}
-		}
+        for (let i = 0; i < features.length; i++) {
+            if (this.enable(features[i])) {
+                totalEnabled++;
+            }
+        }
 
-		return totalEnabled;
-	}
+        return totalEnabled;
+    }
 
-	/**
-	 * Enable all the currently registered features
-	 * @return {Number}
-	 */
-	enableAll() {
-		return this.enableMultiple(this.features);
-	}
+    /**
+     * Enable all the currently registered features
+     * @return {Number}
+     */
+    enableAll() {
+        return this.enableMultiple(this.features);
+    }
 
-	/**
-	 * Disable a feature
-	 * @param {Feature} feature
-	 */
-	disable(feature) {
-		feature.disabled(this.bot);
-		feature.isEnabled = false;
-	}
+    /**
+     * Disable a feature
+     * @param {Feature} feature
+     */
+    disable(feature) {
+        feature.disabled(this.bot);
+        feature.isEnabled = false;
+    }
 
-	/**
-	 * Disable multiple features at once
-	 * @param {Array<Feature>} features
-	 */
-	disableMultiple(features) {
-		for (let i = 0; i < features.length; i++) {
-			this.disable(features[i], this.bot);
-		}
-	}
+    /**
+     * Disable multiple features at once
+     * @param {Array<Feature>} features
+     */
+    disableMultiple(features) {
+        for (let i = 0; i < features.length; i++) {
+            this.disable(features[i], this.bot);
+        }
+    }
 
-	/**
-	 * Disable all the currently registered features
-	 */
-	disableAll() {
-		this.disableMultiple(this.features);
-	}
+    /**
+     * Disable all the currently registered features
+     */
+    disableAll() {
+        this.disableMultiple(this.features);
+    }
 
-	/**
-	 * Reload all currently registered and enabled features
-	 * @return {Number}
-	 */
-	reloadAll() {
-		this.disableAll();
+    /**
+     * Reload all currently registered and enabled features
+     * @return {Number}
+     */
+    reloadAll() {
+        this.disableAll();
 
-		return this.enableAll();
-	}
+        return this.enableAll();
+    }
 
-	// TODO: Replace by Collection's native methods
-	/**
-	 * Register a feature
-	 * @param {Feature} feature
-	 */
-	register(feature) {
-		this.features.push(feature);
-	}
+    // TODO: Replace by Collection's native methods
+    /**
+     * Register a feature
+     * @param {Feature} feature
+     */
+    register(feature) {
+        this.features.push(feature);
+    }
 
-	/**
-	 * Register multiple features at once
-	 * @param {Array<Feature>} features
-	 */
-	registerMultiple(features) {
-		for (let i = 0; i < features.length; i++) {
-			this.register(features[i]);
-		}
-	}
+    /**
+     * Register multiple features at once
+     * @param {Array<Feature>} features
+     */
+    registerMultiple(features) {
+        for (let i = 0; i < features.length; i++) {
+            this.register(features[i]);
+        }
+    }
 
-	/**
-	 * Determine whether a feature is registered
-	 * @param {String} key
-	 * @return {Boolean}
-	 */
-	isRegistered(key) {
-		return this.get(key) != null;
-	}
+    /**
+     * Determine whether a feature is registered
+     * @param {String} key
+     * @return {Boolean}
+     */
+    isRegistered(key) {
+        return this.get(key) != null;
+    }
 
-	/**
-	 * Determine whether a feature is enabled
-	 * @param {String} key
-	 * @return {Boolean}
-	 */
-	isEnabled(key) {
-		return this.get(key).isEnabled;
-	}
+    /**
+     * Determine whether a feature is enabled
+     * @param {String} key
+     * @return {Boolean}
+     */
+    isEnabled(key) {
+        return this.get(key).isEnabled;
+    }
 
-	/**
-	 * @param {String} key
-	 * @return {(Feature|Null)}
-	 */
-	get(key) {
-		for (let i = 0; i < this.features.length; i++) {
-			if (this.features[i].key === key) {
-				return this.features[i];
-			}
-		}
+    /**
+     * @param {String} key
+     * @return {(Feature|Null)}
+     */
+    get(key) {
+        for (let i = 0; i < this.features.length; i++) {
+            if (this.features[i].key === key) {
+                return this.features[i];
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

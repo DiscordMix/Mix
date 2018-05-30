@@ -21,234 +21,234 @@ const fs = require("fs");
  * @extends EventEmitter
  */
 export default class Bot extends EventEmitter {
-	/**
-	 * @param {Object} data
-	 */
-	constructor(data) {
-		super();
+    /**
+     * @param {Object} data
+     */
+    constructor(data) {
+        super();
 
-		// Setup the class
-		this.setup(data);
-	}
+        // Setup the class
+        this.setup(data);
+    }
 
-	/**
-	 * Setup the bot from an object
-	 * @param {Object} data
-	 * @return {Promise}
-	 */
-	async setup(data) {
-		Log.verbose("[Bot.setup] Validating data object");
+    /**
+     * Setup the bot from an object
+     * @param {Object} data
+     * @return {Promise}
+     */
+    async setup(data) {
+        Log.verbose("[Bot.setup] Validating data object");
 
-		if (!Typer.validate({
-			paths: "!object",
-			authStore: ":authStore",
-			dataStore: ":dataStore",
-			argumentTypes: "object"
-		}, data, {
-			authStore: (val) => val instanceof CommandAuthStore,
-			dataStore: (val) => val instanceof DataStore
-		})) {
-			Log.throw("[Bot.setup] Invalid data object provided");
-		}
-		else if (!Typer.validate({
-			settings: "!string",
-			commands: "!string",
-			emojis: "string"
-		}, data.paths)) {
-			Log.throw("[Bot.setup] Invalid paths object");
-		}
+        if (!Typer.validate({
+            paths: "!object",
+            authStore: ":authStore",
+            dataStore: ":dataStore",
+            argumentTypes: "object"
+        }, data, {
+            authStore: (val) => val instanceof CommandAuthStore,
+            dataStore: (val) => val instanceof DataStore
+        })) {
+            Log.throw("[Bot.setup] Invalid data object provided");
+        }
+        else if (!Typer.validate({
+            settings: "!string",
+            commands: "!string",
+            emojis: "string"
+        }, data.paths)) {
+            Log.throw("[Bot.setup] Invalid paths object");
+        }
 
-		/**
-		 * @type {Settings}
-		 * @readonly
-		 */
-		this.settings = new Settings(data.paths.settings);
+        /**
+         * @type {Settings}
+         * @readonly
+         */
+        this.settings = new Settings(data.paths.settings);
 
-		/**
-		 * @type {DataStore}
-		 * @readonly
-		 */
-		this.dataStore = data.dataStore;
+        /**
+         * @type {DataStore}
+         * @readonly
+         */
+        this.dataStore = data.dataStore;
 
-		/**
-		 * @type {CommandAuthStore}
-		 * @readonly
-		 */
-		this.authStore = data.authStore;
+        /**
+         * @type {CommandAuthStore}
+         * @readonly
+         */
+        this.authStore = data.authStore;
 
-		/**
-		 * @type {(EmojiCollection|Null)}
-		 * @readonly
-		 */
-		this.emojis = data.paths.emojis ? EmojiCollection.fromFile(data.paths.emojis) : null;
+        /**
+         * @type {(EmojiCollection|Null)}
+         * @readonly
+         */
+        this.emojis = data.paths.emojis ? EmojiCollection.fromFile(data.paths.emojis) : null;
 
-		/**
-		 * @type {Discord.Client}
-		 * @readonly
-		 */
-		this.client = new Discord.Client();
+        /**
+         * @type {Discord.Client}
+         * @readonly
+         */
+        this.client = new Discord.Client();
 
-		/**
-		 * @type {CommandManager}
-		 * @readonly
-		 */
-		this.commands = new CommandManager(this, data.paths.commands, this.authStore, data.argumentTypes ? data.argumentTypes : {});
+        /**
+         * @type {CommandManager}
+         * @readonly
+         */
+        this.commands = new CommandManager(this, data.paths.commands, this.authStore, data.argumentTypes ? data.argumentTypes : {});
 
-		/**
-		 * @type {FeatureManager}
-		 * @readonly
-		 */
-		this.features = new FeatureManager();
+        /**
+         * @type {FeatureManager}
+         * @readonly
+         */
+        this.features = new FeatureManager();
 
-		/**
-		 * @type {CommandLoader}
-		 * @readonly
-		 */
-		this.commandLoader = new CommandLoader(this.commands);
+        /**
+         * @type {CommandLoader}
+         * @readonly
+         */
+        this.commandLoader = new CommandLoader(this.commands);
 
-		/**
-		 * @type {ConsoleInterface}
-		 * @readonly
-		 */
-		this.console = new ConsoleInterface();
+        /**
+         * @type {ConsoleInterface}
+         * @readonly
+         */
+        this.console = new ConsoleInterface();
 
-		/**
-		 * @type {EmojiMenuManager}
-		 * @readonly
-		 */
-		this.menus = new EmojiMenuManager(this.client);
+        /**
+         * @type {EmojiMenuManager}
+         * @readonly
+         */
+        this.menus = new EmojiMenuManager(this.client);
 
-		// Load commands
-		await this.commandLoader.loadAll();
+        // Load commands
+        await this.commandLoader.loadAll();
 
-		// Setup the Discord client's events
-		this.setupEvents();
+        // Setup the Discord client's events
+        this.setupEvents();
 
-		Log.success("[Bot.setup] Bot setup completed");
-	}
+        Log.success("[Bot.setup] Bot setup completed");
+    }
 
-	/**
-	 * Setup the client's events
-	 */
-	setupEvents() {
-		// TODO: Find better position
-		// TODO: Merge this resolvers with the (if provided) provided
-		// ones by the user.
-		const resolvers = {
-			user: (arg) => Utils.resolveId(arg),
-			channel: (arg) => Utils.resolveId(arg),
-			role: (arg) => Utils.resolveId(arg),
-			state: (arg) => Utils.translateState(arg)
-		};
+    /**
+     * Setup the client's events
+     */
+    setupEvents() {
+        // TODO: Find better position
+        // TODO: Merge this resolvers with the (if provided) provided
+        // ones by the user.
+        const resolvers = {
+            user: (arg) => Utils.resolveId(arg),
+            channel: (arg) => Utils.resolveId(arg),
+            role: (arg) => Utils.resolveId(arg),
+            state: (arg) => Utils.translateState(arg)
+        };
 
-		// Discord client events
-		this.client.on("ready", () => {
-			if (!this.console.ready) {
-				// Setup the console command interface
-				this.console.setup(this);
-			}
+        // Discord client events
+        this.client.on("ready", () => {
+            if (!this.console.ready) {
+                // Setup the console command interface
+                this.console.setup(this);
+            }
 
-			// Setup the command auth store
-			this.setupAuthStore();
+            // Setup the command auth store
+            this.setupAuthStore();
 
-			Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag}`);
-			Log.success("[Bot.setupEvents] Ready");
-		});
+            Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag}`);
+            Log.success("[Bot.setupEvents] Ready");
+        });
 
-		this.client.on("message", async (message) => {
-			if (!message.author.bot) {
-				if (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
-					this.commands.handle(
-						new CommandExecutionContext(
-							message,
-							CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
-							this,
-							this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),
-							this.emojis
-						),
+        this.client.on("message", async (message) => {
+            if (!message.author.bot) {
+                if (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
+                    this.commands.handle(
+                        new CommandExecutionContext(
+                            message,
+                            CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
+                            this,
+                            this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),
+                            this.emojis
+                        ),
 
-						CommandParser.parse(
-							message.content,
-							this.commands,
-							this.settings.general.prefix
-						)
-					);
-				}
-				else if (message.content === "?prefix") {
-					message.channel.send(`Command prefix: **${this.settings.general.prefix}**`);
-				}
-			}
-		});
-	}
+                        CommandParser.parse(
+                            message.content,
+                            this.commands,
+                            this.settings.general.prefix
+                        )
+                    );
+                }
+                else if (message.content === "?prefix") {
+                    message.channel.send(`Command prefix: **${this.settings.general.prefix}**`);
+                }
+            }
+        });
+    }
 
-	setupAuthStore() {
-		const guilds = this.client.guilds.array();
+    setupAuthStore() {
+        const guilds = this.client.guilds.array();
 
-		let entries = 0;
+        let entries = 0;
 
-		for (let i = 0; i < guilds.length; i++) {
-			if (!this.authStore.contains(guilds[i].id)) {
-				this.authStore.create(guilds[i].id);
-				entries++;
-			}
-		}
+        for (let i = 0; i < guilds.length; i++) {
+            if (!this.authStore.contains(guilds[i].id)) {
+                this.authStore.create(guilds[i].id);
+                entries++;
+            }
+        }
 
-		if (entries > 0) {
-			Log.success(`[Bot.setupAuthStore] Added a total of ${entries} new auth store entries`);
-		}
+        if (entries > 0) {
+            Log.success(`[Bot.setupAuthStore] Added a total of ${entries} new auth store entries`);
+        }
 
-		Log.success("[Bot.setupAuthStore] Auth store setup completed");
-	}
+        Log.success("[Bot.setupAuthStore] Auth store setup completed");
+    }
 
-	/**
-	 * Connect the client
-	 * @return {Promise}
-	 */
-	async connect() {
-		Log.verbose("[Bot.connect] Starting");
-		await this.client.login(this.settings.general.token);
-	}
+    /**
+     * Connect the client
+     * @return {Promise}
+     */
+    async connect() {
+        Log.verbose("[Bot.connect] Starting");
+        await this.client.login(this.settings.general.token);
+    }
 
-	/**
-	 * Restart the bot's client
-	 * @todo Use the reload modules param
-	 * @param {Boolean} reloadModules Whether to reload all modules
-	 * @return {Promise}
-	 */
-	async restart(reloadModules = true) {
-		Log.verbose("[Bot.restart] Restarting");
+    /**
+     * Restart the bot's client
+     * @todo Use the reload modules param
+     * @param {Boolean} reloadModules Whether to reload all modules
+     * @return {Promise}
+     */
+    async restart(reloadModules = true) {
+        Log.verbose("[Bot.restart] Restarting");
 
-		if (reloadModules) {
-			// TODO: Actually reload all the features and commands
-			// this.features.reloadAll(this);
-			await this.commandLoader.loadAll();
-		}
+        if (reloadModules) {
+            // TODO: Actually reload all the features and commands
+            // this.features.reloadAll(this);
+            await this.commandLoader.loadAll();
+        }
 
-		await this.disconnect();
-		await this.connect();
-	}
+        await this.disconnect();
+        await this.connect();
+    }
 
-	/**
-	 * Disconnect the client
-	 * @return {Promise}
-	 */
-	async disconnect() {
-		this.settings.save();
-		await this.client.destroy();
-		Log.info("[Bot.disconnect] Disconnected");
-	}
+    /**
+     * Disconnect the client
+     * @return {Promise}
+     */
+    async disconnect() {
+        this.settings.save();
+        await this.client.destroy();
+        Log.info("[Bot.disconnect] Disconnected");
+    }
 
-	/**
-	 * Clear all the files inside the temp folder
-	 * @return {Promise}
-	 */
-	static async clearTemp() {
-		if (fs.existsSync("./temp")) {
-			fs.readdir("./temp", (error, files) => {
-				for (let i = 0; i < files.length; i++) {
-					fs.unlink(`./temp/${files[i]}`);
-				}
-			});
-		}
-	}
+    /**
+     * Clear all the files inside the temp folder
+     * @return {Promise}
+     */
+    static async clearTemp() {
+        if (fs.existsSync("./temp")) {
+            fs.readdir("./temp", (error, files) => {
+                for (let i = 0; i < files.length; i++) {
+                    fs.unlink(`./temp/${files[i]}`);
+                }
+            });
+        }
+    }
 }

@@ -171,7 +171,7 @@ export default class CommandManager /* extends Collection */ {
                 this.handlers[CommandManagerEvent.DisallowedEnvironment](context, command);
             }
             else {
-                context.message.channel.send("That command may not be used here. Sorry!");
+                context.message.channel.send("That command may not be used here.");
             }
         }
         else if (!command.isEnabled) {

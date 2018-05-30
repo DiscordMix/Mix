@@ -78,18 +78,18 @@ bot.on("commandWillExecute", (e) => {
 Commands are automatically loaded as modules. Below are the properties you may use to define your commands:
 
 
-| Property          | Type                                                                                         | Description                                        | Required? | Default value                                  |
-|-------------------|----------------------------------------------------------------------------------------------|----------------------------------------------------|-----------|------------------------------------------------|
-| meta.name         | string                                                                                       | The name of your command                           | **Yes**   | -                                              |
-| executed          | function                                                                                     | When your command is executed                      | **Yes**   | -                                              |
-| canExecute        | function                                                                                     | Determine whether your command can execute         | No        | true                                           |
-| meta.desc         | string                                                                                       | The description of your command                    | No        | "No description provided"                      |
-| meta.args         | object                                                                                       | The types of arguments that your command accepts   | No        | {}                                             |
-| meta.enabled      | boolean                                                                                      | Whether your command is enabled                    | No        | true                                           |
-| meta.aliases      | array(string)                                                                                | Your command's aliases                             | No        | []                                             |
-| restrict.auth     | number                                                                                       | The required authorization level of your command   | No        | 0                                              |
-| restrict.cooldown | number                                                                                       | The required delay between each command execution  | No        | 0                                              |
-| restrict.env      | array([ChatEnvironment](http://www.example.com)) | [ChatEnvironment](http://www.example.com) | The environments where the command may be executed | No        | [ChatEnvironment](http://example.com).Anywhere |
+| Property          | Type                                                                                          | Description                                        | Required? | Default value                                  |
+|-------------------|-----------------------------------------------------------------------------------------------|----------------------------------------------------|-----------|------------------------------------------------|
+| meta.name         | string                                                                                        | The name of your command                           | **Yes**   | -                                              |
+| executed          | function                                                                                      | When your command is executed                      | **Yes**   | -                                              |
+| canExecute        | function                                                                                      | Determine whether your command can execute         | No        | true                                           |
+| meta.desc         | string                                                                                        | The description of your command                    | No        | "No description provided"                      |
+| meta.args         | object                                                                                        | The types of arguments that your command accepts   | No        | {}                                             |
+| meta.enabled      | boolean                                                                                       | Whether your command is enabled                    | No        | true                                           |
+| meta.aliases      | array(string)                                                                                 | Your command's aliases                             | No        | []                                             |
+| restrict.auth     | number                                                                                        | The required authorization level of your command   | No        | 0                                              |
+| restrict.cooldown | number                                                                                        | The required delay between each command execution  | No        | 0                                              |
+| restrict.env      | array([ChatEnvironment](http://www.example.com)) or [ChatEnvironment](http://www.example.com) | The environments where the command may be executed | No        | [ChatEnvironment](http://example.com).Anywhere |
 
 Example:
 

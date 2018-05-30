@@ -154,9 +154,9 @@ export default class CommandManager /* extends Collection */ {
 		else if (!command.isEnabled) {
 			await context.fail("That command is disabled and may not be used.");
 		}
-		else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.authLevel)) {
+		else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
 			// TODO: New AuthStore system
-			const minAuthority = AccessLevelType.toString(command.authLevel);
+			const minAuthority = AccessLevelType.toString(command.auth);
 
 			context.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
 		}

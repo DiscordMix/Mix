@@ -14,7 +14,9 @@ Anvil is a powerful, fully-modular and self-contained bot development framework.
 
 => [Click here to view the NPM package](https://www.npmjs.com/package/discord-anvil)
 
-=> [Click here to view the docs](https://cloudrex.github.io/Anvil/)
+=> [Click here to view the library reference](https://cloudrex.github.io/Anvil/)
+
+=> [Click here to view the documentation](https://cloudrex.gitbook.io/anvil/)
 
 *Powering the [Tux](https://github.com/CloudRex/Tux) and [War](https://github.com/CloudRex/War) bots | Powered by [Discord.js](https://discord.js.org/)*
 

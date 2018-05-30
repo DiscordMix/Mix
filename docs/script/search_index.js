@@ -12,6 +12,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "discord-anvil/src/core/chat-environment.js~chatenvironment",
+    "variable/index.html#static-variable-ChatEnvironment",
+    "<span>ChatEnvironment</span> <span class=\"search-result-import-path\">discord-anvil/src/core/chat-environment.js</span>",
+    "variable"
+  ],
+  [
     "discord-anvil/src/collections/collection.js~collection",
     "class/src/collections/collection.js~Collection.html",
     "<span>Collection</span> <span class=\"search-result-import-path\">discord-anvil/src/collections/collection.js</span>",
@@ -34,12 +40,6 @@ window.esdocSearchIndex = [
     "class/src/commands/command-auth-store.js~CommandAuthStore.html",
     "<span>CommandAuthStore</span> <span class=\"search-result-import-path\">discord-anvil/src/commands/command-auth-store.js</span>",
     "class"
-  ],
-  [
-    "discord-anvil/src/commands/command-category-type.js~commandcategorytype",
-    "variable/index.html#static-variable-CommandCategoryType",
-    "<span>CommandCategoryType</span> <span class=\"search-result-import-path\">discord-anvil/src/commands/command-category-type.js</span>",
-    "variable"
   ],
   [
     "discord-anvil/src/events/command-executed-event.js~commandexecutedevent",
@@ -132,6 +132,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "discord-anvil/src/collections/collection.js~eventemitter",
+    "variable/index.html#static-variable-EventEmitter",
+    "<span>EventEmitter</span> <span class=\"search-result-import-path\">discord-anvil/src/collections/collection.js</span>",
+    "variable"
+  ],
+  [
     "discord-anvil/src/features/feature.js~feature",
     "class/src/features/feature.js~Feature.html",
     "<span>Feature</span> <span class=\"search-result-import-path\">discord-anvil/src/features/feature.js</span>",
@@ -192,15 +198,21 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "discord-anvil/src/core/rgb.js~rgb",
-    "class/src/core/rgb.js~RGB.html",
-    "<span>RGB</span> <span class=\"search-result-import-path\">discord-anvil/src/core/rgb.js</span>",
+    "discord-anvil/src/core/permission.js~permission",
+    "variable/index.html#static-variable-Permission",
+    "<span>Permission</span> <span class=\"search-result-import-path\">discord-anvil/src/core/permission.js</span>",
+    "variable"
+  ],
+  [
+    "discord-anvil/src/misc/rgb.js~rgb",
+    "class/src/misc/rgb.js~RGB.html",
+    "<span>RGB</span> <span class=\"search-result-import-path\">discord-anvil/src/misc/rgb.js</span>",
     "class"
   ],
   [
-    "discord-anvil/src/core/rgba.js~rgba",
-    "class/src/core/rgba.js~RGBA.html",
-    "<span>RGBA</span> <span class=\"search-result-import-path\">discord-anvil/src/core/rgba.js</span>",
+    "discord-anvil/src/misc/rgba.js~rgba",
+    "class/src/misc/rgba.js~RGBA.html",
+    "<span>RGBA</span> <span class=\"search-result-import-path\">discord-anvil/src/misc/rgba.js</span>",
     "class"
   ],
   [
@@ -666,12 +678,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/commands/command-category-type.js",
-    "file/src/commands/command-category-type.js.html",
-    "src/commands/command-category-type.js",
-    "file"
-  ],
-  [
     "src/commands/command-execution-context.js",
     "file/src/commands/command-execution-context.js.html",
     "src/commands/command-execution-context.js",
@@ -912,6 +918,24 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/commands/command-manager.js~commandmanager#unloadall",
+    "class/src/commands/command-manager.js~CommandManager.html#instance-method-unloadAll",
+    "src/commands/command-manager.js~CommandManager#unloadAll",
+    "method"
+  ],
+  [
+    "src/commands/command-manager.js~commandmanager.validatechanneltypeenv",
+    "class/src/commands/command-manager.js~CommandManager.html#static-method-validateChannelTypeEnv",
+    "src/commands/command-manager.js~CommandManager.validateChannelTypeEnv",
+    "method"
+  ],
+  [
+    "src/commands/command-manager.js~commandmanager.validateenvironment",
+    "class/src/commands/command-manager.js~CommandManager.html#static-method-validateEnvironment",
+    "src/commands/command-manager.js~CommandManager.validateEnvironment",
+    "method"
+  ],
+  [
     "src/commands/command-parser.js",
     "file/src/commands/command-parser.js.html",
     "src/commands/command-parser.js",
@@ -966,9 +990,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/commands/command.js~command#authlevel",
-    "class/src/commands/command.js~Command.html#instance-member-authLevel",
-    "src/commands/command.js~Command#authLevel",
+    "src/commands/command.js~command#auth",
+    "class/src/commands/command.js~Command.html#instance-member-auth",
+    "src/commands/command.js~Command#auth",
     "member"
   ],
   [
@@ -978,21 +1002,27 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/commands/command.js~command#category",
-    "class/src/commands/command.js~Command.html#instance-member-category",
-    "src/commands/command.js~Command#category",
-    "member"
-  ],
-  [
     "src/commands/command.js~command#constructor",
     "class/src/commands/command.js~Command.html#instance-constructor-constructor",
     "src/commands/command.js~Command#constructor",
     "method"
   ],
   [
+    "src/commands/command.js~command#cooldown",
+    "class/src/commands/command.js~Command.html#instance-member-cooldown",
+    "src/commands/command.js~Command#cooldown",
+    "member"
+  ],
+  [
     "src/commands/command.js~command#description",
     "class/src/commands/command.js~Command.html#instance-member-description",
     "src/commands/command.js~Command#description",
+    "member"
+  ],
+  [
+    "src/commands/command.js~command#environment",
+    "class/src/commands/command.js~Command.html#instance-member-environment",
+    "src/commands/command.js~Command#environment",
     "member"
   ],
   [
@@ -1017,6 +1047,12 @@ window.esdocSearchIndex = [
     "src/commands/command.js~command#name",
     "class/src/commands/command.js~Command.html#instance-member-name",
     "src/commands/command.js~Command#name",
+    "member"
+  ],
+  [
+    "src/commands/command.js~command#permissions",
+    "class/src/commands/command.js~Command.html#instance-member-permissions",
+    "src/commands/command.js~Command#permissions",
     "member"
   ],
   [
@@ -1059,6 +1095,12 @@ window.esdocSearchIndex = [
     "src/commands/json-auth-store.js~jsonauthstore#reload",
     "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-method-reload",
     "src/commands/json-auth-store.js~JsonAuthStore#reload",
+    "method"
+  ],
+  [
+    "src/commands/json-auth-store.js~jsonauthstore#save",
+    "class/src/commands/json-auth-store.js~JsonAuthStore.html#instance-method-save",
+    "src/commands/json-auth-store.js~JsonAuthStore#save",
     "method"
   ],
   [
@@ -1174,6 +1216,18 @@ window.esdocSearchIndex = [
     "file/src/console/console-interface.js.html",
     "src/console/console-interface.js",
     "file"
+  ],
+  [
+    "src/console/console-interface.js~consoleinterface#constructor",
+    "class/src/console/console-interface.js~ConsoleInterface.html#instance-constructor-constructor",
+    "src/console/console-interface.js~ConsoleInterface#constructor",
+    "method"
+  ],
+  [
+    "src/console/console-interface.js~consoleinterface#ready",
+    "class/src/console/console-interface.js~ConsoleInterface.html#instance-member-ready",
+    "src/console/console-interface.js~ConsoleInterface#ready",
+    "member"
   ],
   [
     "src/console/console-interface.js~consoleinterface#setup",
@@ -1296,6 +1350,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/core/chat-environment.js",
+    "file/src/core/chat-environment.js.html",
+    "src/core/chat-environment.js",
+    "file"
+  ],
+  [
     "src/core/log.js",
     "file/src/core/log.js.html",
     "src/core/log.js",
@@ -1350,76 +1410,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/core/rgb.js",
-    "file/src/core/rgb.js.html",
-    "src/core/rgb.js",
+    "src/core/permission.js",
+    "file/src/core/permission.js.html",
+    "src/core/permission.js",
     "file"
-  ],
-  [
-    "src/core/rgb.js~rgb#blue",
-    "class/src/core/rgb.js~RGB.html#instance-member-blue",
-    "src/core/rgb.js~RGB#blue",
-    "member"
-  ],
-  [
-    "src/core/rgb.js~rgb#constructor",
-    "class/src/core/rgb.js~RGB.html#instance-constructor-constructor",
-    "src/core/rgb.js~RGB#constructor",
-    "method"
-  ],
-  [
-    "src/core/rgb.js~rgb#green",
-    "class/src/core/rgb.js~RGB.html#instance-member-green",
-    "src/core/rgb.js~RGB#green",
-    "member"
-  ],
-  [
-    "src/core/rgb.js~rgb#red",
-    "class/src/core/rgb.js~RGB.html#instance-member-red",
-    "src/core/rgb.js~RGB#red",
-    "member"
-  ],
-  [
-    "src/core/rgb.js~rgb#tostring",
-    "class/src/core/rgb.js~RGB.html#instance-method-toString",
-    "src/core/rgb.js~RGB#toString",
-    "method"
-  ],
-  [
-    "src/core/rgba.js",
-    "file/src/core/rgba.js.html",
-    "src/core/rgba.js",
-    "file"
-  ],
-  [
-    "src/core/rgba.js~rgba#alpha",
-    "class/src/core/rgba.js~RGBA.html#instance-member-alpha",
-    "src/core/rgba.js~RGBA#alpha",
-    "member"
-  ],
-  [
-    "src/core/rgba.js~rgba#constructor",
-    "class/src/core/rgba.js~RGBA.html#instance-constructor-constructor",
-    "src/core/rgba.js~RGBA#constructor",
-    "method"
-  ],
-  [
-    "src/core/rgba.js~rgba#toobject",
-    "class/src/core/rgba.js~RGBA.html#instance-method-toObject",
-    "src/core/rgba.js~RGBA#toObject",
-    "method"
-  ],
-  [
-    "src/core/rgba.js~rgba#tostring",
-    "class/src/core/rgba.js~RGBA.html#instance-method-toString",
-    "src/core/rgba.js~RGBA#toString",
-    "method"
-  ],
-  [
-    "src/core/rgba.js~rgba.fromhex",
-    "class/src/core/rgba.js~RGBA.html#static-method-fromHex",
-    "src/core/rgba.js~RGBA.fromHex",
-    "method"
   ],
   [
     "src/core/settings.js",
@@ -1569,6 +1563,12 @@ window.esdocSearchIndex = [
     "src/core/utils.js~utils.timeago",
     "class/src/core/utils.js~Utils.html#static-method-timeAgo",
     "src/core/utils.js~Utils.timeAgo",
+    "method"
+  ],
+  [
+    "src/core/utils.js~utils.timeagofromnow",
+    "class/src/core/utils.js~Utils.html#static-method-timeAgoFromNow",
+    "src/core/utils.js~Utils.timeAgoFromNow",
     "method"
   ],
   [
@@ -2313,6 +2313,78 @@ window.esdocSearchIndex = [
     "src/message/message-builder.js~messagebuilder#underlined",
     "class/src/message/message-builder.js~MessageBuilder.html#instance-method-underlined",
     "src/message/message-builder.js~MessageBuilder#underlined",
+    "method"
+  ],
+  [
+    "src/misc/rgb.js",
+    "file/src/misc/rgb.js.html",
+    "src/misc/rgb.js",
+    "file"
+  ],
+  [
+    "src/misc/rgb.js~rgb#blue",
+    "class/src/misc/rgb.js~RGB.html#instance-member-blue",
+    "src/misc/rgb.js~RGB#blue",
+    "member"
+  ],
+  [
+    "src/misc/rgb.js~rgb#constructor",
+    "class/src/misc/rgb.js~RGB.html#instance-constructor-constructor",
+    "src/misc/rgb.js~RGB#constructor",
+    "method"
+  ],
+  [
+    "src/misc/rgb.js~rgb#green",
+    "class/src/misc/rgb.js~RGB.html#instance-member-green",
+    "src/misc/rgb.js~RGB#green",
+    "member"
+  ],
+  [
+    "src/misc/rgb.js~rgb#red",
+    "class/src/misc/rgb.js~RGB.html#instance-member-red",
+    "src/misc/rgb.js~RGB#red",
+    "member"
+  ],
+  [
+    "src/misc/rgb.js~rgb#tostring",
+    "class/src/misc/rgb.js~RGB.html#instance-method-toString",
+    "src/misc/rgb.js~RGB#toString",
+    "method"
+  ],
+  [
+    "src/misc/rgba.js",
+    "file/src/misc/rgba.js.html",
+    "src/misc/rgba.js",
+    "file"
+  ],
+  [
+    "src/misc/rgba.js~rgba#alpha",
+    "class/src/misc/rgba.js~RGBA.html#instance-member-alpha",
+    "src/misc/rgba.js~RGBA#alpha",
+    "member"
+  ],
+  [
+    "src/misc/rgba.js~rgba#constructor",
+    "class/src/misc/rgba.js~RGBA.html#instance-constructor-constructor",
+    "src/misc/rgba.js~RGBA#constructor",
+    "method"
+  ],
+  [
+    "src/misc/rgba.js~rgba#toobject",
+    "class/src/misc/rgba.js~RGBA.html#instance-method-toObject",
+    "src/misc/rgba.js~RGBA#toObject",
+    "method"
+  ],
+  [
+    "src/misc/rgba.js~rgba#tostring",
+    "class/src/misc/rgba.js~RGBA.html#instance-method-toString",
+    "src/misc/rgba.js~RGBA#toString",
+    "method"
+  ],
+  [
+    "src/misc/rgba.js~rgba.fromhex",
+    "class/src/misc/rgba.js~RGBA.html#static-method-fromHex",
+    "src/misc/rgba.js~RGBA.fromHex",
     "method"
   ],
   [

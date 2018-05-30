@@ -102,13 +102,13 @@ export default class Command {
         const methods = Typer.validate({
             executed: "!function",
             meta: "!object",
-            canExecute: "function"
+            canExecute: "function",
+            restrict: "object"
         }, data);
 
         const meta = Typer.validate({
             name: "!string",
             desc: "!string",
-            authLevel: "!number",
             args: "object",
             aliases: ":array",
             isEnabled: "boolean",
@@ -116,6 +116,13 @@ export default class Command {
             array: (val) => val instanceof Array
         });
 
-        return (methods && meta);
+        const restrict = Typer.validate({
+            auth: "number",
+            permissions: ":array"
+        }, data.restrict, {
+            array: (val) => val instanceof Array
+        });
+
+        return (methods && meta && restrict);
     }
 }

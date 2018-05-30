@@ -1,6 +1,6 @@
-import AccessLevelType from "../commands/access-level-type";
 import CommandExecutedEvent from "../events/command-executed-event";
 import Log from "../core/log";
+import Permission from "../core/permission";
 
 const Typer = require("@raxor1234/typer/typer");
 // import Collection from "../core/collection";
@@ -148,18 +148,19 @@ export default class CommandManager /* extends Collection */ {
      * @returns {Promise<Boolean>} Whether the command was successfully executed
      */
     async handle(context, command) {
+        // TODO: Add support for multiple environments (chat environments)
         if (!context.message.member) {
             context.message.channel.send("That command must be used in a text channel. Sorry!");
         }
         else if (!command.isEnabled) {
-            await context.fail("That command is disabled and may not be used.");
+            context.fail("That command is disabled and may not be used.");
         }
-        else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
-            // TODO: New AuthStore system
+        // TODO: New AuthStore system
+        /* else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
             const minAuthority = AccessLevelType.toString(command.auth);
 
             context.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
-        }
+        } */
         else if (context.arguments.length > command.maxArguments) {
             if (command.maxArguments > 0) {
                 context.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);
@@ -174,14 +175,15 @@ export default class CommandManager /* extends Collection */ {
         else if (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {
             context.fail("Invalid argument usage. Please use the `usage` command.");
         }
-        else if (command.permissions.length > 0 && !context.message.guild.me.hasPermission(command.permissions)) {
-            const permissions = command.permissions.map((permission) => `\`${permission}\``).join(", ");
+        else if (command.permissions.length > 0 && !context.message.guild.me.hasPermission(command.permissions.map((permissionObj) => permissionObj.permission))) {
+            const permissions = command.permissions.map((permission) => `\`${permission.name}\``).join(", ");
 
-            context.fail(`I need the following permissions to execute that command: ${permissions}`);
+            context.fail(`I need the following permission(s) to execute that command: ${permissions}`);
         }
         else {
             try {
                 const result = command.executed(context);
+
                 context.bot.emit("commandExecuted", new CommandExecutedEvent(command, context));
 
                 return result;

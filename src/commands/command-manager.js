@@ -156,9 +156,6 @@ export default class CommandManager /* extends Collection */ {
         else if (environment === ChatEnvironment.Private && type === "dm") {
             return true;
         }
-        else if (environment === ChatEnvironment.Group && type === "group") {
-            return true;
-        }
         else if (environment === ChatEnvironment.Guild && type === "text") {
             return true;
         }

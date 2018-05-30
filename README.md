@@ -40,9 +40,9 @@ const bot = new Bot({
     },
     
     /**
-     * This file will store our per-guild auth data,
-     * it will be automatically created if it doesn't
-     * exist.
+     * The auth store file will store our per-guild
+     * auth data, it will be automatically created if
+     * it doesn't exist.
      */
     authStore: new JsonAuthStore("auth-schema.json", "auth-store.json")
 });
@@ -61,7 +61,7 @@ settings.json: ([Click here](https://discordapp.com/developers/applications/me) 
 }
 ```
 
-auth-levels.json:
+auth-schema.json:
 ```json
 {
     "default": {

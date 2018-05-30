@@ -141,6 +141,6 @@ export default class ObjectAuthStore extends CommandAuthStore {
 	 * @return {Boolean} Whether the entry exists
 	 */
 	contains(guildId) {
-		return this.data[guildId] !== undefined;
+		return Object.keys(this.data).includes(guildId);
 	}
 }

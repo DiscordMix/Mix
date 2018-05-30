@@ -3,10 +3,6 @@ import Log from "../core/log";
 const EventEmitter = require("events");
 
 export default class CommandAuthStore extends EventEmitter {
-	constructor() {
-		super();
-	}
-
 	/**
 	 * @abstract
 	 * @param {Snowflake} guildId

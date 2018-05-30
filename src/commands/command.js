@@ -27,7 +27,7 @@ export default class Command {
          * @type {String}
          * @readonly
          */
-        this.description = data.meta.desc;
+        this.description = data.meta.desc ? data.meta.desc : "No description provided";
 
         /**
          * @type {Array<String>}
@@ -116,7 +116,7 @@ export default class Command {
 
         const meta = Typer.validate({
             name: "!string",
-            desc: "!string",
+            desc: "string",
             args: "object",
             aliases: ":array",
             isEnabled: "boolean",

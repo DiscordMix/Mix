@@ -8,7 +8,7 @@
 
 <br/>
 
-Anvil is a powerful fully-modular, self-contained bot development framework.
+Anvil is a powerful, fully-modular and self-contained bot development framework.
 
 **Note**: Anvil is a Discord client wrapper and not a Discord API library.
 
@@ -97,11 +97,11 @@ module.exports = {
 ```
 
 #### Building
-To build the project, use `npm run build`.
+To build the project, use `npm run build` or `yarn build` if using [yarn](https://yarnpkg.com/).
 
-To build the docs, use `npm run docs`.
+To build the docs, use `npm run docs` or `yarn docs`.
 
-Make sure that you have previously installed the project dependencies (`npm install`).
+Make sure that you have previously installed the project dependencies (`npm install` or `yarn`).
 
 
 #### Versioning

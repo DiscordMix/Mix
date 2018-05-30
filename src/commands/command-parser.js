@@ -1,3 +1,5 @@
+import Utils from "../core/utils";
+
 export default class CommandParser {
     /**
      * @param {String} commandString
@@ -16,12 +18,12 @@ export default class CommandParser {
     /**
      * @param {String} commandString
      * @param {CommandManager} manager
-     * @param {String} trigger
+     * @param {String} prefix
      * @returns {Boolean}
      */
-    static isValid(commandString, manager, trigger) {
-        if (commandString.startsWith(trigger)) {
-            return manager.isRegistered(this.getCommandBase(commandString, trigger));
+    static isValid(commandString, manager, prefix) {
+        if (commandString.startsWith(prefix)) {
+            return manager.isRegistered(this.getCommandBase(commandString, prefix));
         }
 
         return false;
@@ -33,7 +35,7 @@ export default class CommandParser {
      * @returns {*}
      */
     static getCommandBase(commandString, trigger) {
-        const regexResult = new RegExp(`^${trigger}([a-zA-Z]+)`).exec(commandString);
+        const regexResult = new RegExp(`^${Utils.escapeRegexString(trigger)}([a-zA-Z]+)`).exec(commandString);
 
         if (regexResult) {
             return regexResult[1];

@@ -152,4 +152,12 @@ export default class Utils {
             });
         });
     }
+
+    /**
+     * @param {String} string
+     * @returns {String}
+     */
+    static escapeRegexString(string) {
+        return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    }
 }

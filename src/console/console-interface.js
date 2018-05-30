@@ -2,6 +2,7 @@ import Log from "../core/log";
 import Utils from "../core/utils";
 
 const readline = require("readline");
+const { performance } = require("perf_hooks");
 
 export default class ConsoleInterface {
     constructor() {
@@ -25,27 +26,21 @@ export default class ConsoleInterface {
 
         ci.prompt(true);
 
-        ci.on("line", (input) => {
+        ci.on("line", async (input) => {
             switch (input.trim()) {
                 case "": {
                     break;
                 }
 
                 case "stop": {
-                    bot.disconnect();
+                    await bot.disconnect();
                     process.exit(0);
 
                     break;
                 }
 
-                case "help": {
-                    console.log("CLI Commands: stop, help");
-
-                    break;
-                }
-
                 case "restart": {
-                    bot.restart();
+                    await bot.restart();
 
                     break;
                 }
@@ -58,6 +53,33 @@ export default class ConsoleInterface {
 
                 case "uptime": {
                     console.log(`Started ${Utils.timeAgoFromNow(bot.client.uptime)}`);
+
+                    break;
+                }
+
+                case "reload": {
+                    const startTime = performance.now();
+
+                    await bot.disconnect();
+                    await bot.settings.reload();
+                    await bot.commandLoader.loadAll();
+                    await bot.connect();
+
+                    const endTime = performance.now();
+
+                    console.log(`Reload complete | Took ${Math.round(endTime - startTime) / 1000}s`);
+
+                    break;
+                }
+
+                case "clear": {
+                    console.clear();
+
+                    break;
+                }
+
+                case "help": {
+                    console.log("CLI Commands: stop, help, restart, ping, uptime, reload, clear");
 
                     break;
                 }

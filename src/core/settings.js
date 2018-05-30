@@ -1,4 +1,5 @@
 import Log from "./log";
+import Utils from "./utils";
 
 const fs = require("fs");
 const Typer = require("@raxor1234/typer/typer");
@@ -15,29 +16,37 @@ export default class Settings {
              * @readonly
              */
             this.path = path;
-
-            const jsonObj = JSON.parse(fs.readFileSync(path).toString());
-
-            // TODO: Should be automatic
-            // TODO: Should be validated using Schema
-            /**
-             * @type {Object}
-             * @readonly
-             */
-            this.general = jsonObj.general;
-
-            /**
-             * @type {Object}
-             * @readonly
-             */
-            this.keys = jsonObj.keys;
-
-            // Validate settings after loading them
-            this.validate();
         }
         else {
             Log.throw("Could not load settings: File does not exist");
         }
+    }
+
+    /**
+     * Reload settings
+     * @returns {Promise<Settings>}
+     */
+    async reload() {
+        const jsonObj = await Utils.readJson(this.path);
+
+        // TODO: Should be automatic
+        // TODO: Should be validated using Schema | probably old comment
+        /**
+         * @type {Object}
+         * @readonly
+         */
+        this.general = jsonObj.general;
+
+        /**
+         * @type {Object}
+         * @readonly
+         */
+        this.keys = jsonObj.keys;
+
+        // Validate settings after loading them
+        this.validate();
+
+        return this;
     }
 
     /**

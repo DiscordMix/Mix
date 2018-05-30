@@ -22,19 +22,9 @@ const fs = require("fs");
  */
 export default class Bot extends EventEmitter {
     /**
-     * @param {Object} data
-     */
-    constructor(data) {
-        super();
-
-        // Setup the class
-        this.setup(data);
-    }
-
-    /**
      * Setup the bot from an object
      * @param {Object} data
-     * @return {Promise}
+     * @return {Promise<Bot>}
      */
     async setup(data) {
         Log.verbose("[Bot.setup] Validating data object");
@@ -62,7 +52,7 @@ export default class Bot extends EventEmitter {
          * @type {Settings}
          * @readonly
          */
-        this.settings = new Settings(data.paths.settings);
+        this.settings = await new Settings(data.paths.settings).reload();
 
         /**
          * @type {DataStore}
@@ -125,6 +115,8 @@ export default class Bot extends EventEmitter {
         this.setupEvents();
 
         Log.success("[Bot.setup] Bot setup completed");
+
+        return this;
     }
 
     /**

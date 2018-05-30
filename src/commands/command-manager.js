@@ -1,7 +1,7 @@
 import CommandExecutedEvent from "../events/command-executed-event";
 import Log from "../core/log";
-import Permission from "../core/permission";
 import ChatEnvironment from "../core/chat-environment";
+import CommandManagerEvent from "./command-manager-event";
 
 const Typer = require("@raxor1234/typer/typer");
 // import Collection from "../core/collection";
@@ -46,6 +46,12 @@ export default class CommandManager /* extends Collection */ {
          * @private
          */
         this.commands = [];
+
+        /**
+         * @type {Array<*>}
+         * @private
+         */
+        this.handlers = [];
     }
 
     /**
@@ -144,6 +150,116 @@ export default class CommandManager /* extends Collection */ {
     }
 
     /**
+     * @param {CommandManagerEvent} event
+     * @param {Function} handler
+     * @return {CommandManager}
+     */
+    setEventHandler(event, handler) {
+        this.handlers[event] = handler;
+
+        return this;
+    }
+
+    /**
+     * @param {CommandExecutionContext} context
+     * @param {Command} command The command to handle
+     * @returns {Promise<Boolean>} Whether the command was successfully executed
+     */
+    async handle(context, command) {
+        if (!CommandManager.validateEnvironment(command.environment, context.message.channel.type)) {
+            if (this.handlers[CommandManagerEvent.DisallowedEnvironment]) {
+                this.handlers[CommandManagerEvent.DisallowedEnvironment](context, command);
+            }
+            else {
+                context.message.channel.send("That command may not be used here. Sorry!");
+            }
+        }
+        else if (!command.isEnabled) {
+            if (this.handlers[CommandManagerEvent.DisabledCommand]) {
+                this.handlers[CommandManagerEvent.DisabledCommand](context, command);
+            }
+            else {
+                context.fail("That command is disabled and may not be used.");
+            }
+        }
+        // TODO: New AuthStore system
+        /* else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
+            const minAuthority = AccessLevelType.toString(command.auth);
+
+            context.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
+        } */
+        else if (context.arguments.length > command.maxArguments) {
+            if (this.handlers[CommandManagerEvent.ArgumentAmountMismatch]) {
+                this.handlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);
+            }
+            else if (command.maxArguments > 0) {
+                context.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);
+            }
+            else {
+                context.fail(`That command does not accept any arguments.`);
+            }
+        }
+        else if (command.canExecute !== null && !command.canExecute(context)) {
+            if (this.handlers[CommandManagerEvent.CommandMayNotExecute]) {
+                this.handlers[CommandManagerEvent.CommandMayNotExecute](context, command);
+            }
+            else {
+                context.fail("That command cannot be executed right now.");
+            }
+        }
+        else if (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {
+            if (this.handlers[CommandManagerEvent.InvalidArguments]) {
+                this.handlers[CommandManagerEvent.InvalidArguments](context, command);
+            }
+            else {
+                context.fail("Invalid argument usage. Please use the `usage` command.");
+            }
+        }
+        else if (command.permissions.length > 0 && !context.message.guild.me.hasPermission(command.permissions.map((permissionObj) => permissionObj.permission))) {
+            if (this.handlers[CommandManagerEvent.RequiresPermissions]) {
+                this.handlers[CommandManagerEvent.RequiresPermissions](context, command);
+            }
+            else {
+                const permissions = command.permissions.map((permission) => `\`${permission.name}\``).join(", ");
+
+                context.fail(`I need the following permission(s) to execute that command: ${permissions}`);
+            }
+        }
+        else {
+            try {
+                const result = command.executed(context);
+
+                context.bot.emit("commandExecuted", new CommandExecutedEvent(command, context));
+
+                return result;
+            }
+            catch (error) {
+                if (this.handlers[CommandManagerEvent.CommandError]) {
+                    this.handlers[CommandManagerEvent.CommandError](context, command, error);
+                }
+                else {
+                    // TODO: Include stack trace
+                    Log.error(`There was an error while executing the ${command.name} command: ${error.message}`);
+                    context.fail(`There was an error executing that command. (${error.message})`);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Unload all commands
+     */
+    unloadAll() {
+        if (this.commands.length > 0) {
+            const count = this.commands.length;
+            this.commands = [];
+            Log.success(`[CommandManager.unloadAll] Unloaded ${count} command(s)`);
+        }
+    }
+
+    /**
      * @private
      * @param {ChatEnvironment} environment
      * @param {String} type
@@ -181,71 +297,5 @@ export default class CommandManager /* extends Collection */ {
         }
 
         return false;
-    }
-
-    /**
-     * @param {CommandExecutionContext} context
-     * @param {Command} command The command to handle
-     * @returns {Promise<Boolean>} Whether the command was successfully executed
-     */
-    async handle(context, command) {
-        if (!CommandManager.validateEnvironment(command.environment, context.message.channel.type)) {
-            context.message.channel.send("That command may not be used here. Sorry!");
-        }
-        else if (!command.isEnabled) {
-            context.fail("That command is disabled and may not be used.");
-        }
-        // TODO: New AuthStore system
-        /* else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
-            const minAuthority = AccessLevelType.toString(command.auth);
-
-            context.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
-        } */
-        else if (context.arguments.length > command.maxArguments) {
-            if (command.maxArguments > 0) {
-                context.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);
-            }
-            else {
-                context.fail(`That command does not accept any arguments.`);
-            }
-        }
-        else if (command.canExecute !== null && !command.canExecute(context)) {
-            context.fail("That command cannot be executed right now.");
-        }
-        else if (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) {
-            context.fail("Invalid argument usage. Please use the `usage` command.");
-        }
-        else if (command.permissions.length > 0 && !context.message.guild.me.hasPermission(command.permissions.map((permissionObj) => permissionObj.permission))) {
-            const permissions = command.permissions.map((permission) => `\`${permission.name}\``).join(", ");
-
-            context.fail(`I need the following permission(s) to execute that command: ${permissions}`);
-        }
-        else {
-            try {
-                const result = command.executed(context);
-
-                context.bot.emit("commandExecuted", new CommandExecutedEvent(command, context));
-
-                return result;
-            }
-            catch (error) {
-                // TODO: Include stack trace
-                Log.error(`There was an error while executing the ${command.name} command: ${error.message}`);
-                context.fail(`There was an error executing that command. (${error.message})`);
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Unload all commands
-     */
-    unloadAll() {
-        if (this.commands.length > 0) {
-            const count = this.commands.length;
-            this.commands = [];
-            Log.success(`[CommandManager.unloadAll] Unloaded ${count} command(s)`);
-        }
     }
 }

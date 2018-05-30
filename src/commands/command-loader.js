@@ -21,6 +21,10 @@ export default class CommandLoader {
      * @returns {Promise}
      */
     async loadAll() {
+        // TODO: Implement
+        // Note: relative path | Remove a module from cache
+        // delete require.cache[require.resolve(`./${commandName}.js`)];
+
         return new Promise((resolve) => {
             Log.verbose(`[CommandLoader.loadAll] Loading commands`);
 

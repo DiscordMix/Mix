@@ -1,3 +1,6 @@
+## Note
+Please view [Anvil's gitbook](https://cloudrex.gitbook.io/anvil/) instead. This content is considered deprecated.
+
 ## Table of Contents
 1. [Introduction](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#introduction)
     1. [Notes](https://github.com/CloudRex/Anvil/blob/master/REFERENCE.md#notes)

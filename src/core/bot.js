@@ -150,7 +150,6 @@ export default class Bot extends EventEmitter {
 
             // Setup the command auth store
             this.setupAuthStore();
-
             Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag}`);
             Log.success("[Bot.setupEvents] Ready");
         });

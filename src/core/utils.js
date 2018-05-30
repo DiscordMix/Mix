@@ -98,10 +98,18 @@ export default class Utils {
 
     /**
      * @param {Number} timestamp
-     * @return {*}
+     * @return {String}
      */
     static timeAgo(timestamp) {
         return timeAgo.format(timestamp);
+    }
+
+    /**
+     * @param {Number} timestamp
+     * @returns {String}
+     */
+    static timeAgoFromNow(timestamp) {
+        return Utils.timeAgo(Date.now() - timestamp);
     }
 
     /**

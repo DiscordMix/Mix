@@ -1,4 +1,5 @@
 import Log from "../core/log";
+import Utils from "../core/utils";
 
 const readline = require("readline");
 
@@ -45,6 +46,18 @@ export default class ConsoleInterface {
 
                 case "restart": {
                     bot.restart();
+
+                    break;
+                }
+
+                case "ping": {
+                    console.log(`${bot.client.ping}ms`);
+
+                    break;
+                }
+
+                case "uptime": {
+                    console.log(Utils.timeAgoFromNow(bot.client.uptime));
 
                     break;
                 }

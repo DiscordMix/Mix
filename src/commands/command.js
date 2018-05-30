@@ -1,3 +1,5 @@
+import ChatEnvironment from "../core/chat-environment";
+
 const Typer = require("@raxor1234/typer/typer");
 
 export default class Command {
@@ -68,6 +70,12 @@ export default class Command {
          */
         this.permissions = data.restrict.permissions ? data.restrict.permissions : [];
 
+        /**
+         * @type {ChatEnvironment|Array<ChatEnvironment>}
+         * @readonly
+         */
+        this.environment = data.restrict.env !== undefined ? data.restrict.env : ChatEnvironment.Anywhere;
+
         // TODO: Default auth level to 'default'
         /**
          * @type {AccessLevelType}
@@ -118,7 +126,8 @@ export default class Command {
 
         const restrict = Typer.validate({
             auth: "number",
-            permissions: ":array"
+            permissions: ":array",
+            env: "number"
         }, data.restrict, {
             array: (val) => val instanceof Array
         });

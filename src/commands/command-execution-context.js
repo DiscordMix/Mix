@@ -8,10 +8,10 @@ export default class CommandExecutionContext {
      * @param {Message} message
      * @param {Array<String>} args
      * @param {Bot} bot
-     * @param {Number} authLevel
+     * @param {Number} auth
      * @param {EmojiCollection} emojis
      */
-    constructor(message, args, bot, authLevel, emojis) {
+    constructor(message, args, bot, auth, emojis) {
         /**
          * @type {Message}
          * @readonly
@@ -34,7 +34,7 @@ export default class CommandExecutionContext {
          * @type {AccessLevelType}
          * @readonly
          */
-        this.accessLevel = authLevel;
+        this.accessLevel = auth;
 
         /**
          * @type {EmojiCollection}

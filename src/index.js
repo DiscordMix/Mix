@@ -26,6 +26,7 @@ module.exports = {
     UserConfig: require("./core/user-config").default,
     Utils: require("./core/utils").default,
     Permission: require("./core/permission").default,
+    ChatEnvironment: require("./core/chat-environment").default,
 
     // Collections
     Collection: require("./collections/collection").default,

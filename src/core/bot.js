@@ -163,7 +163,9 @@ export default class Bot extends EventEmitter {
                             message,
                             CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
                             this,
-                            this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id),
+
+                            // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs
+                            message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id) : null,
                             this.emojis
                         ),
 

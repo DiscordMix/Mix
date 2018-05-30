@@ -1,6 +1,7 @@
 import CommandExecutedEvent from "../events/command-executed-event";
 import Log from "../core/log";
 import Permission from "../core/permission";
+import ChatEnvironment from "../core/chat-environment";
 
 const Typer = require("@raxor1234/typer/typer");
 // import Collection from "../core/collection";
@@ -143,14 +144,56 @@ export default class CommandManager /* extends Collection */ {
     }
 
     /**
+     * @private
+     * @param {ChatEnvironment} environment
+     * @param {String} type
+     * @returns {Boolean}
+     */
+    static validateChannelTypeEnv(environment, type) {
+        if (environment === ChatEnvironment.Anywhere) {
+            return true;
+        }
+        else if (environment === ChatEnvironment.Private && type === "dm") {
+            return true;
+        }
+        else if (environment === ChatEnvironment.Group && type === "group") {
+            return true;
+        }
+        else if (environment === ChatEnvironment.Guild && type === "text") {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param {ChatEnvironment|Array<ChatEnvironment>} environment
+     * @param {String} channelType
+     * @returns {Boolean}
+     */
+    static validateEnvironment(environment, channelType) {
+        if (Array.isArray(environment)) {
+            for (let i = 0; i < environment.length; i++) {
+                if (CommandManager.validateChannelTypeEnv(environment, channelType)) {
+                    return true;
+                }
+            }
+        }
+        else {
+            return CommandManager.validateChannelTypeEnv(environment, channelType);
+        }
+
+        return false;
+    }
+
+    /**
      * @param {CommandExecutionContext} context
      * @param {Command} command The command to handle
      * @returns {Promise<Boolean>} Whether the command was successfully executed
      */
     async handle(context, command) {
-        // TODO: Add support for multiple environments (chat environments)
-        if (!context.message.member) {
-            context.message.channel.send("That command must be used in a text channel. Sorry!");
+        if (!CommandManager.validateEnvironment(command.environment, context.message.channel.type)) {
+            context.message.channel.send("That command may not be used here. Sorry!");
         }
         else if (!command.isEnabled) {
             context.fail("That command is disabled and may not be used.");

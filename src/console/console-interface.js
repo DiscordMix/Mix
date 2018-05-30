@@ -57,7 +57,7 @@ export default class ConsoleInterface {
                 }
 
                 case "uptime": {
-                    console.log(Utils.timeAgoFromNow(bot.client.uptime));
+                    console.log(`Started ${Utils.timeAgoFromNow(bot.client.uptime)}`);
 
                     break;
                 }

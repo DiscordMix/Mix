@@ -1,3 +1,5 @@
+import "babel-polyfill";
+
 module.exports = {
     // Commands
     CommandArgumentParser: require("./commands/command-argument-parser").default,

@@ -2,6 +2,9 @@ import Log from "../core/log";
 
 const EventEmitter = require("events");
 
+/**
+ * @extends EventEmitter
+ */
 export default class CommandAuthStore extends EventEmitter {
     /**
      * @abstract
@@ -28,7 +31,7 @@ export default class CommandAuthStore extends EventEmitter {
      * @param {Snowflake} guildId
      * @param {Snowflake} userId
      * @param {Array<String>} roles
-     * @returns {Number} The authority of the user
+     * @return {Number} The authority of the user
      */
     getAuthority(guildId, userId, roles = ["@everyone"]) {
         Log.throw("[CommandAuthStore.getAuthority] Method not implemented");

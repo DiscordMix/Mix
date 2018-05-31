@@ -1,7 +1,7 @@
 export default class ConfigBuilder {
     constructor() {
         /**
-         * @type {Array<*>}
+         * @type {Object}
          * @private
          * @readonly
          */
@@ -9,7 +9,7 @@ export default class ConfigBuilder {
     }
 
     /**
-     * @param path
+     * @param {String} path
      * @return {ConfigBuilder}
      */
     setCommandsPath(path) {

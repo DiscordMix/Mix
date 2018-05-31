@@ -1,23 +1,28 @@
 import Log from "./log";
+import {Snowflake} from "discord.js";
 
 const fs = require("fs");
 const _ = require("lodash");
 
 export default class UserConfig {
-    /**
-     * @param {String} path
-     */
-    constructor(path) {
-        if (fs.existsSync(path)) {
-            /**
-             * @type {String}
-             * @private
-             * @readonly
-             */
-            this.path = path;
+    private readonly path: string;
 
+    private config: any;
+
+    /**
+     * @param {string} path
+     */
+    constructor(path: string) {
+        /**
+         * @type {string}
+         * @private
+         * @readonly
+         */
+        this.path = path;
+
+        if (fs.existsSync(this.path)) {
             /**
-             * @type {any}
+             * @type {*}
              * @private
              */
             this.config = JSON.parse(fs.readFileSync(path).toString());
@@ -28,12 +33,12 @@ export default class UserConfig {
     }
 
     /**
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
-     * @param {(Snowflake|Null)} guildId
-     * @param {String} template
+     * @param {Snowflake|Null} guildId
+     * @param {string} template
      */
-    set(path, value, guildId = null, template = "default") {
+    set(path: string, value: any, guildId = null, template: string = "default"): void {
         const finalPath = guildId ? `${guildId}.${path}` : path;
 
         Log.info(finalPath);
@@ -50,12 +55,12 @@ export default class UserConfig {
     }
 
     /**
-     * @param {String} path
+     * @param {string} path
      * @param {(Snowflake|Null)} guildId
-     * @param {String} template
-     * @returns {*}
+     * @param {string} template
+     * @return {*}
      */
-    get(path, guildId = null, template = "default") {
+    get(path: string, guildId = null, template: string = "default"): any {
         const finalPath = guildId ? `${guildId}.${path}` : path;
 
         if (!this.contains(path, guildId)) {
@@ -66,11 +71,11 @@ export default class UserConfig {
     }
 
     /**
-     * @param {String} path
+     * @param {string} path
      * @param {*} item
      * @param {(Snowflake|Null)} guildId
      */
-    push(path, item, guildId = null) {
+    push(path: string, item: any, guildId = null): void {
         const items = this.get(path, guildId).slice(0);
 
         items.push(item);
@@ -78,11 +83,11 @@ export default class UserConfig {
     }
 
     /**
-     * @param {String} path
+     * @param {string} path
      * @param {(Snowflake|Null)} guildId
-     * @returns {boolean}
+     * @return {boolean}
      */
-    contains(path, guildId = null) {
+    contains(path: string, guildId = null): boolean {
         const finalPath = guildId ? `${guildId}.${path}` : path;
 
         return _.has(this.config, finalPath);
@@ -91,7 +96,7 @@ export default class UserConfig {
     /**
      * @param {Snowflake} id
      */
-    createGuild(id) {
+    createGuild(id: Snowflake): void {
         this.set(id, {});
         this.save();
     }
@@ -99,12 +104,12 @@ export default class UserConfig {
     /**
      * @param {Snowflake} id
      */
-    removeGuild(id) {
+    removeGuild(id: Snowflake): void {
         delete this.config[id];
         this.save();
     }
 
-    save() {
+    save(): void {
         fs.writeFileSync(this.path, JSON.stringify(this.config, null, 4));
     }
 }

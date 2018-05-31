@@ -3,11 +3,14 @@ import Log from '../core/log';
 const parseArgs = require("minimist");
 
 export default class ConsoleCommand {
+    readonly base: string;
+    readonly args: any;
+
     /**
      * @param {String} base
      * @param {Object} args
      */
-    constructor(base, args) {
+    constructor(base: string, args: any) {
         /**
          * @type {String}
          * @readonly
@@ -26,7 +29,7 @@ export default class ConsoleCommand {
      * @param {String} consoleCommandString
      * @return {ConsoleCommand}
      */
-    static parse(consoleCommandString) {
+    static parse(consoleCommandString: string): ConsoleCommand {
         const split = consoleCommandString.split(" ");
 
         Log.info(split.join(" "));

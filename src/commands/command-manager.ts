@@ -1,20 +1,35 @@
 import CommandExecutedEvent from "../events/command-executed-event";
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import CommandManagerEvent from "./command-manager-event";
 import Bot from "../core/bot";
 import Command from "./command";
+import CommandAuthStore from "./command-auth-store";
+import CommandExecutionContext from "./command-execution-context";
 
 const Typer = require("@raxor1234/typer/typer");
 // import Collection from "../core/collection";
+
+/**
+ * @enum {Number}
+ */
+export enum CommandManagerEvent {
+    DisallowedEnvironment = 0,
+    DisabledCommand = 1,
+    ArgumentAmountMismatch = 2,
+    CommandMayNotExecute = 3,
+    InvalidArguments = 4,
+    RequiresPermissions = 5,
+    CommandError = 6
+}
 
 export default class CommandManager /* extends Collection */ {
     readonly bot: Bot;
     readonly path: string;
     readonly authStore: CommandAuthStore;
     readonly argumentTypes: any;
-    readonly commands: Array<Command>;
     readonly handlers: Array<Function>;
+
+    commands: Array<Command>;
 
     /**
      * @param {Bot} bot
@@ -66,31 +81,31 @@ export default class CommandManager /* extends Collection */ {
     /**
      * @param {Command} command
      */
-    register(command) {
+    register(command: Command) {
         this.commands.push(command);
     }
 
     /**
      * @param {String} commandBase
-     * @returns {Boolean}
+     * @return {Boolean}
      */
-    removeByBase(commandBase) {
+    removeByBase(commandBase: string): boolean {
         return this.remove(this.getByName(commandBase));
     }
 
     /**
      * @param {Command} command
-     * @returns {Boolean}
+     * @return {Boolean}
      */
-    remove(command) {
+    remove(command: Command): boolean {
         return this.removeAt(this.commands.indexOf(command));
     }
 
     /**
      * @param {Number} index
-     * @returns {Boolean}
+     * @return {Boolean}
      */
-    removeAt(index) {
+    removeAt(index: number): boolean {
         if (this.commands[index]) {
             this.commands.splice(index, 1);
 
@@ -102,16 +117,16 @@ export default class CommandManager /* extends Collection */ {
 
     /**
      * @param {String} commandBase
-     * @returns {Boolean}
+     * @return {Boolean}
      */
-    contains(commandBase) {
+    contains(commandBase: string): boolean {
         return this.getByName(commandBase) !== null;
     }
 
     /**
      * @param {Array<Command>} commands
      */
-    registerMultiple(commands) {
+    registerMultiple(commands: Array<Command>) {
         for (let i = 0; i < commands.length; i++) {
             this.register(commands[i]);
         }
@@ -119,17 +134,17 @@ export default class CommandManager /* extends Collection */ {
 
     /**
      * @param {String} commandBase
-     * @returns {Boolean}
+     * @return {Boolean}
      */
-    isRegistered(commandBase) {
+    isRegistered(commandBase: string): boolean {
         return this.getByName(commandBase) != null;
     }
 
     /**
      * @param {String} name
-     * @returns {(Command|Null)}
+     * @return {(Command|Null)}
      */
-    getByName(name) {
+    getByName(name: string): Command | null {
         for (let i = 0; i < this.commands.length; i++) {
             if (this.commands[i].name === name || this.commands[i].aliases.includes(name)) {
                 return this.commands[i];
@@ -142,9 +157,9 @@ export default class CommandManager /* extends Collection */ {
     /**
      * @param {Object} rules
      * @param {Array<String>} args
-     * @returns {Object} The assembled arguments
+     * @return {Object} The assembled arguments
      */
-    assembleArguments(rules, args) {
+    assembleArguments(rules: any, args: Array<string>): any {
         const result = {};
 
         if (rules.length !== args.length) {
@@ -163,7 +178,7 @@ export default class CommandManager /* extends Collection */ {
      * @param {Function} handler
      * @return {CommandManager}
      */
-    setEventHandler(event, handler) {
+    setEventHandler(event: CommandManagerEvent, handler: Function): CommandManager {
         this.handlers[event] = handler;
 
         return this;
@@ -172,9 +187,9 @@ export default class CommandManager /* extends Collection */ {
     /**
      * @param {CommandExecutionContext} context
      * @param {Command} command The command to handle
-     * @returns {Promise<Boolean>} Whether the command was successfully executed
+     * @return {Promise<Boolean>} Whether the command was successfully executed
      */
-    async handle(context, command) {
+    async handle(context: CommandExecutionContext, command: Command): Promise<boolean> {
         if (!CommandManager.validateEnvironment(command.environment, context.message.channel.type)) {
             if (this.handlers[CommandManagerEvent.DisallowedEnvironment]) {
                 this.handlers[CommandManagerEvent.DisallowedEnvironment](context, command);
@@ -272,9 +287,9 @@ export default class CommandManager /* extends Collection */ {
      * @private
      * @param {ChatEnvironment} environment
      * @param {String} type
-     * @returns {Boolean}
+     * @return {Boolean}
      */
-    static validateChannelTypeEnv(environment, type) {
+    static validateChannelTypeEnv(environment: ChatEnvironment, type: string): boolean {
         if (environment === ChatEnvironment.Anywhere) {
             return true;
         }
@@ -291,9 +306,9 @@ export default class CommandManager /* extends Collection */ {
     /**
      * @param {ChatEnvironment|Array<ChatEnvironment>} environment
      * @param {String} channelType
-     * @returns {Boolean}
+     * @return {Boolean}
      */
-    static validateEnvironment(environment, channelType) {
+    static validateEnvironment(environment: ChatEnvironment, channelType: string): boolean {
         if (Array.isArray(environment)) {
             for (let i = 0; i < environment.length; i++) {
                 if (CommandManager.validateChannelTypeEnv(environment, channelType)) {

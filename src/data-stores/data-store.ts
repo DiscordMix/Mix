@@ -1,13 +1,11 @@
-export default class DataStore {
+export default abstract class DataStore {
     /**
      * Retrieve guild data
      * @abstract
      * @param {String} path
      * @returns {*}
      */
-    get(path) {
-        throw new Error("[DataStore.get] Method not implemented.");
-    }
+    abstract get(path: string): any;
 
     /**
      * Set guild data
@@ -16,7 +14,5 @@ export default class DataStore {
      * @param {*} value
      * @returns {*}
      */
-    set(path, value) {
-        throw new Error("[DataStore.set] Method not implemented.");
-    }
+    abstract set(path: string, value: any): any;
 }

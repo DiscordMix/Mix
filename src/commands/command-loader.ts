@@ -1,27 +1,31 @@
 import Command from "./command";
 import Log from "../core/log";
+import CommandManager from "./command-manager";
 
 const fs = require("fs");
 const path = require("path");
 
 export default class CommandLoader {
+    private readonly manager: CommandManager;
+
     /**
-     * @param {CommandManager} commandManager
+     * @param {CommandManager} manager
      */
-    constructor(commandManager) {
+    constructor(manager: CommandManager) {
         /**
          * @type {CommandManager}
          * @private
          * @readonly
          */
-        this.commandManager = commandManager;
+        this.manager = manager;
     }
 
     /**
+     * @todo Return type
      * Load all the commands from path
      * @returns {Promise}
      */
-    async reloadAll() {
+    async reloadAll(): Promise<any> {
         // TODO: Implement
         // Note: relative path | Remove a module from cache
         // delete require.cache[require.resolve(`./${commandName}.js`)];
@@ -29,16 +33,16 @@ export default class CommandLoader {
         return new Promise((resolve) => {
             Log.verbose(`[CommandLoader.loadAll] Loading commands`);
 
-            this.commandManager.unloadAll();
+            this.manager.unloadAll();
 
-            fs.readdir(this.commandManager.path, (error, files) => {
+            fs.readdir(this.manager.path, (error: any, files: Array<string>) => {
                 let loaded = 0;
 
-                files.forEach((file) => {
+                files.forEach((file: string) => {
                     const moduleName = path.basename(file, ".js");
 
                     if (!file.startsWith("@")) {
-                        const modulePath = path.join(this.commandManager.path, moduleName);
+                        const modulePath = path.join(this.manager.path, moduleName);
 
                         let module = require(modulePath);
 
@@ -49,7 +53,7 @@ export default class CommandLoader {
 
                         // Validate the command before registering it
                         if (Command.validate(module)) {
-                            this.commandManager.register(new Command(module));
+                            this.manager.register(new Command(module));
                             loaded++;
                         }
                         else {
@@ -67,7 +71,7 @@ export default class CommandLoader {
         });
     }
 
-    load(pth) {
+    load(path: string) {
         // TODO
     }
 }

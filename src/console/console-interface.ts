@@ -1,10 +1,13 @@
 import Log from "../core/log";
 import Utils from "../core/utils";
+import Bot from "../core/bot";
 
 const readline = require("readline");
 const { performance } = require("perf_hooks");
 
 export default class ConsoleInterface {
+    private ready: boolean;
+
     constructor() {
         /**
          * Whether the console interface has been successfully setup
@@ -16,7 +19,7 @@ export default class ConsoleInterface {
     /**
      * @param {Bot} bot
      */
-    setup(bot) {
+    setup(bot: Bot) {
         Log.verbose("[ConsoleInterface] Setting up console interface");
 
         const ci = readline.createInterface({
@@ -26,7 +29,7 @@ export default class ConsoleInterface {
 
         ci.prompt(true);
 
-        ci.on("line", async (input) => {
+        ci.on("line", async (input: string) => {
             switch (input.trim()) {
                 case "": {
                     break;

@@ -1,5 +1,6 @@
 import CommandAuthStore from "./command-auth-store";
 import Log from "../core/log";
+import {Snowflake} from "discord.js";
 
 const Typer = require("@raxor1234/typer");
 
@@ -7,11 +8,14 @@ const Typer = require("@raxor1234/typer");
  * @extends CommandAuthStore
  */
 export default class ObjectAuthStore extends CommandAuthStore {
+    private readonly schema: any;
+    private readonly data: any;
+
     /**
      * @param {Object} schema
      * @param {Object} data
      */
-    constructor(schema, data) {
+    constructor(schema: any, data: any) {
         super();
 
         /**
@@ -28,11 +32,12 @@ export default class ObjectAuthStore extends CommandAuthStore {
     }
 
     /**
+     * @todo Handle default/error auth level (-1)
      * @param {Snowflake} guildId
      * @param {*} identifier
      * @return {Number}
      */
-    getAuthLevel(guildId, identifier) {
+    getAuthLevel(guildId: Snowflake, identifier: any): number {
         const authLevels = this.data[guildId];
 
         for (let i = 0; i < authLevels.length; i++) {
@@ -41,7 +46,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
             }
         }
 
-        return null;
+        return -1;
     }
 
     /**
@@ -49,7 +54,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {Array<String>} roles
      * @return {Number}
      */
-    getHighestAuthLevelByRoles(guildId, roles) {
+    getHighestAuthLevelByRoles(guildId: Snowflake, roles: Array<string>): number {
         let highest = 0;
 
         for (let i = 0; i < roles.length; i++) {
@@ -69,7 +74,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {Array<String>} roles
      * @return {Number} The authority of the user
      */
-    getAuthority(guildId, userId, roles = ["@everyone"]) {
+    getAuthority(guildId: Snowflake, userId: Snowflake, roles: Array<string> = ["@everyone"]): number {
         const byRoles = this.getHighestAuthLevelByRoles(guildId, roles);
         const byId = this.getAuthLevel(guildId, userId);
 
@@ -85,7 +90,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {Snowflake} guildId
      * @return {Boolean} Whether the entry was created
      */
-    create(guildId) {
+    create(guildId: Snowflake): boolean {
         if (!this.contains(guildId)) {
             const schemaKeys = Object.keys(this.schema);
             const entry = [];
@@ -134,8 +139,10 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {Snowflake} guildId
      * @return {Boolean} Whether the entry was removed
      */
-    remove(guildId) {
+    remove(guildId: Snowflake): boolean {
         Log.throw("[ObjectAuthStore.remove] Method not implemented");
+
+        return false;
     }
 
     /**
@@ -143,7 +150,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {Snowflake} guildId
      * @return {Boolean} Whether the entry exists
      */
-    contains(guildId) {
+    contains(guildId: Snowflake): boolean {
         return Object.keys(this.data).includes(guildId);
     }
 }

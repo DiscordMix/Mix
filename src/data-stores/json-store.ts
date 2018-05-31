@@ -7,28 +7,33 @@ const _ = require("lodash");
  * @extends ObjectStore
  */
 export default class JsonStore extends ObjectStore {
+    private readonly path: string;
+
+    private data: any;
+
     /**
-     * @param {String} path
+     * @param {string} path
      */
-    constructor(path) {
+    constructor(path: string) {
         super(null);
 
         /**
-         * @type {String}
+         * @type {string}
          * @private
+         * @readonly
          */
         this.path = path;
     }
 
     /**
      * Reload the data from the source file
-     * @returns {Promise}
+     * @return {Promise<*>}
      */
-    async reload() {
+    async reload(): Promise<any> {
         this.validate();
 
         return new Promise((resolve) => {
-            fs.readFile(this.path, (error, data) => {
+            fs.readFile(this.path, (error: any, data: any) => {
                 if (error) {
                     throw error;
                 }
@@ -40,14 +45,15 @@ export default class JsonStore extends ObjectStore {
     }
 
     /**
+     * @todo Return type
      * Save the data into the source file
-     * @return {Promise}
+     * @return {Promise<void>}
      */
-    async save() {
+    async save(): Promise<any> {
         this.validate();
 
         return new Promise((resolve) => {
-            fs.writeFile(this.path, JSON.stringify(this.data), (error) => {
+            fs.writeFile(this.path, JSON.stringify(this.data), (error: any) => {
                 if (error) {
                     throw error;
                 }
@@ -68,10 +74,10 @@ export default class JsonStore extends ObjectStore {
 
     /**
      * Retrieve guild data
-     * @param {String} path
-     * @returns {*}
+     * @param {string} path
+     * @return {*}
      */
-    get(path) {
+    get(path: string) {
         if (!this.loaded) {
             throw new Error("[JsonStore.get] No data is currently loaded.");
         }
@@ -81,10 +87,10 @@ export default class JsonStore extends ObjectStore {
 
     /**
      * Set guild data
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
      */
-    set(path, value) {
+    set(path: string, value: any) {
         if (!this.loaded) {
             throw new Error("[JsonStore.set] No data is currently loaded.");
         }
@@ -94,10 +100,10 @@ export default class JsonStore extends ObjectStore {
 
     /**
      * Merge guild data
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
      */
-    merge(path, value) {
+    merge(path: string, value: any) {
         if (!this.loaded) {
             throw new Error("[JsonStore.merge] No data is currently loaded.");
         }
@@ -109,7 +115,7 @@ export default class JsonStore extends ObjectStore {
      * Determine whether any data is loaded
      * @return {Boolean} Whether any data is currently loaded
      */
-    get loaded() {
+    get loaded(): boolean {
         return this.data !== null;
     }
 }

@@ -5,15 +5,17 @@ const _ = require("lodash");
 /**
  * @extends DataStore
  */
-export default class ObjectStore extends DataStore {
+export default class objectStore extends DataStore {
+    private readonly data: any;
+
     /**
-     * @param {Object} data
+     * @param {object} data
      */
-    constructor(data) {
+    constructor(data: any) {
         super();
 
         /**
-         * @type {(Object|Null)}
+         * @type {object|null}
          * @private
          */
         this.data = data;
@@ -21,28 +23,29 @@ export default class ObjectStore extends DataStore {
 
     /**
      * Retrieve guild data
-     * @param {String} path
-     * @returns {Object}
+     * @param {string} path
+     * @return {object}
      */
-    get(path) {
+    get(path: string): any {
         return _.get(this.data, path);
     }
 
     /**
      * Set guild data
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
      */
-    set(path, value) {
+    set(path: string, value: any) {
         _.set(this.data, path, value);
     }
 
     /**
+     * @todo
      * Merge guild data
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
      */
-    merge(path, value) {
-        throw new Error("[ObjectStore.merge] Method not implemented.");
+    merge(path: string, value: any) {
+        throw new Error("[objectStore.merge] Method not implemented.");
     }
 }

@@ -8,11 +8,14 @@ const fs = require("fs");
  * @extends ObjectAuthStore
  */
 export default class JsonAuthStore extends ObjectAuthStore {
+    private readonly schemaPath: string;
+    private readonly storePath: string;
+
     /**
      * @param {String} schemaPath
      * @param {String} storePath
      */
-    constructor(schemaPath, storePath) {
+    constructor(schemaPath: string, storePath: string) {
         super(null, null);
 
         /**
@@ -41,13 +44,14 @@ export default class JsonAuthStore extends ObjectAuthStore {
     }
 
     /**
+     * @todo Complete
      * @return {Promise}
      */
     async reload() {
         if (!this.exists) {
             this.data = {};
             await Utils.writeJson(this.storePath, this.data);
-            this.schema
+            // this.schema
         }
         else {
             this.data = await Utils.readJson(this.storePath);
@@ -64,15 +68,15 @@ export default class JsonAuthStore extends ObjectAuthStore {
      * Save the currently loaded data into the store file
      * @return {Promise}
      */
-    async save() {
-        await Utils.writeJson(this.storePath, this.data);
+    async save(): Promise<any> {
+        return Utils.writeJson(this.storePath, this.data);
     }
 
     /**
      * Determine whether the store file exists
      * @return {Boolean} Whether the store file exists
      */
-    get exists() {
+    get exists(): boolean {
         return fs.existsSync(this.storePath) && fs.existsSync(this.schemaPath);
     }
 }

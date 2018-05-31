@@ -1,3 +1,6 @@
+/**
+ * @enum {Number}
+ */
 const CommandManagerEvent = {
     DisallowedEnvironment: 0,
     DisabledCommand: 1,

@@ -5,7 +5,7 @@ export default class CommandParser {
      * @param {String} commandString
      * @param {CommandManager} manager
      * @param {String} trigger
-     * @returns {*}
+     * @returns {Command|Null}
      */
     static parse(commandString, manager, trigger) {
         if (this.isValid(commandString, manager, trigger)) {
@@ -32,7 +32,7 @@ export default class CommandParser {
     /**
      * @param {String} commandString
      * @param {String} trigger
-     * @returns {*}
+     * @returns {String|Null}
      */
     static getCommandBase(commandString, trigger) {
         const regexResult = new RegExp(`^${Utils.escapeRegexString(trigger)}([a-zA-Z]+)`).exec(commandString);

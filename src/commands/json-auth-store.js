@@ -4,6 +4,9 @@ import Log from "../core/log";
 
 const fs = require("fs");
 
+/**
+ * @extends ObjectAuthStore
+ */
 export default class JsonAuthStore extends ObjectAuthStore {
     /**
      * @param {String} schemaPath

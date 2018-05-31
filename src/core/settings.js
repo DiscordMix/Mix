@@ -24,7 +24,7 @@ export default class Settings {
 
     /**
      * Reload settings
-     * @returns {Promise<Settings>}
+     * @return {Promise<Settings>}
      */
     async reload() {
         const jsonObj = await Utils.readJson(this.path);
@@ -50,16 +50,24 @@ export default class Settings {
     }
 
     /**
+     * @todo Should be done async
      * Save the local settings into path
+     * @return {Settings}
      */
     save() {
         fs.writeFileSync(this.path, JSON.stringify({
             general: this.general,
             keys: this.keys
         }, null, 4));
+
+        return this;
     }
 
-    // TODO
+    /**
+     * Validate the settings
+     * @todo
+     * @return {Settings}
+     */
     validate() {
         if (!Typer.validate({
             token: "!string",
@@ -67,5 +75,7 @@ export default class Settings {
         }, this.general)) {
             Log.throw("[Settings.validate] Invalid settings provided");
         }
+
+        return this;
     }
 }

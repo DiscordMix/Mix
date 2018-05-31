@@ -12,6 +12,7 @@ export default class CommandLoader {
         /**
          * @type {CommandManager}
          * @private
+         * @readonly
          */
         this.commandManager = commandManager;
     }
@@ -20,7 +21,7 @@ export default class CommandLoader {
      * Load all the commands from path
      * @returns {Promise}
      */
-    async loadAll() {
+    async reloadAll() {
         // TODO: Implement
         // Note: relative path | Remove a module from cache
         // delete require.cache[require.resolve(`./${commandName}.js`)];

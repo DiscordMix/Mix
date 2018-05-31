@@ -109,7 +109,7 @@ export default class Bot extends EventEmitter {
         this.menus = new EmojiMenuManager(this.client);
 
         // Load commands
-        await this.commandLoader.loadAll();
+        await this.commandLoader.reloadAll();
 
         // Setup the Discord client's events
         this.setupEvents();
@@ -214,7 +214,7 @@ export default class Bot extends EventEmitter {
         if (reloadModules) {
             // TODO: Actually reload all the features and commands
             // this.features.reloadAll(this);
-            await this.commandLoader.loadAll();
+            await this.commandLoader.reloadAll();
         }
 
         await this.disconnect();

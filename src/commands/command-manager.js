@@ -229,7 +229,7 @@ export default class CommandManager /* extends Collection */ {
             try {
                 const result = command.executed(context);
 
-                context.bot.emit("commandExecuted", new CommandExecutedEvent(command, context));
+                context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command));
 
                 return result;
             }

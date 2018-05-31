@@ -1,23 +1,19 @@
-export default class CommandWillExecuteEvent {
+import PreventableCommandEvent from "./preventable-command-event";
+
+/**
+ * @extends PreventableCommandEvent
+ */
+export default class CommandWillExecuteEvent extends PreventableCommandEvent {
     /**
-     * @param {Command} command
      * @param {CommandExecutionContext} context
-     * @param {Function} prevent
+     * @param {Command} command
      */
-    constructor(command, context, prevent) {
+    constructor(context, command) {
+        super(context);
+
         /**
          * @type {Command}
          */
         this.command = command;
-
-        /**
-         * @type {CommandExecutionContext}
-         */
-        this.context = context;
-
-        /**
-         * @type {Function}
-         */
-        this.prevent = prevent;
     }
 }

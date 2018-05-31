@@ -59,8 +59,8 @@ const bot = new Bot({
 
 | Name               | Description                              | Event object                                                                                                                            |
 |--------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| commandWillExecute | Fired when before a command will execute | [CommandWillExecuteEvent](https://cloudrex.github.io/Anvil/class/src/events/command-will-execute-event.js~CommandWillExecuteEvent.html) |
-| commandExecuted    | Fired after a command has been executed  | [CommandExecutedEvent](https://cloudrex.github.io/Anvil/class/src/events/command-executed-event.js~CommandExecutedEvent.html)           |
+| commandWillExecute | Fired when before a command will execute | [CommandWillExecuteEvent](https://cloudrex.github.io/Anvil/class/src/events/command-will-execute-event.ts~CommandWillExecuteEvent.html) |
+| commandExecuted    | Fired after a command has been executed  | [CommandExecutedEvent](https://cloudrex.github.io/Anvil/class/src/events/command-executed-event.ts~CommandExecutedEvent.html)           |
 
 Example:
 

@@ -1,10 +1,14 @@
 export default class Feature {
+    readonly name: string;
+    readonly key: string;
+    readonly description: string;
+
     /**
      * @param {String} name The name of the feature
      * @param {String} key
      * @param {String} description The description of the feature
      */
-    constructor(name, key, description) {
+    constructor(name: string, key: string, description: string) {
         /**
          * @type {String}
          * @readonly

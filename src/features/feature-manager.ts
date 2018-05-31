@@ -1,20 +1,19 @@
 // import Collection from "../collections/collection";
 
 // TODO: Implement the Collection class.
+import Bot from "../core/bot";
+import Feature from "./feature";
+
 export default class FeatureManager /* extends Collection */ {
+    private readonly bot: Bot;
+    private readonly features: Array<Feature>;
+
     /**
      * @param {Bot} bot
      * @param {Array<Feature>} features
      */
-    constructor(bot, features = []) {
+    constructor(bot: Bot, features: Array<Feature> = []) {
         // super(features);
-
-        /**
-         * @type {Array<Feature>}
-         * @private
-         * @readonly
-         */
-        this.features = features;
 
         /**
          * @type {Bot}
@@ -22,14 +21,21 @@ export default class FeatureManager /* extends Collection */ {
          * @readonly
          */
         this.bot = bot;
+
+        /**
+         * @type {Array<Feature>}
+         * @private
+         * @readonly
+         */
+        this.features = features;
     }
 
     /**
      * Enable a feature
      * @param {Feature} feature
-     * @return {Boolean}
+     * @return {boolean}
      */
-    enable(feature) {
+    enable(feature: Feature): boolean {
         if (feature.canEnable(this.bot)) {
             feature.enabled(this.bot);
             feature.isEnabled = true;
@@ -45,7 +51,7 @@ export default class FeatureManager /* extends Collection */ {
      * @param {Array<Feature>} features
      * @return {Number}
      */
-    enableMultiple(features) {
+    enableMultiple(features: Array<Feature>): number {
         let totalEnabled = 0;
 
         for (let i = 0; i < features.length; i++) {
@@ -61,7 +67,7 @@ export default class FeatureManager /* extends Collection */ {
      * Enable all the currently registered features
      * @return {Number}
      */
-    enableAll() {
+    enableAll(): number {
         return this.enableMultiple(this.features);
     }
 
@@ -69,7 +75,7 @@ export default class FeatureManager /* extends Collection */ {
      * Disable a feature
      * @param {Feature} feature
      */
-    disable(feature) {
+    disable(feature: Feature) {
         feature.disabled(this.bot);
         feature.isEnabled = false;
     }
@@ -78,9 +84,9 @@ export default class FeatureManager /* extends Collection */ {
      * Disable multiple features at once
      * @param {Array<Feature>} features
      */
-    disableMultiple(features) {
+    disableMultiple(features: Array<Feature>) {
         for (let i = 0; i < features.length; i++) {
-            this.disable(features[i], this.bot);
+            this.disable(features[i]);
         }
     }
 
@@ -95,7 +101,7 @@ export default class FeatureManager /* extends Collection */ {
      * Reload all currently registered and enabled features
      * @return {Number}
      */
-    reloadAll() {
+    reloadAll(): number {
         this.disableAll();
 
         return this.enableAll();
@@ -106,7 +112,7 @@ export default class FeatureManager /* extends Collection */ {
      * Register a feature
      * @param {Feature} feature
      */
-    register(feature) {
+    register(feature: Feature) {
         this.features.push(feature);
     }
 
@@ -114,7 +120,7 @@ export default class FeatureManager /* extends Collection */ {
      * Register multiple features at once
      * @param {Array<Feature>} features
      */
-    registerMultiple(features) {
+    registerMultiple(features: Array<Feature>) {
         for (let i = 0; i < features.length; i++) {
             this.register(features[i]);
         }
@@ -122,27 +128,27 @@ export default class FeatureManager /* extends Collection */ {
 
     /**
      * Determine whether a feature is registered
-     * @param {String} key
-     * @return {Boolean}
+     * @param {string} key
+     * @return {boolean}
      */
-    isRegistered(key) {
+    isRegistered(key: string): boolean {
         return this.get(key) != null;
     }
 
     /**
      * Determine whether a feature is enabled
-     * @param {String} key
-     * @return {Boolean}
+     * @param {string} key
+     * @return {boolean}
      */
-    isEnabled(key) {
+    isEnabled(key: string): boolean {
         return this.get(key).isEnabled;
     }
 
     /**
-     * @param {String} key
-     * @return {(Feature|Null)}
+     * @param {string} key
+     * @return {Feature|null}
      */
-    get(key) {
+    get(key: string): Feature | null {
         for (let i = 0; i < this.features.length; i++) {
             if (this.features[i].key === key) {
                 return this.features[i];

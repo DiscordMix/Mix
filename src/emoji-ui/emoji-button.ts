@@ -1,9 +1,12 @@
 export default class EmojiButton {
+    readonly emoji: string;
+    readonly handle: Function;
+
     /**
      * @param {String} emoji
      * @param {Function} clickHandler
      */
-    constructor(emoji, clickHandler) {
+    constructor(emoji: string, clickHandler: Function) {
         /**
          * @type {String}
          * @readonly

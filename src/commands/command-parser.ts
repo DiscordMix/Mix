@@ -1,27 +1,29 @@
 import Utils from "../core/utils";
+import CommandManager from "./command-manager";
+import Command from "./command";
 
 export default class CommandParser {
     /**
-     * @param {String} commandString
+     * @param {string} commandString
      * @param {CommandManager} manager
-     * @param {String} trigger
-     * @returns {Command|Null}
+     * @param {string} prefix
+     * @return {Command|Null}
      */
-    static parse(commandString, manager, trigger) {
-        if (this.isValid(commandString, manager, trigger)) {
-            return manager.getByName(this.getCommandBase(commandString, trigger));
+    static parse(commandString: string, manager: CommandManager, prefix: string): Command | null {
+        if (this.isValid(commandString, manager, prefix)) {
+            return manager.getByName(this.getCommandBase(commandString, prefix));
         }
 
         return null;
     }
 
     /**
-     * @param {String} commandString
+     * @param {string} commandString
      * @param {CommandManager} manager
-     * @param {String} prefix
-     * @returns {Boolean}
+     * @param {string} prefix
+     * @return {boolean}
      */
-    static isValid(commandString, manager, prefix) {
+    static isValid(commandString: string, manager: CommandManager, prefix: string): boolean {
         if (commandString.startsWith(prefix)) {
             return manager.isRegistered(this.getCommandBase(commandString, prefix));
         }
@@ -30,12 +32,12 @@ export default class CommandParser {
     }
 
     /**
-     * @param {String} commandString
-     * @param {String} trigger
-     * @returns {String|Null}
+     * @param {string} commandString
+     * @param {string} prefix
+     * @return {string|null}
      */
-    static getCommandBase(commandString, trigger) {
-        const regexResult = new RegExp(`^${Utils.escapeRegexString(trigger)}([a-zA-Z]+)`).exec(commandString);
+    static getCommandBase(commandString: string, prefix: string): string | null {
+        const regexResult = new RegExp(`^${Utils.escapeRegexString(prefix)}([a-zA-Z]+)`).exec(commandString);
 
         if (regexResult) {
             return regexResult[1];
@@ -46,10 +48,10 @@ export default class CommandParser {
 
     /**
      *
-     * @param {String} commandString
-     * @returns {Array<String>}
+     * @param {string} commandString
+     * @return {Array<string>}
      */
-    static getArguments(commandString) {
+    static getArguments(commandString: string): Array<string> {
         const expression = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+)/g;
         const argCleanExpression = /(```|`|'|"|)(.+)\1/;
         const result = [];
@@ -66,12 +68,12 @@ export default class CommandParser {
 
     // TODO: Also take in arg schema to avoid matching accidental args.
     /**
-     * @param {Array<String>} args
+     * @param {Array<string>} args
      * @param {Object} types
      * @param {Object} resolvers
-     * @returns {Array<String>} The resolved arguments
+     * @return {Array<string>} The resolved arguments
      */
-    static resolveArguments(args, types, resolvers) {
+    static resolveArguments(args: Array<string>, types: any, resolvers: any): Array<string> {
         const result = args;
         const typeKeys = Object.keys(types);
 

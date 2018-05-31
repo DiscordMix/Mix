@@ -1,10 +1,14 @@
-export default class RGB {
+export default class Rgb {
+    readonly red: number;
+    readonly green: number;
+    readonly blue: number;
+
     /**
      * @param {Number} red
      * @param {Number} green
      * @param {Number} blue
      */
-    constructor(red, green, blue) {
+    constructor(red: number, green: number, blue: number) {
         /**
          * @type {Number}
          * @readonly
@@ -25,9 +29,9 @@ export default class RGB {
     }
 
     /**
-     * @returns {String}
+     * @return {String} The string equivalent
      */
-    toString() {
+    toString(): string {
         return `${this.red}, ${this.green}, ${this.blue}`;
     }
 }

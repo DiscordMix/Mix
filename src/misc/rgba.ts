@@ -1,36 +1,42 @@
-import RGB from "./rgb";
+import Rgb from "./rgb";
+
+export interface RgbaOptions {
+    red: number,
+    green: number,
+    blue: number,
+    alpha: number
+}
 
 /**
- * @extends RGB
+ * @extends Rgb
  */
-export default class RGBA extends RGB {
+export default class Rgba extends Rgb {
+    readonly alpha: number;
+
     /**
-     * @param {Number} red
-     * @param {Number} green
-     * @param {Number} blue
-     * @param {Number} alpha
+     * @param {RgbaOptions} options
      */
-    constructor(red, green, blue, alpha) {
-        super(red, green, blue);
+    constructor(options: RgbaOptions) {
+        super(options.red, options.green, options.blue);
 
         /**
          * @type {Number}
          * @readonly
          */
-        this.alpha = alpha;
+        this.alpha = options.alpha;
     }
 
     /**
      * @returns {String}
      */
-    toString() {
+    toString(): string {
         return `${this.red}, ${this.green}, ${this.blue}, ${this.alpha}`;
     }
 
     /**
      * @returns {Object}
      */
-    toObject() {
+    toObject(): any {
         return {
             red: this.red,
             green: this.green,
@@ -41,13 +47,20 @@ export default class RGBA extends RGB {
 
     /**
      * @param {String} hex
-     * @returns {(RGBA|Null)}
+     * @return {Rgba|null}
      */
-    static fromHex(hex) {
+    static fromHex(hex: string): Rgba | null {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
+        const options: RgbaOptions = {
+            red: parseInt(result[1], 16),
+            blue: parseInt(result[2], 16),
+            green: parseInt(result[3], 16),
+            alpha: 255
+        };
+
         // TODO: Also get the Alpha value (instead of being hardcoded).
-        return result ? new RGBA(parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16), 255) : null;
+        return result ? new Rgba(options) : null;
     }
 
     // TODO: Support for shorthand hex:

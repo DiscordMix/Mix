@@ -1,6 +1,6 @@
 import Utils from "../core/utils";
-import RGB from "../misc/rgb";
-import RGBA from "../misc/rgba";
+import Rgb from "../misc/rgb";
+import Rgba from "../misc/rgba";
 import Collection from "../collections/collection";
 import ObjectStore from "../data-stores/object-store";
 
@@ -13,8 +13,8 @@ const subjects = {
         "285578743324606482"
     ],
 
-    rgb: new RGB(5, 10, 15),
-    rgba: new RGBA(5, 10, 15, 20),
+    rgb: new Rgb(5, 10, 15),
+    rgba: new Rgba(5, 10, 15, 20),
 
     collection: new Collection(["hello", "it's me", {
         name: "John Doe"
@@ -102,8 +102,8 @@ describe("Utils.shuffle()", () => {
     });
 });
 
-describe("RGB.toString()", () => {
-    it("should return the RGB in string format", () => {
+describe("Rgb.toString()", () => {
+    it("should return the Rgb in string format", () => {
         const result = subjects.rgb.toString();
 
         expect(result).to.be.an("string");
@@ -111,8 +111,8 @@ describe("RGB.toString()", () => {
     });
 });
 
-describe("RGBA.toString()", () => {
-    it("should return the RGBA in string format", () => {
+describe("Rgba.toString()", () => {
+    it("should return the Rgba in string format", () => {
         const result = subjects.rgba.toString();
 
         expect(result).to.be.an("string");

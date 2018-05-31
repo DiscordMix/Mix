@@ -1,8 +1,14 @@
+import {Client, Message} from "discord.js";
+import EmojiMenu from "./emoji-menu";
+
 export default class EmojiMenuManager {
+    private readonly client: Client;
+    private readonly awaiting: Array<any>;
+
     /**
      * @param {Discord.Client} client
      */
-    constructor(client) {
+    constructor(client: Client) {
         /**
          * @type {Discord.Client}
          * @private
@@ -37,8 +43,9 @@ export default class EmojiMenuManager {
     /**
      * @param {*} channel
      * @param {EmojiMenu} menu
+     * @return {Promise<Message>}
      */
-    async show(channel, menu) {
+    async show(channel: any, menu: EmojiMenu): Promise<Message> {
         const sentMessage = await channel.send(menu.content);
 
         for (let i = 0; i < menu.buttons.length; i++) {

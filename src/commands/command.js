@@ -57,7 +57,7 @@ export default class Command {
          * @type {Boolean}
          * @readonly
          */
-        this.isEnabled = data.meta.enabled !== undefined ? data.meta.enabled : true;
+        this.isEnabled = data.restrict.enabled !== undefined ? data.restrict.enabled : true;
 
         /**
          * @type {Number}
@@ -81,24 +81,24 @@ export default class Command {
          * @type {AccessLevelType}
          * @readonly
          */
-        this.auth = data.restrict.auth;
+        this.auth = data.restrict.auth !== undefined ? data.restrict.auth : 0;
     }
 
     /**
-     * @return {Number} The maximum amount of arguments that this command can accept
+     * @return {Number} The minimum amount of required arguments that this command accepts
      */
     get maxArguments() {
         const keys = Object.keys(this.args);
 
-        let result = 0;
+        let counter = 0;
 
         for (let i = 0; i < keys.length; i++) {
             if (this.args[keys[i]].startsWith("!")) {
-                result++;
+                counter++;
             }
         }
 
-        return result;
+        return counter;
     }
 
     /**

@@ -24,15 +24,15 @@ export default class Utils {
     /**
      * @param {Number} min
      * @param {Number} max
-     * @return {Number}
+     * @return {Number} The random number
      */
     static getRandomInt(min, max) {
         return Math.floor(Math.random() * max) + min;
     }
 
     /**
-     * @param {Array} array
-     * @return {Array}
+     * @param {Array} array The array to shuffle
+     * @return {Array} The shuffled array
      */
     static shuffle(array) {
         let counter = array.length;
@@ -154,8 +154,8 @@ export default class Utils {
     }
 
     /**
-     * @param {String} string
-     * @returns {String}
+     * @param {String} string The string to escape
+     * @returns {String} The escaped string
      */
     static escapeRegexString(string) {
         return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");

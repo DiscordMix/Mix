@@ -4,10 +4,6 @@ import DataStore from "./data-store";
  * @extends DataStore
  */
 export default class SqliteStore extends DataStore {
-    constructor() {
-        super();
-    }
-
     /**
      * Retrieve guild data
      * @param {String} path

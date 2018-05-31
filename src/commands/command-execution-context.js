@@ -5,42 +5,38 @@ const Discord = require("discord.js");
 
 export default class CommandExecutionContext {
     /**
-     * @param {Message} message
-     * @param {Array<String>} args
-     * @param {Bot} bot
-     * @param {Number} auth
-     * @param {EmojiCollection} emojis
+     * @param {Object} data
      */
-    constructor(message, args, bot, auth, emojis) {
+    constructor(data) {
         /**
          * @type {Message}
          * @readonly
          */
-        this.message = message;
+        this.message = data.message;
 
         /**
          * @type {Array<String>}
          * @readonly
          */
-        this.arguments = args;
+        this.arguments = data.args;
 
         /**
          * @type {Bot}
          * @readonly
          */
-        this.bot = bot;
+        this.bot = data.bot;
 
         /**
          * @type {AccessLevelType}
          * @readonly
          */
-        this.accessLevel = auth;
+        this.auth = data.auth;
 
         /**
          * @type {EmojiCollection}
          * @readonly
          */
-        this.emojis = emojis;
+        this.emojis = data.emojis;
     }
 
     /**

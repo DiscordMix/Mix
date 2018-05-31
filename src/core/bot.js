@@ -109,7 +109,7 @@ export default class Bot extends EventEmitter {
         this.menus = new EmojiMenuManager(this.client);
 
         // Load commands
-        await this.commandLoader.loadAll();
+        await this.commandLoader.reloadAll();
 
         // Setup the Discord client's events
         this.setupEvents();
@@ -150,15 +150,15 @@ export default class Bot extends EventEmitter {
             if (!message.author.bot) {
                 if (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
                     this.commands.handle(
-                        new CommandExecutionContext(
-                            message,
-                            CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
-                            this,
+                        new CommandExecutionContext({
+                            message: message,
+                            args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
+                            bot: this,
 
                             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs
-                            message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id) : null,
-                            this.emojis
-                        ),
+                            auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id) : null,
+                            emojis: this.emojis
+                        }),
 
                         CommandParser.parse(
                             message.content,
@@ -214,7 +214,7 @@ export default class Bot extends EventEmitter {
         if (reloadModules) {
             // TODO: Actually reload all the features and commands
             // this.features.reloadAll(this);
-            await this.commandLoader.loadAll();
+            await this.commandLoader.reloadAll();
         }
 
         await this.disconnect();

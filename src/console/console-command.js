@@ -24,7 +24,7 @@ export default class ConsoleCommand {
     // TODO
     /**
      * @param {String} consoleCommandString
-     * @returns {ConsoleCommand}
+     * @return {ConsoleCommand}
      */
     static parse(consoleCommandString) {
         const split = consoleCommandString.split(" ");

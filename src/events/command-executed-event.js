@@ -1,17 +1,19 @@
-export default class CommandExecutedEvent {
+import CommandEvent from "./command-event";
+
+/**
+ * @extends CommandEvent
+ */
+export default class CommandExecutedEvent extends CommandEvent {
     /**
-     * @param {Command} command
      * @param {CommandExecutionContext} context
+     * @param {Command} command
      */
-    constructor(command, context) {
+    constructor(context,  command) {
+        super(context);
+
         /**
          * @type {Command}
          */
         this.command = command;
-
-        /**
-         * @type {CommandExecutionContext}
-         */
-        this.context = context;
     }
 }

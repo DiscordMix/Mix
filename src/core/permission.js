@@ -1,7 +1,7 @@
-import { Permissions as DiscordPermission } from "discord.js"
+import { Permissions as DiscordPermission } from "discord.js";
 
 /**
- * @enum {Number}
+ * @enum {Object}
  */
 const Permission = {
     CreateInstantInvite: {

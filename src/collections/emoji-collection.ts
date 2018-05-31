@@ -9,7 +9,7 @@ export default class EmojiCollection extends Collection {
     /**
      * @param {Array<Object>} emojis
      */
-    constructor(emojis = []) {
+    constructor(emojis: Array<any> = []) {
         super(emojis);
     }
 
@@ -17,7 +17,7 @@ export default class EmojiCollection extends Collection {
      * @param {String} name
      * @returns {String}
      */
-    get(name) {
+    get(name: string) {
         return this.find("name", name).id;
     }
 
@@ -25,7 +25,7 @@ export default class EmojiCollection extends Collection {
      * @param {String} path
      * @returns {EmojiCollection}
      */
-    static fromFile(path) {
+    static fromFile(path: string) {
         if (!fs.existsSync(path)) {
             throw new Error(`[EmojiCollection.fromFile] Path does not exist: ${path}`);
         }

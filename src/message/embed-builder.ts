@@ -1,6 +1,10 @@
+import {RichEmbed} from "discord.js";
+
 const Discord = require("discord.js");
 
 export default class EmbedBuilder {
+    private readonly embed: RichEmbed;
+
     constructor() {
         /**
          * @type {Discord.RichEmbed}
@@ -12,10 +16,10 @@ export default class EmbedBuilder {
 
     /**
      * Set the color of the embed
-     * @param {String} color
-     * @returns {EmbedBuilder}
+     * @param {string} color
+     * @return {EmbedBuilder}
      */
-    color(color) {
+    color(color: string) {
         this.embed.setColor(color);
 
         return this;
@@ -23,20 +27,20 @@ export default class EmbedBuilder {
 
     /**
      * Set the title of the embed
-     * @param {String} title
-     * @returns {EmbedBuilder}
+     * @param {string} title
+     * @return {EmbedBuilder}
      */
-    title(title) {
-        this.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : null);
+    title(title: string) {
+        this.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : "");
 
         return this;
     }
 
     /**
-     * @param {String} url
-     * @returns {EmbedBuilder}
+     * @param {string} url
+     * @return {EmbedBuilder}
      */
-    titleIcon(url) {
+    titleIcon(url: string) {
         this.embed.setAuthor(this.embed.author ? this.embed.author.name : null, url);
 
         return this;
@@ -44,10 +48,10 @@ export default class EmbedBuilder {
 
     /**
      * Set the thumbnail image of the embed
-     * @param {String} url
-     * @returns {EmbedBuilder}
+     * @param {string} url
+     * @return {EmbedBuilder}
      */
-    thumbnail(url) {
+    thumbnail(url: string) {
         this.embed.setThumbnail(url);
 
         return this;
@@ -55,11 +59,11 @@ export default class EmbedBuilder {
 
     /**
      * Set the footer text of the embed
-     * @param {String} text
-     * @param {String} icon
-     * @returns {EmbedBuilder}
+     * @param {string} text
+     * @param {string} icon
+     * @return {EmbedBuilder}
      */
-    footer(text, icon) {
+    footer(text: string, icon: string) {
         this.embed.setFooter(text, icon);
 
         return this;
@@ -67,10 +71,10 @@ export default class EmbedBuilder {
 
     /**
      * Set the image of the embed
-     * @param {String} url
-     * @returns {EmbedBuilder}
+     * @param {string} url
+     * @return {EmbedBuilder}
      */
-    image(url) {
+    image(url: string) {
         this.embed.setImage(url);
 
         return this;
@@ -80,9 +84,9 @@ export default class EmbedBuilder {
      * Set the text of the embed
      * @todo Limit text to Discord's embed char limit
      * @param {string} text
-     * @returns {EmbedBuilder}
+     * @return {EmbedBuilder}
      */
-    text(text) {
+    text(text: string) {
         this.embed.setDescription(text);
 
         return this;
@@ -90,11 +94,11 @@ export default class EmbedBuilder {
 
     /**
      * Add a field to the embed
-     * @param {String} title
+     * @param {string} title
      * @param {*} value
-     * @returns {EmbedBuilder}
+     * @return {EmbedBuilder}
      */
-    field(title, value) {
+    field(title: string, value: any) {
         this.embed.addField(title, value);
 
         return this;
@@ -102,7 +106,7 @@ export default class EmbedBuilder {
 
     /**
      * Convert the embed to a RichEmbed
-     * @returns {Discord.RichEmbed}
+     * @return {Discord.RichEmbed}
      */
     build() {
         return this.embed;
@@ -110,9 +114,9 @@ export default class EmbedBuilder {
 
     /**
      * @param {Object} obj
-     * @returns {EmbedBuilder}
+     * @return {EmbedBuilder}
      */
-    static fromObject(obj) {
+    static fromObject(obj: any) {
         const result = new EmbedBuilder();
 
         if (!obj.text) {
@@ -151,10 +155,10 @@ export default class EmbedBuilder {
 
     /**
      * @param {Object} sections
-     * @param {String} color
+     * @param {string} color
      * @return {EmbedBuilder}
      */
-    static sections(sections, color = null) {
+    static sections(sections: any, color: string = "") {
         const result = new EmbedBuilder();
 
         for (let i = 0; i < Object.keys(sections).length; i++) {

@@ -1,93 +1,97 @@
-import ChatEnvironment from "../core/chat-environment";
+import {ChatEnvironment} from "../core/chat-environment";
+import {CommandOptions} from "./command-options";
+import Permission from "../core/permission";
 
 const Typer = require("@raxor1234/typer/typer");
 
 export default class Command {
-    /**
-     * @param {Object} data
-     */
-    constructor(data) {
-        // Setup the command from the provided object
-        this.setup(data);
-    }
+    readonly name: string;
+    readonly description: string;
+    readonly aliases: Array<string>;
+    readonly executed: Function;
+    readonly canExecute: Function | boolean;
+    readonly args: any;
+    readonly isEnabled: boolean;
+    readonly cooldown: number;
+    readonly permissions: Array<Permission>;
+    readonly environment: ChatEnvironment;
+    readonly auth: number;
 
     /**
-     * @todo [CRITICAL] Reflect default data changes throughout project
-     * Setup the command from an object
-     * @param {Object} data
+     * @param {Object} options
      */
-    setup(data) {
+    constructor(options: CommandOptions) {
         /**
          * @type {String}
          * @readonly
          */
-        this.name = data.meta.name;
+        this.name = options.meta.name;
 
         /**
          * @type {String}
          * @readonly
          */
-        this.description = data.meta.desc ? data.meta.desc : "No description provided";
+        this.description = options.meta.desc ? options.meta.desc : "No description provided";
 
         /**
          * @type {Array<String>}
          * @readonly
          */
-        this.aliases = data.meta.aliases ? data.meta.aliases : [];
+        this.aliases = options.meta.aliases ? options.meta.aliases : [];
 
         /**
          * @type {Function}
          * @readonly
          */
-        this.executed = data.executed;
+        this.executed = options.executed;
 
         /**
          * @type {Function}
          * @readonly
          */
-        this.canExecute = data.canExecute ? data.canExecute : null;
+        this.canExecute = options.canExecute ? options.canExecute : true;
 
         /**
          * @type {Object}
          * @readonly
          */
-        this.args = data.meta.args ? data.meta.args : {};
+        this.args = options.meta.args ? options.meta.args : {};
 
         /**
          * @type {Boolean}
          * @readonly
          */
-        this.isEnabled = data.restrict.enabled !== undefined ? data.restrict.enabled : true;
+        this.isEnabled = options.restrict.enabled !== undefined ? options.restrict.enabled : true;
 
         /**
          * @type {Number}
          * @readonly
          */
-        this.cooldown = data.restrict.cooldown ? data.restrict.cooldown : 0;
+        this.cooldown = options.restrict.cooldown ? options.restrict.cooldown : 0;
 
         /**
          * @type {Array<Number>}
          */
-        this.permissions = data.restrict.permissions ? data.restrict.permissions : [];
+        this.permissions = options.restrict.permissions ? options.restrict.permissions : [];
 
         /**
          * @type {ChatEnvironment|Array<ChatEnvironment>}
          * @readonly
          */
-        this.environment = data.restrict.env !== undefined ? data.restrict.env : ChatEnvironment.Anywhere;
+        this.environment = options.restrict.env !== undefined ? options.restrict.env : ChatEnvironment.Anywhere;
 
         // TODO: Default auth level to 'default'
         /**
-         * @type {AccessLevelType}
+         * @type {Number}
          * @readonly
          */
-        this.auth = data.restrict.auth !== undefined ? data.restrict.auth : 0;
+        this.auth = options.restrict.auth !== undefined ? options.restrict.auth : 0;
     }
 
     /**
      * @return {Number} The minimum amount of required arguments that this command accepts
      */
-    get maxArguments() {
+    get maxArguments(): number {
         const keys = Object.keys(this.args);
 
         let counter = 0;
@@ -106,7 +110,7 @@ export default class Command {
      * @param {Object} data The module to validate
      * @return {Boolean} Whether the module is valid
      */
-    static validate(data) {
+    static validate(data: CommandOptions): boolean {
         const methods = Typer.validate({
             executed: "!function",
             meta: "!object",
@@ -121,7 +125,7 @@ export default class Command {
             aliases: ":array",
             isEnabled: "boolean",
         }, data.meta, {
-            array: (val) => val instanceof Array
+            array: (val: any) => val instanceof Array
         });
 
         const restrict = Typer.validate({
@@ -129,7 +133,7 @@ export default class Command {
             permissions: ":array",
             env: "number"
         }, data.restrict, {
-            array: (val) => val instanceof Array
+            array: (val: any) => val instanceof Array
         });
 
         return (methods && meta && restrict);

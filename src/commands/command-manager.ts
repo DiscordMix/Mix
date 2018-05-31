@@ -2,18 +2,27 @@ import CommandExecutedEvent from "../events/command-executed-event";
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
 import CommandManagerEvent from "./command-manager-event";
+import Bot from "../core/bot";
+import Command from "./command";
 
 const Typer = require("@raxor1234/typer/typer");
 // import Collection from "../core/collection";
 
 export default class CommandManager /* extends Collection */ {
+    readonly bot: Bot;
+    readonly path: string;
+    readonly authStore: CommandAuthStore;
+    readonly argumentTypes: any;
+    readonly commands: Array<Command>;
+    readonly handlers: Array<Function>;
+
     /**
      * @param {Bot} bot
      * @param {String} path
      * @param {CommandAuthStore} authStore
      * @param {Object} argumentTypes
      */
-    constructor(bot, path, authStore, argumentTypes) {
+    constructor(bot: Bot, path: string, authStore: CommandAuthStore, argumentTypes: any) {
         /**
          * @type {Bot}
          * @private
@@ -48,7 +57,7 @@ export default class CommandManager /* extends Collection */ {
         this.commands = [];
 
         /**
-         * @type {Array<*>}
+         * @type {Array<Function>}
          * @private
          */
         this.handlers = [];
@@ -199,7 +208,7 @@ export default class CommandManager /* extends Collection */ {
                 context.fail(`That command does not accept any arguments.`);
             }
         }
-        else if (command.canExecute !== null && !command.canExecute(context)) {
+        else if ((typeof command.canExecute === "function" && !command.canExecute(context)) || typeof command.canExecute === "boolean" && !command.canExecute) {
             if (this.handlers[CommandManagerEvent.CommandMayNotExecute]) {
                 this.handlers[CommandManagerEvent.CommandMayNotExecute](context, command);
             }

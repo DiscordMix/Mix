@@ -1,59 +1,76 @@
 import EditableMessage from "../message/editable-message";
 import EmbedBuilder from "../message/embed-builder";
+import {Message, Role, Snowflake, User} from "discord.js";
+import Bot from "../core/bot";
+import EmojiCollection from "../collections/emoji-collection";
 
 const Discord = require("discord.js");
 
+export interface CommandExecutionContextOptions {
+    message: Message;
+    args: Array<string>;
+    bot: Bot;
+    auth: number;
+    emojis: EmojiCollection;
+}
+
 export default class CommandExecutionContext {
+    message: Message;
+    arguments: Array<string>;
+    bot: Bot;
+    auth: number;
+    emojis: EmojiCollection;
+
     /**
-     * @param {Object} data
+     * @param {CommandExecutionContextOptions} options
      */
-    constructor(data) {
+    constructor(options: CommandExecutionContextOptions) {
         /**
          * @type {Message}
          * @readonly
          */
-        this.message = data.message;
+        this.message = options.message;
 
         /**
          * @type {Array<String>}
          * @readonly
          */
-        this.arguments = data.args;
+        this.arguments = options.args;
 
         /**
          * @type {Bot}
          * @readonly
          */
-        this.bot = data.bot;
+        this.bot = options.bot;
 
         /**
-         * @type {AccessLevelType}
+         * @type {Number}
          * @readonly
          */
-        this.auth = data.auth;
+        this.auth = options.auth;
 
         /**
          * @type {EmojiCollection}
          * @readonly
          */
-        this.emojis = data.emojis;
+        this.emojis = options.emojis;
     }
 
     /**
      * @param {*} stream
      * @param {String} name
-     * @returns {(Promise<EditableMessage>|Null)}
+     * @return {Promise<EditableMessage>|Null}
      */
-    async fileStream(stream, name) {
+    async fileStream(stream: any, name: string): Promise<EditableMessage> {
         return await this.message.channel.send(new Discord.Attachment(stream, name));
     }
 
     /**
-     * @param {(Object|EmbedBuilder)} content
+     * @param {Object|EmbedBuilder} content
      * @param {Boolean} [autoDelete=false]
-     * @returns {(Promise<EditableMessage>|null)}
+     * @return {Promise<EditableMessage>|Null}
      */
-    async respond(content, autoDelete = false) {
+    async respond(content: object | EmbedBuilder, autoDelete: boolean = false): Promise<EditableMessage> {
         let embed = null;
 
         if (content.text) {
@@ -102,33 +119,33 @@ export default class CommandExecutionContext {
 
     /**
      * @param {Snowflake} userId
-     * @returns {AccessLevelType}
+     * @returns {Number}
      */
-    getAuth(userId) {
-        return this.bot.authStore.getAuthority(this.message.guild.id, this.message.guild.member(userId).roles.array().map((role) => role.name), userId);
+    getAuth(userId: Snowflake): number {
+        return this.bot.authStore.getAuthority(this.message.guild.id, this.message.guild.member(userId).roles.array().map((role: Role) => role.name), userId);
     }
 
     /**
-     * @returns {AccessLevelType}
+     * @return {Number}
      */
-    get auth() {
+    get senderAuth(): number {
         return this.getAuth(this.sender.id);
     }
 
     /**
      * @param {Object} sections
      * @param {String} color
-     * @returns {Promise<EditableMessage>}
+     * @return {Promise<EditableMessage>}
      */
-    async sections(sections, color = "GREEN") {
+    async sections(sections: any, color: string = "GREEN"): Promise<EditableMessage> {
         return await this.respond(EmbedBuilder.sections(sections, color));
     }
 
     /**
      * @param {String} text
-     * @returns {Promise<EditableMessage>}
+     * @return {Promise<EditableMessage>}
      */
-    async ok(text) {
+    async ok(text: string): Promise<EditableMessage> {
         return await this.respond({
             text: `${text}`
         });
@@ -136,9 +153,9 @@ export default class CommandExecutionContext {
 
     /**
      * @param {String} text
-     * @returns {Promise<EditableMessage>}
+     * @return {Promise<EditableMessage>}
      */
-    async loading(text) {
+    async loading(text: string): Promise<EditableMessage> {
         return await this.respond({
             text: `${text}`,
             color: "BLUE"
@@ -146,10 +163,10 @@ export default class CommandExecutionContext {
     }
 
     /**
-     * @param {String} text
-     * @returns {Promise<EditableMessage>}
+     * @param {string} text
+     * @return {Promise<EditableMessage | null>}
      */
-    async fail(text) {
+    async fail(text: string): Promise<EditableMessage | null> {
         return await this.respond({
             text: `:thinking: ${text}`,
             color: "RED"
@@ -157,24 +174,25 @@ export default class CommandExecutionContext {
     }
 
     /**
-     * @returns {User}
+     * @return {User}
      */
-    get sender() {
+    get sender(): User {
         return this.message.author;
     }
 
     /**
-     * @param {String} message
-     * @returns {(Promise<Message>|null)}
+     * @param {string} message
+     * @return {Promise<Message | Null>}
      */
-    async reply(message) {
+    async reply(message: string): Promise<Message | Message[] | null> {
         return await this.message.reply(message);
     }
 
     /**
-     * @param {String} message
+     * @param {string} message
+     * @return {Promise<Message | Message>}
      */
-    async privateReply(message) {
+    async privateReply(message: string): Promise<Message | Message[]> {
         return await this.message.author.send(message);
     }
 }

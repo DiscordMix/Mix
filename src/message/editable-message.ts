@@ -1,12 +1,15 @@
 import Log from "../core/log";
+import {Message} from "discord.js";
 
 const Discord = require("discord.js");
 
 export default class EditableMessage {
+    readonly message: Message;
+
     /**
      * @param {Discord.Message} message
      */
-    constructor(message) {
+    constructor(message: Message) {
         if (message.embeds.length === 0) {
             Log.error("[EditableMessage] Message parameter must contain embeds");
         }
@@ -21,14 +24,14 @@ export default class EditableMessage {
 
     /**
      * Edit an already sent message
-     * @param {String} message
-     * @param {String} title
-     * @param {String} color
-     * @param {String} thumbnailUrl
-     * @param {String} [image=""]
-     * @returns {Promise<Discord.Message>}
+     * @param {string} message
+     * @param {string} title
+     * @param {string} color
+     * @param {string} thumbnailUrl
+     * @param {string} [image=""]
+     * @returns {Promise<Message>}
      */
-    async edit(message, title = "", color = "RANDOM", thumbnailUrl = "", image = "") {
+    async edit(message: string, title: string = "", color: string = "RANDOM", thumbnailUrl: string = "", image: string = ""): Promise<Message> {
         return this.message.edit("", new Discord.RichEmbed()
             .setColor(color)
             .setDescription(message)

@@ -7,7 +7,7 @@ export default class Log {
      * @param {String} color
      * @param {String} prefix
      */
-    static async log(message, color = "white", prefix = null) {
+    static async log(message: string, color: string = "white", prefix: string = "") {
         const date = new Date().toISOString().replace(/T/, " ").replace(/\..+/, "");
 
         // TODO: Make this next line work on the vps
@@ -20,9 +20,9 @@ export default class Log {
 
         fs.writeFile("bot.log", `[${date}] ${message}\n`, {
             flag: "a"
-        }, (err) => {
-            if (err) {
-                throw err;
+        }, (error: any) => {
+            if (error) {
+                throw error;
             }
         });
     }
@@ -30,35 +30,35 @@ export default class Log {
     /**
      * @param {String} message
      */
-    static info(message) {
+    static info(message: string) {
         Log.log(message, "cyan", "info");
     }
 
     /**
      * @param {String} message
      */
-    static success(message) {
+    static success(message: string) {
         Log.log(message, "green", "sucs");
     }
 
     /**
      * @param {String} message
      */
-    static warn(message) {
+    static warn(message: string) {
         Log.log(message, "yellow", "warn");
     }
 
     /**
      * @param {String} message
      */
-    static error(message) {
+    static error(message: string) {
         Log.log(message, "red", "dang");
     }
 
     /**
      * @param {String} message
      */
-    static throw(message) {
+    static throw(message: string) {
         Log.log(message, "red", "dang");
         process.exit(1);
     }
@@ -66,14 +66,14 @@ export default class Log {
     /**
      * @param {String} message
      */
-    static async verbose(message) {
+    static async verbose(message: string) {
         Log.log(message, "grey");
     }
 
     /**
      * @param {String} message
      */
-    static debug(message) {
+    static debug(message: string) {
         Log.log(message, "magenta", "dbug");
     }
 }

@@ -1,20 +1,19 @@
 import Log from "../core/log";
+import {Message, Snowflake} from "discord.js";
 
 const EventEmitter = require("events");
 
 /**
  * @extends EventEmitter
  */
-export default class CommandAuthStore extends EventEmitter {
+export default abstract class CommandAuthStore extends EventEmitter {
     /**
      * @abstract
      * @param {Snowflake} guildId
      * @param {*} identifier
      * @returns {Number}
      */
-    getAuthLevel(guildId, identifier) {
-        Log.throw("[CommandAuthStore.getAuthLevel] Method not implemented");
-    }
+    abstract getAuthLevel(guildId: Snowflake, identifier: any): number;
 
     /**
      * @abstract
@@ -22,20 +21,17 @@ export default class CommandAuthStore extends EventEmitter {
      * @param {Array<String>} roles
      * @returns {Number}
      */
-    getHighestAuthLevelByRoles(guildId, roles) {
-        Log.throw("[CommandAuthStore.getHighestAuthLevelByRoles] Method not implemented");
-    }
+    abstract getHighestAuthLevelByRoles(guildId: Snowflake, roles: Array<string>): number;
 
     /**
+     * @todo TYPESCRIPT Fix initializer in implementations (not allowed in typescript abstract methods)
      * @abstract
      * @param {Snowflake} guildId
      * @param {Snowflake} userId
      * @param {Array<String>} roles
      * @return {Number} The authority of the user
      */
-    getAuthority(guildId, userId, roles = ["@everyone"]) {
-        Log.throw("[CommandAuthStore.getAuthority] Method not implemented");
-    }
+    abstract getAuthority(guildId: Snowflake, userId: Snowflake, roles: Array<string>/*  = ["@everyone"]*/): number;
 
     /**
      * Create a default auth store entry
@@ -43,9 +39,7 @@ export default class CommandAuthStore extends EventEmitter {
      * @param {Snowflake} guildId
      * @return {Boolean} Whether the entry was created
      */
-    create(guildId) {
-        Log.throw("[CommandAuthStore.create] Method not implemented");
-    }
+    abstract create(guildId: Snowflake): boolean;
 
     /**
      * Remove an auth store entry
@@ -53,17 +47,15 @@ export default class CommandAuthStore extends EventEmitter {
      * @param {Snowflake} guildId
      * @return {Boolean} Whether the entry was removed
      */
-    remove(guildId) {
-        Log.throw("[CommandAuthStore.remove] Method not implemented");
-    }
+    abstract remove(guildId: Snowflake): boolean;
 
     /**
      * Determine whether this auth store contains an entry
      * @param {Snowflake} guildId
      * @return {Boolean} Whether the entry exists
      */
-    contains(guildId) {
-        return this.data[guildId] !== undefined;
+    contains(guildId: Snowflake) {
+        return Object.keys(this.data).includes(guildId);
     }
 
     /**
@@ -72,7 +64,7 @@ export default class CommandAuthStore extends EventEmitter {
      * @param {Number} authLevel
      * @returns {Boolean}
      */
-    hasAuthority(guildId, message, authLevel) {
+    hasAuthority(guildId: Snowflake, message: Message, authLevel: number): boolean {
         return this.getAuthority(guildId, message.author.id, message.member.roles.array().map((role) => role.name)) >= authLevel;
     }
 }

@@ -5,19 +5,23 @@ const fs = require("fs");
 const Typer = require("@raxor1234/typer/typer");
 
 export default class Settings {
+    private readonly path: string;
+
+    general: any;
+    keys: any;
+
     /**
      * @param {String} path
      */
-    constructor(path) {
-        if (fs.existsSync(path)) {
-            /**
-             * @type {String}
-             * @private
-             * @readonly
-             */
-            this.path = path;
-        }
-        else {
+    constructor(path: string) {
+        /**
+         * @type {String}
+         * @private
+         * @readonly
+         */
+        this.path = path;
+
+        if (!fs.existsSync(this.path)) {
             Log.throw("Could not load settings: File does not exist");
         }
     }

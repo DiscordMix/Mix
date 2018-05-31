@@ -1,17 +1,23 @@
 export default class MessageBuilder {
+    private message: string;
+
     /**
      * @param {string} [startingString=""]
      */
     constructor(startingString = "") {
+        /**
+         * @type {string}
+         * @private
+         */
         this.message = startingString;
     }
 
     /**
-     * @param {string} string
-     * @returns {MessageBuilder}
+     * @param {string} text
+     * @return {MessageBuilder}
      */
-    add(string) {
-        this.message += string;
+    add(text: string): MessageBuilder {
+        this.message += text;
 
         return this;
     }
@@ -19,9 +25,9 @@ export default class MessageBuilder {
     /**
      * @param {(String|Null)} language
      * @param {(String|Null)} [code=null]
-     * @returns {MessageBuilder}
+     * @return {MessageBuilder}
      */
-    codeBlock(language = null, code = null) {
+    codeBlock(language = null, code = null): MessageBuilder {
         let result = "```";
 
         if (language !== null) {
@@ -36,60 +42,64 @@ export default class MessageBuilder {
     }
 
     /**
-     * @param {(string|null)} code
-     * @returns {MessageBuilder}
+     * @param {string} code
+     * @return {MessageBuilder}
      */
-    code(code = null) {
-        if (code === null) {
-            return this.add("`");
-        }
-
+    code(code: string): MessageBuilder {
         return this.add(`\`${code}\``);
     }
 
     /**
      * @param {string} text
-     * @returns {MessageBuilder}
+     * @return {MessageBuilder}
      */
-    italic(text) {
+    italic(text: string): MessageBuilder {
         return this.add(`*${text}*`);
     }
 
     /**
      * @param {string} text
-     * @returns {MessageBuilder}
+     * @return {MessageBuilder}
      */
-    bold(text) {
+    bold(text: string): MessageBuilder {
         return this.add(`**${text}**`);
     }
 
     /**
      * @param {string} text
-     * @returns {MessageBuilder}
+     * @return {MessageBuilder}
      */
-    underlined(text) {
+    underlined(text: string): MessageBuilder {
         return this.add(`__${text}__`);
     }
 
     /**
-     * @returns {MessageBuilder}
+     * @param {number} amount
+     * @return {MessageBuilder}
      */
-    line() {
-        return this.add("\n");
+    line(amount: number = 1): MessageBuilder {
+        let counter = 0;
+
+        while (counter !== amount) {
+            this.add("\n");
+            counter++;
+        }
+
+        return this;
     }
 
     /**
      * @param {string} emoji
-     * @returns {MessageBuilder}
+     * @return {MessageBuilder}
      */
-    emoji(emoji) {
+    emoji(emoji: string): MessageBuilder {
         return this.add(`:${emoji}:`);
     }
 
     /**
-     * @returns {string}
+     * @return {string}
      */
-    build() {
+    build(): string {
         return this.message;
     }
 }

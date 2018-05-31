@@ -5,14 +5,16 @@ const _ = require("lodash");
  * @extends EventEmitter
  */
 export default class Collection extends EventEmitter {
+    private items: Array<any>;
+
     /**
      * @param {Array} items
      */
-    constructor(items = []) {
+    constructor(items: Array<any> = []) {
         super();
 
         /**
-         * @type {Array}
+         * @type {Array<*>}
          * @private
          */
         this.items = items;
@@ -23,7 +25,7 @@ export default class Collection extends EventEmitter {
      * @param {Number} index
      * @returns {*}
      */
-    at(index) {
+    at(index: number) {
         return this.items[index];
     }
 
@@ -32,7 +34,7 @@ export default class Collection extends EventEmitter {
      * @param {Number} index
      * @returns {Boolean} Whether the item was removed
      */
-    removeAt(index) {
+    removeAt(index: number) {
         if (this.items[index] !== null && this.items[index] !== undefined) {
             this.emit("itemRemoved", this.items[index]);
             this.items.splice(index, 1);
@@ -47,7 +49,7 @@ export default class Collection extends EventEmitter {
      * Add an item to this collection
      * @param {*} item
      */
-    add(item) {
+    add(item: any) {
         this.items.push(item);
         this.emit("itemAdded", item);
     }
@@ -57,7 +59,7 @@ export default class Collection extends EventEmitter {
      * @param {*} item
      * @returns {Boolean} Whether the item was added
      */
-    addUnique(item) {
+    addUnique(item: any) {
         if (!this.contains(item)) {
             this.add(item);
 
@@ -72,7 +74,7 @@ export default class Collection extends EventEmitter {
      * @param {*} item
      * @returns {Boolean}
      */
-    contains(item) {
+    contains(item: any) {
         for (let i = 0; i < this.items.length; i++) {
             if (this.items[i] === item) {
                 return true;
@@ -88,7 +90,7 @@ export default class Collection extends EventEmitter {
      * @param {String} path
      * @param {*} value
      */
-    find(path, value) {
+    find(path: string, value: any) {
         for (let i = 0; i < this.items.length; i++) {
             if (_.get(this.items[i], path) === value) {
                 return this.items[i];

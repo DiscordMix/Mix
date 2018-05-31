@@ -21,12 +21,23 @@ const fs = require("fs");
  * @extends EventEmitter
  */
 export default class Bot extends EventEmitter {
+    settings: Settings;
+    dataStore: DataStore;
+    authStore: CommandAuthStore;
+    emojis: EmojiCollection;
+    client: any; // TODO
+    commands: CommandManager;
+    features: FeatureManager;
+    commandLoader: CommandLoader;
+    console: ConsoleInterface;
+    menus: EmojiMenuManager;
+
     /**
      * Setup the bot from an object
      * @param {Object} data
      * @return {Promise<Bot>}
      */
-    async setup(data) {
+    async setup(data: any) {
         Log.verbose("[Bot.setup] Validating data object");
 
         if (!Typer.validate({
@@ -35,8 +46,8 @@ export default class Bot extends EventEmitter {
             dataStore: ":dataStore",
             argumentTypes: "object"
         }, data, {
-            authStore: (val) => val instanceof CommandAuthStore,
-            dataStore: (val) => val instanceof DataStore
+            authStore: (val: any) => val instanceof CommandAuthStore,
+            dataStore: (val: any) => val instanceof DataStore
         })) {
             Log.throw("[Bot.setup] Invalid data object provided");
         }
@@ -127,10 +138,10 @@ export default class Bot extends EventEmitter {
         // TODO: Merge this resolvers with the (if provided) provided
         // ones by the user.
         const resolvers = {
-            user: (arg) => Utils.resolveId(arg),
-            channel: (arg) => Utils.resolveId(arg),
-            role: (arg) => Utils.resolveId(arg),
-            state: (arg) => Utils.translateState(arg)
+            user: (arg: string) => Utils.resolveId(arg),
+            channel: (arg: string) => Utils.resolveId(arg),
+            role: (arg: string) => Utils.resolveId(arg),
+            state: (arg: string) => Utils.translateState(arg)
         };
 
         // Discord client events
@@ -146,7 +157,7 @@ export default class Bot extends EventEmitter {
             Log.success("[Bot.setupEvents] Ready");
         });
 
-        this.client.on("message", async (message) => {
+        this.client.on("message", async (message: any) => {
             if (!message.author.bot) {
                 if (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
                     this.commands.handle(
@@ -156,7 +167,7 @@ export default class Bot extends EventEmitter {
                             bot: this,
 
                             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs
-                            auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role) => role.name), message.author.id) : null,
+                            auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role: any) => role.name), message.author.id) : null,
                             emojis: this.emojis
                         }),
 
@@ -208,7 +219,7 @@ export default class Bot extends EventEmitter {
      * @param {Boolean} reloadModules Whether to reload all modules
      * @return {Promise}
      */
-    async restart(reloadModules = true) {
+    async restart(reloadModules:boolean = true) {
         Log.verbose("[Bot.restart] Restarting");
 
         if (reloadModules) {
@@ -237,7 +248,7 @@ export default class Bot extends EventEmitter {
      */
     static async clearTemp() {
         if (fs.existsSync("./temp")) {
-            fs.readdir("./temp", (error, files) => {
+            fs.readdir("./temp", (error: any, files: any) => {
                 for (let i = 0; i < files.length; i++) {
                     fs.unlink(`./temp/${files[i]}`);
                 }

@@ -9,7 +9,12 @@ export default class EditableMessage {
     /**
      * @param {Discord.Message} message
      */
-    constructor(message: Message) {
+    constructor(message: Message | Message[]) {
+        // TODO: Hotfix
+        if (Array.isArray(message)) {
+            message = message[0];
+        }
+
         if (message.embeds.length === 0) {
             Log.error("[EditableMessage] Message parameter must contain embeds");
         }

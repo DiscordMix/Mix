@@ -1,10 +1,10 @@
 import Rgb from "./rgb";
 
 export interface RgbaOptions {
-    red: number,
-    green: number,
-    blue: number,
-    alpha: number
+    readonly red: number,
+    readonly green: number,
+    readonly blue: number,
+    readonly alpha: number
 }
 
 /**
@@ -50,7 +50,7 @@ export default class Rgba extends Rgb {
      * @return {Rgba|null}
      */
     static fromHex(hex: string): Rgba | null {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        const result: any = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
         const options: RgbaOptions = {
             red: parseInt(result[1], 16),

@@ -1,6 +1,5 @@
-import {ChatEnvironment} from "../core/chat-environment";
+import ChatEnvironment from "../core/chat-environment";
 import {CommandOptions} from "./command-options";
-import Permission from "../core/permission";
 
 const Typer = require("@raxor1234/typer/typer");
 
@@ -13,7 +12,7 @@ export default class Command {
     readonly args: any;
     readonly isEnabled: boolean;
     readonly cooldown: number;
-    readonly permissions: Array<Permission>;
+    readonly permissions: Array<any>; // TODO: Type hotfix
     readonly environment: ChatEnvironment;
     readonly auth: number;
 

@@ -6,7 +6,7 @@ const readline = require("readline");
 const { performance } = require("perf_hooks");
 
 export default class ConsoleInterface {
-    private ready: boolean;
+    ready: boolean;
 
     constructor() {
         /**

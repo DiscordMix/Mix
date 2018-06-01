@@ -9,8 +9,6 @@ const _ = require("lodash");
 export default class JsonStore extends ObjectStore {
     private readonly path: string;
 
-    private data: any;
-
     /**
      * @param {string} path
      */

@@ -1,7 +1,11 @@
-export default class Feature {
+import Bot from "../core/bot";
+
+export default abstract class Feature {
     readonly name: string;
     readonly key: string;
     readonly description: string;
+
+    isEnabled: boolean = false;
 
     /**
      * @param {String} name The name of the feature
@@ -28,5 +32,19 @@ export default class Feature {
         this.description = description;
     }
 
-    // TODO: Throw methods not implemented
+    /**
+     * @param {Bot} bot
+     */
+    abstract enabled(bot: Bot): void;
+
+    /**
+     * @param {Bot} bot
+     */
+    abstract disabled(bot: Bot): void;
+
+    /**
+     * @param {Bot} bot
+     * @return {boolean}
+     */
+    abstract canEnable(bot: Bot): boolean;
 }

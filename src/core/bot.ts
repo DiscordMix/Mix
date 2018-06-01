@@ -1,5 +1,5 @@
 import CommandParser from "../commands/command-parser";
-import CommandExecutionContext from "../commands/command-execution-context";
+import CommandExecutionContext, {CommandExecutionContextOptions} from "../commands/command-execution-context";
 import ConsoleInterface from "../console/console-interface";
 import EmojiMenuManager from "../emoji-ui/emoji-menu-manager";
 import CommandManager from "../commands/command-manager";
@@ -17,35 +17,51 @@ const Typer = require("@raxor1234/typer");
 const EventEmitter = require("events");
 const fs = require("fs");
 
+export interface BotPathOptions {
+    readonly settings: string;
+    readonly commands: string;
+    readonly emojis: string;
+}
+
+export interface BotOptions {
+    readonly paths: BotPathOptions;
+    readonly authStore: CommandAuthStore;
+    readonly dataStore?: DataStore;
+    readonly argumentTypes?: any;
+    readonly prefixCommand?: boolean;
+}
+
 /**
  * @extends EventEmitter
  */
 export default class Bot extends EventEmitter {
-    settings: Settings;
-    dataStore: DataStore;
-    authStore: CommandAuthStore;
-    emojis: EmojiCollection;
-    client: any; // TODO
-    commands: CommandManager;
-    features: FeatureManager;
-    commandLoader: CommandLoader;
-    console: ConsoleInterface;
-    menus: EmojiMenuManager;
+    readonly settings: Settings;
+    readonly dataStore?: DataStore;
+    readonly authStore: CommandAuthStore;
+    readonly emojis?: EmojiCollection;
+    readonly client: any; // TODO
+    readonly commands: CommandManager;
+    readonly features: FeatureManager;
+    readonly commandLoader: CommandLoader;
+    readonly console: ConsoleInterface;
+    readonly menus: EmojiMenuManager;
 
     /**
      * Setup the bot from an object
-     * @param {Object} data
+     * @param {Object} options
      * @return {Promise<Bot>}
      */
-    async setup(data: any) {
-        Log.verbose("[Bot.setup] Validating data object");
+    constructor(options: BotOptions) {
+        super();
 
-        if (!Typer.validate({
+        // Log.verbose("[Bot.setup] Validating data object");
+
+        /* if (!Typer.validate({
             paths: "!object",
             authStore: ":authStore",
             dataStore: ":dataStore",
             argumentTypes: "object"
-        }, data, {
+        }, options, {
             authStore: (val: any) => val instanceof CommandAuthStore,
             dataStore: (val: any) => val instanceof DataStore
         })) {
@@ -55,33 +71,33 @@ export default class Bot extends EventEmitter {
             settings: "!string",
             commands: "!string",
             emojis: "string"
-        }, data.paths)) {
+        }, options.paths)) {
             Log.throw("[Bot.setup] Invalid paths object");
-        }
+        } */
 
         /**
          * @type {Settings}
          * @readonly
          */
-        this.settings = await new Settings(data.paths.settings).reload();
+        this.settings = new Settings(options.paths.settings);
 
         /**
          * @type {DataStore}
          * @readonly
          */
-        this.dataStore = data.dataStore;
+        this.dataStore = options.dataStore ? options.dataStore : undefined;
 
         /**
          * @type {CommandAuthStore}
          * @readonly
          */
-        this.authStore = data.authStore;
+        this.authStore = options.authStore;
 
         /**
-         * @type {(EmojiCollection|Null)}
+         * @type {EmojiCollection|Null}
          * @readonly
          */
-        this.emojis = data.paths.emojis ? EmojiCollection.fromFile(data.paths.emojis) : null;
+        this.emojis = options.paths.emojis ? EmojiCollection.fromFile(options.paths.emojis) : undefined;
 
         /**
          * @type {Discord.Client}
@@ -93,13 +109,13 @@ export default class Bot extends EventEmitter {
          * @type {CommandManager}
          * @readonly
          */
-        this.commands = new CommandManager(this, data.paths.commands, this.authStore, data.argumentTypes ? data.argumentTypes : {});
+        this.commands = new CommandManager(this, options.paths.commands, this.authStore, options.argumentTypes ? options.argumentTypes : {});
 
         /**
          * @type {FeatureManager}
          * @readonly
          */
-        this.features = new FeatureManager();
+        this.features = new FeatureManager(this);
 
         /**
          * @type {CommandLoader}
@@ -119,6 +135,23 @@ export default class Bot extends EventEmitter {
          */
         this.menus = new EmojiMenuManager(this.client);
 
+        /**
+         * @type {boolean}
+         * @readonly
+         */
+        this.prefixCommand = options.prefixCommand ? options.prefixCommand : true;
+
+        return this;
+    }
+
+    /**
+     * Setup the bot
+     * @return {Promise<Bot>}
+     */
+    async setup(): Promise<Bot> {
+        // Load settings
+        await this.settings.reload();
+
         // Load commands
         await this.commandLoader.reloadAll();
 
@@ -134,6 +167,8 @@ export default class Bot extends EventEmitter {
      * Setup the client's events
      */
     setupEvents() {
+        Log.verbose("[Bot.setupEvents] Setting up Discord events");
+
         // TODO: Find better position
         // TODO: Merge this resolvers with the (if provided) provided
         // ones by the user.
@@ -160,29 +195,40 @@ export default class Bot extends EventEmitter {
         this.client.on("message", async (message: any) => {
             if (!message.author.bot) {
                 if (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
-                    this.commands.handle(
-                        new CommandExecutionContext({
-                            message: message,
-                            args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
-                            bot: this,
+                    const executionOptions: CommandExecutionContextOptions = {
+                        message: message,
+                        args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
+                        bot: this,
 
-                            // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs
-                            auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role: any) => role.name), message.author.id) : null,
-                            emojis: this.emojis
-                        }),
+                        // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs
+                        // TODO: CRITICAL: Default access level set to 0
+                        auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role: any) => role.name), message.author.id) : 0,
+                        emojis: this.emojis
+                    };
 
-                        CommandParser.parse(
-                            message.content,
-                            this.commands,
-                            this.settings.general.prefix
-                        )
+                    const command = CommandParser.parse(
+                        message.content,
+                        this.commands,
+                        this.settings.general.prefix
                     );
+
+                    if (command) {
+                        this.commands.handle(
+                            new CommandExecutionContext(executionOptions),
+                            command
+                        );
+                    }
+                    else {
+                        Log.error("[Bot.setupEvents] Failed parsing command");
+                    }
                 }
                 else if (message.content === "?prefix") {
                     message.channel.send(`Command prefix: **${this.settings.general.prefix}**`);
                 }
             }
         });
+
+        Log.success("[Bot.setupEvents] Discord events setup completed");
     }
 
     setupAuthStore() {
@@ -206,20 +252,22 @@ export default class Bot extends EventEmitter {
 
     /**
      * Connect the client
-     * @return {Promise}
+     * @return {Promise<Bot>}
      */
-    async connect() {
+    async connect(): Promise<Bot> {
         Log.verbose("[Bot.connect] Starting");
         await this.client.login(this.settings.general.token);
+
+        return this;
     }
 
     /**
      * Restart the bot's client
      * @todo Use the reload modules param
-     * @param {Boolean} reloadModules Whether to reload all modules
-     * @return {Promise}
+     * @param {boolean} reloadModules Whether to reload all modules
+     * @return {Promise<Bot>}
      */
-    async restart(reloadModules:boolean = true) {
+    async restart(reloadModules:boolean = true): Promise<Bot> {
         Log.verbose("[Bot.restart] Restarting");
 
         if (reloadModules) {
@@ -230,21 +278,25 @@ export default class Bot extends EventEmitter {
 
         await this.disconnect();
         await this.connect();
+
+        return this;
     }
 
     /**
      * Disconnect the client
-     * @return {Promise}
+     * @return {Promise<Bot>}
      */
-    async disconnect() {
+    async disconnect(): Promise<Bot> {
         this.settings.save();
         await this.client.destroy();
         Log.info("[Bot.disconnect] Disconnected");
+
+        return this;
     }
 
     /**
      * Clear all the files inside the temp folder
-     * @return {Promise}
+     * @return {Promise<*>}
      */
     static async clearTemp() {
         if (fs.existsSync("./temp")) {

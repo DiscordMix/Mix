@@ -5,8 +5,8 @@ const _ = require("lodash");
 /**
  * @extends DataStore
  */
-export default class objectStore extends DataStore {
-    private readonly data: any;
+export default class ObjectStore extends DataStore {
+    protected data: any;
 
     /**
      * @param {object} data
@@ -46,6 +46,6 @@ export default class objectStore extends DataStore {
      * @param {*} value
      */
     merge(path: string, value: any) {
-        throw new Error("[objectStore.merge] Method not implemented.");
+        throw new Error("[ObjectStore.merge] Method not implemented.");
     }
 }

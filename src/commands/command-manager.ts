@@ -13,13 +13,13 @@ const Typer = require("@raxor1234/typer/typer");
  * @enum {Number}
  */
 export enum CommandManagerEvent {
-    DisallowedEnvironment = 0,
-    DisabledCommand = 1,
-    ArgumentAmountMismatch = 2,
-    CommandMayNotExecute = 3,
-    InvalidArguments = 4,
-    RequiresPermissions = 5,
-    CommandError = 6
+    DisallowedEnvironment,
+    DisabledCommand,
+    ArgumentAmountMismatch,
+    CommandMayNotExecute,
+    InvalidArguments,
+    RequiresPermissions,
+    CommandError
 }
 
 export default class CommandManager /* extends Collection */ {
@@ -86,11 +86,17 @@ export default class CommandManager /* extends Collection */ {
     }
 
     /**
-     * @param {String} commandBase
-     * @return {Boolean}
+     * @param {string} commandBase
+     * @return {boolean} Whether the command was removed
      */
     removeByBase(commandBase: string): boolean {
-        return this.remove(this.getByName(commandBase));
+        const command = this.getByName(commandBase);
+
+        if (command) {
+            return this.remove(command);
+        }
+
+        return false;
     }
 
     /**
@@ -160,14 +166,14 @@ export default class CommandManager /* extends Collection */ {
      * @return {Object} The assembled arguments
      */
     assembleArguments(rules: any, args: Array<string>): any {
-        const result = {};
+        const result: any = {};
 
         if (rules.length !== args.length) {
             Log.debug("AssembleArguments: Not same length");
         }
 
         for (let i = 0; i < rules.length; i++) {
-            result[rules[i]] = (isNaN(args[i]) ? args[i] : parseInt(args[i]));
+            result[rules[i]] = (isNaN(parseInt(args[i])) ? args[i] : parseInt(args[i]));
         }
 
         return result;

@@ -1,5 +1,5 @@
 import Permission from "../core/permission";
-import {ChatEnvironment} from "../core/chat-environment";
+import ChatEnvironment from "../core/chat-environment";
 
 export interface CommandMetaOptions {
     name: string;
@@ -11,7 +11,7 @@ export interface CommandMetaOptions {
 export interface CommandRestrictOptions {
     enabled: boolean;
     cooldown: number;
-    permissions: Array<Permission>;
+    permissions: Array<any>; // TODO: Permission type
     env: ChatEnvironment;
     auth: number;
 }

@@ -138,10 +138,16 @@ export default class FeatureManager /* extends Collection */ {
     /**
      * Determine whether a feature is enabled
      * @param {string} key
-     * @return {boolean}
+     * @return {boolean} Whether the feature is disabled, or null if the feature doesn't exist
      */
-    isEnabled(key: string): boolean {
-        return this.get(key).isEnabled;
+    isEnabled(key: string): boolean | null {
+        const feature = this.get(key);
+
+        if (feature) {
+            return feature.isEnabled;
+        }
+
+        return null;
     }
 
     /**

@@ -31,7 +31,9 @@ export default class Settings {
      * @return {Promise<Settings>}
      */
     async reload() {
-        const jsonObj = await Utils.readJson(this.path);
+        Log.verbose("[Settings.reload] Reloading");
+
+        const jsonObj: any = await Utils.readJson(this.path);
 
         // TODO: Should be automatic
         // TODO: Should be validated using Schema | probably old comment
@@ -47,6 +49,9 @@ export default class Settings {
          */
         this.keys = jsonObj.keys;
 
+        Log.success("[Settings.reload] Successfully reloaded settings");
+
+        // TODO: May not be needed with typescript?
         // Validate settings after loading them
         this.validate();
 

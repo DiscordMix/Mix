@@ -1,5 +1,5 @@
 import EditableMessage from "../message/editable-message";
-import EmbedBuilder from "../message/embed-builder";
+import EmbedBuilder from "../builders/embed-builder";
 import {Message, Role, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import EmojiCollection from "../collections/emoji-collection";
@@ -7,11 +7,11 @@ import EmojiCollection from "../collections/emoji-collection";
 const Discord = require("discord.js");
 
 export interface CommandExecutionContextOptions {
-    message: Message;
-    args: Array<string>;
-    bot: Bot;
-    auth: number;
-    emojis: EmojiCollection;
+    readonly message: Message;
+    readonly args: Array<string>;
+    readonly bot: Bot;
+    readonly auth: number;
+    readonly emojis?: EmojiCollection;
 }
 
 export default class CommandExecutionContext {
@@ -19,7 +19,7 @@ export default class CommandExecutionContext {
     arguments: Array<string>;
     bot: Bot;
     auth: number;
-    emojis: EmojiCollection;
+    emojis?: EmojiCollection;
 
     /**
      * @param {CommandExecutionContextOptions} options
@@ -53,7 +53,7 @@ export default class CommandExecutionContext {
          * @type {EmojiCollection}
          * @readonly
          */
-        this.emojis = options.emojis;
+        this.emojis = options.emojis ? options.emojis : undefined;
     }
 
     /**
@@ -62,7 +62,7 @@ export default class CommandExecutionContext {
      * @return {Promise<EditableMessage>|Null}
      */
     async fileStream(stream: any, name: string): Promise<EditableMessage> {
-        return await this.message.channel.send(new Discord.Attachment(stream, name));
+        return new EditableMessage(await this.message.channel.send(new Discord.Attachment(stream, name)));
     }
 
     /**
@@ -70,7 +70,7 @@ export default class CommandExecutionContext {
      * @param {Boolean} [autoDelete=false]
      * @return {Promise<EditableMessage>|Null}
      */
-    async respond(content: object | EmbedBuilder, autoDelete: boolean = false): Promise<EditableMessage> {
+    async respond(content: any | EmbedBuilder, autoDelete: boolean = false): Promise<EditableMessage | null> {
         let embed = null;
 
         if (content.text) {
@@ -97,15 +97,29 @@ export default class CommandExecutionContext {
             embed = EmbedBuilder.fromObject(content);
         }
 
-        const messageResult = await this.message.channel.send(embed.build()).catch((error) => {
+        let messageResult = await this.message.channel.send(embed.build()).catch((error) => {
             // TODO: Temporarily disabled due to spamming on unwanted servers.
             // this.privateReply(`Oh noes! For some reason, I was unable to reply to you in that channel. (${error.message})`);
         });
 
+        // TODO: Hotfix
+        if (Array.isArray(messageResult)) {
+            messageResult = messageResult[0];
+        }
+
         if (autoDelete && messageResult) {
-            // TODO: Cannot access .length in embeds
-            // also static time for images, probably need function
-            const timeInSeconds = (4000 + (100 * embed.build() * 1000)) / 1000;
+            const fields = embed.build().fields;
+
+            let contentSize = 0;
+
+            if (fields) {
+                for (let i = 0; i < fields.length; i++) {
+                    contentSize += fields[i].name.length + fields[i].value.length;
+                }
+            }
+
+            // TODO: static time for images, probably need function
+            const timeInSeconds = (4000 + (100 * contentSize * 1000)) / 1000;
 
             messageResult.delete(4000 + (100 * messageResult.content.length * 1000));
 
@@ -122,7 +136,7 @@ export default class CommandExecutionContext {
      * @returns {Number}
      */
     getAuth(userId: Snowflake): number {
-        return this.bot.authStore.getAuthority(this.message.guild.id, this.message.guild.member(userId).roles.array().map((role: Role) => role.name), userId);
+        return this.bot.authStore.getAuthority(this.message.guild.id, userId, this.message.guild.member(userId).roles.array().map((role: Role) => role.name));
     }
 
     /**
@@ -137,7 +151,7 @@ export default class CommandExecutionContext {
      * @param {String} color
      * @return {Promise<EditableMessage>}
      */
-    async sections(sections: any, color: string = "GREEN"): Promise<EditableMessage> {
+    async sections(sections: any, color: string = "GREEN"): Promise<EditableMessage | null> {
         return await this.respond(EmbedBuilder.sections(sections, color));
     }
 
@@ -145,7 +159,7 @@ export default class CommandExecutionContext {
      * @param {String} text
      * @return {Promise<EditableMessage>}
      */
-    async ok(text: string): Promise<EditableMessage> {
+    async ok(text: string): Promise<EditableMessage | null> {
         return await this.respond({
             text: `${text}`
         });
@@ -155,7 +169,7 @@ export default class CommandExecutionContext {
      * @param {String} text
      * @return {Promise<EditableMessage>}
      */
-    async loading(text: string): Promise<EditableMessage> {
+    async loading(text: string): Promise<EditableMessage | null> {
         return await this.respond({
             text: `${text}`,
             color: "BLUE"

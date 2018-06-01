@@ -8,8 +8,8 @@ const Typer = require("@raxor1234/typer");
  * @extends CommandAuthStore
  */
 export default class ObjectAuthStore extends CommandAuthStore {
-    private readonly schema: any;
-    private readonly data: any;
+    protected schema: any;
+    protected data: any;
 
     /**
      * @param {Object} schema

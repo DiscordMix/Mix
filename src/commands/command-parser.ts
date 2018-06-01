@@ -10,8 +10,10 @@ export default class CommandParser {
      * @return {Command|Null}
      */
     static parse(commandString: string, manager: CommandManager, prefix: string): Command | null {
-        if (this.isValid(commandString, manager, prefix)) {
-            return manager.getByName(this.getCommandBase(commandString, prefix));
+        const commandBase = this.getCommandBase(commandString, prefix);
+
+        if (commandBase) {
+            return manager.getByName(commandBase);
         }
 
         return null;
@@ -25,7 +27,11 @@ export default class CommandParser {
      */
     static isValid(commandString: string, manager: CommandManager, prefix: string): boolean {
         if (commandString.startsWith(prefix)) {
-            return manager.isRegistered(this.getCommandBase(commandString, prefix));
+            const commandBase = this.getCommandBase(commandString, prefix);
+
+            if (commandBase) {
+                return manager.isRegistered(commandBase);
+            }
         }
 
         return false;
@@ -59,7 +65,13 @@ export default class CommandParser {
         let match = expression.exec(commandString);
 
         while (match != null) {
-            result.push(argCleanExpression.exec(match[1])[2]);
+            // TODO: Hotfix/review
+            const match1 = argCleanExpression.exec(match[1]);
+
+            if (match1) {
+                result.push(match1[2]);
+            }
+
             match = expression.exec(commandString);
         }
 

@@ -49,7 +49,7 @@ export default class ConsoleInterface {
                 }
 
                 case "ping": {
-                    console.log(`${bot.client.ping}ms`);
+                    console.log(`${Math.round(bot.client.ping)}ms`);
 
                     break;
                 }

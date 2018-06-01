@@ -1,79 +1,110 @@
 const colors = require("colors");
 const fs = require("fs");
 
+export enum LogLevel {
+    Fatal,
+    Error,
+    Warn,
+    Info,
+    Success,
+    Verbose,
+    Debug
+}
+
 export default class Log {
+    static level: LogLevel = LogLevel.Success;
+
     /**
-     * @param {String} message
-     * @param {String} color
-     * @param {String} prefix
+     * @param {string} message
+     * @param {LogLevel} type
+     * @param {string} color
+     * @param {string} prefix
+     * @return {Promise<void>}
      */
-    static async log(message: string, color: string = "white", prefix: string = "") {
-        const date = new Date().toISOString().replace(/T/, " ").replace(/\..+/, "");
+    static async compose(message: string, type: LogLevel, color: string = "white", prefix: string = ""): Promise<any> {
+        return new Promise((resolve) => {
+            // TODO: Make sure check is working as inteded, seems a bit suspicious
+            if (Log.level < type) {
+                resolve();
 
-        // TODO: Make this next line work on the vps
-        // process.stdout.write(`\x1B[2D[${date}] ${colors[color](message)}\n> `);
-        console.log(`[${date}] ${colors[color](message)}`);
-
-        if (prefix !== null) {
-            message = `<${prefix.toUpperCase()}> ${message}`;
-        }
-
-        fs.writeFile("bot.log", `[${date}] ${message}\n`, {
-            flag: "a"
-        }, (error: any) => {
-            if (error) {
-                throw error;
+                return;
             }
+
+            const date = new Date().toISOString().replace(/T/, " ").replace(/\..+/, "");
+
+            // TODO: Make this next line work on the vps
+            // process.stdout.write(`\x1B[2D[${date}] ${colors[color](message)}\n> `);
+            console.log(`[${date}] ${colors[color](message)}`);
+
+            if (prefix !== null) {
+                message = `<${prefix.toUpperCase()}> ${message}`;
+            }
+
+            fs.writeFile("bot.log", `[${date}] ${message}\n`, {
+                flag: "a"
+            }, (error: any) => {
+                if (error) {
+                    throw error;
+                }
+
+                resolve();
+            });
         });
     }
 
     /**
-     * @param {String} message
+     * @param {string} message
      */
-    static info(message: string) {
-        Log.log(message, "cyan", "info");
+    static info(message: string): Promise<any> {
+        return Log.compose(message, LogLevel.Info, "cyan", "info");
     }
 
     /**
-     * @param {String} message
+     * @param {string} message
      */
-    static success(message: string) {
-        Log.log(message, "green", "sucs");
+    static success(message: string): Promise<any> {
+        return Log.compose(message, LogLevel.Success, "green", "sucs");
     }
 
     /**
-     * @param {String} message
+     * @param {string} message
      */
-    static warn(message: string) {
-        Log.log(message, "yellow", "warn");
+    static warn(message: string): Promise<any> {
+        return Log.compose(message, LogLevel.Warn, "yellow", "warn");
     }
 
     /**
-     * @param {String} message
+     * @param {string} message
      */
-    static error(message: string) {
-        Log.log(message, "red", "dang");
+    static error(message: string): Promise<any> {
+        return Log.compose(message, LogLevel.Error, "red", "dang");
     }
 
     /**
-     * @param {String} message
+     * @param {string} message
+     * @param {boolean} exit
      */
-    static throw(message: string) {
-        Log.log(message, "red", "dang");
-        process.exit(1);
+    static throw(message: string, exit: boolean = true): Promise<any> {
+        const result = Log.compose(message, LogLevel.Fatal, "red", "dang")
+
+        if (exit) {
+            process.exit(1);
+        }
+
+        return result;
     }
 
     /**
-     * @param {String} message
+     * @param {string} message
      */
-    static async verbose(message: string) {
-        Log.log(message, "grey");
+    static verbose(message: string): Promise<any> {
+        return Log.compose(message, LogLevel.Verbose, "grey", "verb");
     }
 
     /**
-     * @param {String} message
+     * @param {string} message
      */
-    static debug(message: string) {
-        Log.log(message, "magenta", "dbug");
+    static debug(message: string): Promise<any> {
+        return Log.compose(message, LogLevel.Debug, "magenta", "dbug");
     }
 }

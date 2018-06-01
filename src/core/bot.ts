@@ -13,7 +13,6 @@ import DataStore from "../data-stores/data-store";
 import CommandAuthStore from "../commands/command-auth-store";
 
 const Discord = require("discord.js");
-const Typer = require("@raxor1234/typer");
 const EventEmitter = require("events");
 const fs = require("fs");
 
@@ -45,6 +44,7 @@ export default class Bot extends EventEmitter {
     readonly commandLoader: CommandLoader;
     readonly console: ConsoleInterface;
     readonly menus: EmojiMenuManager;
+    readonly prefixCommand: boolean;
 
     /**
      * Setup the bot from an object
@@ -193,38 +193,36 @@ export default class Bot extends EventEmitter {
         });
 
         this.client.on("message", async (message: any) => {
-            if (!message.author.bot) {
-                if (CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
-                    const executionOptions: CommandExecutionContextOptions = {
-                        message: message,
-                        args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
-                        bot: this,
+            if (!message.author.bot && CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
+                const executionOptions: CommandExecutionContextOptions = {
+                    message: message,
+                    args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
+                    bot: this,
 
-                        // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs
-                        // TODO: CRITICAL: Default access level set to 0
-                        auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role: any) => role.name), message.author.id) : 0,
-                        emojis: this.emojis
-                    };
+                    // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
+                    // TODO: CRITICAL: Default access level set to 0
+                    auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role: any) => role.name), message.author.id) : 0,
+                    emojis: this.emojis
+                };
 
-                    const command = CommandParser.parse(
-                        message.content,
-                        this.commands,
-                        this.settings.general.prefix
+                const command = CommandParser.parse(
+                    message.content,
+                    this.commands,
+                    this.settings.general.prefix
+                );
+
+                if (command) {
+                    this.commands.handle(
+                        new CommandExecutionContext(executionOptions),
+                        command
                     );
-
-                    if (command) {
-                        this.commands.handle(
-                            new CommandExecutionContext(executionOptions),
-                            command
-                        );
-                    }
-                    else {
-                        Log.error("[Bot.setupEvents] Failed parsing command");
-                    }
                 }
-                else if (message.content === "?prefix") {
-                    message.channel.send(`Command prefix: **${this.settings.general.prefix}**`);
+                else {
+                    Log.error("[Bot.setupEvents] Failed parsing command");
                 }
+            }
+            else if (message.content === "?prefix" && this.prefixCommand) {
+                message.channel.send(`Command prefix: **${this.settings.general.prefix}**`);
             }
         });
 
@@ -267,7 +265,7 @@ export default class Bot extends EventEmitter {
      * @param {boolean} reloadModules Whether to reload all modules
      * @return {Promise<Bot>}
      */
-    async restart(reloadModules:boolean = true): Promise<Bot> {
+    async restart(reloadModules: boolean = true): Promise<Bot> {
         Log.verbose("[Bot.restart] Restarting");
 
         if (reloadModules) {

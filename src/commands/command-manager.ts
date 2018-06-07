@@ -191,11 +191,15 @@ export default class CommandManager /* extends Collection */ {
     }
 
     /**
+     * @todo Since it's returning a Promise, review
      * @param {CommandExecutionContext} context
      * @param {Command} command The command to handle
      * @return {Promise<Boolean>} Whether the command was successfully executed
      */
     async handle(context: CommandExecutionContext, command: Command): Promise<boolean> {
+        // TODO: Add a check for exclusions including:
+        // #channelId, &roleId, @userId, $guildId
+
         if (!CommandManager.validateEnvironment(command.environment, context.message.channel.type)) {
             if (this.handlers[CommandManagerEvent.DisallowedEnvironment]) {
                 this.handlers[CommandManagerEvent.DisallowedEnvironment](context, command);
@@ -257,7 +261,7 @@ export default class CommandManager /* extends Collection */ {
         }
         else {
             try {
-                const result = command.executed(context);
+                const result: boolean = command.executed(context);
 
                 context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command));
 

@@ -1,4 +1,5 @@
 import "babel-polyfill";
+import {CommandMetaOptions, CommandOptions, CommandRestrictOptions} from "./commands/command";
 
 module.exports = {
     // Commands
@@ -9,6 +10,9 @@ module.exports = {
     CommandManagerEvent: require("./commands/command-manager").CommandManagerEvent,
     CommandParser: require("./commands/command-parser").default,
     Command: require("./commands/command").default,
+    CommandMetaOptions: require("./commands/command").CommandMetaOptions,
+    CommandRestrictOptions: require("./commands/command").CommandRestrictOptions,
+    CommandOptions: require("./commands/command").CommandOptions,
 
     // Console
     ConsoleInterface: require("./console/console-interface").default,

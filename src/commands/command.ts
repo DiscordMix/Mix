@@ -1,7 +1,29 @@
 import ChatEnvironment from "../core/chat-environment";
-import {CommandOptions} from "./command-options";
 
 const Typer = require("@raxor1234/typer/typer");
+
+export interface CommandMetaOptions {
+    name: string;
+    desc: string;
+    aliases: Array<string>;
+    args: any;
+}
+
+export interface CommandRestrictOptions {
+    enabled: boolean;
+    cooldown: number;
+    permissions: Array<any>; // TODO: Permission type
+    env: ChatEnvironment;
+    auth: number;
+    exclude: Array<string>;
+}
+
+export interface CommandOptions {
+    executed: Function;
+    canExecute: Function;
+    meta: CommandMetaOptions;
+    restrict: CommandRestrictOptions;
+}
 
 export default class Command {
     readonly name: string;
@@ -15,6 +37,7 @@ export default class Command {
     readonly permissions: Array<any>; // TODO: Type hotfix
     readonly environment: ChatEnvironment;
     readonly auth: number;
+    readonly exclude: Array<string>;
 
     /**
      * @param {Object} options
@@ -85,10 +108,24 @@ export default class Command {
          * @readonly
          */
         this.auth = options.restrict.auth !== undefined ? options.restrict.auth : 0;
+
+        /**
+         * @type {Array<string>}
+         * @readonly
+         */
+        this.exclude = options.restrict.exclude ? options.restrict.exclude : [];
     }
 
     /**
-     * @return {Number} The minimum amount of required arguments that this command accepts
+     * @param {string} query
+     * @returns {boolean} Whether the query is excluded
+     */
+    isExcluded(query: string): boolean {
+        return this.exclude.includes(query);
+    }
+
+    /**
+     * @return {number} The minimum amount of required arguments that this command accepts
      */
     get maxArguments(): number {
         const keys = Object.keys(this.args);
@@ -106,8 +143,8 @@ export default class Command {
 
     /**
      * Validate a command module
-     * @param {Object} data The module to validate
-     * @return {Boolean} Whether the module is valid
+     * @param {object} data The module to validate
+     * @return {boolean} Whether the module is valid
      */
     static validate(data: CommandOptions): boolean {
         const methods = Typer.validate({

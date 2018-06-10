@@ -1,5 +1,4 @@
 import "babel-polyfill";
-import {CommandMetaOptions, CommandOptions, CommandRestrictOptions} from "./commands/command";
 
 module.exports = {
     // Commands
@@ -19,7 +18,6 @@ module.exports = {
     ConsoleCommand: require("./console/console-command").default,
 
     // Core
-    AccessLevelType: require("./commands/access-level-type").default,
     Bot: require("./core/bot").default,
     EditableMessage: require("./message/editable-message").default,
     EmbedBuilder: require("./builders/embed-builder").default,
@@ -31,7 +29,6 @@ module.exports = {
     Settings: require("./core/settings").default,
     TimeParser: require("./time/time-parser").default,
     TimeSuffixType: require("./time/time-suffix-type").default,
-    UserConfig: require("./core/user-config").default,
     Utils: require("./core/utils").default,
     Permission: require("./core/permission").default,
     ChatEnvironment: require("./core/chat-environment").default,

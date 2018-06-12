@@ -58,7 +58,7 @@ export default class JsonAuthStore extends ObjectAuthStore {
         }
 
         if (!fs.existsSync(this.schemaPath)) {
-            Log.throw(`[JsonAuthStore] Schema file path does not exist: ${this.schemaPath}`);
+            Log.throw(`[JsonAuthStore] Schema file does not exist in path: ${this.schemaPath}`);
         }
 
         this.schema = await Utils.readJson(this.schemaPath);

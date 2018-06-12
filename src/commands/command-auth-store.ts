@@ -1,4 +1,3 @@
-import Log from "../core/log";
 import {Message, Snowflake} from "discord.js";
 
 const EventEmitter = require("events");
@@ -7,19 +6,21 @@ const EventEmitter = require("events");
  * @extends EventEmitter
  */
 export default abstract class CommandAuthStore extends EventEmitter {
+    schema: any;
+
     /**
      * @abstract
      * @param {Snowflake} guildId
      * @param {*} identifier
-     * @returns {Number}
+     * @return {number}
      */
     abstract getAuthLevel(guildId: Snowflake, identifier: any): number;
 
     /**
      * @abstract
      * @param {Snowflake} guildId
-     * @param {Array<String>} roles
-     * @returns {Number}
+     * @param {Array<string>} roles
+     * @return {number}
      */
     abstract getHighestAuthLevelByRoles(guildId: Snowflake, roles: Array<string>): number;
 
@@ -28,16 +29,16 @@ export default abstract class CommandAuthStore extends EventEmitter {
      * @abstract
      * @param {Snowflake} guildId
      * @param {Snowflake} userId
-     * @param {Array<String>} roles
-     * @return {Number} The authority of the user
+     * @param {Array<string>} roles
+     * @return {number} The authority of the user
      */
-    abstract getAuthority(guildId: Snowflake, userId: Snowflake, roles: Array<string>/*  = ["@everyone"]*/): number;
+    abstract getAuthority(guildId: Snowflake, userId: Snowflake, roles: Array<string>/* = ["@everyone"]*/): number;
 
     /**
      * Create a default auth store entry
      * @abstract
      * @param {Snowflake} guildId
-     * @return {Boolean} Whether the entry was created
+     * @return {boolean} Whether the entry was created
      */
     abstract create(guildId: Snowflake): boolean;
 
@@ -45,14 +46,14 @@ export default abstract class CommandAuthStore extends EventEmitter {
      * Remove an auth store entry
      * @abstract
      * @param {Snowflake} guildId
-     * @return {Boolean} Whether the entry was removed
+     * @return {boolean} Whether the entry was removed
      */
     abstract remove(guildId: Snowflake): boolean;
 
     /**
      * Determine whether this auth store contains an entry
      * @param {Snowflake} guildId
-     * @return {Boolean} Whether the entry exists
+     * @return {boolean} Whether the entry exists
      */
     contains(guildId: Snowflake) {
         return Object.keys(this.data).includes(guildId);
@@ -61,10 +62,27 @@ export default abstract class CommandAuthStore extends EventEmitter {
     /**
      * @param {Snowflake} guildId
      * @param {Discord.Message} message
-     * @param {Number} authLevel
-     * @returns {Boolean}
+     * @param {number} authLevel
+     * @return {boolean}
      */
     hasAuthority(guildId: Snowflake, message: Message, authLevel: number): boolean {
+        // TODO: Message.member may return undefined in private channels (DMs)
         return this.getAuthority(guildId, message.author.id, message.member.roles.array().map((role) => role.name)) >= authLevel;
+    }
+
+    /**
+     * @param {number} rank
+     * @return {string | null}
+     */
+    getSchemaRankName(rank: number): string | null {
+        const keys = Object.keys(this.schema);
+
+        for (let i = 0; i < keys.length; i++) {
+            if (this.schema[keys[i]].rank === rank) {
+                return keys[i];
+            }
+        }
+
+        return null;
     }
 }

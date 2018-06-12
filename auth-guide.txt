@@ -1,0 +1,23 @@
+===> Schema -> Define your auth levels (manual)
+
+{
+	"default": {
+		"rank": 0
+	},
+	"member": {
+		"rank": 1
+	}
+}
+
+===> Store -> Store auth level data (automatic)
+
+{
+    "default": 0, // Always have the default rank in the store
+
+	"954320520342343244": [ // Guild id
+	    1: [ // User IDs/role IDs
+	        "94324238532592342", // Someone's ID
+	        "59452034023040560"  // Some role's ID
+	    ]
+	]
+}

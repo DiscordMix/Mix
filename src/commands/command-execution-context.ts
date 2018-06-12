@@ -97,7 +97,7 @@ export default class CommandExecutionContext {
             embed = EmbedBuilder.fromObject(content);
         }
 
-        let messageResult = await this.message.channel.send(embed.build()).catch((error) => {
+        let messageResult = await this.message.channel.send(embed.build()).catch((error: Error) => {
             // TODO: Temporarily disabled due to spamming on unwanted servers.
             // this.privateReply(`Oh noes! For some reason, I was unable to reply to you in that channel. (${error.message})`);
         });
@@ -121,7 +121,7 @@ export default class CommandExecutionContext {
             // TODO: static time for images, probably need function
             const timeInSeconds = (4000 + (100 * contentSize * 1000)) / 1000;
 
-            messageResult.delete(4000 + (100 * messageResult.content.length * 1000));
+            messageResult.delete(timeInSeconds);
 
             // TODO
             // this.bot.log.info(messageResult.content.length);

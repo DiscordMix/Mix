@@ -201,7 +201,7 @@ export default class Bot extends EventEmitter {
                 }
             }
             else if (message.content === "?prefix" && this.prefixCommand) {
-                message.channel.send(`Command prefix: **${this.settings.general.prefix}**`);
+                message.channel.send(`Command prefix: **${this.settings.general.prefix}** | Powered by Anvil v**${await Utils.getAnvilVersion()}**`);
             }
         });
 

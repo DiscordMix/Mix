@@ -11,7 +11,7 @@ export default class Utils {
      * @param {String} mention
      * @returns {String}
      */
-    static resolveId(mention: string) {
+    static resolveId(mention: string): string {
         return mention
             .replace("<", "")
             .replace(">", "")
@@ -26,7 +26,7 @@ export default class Utils {
      * @param {Number} max
      * @return {Number} The random number
      */
-    static getRandomInt(min: number, max: number) {
+    static getRandomInt(min: number, max: number): number {
         return Math.floor(Math.random() * max) + min;
     }
 
@@ -34,7 +34,7 @@ export default class Utils {
      * @param {Array<*>} array The array to shuffle
      * @return {Array<*>} The shuffled array
      */
-    static shuffle(array: Array<any>) {
+    static shuffle(array: Array<any>): Array<any> {
         let counter = array.length;
 
         // While there are elements in the array
@@ -116,7 +116,7 @@ export default class Utils {
      * @param {String} state
      * @return {Boolean}
      */
-    static translateState(state: string) {
+    static translateState(state: string): boolean {
         return /^(1|true|on|y|yes)$/i.test(state);
     }
 
@@ -125,7 +125,7 @@ export default class Utils {
      * @param {Object} data
      * @return {Promise}
      */
-    static async writeJson(path: string, data: any) {
+    static async writeJson(path: string, data: any): Promise<any> {
         return new Promise((resolve) => {
             fs.writeFile(path, JSON.stringify(data), (error: any) => {
                 if (error) {
@@ -141,9 +141,9 @@ export default class Utils {
      * @param {String} path
      * @return {Promise<Object>}
      */
-    static async readJson(path: string) {
+    static async readJson(path: string): Promise<any> {
         return new Promise((resolve) => {
-            fs.readFile(path, (error: any, data: any) => {
+            fs.readFile(path, (error: Error, data: any) => {
                 if (error) {
                     throw error;
                 }
@@ -157,7 +157,15 @@ export default class Utils {
      * @param {String} string The string to escape
      * @returns {String} The escaped string
      */
-    static escapeRegexString(string: string) {
+    static escapeRegexString(string: string): string {
         return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    }
+
+    static async getAnvilVersion(): Promise<string> {
+        // TODO
+        // return (await this.readJson("package.json")).version;
+
+        // TODO: Hard coded
+        return "1.1.21";
     }
 }

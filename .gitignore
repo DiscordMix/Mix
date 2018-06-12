@@ -4,3 +4,4 @@ dist/
 .vscode/
 temp/*
 botty.db
+visualize_gource.bat

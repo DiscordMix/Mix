@@ -19,7 +19,8 @@ export enum CommandManagerEvent {
     CommandMayNotExecute,
     InvalidArguments,
     RequiresPermissions,
-    CommandError
+    CommandError,
+    NoAuthority
 }
 
 export default class CommandManager /* extends Collection */ {
@@ -131,11 +132,14 @@ export default class CommandManager /* extends Collection */ {
 
     /**
      * @param {Array<Command>} commands
+     * @return {CommandManager}
      */
     registerMultiple(commands: Array<Command>) {
         for (let i = 0; i < commands.length; i++) {
             this.register(commands[i]);
         }
+
+        return this;
     }
 
     /**
@@ -216,12 +220,22 @@ export default class CommandManager /* extends Collection */ {
                 context.fail("That command is disabled and may not be used.");
             }
         }
-        // TODO: New AuthStore system
-        /* else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
-            const minAuthority = AccessLevelType.toString(command.auth);
+        else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
+            if (this.handlers[CommandManagerEvent.NoAuthority]) {
+                this.handlers[CommandManagerEvent.NoAuthority](context, command);
+            }
+            else {
+                const minAuthority = this.authStore.getSchemaRankName(command.auth);
 
-            context.fail(`You don't have the authority to use that command. You must be at least a(n) **${minAuthority}**.`);
-        } */
+                let rankName = "Unknown"; // TODO: Unknown should be a reserved auth level name (schema)
+
+                if (minAuthority !== null) {
+                    rankName = minAuthority.charAt(0).toUpperCase() + minAuthority.slice(1);
+                }
+
+                context.fail(`You don't have the authority to use that command. You must be at least a(n) **${rankName}**.`);
+            }
+        }
         else if (context.arguments.length > command.maxArguments) {
             if (this.handlers[CommandManagerEvent.ArgumentAmountMismatch]) {
                 this.handlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);

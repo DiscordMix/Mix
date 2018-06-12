@@ -59,7 +59,7 @@ export default class CommandExecutionContext {
     /**
      * @param {*} stream
      * @param {string} name
-     * @return {Promise<EditableMessage>|Null}
+     * @return {Promise<EditableMessage>|null}
      */
     async fileStream(stream: any, name: string): Promise<EditableMessage> {
         return new EditableMessage(await this.message.channel.send(new Discord.Attachment(stream, name)));
@@ -68,7 +68,7 @@ export default class CommandExecutionContext {
     /**
      * @param {Object|EmbedBuilder} content
      * @param {boolean} [autoDelete=false]
-     * @return {Promise<EditableMessage>|Null}
+     * @return {Promise<EditableMessage>|null}
      */
     async respond(content: any | EmbedBuilder, autoDelete: boolean = false): Promise<EditableMessage | null> {
         let embed = null;

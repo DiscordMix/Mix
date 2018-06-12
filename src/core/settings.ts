@@ -30,7 +30,7 @@ export default class Settings {
      * Reload settings
      * @return {Promise<Settings>}
      */
-    async reload() {
+    async reload(): Promise<Settings> {
         Log.verbose("[Settings.reload] Reloading");
 
         const jsonObj: any = await Utils.readJson(this.path);
@@ -63,7 +63,7 @@ export default class Settings {
      * Save the local settings into path
      * @return {Settings}
      */
-    save() {
+    save(): Settings {
         fs.writeFileSync(this.path, JSON.stringify({
             general: this.general,
             keys: this.keys
@@ -77,7 +77,7 @@ export default class Settings {
      * @todo
      * @return {Settings}
      */
-    validate() {
+    validate(): Settings {
         if (!Typer.validate({
             token: "!string",
             prefix: "!string"

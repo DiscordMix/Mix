@@ -23,7 +23,8 @@ export default class EmojiMenuManager {
          */
         this.awaiting = [];
 
-        this.client.on("messageReactionAdd", (reaction, user) => {
+        // TODO: Types
+        this.client.on("messageReactionAdd", (reaction: any, user: any) => {
             if (!user.bot) {
                 for (let i = 0; i < this.awaiting.length; i++) {
                     if (this.awaiting[i].messageId === reaction.message.id) {

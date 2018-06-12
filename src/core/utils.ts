@@ -62,7 +62,7 @@ export default class Utils {
      * @param {string} [footerSuffix=""]
      * @return {Promise<Discord.Message>}
      */
-    static async send(options: any, requester: any, channel: any, footerSuffix = "") {
+    static async send(options: any, requester: any, channel: any, footerSuffix = ""): any {
         const optionsCpy = options;
 
         optionsCpy.footer = {
@@ -90,7 +90,7 @@ export default class Utils {
      * @param {number} [years=0]
      * @return {number}
      */
-    static timeFromNow(milliseconds: number, seconds: number = 0, minutes: number = 0, hours: number = 0, days: number = 0, months: number = 0, years: number = 0) {
+    static timeFromNow(milliseconds: number, seconds: number = 0, minutes: number = 0, hours: number = 0, days: number = 0, months: number = 0, years: number = 0): number {
         const now = new Date();
 
         return new Date(years + now.getFullYear(), months + now.getMonth(), days + now.getDate(), hours + now.getHours(), minutes + now.getMinutes(), seconds + now.getSeconds(), milliseconds + now.getMilliseconds()).getTime();
@@ -100,7 +100,7 @@ export default class Utils {
      * @param {number} timestamp
      * @return {string}
      */
-    static timeAgo(timestamp: number) {
+    static timeAgo(timestamp: number): string {
         return timeAgo.format(timestamp);
     }
 
@@ -108,7 +108,7 @@ export default class Utils {
      * @param {number} timestamp
      * @return {string}
      */
-    static timeAgoFromNow(timestamp: number) {
+    static timeAgoFromNow(timestamp: number): string {
         return Utils.timeAgo(Date.now() - timestamp);
     }
 

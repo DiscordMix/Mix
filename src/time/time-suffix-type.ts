@@ -12,10 +12,11 @@ const TimeSuffixType = {
     Year: 6,
 
     /**
+     * @todo Return type
      * @param {string} short The short suffix
      * @return {TimeSuffixType}
      */
-    fromShort(short) {
+    fromShort(short: string): any {
         switch (short) {
             case "ms": {
                 return this.Millisecond;

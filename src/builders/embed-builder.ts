@@ -19,7 +19,7 @@ export default class EmbedBuilder {
      * @param {string} color
      * @return {EmbedBuilder}
      */
-    color(color: string) {
+    color(color: string): EmbedBuilder {
         this.embed.setColor(color);
 
         return this;
@@ -30,7 +30,7 @@ export default class EmbedBuilder {
      * @param {string} title
      * @return {EmbedBuilder}
      */
-    title(title: string) {
+    title(title: string): EmbedBuilder {
         this.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : "");
 
         return this;
@@ -40,7 +40,7 @@ export default class EmbedBuilder {
      * @param {string} url
      * @return {EmbedBuilder}
      */
-    titleIcon(url: string) {
+    titleIcon(url: string): EmbedBuilder {
         this.embed.setAuthor(this.embed.author ? this.embed.author.name : null, url);
 
         return this;
@@ -51,7 +51,7 @@ export default class EmbedBuilder {
      * @param {string} url
      * @return {EmbedBuilder}
      */
-    thumbnail(url: string) {
+    thumbnail(url: string): EmbedBuilder {
         this.embed.setThumbnail(url);
 
         return this;
@@ -63,7 +63,7 @@ export default class EmbedBuilder {
      * @param {string} icon
      * @return {EmbedBuilder}
      */
-    footer(text: string, icon: string) {
+    footer(text: string, icon: string): EmbedBuilder {
         this.embed.setFooter(text, icon);
 
         return this;
@@ -74,7 +74,7 @@ export default class EmbedBuilder {
      * @param {string} url
      * @return {EmbedBuilder}
      */
-    image(url: string) {
+    image(url: string): EmbedBuilder {
         this.embed.setImage(url);
 
         return this;
@@ -86,7 +86,7 @@ export default class EmbedBuilder {
      * @param {string} text
      * @return {EmbedBuilder}
      */
-    text(text: string) {
+    text(text: string): EmbedBuilder {
         this.embed.setDescription(text);
 
         return this;
@@ -98,7 +98,7 @@ export default class EmbedBuilder {
      * @param {*} value
      * @return {EmbedBuilder}
      */
-    field(title: string, value: any) {
+    field(title: string, value: any): EmbedBuilder {
         this.embed.addField(title, value);
 
         return this;
@@ -108,7 +108,7 @@ export default class EmbedBuilder {
      * Convert the embed to a RichEmbed
      * @return {Discord.RichEmbed}
      */
-    build() {
+    build(): RichEmbed {
         return this.embed;
     }
 
@@ -116,7 +116,7 @@ export default class EmbedBuilder {
      * @param {Object} obj
      * @return {EmbedBuilder}
      */
-    static fromObject(obj: any) {
+    static fromObject(obj: any): EmbedBuilder {
         const result = new EmbedBuilder();
 
         if (!obj.text) {
@@ -158,7 +158,7 @@ export default class EmbedBuilder {
      * @param {string} color
      * @return {EmbedBuilder}
      */
-    static sections(sections: any, color: string = "") {
+    static sections(sections: any, color: string = ""): EmbedBuilder {
         const result = new EmbedBuilder();
 
         for (let i = 0; i < Object.keys(sections).length; i++) {

@@ -82,7 +82,7 @@ export default class CommandManager /* extends Collection */ {
     /**
      * @param {Command} command
      */
-    register(command: Command) {
+    register(command: Command): void {
         this.commands.push(command);
     }
 
@@ -134,7 +134,7 @@ export default class CommandManager /* extends Collection */ {
      * @param {Array<Command>} commands
      * @return {CommandManager}
      */
-    registerMultiple(commands: Array<Command>) {
+    registerMultiple(commands: Array<Command>): CommandManager {
         for (let i = 0; i < commands.length; i++) {
             this.register(commands[i]);
         }
@@ -152,7 +152,7 @@ export default class CommandManager /* extends Collection */ {
 
     /**
      * @param {string} name
-     * @return {(Command|Null)}
+     * @return {(Command|null)}
      */
     getByName(name: string): Command | null {
         for (let i = 0; i < this.commands.length; i++) {
@@ -299,7 +299,7 @@ export default class CommandManager /* extends Collection */ {
     /**
      * Unload all commands
      */
-    unloadAll() {
+    unloadAll(): void {
         if (this.commands.length > 0) {
             const count = this.commands.length;
             this.commands = [];

@@ -45,9 +45,9 @@ export default class JsonAuthStore extends ObjectAuthStore {
 
     /**
      * @todo Complete
-     * @return {Promise}
+     * @return {Promise<*>}
      */
-    async reload() {
+    async reload(): Promise<any> {
         if (!this.exists) {
             this.data = {};
             await Utils.writeJson(this.storePath, this.data);
@@ -66,7 +66,7 @@ export default class JsonAuthStore extends ObjectAuthStore {
 
     /**
      * Save the currently loaded data into the store file
-     * @return {Promise}
+     * @return {Promise<*>}
      */
     async save(): Promise<any> {
         return Utils.writeJson(this.storePath, this.data);

@@ -7,7 +7,7 @@ export default class CommandParser {
      * @param {string} commandString
      * @param {CommandManager} manager
      * @param {string} prefix
-     * @return {Command|Null}
+     * @return {Command|null}
      */
     static parse(commandString: string, manager: CommandManager, prefix: string): Command | null {
         const commandBase = this.getCommandBase(commandString, prefix);

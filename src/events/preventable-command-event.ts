@@ -17,7 +17,7 @@ export default class PreventableCommandEvent extends CommandEvent {
     /**
      * @param {boolean} [prevent
      */
-    prevent(prevent = true) {
+    prevent(prevent = true): void {
         /**
          * @type {boolean}
          * @readonly

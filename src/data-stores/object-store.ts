@@ -9,7 +9,7 @@ export default class ObjectStore extends DataStore {
     protected data: any;
 
     /**
-     * @param {object} data
+     * @param {Object} data
      */
     constructor(data: any) {
         super();
@@ -24,7 +24,7 @@ export default class ObjectStore extends DataStore {
     /**
      * Retrieve guild data
      * @param {string} path
-     * @return {object}
+     * @return {Object}
      */
     get(path: string): any {
         return _.get(this.data, path);
@@ -35,7 +35,7 @@ export default class ObjectStore extends DataStore {
      * @param {string} path
      * @param {*} value
      */
-    set(path: string, value: any) {
+    set(path: string, value: any): void {
         _.set(this.data, path, value);
     }
 
@@ -45,7 +45,7 @@ export default class ObjectStore extends DataStore {
      * @param {string} path
      * @param {*} value
      */
-    merge(path: string, value: any) {
+    merge(path: string, value: any): void {
         throw new Error("[ObjectStore.merge] Method not implemented.");
     }
 }

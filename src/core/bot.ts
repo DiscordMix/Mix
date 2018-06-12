@@ -73,7 +73,7 @@ export default class Bot extends EventEmitter {
         this.authStore = options.authStore;
 
         /**
-         * @type {EmojiCollection|Null}
+         * @type {EmojiCollection|null}
          * @readonly
          */
         this.emojis = options.paths.emojis ? EmojiCollection.fromFile(options.paths.emojis) : undefined;
@@ -145,7 +145,7 @@ export default class Bot extends EventEmitter {
     /**
      * Setup the client's events
      */
-    setupEvents() {
+    setupEvents(): void {
         Log.verbose("[Bot.setupEvents] Setting up Discord events");
 
         // TODO: Find better position
@@ -208,7 +208,7 @@ export default class Bot extends EventEmitter {
         Log.success("[Bot.setupEvents] Discord events setup completed");
     }
 
-    setupAuthStore() {
+    setupAuthStore(): void {
         const guilds = this.client.guilds.array();
 
         let entries = 0;
@@ -275,7 +275,7 @@ export default class Bot extends EventEmitter {
      * Clear all the files inside the temp folder
      * @return {Promise<*>}
      */
-    static async clearTemp() {
+    static async clearTemp(): Promise<any> {
         if (fs.existsSync("./temp")) {
             fs.readdir("./temp", (error: any, files: any) => {
                 for (let i = 0; i < files.length; i++) {

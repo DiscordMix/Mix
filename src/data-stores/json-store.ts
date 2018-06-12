@@ -64,7 +64,7 @@ export default class JsonStore extends ObjectStore {
     /**
      * Ensure that the source file exists
      */
-    validate() {
+    validate(): void {
         if (!fs.existsSync(this.path)) {
             throw new Error(`[JsonAdapter] Path does not exist: ${this.path}`);
         }
@@ -75,7 +75,7 @@ export default class JsonStore extends ObjectStore {
      * @param {string} path
      * @return {*}
      */
-    get(path: string) {
+    get(path: string): any {
         if (!this.loaded) {
             throw new Error("[JsonStore.get] No data is currently loaded.");
         }
@@ -88,7 +88,7 @@ export default class JsonStore extends ObjectStore {
      * @param {string} path
      * @param {*} value
      */
-    set(path: string, value: any) {
+    set(path: string, value: any): void {
         if (!this.loaded) {
             throw new Error("[JsonStore.set] No data is currently loaded.");
         }
@@ -101,7 +101,7 @@ export default class JsonStore extends ObjectStore {
      * @param {string} path
      * @param {*} value
      */
-    merge(path: string, value: any) {
+    merge(path: string, value: any): void {
         if (!this.loaded) {
             throw new Error("[JsonStore.merge] No data is currently loaded.");
         }

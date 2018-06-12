@@ -2,7 +2,7 @@ import CommandAuthStore from "../commands/command-auth-store";
 import DataStore from "../data-stores/data-store";
 
 export default class ConfigBuilder {
-    private properties: any;
+    private readonly properties: any;
 
     constructor() {
         /**
@@ -76,7 +76,7 @@ export default class ConfigBuilder {
     /**
      * @return {Object}
      */
-    build() {
+    build(): any {
         return this.properties;
     }
 }

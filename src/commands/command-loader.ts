@@ -71,7 +71,7 @@ export default class CommandLoader {
         });
     }
 
-    load(path: string) {
+    load(path: string): void {
         // TODO
     }
 }

@@ -18,8 +18,9 @@ export default class ConsoleInterface {
 
     /**
      * @param {Bot} bot
+     * @return {ConsoleInterface}
      */
-    setup(bot: Bot) {
+    setup(bot: Bot): ConsoleInterface {
         Log.verbose("[ConsoleInterface] Setting up console interface");
 
         const ci = readline.createInterface({
@@ -104,5 +105,7 @@ export default class ConsoleInterface {
         // TODO: Should log before setting the prompt
         this.ready = true;
         Log.success("[ConsoleInterface.setup] Console interface setup completed");
+
+        return this;
     }
 }

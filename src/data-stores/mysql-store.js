@@ -99,7 +99,7 @@ export default class MysqlStore extends DataStore {
     /**
      * Retrieve guild data
      * @param {string} path
-     * @param {(Snowflake|Null)} [guildId=null]
+     * @param {(Snowflake|null)} [guildId=null]
      * @return {Promise}
      */
     async get(path, guildId = null) {
@@ -146,7 +146,7 @@ export default class MysqlStore extends DataStore {
      * Set guild data
      * @param {string} path
      * @param {*} value
-     * @param {(Snowflake|Null)} [guildId=null]
+     * @param {(Snowflake|null)} [guildId=null]
      * @return {Promise<Object>}
      */
     async set(path, value, guildId = null) {
@@ -175,7 +175,7 @@ export default class MysqlStore extends DataStore {
      * Merge guild data
      * @param {string} path
      * @param {*} value
-     * @param {(Snowflake|Null)} [guildId=null]
+     * @param {(Snowflake|null)} [guildId=null]
      */
     merge(path, value, guildId = null) {
         if (!this.loaded) {

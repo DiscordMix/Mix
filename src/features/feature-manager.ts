@@ -75,7 +75,7 @@ export default class FeatureManager /* extends Collection */ {
      * Disable a feature
      * @param {Feature} feature
      */
-    disable(feature: Feature) {
+    disable(feature: Feature): void {
         feature.disabled(this.bot);
         feature.isEnabled = false;
     }
@@ -84,7 +84,7 @@ export default class FeatureManager /* extends Collection */ {
      * Disable multiple features at once
      * @param {Array<Feature>} features
      */
-    disableMultiple(features: Array<Feature>) {
+    disableMultiple(features: Array<Feature>): void {
         for (let i = 0; i < features.length; i++) {
             this.disable(features[i]);
         }
@@ -93,7 +93,7 @@ export default class FeatureManager /* extends Collection */ {
     /**
      * Disable all the currently registered features
      */
-    disableAll() {
+    disableAll(): void {
         this.disableMultiple(this.features);
     }
 
@@ -112,7 +112,7 @@ export default class FeatureManager /* extends Collection */ {
      * Register a feature
      * @param {Feature} feature
      */
-    register(feature: Feature) {
+    register(feature: Feature): void {
         this.features.push(feature);
     }
 
@@ -120,7 +120,7 @@ export default class FeatureManager /* extends Collection */ {
      * Register multiple features at once
      * @param {Array<Feature>} features
      */
-    registerMultiple(features: Array<Feature>) {
+    registerMultiple(features: Array<Feature>): void {
         for (let i = 0; i < features.length; i++) {
             this.register(features[i]);
         }
@@ -138,7 +138,7 @@ export default class FeatureManager /* extends Collection */ {
     /**
      * Determine whether a feature is enabled
      * @param {string} key
-     * @return {boolean} Whether the feature is disabled, or null if the feature doesn't exist
+     * @return {boolean|null} Whether the feature is disabled, or null if the feature doesn't exist
      */
     isEnabled(key: string): boolean | null {
         const feature = this.get(key);

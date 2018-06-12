@@ -55,7 +55,7 @@ export default abstract class CommandAuthStore extends EventEmitter {
      * @param {Snowflake} guildId
      * @return {boolean} Whether the entry exists
      */
-    contains(guildId: Snowflake) {
+    contains(guildId: Snowflake): boolean {
         return Object.keys(this.data).includes(guildId);
     }
 
@@ -72,7 +72,7 @@ export default abstract class CommandAuthStore extends EventEmitter {
 
     /**
      * @param {number} rank
-     * @return {string | null}
+     * @return {string|null}
      */
     getSchemaRankName(rank: number): string | null {
         const keys = Object.keys(this.schema);

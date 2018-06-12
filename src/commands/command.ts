@@ -92,7 +92,7 @@ export default class Command {
         this.cooldown = options.restrict.cooldown ? options.restrict.cooldown : 0;
 
         /**
-         * @type {Array<Number>}
+         * @type {Array<number>}
          */
         this.permissions = options.restrict.permissions ? options.restrict.permissions : [];
 
@@ -143,7 +143,7 @@ export default class Command {
 
     /**
      * Validate a command module
-     * @param {object} data The module to validate
+     * @param {Object} data The module to validate
      * @return {boolean} Whether the module is valid
      */
     static validate(data: CommandOptions): boolean {

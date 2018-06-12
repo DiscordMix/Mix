@@ -62,7 +62,7 @@ export default class Utils {
      * @param {string} [footerSuffix=""]
      * @return {Promise<Discord.Message>}
      */
-    static async send(options: any, requester: any, channel: any, footerSuffix = ""): any {
+    static async send(options: any, requester: any, channel: any, footerSuffix = ""): Promise<any> {
         const optionsCpy = options;
 
         optionsCpy.footer = {

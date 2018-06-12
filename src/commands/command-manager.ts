@@ -20,7 +20,14 @@ export enum CommandManagerEvent {
     InvalidArguments,
     RequiresPermissions,
     CommandError,
-    NoAuthority
+    NoAuthority,
+    UnderCooldown
+}
+
+export interface CommandCooldown {
+    readonly context: CommandExecutionContext;
+    readonly command: Command;
+    readonly end: number;
 }
 
 export default class CommandManager /* extends Collection */ {
@@ -29,6 +36,7 @@ export default class CommandManager /* extends Collection */ {
     readonly authStore: CommandAuthStore;
     readonly argumentTypes: any;
     readonly handlers: Array<Function>;
+    readonly cooldowns: Array<CommandCooldown>;
 
     commands: Array<Command>;
 
@@ -77,6 +85,12 @@ export default class CommandManager /* extends Collection */ {
          * @private
          */
         this.handlers = [];
+
+        /**
+         * @type {Array<CommandCooldown>}
+         * @private
+         */
+        this.cooldowns = [];
     }
 
     /**
@@ -195,6 +209,32 @@ export default class CommandManager /* extends Collection */ {
     }
 
     /**
+     * @param {CommandExecutionContext} context
+     * @param {Command} command
+     * @returns {CommandCooldown | null}
+     */
+    getCooldown(context: CommandExecutionContext, command: Command): CommandCooldown | null {
+        for (let i: number = 0; i < this.cooldowns.length; i++) {
+            if (this.cooldowns[i].context === context && this.cooldowns[i].command === command) {
+                return this.cooldowns[i];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param {CommandExecutionContext} context
+     * @param {Command} command
+     * @return {boolean}
+     */
+    cooldownExpired(context: CommandExecutionContext, command: Command): boolean {
+        const cooldown = this.getCooldown(context, command);
+
+        return cooldown !== null && Date.now() > cooldown.end || cooldown === null;
+    }
+
+    /**
      * @todo Since it's returning a Promise, review
      * @param {CommandExecutionContext} context
      * @param {Command} command The command to handle
@@ -273,10 +313,38 @@ export default class CommandManager /* extends Collection */ {
                 context.fail(`I need the following permission(s) to execute that command: ${permissions}`);
             }
         }
+        else if (command.cooldown && !this.cooldownExpired(context, command)) {
+            if (this.handlers[CommandManagerEvent.UnderCooldown]) {
+                this.handlers[CommandManagerEvent.UnderCooldown](context, command);
+            }
+            else {
+                // TODO
+                const timeLeft = "TODO";
+
+                context.fail(`You must wait ${timeLeft} more seconds before using that command again.`);
+            }
+        }
         else {
             try {
                 const result: boolean = command.executed(context);
 
+                const commandCooldown: CommandCooldown = {
+                    context: context,
+                    command: command,
+
+                    // TODO: User should be able to specify more than just seconds (maybe cooldown
+                    // multiplier option?)
+                    end: Date.now() + (command.cooldown * 1000)
+                };
+
+                const lastCooldown = this.getCooldown(context, command);
+
+                // Delete the last cooldown before adding the new one for this command + user
+                if (lastCooldown) {
+                    this.cooldowns.splice(this.cooldowns.indexOf(lastCooldown), 1);
+                }
+
+                this.cooldowns.push(commandCooldown);
                 context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command));
 
                 return result;

@@ -15,11 +15,11 @@ export default class PreventableCommandEvent extends CommandEvent {
     }
 
     /**
-     * @param {Boolean} [prevent
+     * @param {boolean} [prevent
      */
     prevent(prevent = true) {
         /**
-         * @type {Boolean}
+         * @type {boolean}
          * @readonly
          */
         this.prevented = prevent;

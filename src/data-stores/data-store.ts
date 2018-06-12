@@ -2,17 +2,17 @@ export default abstract class DataStore {
     /**
      * Retrieve guild data
      * @abstract
-     * @param {String} path
-     * @returns {*}
+     * @param {string} path
+     * @return {*}
      */
     abstract get(path: string): any;
 
     /**
      * Set guild data
      * @abstract
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
-     * @returns {*}
+     * @return {*}
      */
     abstract set(path: string, value: any): any;
 }

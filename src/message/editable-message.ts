@@ -34,7 +34,7 @@ export default class EditableMessage {
      * @param {string} color
      * @param {string} thumbnailUrl
      * @param {string} [image=""]
-     * @returns {Promise<Message>}
+     * @return {Promise<Message>}
      */
     async edit(message: string, title: string = "", color: string = "RANDOM", thumbnailUrl: string = "", image: string = ""): Promise<Message> {
         return this.message.edit("", new Discord.RichEmbed()

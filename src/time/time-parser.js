@@ -3,11 +3,11 @@ import Utils from "../core/utils";
 
 export default class TimeParser {
     /**
-     * @param {String} timeString
+     * @param {string} timeString
      */
     constructor(timeString) {
         /**
-         * @type {String}
+         * @type {string}
          * @private
          * @readonly
          */
@@ -15,28 +15,28 @@ export default class TimeParser {
     }
 
     /**
-     * @returns {*}
+     * @return {*}
      */
     getMatch() {
         return /^([0-9]+)(ms|s|m|h|d|mo|y)$/.exec(this.timeString);
     }
 
     /**
-     * @returns {TimeSuffixType}
+     * @return {TimeSuffixType}
      */
     get suffix() {
         return TimeSuffixType.fromShort(this.getMatch()[2]);
     }
 
     /**
-     * @returns {Number}
+     * @return {number}
      */
     get amount() {
         return parseInt(this.getMatch()[1]);
     }
 
     /**
-     * @returns {Number}
+     * @return {number}
      */
     getTimeFromNow() {
         switch (this.suffix) {

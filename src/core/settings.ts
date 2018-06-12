@@ -11,11 +11,11 @@ export default class Settings {
     keys: any;
 
     /**
-     * @param {String} path
+     * @param {string} path
      */
     constructor(path: string) {
         /**
-         * @type {String}
+         * @type {string}
          * @private
          * @readonly
          */

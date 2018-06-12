@@ -1,5 +1,5 @@
 /**
- * @enum {Number}
+ * @enum {number}
  * @readonly
  */
 const TimeSuffixType = {
@@ -12,8 +12,8 @@ const TimeSuffixType = {
     Year: 6,
 
     /**
-     * @param {String} short The short suffix
-     * @returns {TimeSuffixType}
+     * @param {string} short The short suffix
+     * @return {TimeSuffixType}
      */
     fromShort(short) {
         switch (short) {

@@ -22,8 +22,8 @@ export default class Collection extends EventEmitter {
 
     /**
      * Get an item in this collection by its index
-     * @param {Number} index
-     * @returns {*}
+     * @param {number} index
+     * @return {*}
      */
     at(index: number) {
         return this.items[index];
@@ -31,8 +31,8 @@ export default class Collection extends EventEmitter {
 
     /**
      * Remove an item from this collection by its index
-     * @param {Number} index
-     * @returns {Boolean} Whether the item was removed
+     * @param {number} index
+     * @return {boolean} Whether the item was removed
      */
     removeAt(index: number) {
         if (this.items[index] !== null && this.items[index] !== undefined) {
@@ -57,7 +57,7 @@ export default class Collection extends EventEmitter {
     /**
      * Add an item to this collection only if it doesn't already exist
      * @param {*} item
-     * @returns {Boolean} Whether the item was added
+     * @return {boolean} Whether the item was added
      */
     addUnique(item: any) {
         if (!this.contains(item)) {
@@ -72,7 +72,7 @@ export default class Collection extends EventEmitter {
     /**
      * Determine whether this collection contains an item
      * @param {*} item
-     * @returns {Boolean}
+     * @return {boolean}
      */
     contains(item: any) {
         for (let i = 0; i < this.items.length; i++) {
@@ -87,7 +87,7 @@ export default class Collection extends EventEmitter {
     /**
      * @todo Move this method into the Utils class
      * Find an item in this collection
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
      */
     find(path: string, value: any) {

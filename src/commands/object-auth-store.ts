@@ -34,7 +34,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @todo Handle default/error auth level (-1)
      * @param {Snowflake} guildId
      * @param {*} identifier
-     * @return {Number}
+     * @return {number}
      */
     getAuthLevel(guildId: Snowflake, identifier: any): number {
         const authLevels = this.data[guildId];
@@ -50,8 +50,8 @@ export default class ObjectAuthStore extends CommandAuthStore {
 
     /**
      * @param {Snowflake} guildId
-     * @param {Array<String>} roles
-     * @return {Number}
+     * @param {Array<string>} roles
+     * @return {number}
      */
     getHighestAuthLevelByRoles(guildId: Snowflake, roles: Array<string>): number {
         let highest = 0;
@@ -70,8 +70,8 @@ export default class ObjectAuthStore extends CommandAuthStore {
     /**
      * @param {Snowflake} guildId
      * @param {Snowflake} userId
-     * @param {Array<String>} roles
-     * @return {Number} The authority of the user
+     * @param {Array<string>} roles
+     * @return {number} The authority of the user
      */
     getAuthority(guildId: Snowflake, userId: Snowflake, roles: Array<string> = ["@everyone"]): number {
         const byRoles = this.getHighestAuthLevelByRoles(guildId, roles);
@@ -87,7 +87,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
     /**
      * Create a default auth store entry
      * @param {Snowflake} guildId
-     * @return {Boolean} Whether the entry was created
+     * @return {boolean} Whether the entry was created
      */
     create(guildId: Snowflake): boolean {
         if (!this.contains(guildId)) {
@@ -136,7 +136,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
     /**
      * Remove an auth store entry
      * @param {Snowflake} guildId
-     * @return {Boolean} Whether the entry was removed
+     * @return {boolean} Whether the entry was removed
      */
     remove(guildId: Snowflake): boolean {
         Log.throw("[ObjectAuthStore.remove] Method not implemented");
@@ -147,7 +147,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
     /**
      * Determine whether this auth store contains an entry
      * @param {Snowflake} guildId
-     * @return {Boolean} Whether the entry exists
+     * @return {boolean} Whether the entry exists
      */
     contains(guildId: Snowflake): boolean {
         return Object.keys(this.data).includes(guildId);

@@ -11,7 +11,7 @@ export default class ConsoleInterface {
     constructor() {
         /**
          * Whether the console interface has been successfully setup
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.ready = false;
     }

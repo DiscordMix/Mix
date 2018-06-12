@@ -14,16 +14,16 @@ export default class EmojiCollection extends Collection {
     }
 
     /**
-     * @param {String} name
-     * @returns {String}
+     * @param {string} name
+     * @return {string}
      */
     get(name: string) {
         return this.find("name", name).id;
     }
 
     /**
-     * @param {String} path
-     * @returns {EmojiCollection}
+     * @param {string} path
+     * @return {EmojiCollection}
      */
     static fromFile(path: string) {
         if (!fs.existsSync(path)) {

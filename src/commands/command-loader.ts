@@ -23,7 +23,7 @@ export default class CommandLoader {
     /**
      * @todo Return type
      * Load all the commands from path
-     * @returns {Promise}
+     * @return {Promise}
      */
     async reloadAll(): Promise<any> {
         // TODO: Implement

@@ -6,7 +6,7 @@ export default class EmojiMenu {
 
     /**
      * @param {Array<EmojiButton>} buttons
-     * @param {String} content
+     * @param {string} content
      */
     constructor(buttons: Array<EmojiButton>, content: string) {
         /**
@@ -16,7 +16,7 @@ export default class EmojiMenu {
         this.buttons = buttons;
 
         /**
-         * @type {String}
+         * @type {string}
          * @readonly
          */
         this.content = content;

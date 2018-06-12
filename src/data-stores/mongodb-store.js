@@ -7,13 +7,13 @@ const mongodb = require("mongodb");
  */
 export default class MongodbStore extends DataStore {
     /**
-     * @param {String} url
+     * @param {string} url
      */
     constructor(url) {
         super();
 
         /**
-         * @type {String}
+         * @type {string}
          * @private
          * @readonly
          */
@@ -34,7 +34,7 @@ export default class MongodbStore extends DataStore {
     }
 
     /**
-     * @param {String} database The database name
+     * @param {string} database The database name
      */
     connect(database) {
         this.client.connect(this.url, (error, db) => {
@@ -48,8 +48,8 @@ export default class MongodbStore extends DataStore {
 
     /**
      * Retrieve guild data
-     * @param {String} path
-     * @returns {*}
+     * @param {string} path
+     * @return {*}
      */
     get(path) {
         throw new Error("[MongoDb.get] Method not implemented.");
@@ -57,7 +57,7 @@ export default class MongodbStore extends DataStore {
 
     /**
      * Set guild data
-     * @param {String} path
+     * @param {string} path
      * @param {*} data
      */
     set(path, data) {
@@ -66,7 +66,7 @@ export default class MongodbStore extends DataStore {
 
     /**
      * Merge guild data
-     * @param {String} path
+     * @param {string} path
      * @param {*} data
      */
     merge(path, data) {

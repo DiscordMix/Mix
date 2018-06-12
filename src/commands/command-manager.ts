@@ -10,7 +10,7 @@ const Typer = require("@raxor1234/typer/typer");
 // import Collection from "../core/collection";
 
 /**
- * @enum {Number}
+ * @enum {number}
  */
 export enum CommandManagerEvent {
     DisallowedEnvironment,
@@ -34,7 +34,7 @@ export default class CommandManager /* extends Collection */ {
 
     /**
      * @param {Bot} bot
-     * @param {String} path
+     * @param {string} path
      * @param {CommandAuthStore} authStore
      * @param {Object} argumentTypes
      */
@@ -47,7 +47,7 @@ export default class CommandManager /* extends Collection */ {
         this.bot = bot;
 
         /**
-         * @type {String}
+         * @type {string}
          * @private
          * @readonly
          */
@@ -102,15 +102,15 @@ export default class CommandManager /* extends Collection */ {
 
     /**
      * @param {Command} command
-     * @return {Boolean}
+     * @return {boolean}
      */
     remove(command: Command): boolean {
         return this.removeAt(this.commands.indexOf(command));
     }
 
     /**
-     * @param {Number} index
-     * @return {Boolean}
+     * @param {number} index
+     * @return {boolean}
      */
     removeAt(index: number): boolean {
         if (this.commands[index]) {
@@ -123,8 +123,8 @@ export default class CommandManager /* extends Collection */ {
     }
 
     /**
-     * @param {String} commandBase
-     * @return {Boolean}
+     * @param {string} commandBase
+     * @return {boolean}
      */
     contains(commandBase: string): boolean {
         return this.getByName(commandBase) !== null;
@@ -143,15 +143,15 @@ export default class CommandManager /* extends Collection */ {
     }
 
     /**
-     * @param {String} commandBase
-     * @return {Boolean}
+     * @param {string} commandBase
+     * @return {boolean}
      */
     isRegistered(commandBase: string): boolean {
         return this.getByName(commandBase) != null;
     }
 
     /**
-     * @param {String} name
+     * @param {string} name
      * @return {(Command|Null)}
      */
     getByName(name: string): Command | null {
@@ -166,7 +166,7 @@ export default class CommandManager /* extends Collection */ {
 
     /**
      * @param {Object} rules
-     * @param {Array<String>} args
+     * @param {Array<string>} args
      * @return {Object} The assembled arguments
      */
     assembleArguments(rules: any, args: Array<string>): any {
@@ -310,8 +310,8 @@ export default class CommandManager /* extends Collection */ {
     /**
      * @private
      * @param {ChatEnvironment} environment
-     * @param {String} type
-     * @return {Boolean}
+     * @param {string} type
+     * @return {boolean}
      */
     static validateChannelTypeEnv(environment: ChatEnvironment, type: string): boolean {
         if (environment === ChatEnvironment.Anywhere) {
@@ -329,8 +329,8 @@ export default class CommandManager /* extends Collection */ {
 
     /**
      * @param {ChatEnvironment|Array<ChatEnvironment>} environment
-     * @param {String} channelType
-     * @return {Boolean}
+     * @param {string} channelType
+     * @return {boolean}
      */
     static validateEnvironment(environment: ChatEnvironment, channelType: string): boolean {
         if (Array.isArray(environment)) {

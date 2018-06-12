@@ -8,25 +8,25 @@ export default abstract class Feature {
     isEnabled: boolean = false;
 
     /**
-     * @param {String} name The name of the feature
-     * @param {String} key
-     * @param {String} description The description of the feature
+     * @param {string} name The name of the feature
+     * @param {string} key
+     * @param {string} description The description of the feature
      */
     constructor(name: string, key: string, description: string) {
         /**
-         * @type {String}
+         * @type {string}
          * @readonly
          */
         this.name = name;
 
         /**
-         * @type {String}
+         * @type {string}
          * @readonly
          */
         this.key = key;
 
         /**
-         * @type {String}
+         * @type {string}
          * @readonly
          */
         this.description = description;

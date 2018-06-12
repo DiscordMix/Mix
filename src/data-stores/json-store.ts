@@ -111,7 +111,7 @@ export default class JsonStore extends ObjectStore {
 
     /**
      * Determine whether any data is loaded
-     * @return {Boolean} Whether any data is currently loaded
+     * @return {boolean} Whether any data is currently loaded
      */
     get loaded(): boolean {
         return this.data !== null;

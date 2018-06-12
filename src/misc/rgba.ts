@@ -20,21 +20,21 @@ export default class Rgba extends Rgb {
         super(options.red, options.green, options.blue);
 
         /**
-         * @type {Number}
+         * @type {number}
          * @readonly
          */
         this.alpha = options.alpha;
     }
 
     /**
-     * @returns {String}
+     * @return {string}
      */
     toString(): string {
         return `${this.red}, ${this.green}, ${this.blue}, ${this.alpha}`;
     }
 
     /**
-     * @returns {Object}
+     * @return {Object}
      */
     toObject(): any {
         return {
@@ -46,7 +46,7 @@ export default class Rgba extends Rgb {
     }
 
     /**
-     * @param {String} hex
+     * @param {string} hex
      * @return {Rgba|null}
      */
     static fromHex(hex: string): Rgba | null {

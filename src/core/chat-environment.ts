@@ -1,5 +1,5 @@
 /**
- * @enum {Number}
+ * @enum {number}
  */
 enum ChatEnvironment {
     Private = 0,

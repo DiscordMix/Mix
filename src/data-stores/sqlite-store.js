@@ -6,8 +6,8 @@ import DataStore from "./data-store";
 export default class SqliteStore extends DataStore {
     /**
      * Retrieve guild data
-     * @param {String} path
-     * @returns {*}
+     * @param {string} path
+     * @return {*}
      */
     get(path) {
         throw new Error("[SqliteStore.get] Method not implemented.");
@@ -15,7 +15,7 @@ export default class SqliteStore extends DataStore {
 
     /**
      * Set guild data
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
      */
     set(path, value) {
@@ -24,7 +24,7 @@ export default class SqliteStore extends DataStore {
 
     /**
      * Merge guild data
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
      */
     merge(path, value) {

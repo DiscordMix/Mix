@@ -49,7 +49,7 @@ export default class FeatureManager /* extends Collection */ {
     /**
      * Enable multiple features at once
      * @param {Array<Feature>} features
-     * @return {Number}
+     * @return {number}
      */
     enableMultiple(features: Array<Feature>): number {
         let totalEnabled = 0;
@@ -65,7 +65,7 @@ export default class FeatureManager /* extends Collection */ {
 
     /**
      * Enable all the currently registered features
-     * @return {Number}
+     * @return {number}
      */
     enableAll(): number {
         return this.enableMultiple(this.features);
@@ -99,7 +99,7 @@ export default class FeatureManager /* extends Collection */ {
 
     /**
      * Reload all currently registered and enabled features
-     * @return {Number}
+     * @return {number}
      */
     reloadAll(): number {
         this.disableAll();

@@ -14,7 +14,7 @@ export default class ConfigBuilder {
     }
 
     /**
-     * @param {String} path
+     * @param {string} path
      * @return {ConfigBuilder}
      */
     setCommandsPath(path: string): ConfigBuilder {
@@ -25,7 +25,7 @@ export default class ConfigBuilder {
 
     /**
      * @param {CommandAuthStore} authStore
-     * @returns {ConfigBuilder}
+     * @return {ConfigBuilder}
      */
     setAuthStore(authStore: CommandAuthStore): ConfigBuilder {
         this.properties.authStore = authStore;
@@ -34,8 +34,8 @@ export default class ConfigBuilder {
     }
 
     /**
-     * @param {String} path
-     * @returns {ConfigBuilder}
+     * @param {string} path
+     * @return {ConfigBuilder}
      */
     setSettingsPath(path: string): ConfigBuilder {
         this.properties.paths.settings = path;
@@ -44,8 +44,8 @@ export default class ConfigBuilder {
     }
 
     /**
-     * @param {String} path
-     * @returns {ConfigBuilder}
+     * @param {string} path
+     * @return {ConfigBuilder}
      */
     setEmojisPath(path: string): ConfigBuilder {
         this.properties.paths.emojis = path;
@@ -55,7 +55,7 @@ export default class ConfigBuilder {
 
     /**
      * @param {Object} argumentTypes
-     * @returns {ConfigBuilder}
+     * @return {ConfigBuilder}
      */
     setArgumentTypes(argumentTypes: any): ConfigBuilder {
         this.properties.argumentTypes = argumentTypes;
@@ -65,7 +65,7 @@ export default class ConfigBuilder {
 
     /**
      * @param {DataStore} dataStore
-     * @returns {ConfigBuilder}
+     * @return {ConfigBuilder}
      */
     setDataStore(dataStore: DataStore): ConfigBuilder {
         this.properties.dataStore = dataStore;

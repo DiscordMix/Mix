@@ -7,12 +7,12 @@ export default class ConsoleCommand {
     readonly args: any;
 
     /**
-     * @param {String} base
+     * @param {string} base
      * @param {Object} args
      */
     constructor(base: string, args: any) {
         /**
-         * @type {String}
+         * @type {string}
          * @readonly
          */
         this.base = base;
@@ -26,7 +26,7 @@ export default class ConsoleCommand {
 
     // TODO
     /**
-     * @param {String} consoleCommandString
+     * @param {string} consoleCommandString
      * @return {ConsoleCommand}
      */
     static parse(consoleCommandString: string): ConsoleCommand {

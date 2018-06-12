@@ -27,7 +27,7 @@ export default class MysqlStore extends DataStore {
         this.connection = mysql.createConnection(data);
 
         /**
-         * @type {Boolean}
+         * @type {boolean}
          * @private
          */
         this.connected = false;
@@ -35,7 +35,7 @@ export default class MysqlStore extends DataStore {
 
     /**
      * Connect to the database
-     * @returns {Promise<MysqlStore>}
+     * @return {Promise<MysqlStore>}
      */
     connect() {
         return new Promise((resolve, reject) => {
@@ -53,7 +53,7 @@ export default class MysqlStore extends DataStore {
 
     /**
      * Disconnect from the database
-     * @returns {Promise<MysqlStore>}
+     * @return {Promise<MysqlStore>}
      */
     disconnect() {
         return new Promise((resolve, reject) => {
@@ -71,10 +71,10 @@ export default class MysqlStore extends DataStore {
 
     /**
      * Execute a query in the database
-     * @param {String} query
+     * @param {string} query
      * @param {*} args
-     * @param {Number} [timeout=5000]
-     * @returns {Promise<Object>}
+     * @param {number} [timeout=5000]
+     * @return {Promise<Object>}
      */
     query(query, args = [], timeout = 5000) {
         return new Promise((resolve, reject) => {
@@ -98,9 +98,9 @@ export default class MysqlStore extends DataStore {
 
     /**
      * Retrieve guild data
-     * @param {String} path
+     * @param {string} path
      * @param {(Snowflake|Null)} [guildId=null]
-     * @returns {Promise}
+     * @return {Promise}
      */
     async get(path, guildId = null) {
         if (!this.loaded) {
@@ -144,10 +144,10 @@ export default class MysqlStore extends DataStore {
 
     /**
      * Set guild data
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
      * @param {(Snowflake|Null)} [guildId=null]
-     * @returns {Promise<Object>}
+     * @return {Promise<Object>}
      */
     async set(path, value, guildId = null) {
         if (!this.loaded) {
@@ -173,7 +173,7 @@ export default class MysqlStore extends DataStore {
 
     /**
      * Merge guild data
-     * @param {String} path
+     * @param {string} path
      * @param {*} value
      * @param {(Snowflake|Null)} [guildId=null]
      */
@@ -186,9 +186,9 @@ export default class MysqlStore extends DataStore {
     }
 
     /**
-     * @param {String} path
+     * @param {string} path
      * @param {Snowflake} guildId
-     * @returns {Array<String>}
+     * @return {Array<string>}
      */
     static cleanPath(path, guildId) {
         return `${guildId ? `guilds.${guildId}.` : ""}${path}`.split(".");
@@ -196,7 +196,7 @@ export default class MysqlStore extends DataStore {
 
     /**
      * Determine whether any data is loaded
-     * @returns {Boolean} Whether any data is currently loaded
+     * @return {boolean} Whether any data is currently loaded
      */
     get loaded() {
         return this.data !== null && this.connected;

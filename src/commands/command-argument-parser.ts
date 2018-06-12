@@ -1,9 +1,9 @@
 export default class CommandArgumentParser {
     /**
-     * @param {String} type
-     * @param {String} arg
+     * @param {string} type
+     * @param {string} arg
      * @param {Object} resolvers
-     * @returns {*}
+     * @return {*}
      */
     static resolve(type: string, arg: string, resolvers: any): any {
         const keys = Object.keys(resolvers);

@@ -44,19 +44,19 @@ export default class Command {
      */
     constructor(options: CommandOptions) {
         /**
-         * @type {String}
+         * @type {string}
          * @readonly
          */
         this.name = options.meta.name;
 
         /**
-         * @type {String}
+         * @type {string}
          * @readonly
          */
         this.description = options.meta.desc ? options.meta.desc : "No description provided";
 
         /**
-         * @type {Array<String>}
+         * @type {Array<string>}
          * @readonly
          */
         this.aliases = options.meta.aliases ? options.meta.aliases : [];
@@ -80,13 +80,13 @@ export default class Command {
         this.args = options.meta.args ? options.meta.args : {};
 
         /**
-         * @type {Boolean}
+         * @type {boolean}
          * @readonly
          */
         this.isEnabled = options.restrict.enabled !== undefined ? options.restrict.enabled : true;
 
         /**
-         * @type {Number}
+         * @type {number}
          * @readonly
          */
         this.cooldown = options.restrict.cooldown ? options.restrict.cooldown : 0;
@@ -104,7 +104,7 @@ export default class Command {
 
         // TODO: Default auth level to 'default'
         /**
-         * @type {Number}
+         * @type {number}
          * @readonly
          */
         this.auth = options.restrict.auth !== undefined ? options.restrict.auth : 0;
@@ -118,7 +118,7 @@ export default class Command {
 
     /**
      * @param {string} query
-     * @returns {boolean} Whether the query is excluded
+     * @return {boolean} Whether the query is excluded
      */
     isExcluded(query: string): boolean {
         return this.exclude.includes(query);

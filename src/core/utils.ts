@@ -8,8 +8,8 @@ const timeAgo = new TimeAgo("en-US");
 
 export default class Utils {
     /**
-     * @param {String} mention
-     * @returns {String}
+     * @param {string} mention
+     * @return {string}
      */
     static resolveId(mention: string): string {
         return mention
@@ -22,9 +22,9 @@ export default class Utils {
     }
 
     /**
-     * @param {Number} min
-     * @param {Number} max
-     * @return {Number} The random number
+     * @param {number} min
+     * @param {number} max
+     * @return {number} The random number
      */
     static getRandomInt(min: number, max: number): number {
         return Math.floor(Math.random() * max) + min;
@@ -59,7 +59,7 @@ export default class Utils {
      * @param {Object} options
      * @param {User} requester
      * @param {Discord.Channel} channel
-     * @param {String} [footerSuffix=""]
+     * @param {string} [footerSuffix=""]
      * @return {Promise<Discord.Message>}
      */
     static async send(options: any, requester: any, channel: any, footerSuffix = "") {
@@ -81,14 +81,14 @@ export default class Utils {
     }
 
     /**
-     * @param {Number} milliseconds
-     * @param {Number} [seconds=0]
-     * @param {Number} [minutes=0]
-     * @param {Number} [hours=0]
-     * @param {Number} [days=0]
-     * @param {Number} [months=0]
-     * @param {Number} [years=0]
-     * @return {Number}
+     * @param {number} milliseconds
+     * @param {number} [seconds=0]
+     * @param {number} [minutes=0]
+     * @param {number} [hours=0]
+     * @param {number} [days=0]
+     * @param {number} [months=0]
+     * @param {number} [years=0]
+     * @return {number}
      */
     static timeFromNow(milliseconds: number, seconds: number = 0, minutes: number = 0, hours: number = 0, days: number = 0, months: number = 0, years: number = 0) {
         const now = new Date();
@@ -97,31 +97,31 @@ export default class Utils {
     }
 
     /**
-     * @param {Number} timestamp
-     * @return {String}
+     * @param {number} timestamp
+     * @return {string}
      */
     static timeAgo(timestamp: number) {
         return timeAgo.format(timestamp);
     }
 
     /**
-     * @param {Number} timestamp
-     * @returns {String}
+     * @param {number} timestamp
+     * @return {string}
      */
     static timeAgoFromNow(timestamp: number) {
         return Utils.timeAgo(Date.now() - timestamp);
     }
 
     /**
-     * @param {String} state
-     * @return {Boolean}
+     * @param {string} state
+     * @return {boolean}
      */
     static translateState(state: string): boolean {
         return /^(1|true|on|y|yes)$/i.test(state);
     }
 
     /**
-     * @param {String} path
+     * @param {string} path
      * @param {Object} data
      * @return {Promise}
      */
@@ -138,7 +138,7 @@ export default class Utils {
     }
 
     /**
-     * @param {String} path
+     * @param {string} path
      * @return {Promise<Object>}
      */
     static async readJson(path: string): Promise<any> {
@@ -154,8 +154,8 @@ export default class Utils {
     }
 
     /**
-     * @param {String} string The string to escape
-     * @returns {String} The escaped string
+     * @param {string} string The string to escape
+     * @return {string} The escaped string
      */
     static escapeRegexString(string: string): string {
         return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");

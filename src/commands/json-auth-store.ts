@@ -12,15 +12,15 @@ export default class JsonAuthStore extends ObjectAuthStore {
     private readonly storePath: string;
 
     /**
-     * @param {String} schemaPath
-     * @param {String} storePath
+     * @param {string} schemaPath
+     * @param {string} storePath
      */
     constructor(schemaPath: string, storePath: string) {
         super(null, null);
 
         /**
          * The path of the schema file
-         * @type {String}
+         * @type {string}
          * @private
          * @readonly
          */
@@ -28,7 +28,7 @@ export default class JsonAuthStore extends ObjectAuthStore {
 
         /**
          * The path of the store file
-         * @type {String}
+         * @type {string}
          * @private
          * @readonly
          */
@@ -74,7 +74,7 @@ export default class JsonAuthStore extends ObjectAuthStore {
 
     /**
      * Determine whether the store file exists
-     * @return {Boolean} Whether the store file exists
+     * @return {boolean} Whether the store file exists
      */
     get exists(): boolean {
         return fs.existsSync(this.storePath) && fs.existsSync(this.schemaPath);

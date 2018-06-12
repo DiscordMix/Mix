@@ -32,7 +32,7 @@ export default class CommandExecutionContext {
         this.message = options.message;
 
         /**
-         * @type {Array<String>}
+         * @type {Array<string>}
          * @readonly
          */
         this.arguments = options.args;
@@ -44,7 +44,7 @@ export default class CommandExecutionContext {
         this.bot = options.bot;
 
         /**
-         * @type {Number}
+         * @type {number}
          * @readonly
          */
         this.auth = options.auth;
@@ -58,7 +58,7 @@ export default class CommandExecutionContext {
 
     /**
      * @param {*} stream
-     * @param {String} name
+     * @param {string} name
      * @return {Promise<EditableMessage>|Null}
      */
     async fileStream(stream: any, name: string): Promise<EditableMessage> {
@@ -67,7 +67,7 @@ export default class CommandExecutionContext {
 
     /**
      * @param {Object|EmbedBuilder} content
-     * @param {Boolean} [autoDelete=false]
+     * @param {boolean} [autoDelete=false]
      * @return {Promise<EditableMessage>|Null}
      */
     async respond(content: any | EmbedBuilder, autoDelete: boolean = false): Promise<EditableMessage | null> {
@@ -133,14 +133,14 @@ export default class CommandExecutionContext {
 
     /**
      * @param {Snowflake} userId
-     * @returns {Number}
+     * @return {number}
      */
     getAuth(userId: Snowflake): number {
         return this.bot.authStore.getAuthority(this.message.guild.id, userId, this.message.guild.member(userId).roles.array().map((role: Role) => role.name));
     }
 
     /**
-     * @return {Number}
+     * @return {number}
      */
     get senderAuth(): number {
         return this.getAuth(this.sender.id);
@@ -148,7 +148,7 @@ export default class CommandExecutionContext {
 
     /**
      * @param {Object} sections
-     * @param {String} color
+     * @param {string} color
      * @return {Promise<EditableMessage>}
      */
     async sections(sections: any, color: string = "GREEN"): Promise<EditableMessage | null> {
@@ -156,7 +156,7 @@ export default class CommandExecutionContext {
     }
 
     /**
-     * @param {String} text
+     * @param {string} text
      * @return {Promise<EditableMessage>}
      */
     async ok(text: string): Promise<EditableMessage | null> {
@@ -166,7 +166,7 @@ export default class CommandExecutionContext {
     }
 
     /**
-     * @param {String} text
+     * @param {string} text
      * @return {Promise<EditableMessage>}
      */
     async loading(text: string): Promise<EditableMessage | null> {

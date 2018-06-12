@@ -54,27 +54,6 @@ export default class Bot extends EventEmitter {
     constructor(options: BotOptions) {
         super();
 
-        // Log.verbose("[Bot.setup] Validating data object");
-
-        /* if (!Typer.validate({
-            paths: "!object",
-            authStore: ":authStore",
-            dataStore: ":dataStore",
-            argumentTypes: "object"
-        }, options, {
-            authStore: (val: any) => val instanceof CommandAuthStore,
-            dataStore: (val: any) => val instanceof DataStore
-        })) {
-            Log.throw("[Bot.setup] Invalid data object provided");
-        }
-        else if (!Typer.validate({
-            settings: "!string",
-            commands: "!string",
-            emojis: "string"
-        }, options.paths)) {
-            Log.throw("[Bot.setup] Invalid paths object");
-        } */
-
         /**
          * @type {Settings}
          * @readonly

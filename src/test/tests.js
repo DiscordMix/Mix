@@ -14,7 +14,13 @@ const subjects = {
     ],
 
     rgb: new Rgb(5, 10, 15),
-    rgba: new Rgba(5, 10, 15, 20),
+
+    rgba: new Rgba({
+        red: 5,
+        green: 10,
+        blue: 15,
+        alpha: 1
+    }),
 
     collection: new Collection(["hello", "it's me", {
         name: "John Doe"
@@ -116,7 +122,7 @@ describe("Rgba.toString()", () => {
         const result = subjects.rgba.toString();
 
         expect(result).to.be.an("string");
-        expect(result).to.equal("5, 10, 15, 20");
+        expect(result).to.equal("5, 10, 15, 1");
     });
 });
 

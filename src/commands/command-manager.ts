@@ -276,7 +276,7 @@ export default class CommandManager /* extends Collection */ {
                 context.fail(`You don't have the authority to use that command. You must be at least a(n) **${rankName}**.`);
             }
         }
-        else if (!command.ignoreArgs && (context.arguments.length > command.maxArguments || context.arguments.length < command.minArguments)) {
+        else if (!command.singleArg && (context.arguments.length > command.maxArguments || context.arguments.length < command.minArguments)) {
             if (this.handlers[CommandManagerEvent.ArgumentAmountMismatch]) {
                 this.handlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);
             }
@@ -295,7 +295,7 @@ export default class CommandManager /* extends Collection */ {
                 context.fail("That command cannot be executed right now.");
             }
         }
-        else if (!command.ignoreArgs && (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes))) {
+        else if (!command.singleArg && (!Typer.validate(command.args, this.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes))) {
             if (this.handlers[CommandManagerEvent.InvalidArguments]) {
                 this.handlers[CommandManagerEvent.InvalidArguments](context, command);
             }

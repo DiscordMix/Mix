@@ -189,6 +189,8 @@ export default class Command {
             array: (val: any) => val instanceof Array
         });
 
-        return (methods && meta && restrict);
+        const extraChecks = !(data.meta.args && data.meta.ignoreArgs);
+
+        return (methods && meta && restrict && extraChecks);
     }
 }

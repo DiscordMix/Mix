@@ -119,7 +119,7 @@ export default class CommandExecutionContext {
             }
 
             // TODO: static time for images, probably need function
-            const timeInSeconds = (4000 + (100 * contentSize * 1000)) / 1000;
+            const timeInSeconds = (4000 + (100 * contentSize * 1000));
 
             messageResult.delete(timeInSeconds);
 

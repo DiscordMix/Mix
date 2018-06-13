@@ -151,7 +151,7 @@ export default class Bot extends EventEmitter {
         // TODO: Find better position
         // TODO: Merge this resolvers with the (if provided) provided
         // ones by the user.
-        const resolvers = {
+        const resolvers: any = {
             user: (arg: string) => Utils.resolveId(arg),
             channel: (arg: string) => Utils.resolveId(arg),
             role: (arg: string) => Utils.resolveId(arg),

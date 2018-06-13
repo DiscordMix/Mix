@@ -125,6 +125,7 @@ export default class Command {
     }
 
     /**
+     * @todo CRITICAL Also consider optional arguments
      * @return {number} The minimum amount of required arguments that this command accepts
      */
     get maxArguments(): number {

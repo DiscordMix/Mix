@@ -125,10 +125,9 @@ export default class Command {
     }
 
     /**
-     * @todo CRITICAL Also consider optional arguments
      * @return {number} The minimum amount of required arguments that this command accepts
      */
-    get maxArguments(): number {
+    get minArguments(): number {
         const keys = Object.keys(this.args);
 
         let counter = 0;
@@ -140,6 +139,13 @@ export default class Command {
         }
 
         return counter;
+    }
+
+    /**
+     * @return {number} The maximum amount of arguments that this command accepts
+     */
+    get maxArguments(): number {
+        return Object.keys(this.args).length;
     }
 
     /**

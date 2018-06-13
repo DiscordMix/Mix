@@ -276,12 +276,12 @@ export default class CommandManager /* extends Collection */ {
                 context.fail(`You don't have the authority to use that command. You must be at least a(n) **${rankName}**.`);
             }
         }
-        else if (context.arguments.length > command.maxArguments) {
+        else if (context.arguments.length > command.maxArguments || context.arguments.length < command.minArguments) {
             if (this.handlers[CommandManagerEvent.ArgumentAmountMismatch]) {
                 this.handlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);
             }
             else if (command.maxArguments > 0) {
-                context.fail(`That command only accepts up to **${command.maxArguments}** arguments.`);
+                context.fail(`That command only accepts up to **${command.maxArguments}** and a minimum of **${command.minArguments}** arguments.`);
             }
             else {
                 context.fail(`That command does not accept any arguments.`);

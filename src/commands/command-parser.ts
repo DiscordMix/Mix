@@ -58,7 +58,7 @@ export default class CommandParser {
      * @return {Array<string>}
      */
     static getArguments(commandString: string): Array<string> {
-        const expression = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+)/g;
+        const expression = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;
         const argCleanExpression = /(```|`|'|"|)(.+)\1/;
         const result = [];
 

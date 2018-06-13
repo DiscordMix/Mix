@@ -7,6 +7,7 @@ export interface CommandMetaOptions {
     desc: string;
     aliases: Array<string>;
     args: any;
+    ignoreArgs: boolean;
 }
 
 export interface CommandRestrictOptions {
@@ -38,6 +39,7 @@ export default class Command {
     readonly environment: ChatEnvironment;
     readonly auth: number;
     readonly exclude: Array<string>;
+    readonly ignoreArgs: boolean;
 
     /**
      * @param {Object} options
@@ -84,6 +86,14 @@ export default class Command {
          * @readonly
          */
         this.isEnabled = options.restrict.enabled !== undefined ? options.restrict.enabled : true;
+
+        /**
+         * Ignore the argument count and format
+         * 
+         * @type {boolean}
+         * @readonly
+         */
+        this.ignoreArgs = options.meta.ignoreArgs !== undefined ? options.meta.ignoreArgs : false;
 
         /**
          * @type {number}
@@ -167,6 +177,7 @@ export default class Command {
             args: "object",
             aliases: ":array",
             isEnabled: "boolean",
+            ignoreArgs: "boolean"
         }, data.meta, {
             array: (val: any) => val instanceof Array
         });

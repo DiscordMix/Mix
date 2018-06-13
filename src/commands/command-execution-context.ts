@@ -121,7 +121,7 @@ export default class CommandExecutionContext {
             // TODO: static time for images, probably need function
             const timeInSeconds = (4000 + (100 * contentSize * 1000));
 
-            messageResult.delete(timeInSeconds);
+            messageResult.delete(4000);
 
             // TODO
             // this.bot.log.info(messageResult.content.length);

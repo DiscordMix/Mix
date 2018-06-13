@@ -12,6 +12,7 @@ export interface CommandExecutionContextOptions {
     readonly bot: Bot;
     readonly auth: number;
     readonly emojis?: EmojiCollection;
+    readonly label: string | null;
 }
 
 export default class CommandExecutionContext {
@@ -20,6 +21,7 @@ export default class CommandExecutionContext {
     bot: Bot;
     auth: number;
     emojis?: EmojiCollection;
+    label: string | null;
 
     /**
      * @param {CommandExecutionContextOptions} options
@@ -54,6 +56,12 @@ export default class CommandExecutionContext {
          * @readonly
          */
         this.emojis = options.emojis ? options.emojis : undefined;
+
+        /**
+         * @type {string}
+         * @readonly
+         */
+        this.label = options.label;
     }
 
     /**
@@ -208,5 +216,11 @@ export default class CommandExecutionContext {
      */
     async privateReply(message: string): Promise<Message | Message[]> {
         return await this.message.author.send(message);
+    }
+
+    argumentsString(): string {
+        if (!this.label)
+            return this.message.content;
+        return this.message.content.substr(this.label.length + 1);
     }
 }

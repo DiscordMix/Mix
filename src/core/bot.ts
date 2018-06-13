@@ -181,9 +181,10 @@ export default class Bot extends EventEmitter {
                     // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
                     // TODO: CRITICAL: Default access level set to 0
                     auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role: any) => role.name), message.author.id) : 0,
-                    emojis: this.emojis
+                    emojis: this.emojis,
+                    label: CommandParser.getCommandBase(message.content, this.settings.general.prefix)
                 };
-
+                
                 const command = CommandParser.parse(
                     message.content,
                     this.commands,

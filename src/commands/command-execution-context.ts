@@ -218,9 +218,14 @@ export default class CommandExecutionContext {
         return await this.message.author.send(message);
     }
 
-    argumentsString(): string {
-        if (!this.label)
+    /**
+     * @returns {string}
+     */
+    joinArguments(): string {
+        if (!this.label) {
             return this.message.content;
+        }
+
         return this.message.content.substr(this.label.length + 1);
     }
 }

@@ -89,7 +89,6 @@ export default class Command {
 
         /**
          * Ignore the argument count and format
-         * 
          * @type {boolean}
          * @readonly
          */

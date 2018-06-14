@@ -7,6 +7,10 @@ import Settings from "../core/settings";
 
 const { expect } = require("chai");
 
+const globalAny: any = global;
+const describe: any = globalAny.describe;
+const it: any = globalAny.it;
+
 const subjects = {
     ids: [
         "<@285578743324606482>",

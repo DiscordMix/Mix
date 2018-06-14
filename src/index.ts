@@ -34,6 +34,10 @@ module.exports = {
     ChatEnvironment: require("./core/chat-environment").default,
     ConfigBuilder: require("./builders/config-builder").default,
 
+    // Plugins
+    Plugin: require("./core/plugin").default,
+    PluginManager: require("./core/plugin-manager").default,
+
     // Collections
     Collection: require("./collections/collection").default,
     EmojiCollection: require("./collections/emoji-collection").default,

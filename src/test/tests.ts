@@ -268,7 +268,7 @@ describe("Settings.fromFile()", () => {
             expect(result.keys.bfd).to.equal("my_bfd_key");
         });
 
-        return settingsPromise.then((result: Settings) => {
+        return settingsSecondPromise.then((result: Settings) => {
             expect(result.general.prefix).to.be.an("string");
             expect(result.general.prefix).to.equal(".");
 

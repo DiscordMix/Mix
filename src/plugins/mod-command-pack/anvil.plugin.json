@@ -3,5 +3,5 @@
     "desc": "Basic moderation commands",
     "version": "1.0.0",
     "author": "Atlas <private.phantom@outlook.com>",
-    "plugin": "plugin.js"
+    "entry": "plugin.js"
 }

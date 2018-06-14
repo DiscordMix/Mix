@@ -41,27 +41,8 @@ export default class CommandLoader {
                 files.forEach((file: string) => {
                     const moduleName = path.basename(file, ".js");
 
-                    if (!file.startsWith("@")) {
-                        const modulePath = path.join(this.manager.path, moduleName);
-
-                        let module = require(modulePath);
-
-                        // Support for ES6-compiled modules
-                        if (module.default && typeof module.default === "object") {
-                            module = module.default;
-                        }
-
-                        // Validate the command before registering it
-                        if (Command.validate(module)) {
-                            this.manager.register(new Command(module));
-                            loaded++;
-                        }
-                        else {
-                            Log.warn(`[CommandLoader.loadAll] Skipping invalid command: ${moduleName}`);
-                        }
-                    }
-                    else {
-                        Log.verbose(`[CommandLoader.loadAll] Skipping command: ${moduleName}`);
+                    if (this.load(file, moduleName)) {
+                        loaded++;
                     }
                 });
 
@@ -71,7 +52,36 @@ export default class CommandLoader {
         });
     }
 
-    load(path: string): void {
-        // TODO
+    /**
+     * @param {string} file The path to the command file
+     * @param {string} moduleName
+     * @returns {boolean} Whether the command was validated and loaded successfully
+     */
+    load(file: string, moduleName: string): boolean {
+        if (!file.startsWith("@")) {
+            const modulePath = path.join(this.manager.path, moduleName);
+
+            let module = require(modulePath);
+
+            // Support for ES6-compiled modules
+            if (module.default && typeof module.default === "object") {
+                module = module.default;
+            }
+
+            // Validate the command before registering it
+            if (Command.validate(module)) {
+                this.manager.register(new Command(module));
+
+                return true;
+            }
+            else {
+                Log.warn(`[CommandLoader.loadAll] Skipping invalid command: ${moduleName}`);
+            }
+        }
+        else {
+            Log.verbose(`[CommandLoader.loadAll] Skipping command: ${moduleName}`);
+        }
+
+        return false;
     }
 }

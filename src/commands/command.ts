@@ -1,29 +1,38 @@
 import ChatEnvironment from "../core/chat-environment";
+import CommandExecutionContext from "./command-execution-context";
 
 const Typer = require("@raxor1234/typer/typer");
 
+export interface CommandOptions {
+    readonly executed: (context: CommandExecutionContext) => void;
+    readonly canExecute?: Function;
+    readonly meta: CommandMetaOptions;
+    readonly restrict: CommandRestrictOptions;
+}
+
 export interface CommandMetaOptions {
-    name: string;
-    desc: string;
-    aliases: Array<string>;
-    args: any;
-    singleArg: boolean;
+    readonly name: string;
+    readonly desc?: string;
+    readonly aliases?: Array<string>;
+    readonly args?: any;
+    readonly singleArg?: boolean;
 }
 
 export interface CommandRestrictOptions {
-    enabled: boolean;
-    cooldown: number;
-    permissions: Array<any>; // TODO: Permission type
-    env: ChatEnvironment;
-    auth: number;
-    exclude: Array<string>;
+    readonly enabled?: boolean;
+    readonly cooldown?: number;
+    readonly selfPerms?: Array<any>; // TODO: Permission type
+    readonly issuerPerms?: Array<any>; // TODO: Permission type again
+    readonly env?: ChatEnvironment;
+    readonly auth?: number;
+    readonly exclude?: Array<string>;
 }
 
-export interface CommandOptions {
-    executed: Function;
-    canExecute: Function;
-    meta: CommandMetaOptions;
-    restrict: CommandRestrictOptions;
+// TODO: Make use of this
+export interface CommandMetaArgument {
+    readonly type: string;
+    readonly defaultValue?: any;
+    readonly required?: boolean;
 }
 
 export default class Command {
@@ -35,77 +44,95 @@ export default class Command {
     readonly args: any;
     readonly isEnabled: boolean;
     readonly cooldown: number;
-    readonly permissions: Array<any>; // TODO: Type hotfix
+    readonly selfPermissions: Array<any>; // TODO: Type hotfix
+    readonly issuerPermissions: Array<any>; // TODO: Type hotfix again
     readonly environment: ChatEnvironment;
     readonly auth: number;
     readonly exclude: Array<string>;
     readonly singleArg: boolean;
 
     /**
-     * @param {Object} options
+     * @param {CommandOptions} options
      */
     constructor(options: CommandOptions) {
         /**
+         * The name by which the command will be executed
          * @type {string}
          * @readonly
          */
         this.name = options.meta.name;
 
         /**
+         * The description of the command
          * @type {string}
          * @readonly
          */
         this.description = options.meta.desc ? options.meta.desc : "No description provided";
 
         /**
+         * The list of alternative names that will execute this command
          * @type {Array<string>}
          * @readonly
          */
         this.aliases = options.meta.aliases ? options.meta.aliases : [];
 
         /**
+         * The method called when this command is successfully executed
          * @type {Function}
          * @readonly
          */
         this.executed = options.executed;
 
         /**
+         * A method that determines whether this command can execute
          * @type {Function}
          * @readonly
          */
         this.canExecute = options.canExecute ? options.canExecute : true;
 
         /**
+         * An object describing the required and optional arguments that this command accepts
          * @type {Object}
          * @readonly
          */
         this.args = options.meta.args ? options.meta.args : {};
 
         /**
+         * Whether this command is enabled and can be executed
          * @type {boolean}
          * @readonly
          */
         this.isEnabled = options.restrict.enabled !== undefined ? options.restrict.enabled : true;
 
         /**
-         * Ignore the argument count and format
+         * @todo Should be determined automatically?
+         * Whether the command is intended to only have a single argument
          * @type {boolean}
          * @readonly
          */
         this.singleArg = options.meta.singleArg !== undefined ? options.meta.singleArg : false;
 
         /**
+         * The time between required between each command execution (per user)
          * @type {number}
          * @readonly
          */
         this.cooldown = options.restrict.cooldown ? options.restrict.cooldown : 0;
 
         /**
+         * Permissions required by the bot itself
          * @type {Array<number>}
          */
-        this.permissions = options.restrict.permissions ? options.restrict.permissions : [];
+        this.selfPermissions = options.restrict.selfPerms ? options.restrict.selfPerms : [];
 
         /**
+         * Permissions required by the command issuer
+         * @type {Array<*>}
+         */
+        this.issuerPermissions = options.restrict.issuerPerms ? options.restrict.issuerPerms : [];
+
+        /**
+         * The exclusive environment where this command is allowed to execute
          * @type {ChatEnvironment|Array<ChatEnvironment>}
          * @readonly
          */
@@ -113,12 +140,14 @@ export default class Command {
 
         // TODO: Default auth level to 'default'
         /**
+         * The authorization level required by the command issuer
          * @type {number}
          * @readonly
          */
         this.auth = options.restrict.auth !== undefined ? options.restrict.auth : 0;
 
         /**
+         * List of users, channels, roles, and/or guilds blocked from using this command
          * @type {Array<string>}
          * @readonly
          */
@@ -158,7 +187,7 @@ export default class Command {
     }
 
     /**
-     * Validate a command module
+     * Determine whether a command module is valid
      * @param {Object} data The module to validate
      * @return {boolean} Whether the module is valid
      */

@@ -1,0 +1,7 @@
+{
+    "name": "Moderation Command Pack",
+    "desc": "Basic moderation commands",
+    "version": "1.0.0",
+    "author": "Atlas <private.phantom@outlook.com>",
+    "plugin": "plugin.js"
+}

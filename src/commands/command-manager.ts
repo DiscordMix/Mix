@@ -303,12 +303,12 @@ export default class CommandManager /* extends Collection */ {
                 context.fail("Invalid argument usage. Please use the `usage` command.");
             }
         }
-        else if (command.permissions.length > 0 && !context.message.guild.me.hasPermission(command.permissions.map((permissionObj) => permissionObj.permission))) {
+        else if (command.selfPermissions.length > 0 && !context.message.guild.me.hasPermission(command.selfPermissions.map((permissionObj) => permissionObj.permission))) {
             if (this.handlers[CommandManagerEvent.RequiresPermissions]) {
                 this.handlers[CommandManagerEvent.RequiresPermissions](context, command);
             }
             else {
-                const permissions = command.permissions.map((permission) => `\`${permission.name}\``).join(", ");
+                const permissions = command.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`I need the following permission(s) to execute that command: ${permissions}`);
             }

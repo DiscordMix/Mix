@@ -48,8 +48,8 @@ export default class Settings {
          * @readonly
          */
         this.paths = {
-            commands: options.paths.commands ? options.paths.commands : "./commands",
-            plugins: options.paths.plugins ? options.paths.plugins : "./plugins"
+            commands: options.paths && options.paths.commands ? options.paths.commands : "./commands",
+            plugins: options.paths && options.paths.plugins ? options.paths.plugins : "./plugins"
         };
 
         /**

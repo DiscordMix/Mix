@@ -6,6 +6,7 @@ import ObjectStore from "../data-stores/object-store";
 import Settings from "../core/settings";
 
 const { expect } = require("chai");
+const path = require("path");
 
 const globalAny: any = global;
 const describe: any = globalAny.describe;
@@ -39,7 +40,7 @@ const subjects = {
         }
     }),
 
-    settingsPath: "./test-settings.json"
+    settingsPath: path.resolve(path.join(__dirname, "./test-settings.json"))
 };
 
 describe("Utils.resolveId()", () => {
@@ -235,8 +236,10 @@ describe("ObjectStore.set()", () => {
     });
 });
 
+console.log(__dirname);
+
 describe("Settings.fromFile()", () => {
-    it("should load settings from a file", (done: Function) => {
+    it("should load settings from a file", () => {
         const settingsPromise: Promise<Settings> = new Promise(async (resolve) => {
             resolve(await Settings.fromFile(subjects.settingsPath));
         });

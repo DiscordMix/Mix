@@ -45,7 +45,7 @@ export default class JsonStore extends ObjectStore {
     /**
      * @todo Return type
      * Save the data into the source file
-     * @return {Promise<void>}
+     * @return {Promise<*>}
      */
     async save(): Promise<any> {
         this.validate();

@@ -1,3 +1,5 @@
+import Log from "../core/log";
+
 export default class CommandArgumentParser {
     /**
      * @param {string} type
@@ -14,6 +16,6 @@ export default class CommandArgumentParser {
             }
         }
 
-        throw new Error(`[CommandArgumentParser.resolve] Missing argument resolver: ${type}`);
+        Log.error(`[CommandArgumentParser.resolve] Argument resolver missing: ${type}`);
     }
 }

@@ -73,8 +73,8 @@ export default class Settings {
     }
 
     /**
-     * Validate the settings
      * @todo
+     * Validate the settings
      * @return {Settings}
      */
     validate(): Settings {

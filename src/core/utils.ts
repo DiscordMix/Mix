@@ -56,6 +56,7 @@ export default class Utils {
     }
 
     /**
+     * @todo Return type
      * @param {Object} options
      * @param {User} requester
      * @param {Discord.Channel} channel
@@ -123,7 +124,7 @@ export default class Utils {
     /**
      * @param {string} path
      * @param {Object} data
-     * @return {Promise}
+     * @return {Promise<*>}
      */
     static async writeJson(path: string, data: any): Promise<any> {
         return new Promise((resolve) => {

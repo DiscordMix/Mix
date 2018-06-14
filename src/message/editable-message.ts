@@ -7,7 +7,8 @@ export default class EditableMessage {
     readonly message: Message;
 
     /**
-     * @param {Discord.Message} message
+     * @todo Verify param "message"'s type
+     * @param {Discord.Message|Array<Discord.Message>} message
      */
     constructor(message: Message | Message[]) {
         // TODO: Hotfix
@@ -30,9 +31,9 @@ export default class EditableMessage {
     /**
      * Edit an already sent message
      * @param {string} message
-     * @param {string} title
-     * @param {string} color
-     * @param {string} thumbnailUrl
+     * @param {string} [title=""]
+     * @param {string} [color="RANDOM"]
+     * @param {string} [thumbnailUrl=""]
      * @param {string} [image=""]
      * @return {Promise<Message>}
      */

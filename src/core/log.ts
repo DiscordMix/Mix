@@ -63,6 +63,7 @@ export default class Log {
 
     /**
      * @param {string} message
+     * @return {Promise<*>}
      */
     static info(message: string): Promise<any> {
         const options: ComposeOptions = {
@@ -77,6 +78,7 @@ export default class Log {
 
     /**
      * @param {string} message
+     * @return {Promise<*>}
      */
     static success(message: string): Promise<any> {
         const options: ComposeOptions = {
@@ -91,6 +93,7 @@ export default class Log {
 
     /**
      * @param {string} message
+     * @return {Promise<*>}
      */
     static warn(message: string): Promise<any> {
         const options: ComposeOptions = {
@@ -105,6 +108,7 @@ export default class Log {
 
     /**
      * @param {string} message
+     * @return {Promise<*>}
      */
     static error(message: string): Promise<any> {
         const options: ComposeOptions = {
@@ -120,6 +124,7 @@ export default class Log {
     /**
      * @param {string} message
      * @param {boolean} exit
+     * @return {Promise<*>}
      */
     static throw(message: string, exit: boolean = true): Promise<any> {
         const options: ComposeOptions = {
@@ -140,6 +145,7 @@ export default class Log {
 
     /**
      * @param {string} message
+     * @return {Promise<*>}
      */
     static verbose(message: string): Promise<any> {
         const options: ComposeOptions = {
@@ -154,6 +160,7 @@ export default class Log {
 
     /**
      * @param {string} message
+     * @return {Promise<*>}
      */
     static debug(message: string): Promise<any> {
         const options: ComposeOptions = {

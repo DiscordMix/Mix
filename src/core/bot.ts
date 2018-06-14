@@ -11,6 +11,7 @@ import CommandLoader from "../commands/command-loader";
 import Log from "./log";
 import DataStore from "../data-stores/data-store";
 import CommandAuthStore from "../commands/command-auth-store";
+import Temp from "./temp";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -35,6 +36,7 @@ export interface BotOptions {
  */
 export default class Bot extends EventEmitter {
     readonly settings: Settings;
+    readonly temp: Temp;
     readonly dataStore?: DataStore;
     readonly authStore: CommandAuthStore;
     readonly emojis?: EmojiCollection;
@@ -59,6 +61,13 @@ export default class Bot extends EventEmitter {
          * @readonly
          */
         this.settings = new Settings(options.paths.settings);
+
+        /**
+         * @todo Temporary hard-coded user id
+         * @type {Temp}
+         * @readonly
+         */
+        this.temp = new Temp("777");
 
         /**
          * @type {DataStore}
@@ -133,6 +142,9 @@ export default class Bot extends EventEmitter {
 
         // Load commands
         await this.commandLoader.reloadAll();
+
+        // Create the temp folder
+        await this.temp.create();
 
         // Setup the Discord client's events
         this.setupEvents();
@@ -240,8 +252,8 @@ export default class Bot extends EventEmitter {
     }
 
     /**
-     * Restart the bot's client
      * @todo Use the reload modules param
+     * Restart the bot's client
      * @param {boolean} reloadModules Whether to reload all modules
      * @return {Promise<Bot>}
      */

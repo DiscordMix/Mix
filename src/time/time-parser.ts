@@ -24,21 +24,6 @@ export default class TimeParser {
     }
 
     /**
-     * @todo Return type
-     * @return {TimeSuffixType}
-     */
-    get suffix(): any {
-        return TimeSuffixType.fromShort(this.getMatch()[2]);
-    }
-
-    /**
-     * @return {number}
-     */
-    get amount(): number {
-        return parseInt(this.getMatch()[1]);
-    }
-
-    /**
      * @return {number}
      */
     getTimeFromNow(): number {
@@ -75,5 +60,20 @@ export default class TimeParser {
                 throw new Error(`[TimeParser.getTimeFromNow] Invalid suffix: ${this.suffix}`);
             }
         }
+    }
+
+    /**
+     * @todo Return type
+     * @return {TimeSuffixType}
+     */
+    get suffix(): any {
+        return TimeSuffixType.fromShort(this.getMatch()[2]);
+    }
+
+    /**
+     * @return {number}
+     */
+    get amount(): number {
+        return parseInt(this.getMatch()[1]);
     }
 }

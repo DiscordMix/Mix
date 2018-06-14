@@ -9,7 +9,14 @@ export interface PluginMeta {
 export default class Plugin {
     readonly meta: PluginMeta;
 
+    /**
+     * @param {PluginMeta} meta
+     */
     constructor(meta: PluginMeta) {
+        /**
+         * @type {PluginMeta}
+         * @readonly
+         */
         this.meta = meta;
     }
 }

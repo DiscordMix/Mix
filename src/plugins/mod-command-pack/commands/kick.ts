@@ -5,7 +5,7 @@ import ChatEnvironment from "../../../core/chat-environment";
 
 const command: CommandOptions = {
     executed: async (context: CommandExecutionContext) => {
-        const targetMember = context.message.guild.member();
+        const targetMember = context.message.guild.member(context.arguments[0]);
 
         if (targetMember) {
             if (targetMember.kickable) {

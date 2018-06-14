@@ -40,7 +40,7 @@ const subjects = {
         }
     }),
 
-    settingsPath: path.resolve(path.join(__dirname, "./test-settings.json"))
+    settingsPath: path.resolve(path.join(__dirname, "./../../src/test/test-settings.json"))
 };
 
 describe("Utils.resolveId()", () => {

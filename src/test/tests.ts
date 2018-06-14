@@ -232,14 +232,18 @@ describe("ObjectStore.set()", () => {
 });
 
 describe("Settings.fromFile()", () => {
-    it("should load settings from a file", async () => {
-        const settingsObj: Settings = await Settings.fromFile(subjects.settingsPath);
+    it("should load settings from a file", (done: Function) => {
+        const settingsPromise: Promise<Settings> = new Promise(async (resolve) => {
+            resolve(await Settings.fromFile(subjects.settingsPath));
+        });
 
-        expect(settingsObj.general.prefix).to.equal("!");
-        expect(settingsObj.general.token).to.equal("my_secret_token");
-        expect(settingsObj.paths.commands).to.equal("./my_commands");
-        expect(settingsObj.paths.plugins).to.equal("./my_plugins");
-        expect(settingsObj.keys.dbl).to.equal("my_dbl_key");
-        expect(settingsObj.keys.bfd).to.equal("my_bfd_key");
+        return settingsPromise.then((result: Settings) => {
+            expect(result.general.prefix).to.equal("!");
+            expect(result.general.token).to.equal("my_secret_token");
+            expect(result.paths.commands).to.equal("./my_commands");
+            expect(result.paths.plugins).to.equal("./my_plugins");
+            expect(result.keys.dbl).to.equal("my_dbl_key");
+            expect(result.keys.bfd).to.equal("my_bfd_key");
+        });
     });
 });

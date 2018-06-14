@@ -1,4 +1,3 @@
-import Bot from "./bot";
 import Log from "./log";
 import Utils from "./utils";
 
@@ -20,7 +19,7 @@ export default class Temp {
 
     /**
      * Create the temp folder for the bot
-     * @returns {Promise<*>}
+     * @return {Promise<*>}
      */
     async create(): Promise<any> {
         return new Promise((resolve) => {
@@ -45,7 +44,7 @@ export default class Temp {
      * @param {string} file The file in which to store the data
      * @return {Promise<boolean>}
      */
-    save(data: any, file: string): Promise<boolean> {
+    store(data: any, file: string): Promise<boolean> {
         return Utils.writeJson(path.resolve(path.join(this.resolvedPath, file)), data);
     }
 

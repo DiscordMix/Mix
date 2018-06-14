@@ -211,7 +211,7 @@ export default class CommandManager /* extends Collection */ {
     /**
      * @param {CommandExecutionContext} context
      * @param {Command} command
-     * @returns {CommandCooldown | null}
+     * @return {CommandCooldown | null}
      */
     getCooldown(context: CommandExecutionContext, command: Command): CommandCooldown | null {
         for (let i: number = 0; i < this.cooldowns.length; i++) {

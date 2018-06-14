@@ -33,7 +33,7 @@ export default class CommandLoader {
     /**
      * @param {string} file The path to the command file
      * @param {string} moduleName
-     * @returns {boolean} Whether the command was validated and loaded successfully
+     * @return {boolean} Whether the command was validated and loaded successfully
      */
     load(file: string, moduleName: string): boolean {
         if (!file.startsWith("@")) {
@@ -66,7 +66,7 @@ export default class CommandLoader {
     /**
      * Extract and load all commands from a directory
      * @param {string} directoryPath
-     * @returns {Promise<number>} The amount of successfully loaded commands
+     * @return {Promise<number>} The amount of successfully loaded commands
      */
     loadAll(directoryPath: string): Promise<number> {
         // TODO: Implement

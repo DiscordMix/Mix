@@ -65,7 +65,6 @@ export default class ConsoleInterface {
                     const startTime = performance.now();
 
                     await bot.disconnect();
-                    await bot.settings.reload();
                     await bot.commandLoader.reloadAll();
                     await bot.connect();
 

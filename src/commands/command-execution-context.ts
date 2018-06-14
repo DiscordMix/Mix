@@ -219,7 +219,7 @@ export default class CommandExecutionContext {
     }
 
     /**
-     * @returns {string}
+     * @return {string}
      */
     joinArguments(): string {
         if (!this.label) {

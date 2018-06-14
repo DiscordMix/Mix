@@ -24,6 +24,7 @@ export interface BotPathOptions {
 }
 
 export interface BotOptions {
+    readonly settings: Settings;
     readonly paths: BotPathOptions;
     readonly authStore: CommandAuthStore;
     readonly dataStore?: DataStore;
@@ -50,7 +51,7 @@ export default class Bot extends EventEmitter {
 
     /**
      * Setup the bot from an object
-     * @param {Object} options
+     * @param {BotOptions} options
      * @return {Promise<Bot>}
      */
     constructor(options: BotOptions) {
@@ -60,7 +61,7 @@ export default class Bot extends EventEmitter {
          * @type {Settings}
          * @readonly
          */
-        this.settings = new Settings(options.paths.settings);
+        this.settings = options.settings;
 
         /**
          * @todo Temporary hard-coded user id
@@ -137,9 +138,6 @@ export default class Bot extends EventEmitter {
      * @return {Promise<Bot>}
      */
     async setup(): Promise<Bot> {
-        // Load settings
-        await this.settings.reload();
-
         // Load commands
         await this.commandLoader.reloadAll();
 
@@ -277,7 +275,8 @@ export default class Bot extends EventEmitter {
      * @return {Promise<Bot>}
      */
     async disconnect(): Promise<Bot> {
-        this.settings.save();
+        // TODO
+        //this.settings.save();
         await this.client.destroy();
         Log.info("[Bot.disconnect] Disconnected");
 

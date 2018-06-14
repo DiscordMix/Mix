@@ -4,33 +4,67 @@ import Utils from "./utils";
 const fs = require("fs");
 const Typer = require("@raxor1234/typer/typer");
 
-export default class Settings {
-    private readonly path: string;
+// TODO: All these interfaces probably shouldn't be
+// read-only since it should be allowed to change them
+// in code.
+export interface SettingsGeneral {
+    readonly token: string;
+    readonly prefix: string;
+}
 
-    general: any;
-    keys: any;
+export interface SettingsKeys {
+    readonly dbl?: string;
+    readonly bfd?: string;
+}
+
+export interface SettingsPaths {
+    readonly commands?: string;
+    readonly plugins?: string;
+}
+
+export interface SettingsOptions {
+    readonly general: SettingsGeneral;
+    readonly paths: SettingsPaths;
+    readonly keys: SettingsKeys;
+}
+
+export default class Settings {
+    general: SettingsGeneral;
+    paths: SettingsPaths;
+    keys: SettingsKeys;
 
     /**
-     * @param {string} path
+     * @param {SettingsOptions} options
      */
-    constructor(path: string) {
+    constructor(options: SettingsOptions) {
         /**
-         * @type {string}
-         * @private
+         * @type {SettingsGeneral}
          * @readonly
          */
-        this.path = path;
+        this.general = options.general;
 
-        if (!fs.existsSync(this.path)) {
-            Log.throw("Could not load settings: File does not exist");
-        }
+        /**
+         * @type {SettingsPaths}
+         * @readonly
+         */
+        this.paths = {
+            commands: options.paths.commands ? options.paths.commands : "./commands",
+            plugins: options.paths.plugins ? options.paths.plugins : "./plugins"
+        };
+
+        /**
+         * @readonly
+         * @type {SettingsKeys}
+         */
+        this.keys = options.keys;
     }
 
     /**
+     * @todo Probably not needed anymore
      * Reload settings
      * @return {Promise<Settings>}
      */
-    async reload(): Promise<Settings> {
+    /* async reload(): Promise<Settings> {
         Log.verbose("[Settings.reload] Reloading");
 
         const jsonObj: any = await Utils.readJson(this.path);
@@ -41,39 +75,40 @@ export default class Settings {
          * @type {Object}
          * @readonly
          */
-        this.general = jsonObj.general;
+        // this.general = jsonObj.general;
 
         /**
          * @type {Object}
          * @readonly
          */
-        this.keys = jsonObj.keys;
+        // this.keys = jsonObj.keys;
 
-        Log.success("[Settings.reload] Successfully reloaded settings");
+        // Log.success("[Settings.reload] Successfully reloaded settings");
 
         // TODO: May not be needed with typescript?
         // Validate settings after loading them
-        this.validate();
+        // this.validate();
 
-        return this;
-    }
+        // return this;
+    //}
 
     /**
+     * @todo Probably not needed anymore also
      * @todo Should be done async
      * Save the local settings into path
      * @return {Settings}
      */
-    save(): Settings {
+    /* save(): Settings {
         fs.writeFileSync(this.path, JSON.stringify({
             general: this.general,
             keys: this.keys
         }, null, 4));
 
         return this;
-    }
+    } */
 
     /**
-     * @todo
+     * @todo Probably not needed anymore also x2
      * Validate the settings
      * @return {Settings}
      */
@@ -86,5 +121,40 @@ export default class Settings {
         }
 
         return this;
+    }
+
+    /**
+     * Load bot settings from a file
+     * @param {string} path The file containing the settings
+     * @return {Promise<Settings>}
+     */
+    static async fromFile(path: string): Promise<Settings> {
+        if (!fs.existsSync(path)) {
+            Log.throw("[Settings.fromFile] Could not load settings: File does not exist");
+        }
+
+        const fileSettings = await Utils.readJson(path);
+
+        // TODO: Make sure pure objects work
+        return new Settings(fileSettings);
+
+        // TODO
+        /* return new Settings({
+            general: {
+                token: fileSettings.general.token,
+                prefix: fileSettings.general.prefix
+            },
+
+            paths: {
+                // TODO: Even tho it has a default value here, when initiating it in code it
+                // should also have a default value.
+                commands: fileSettings.paths.commands
+            },
+
+            keys: {
+                dbl: fileSettings.keys.dbl,
+                bfd: fileSettings.keys.bfd
+            }
+        }); */
     }
 }

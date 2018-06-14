@@ -162,6 +162,9 @@ export default class Utils {
         return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
+    /**
+     * @return {Promise<string>}
+     */
     static async getAnvilVersion(): Promise<string> {
         // TODO
         // return (await this.readJson("package.json")).version;

@@ -40,7 +40,9 @@ const subjects = {
         }
     }),
 
-    settingsPath: path.resolve(path.join(__dirname, "./../../src/test/test-settings.json"))
+    settingsPath: path.resolve(path.join(__dirname, "./../../src/test/test-settings.json")),
+
+    settingsPathTwo: path.resolve(path.join(__dirname, "./../../src/test/test-settings-2.json"))
 };
 
 describe("Utils.resolveId()", () => {
@@ -236,21 +238,48 @@ describe("ObjectStore.set()", () => {
     });
 });
 
-console.log(__dirname);
-
 describe("Settings.fromFile()", () => {
     it("should load settings from a file", () => {
         const settingsPromise: Promise<Settings> = new Promise(async (resolve) => {
             resolve(await Settings.fromFile(subjects.settingsPath));
         });
 
-        return settingsPromise.then((result: Settings) => {
+        const settingsSecondPromise: Promise<Settings> = new Promise(async (resolve) => {
+            resolve(await Settings.fromFile(subjects.settingsPathTwo));
+        });
+
+        settingsPromise.then((result: Settings) => {
+            expect(result.general.prefix).to.be.an("string");
             expect(result.general.prefix).to.equal("!");
+
+            expect(result.general.token).to.be.an("string");
             expect(result.general.token).to.equal("my_secret_token");
+
+            expect(result.paths.commands).to.be.an("string");
             expect(result.paths.commands).to.equal("./my_commands");
+
+            expect(result.paths.plugins).to.be.an("string");
             expect(result.paths.plugins).to.equal("./my_plugins");
+
+            expect(result.keys.dbl).to.be.an("string");
             expect(result.keys.dbl).to.equal("my_dbl_key");
+
+            expect(result.keys.bfd).to.be.an("string");
             expect(result.keys.bfd).to.equal("my_bfd_key");
+        });
+
+        return settingsPromise.then((result: Settings) => {
+            expect(result.general.prefix).to.be.an("string");
+            expect(result.general.prefix).to.equal(".");
+
+            expect(result.general.token).to.be.an("string");
+            expect(result.general.token).to.equal("another_secret_token");
+
+            expect(result.paths.commands).to.be.an("string");
+            expect(result.paths.commands).to.equal("./commands");
+
+            expect(result.paths.plugins).to.be.an("string");
+            expect(result.paths.plugins).to.equal("./plugins");
         });
     });
 });

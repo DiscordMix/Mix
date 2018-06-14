@@ -15,6 +15,7 @@ export interface CommandMetaOptions {
     readonly desc?: string;
     readonly aliases?: Array<string>;
     readonly args?: any;
+    readonly newArgs?: Array<CommandMetaArgument>;
     readonly singleArg?: boolean;
 }
 
@@ -30,7 +31,9 @@ export interface CommandRestrictOptions {
 
 // TODO: Make use of this
 export interface CommandMetaArgument {
+    readonly name: string;
     readonly type: string;
+    readonly desc?: string;
     readonly defaultValue?: any;
     readonly required?: boolean;
 }
@@ -42,6 +45,7 @@ export default class Command {
     readonly executed: Function;
     readonly canExecute: Function | boolean;
     readonly args: any;
+    readonly newArgs: Array<CommandMetaArgument>;
     readonly isEnabled: boolean;
     readonly cooldown: number;
     readonly selfPermissions: Array<any>; // TODO: Type hotfix
@@ -91,11 +95,18 @@ export default class Command {
         this.canExecute = options.canExecute ? options.canExecute : true;
 
         /**
-         * An object describing the required and optional arguments that this command accepts
+         * An object describing the required and optional arguments accepted by the command
          * @type {Object}
          * @readonly
          */
         this.args = options.meta.args ? options.meta.args : {};
+
+        /**
+         * The new argument array containing the required and optional arguments accepted by the command
+         * @type {Array<CommandMetaArgument>}
+         * @readonly
+         */
+        this.newArgs = options.meta.newArgs ? options.meta.newArgs : [];
 
         /**
          * Whether this command is enabled and can be executed

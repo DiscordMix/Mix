@@ -33,7 +33,20 @@ const command: CommandOptions = {
         args: {
             target: "!:user",
             reason: "string"
-        }
+        },
+        newArgs: [
+            {
+                name: "member",
+                desc: "The guild member to kick",
+                type: ":user",
+                required: true
+            },
+            {
+                name: "reason",
+                desc: "The reason for performing this action",
+                type: "string"
+            }
+        ]
     },
     restrict: {
         env: ChatEnvironment.Guild,

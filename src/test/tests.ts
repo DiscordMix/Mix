@@ -80,7 +80,7 @@ describe("Utils.translateState()", () => {
         ];
 
         for (let i = 0; i < subjects.length; i++) {
-            const result = Utils.translateState(subjects[i]);
+            const result = Utils.translateState(subjects[i].toString());
 
             expect(result).to.be.an("boolean");
             expect(result).to.be.equal(true);

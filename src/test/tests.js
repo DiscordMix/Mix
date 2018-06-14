@@ -82,7 +82,7 @@ describe("Utils.translateState()", () => {
 });
 
 describe("Utils.timeFromNow()", () => {
-    it("should time from now in milliseconds", () => {
+    it("should return the time from now in milliseconds", () => {
         const result = Utils.timeFromNow(0, 0, 50);
 
         expect(result).to.be.an("number");

@@ -21,35 +21,13 @@ export default class CommandLoader {
     }
 
     /**
-     * @todo Return type
-     * Load all the commands from path
-     * @return {Promise}
+     * Load all the commands from the command manager's commands path
+     * @return {Promise<number>}
      */
-    async reloadAll(): Promise<any> {
-        // TODO: Implement
-        // Note: relative path | Remove a module from cache
-        // delete require.cache[require.resolve(`./${commandName}.js`)];
+    reloadAll(): Promise<number> {
+        this.manager.unloadAll();
 
-        return new Promise((resolve) => {
-            Log.verbose(`[CommandLoader.loadAll] Loading commands`);
-
-            this.manager.unloadAll();
-
-            fs.readdir(this.manager.path, (error: any, files: Array<string>) => {
-                let loaded = 0;
-
-                files.forEach((file: string) => {
-                    const moduleName = path.basename(file, ".js");
-
-                    if (this.load(file, moduleName)) {
-                        loaded++;
-                    }
-                });
-
-                Log.success(`[CommandLoader.loadAll] Loaded a total of ${loaded} command(s)`);
-                resolve();
-            });
-        });
+        return this.loadAll(this.manager.path);
     }
 
     /**
@@ -75,13 +53,47 @@ export default class CommandLoader {
                 return true;
             }
             else {
-                Log.warn(`[CommandLoader.loadAll] Skipping invalid command: ${moduleName}`);
+                Log.warn(`[CommandLoader.load] Skipping invalid command: ${moduleName}`);
             }
         }
         else {
-            Log.verbose(`[CommandLoader.loadAll] Skipping command: ${moduleName}`);
+            Log.verbose(`[CommandLoader.load] Skipping command: ${moduleName} (file name starts with @)`);
         }
 
         return false;
+    }
+
+    /**
+     * Extract and load all commands from a directory
+     * @param {string} directoryPath
+     * @returns {Promise<number>} The amount of successfully loaded commands
+     */
+    loadAll(directoryPath: string): Promise<number> {
+        // TODO: Implement
+        // Note: relative path | Remove a module from cache
+        // delete require.cache[require.resolve(`./${commandName}.js`)];
+
+        return new Promise((resolve) => {
+            Log.verbose(`[CommandLoader.loadAll] Loading multiple commands`);
+
+            fs.readdir(directoryPath, (error: Error, files: Array<string>) => {
+                if (error) {
+                    throw error;
+                }
+
+                let loaded: number = 0;
+
+                for (let i: number = 0; i < files.length; i++) {
+                    const moduleName: string = path.basename(files[i], ".js");
+
+                    if (this.load(files[i], moduleName)) {
+                        loaded++;
+                    }
+                }
+
+                Log.success(`[CommandLoader.loadAll] Loaded a total of ${loaded} command(s)`);
+                resolve(loaded);
+            });
+        });
     }
 }

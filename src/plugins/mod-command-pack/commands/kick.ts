@@ -1,10 +1,29 @@
 import {CommandOptions} from "../../../commands/command";
 import Permission from "../../../core/permission";
 import CommandExecutionContext from "../../../commands/command-execution-context";
+import ChatEnvironment from "../../../core/chat-environment";
 
 const command: CommandOptions = {
     executed: async (context: CommandExecutionContext) => {
-        context.ok("hello world from the kick command");
+        const targetMember = context.message.guild.member();
+
+        if (targetMember) {
+            if (targetMember.kickable) {
+                const name = `${targetMember.displayName} (${targetMember.id})`;
+
+                targetMember.kick(context.arguments.length === 2 ? context.arguments[2] : undefined).then(() => {
+                    context.ok(`${name} was successfully kicked from this server.`);
+                }).catch((error: Error) => {
+                    context.fail(`I was unable to kick that person. (${error.message})`);
+                });
+            }
+            else {
+                context.fail("I cannot kick that person.");
+            }
+        }
+        else {
+            context.fail("Couldn't find that person. Are you sure they're in this server?");
+        }
 
         return;
     },
@@ -17,6 +36,7 @@ const command: CommandOptions = {
         }
     },
     restrict: {
+        env: ChatEnvironment.Guild,
         selfPerms: [Permission.KickMembers],
         issuerPerms: [Permission.KickMembers]
     }

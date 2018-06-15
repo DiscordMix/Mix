@@ -1,4 +1,6 @@
 import DataStore from "./data-store";
+import Log from "../core/log";
+import {Snowflake} from "discord.js";
 
 const mysql = require("mysql");
 const _ = require("lodash");
@@ -7,10 +9,17 @@ const _ = require("lodash");
  * @extends DataStore
  */
 export default class MysqlStore extends DataStore {
+    private readonly connection: any;
+
+    readonly data: any;
+
+    // TODO: Can be modified externally
+    connected: boolean;
+
     /**
      * @param {Object} data
      */
-    constructor(data) {
+    constructor(data: any) {
         super();
 
         /**
@@ -37,10 +46,11 @@ export default class MysqlStore extends DataStore {
      * Connect to the database
      * @return {Promise<MysqlStore>}
      */
-    connect() {
+    connect(): Promise<MysqlStore> {
         return new Promise((resolve, reject) => {
-            this.connection.connect((err) => {
-                if (err) {
+            this.connection.connect((error: Error) => {
+                // TODO: Should throw error instead?
+                if (error) {
                     reject(reject);
                 }
                 else {
@@ -55,10 +65,11 @@ export default class MysqlStore extends DataStore {
      * Disconnect from the database
      * @return {Promise<MysqlStore>}
      */
-    disconnect() {
+    disconnect(): Promise<MysqlStore> {
         return new Promise((resolve, reject) => {
-            this.connection.end((err) => {
-                if (err) {
+            this.connection.end((error: Error) => {
+                // TODO: Should throw error instead?
+                if (error) {
                     reject(reject);
                 }
                 else {
@@ -72,17 +83,18 @@ export default class MysqlStore extends DataStore {
     /**
      * Execute a query in the database
      * @param {string} query
-     * @param {*} args
+     * @param {Array<*>} args
      * @param {number} [timeout=5000]
      * @return {Promise<Object>}
      */
-    query(query, args = [], timeout = 5000) {
+    query(query: string, args: Array<any> = [], timeout = 5000): Promise<object> {
         return new Promise((resolve, reject) => {
             this.connection.query({
                 sql: query,
                 values: args,
                 timeout: timeout
-            }, (error, results, fields) => {
+            }, (error: Error, results: any, fields: any) => {
+                // TODO: Should throw error instead?
                 if (error) {
                     reject(error);
                 }
@@ -97,32 +109,41 @@ export default class MysqlStore extends DataStore {
     }
 
     /**
+     * @todo Instead of setting Snowflake to null use ? (typescript) instead
      * Retrieve guild data
      * @param {string} path
-     * @param {(Snowflake|null)} [guildId=null]
+     * @param {Snowflake|null} [guildId=null]
      * @return {Promise}
      */
-    async get(path, guildId = null) {
+    async get(path: string, guildId: Snowflake | null = null) {
         if (!this.loaded) {
-            throw new Error("[MysqlStore.get] No data is currently loaded.");
+            Log.error("[MysqlStore.get] No data is currently loaded.");
+
+            return;
         }
 
         let query = "SELECT * FROM ?? WHERE id = ?";
 
-        const splitPath = MysqlStore.cleanPath(path, guildId);
+        // TODO: Temporary "" default value hotfix
+        const splitPath: any = MysqlStore.cleanPath(path, guildId ? guildId : "");
 
         if (splitPath.length === 1) {
             query = "SELECT * FROM ??";
         }
 
-        const { results, fields } = await this.query(query, splitPath);
+        const queryResult: any = await this.query(query, splitPath);
+        const results = queryResult.results;
+        const fields = queryResult.fields;
 
         if (splitPath.length === 1) {
             const rtn = [];
+
             for (let i = 0; i < results.length; i++) {
                 const row = results[i];
+
                 rtn[row.id] = row;
             }
+
             return rtn;
         }
 
@@ -143,41 +164,50 @@ export default class MysqlStore extends DataStore {
     }
 
     /**
+     * @todo Instead of setting Snowflake to null use ? (typescript) instead
      * Set guild data
      * @param {string} path
      * @param {*} value
-     * @param {(Snowflake|null)} [guildId=null]
+     * @param {Snowflake|null} [guildId=null]
      * @return {Promise<Object>}
      */
-    async set(path, value, guildId = null) {
+    async set(path: string, value: any, guildId: Snowflake | null = null) {
         if (!this.loaded) {
-            throw new Error("[MysqlStore.set] No data is currently loaded.");
+            Log.error("[MysqlStore.set] No data is currently loaded.");
+
+            return;
         }
 
         const query = "UPDATE ?? SET ??=? WHERE  `id`=?;";
-        const splitPath = MysqlStore.cleanPath(path, guildId);
+
+        // TODO: Temporary "" default value hotfix again
+        const splitPath = MysqlStore.cleanPath(path, guildId ? guildId : "");
 
         if (splitPath.length < 3) {
             throw new Error(`[MysqlAdapter.set] Invalid path: ${path}`);
         }
 
-        const { results, fields } = await this.query(query, [
+        const queryResult: any = await this.query(query, [
             splitPath[0],
             splitPath[2],
             value,
             splitPath[1]
         ]);
 
-        return { results, fields };
+        return {
+            results: queryResult.results,
+            fields: queryResult.fields
+        };
     }
 
     /**
+     * @todo Instead of setting Snowflake to null use ? (typescript) instead
      * Merge guild data
      * @param {string} path
      * @param {*} value
-     * @param {(Snowflake|null)} [guildId=null]
+     * @param {Snowflake|null} [guildId=null]
      */
-    merge(path, value, guildId = null) {
+    merge(path: string, value: any, guildId: Snowflake | null = null) {
         if (!this.loaded) {
             throw new Error("[MysqlStore.merge] No data is currently loaded.");
         }
@@ -190,7 +220,7 @@ export default class MysqlStore extends DataStore {
      * @param {Snowflake} guildId
      * @return {Array<string>}
      */
-    static cleanPath(path, guildId) {
+    static cleanPath(path: string, guildId: Snowflake) {
         return `${guildId ? `guilds.${guildId}.` : ""}${path}`.split(".");
     }
 

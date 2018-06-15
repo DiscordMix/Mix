@@ -6,10 +6,15 @@ const mongodb = require("mongodb");
  * @extends DataStore
  */
 export default class MongodbStore extends DataStore {
+    readonly url: string;
+    readonly client: any;
+
+    private db: any;
+
     /**
      * @param {string} url
      */
-    constructor(url) {
+    constructor(url: string) {
         super();
 
         /**
@@ -34,10 +39,11 @@ export default class MongodbStore extends DataStore {
     }
 
     /**
+     * @todo Should return a boolean indicating whether connected or not
      * @param {string} database The database name
      */
-    connect(database) {
-        this.client.connect(this.url, (error, db) => {
+    connect(database: string): void {
+        this.client.connect(this.url, (error: Error, db: any) => {
             if (error) {
                 throw error;
             }
@@ -51,7 +57,7 @@ export default class MongodbStore extends DataStore {
      * @param {string} path
      * @return {*}
      */
-    get(path) {
+    get(path: string): any {
         throw new Error("[MongoDb.get] Method not implemented.");
     }
 
@@ -60,7 +66,7 @@ export default class MongodbStore extends DataStore {
      * @param {string} path
      * @param {*} data
      */
-    set(path, data) {
+    set(path: string, data: any): void {
         throw new Error("[MongoDb.set] Method not implemented.");
     }
 
@@ -69,7 +75,7 @@ export default class MongodbStore extends DataStore {
      * @param {string} path
      * @param {*} data
      */
-    merge(path, data) {
+    merge(path: string, data: any): void {
         throw new Error("[MongoDb.merge] Method not implemented.");
     }
 }

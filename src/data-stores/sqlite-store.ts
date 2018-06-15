@@ -9,7 +9,7 @@ export default class SqliteStore extends DataStore {
      * @param {string} path
      * @return {*}
      */
-    get(path) {
+    get(path: string): any {
         throw new Error("[SqliteStore.get] Method not implemented.");
     }
 
@@ -18,7 +18,7 @@ export default class SqliteStore extends DataStore {
      * @param {string} path
      * @param {*} value
      */
-    set(path, value) {
+    set(path: string, value: any): void {
         throw new Error("[SqliteStore.set] Method not implemented.");
     }
 
@@ -27,7 +27,7 @@ export default class SqliteStore extends DataStore {
      * @param {string} path
      * @param {*} value
      */
-    merge(path, value) {
+    merge(path: string, value: any): void {
         throw new Error("[SqliteStore.merge] Method not implemented.");
     }
 }

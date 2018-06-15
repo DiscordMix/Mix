@@ -17,15 +17,8 @@ const Discord = require("discord.js");
 const EventEmitter = require("events");
 const fs = require("fs");
 
-export interface BotPathOptions {
-    readonly settings: string;
-    readonly commands: string;
-    readonly emojis: string;
-}
-
 export interface BotOptions {
     readonly settings: Settings;
-    readonly paths: BotPathOptions;
     readonly authStore: CommandAuthStore;
     readonly dataStore?: DataStore;
     readonly argumentTypes?: any;
@@ -86,7 +79,7 @@ export default class Bot extends EventEmitter {
          * @type {EmojiCollection|null}
          * @readonly
          */
-        this.emojis = options.paths.emojis ? EmojiCollection.fromFile(options.paths.emojis) : undefined;
+        this.emojis = fs.existsSync(this.settings.paths.emojis) ? EmojiCollection.fromFile(this.settings.paths.emojis) : undefined;
 
         /**
          * @type {Discord.Client}
@@ -98,7 +91,7 @@ export default class Bot extends EventEmitter {
          * @type {CommandManager}
          * @readonly
          */
-        this.commands = new CommandManager(this, options.paths.commands, this.authStore, options.argumentTypes ? options.argumentTypes : {});
+        this.commands = new CommandManager(this, this.settings.paths.commands, this.authStore, options.argumentTypes ? options.argumentTypes : {});
 
         /**
          * @type {FeatureManager}
@@ -194,7 +187,7 @@ export default class Bot extends EventEmitter {
                     emojis: this.emojis,
                     label: CommandParser.getCommandBase(message.content, this.settings.general.prefix)
                 };
-                
+
                 const command = CommandParser.parse(
                     message.content,
                     this.commands,

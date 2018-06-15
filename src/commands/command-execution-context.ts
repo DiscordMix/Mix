@@ -16,12 +16,12 @@ export interface CommandExecutionContextOptions {
 }
 
 export default class CommandExecutionContext {
-    message: Message;
-    arguments: Array<string>;
-    bot: Bot;
-    auth: number;
-    emojis?: EmojiCollection;
-    label: string | null;
+    readonly message: Message;
+    readonly arguments: Array<string>;
+    readonly bot: Bot;
+    readonly auth: number;
+    readonly emojis?: EmojiCollection;
+    readonly label: string | null;
 
     /**
      * @param {CommandExecutionContextOptions} options
@@ -55,13 +55,33 @@ export default class CommandExecutionContext {
          * @type {EmojiCollection}
          * @readonly
          */
-        this.emojis = options.emojis ? options.emojis : undefined;
+        this.emojis = options.emojis;
 
         /**
          * @type {string}
          * @readonly
          */
         this.label = options.label;
+    }
+
+    /**
+     * @param {Snowflake} userId
+     * @return {number}
+     */
+    getAuth(userId: Snowflake): number {
+        return this.bot.authStore.getAuthority(this.message.guild.id, userId, this.message.guild.member(userId).roles.array().map((role: Role) => role.name));
+    }
+
+    /**
+     * Join all command arguments into a single string
+     * @return {string}
+     */
+    joinArguments(): string {
+        if (!this.label) {
+            return this.message.content;
+        }
+
+        return this.message.content.substr(this.label.length + 1);
     }
 
     /**
@@ -140,21 +160,6 @@ export default class CommandExecutionContext {
     }
 
     /**
-     * @param {Snowflake} userId
-     * @return {number}
-     */
-    getAuth(userId: Snowflake): number {
-        return this.bot.authStore.getAuthority(this.message.guild.id, userId, this.message.guild.member(userId).roles.array().map((role: Role) => role.name));
-    }
-
-    /**
-     * @return {number}
-     */
-    get senderAuth(): number {
-        return this.getAuth(this.sender.id);
-    }
-
-    /**
      * @param {Object} sections
      * @param {string} color
      * @return {Promise<EditableMessage>}
@@ -196,13 +201,6 @@ export default class CommandExecutionContext {
     }
 
     /**
-     * @return {User}
-     */
-    get sender(): User {
-        return this.message.author;
-    }
-
-    /**
      * @param {string} message
      * @return {Promise<Message | Null>}
      */
@@ -219,13 +217,16 @@ export default class CommandExecutionContext {
     }
 
     /**
-     * @return {string}
+     * @return {number}
      */
-    joinArguments(): string {
-        if (!this.label) {
-            return this.message.content;
-        }
+    get senderAuth(): number {
+        return this.getAuth(this.sender.id);
+    }
 
-        return this.message.content.substr(this.label.length + 1);
+    /**
+     * @return {User}
+     */
+    get sender(): User {
+        return this.message.author;
     }
 }

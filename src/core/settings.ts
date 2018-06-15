@@ -17,9 +17,16 @@ export interface SettingsKeys {
     readonly bfd?: string;
 }
 
+export interface DefiniteSettingsPaths {
+    readonly commands: string;
+    readonly plugins: string;
+    readonly emojis: string;
+}
+
 export interface SettingsPaths {
     readonly commands?: string;
     readonly plugins?: string;
+    readonly emojis?: string;
 }
 
 export interface SettingsOptions {
@@ -30,7 +37,7 @@ export interface SettingsOptions {
 
 export default class Settings {
     general: SettingsGeneral;
-    paths: SettingsPaths;
+    paths: DefiniteSettingsPaths;
     keys: SettingsKeys;
 
     /**
@@ -48,64 +55,18 @@ export default class Settings {
          * @readonly
          */
         this.paths = {
+            // TODO: Find a way to simplify this process
             commands: options.paths && options.paths.commands ? options.paths.commands : "./commands",
-            plugins: options.paths && options.paths.plugins ? options.paths.plugins : "./plugins"
+            plugins: options.paths && options.paths.plugins ? options.paths.plugins : "./plugins",
+            emojis: options.paths && options.paths.emojis ? options.paths.emojis : "./emojis"
         };
 
         /**
-         * @readonly
          * @type {SettingsKeys}
+         * @readonly
          */
         this.keys = options.keys;
     }
-
-    /**
-     * @todo Probably not needed anymore
-     * Reload settings
-     * @return {Promise<Settings>}
-     */
-    /* async reload(): Promise<Settings> {
-        Log.verbose("[Settings.reload] Reloading");
-
-        const jsonObj: any = await Utils.readJson(this.path);
-
-        // TODO: Should be automatic
-        // TODO: Should be validated using Schema | probably old comment
-        /**
-         * @type {Object}
-         * @readonly
-         */
-        // this.general = jsonObj.general;
-
-        /**
-         * @type {Object}
-         * @readonly
-         */
-        // this.keys = jsonObj.keys;
-
-        // Log.success("[Settings.reload] Successfully reloaded settings");
-
-        // TODO: May not be needed with typescript?
-        // Validate settings after loading them
-        // this.validate();
-
-        // return this;
-    //}
-
-    /**
-     * @todo Probably not needed anymore also
-     * @todo Should be done async
-     * Save the local settings into path
-     * @return {Settings}
-     */
-    /* save(): Settings {
-        fs.writeFileSync(this.path, JSON.stringify({
-            general: this.general,
-            keys: this.keys
-        }, null, 4));
-
-        return this;
-    } */
 
     /**
      * @todo Probably not needed anymore also x2

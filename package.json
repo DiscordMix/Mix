@@ -14,7 +14,7 @@
         "es2015"
     ],
     "scripts": {
-        "build": "tsc && babel src --out-dir dist",
+        "build": "tsc",
         "type-check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js",
         "prepublish": "npm run build",
@@ -32,7 +32,7 @@
         "babel-polyfill": "^6.26.0",
         "colors": "latest",
         "dblapi.js": "^2.0.0",
-        "discord.js": "^11.2.1",
+        "discord.js": "^11.3.2",
         "hoek": "^4.2.1",
         "javascript-time-ago": "^1.0.30",
         "lodash": "^4.17.5",

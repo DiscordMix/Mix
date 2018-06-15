@@ -3,8 +3,16 @@ import {Message} from "discord.js";
 
 const Discord = require("discord.js");
 
+export interface MessageEditOptions {
+    readonly message: string;
+    readonly title?: string;
+    readonly color?: string;
+    readonly thumbnailUrl?: string;
+    readonly imageUrl?: string;
+}
+
 export default class EditableMessage {
-    readonly message: Message;
+    private readonly message: Message;
 
     /**
      * @todo Verify param "message"'s type
@@ -30,18 +38,15 @@ export default class EditableMessage {
 
     /**
      * Edit an already sent message
-     * @param {string} message
-     * @param {string} [title=""]
-     * @param {string} [color="RANDOM"]
-     * @param {string} [thumbnailUrl=""]
-     * @param {string} [image=""]
+     * @param {MessageEditOptions} options
      * @return {Promise<Message>}
      */
-    async edit(message: string, title: string = "", color: string = "RANDOM", thumbnailUrl: string = "", image: string = ""): Promise<Message> {
+    async edit(options: MessageEditOptions): Promise<Message> {
+        // TODO: Default values?
         return this.message.edit("", new Discord.RichEmbed()
-            .setColor(color)
-            .setDescription(message)
-            .setAuthor(title, thumbnailUrl)
-            .setImage(image));
+            .setColor(options.color)
+            .setDescription(options.message)
+            .setAuthor(options.title, options.thumbnailUrl)
+            .setImage(options.imageUrl));
     }
 }

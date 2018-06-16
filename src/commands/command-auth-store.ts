@@ -1,4 +1,4 @@
-import {Message, Snowflake} from "discord.js";
+import {Message, Role, Snowflake} from "discord.js";
 
 const EventEmitter = require("events");
 
@@ -67,7 +67,7 @@ export default abstract class CommandAuthStore extends EventEmitter {
      */
     hasAuthority(guildId: Snowflake, message: Message, authLevel: number): boolean {
         // TODO: Message.member may return undefined in private channels (DMs)
-        return this.getAuthority(guildId, message.author.id, message.member.roles.array().map((role) => role.name)) >= authLevel;
+        return this.getAuthority(guildId, message.author.id, message.member.roles.array().map((role: Role) => role.name)) >= authLevel;
     }
 
     /**

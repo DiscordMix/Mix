@@ -19,7 +19,8 @@
         "test": "npm run build && mocha dist/test/tests.js",
         "prepublish": "npm run build",
         "docs": "./node_modules/.bin/esdoc",
-        "rdocs": "npm run docs && git add docs/* && git commit -m 'Regenerated docs' && git push"
+        "rdocs": "npm run docs && git add docs/* && git commit -m 'Regenerated docs' && git push",
+        "consume": "npm run build && node dist/test/consumer/consumer.js"
     },
     "author": "Phantom <private.phantom@outlook.com>",
     "contributors": [

@@ -31,8 +31,8 @@ export interface SettingsPaths {
 
 export interface SettingsOptions {
     readonly general: SettingsGeneral;
-    readonly paths: SettingsPaths;
-    readonly keys: SettingsKeys;
+    readonly paths?: SettingsPaths;
+    readonly keys?: SettingsKeys;
 }
 
 export default class Settings {
@@ -62,10 +62,11 @@ export default class Settings {
         };
 
         /**
+         * @todo Hotfix default value, it should be OK like this, review anyway
          * @type {SettingsKeys}
          * @readonly
          */
-        this.keys = options.keys;
+        this.keys = options.keys ? options.keys : {};
     }
 
     /**

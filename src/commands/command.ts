@@ -4,10 +4,10 @@ import CommandExecutionContext from "./command-execution-context";
 const Typer = require("@raxor1234/typer/typer");
 
 export interface CommandOptions {
-    readonly executed: (context: CommandExecutionContext) => void;
-    readonly canExecute?: Function;
+    readonly executed: (context: CommandExecutionContext) => any;
     readonly meta: CommandMetaOptions;
-    readonly restrict: CommandRestrictOptions;
+    readonly restrict?: CommandRestrictOptions;
+    readonly canExecute?: Function;
 }
 
 export interface CommandMetaOptions {
@@ -42,7 +42,7 @@ export default class Command {
     readonly name: string;
     readonly description: string;
     readonly aliases: Array<string>;
-    readonly executed: Function;
+    readonly executed: (context: CommandExecutionContext) => any;
     readonly canExecute: Function | boolean;
     readonly args: any;
     readonly newArgs: Array<CommandMetaArgument>;
@@ -113,7 +113,7 @@ export default class Command {
          * @type {boolean}
          * @readonly
          */
-        this.isEnabled = options.restrict.enabled !== undefined ? options.restrict.enabled : true;
+        this.isEnabled =  options.restrict && options.restrict.enabled !== undefined ? options.restrict.enabled : true;
 
         /**
          * @todo Should be determined automatically?
@@ -128,26 +128,26 @@ export default class Command {
          * @type {number}
          * @readonly
          */
-        this.cooldown = options.restrict.cooldown ? options.restrict.cooldown : 0;
+        this.cooldown = options.restrict && options.restrict.cooldown ? options.restrict.cooldown : 0;
 
         /**
          * Permissions required by the bot itself
          * @type {Array<number>}
          */
-        this.selfPermissions = options.restrict.selfPerms ? options.restrict.selfPerms : [];
+        this.selfPermissions = options.restrict && options.restrict.selfPerms ? options.restrict.selfPerms : [];
 
         /**
          * Permissions required by the command issuer
          * @type {Array<*>}
          */
-        this.issuerPermissions = options.restrict.issuerPerms ? options.restrict.issuerPerms : [];
+        this.issuerPermissions = options.restrict && options.restrict.issuerPerms ? options.restrict.issuerPerms : [];
 
         /**
          * The exclusive environment where this command is allowed to execute
          * @type {ChatEnvironment|Array<ChatEnvironment>}
          * @readonly
          */
-        this.environment = options.restrict.env !== undefined ? options.restrict.env : ChatEnvironment.Anywhere;
+        this.environment = options.restrict && options.restrict.env !== undefined ? options.restrict.env : ChatEnvironment.Anywhere;
 
         // TODO: Default auth level to 'default'
         /**
@@ -155,14 +155,14 @@ export default class Command {
          * @type {number}
          * @readonly
          */
-        this.auth = options.restrict.auth !== undefined ? options.restrict.auth : 0;
+        this.auth = options.restrict && options.restrict.auth !== undefined ? options.restrict.auth : 0;
 
         /**
          * List of users, channels, roles, and/or guilds blocked from using this command
          * @type {Array<string>}
          * @readonly
          */
-        this.exclude = options.restrict.exclude ? options.restrict.exclude : [];
+        this.exclude = options.restrict && options.restrict.exclude ? options.restrict.exclude : [];
     }
 
     /**

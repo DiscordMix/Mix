@@ -2,9 +2,9 @@
  * @enum {number}
  */
 enum ChatEnvironment {
-    Private = 0,
-    Guild = 1,
-    Anywhere = 3
+    Private,
+    Guild,
+    Anywhere
 }
 
 export default ChatEnvironment;

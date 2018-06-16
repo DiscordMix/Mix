@@ -12,6 +12,7 @@ import Log from "./log";
 import DataStore from "../data-stores/data-store";
 import CommandAuthStore from "../commands/command-auth-store";
 import Temp from "./temp";
+import {Role} from "discord.js";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -183,7 +184,7 @@ export default class Bot extends EventEmitter {
 
                     // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
                     // TODO: CRITICAL: Default access level set to 0
-                    auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role: any) => role.name), message.author.id) : 0,
+                    auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role: Role) => role.name), message.author.id) : 0,
                     emojis: this.emojis,
                     label: CommandParser.getCommandBase(message.content, this.settings.general.prefix)
                 };

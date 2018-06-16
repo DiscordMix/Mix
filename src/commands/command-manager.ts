@@ -326,7 +326,7 @@ export default class CommandManager /* extends Collection */ {
         }
         else {
             try {
-                const result: boolean = command.executed(context);
+                const result: any = command.executed(context);
 
                 const commandCooldown: CommandCooldown = {
                     context: context,
@@ -345,7 +345,7 @@ export default class CommandManager /* extends Collection */ {
                 }
 
                 this.cooldowns.push(commandCooldown);
-                context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command));
+                context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command), result);
 
                 return result;
             }

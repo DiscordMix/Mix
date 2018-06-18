@@ -1,13 +1,16 @@
 import JsonAuthStore from "../../commands/json-auth-store";
 import Bot from "../../core/bot";
 import Settings from "../../core/settings";
+import Log, {LogLevel} from "../../core/log";
 
 const path = require("path");
 const baseDir = "src/test/consumer";
 
+Log.level = LogLevel.Debug;
+
 const settings = new Settings({
     general: {
-        token: "NDMyNTg3MDQxMzQwMTI5Mjkz.De954Q.rLBj-XOviqqCoyuDb8hhWLtaVN0",
+        token: "token_here",
         prefix: "-"
     },
     paths: {

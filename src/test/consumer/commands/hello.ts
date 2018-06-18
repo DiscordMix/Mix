@@ -6,6 +6,10 @@ const command: CommandOptions = {
         name: "hello"
     },
 
+    restrict: {
+        auth: 1
+    },
+
     executed: (context: CommandExecutionContext): void => {
         context.ok("Hello world!");
     }

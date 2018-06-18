@@ -14,6 +14,7 @@
         "es2015"
     ],
     "scripts": {
+        "watch": "tsc --watch",
         "build": "tsc",
         "type-check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js",

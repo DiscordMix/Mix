@@ -17,6 +17,7 @@ import {Role} from "discord.js";
 const Discord = require("discord.js");
 const EventEmitter = require("events");
 const fs = require("fs");
+const { performance } = require("perf_hooks");
 
 export interface BotOptions {
     readonly settings: Settings;
@@ -42,6 +43,8 @@ export default class Bot extends EventEmitter {
     readonly console: ConsoleInterface;
     readonly menus: EmojiMenuManager;
     readonly prefixCommand: boolean;
+
+    private setupStart: number = 0;
 
     /**
      * Setup the bot from an object
@@ -132,6 +135,8 @@ export default class Bot extends EventEmitter {
      * @return {Promise<Bot>}
      */
     async setup(): Promise<Bot> {
+        this.setupStart = performance.now();
+
         // Load commands
         await this.commandLoader.reloadAll();
 
@@ -172,7 +177,17 @@ export default class Bot extends EventEmitter {
             // Setup the command auth store
             this.setupAuthStore();
             Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag}`);
-            Log.success("[Bot.setupEvents] Ready");
+
+            let suffix = "s";
+            let took = (performance.now() - this.setupStart) / 1000;
+            let rounded = Math.round(took);
+
+            if (rounded <= 0) {
+                rounded = Math.round(took * 1000);
+                suffix = "ms";
+            }
+
+            Log.success(`[Bot.setupEvents] Ready | Took ${rounded}${suffix}`);
         });
 
         this.client.on("message", async (message: any) => {

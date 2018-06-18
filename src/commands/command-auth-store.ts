@@ -3,6 +3,7 @@ import {Message, Role, Snowflake} from "discord.js";
 const EventEmitter = require("events");
 
 /**
+ * @todo CRITICAL (not here maybe) When loading auth store .json, if it's empty (not containing "[]") it will throw "Unexpected end of JSON" error
  * @extends EventEmitter
  */
 export default abstract class CommandAuthStore extends EventEmitter {

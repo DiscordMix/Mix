@@ -36,7 +36,7 @@ export default class CommandLoader {
      * @return {boolean} Whether the command was validated and loaded successfully
      */
     load(file: string, moduleName: string): boolean {
-        if (!file.startsWith("@")) {
+        if (!file.startsWith("@") && !file.endsWith(".d.ts") && file.endsWith(".js")) {
             const modulePath = path.join(this.manager.path, moduleName);
 
             let module = require(modulePath);
@@ -57,7 +57,7 @@ export default class CommandLoader {
             }
         }
         else {
-            Log.verbose(`[CommandLoader.load] Skipping command: ${moduleName} (file name starts with @)`);
+            Log.verbose(`[CommandLoader.load] Skipping file: ${moduleName} (excluded or invalid name)`);
         }
 
         return false;

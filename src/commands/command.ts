@@ -221,13 +221,17 @@ export default class Command {
             array: (val: any) => val instanceof Array
         });
 
-        const restrict = Typer.validate({
-            auth: "number",
-            permissions: ":array",
-            env: "number"
-        }, data.restrict, {
-            array: (val: any) => val instanceof Array
-        });
+        let restrict = true;
+
+        if (data.restrict) {
+            restrict = Typer.validate({
+                auth: "number",
+                permissions: ":array",
+                env: "number"
+            }, data.restrict, {
+                array: (val: any) => val instanceof Array
+            });
+        }
 
         const extraChecks = !(data.meta.args && data.meta.singleArg);
 

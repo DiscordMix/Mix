@@ -1,5 +1,5 @@
-import CommandAuthStore from "./command-auth-store";
-import Log from "../core/log";
+import CommandAuthStore from "../command-auth-store";
+import Log from "../../core/log";
 import {Snowflake} from "discord.js";
 
 const Typer = require("@raxor1234/typer");

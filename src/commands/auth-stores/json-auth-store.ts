@@ -1,6 +1,6 @@
-import Utils from "../core/utils";
+import Utils from "../../core/utils";
 import ObjectAuthStore from "./object-auth-store";
-import Log from "../core/log";
+import Log from "../../core/log";
 
 const fs = require("fs");
 
@@ -41,6 +41,18 @@ export default class JsonAuthStore extends ObjectAuthStore {
         this.on("guildCreated", () => {
             this.save();
         });
+
+        // Validate the store when created
+        if (!this.validate()) {
+            Log.error(`[JsonAuthStore] Store/schema path(s) do not exist`);
+        }
+    }
+
+    /**
+     * @return {boolean}
+     */
+    validate(): boolean {
+        return fs.existsSync(this.schemaPath) && fs.existsSync(this.storePath);
     }
 
     /**
@@ -68,7 +80,7 @@ export default class JsonAuthStore extends ObjectAuthStore {
      * Save the currently loaded data into the store file
      * @return {Promise<*>}
      */
-    async save(): Promise<any> {
+    async save(): Promise<boolean> {
         return Utils.writeJson(this.storePath, this.data);
     }
 

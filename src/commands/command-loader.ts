@@ -136,6 +136,8 @@ export default class CommandLoader {
      * @return {Promise<number>}
      */
     async loadPrimitives(names: Array<string>): Promise<number> {
+        Log.verbose(`[CommandLoader.loadPrimitives] Attempting to load ${names.length} primitive commands`);
+
         let loaded = 0;
 
         for (let i = 0; i < names.length; i++) {
@@ -143,6 +145,8 @@ export default class CommandLoader {
                 loaded++;
             }
         }
+
+        Log.success(`[CommandLoader.loadPrimitives] Successfully loaded ${loaded}/${names.length} primitive commands`);
 
         return loaded;
     }

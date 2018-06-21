@@ -17,6 +17,7 @@ import ConfigBuilder from "./builders/config-builder";
 import CommandWillExecuteEvent from "./events/command-will-execute-event";
 import Command from "./commands/command";
 import ConsoleInterface from "./console/console-interface";
+import BotBuilder from "./builders/bot-builder";
 
 export default {
     // Commands
@@ -35,13 +36,17 @@ export default {
     ConsoleInterface: ConsoleInterface,
     ConsoleCommand: ConsoleCommand,
 
+    // Builder
+    BotBuilder: BotBuilder,
+    EmbedBuilder: EmbedBuilder,
+    ConfigBuilder: ConfigBuilder,
+    MessageBuilder: MessageBuilder,
+
     // Core
     Bot: Bot,
     EditableMessage: EditableMessage,
-    EmbedBuilder: EmbedBuilder,
     Log: Log,
     LogLevel: LogLevel,
-    MessageBuilder: MessageBuilder,
     Rgb: Rgb,
     Rgba: Rgba,
     Settings: Settings,
@@ -50,7 +55,6 @@ export default {
     Utils: Utils,
     Permission: Permission,
     ChatEnvironment: ChatEnvironment,
-    ConfigBuilder: ConfigBuilder,
 
     // Plugins
     Plugin: require("./core/plugin").default,
@@ -78,6 +82,6 @@ export default {
 
     // Auth Stores
     CommandAuthStore: require("./commands/command-auth-store").default,
-    ObjectAuthStore: require("./commands/object-auth-store").default,
-    JsonAuthStore: require("./commands/json-auth-store").default
+    ObjectAuthStore: require("./commands/auth-stores/object-auth-store").default,
+    JsonAuthStore: require("./commands/auth-stores/json-auth-store").default
 }

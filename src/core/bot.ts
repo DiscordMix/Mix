@@ -12,6 +12,7 @@ import DataStore from "../data-stores/data-store";
 import CommandAuthStore from "../commands/command-auth-store";
 import Temp from "./temp";
 import {Role} from "discord.js";
+import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -77,7 +78,7 @@ export default class Bot extends EventEmitter {
          * @type {CommandAuthStore}
          * @readonly
          */
-        this.authStore = options.authStore;
+        this.authStore = options.authStore ? options.authStore : new JsonAuthStore("auth/schema.json", "auth/store.json");
 
         /**
          * @type {EmojiCollection|null}
@@ -125,7 +126,7 @@ export default class Bot extends EventEmitter {
          * @type {Array<string>}
          * @readonly
          */
-        this.primitiveCommands = options.primitiveCommands ? options.primitiveCommands : ["help", "ping"];
+        this.primitiveCommands = options.primitiveCommands ? options.primitiveCommands : ["help", "ping", "auth"];
 
         return this;
     }
@@ -137,11 +138,12 @@ export default class Bot extends EventEmitter {
     async setup(): Promise<Bot> {
         this.setupStart = performance.now();
 
-        // Load primitive commands
-        await this.commandLoader.loadPrimitives(this.primitiveCommands);
-
         // Load commands
         await this.commandLoader.reloadAll();
+
+        // TODO: Primitives should be loaded first
+        // Load primitive commands
+        await this.commandLoader.loadPrimitives(this.primitiveCommands);
 
         // Create the temp folder
         await this.temp.create();
@@ -171,14 +173,14 @@ export default class Bot extends EventEmitter {
         };
 
         // Discord client events
-        this.client.on("ready", () => {
+        this.client.on("ready", async () => {
             if (!this.console.ready) {
                 // Setup the console command interface
                 this.console.setup(this);
             }
 
             // Setup the command auth store
-            this.setupAuthStore();
+            await this.setupAuthStore();
             Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag}`);
 
             let suffix = "s";
@@ -234,7 +236,7 @@ export default class Bot extends EventEmitter {
     /**
      * Setup the bot's auth store
      */
-    setupAuthStore(): void {
+    async setupAuthStore(): Promise<void> {
         const guilds = this.client.guilds.array();
 
         let entries = 0;
@@ -244,6 +246,11 @@ export default class Bot extends EventEmitter {
                 this.authStore.create(guilds[i].id);
                 entries++;
             }
+        }
+
+        // Save the auth store if it is a JsonAuthStore
+        if (this.authStore instanceof JsonAuthStore) {
+            await this.authStore.save();
         }
 
         if (entries > 0) {
@@ -290,6 +297,12 @@ export default class Bot extends EventEmitter {
      * @return {Promise<Bot>}
      */
     async disconnect(): Promise<Bot> {
+        // Save auth store if it's a JsonAuthStore
+        if (this.authStore instanceof JsonAuthStore) {
+            Log.verbose("[Bot.disconnect] Saving auth store");
+            await this.authStore.save();
+        }
+
         // TODO
         //this.settings.save();
         await this.client.destroy();

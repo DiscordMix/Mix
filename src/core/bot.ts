@@ -6,7 +6,6 @@ import CommandManager from "../commands/command-manager";
 import Utils from "./utils";
 import EmojiCollection from "../collections/emoji-collection";
 import Settings from "./settings";
-import FeatureManager from "../features/feature-manager";
 import CommandLoader from "../commands/command-loader";
 import Log from "./log";
 import DataStore from "../data-stores/data-store";
@@ -39,7 +38,6 @@ export default class Bot extends EventEmitter {
     readonly emojis?: EmojiCollection;
     readonly client: any; // TODO
     readonly commands: CommandManager;
-    readonly features: FeatureManager;
     readonly commandLoader: CommandLoader;
     readonly console: ConsoleInterface;
     readonly menus: EmojiMenuManager;
@@ -98,12 +96,6 @@ export default class Bot extends EventEmitter {
          * @readonly
          */
         this.commands = new CommandManager(this, this.settings.paths.commands, this.authStore, options.argumentTypes ? options.argumentTypes : {});
-
-        /**
-         * @type {FeatureManager}
-         * @readonly
-         */
-        this.features = new FeatureManager(this);
 
         /**
          * @type {CommandLoader}

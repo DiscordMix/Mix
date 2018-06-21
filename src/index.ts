@@ -69,10 +69,6 @@ export default {
     CommandWillExecuteEvent: CommandWillExecuteEvent,
     CommandExecutedEvent: require("./events/command-executed-event").default,
 
-    // Features
-    FeatureManager: require("./features/feature-manager").default,
-    Feature: require("./features/feature").default,
-
     // Data Stores
     DataStore: require("./data-stores/data-store").default,
     ObjectStore: require("./data-stores/object-store").default,

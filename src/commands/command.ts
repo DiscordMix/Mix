@@ -40,7 +40,7 @@ export interface CommandMetaArgument {
 
 export default class Command {
     readonly name: string;
-    readonly description: string;
+    readonly description?: string;
     readonly aliases: Array<string>;
     readonly executed: (context: CommandExecutionContext) => any;
     readonly canExecute: Function | boolean;
@@ -71,7 +71,7 @@ export default class Command {
          * @type {string}
          * @readonly
          */
-        this.description = options.meta.desc ? options.meta.desc : "No description provided";
+        this.description = options.meta.desc;
 
         /**
          * The list of alternative names that will execute this command

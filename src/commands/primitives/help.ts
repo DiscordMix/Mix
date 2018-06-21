@@ -9,7 +9,7 @@ const command: CommandOptions = {
 
     executed: (context: CommandExecutionContext): void => {
         context.ok(context.bot.commands.commands
-            .map((command) => `${command.name} => ${command.description}`)
+            .map((command) => `${command.name} => ${command.description ? command.description : "No description provided"}`)
             .join("\n"));
     }
 };

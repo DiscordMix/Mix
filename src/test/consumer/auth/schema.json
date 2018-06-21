@@ -3,7 +3,11 @@
         "rank": 0
     },
 
-	"member": {
+	"moderator": {
 	    "rank": 1
-	}
+	},
+
+    "admin": {
+        "rank": 2
+    }
 }

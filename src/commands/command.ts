@@ -27,6 +27,7 @@ export interface CommandRestrictOptions {
     readonly env?: ChatEnvironment;
     readonly auth?: number;
     readonly exclude?: Array<string>;
+    readonly specific?: Array<string>;
 }
 
 // TODO: Make use of this
@@ -54,6 +55,7 @@ export default class Command {
     readonly auth: number;
     readonly exclude: Array<string>;
     readonly singleArg: boolean;
+    readonly specific: Array<string>;
 
     /**
      * @param {CommandOptions} options
@@ -163,6 +165,12 @@ export default class Command {
          * @readonly
          */
         this.exclude = options.restrict && options.restrict.exclude ? options.restrict.exclude : [];
+
+        /**
+         * @type {Array<string>}
+         * @readonly
+         */
+        this.specific = options.restrict && options.restrict.specific ? options.restrict.specific : [];
     }
 
     /**

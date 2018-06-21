@@ -260,6 +260,9 @@ export default class CommandManager /* extends Collection */ {
                 context.fail("That command is disabled and may not be used.");
             }
         }
+        else if (command.specific.length > 0 && !CommandManager.specificMet(command, context)) {
+            context.fail("You are not allowed to use that command");
+        }
         else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
             if (this.handlers[CommandManagerEvent.NoAuthority]) {
                 this.handlers[CommandManagerEvent.NoAuthority](context, command);
@@ -373,6 +376,40 @@ export default class CommandManager /* extends Collection */ {
             this.commands = [];
             Log.success(`[CommandManager.unloadAll] Unloaded ${count} command(s)`);
         }
+    }
+
+    static specificMet(command: Command, context: CommandExecutionContext): boolean {
+        let met = false;
+
+        for (let i = 0; i < command.specific.length; i++) {
+            switch (command.specific[i][0]) {
+                case "@": {
+                    if (context.sender.id === command.specific[i].substring(1)) {
+                        met = true;
+                    }
+
+                    break;
+                }
+
+                case "&": {
+                    if (context.message.member.roles.find("id", command.specific[i].substr(1, command.specific[i].length))) {
+                        met = true;
+                    }
+
+                    break;
+                }
+
+                default: {
+                    Log.error(`[CommandManager.specificMet] Invalid specific prefix: ${command.specific[0]}`)
+                }
+            }
+
+            if (met) {
+                break;
+            }
+        }
+
+        return met;
     }
 
     /**

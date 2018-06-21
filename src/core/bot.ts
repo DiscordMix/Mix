@@ -13,6 +13,7 @@ import CommandAuthStore from "../commands/command-auth-store";
 import Temp from "./temp";
 import {Role} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
+import BehaviourManager from "../behaviours/behaviour-manager";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -38,6 +39,7 @@ export default class Bot extends EventEmitter {
     readonly authStore: CommandAuthStore;
     readonly emojis?: EmojiCollection;
     readonly client: any; // TODO
+    readonly behaviours: BehaviourManager;
     readonly commands: CommandManager;
     readonly commandLoader: CommandLoader;
     readonly console: ConsoleInterface;
@@ -93,6 +95,12 @@ export default class Bot extends EventEmitter {
         this.client = new Discord.Client();
 
         /**
+         * @type {BehaviourManager}
+         * @readonly
+         */
+        this.behaviours = new BehaviourManager(this, this.settings.paths.behaviours);
+
+        /**
          * @type {CommandManager}
          * @readonly
          */
@@ -137,6 +145,12 @@ export default class Bot extends EventEmitter {
      */
     async setup(): Promise<Bot> {
         this.setupStart = performance.now();
+
+        // Load behaviours
+        const behavioursLoaded = this.behaviours.loadAllSync();
+
+        Log.success(`[Bot.setup] Loaded ${behavioursLoaded} behaviours`);
+        this.behaviours.enableAll();
 
         // Load commands
         await this.commandLoader.reloadAll();

@@ -1,3 +1,5 @@
+import {DMChannel, GroupDMChannel, GuildChannel, Message, RichEmbed, TextChannel, User} from "discord.js";
+
 const fs = require("fs");
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
@@ -5,6 +7,15 @@ const en: any = require("javascript-time-ago/locale/en");
 TimeAgo.locale(en);
 
 const timeAgo = new TimeAgo("en-US");
+
+export interface SendOptions {
+    readonly user: User;
+    readonly channel: any/* TextChannel | GroupDMChannel | DMChannel | GuildChannel */; // TODO: Type
+    readonly message: string;
+    readonly color?: string;
+    readonly footer?: string;
+    readonly title?: string;
+}
 
 export default class Utils {
     /**
@@ -57,28 +68,15 @@ export default class Utils {
 
     /**
      * @todo Return type
-     * @param {Object} options
-     * @param {User} requester
-     * @param {Discord.Channel} channel
-     * @param {string} [footerSuffix=""]
+     * @param {SendOptions} options
      * @return {Promise<Discord.Message>}
      */
-    static async send(options: any, requester: any, channel: any, footerSuffix = ""): Promise<any> {
-        const optionsCpy = options;
-
-        optionsCpy.footer = {
-            icon_url: requester.avatarURL,
-            text: `Requested by ${requester.username} ${footerSuffix}`
-        };
-
-        if (!optionsCpy.color) {
-            // TODO: Color is literal hex, not string (gives error)
-            optionsCpy.color = "GREEN";
-        }
-
-        return await channel.send({
-            embed: options
-        });
+    static async send(options: SendOptions): Promise<any> {
+        return await options.channel.send(new RichEmbed()
+            .setColor(options.color ? options.color : "GREEN")
+            .setTitle(options.title ? options.title : "")
+            .setFooter(options.footer, options.user.avatarURL)
+            .setDescription(options.message));
     }
 
     /**

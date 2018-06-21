@@ -17,7 +17,7 @@ import {Role} from "discord.js";
 const Discord = require("discord.js");
 const EventEmitter = require("events");
 const fs = require("fs");
-const { performance } = require("perf_hooks");
+const {performance} = require("perf_hooks");
 
 export interface BotOptions {
     readonly settings: Settings;
@@ -25,6 +25,7 @@ export interface BotOptions {
     readonly dataStore?: DataStore;
     readonly argumentTypes?: any;
     readonly prefixCommand?: boolean;
+    readonly primitiveCommands?: Array<string>;
 }
 
 /**
@@ -43,6 +44,7 @@ export default class Bot extends EventEmitter {
     readonly console: ConsoleInterface;
     readonly menus: EmojiMenuManager;
     readonly prefixCommand: boolean;
+    readonly primitiveCommands: Array<string>;
 
     private setupStart: number = 0;
 
@@ -127,6 +129,12 @@ export default class Bot extends EventEmitter {
          */
         this.prefixCommand = options.prefixCommand ? options.prefixCommand : true;
 
+        /**
+         * @type {Array<string>}
+         * @readonly
+         */
+        this.primitiveCommands = options.primitiveCommands ? options.primitiveCommands : ["help", "ping"];
+
         return this;
     }
 
@@ -136,6 +144,9 @@ export default class Bot extends EventEmitter {
      */
     async setup(): Promise<Bot> {
         this.setupStart = performance.now();
+
+        // Load primitive commands
+        await this.commandLoader.loadPrimitives(this.primitiveCommands);
 
         // Load commands
         await this.commandLoader.reloadAll();
@@ -228,6 +239,9 @@ export default class Bot extends EventEmitter {
         Log.success("[Bot.setupEvents] Discord events setup completed");
     }
 
+    /**
+     * Setup the bot's auth store
+     */
     setupAuthStore(): void {
         const guilds = this.client.guilds.array();
 
@@ -260,7 +274,7 @@ export default class Bot extends EventEmitter {
 
     /**
      * @todo Use the reload modules param
-     * Restart the bot's client
+     * Restart the client
      * @param {boolean} reloadModules Whether to reload all modules
      * @return {Promise<Bot>}
      */

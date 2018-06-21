@@ -96,4 +96,54 @@ export default class CommandLoader {
             });
         });
     }
+
+    /**
+     * @param {string} name
+     * @return {Promise<boolean>}
+     */
+    async loadPrimitive(name: string): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            const modulePath = path.join(__dirname, "primitives", `${name}.js`);
+
+            if (!fs.existsSync(modulePath)) {
+                Log.error(`[CommandLoader.loadPrimitive] Primitive command does not exist: ${modulePath}`);
+
+                resolve(false);
+            }
+
+            let module = require(modulePath);
+
+            // Support for ES6-compiled modules
+            if (module.default && typeof module.default === "object") {
+                module = module.default;
+            }
+
+            // Validate the command before registering it
+            if (Command.validate(module)) {
+                this.manager.register(new Command(module));
+
+                resolve(true);
+            }
+            else {
+                Log.warn(`[CommandLoader.loadPrimitive] Primitive was found, but was validated invalid: ${name}`);
+                resolve(false);
+            }
+        });
+    }
+
+    /**
+     * @param {Array<string>} names
+     * @return {Promise<number>}
+     */
+    async loadPrimitives(names: Array<string>): Promise<number> {
+        let loaded = 0;
+
+        for (let i = 0; i < names.length; i++) {
+            if (await this.loadPrimitive(names[i])) {
+                loaded++;
+            }
+        }
+
+        return loaded;
+    }
 }

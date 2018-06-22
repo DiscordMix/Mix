@@ -11,7 +11,7 @@ Log.level = LogLevel.Debug;
 const settings = new Settings({
     general: {
         token: "token_here",
-        prefix: "-!"
+        prefix: "="
     },
 
     paths: {

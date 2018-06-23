@@ -1,8 +1,12 @@
 import {BehaviourOptions} from "../../../behaviours/behaviour";
 import Bot from "../../../core/bot";
-import {DMChannel, GroupDMChannel, Message, RichEmbed, TextChannel, User} from "discord.js";
+import {GuildMember, Message, RichEmbed, User} from "discord.js";
 import Utils from "../../../core/utils";
 import Log from "../../../core/log";
+
+function mute(member: GuildMember): void {
+    member.addRole(member.guild.roles.find("name", "Muted"));
+}
 
 const channels = {
     general: "286352649610199052",
@@ -53,7 +57,7 @@ const behaviour: BehaviourOptions = {
                     }
 
                     // Mute the user
-                    message.member.addRole("446493884130787339"); // Muted role id
+                    mute(message.member);
 
                     message.reply("You have been muted until further notice for mass pinging.");
                 }

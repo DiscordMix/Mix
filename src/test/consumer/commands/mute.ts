@@ -3,6 +3,11 @@ import CommandExecutionContext from "../../../commands/command-execution-context
 import Utils from "../../../core/utils";
 import Permission from "../../../core/permission";
 import ChatEnvironment from "../../../core/chat-environment";
+import {GuildMember} from "discord.js";
+
+function mute(member: GuildMember): void {
+    member.addRole(member.guild.roles.find("name", "Muted"));
+}
 
 const command: CommandOptions = {
     meta: {
@@ -43,7 +48,7 @@ const command: CommandOptions = {
             return;
         }
 
-        target.addRole("446493884130787339"); // Muted role
+        mute(target);
 
         Utils.send({
             title: "Mute | Case #0",

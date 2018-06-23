@@ -43,7 +43,7 @@ const command: CommandOptions = {
             return;
         }
 
-        target.addRole("458797638939049994"); // Muted role
+        target.addRole("446493884130787339"); // Muted role
 
         Utils.send({
             title: "Mute | Case #0",

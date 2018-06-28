@@ -4,7 +4,7 @@ import CommandExecutionContext from "./command-execution-context";
 const Typer = require("@raxor1234/typer/typer");
 
 export interface CommandOptions {
-    readonly executed: (context: CommandExecutionContext) => any;
+    readonly executed: (context: CommandExecutionContext, api: any) => any;
     readonly meta: CommandMetaOptions;
     readonly restrict?: CommandRestrictOptions;
     readonly canExecute?: Function;
@@ -43,7 +43,7 @@ export default class Command {
     readonly name: string;
     readonly description?: string;
     readonly aliases: Array<string>;
-    readonly executed: (context: CommandExecutionContext) => any;
+    readonly executed: (context: CommandExecutionContext, api: any) => any;
     readonly canExecute: Function | boolean;
     readonly args: any;
     readonly newArgs: Array<CommandMetaArgument>;

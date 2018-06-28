@@ -2,6 +2,7 @@ import JsonAuthStore from "../../commands/auth-stores/json-auth-store";
 import Bot from "../../core/bot";
 import Settings from "../../core/settings";
 import Log, {LogLevel} from "../../core/log";
+import ConsumerAPI from "./consumer-api";
 
 const path = require("path");
 const baseDir = "./src/test/consumer";
@@ -10,8 +11,8 @@ Log.level = LogLevel.Debug;
 
 const settings = new Settings({
     general: {
-        token: "token_here",
-        prefix: "="
+        token: process.env.AC_TOKEN ? process.env.AC_TOKEN : "",
+        prefix: process.env.AC_PREFIX ? process.env.AC_PREFIX : "="
     },
 
     paths: {
@@ -29,6 +30,8 @@ async function start() {
         },
 
         settings: settings,
+
+        api: ConsumerAPI,
 
         authStore: new JsonAuthStore(path.resolve(path.join(baseDir, "auth/schema.json")), path.resolve(path.join(baseDir, "auth/store.json")))
     }).setup();

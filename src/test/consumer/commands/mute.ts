@@ -33,7 +33,7 @@ const command: CommandOptions = {
         ]
     },
 
-    executed: (context: CommandExecutionContext): void => {
+    executed: (context: CommandExecutionContext, api: any): void => {
         const target = context.message.guild.member(context.arguments[0]);
         const modLog = context.message.guild.channels.get("458794765308395521");
 
@@ -49,6 +49,8 @@ const command: CommandOptions = {
         }
 
         mute(target);
+
+        // TODO: use api instead
 
         Utils.send({
             title: "Mute | Case #0",

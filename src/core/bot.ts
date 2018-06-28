@@ -27,6 +27,7 @@ export interface BotOptions {
     readonly argumentTypes?: any;
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: Array<string>;
+    readonly api?: any;
 }
 
 /**
@@ -46,6 +47,7 @@ export default class Bot extends EventEmitter {
     readonly menus: EmojiMenuManager;
     readonly prefixCommand: boolean;
     readonly primitiveCommands: Array<string>;
+    readonly api: any;
 
     private setupStart: number = 0;
 
@@ -135,6 +137,12 @@ export default class Bot extends EventEmitter {
          * @readonly
          */
         this.primitiveCommands = options.primitiveCommands ? options.primitiveCommands : ["help", "ping", "auth"];
+
+        /**
+         * @type {*|null}
+         * @readonly
+         */
+        this.api = options.api ? options.api : null;
 
         return this;
     }

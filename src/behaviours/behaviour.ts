@@ -3,17 +3,17 @@ import Bot from "../core/bot";
 export interface BehaviourOptions {
     readonly name: string;
     readonly description?: string;
-    readonly enabled: (bot: Bot) => void;
-    readonly disabled?: (bot: Bot) => void;
-    readonly canEnable?: (bot: Bot) => boolean;
+    readonly enabled: (bot: Bot, api: any) => void;
+    readonly disabled?: (bot: Bot, api: any) => void;
+    readonly canEnable?: (bot: Bot, api: any) => boolean;
 }
 
 export default class Behaviour {
     readonly name: string;
     readonly description: string;
-    readonly enabled: (bot: Bot) => void;
-    readonly disabled?: (bot: Bot) => void;
-    readonly canEnable: ((bot: Bot) => boolean) | boolean;
+    readonly enabled: (bot: Bot, api: any) => void;
+    readonly disabled?: (bot: Bot, api: any) => void;
+    readonly canEnable: ((bot: Bot, api: any) => boolean) | boolean;
 
     /**
      * @param {BehaviourOptions} options

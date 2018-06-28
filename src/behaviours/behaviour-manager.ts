@@ -9,8 +9,7 @@ const path = require("path");
 export default class BehaviourManager {
     private readonly bot: Bot;
     private readonly path: string;
-
-    private behaviours: Array<Behaviour>;
+    private readonly behaviours: Array<Behaviour>;
 
     constructor(bot: Bot, path: string) {
         /**
@@ -61,7 +60,7 @@ export default class BehaviourManager {
         const behaviour = this.getBehaviour(name);
 
         if (behaviour) {
-            behaviour.enabled(this.bot);
+            behaviour.enabled(this.bot, this.bot.api);
 
             return true;
         }

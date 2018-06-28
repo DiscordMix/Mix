@@ -329,7 +329,7 @@ export default class CommandManager /* extends Collection */ {
         }
         else {
             try {
-                const result: any = command.executed(context);
+                const result: any = command.executed(context, this.bot.api);
 
                 const commandCooldown: CommandCooldown = {
                     context: context,

@@ -1,7 +1,8 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
-import Utils from "../../../core/utils";
 import ChatEnvironment from "../../../core/chat-environment";
+import ConsumerAPI from "../consumer-api";
+import Utils from "../../../core/utils";
 
 const command: CommandOptions = {
     meta: {
@@ -10,7 +11,8 @@ const command: CommandOptions = {
 
         args: {
             target: "!:user",
-            reason: "!string"
+            reason: "!string",
+            evidence: "string"
         }
     },
 
@@ -25,8 +27,8 @@ const command: CommandOptions = {
         ]
     },
 
-    executed: async (context: CommandExecutionContext): Promise<void> => {
-        const target = context.message.guild.member(context.arguments[0]);
+    executed: async (context: CommandExecutionContext, api: any): Promise<void> => { // TODO: api type not working for some reason
+        const target = context.message.guild.member(Utils.resolveId(context.arguments[0]));
         const modLog = context.message.guild.channels.get("458794765308395521");
 
         if (!target) {
@@ -39,14 +41,24 @@ const command: CommandOptions = {
 
             return;
         }
+        else if (context.sender.id === target.user.id) {
+            context.fail("You can't warn yourself");
 
-        Utils.send({
+            return;
+        }
+        else if (target.user.bot) {
+            context.fail("You can't warn a bot");
+
+            return;
+        }
+
+        api.warn({
+            moderator: context.sender,
+            reason: context.arguments[1],
+            user: target,
             channel: modLog,
-            user: context.sender,
-            message: `<@${target.user.id}> (${target.user.username}) was warned for **${context.arguments[1]}**`,
-            footer: `Warned by ${context.sender.username}`,
-            color: "GOLD",
-            title: "Warn | Case #0"
+            evidence: context.arguments.length === 3 ? context.arguments[2] : null,
+            message: context.message
         });
     }
 };

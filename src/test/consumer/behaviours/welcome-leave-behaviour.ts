@@ -53,7 +53,7 @@ function getMessage(category: string, name: string): string {
 
 const sendGeneral = (text: string, titleSuffix: string, member: GuildMember, color = "GREEN") => {
     Utils.send({
-        title: "Member Joined",
+        title: `Member ${titleSuffix}`,
         color: color,
         footer: "Welcome!",
         user: member.user,

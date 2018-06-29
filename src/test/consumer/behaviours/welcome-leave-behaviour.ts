@@ -1,6 +1,6 @@
 import {BehaviourOptions} from "../../../behaviours/behaviour";
 import Bot from "../../../core/bot";
-import {Guild, GuildMember} from "discord.js";
+import {Guild, GuildMember, User} from "discord.js";
 import Utils from "../../../core/utils";
 
 const messages: any = {
@@ -25,13 +25,24 @@ const messages: any = {
         "{user} has suddenly appeared",
         "Awesomeness at 100% | Cause: {user} has arrived",
         "We'll need more roles, {user} has arrived",
-        "A suspicious {user} has joined the server"
+        "A suspicious {user} has joined the server",
+        "{user} sneaked his way into the server",
+        "Call security, {user} is here",
+        "Somebody called for a {user}?",
+        "{user} is now part of the sauce",
+        "{user} is now your friend",
+        "{user} has added you to their friends-list",
+        "{user} suddenly appeared",
+        "{user} just came out of your closet",
+        "{user} was hiding under your bed",
+        "The sea has washed {user} to shore",
+        "{user} has achieved transcendence"
     ],
 
     goodbye: [
         "{user} doesn't like games",
         "We're sad to see you go, {user}",
-        "Till next time, {user}",
+        "'Till next time, {user}",
         "We'll miss you, {user}",
         "We had a great time with you, {user}",
         "Goodbye, {user}",
@@ -39,7 +50,21 @@ const messages: any = {
         "We hope to see you again someday, {user}",
         "Thanks for being a part of our community, {user}",
         "We hope you had a great time here, {user}",
-        "Come back anytime, {user}"
+        "Come back anytime, {user}",
+        "Everybody, say goodbye to {user}",
+        "Hope you had fun here, {user}",
+        "Good luck, {user}!",
+        "See you around, {user}",
+        "The storm has taken {user} with them",
+        "{user} has suddenly gone missing",
+        "{user} was abducted by aliens",
+        "{user} went to the bathroom and never came back",
+        "{user} accidentally left the server",
+        "{user} was forgotten",
+        "{user} is gone forever",
+        "{user} was never here",
+        "{user} is no more",
+        "The {user} was a lie"
     ]
 };
 
@@ -47,15 +72,15 @@ function getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function getMessage(category: string, name: string): string {
-    return messages[category][getRandomInt(0, messages[category].length)].replace(/\{user\}/g, `**${name}**`);
+function getMessage(category: string, user: User): string {
+    return messages[category][getRandomInt(0, messages[category].length)].replace(/\{user\}/g, `<@${user.id}> (${user.username})`);
 }
 
 const sendGeneral = (text: string, titleSuffix: string, member: GuildMember, color = "GREEN") => {
     Utils.send({
         title: `Member ${titleSuffix}`,
         color: color,
-        footer: "Welcome!",
+        footer: `${member.guild.memberCount} members`,
         user: member.user,
         channel: member.guild.channels.get("286352649610199052"), // General
         message: text
@@ -67,11 +92,11 @@ const behaviour: BehaviourOptions = {
 
     enabled: (bot: Bot) => {
         bot.client.on("guildMemberAdd", (member: GuildMember) => {
-            sendGeneral(getMessage("welcome", member.user.username), "Joined", member);
+            sendGeneral(getMessage("welcome", member.user), "Joined", member);
         });
 
         bot.client.on("guildMemberRemove", (member: GuildMember) => {
-            sendGeneral(getMessage("goodbye", member.user.username), "Left", member);
+            sendGeneral(getMessage("goodbye", member.user), "Left", member);
         });
     }
 };

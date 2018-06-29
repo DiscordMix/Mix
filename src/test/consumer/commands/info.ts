@@ -4,7 +4,8 @@ import CommandExecutionContext from "../../../commands/command-execution-context
 const command: CommandOptions = {
     meta: {
         name: "info",
-        desc: "View information about the server"
+        desc: "View information about the server",
+        aliases: ["uptime"]
     },
 
     executed: (context: CommandExecutionContext): void => {

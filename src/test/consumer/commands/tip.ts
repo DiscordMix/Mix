@@ -37,6 +37,10 @@ const command: CommandOptions = {
         desc: "View a random tip"
     },
 
+    restrict: {
+        cooldown: 5
+    },
+
     executed: (context: CommandExecutionContext, api: any): void => {
         const tipIndex = api.getRandomInt(0, tips.length);
 

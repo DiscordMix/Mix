@@ -1,5 +1,6 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
+import Permission from "../../../core/permission";
 
 const command: CommandOptions = {
     meta: {
@@ -16,7 +17,7 @@ const command: CommandOptions = {
     },
 
     restrict: {
-        specific: ["@285578743324606482"]
+        issuerPerms: [Permission.ManageGuild]
     }
 };
 

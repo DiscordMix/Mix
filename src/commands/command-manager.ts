@@ -18,7 +18,8 @@ export enum CommandManagerEvent {
     ArgumentAmountMismatch,
     CommandMayNotExecute,
     InvalidArguments,
-    RequiresPermissions,
+    MissingSelfPermissions,
+    MissingIssuerPermissions,
     CommandError,
     NoAuthority,
     UnderCooldown
@@ -307,13 +308,23 @@ export default class CommandManager /* extends Collection */ {
             }
         }
         else if (command.selfPermissions.length > 0 && !context.message.guild.me.hasPermission(command.selfPermissions.map((permissionObj) => permissionObj.permission))) {
-            if (this.handlers[CommandManagerEvent.RequiresPermissions]) {
-                this.handlers[CommandManagerEvent.RequiresPermissions](context, command);
+            if (this.handlers[CommandManagerEvent.MissingSelfPermissions]) {
+                this.handlers[CommandManagerEvent.MissingSelfPermissions](context, command);
             }
             else {
                 const permissions = command.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`I need the following permission(s) to execute that command: ${permissions}`);
+            }
+        }
+        else if (command.issuerPermissions.length > 0 && !context.message.member.hasPermission(command.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
+            if (this.handlers[CommandManagerEvent.MissingIssuerPermissions]) {
+                this.handlers[CommandManagerEvent.MissingIssuerPermissions](context, command);
+            }
+            else {
+                const permissions = command.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
+
+                context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
         else if (command.cooldown && !this.cooldownExpired(context, command)) {
@@ -349,6 +360,10 @@ export default class CommandManager /* extends Collection */ {
 
                 this.cooldowns.push(commandCooldown);
                 context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command), result);
+
+                if (context.bot.autoDeleteCommands && context.message.deletable) {
+                    context.message.delete();
+                }
 
                 return result;
             }

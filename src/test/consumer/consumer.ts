@@ -33,7 +33,9 @@ async function start() {
 
         api: ConsumerAPI,
 
-        authStore: new JsonAuthStore(path.resolve(path.join(baseDir, "auth/schema.json")), path.resolve(path.join(baseDir, "auth/store.json")))
+        authStore: new JsonAuthStore(path.resolve(path.join(baseDir, "auth/schema.json")), path.resolve(path.join(baseDir, "auth/store.json"))),
+
+        autoDeleteCommands: true
     }).setup();
 
     bot.connect();

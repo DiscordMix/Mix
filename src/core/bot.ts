@@ -30,6 +30,7 @@ export interface BotOptions {
     readonly primitiveCommands?: Array<string>;
     readonly api?: any;
     readonly commandArgumentStyle?: CommandArgumentStyle;
+    readonly autoDeleteCommands?: boolean;
 }
 
 /**
@@ -51,6 +52,7 @@ export default class Bot extends EventEmitter {
     readonly primitiveCommands: Array<string>;
     readonly api: any;
     readonly commandArgumentStyle: CommandArgumentStyle;
+    readonly autoDeleteCommands: boolean;
 
     private setupStart: number = 0;
 
@@ -152,6 +154,12 @@ export default class Bot extends EventEmitter {
          * @readonly
          */
         this.commandArgumentStyle = options.commandArgumentStyle ? options.commandArgumentStyle : CommandArgumentStyle.Specific;
+
+        /**
+         * @type {boolean}
+         * @readonly
+         */
+        this.autoDeleteCommands = options.autoDeleteCommands ? options.autoDeleteCommands : false;
 
         return this;
     }

@@ -50,6 +50,8 @@ const behaviour: BehaviourOptions = {
                     }
 
                     message.reply("Discord server invites are not allowed in this server.");
+
+                    // TODO: Warn
                 }
                 else if (message.mentions.members.array().length > 4 || message.mentions.roles.array().length > 4 || message.mentions.users.array().length > 4) {
                     if (message.deletable) {
@@ -63,8 +65,8 @@ const behaviour: BehaviourOptions = {
                 }
 
                 message.mentions.members.array().map((member) => {
-                    if (member.roles.map((role) => role.id).includes("458827341196427265")) {
-                        message.reply("Please refrain from pinging this person under any circumstances. He/she is either a partner or special guest and should not be pinged.")
+                    if (member.id !== message.author.id && member.roles.map((role) => role.id).includes("458827341196427265")) {
+                        message.reply("Please refrain from pinging this person under any circumstances. He/she is either a partner or special guest and should not be pinged.");
 
                         const channel = message.guild.channels.get(channels.modLog);
 

@@ -1,6 +1,8 @@
 import {GuildMember, Message, RichEmbed, TextChannel, User} from "discord.js";
 import Log from "../../core/log";
 
+const reviewChannelId = "462109996260261899";
+
 let caseCounter: number = 0;
 
 export interface WarnOptions {
@@ -11,6 +13,16 @@ export interface WarnOptions {
     readonly message: Message;
     readonly evidence?: string;
 }
+
+const SuspectedViolation: any = {
+    Long: "Long",
+    HeavyProfanity: "Heavy Profanity",
+    Sexism: "Sexism",
+    Spamming: "Spamming",
+    MassMentions: "Mass Mentions",
+    Advertising: "Advertising",
+    None: "None"
+};
 
 export default abstract class ConsumerAPI {
     static async warn(options: WarnOptions): Promise<boolean> {
@@ -51,5 +63,36 @@ export default abstract class ConsumerAPI {
 
     static getRandomInt(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    static isMessageSuspicious(message: Message): string {
+        if (message.content.length > 500) {
+            return SuspectedViolation.Long;
+        }
+        else if (message.mentions.users.size > 3) {
+            return SuspectedViolation.MassMentions;
+        }
+
+        // TODO: Add missing checks
+
+        return SuspectedViolation.None;
+    }
+
+    static flagMessage(message: Message, suspectedViolation: string): void {
+        const reviewChannel: any = message.guild.channels.get(reviewChannelId);
+
+        if (!reviewChannel) {
+            Log.error("[ConsumerAPI.flagMessage] Review channel does not exist, failed to flag message");
+
+            return;
+        }
+
+        reviewChannel.send(new RichEmbed()
+            .setTitle("Suspicious Message")
+            .addField("Sender", `<@${message.author.id}> (${message.author.username})`)
+            .addField("Message", message.content)
+            .addField("Channel", `<#${message.channel.id}>`)
+            .addField("Suspected Violation", suspectedViolation)
+            .addField("Message ID", message.id));
     }
 }

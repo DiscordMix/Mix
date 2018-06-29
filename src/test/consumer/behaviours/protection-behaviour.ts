@@ -38,12 +38,9 @@ const warn = (options: WarnOptions): Promise<any> => {
 const behaviour: BehaviourOptions = {
     name: "Special Channels",
 
-    enabled: (bot: Bot): void => {
+    enabled: (bot: Bot, api: any): void => {
         bot.client.on("message", async (message: Message) => {
-            if (message.content === "pls teach me" && message.channel.id === channels.general) {
-                message.author.send(new RichEmbed().setDescription("Here are some awesome tips to get you started!\n=> If you play games, **make sure to mention what games you play in the #general channel** to get shiny roles!\n=>You can click on people's names to see what games they play!\n=> We do giveaways for Dota 2 and Team Fortress 2, make sure to checkout the #giveaways channel"));
-            }
-            else if (message.author.id !== "285578743324606482") {
+            if (message.author.id !== "1") {
                 if (/https?:\/\/discord\.gg\/[a-zA-Z0-9]+/.test(message.content) || /https?:\/\/discordapp\.com\/invite\/[a-zA-Z0-9]+/.test(message.content)) {
                     if (message.deletable) {
                         await message.delete();
@@ -62,6 +59,13 @@ const behaviour: BehaviourOptions = {
                     mute(message.member);
 
                     message.reply("You have been muted until further notice for mass pinging.");
+                }
+
+                // TODO: What about if it has been taken action against?
+                const suspectedViolation: string = api.isMessageSuspicious(message);
+
+                if (suspectedViolation !== "None") {
+                    api.flagMessage(message, suspectedViolation);
                 }
 
                 message.mentions.members.array().map((member) => {

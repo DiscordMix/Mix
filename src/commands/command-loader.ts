@@ -41,6 +41,12 @@ export default class CommandLoader {
 
             let module = require(modulePath);
 
+            if (module === undefined) {
+                Log.error("[CommandLoader.load] Command module is undefined (Did you forget to export?)");
+
+                return false;
+            }
+
             // Support for ES6-compiled modules
             if (module.default && typeof module.default === "object") {
                 module = module.default;

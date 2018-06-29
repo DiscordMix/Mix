@@ -3,6 +3,11 @@ import CommandExecutionContext from "./command-execution-context";
 
 const Typer = require("@raxor1234/typer/typer");
 
+export enum CommandArgumentStyle {
+    Specific,
+    Descriptive
+}
+
 export interface CommandOptions {
     readonly executed: (context: CommandExecutionContext, api: any) => any;
     readonly meta: CommandMetaOptions;

@@ -170,11 +170,13 @@ export default class CommandExecutionContext {
 
     /**
      * @param {string} text
+     * @param {string} [title=""]
      * @return {Promise<EditableMessage>}
      */
-    async ok(text: string): Promise<EditableMessage | null> {
+    async ok(text: string, title: string = ""): Promise<EditableMessage | null> {
         return await this.respond({
-            text: `${text}`
+            text: `${text}`,
+            title: title
         });
     }
 

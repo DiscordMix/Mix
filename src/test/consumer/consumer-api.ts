@@ -13,7 +13,7 @@ export interface WarnOptions {
 }
 
 export default abstract class ConsumerAPI {
-    public static async warn(options: WarnOptions): Promise<boolean> {
+    static async warn(options: WarnOptions): Promise<boolean> {
         if (!(options.channel instanceof TextChannel)) {
             Log.error("[ConsumerAPI.warn] Expecting channel to be of type 'TextChannel'");
 
@@ -47,5 +47,9 @@ export default abstract class ConsumerAPI {
         caseCounter++;
 
         return caseCounter - 1;
+    }
+
+    static getRandomInt(min: number, max: number): number {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }

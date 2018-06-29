@@ -14,6 +14,7 @@ import Temp from "./temp";
 import {Role} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
+import {CommandArgumentStyle} from "../commands/command";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -28,6 +29,7 @@ export interface BotOptions {
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: Array<string>;
     readonly api?: any;
+    readonly commandArgumentStyle?: CommandArgumentStyle;
 }
 
 /**
@@ -48,6 +50,7 @@ export default class Bot extends EventEmitter {
     readonly prefixCommand: boolean;
     readonly primitiveCommands: Array<string>;
     readonly api: any;
+    readonly commandArgumentStyle: CommandArgumentStyle;
 
     private setupStart: number = 0;
 
@@ -143,6 +146,12 @@ export default class Bot extends EventEmitter {
          * @readonly
          */
         this.api = options.api ? options.api : null;
+
+        /**
+         * @type {CommandArgumentStyle}
+         * @readonly
+         */
+        this.commandArgumentStyle = options.commandArgumentStyle ? options.commandArgumentStyle : CommandArgumentStyle.Specific;
 
         return this;
     }

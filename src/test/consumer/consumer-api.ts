@@ -3,6 +3,18 @@ import Log from "../../core/log";
 
 const reviewChannelId = "462109996260261899";
 
+const badWords = [
+    "asshole",
+    "fuck",
+    "bitch",
+    "shit",
+    "slut"
+];
+
+const racialSlurs = [
+    "nigger"
+];
+
 let caseCounter: number = 0;
 
 export interface WarnOptions {
@@ -16,10 +28,11 @@ export interface WarnOptions {
 
 const SuspectedViolation: any = {
     Long: "Long",
-    HeavyProfanity: "Heavy Profanity",
+    ExcessiveProfanity: "Excessive Profanity",
     Sexism: "Sexism",
     Spamming: "Spamming",
     MassMentions: "Mass Mentions",
+    MultipleNewLines: "Multiple New Lines",
     Advertising: "Advertising",
     None: "None"
 };
@@ -67,12 +80,32 @@ export default abstract class ConsumerAPI {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    static countBadWords(message: string): number {
+        let count = 0;
+
+        for (let i = 0; i < badWords.length; i++) {
+            console.log(new RegExp(badWords[i], "gi").ma);
+
+            if (message.includes(badWords[i])) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
     static isMessageSuspicious(message: Message): string {
         if (message.content.length > 500) {
             return SuspectedViolation.Long;
         }
         else if (message.mentions.users.size > 3) {
             return SuspectedViolation.MassMentions;
+        }
+        else if (message.content.split("\n").length > 2) {
+            return SuspectedViolation.MultipleNewLines;
+        }
+        else if (this.countBadWords(message.content) > 2) {
+            return SuspectedViolation.ExcessiveProfanity;
         }
 
         // TODO: Add missing checks
@@ -88,7 +121,7 @@ export default abstract class ConsumerAPI {
         return null;
     }
 
-    static flagMessage(message: Message, suspectedViolation: string): void {
+    static async flagMessage(message: Message, suspectedViolation: string): Promise<void> {
         const reviewChannel: any = message.guild.channels.get(reviewChannelId);
 
         if (!reviewChannel) {
@@ -97,12 +130,14 @@ export default abstract class ConsumerAPI {
             return;
         }
 
-        reviewChannel.send(new RichEmbed()
+        await reviewChannel.send(new RichEmbed()
             .setTitle("Suspicious Message")
             .addField("Sender", `<@${message.author.id}> (${message.author.username})`)
             .addField("Message", message.content)
             .addField("Channel", `<#${message.channel.id}>`)
             .addField("Suspected Violation", suspectedViolation)
             .addField("Message ID", message.id));
+
+        return;
     }
 }

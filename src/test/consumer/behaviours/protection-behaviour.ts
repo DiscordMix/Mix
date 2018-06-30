@@ -41,7 +41,7 @@ const behaviour: BehaviourOptions = {
 
     enabled: (bot: Bot, api: any): void => {
         bot.client.on("message", async (message: Message) => {
-            if (message.author.id !== "1") {
+            if (message.author.id !== "285578743324606482") {
                 if (/https?:\/\/discord\.gg\/[a-zA-Z0-9]+/.test(message.content) || /https?:\/\/discordapp\.com\/invite\/[a-zA-Z0-9]+/.test(message.content)) {
                     if (message.deletable) {
                         await message.delete();
@@ -63,10 +63,11 @@ const behaviour: BehaviourOptions = {
                 }
 
                 // TODO: What about if it has been taken action against?
+                // TODO: Something around posting suspected violations giving uncatched missing permissions error
                 const suspectedViolation: string = api.isMessageSuspicious(message);
 
                 if (suspectedViolation !== "None") {
-                    api.flagMessage(message, suspectedViolation);
+                    await api.flagMessage(message, suspectedViolation);
                 }
 
                 message.mentions.members.array().map((member) => {

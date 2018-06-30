@@ -8,11 +8,24 @@ const badWords = [
     "fuck",
     "bitch",
     "shit",
-    "slut"
+    "slut",
+    "whore",
+    "anus",
+    "dick",
+    "bastard",
+    "cunt",
+    "pussy",
+    "cock"
 ];
 
 const racialSlurs = [
-    "nigger"
+    "nigger",
+    "nigga",
+    "zipperhead",
+    "bobo",
+    "amigo",
+    "blaxican",
+    "brownie"
 ];
 
 let caseCounter: number = 0;
@@ -34,6 +47,7 @@ const SuspectedViolation: any = {
     MassMentions: "Mass Mentions",
     MultipleNewLines: "Multiple New Lines",
     Advertising: "Advertising",
+    RacialSlurs: "Racial Slurs",
     None: "None"
 };
 
@@ -84,10 +98,24 @@ export default abstract class ConsumerAPI {
         let count = 0;
 
         for (let i = 0; i < badWords.length; i++) {
-            console.log(new RegExp(badWords[i], "gi").ma);
+            const matches = message.match(new RegExp(badWords[i], "gi"));
 
-            if (message.includes(badWords[i])) {
-                count++;
+            if (matches) {
+                count += matches.length;
+            }
+        }
+
+        return count;
+    }
+
+    static countRacialSlurs(message: string): number {
+        let count = 0;
+
+        for (let i = 0; i < racialSlurs.length; i++) {
+            const matches = message.match(new RegExp(racialSlurs[i], "gi"));
+
+            if (matches) {
+                count += matches.length;
             }
         }
 
@@ -106,6 +134,9 @@ export default abstract class ConsumerAPI {
         }
         else if (this.countBadWords(message.content) > 2) {
             return SuspectedViolation.ExcessiveProfanity;
+        }
+        else if (this.countRacialSlurs(message.content) > 0) {
+            return SuspectedViolation.RacialSlurs;
         }
 
         // TODO: Add missing checks

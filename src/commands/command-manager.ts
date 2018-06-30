@@ -210,13 +210,12 @@ export default class CommandManager /* extends Collection */ {
     }
 
     /**
-     * @param {CommandExecutionContext} context
      * @param {Command} command
      * @return {CommandCooldown | null}
      */
-    getCooldown(context: CommandExecutionContext, command: Command): CommandCooldown | null {
+    getCooldown(command: Command): CommandCooldown | null {
         for (let i: number = 0; i < this.cooldowns.length; i++) {
-            if (this.cooldowns[i].context === context && this.cooldowns[i].command === command) {
+            if (this.cooldowns[i].command === command) {
                 return this.cooldowns[i];
             }
         }
@@ -230,9 +229,9 @@ export default class CommandManager /* extends Collection */ {
      * @return {boolean}
      */
     cooldownExpired(context: CommandExecutionContext, command: Command): boolean {
-        const cooldown = this.getCooldown(context, command);
+        const cooldown: CommandCooldown | null = this.getCooldown(command);
 
-        return cooldown !== null && Date.now() > cooldown.end || cooldown === null;
+        return (cooldown !== null && Date.now() > cooldown.end) || cooldown === null;
     }
 
     /**
@@ -332,10 +331,15 @@ export default class CommandManager /* extends Collection */ {
                 this.handlers[CommandManagerEvent.UnderCooldown](context, command);
             }
             else {
-                // TODO
-                const timeLeft = "TODO";
+                const timeLeft: CommandCooldown | null = this.getCooldown(command);
 
-                context.fail(`You must wait ${timeLeft} more seconds before using that command again.`);
+                if (timeLeft) {
+                    context.fail(`You must wait **${(timeLeft.end - Date.now()) / 1000}** seconds before using that command again.`);
+                }
+                else {
+                    Log.warn("[CommandManager.handle] Command cooldown returned null or undefined, this shouldn't happen");
+                    context.fail("That command is under cooldown.");
+                }
             }
         }
         else {
@@ -351,7 +355,7 @@ export default class CommandManager /* extends Collection */ {
                     end: Date.now() + (command.cooldown * 1000)
                 };
 
-                const lastCooldown = this.getCooldown(context, command);
+                const lastCooldown = this.getCooldown(command);
 
                 // Delete the last cooldown before adding the new one for this command + user
                 if (lastCooldown) {

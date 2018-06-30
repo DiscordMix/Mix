@@ -235,7 +235,8 @@ export default class Bot extends EventEmitter {
         });
 
         this.client.on("message", async (message: any) => {
-            if (!message.author.bot && CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
+            // TODO: Add support for multiple prefixes
+            if (!message.author.bot && message.content.startsWith(this.settings.general.prefix) && CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
                 const executionOptions: CommandExecutionContextOptions = {
                     message: message,
                     args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),

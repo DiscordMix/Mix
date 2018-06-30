@@ -1,4 +1,6 @@
 import {Client, Message, RichEmbed, Snowflake, TextChannel, User} from "discord.js";
+import CommandExecutionContext from "../commands/command-execution-context";
+import Log from "./log";
 
 export enum SetupHelperActionType {
     Input,
@@ -24,7 +26,7 @@ export default class SetupHelper {
     private readonly embed: boolean;
     private readonly actionMap: Array<SetupHelperAction>;
 
-    constructor(client: any, channel: TextChannel, userId: Snowflake, title?: string, timeout: number = 180, embed: boolean = true) {
+    constructor(client: any, channel: TextChannel, userId: Snowflake, title?: string, timeout: number = 60, embed: boolean = true) {
         this.client = client;
         this.channel = channel;
         this.userId = userId;
@@ -52,10 +54,10 @@ export default class SetupHelper {
         return this;
     }
 
-    async finish(responseHandler: (response: string) => string): Promise<SetupHelperResult> {
+    async finish(responseHandler?: (response: string) => string): Promise<SetupHelperResult> {
         const responses: Array<string> = [];
 
-        for (let i = 0; this.actionMap.length; i++) {
+        for (let i = 0; i < this.actionMap.length; i++) {
             // TODO: Inefficient check position
             if (this.embed) {
                 this.channel.send(new RichEmbed()
@@ -73,7 +75,7 @@ export default class SetupHelper {
             const response = await this.awaitResponse();
 
             if (response !== null) {
-                responses.push(responseHandler(response));
+                responses.push(responseHandler ? responseHandler(response) : response);
             }
             else {
                 return {
@@ -82,6 +84,8 @@ export default class SetupHelper {
                 };
             }
         }
+
+        console.log("done");
 
         return {
             responses: responses,
@@ -93,6 +97,11 @@ export default class SetupHelper {
         return new Promise((resolve) => {
             // Timeout after x seconds
             const responseTimeout = setTimeout(() => {
+                this.channel.send(new RichEmbed()
+                    .setTitle(`${this.title} Expired`)
+                    .setColor("GOLD")
+                    .setDescription(`The setup automatically expired after **${this.timeout}** seconds of inactivity`));
+
                 resolve(null);
             }, this.timeout * 1000);
 
@@ -106,5 +115,16 @@ export default class SetupHelper {
 
             this.client.on("message", messageHandler);
         });
+    }
+
+    static fromContext(context: CommandExecutionContext, title?: string, embed?: boolean, timeout?: number): SetupHelper | null {
+        if (context.message.channel instanceof TextChannel) {
+            return new SetupHelper(context.bot.client, context.message.channel, context.sender.id, title, timeout, embed);
+        }
+        else {
+            Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${context.message.channel.type}'`);
+
+            return null;
+        }
     }
 }

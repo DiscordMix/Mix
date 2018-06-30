@@ -3,6 +3,7 @@ import Bot from "../../../core/bot";
 import {GuildMember, Message, RichEmbed, User} from "discord.js";
 import Utils from "../../../core/utils";
 import Log from "../../../core/log";
+import ConsumerAPI from "../consumer-api";
 
 function mute(member: GuildMember): void {
     member.addRole(member.guild.roles.find("name", "Muted"));
@@ -89,6 +90,25 @@ const behaviour: BehaviourOptions = {
                 });
             }
         });
+
+        // Save deleted messages for snipe command
+        bot.client.on("messageDelete", (message: Message) => {
+            // TODO: Temporary hotfix
+            if (message.content.substr(bot.settings.general.prefix.length) === "snipe") {
+                return;
+            }
+
+            ConsumerAPI.deletedMessages[message.channel.id] = message;
+
+            // Delete the saved message after 30 minutes
+            setTimeout(() => {
+                delete ConsumerAPI.deletedMessages[message.channel.id];
+            }, 1800000);
+        });
+
+        if (bot.autoDeleteCommands) {
+            Log.warn("The autoDeleteCommands option is currently incompatible with the snipe command");
+        }
     }
 };
 

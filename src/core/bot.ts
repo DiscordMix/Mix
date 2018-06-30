@@ -14,7 +14,7 @@ import Temp from "./temp";
 import {Role} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
-import {CommandArgumentStyle} from "../commands/command";
+import {CommandArgumentStyle, UserGroup} from "../commands/command";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -31,6 +31,7 @@ export interface BotOptions {
     readonly api?: any;
     readonly commandArgumentStyle?: CommandArgumentStyle;
     readonly autoDeleteCommands?: boolean;
+    readonly userGroups?: Array<UserGroup>;
 }
 
 /**
@@ -53,6 +54,7 @@ export default class Bot extends EventEmitter {
     readonly api: any;
     readonly commandArgumentStyle: CommandArgumentStyle;
     readonly autoDeleteCommands: boolean;
+    readonly userGroups: Array<UserGroup>;
 
     private setupStart: number = 0;
 
@@ -160,6 +162,13 @@ export default class Bot extends EventEmitter {
          * @readonly
          */
         this.autoDeleteCommands = options.autoDeleteCommands ? options.autoDeleteCommands : false;
+
+        // TODO: Make use of the userGroups property
+        /**
+         * @type {Array<UserGroup>}
+         * @readonly
+         */
+        this.userGroups = options.userGroups ? options.userGroups : [];
 
         return this;
     }

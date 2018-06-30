@@ -1,4 +1,4 @@
-import {GuildMember, Message, RichEmbed, TextChannel, User} from "discord.js";
+import {GuildMember, Message, RichEmbed, Snowflake, TextChannel, User} from "discord.js";
 import Log from "../../core/log";
 
 const reviewChannelId = "462109996260261899";
@@ -25,6 +25,8 @@ const SuspectedViolation: any = {
 };
 
 export default abstract class ConsumerAPI {
+    static deletedMessages: any = [];
+
     static async warn(options: WarnOptions): Promise<boolean> {
         if (!(options.channel instanceof TextChannel)) {
             Log.error("[ConsumerAPI.warn] Expecting channel to be of type 'TextChannel'");
@@ -76,6 +78,14 @@ export default abstract class ConsumerAPI {
         // TODO: Add missing checks
 
         return SuspectedViolation.None;
+    }
+
+    static getLastDeletedMessage(channelId: Snowflake): Message | null {
+        if (ConsumerAPI.deletedMessages[channelId]) {
+            return ConsumerAPI.deletedMessages[channelId];
+        }
+
+        return null;
     }
 
     static flagMessage(message: Message, suspectedViolation: string): void {

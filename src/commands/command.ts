@@ -3,6 +3,8 @@ import CommandExecutionContext from "./command-execution-context";
 
 const Typer = require("@raxor1234/typer/typer");
 
+export type UserGroup = Array<string>;
+
 export enum CommandArgumentStyle {
     Specific,
     Descriptive

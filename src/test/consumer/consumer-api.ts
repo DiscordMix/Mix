@@ -25,7 +25,8 @@ const racialSlurs = [
     "bobo",
     "amigo",
     "blaxican",
-    "brownie"
+    "brownie",
+    "faggot"
 ];
 
 let caseCounter: number = 0;

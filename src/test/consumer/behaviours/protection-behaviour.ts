@@ -42,7 +42,7 @@ const behaviour: BehaviourOptions = {
     enabled: (bot: Bot, api: any): void => {
         bot.client.on("message", async (message: Message) => {
             if (message.author.id !== "285578743324606482") {
-                if (/https?:\/\/discord\.gg\/[a-zA-Z0-9]+/.test(message.content) || /https?:\/\/discordapp\.com\/invite\/[a-zA-Z0-9]+/.test(message.content)) {
+                if (/https?:\/\/discord\.gg\/[a-zA-Z0-9]+/gi.test(message.content) || /https?:\/\/discordapp\.com\/invite\/[a-zA-Z0-9]+/gi.test(message.content)) {
                     if (message.deletable) {
                         await message.delete();
                     }
@@ -70,8 +70,8 @@ const behaviour: BehaviourOptions = {
                     await api.flagMessage(message, suspectedViolation);
                 }
 
-                message.mentions.members.array().map((member) => {
-                    if (member.id !== message.author.id && member.roles.map((role) => role.id).includes("458827341196427265")) {
+                message.mentions.members.array().map((member: GuildMember) => {
+                    if (!member.user.bot && member.id !== message.author.id && member.roles.map((role) => role.id).includes("458827341196427265")) {
                         message.reply("Please refrain from pinging this person under any circumstances. He/she is either a partner or special guest and should not be pinged.");
 
                         const channel = message.guild.channels.get(channels.modLog);

@@ -1,6 +1,8 @@
 import Utils from "../core/utils";
 import CommandManager from "./command-manager";
 import Command from "./command";
+import CommandExecutionContext from "./command-execution-context";
+import {Message} from "discord.js";
 
 export default class CommandParser {
     /**
@@ -83,9 +85,10 @@ export default class CommandParser {
      * @param {Array<string>} args
      * @param {Object} types
      * @param {Object} resolvers
+     * @param {Message} message
      * @return {Array<string>} The resolved arguments
      */
-    static resolveArguments(args: Array<string>, types: any, resolvers: any): Array<string> {
+    static resolveArguments(args: Array<string>, types: any, resolvers: any, message: Message): Array<string> {
         const result = args;
         const typeKeys = Object.keys(types);
 
@@ -102,7 +105,7 @@ export default class CommandParser {
 
                 if (match) {
                     if (typeof resolvers[typeKeys[typeIdx]] === "function") {
-                        result[argIdx] = resolvers[typeKeys[typeIdx]](result[argIdx]);
+                        result[argIdx] = resolvers[typeKeys[typeIdx]](result[argIdx], message);
                     }
                     // TODO: Issue further testing, there's a chance this is a bug.
                     /* else {

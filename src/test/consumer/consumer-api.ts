@@ -108,18 +108,14 @@ export default abstract class ConsumerAPI {
         return count;
     }
 
-    static countRacialSlurs(message: string): number {
-        let count = 0;
-
+    static containsRacialSlurs(message: string): boolean {
         for (let i = 0; i < racialSlurs.length; i++) {
-            const matches = message.match(new RegExp(racialSlurs[i], "gi"));
-
-            if (matches) {
-                count += matches.length;
+            if (message.includes(racialSlurs[i])) {
+                return true;
             }
         }
 
-        return count;
+        return false;
     }
 
     static isMessageSuspicious(message: Message): string {
@@ -135,7 +131,7 @@ export default abstract class ConsumerAPI {
         else if (this.countBadWords(message.content) > 2) {
             return SuspectedViolation.ExcessiveProfanity;
         }
-        else if (this.countRacialSlurs(message.content) > 0) {
+        else if (this.containsRacialSlurs(message.content)) {
             return SuspectedViolation.RacialSlurs;
         }
 

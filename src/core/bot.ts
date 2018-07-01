@@ -11,7 +11,7 @@ import Log from "./log";
 import DataStore from "../data-stores/data-store";
 import CommandAuthStore from "../commands/command-auth-store";
 import Temp from "./temp";
-import {Role} from "discord.js";
+import {GuildMember, Message, Role} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
 import {CommandArgumentStyle, UserGroup} from "../commands/command";
@@ -210,6 +210,7 @@ export default class Bot extends EventEmitter {
     setupEvents(): void {
         Log.verbose("[Bot.setupEvents] Setting up Discord events");
 
+        // TODO: Should be a property/option on Bot, not hardcoded
         // TODO: Find better position
         // TODO: Merge this resolvers with the (if provided) provided
         // ones by the user.
@@ -217,7 +218,17 @@ export default class Bot extends EventEmitter {
             user: (arg: string) => Utils.resolveId(arg),
             channel: (arg: string) => Utils.resolveId(arg),
             role: (arg: string) => Utils.resolveId(arg),
-            state: (arg: string) => Utils.translateState(arg)
+            state: (arg: string) => Utils.translateState(arg),
+
+            member: (arg: string, message: Message): GuildMember | null => {
+                const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg));
+
+                if (resolvedMember) {
+                    return resolvedMember;
+                }
+
+                return null;
+            }
         };
 
         // Discord client events
@@ -248,7 +259,7 @@ export default class Bot extends EventEmitter {
             if (!message.author.bot && message.content.startsWith(this.settings.general.prefix) && CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
                 const executionOptions: CommandExecutionContextOptions = {
                     message: message,
-                    args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers),
+                    args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers, message),
                     bot: this,
 
                     // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)

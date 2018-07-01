@@ -22,11 +22,14 @@ const settings = new Settings({
 });
 
 async function start() {
+    const userMentionRegex = /(^[0-9]{17,18}$|^<@!?[0-9]{17,18}>$)/;
+
     const bot = await new Bot({
         argumentTypes: {
-            user: /(^[0-9]{17,18}$|^<@!?[0-9]{17,18}>$)/,
+            user: userMentionRegex,
             role: /(^[0-9]{18}$|^<&[0-9]{18}>$)/,
-            channel: /(^[0-9]{18}$|^<#[0-9]{18}>$)/
+            channel: /(^[0-9]{18}$|^<#[0-9]{18}>$)/,
+            member: userMentionRegex
         },
 
         settings: settings,

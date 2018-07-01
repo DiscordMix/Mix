@@ -283,6 +283,9 @@ export default class CommandManager /* extends Collection */ {
             if (this.handlers[CommandManagerEvent.ArgumentAmountMismatch]) {
                 this.handlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);
             }
+            else if (command.maxArguments === command.minArguments) {
+                context.fail(`That command only accepts **${command.maxArguments}** arguments.`);
+            }
             else if (command.maxArguments > 0) {
                 context.fail(`That command only accepts up to **${command.maxArguments}** and a minimum of **${command.minArguments}** arguments.`);
             }

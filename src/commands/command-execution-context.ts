@@ -17,7 +17,7 @@ export interface CommandExecutionContextOptions {
 
 export default class CommandExecutionContext {
     readonly message: Message;
-    readonly arguments: Array<string>;
+    readonly arguments: Array<any>;
     readonly bot: Bot;
     readonly auth: number;
     readonly emojis?: EmojiCollection;

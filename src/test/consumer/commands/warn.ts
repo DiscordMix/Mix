@@ -27,8 +27,10 @@ const command: CommandOptions = {
         ]
     },
 
+    // TODO: Throws unknown message
     executed: async (context: CommandExecutionContext, api: any): Promise<void> => { // TODO: api type not working for some reason
-        const target = context.message.guild.member(Utils.resolveId(context.arguments[0]));
+        const target = context.message.guild.member(Utils.resolveId(context.arguments[0].id));
+
         const modLog = context.message.guild.channels.get("458794765308395521");
 
         if (!target) {

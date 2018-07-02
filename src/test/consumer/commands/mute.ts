@@ -29,7 +29,7 @@ const command: CommandOptions = {
         ]
     },
 
-    executed: (context: CommandExecutionContext, api: ConsumerAPI): void => {
+    executed: (context: CommandExecutionContext, api: any): void => {
         const target = context.message.guild.member(context.arguments[0]);
         const modLog = context.message.guild.channels.get("458794765308395521");
 

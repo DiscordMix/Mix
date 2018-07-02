@@ -76,7 +76,7 @@ export {
     ChatEnvironment,
 
     // Plugins
-    Plugin,
+    Plugin, // Why error?
     PluginManager,
 
     // Collections

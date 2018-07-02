@@ -158,7 +158,7 @@ export default abstract class ConsumerAPI {
         else if (message.mentions.users.size > 3) {
             return SuspectedViolation.MassMentions;
         }
-        else if (message.content.split("\n").length > 2) {
+        else if (!message.author.bot && message.content.split("\n").length > 2) {
             return SuspectedViolation.MultipleNewLines;
         }
         else if (this.countBadWords(message.content) > 2) {

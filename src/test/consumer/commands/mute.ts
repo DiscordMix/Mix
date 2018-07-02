@@ -3,11 +3,7 @@ import CommandExecutionContext from "../../../commands/command-execution-context
 import Utils from "../../../core/utils";
 import Permission from "../../../core/permission";
 import ChatEnvironment from "../../../core/chat-environment";
-import {GuildMember} from "discord.js";
-
-function mute(member: GuildMember): void {
-    member.addRole(member.guild.roles.find("name", "Muted"));
-}
+import {GuildMember, Message, RichEmbed, User} from "discord.js";
 
 const command: CommandOptions = {
     meta: {
@@ -16,7 +12,8 @@ const command: CommandOptions = {
 
         args: {
             user: "!:user",
-            reason: "!string"
+            reason: "!string",
+            evidence: "string"
         }
     },
 
@@ -48,17 +45,13 @@ const command: CommandOptions = {
             return;
         }
 
-        mute(target);
-
-        // TODO: use api instead
-
-        Utils.send({
-            title: "Mute | Case #0",
-            color: "BLUE",
-            message: `<@${target.user.id}> (${target.user.username}) was muted for **${context.arguments[1]}**`,
+        api.mute({
+            moderator: context.sender,
+            reason: context.arguments[1],
+            user: target,
             channel: modLog,
-            user: context.sender,
-            footer: `Muted by ${context.sender.username}`
+            evidence: context.arguments.length === 3 ? context.arguments[2] : null,
+            message: context.message
         });
     }
 };

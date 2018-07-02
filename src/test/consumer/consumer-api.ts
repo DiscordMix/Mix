@@ -1,5 +1,6 @@
 import {GuildMember, Message, RichEmbed, Snowflake, TextChannel, User} from "discord.js";
 import Log from "../../core/log";
+import {MuteOptions} from "./commands/mute";
 
 const reviewChannelId = "462109996260261899";
 
@@ -32,6 +33,15 @@ const racialSlurs = [
 let caseCounter: number = 0;
 
 export interface WarnOptions {
+    readonly user: GuildMember;
+    readonly moderator: User;
+    readonly reason: string;
+    readonly channel: any;
+    readonly message: Message;
+    readonly evidence?: string;
+}
+
+export interface MuteOptions {
     readonly user: GuildMember;
     readonly moderator: User;
     readonly reason: string;
@@ -79,10 +89,24 @@ export default abstract class ConsumerAPI {
             .setTitle(`Case #${caseNum}`));
 
         if (options.message.deletable) {
-            options.message.delete();
+            await options.message.delete();
         }
 
         return true;
+    }
+
+    static async mute(options: MuteOptions): Promise<void> {
+        await options.user.addRole(options.user.guild.roles.find("name", "Muted"));
+
+        (await options.user.createDM()).send(new RichEmbed()
+        // TODO: Case number
+            .setTitle(`Mute | Case #0`)
+            .addField("Member", `<@${options.user.id}> (${options.user.user.username})`)
+            .addField("Reason", options.reason)
+            .addField("Moderator", `<@${options.moderator.id}> (${options.moderator.username})`)
+            .setThumbnail(options.evidence ? options.evidence : "")
+            .setFooter(`Muted by ${options.moderator.username}`, options.moderator.avatarURL)
+            .setColor("BLUE"));
     }
 
     static getCase(): number {
@@ -111,7 +135,7 @@ export default abstract class ConsumerAPI {
 
     static containsRacialSlurs(message: string): boolean {
         for (let i = 0; i < racialSlurs.length; i++) {
-            if (message.includes(racialSlurs[i])) {
+            if (message.toLowerCase().includes(racialSlurs[i])) {
                 return true;
             }
         }

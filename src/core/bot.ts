@@ -15,6 +15,7 @@ import {GuildMember, Message, Role} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
 import {CommandArgumentStyle, UserGroup} from "../commands/command";
+import JsonStore from "../data-stores/json-store";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -361,6 +362,12 @@ export default class Bot extends EventEmitter {
         if (this.authStore instanceof JsonAuthStore) {
             Log.verbose("[Bot.disconnect] Saving auth store");
             await this.authStore.save();
+        }
+
+        // Save data before exiting
+        if (this.dataStore && this.dataStore instanceof JsonStore) {
+            Log.verbose("[Bot.disconnect] Saving JsonStore");
+            await this.dataStore.save();
         }
 
         // TODO

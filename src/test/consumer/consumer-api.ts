@@ -1,5 +1,6 @@
 import {GuildMember, Message, RichEmbed, Snowflake, TextChannel, User} from "discord.js";
 import Log from "../../core/log";
+import JsonStore from "../../data-stores/json-store";
 
 const reviewChannelId = "462109996260261899";
 
@@ -28,8 +29,6 @@ const racialSlurs = [
     "brownie",
     "faggot"
 ];
-
-let caseCounter: number = 0;
 
 export interface WarnOptions {
     readonly user: GuildMember;
@@ -63,6 +62,8 @@ const SuspectedViolation: any = {
 
 export default abstract class ConsumerAPI {
     static deletedMessages: any = [];
+    static store: JsonStore;
+    static caseCounter: number;
 
     static async warn(options: WarnOptions): Promise<boolean> {
         if (!(options.channel instanceof TextChannel)) {
@@ -115,9 +116,11 @@ export default abstract class ConsumerAPI {
     }
 
     static getCase(): number {
-        caseCounter++;
+        ConsumerAPI.caseCounter++;
 
-        return caseCounter - 1;
+        ConsumerAPI.store.set("case_counter", ConsumerAPI.caseCounter);
+
+        return ConsumerAPI.caseCounter - 1;
     }
 
     static getRandomInt(min: number, max: number): number {

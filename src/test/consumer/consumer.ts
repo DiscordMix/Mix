@@ -3,6 +3,7 @@ import Bot from "../../core/bot";
 import Settings from "../../core/settings";
 import Log, {LogLevel} from "../../core/log";
 import ConsumerAPI from "./consumer-api";
+import JsonStore from "../../data-stores/json-store";
 
 const path = require("path");
 const baseDir = "./src/test/consumer";
@@ -38,10 +39,23 @@ async function start() {
 
         authStore: new JsonAuthStore(path.resolve(path.join(baseDir, "auth/schema.json")), path.resolve(path.join(baseDir, "auth/store.json"))),
 
+        dataStore: new JsonStore(path.resolve(path.join(__dirname, "data.json"))),
+
         autoDeleteCommands: true
     }).setup();
 
     bot.connect();
+
+    if (bot.dataStore) {
+        const store: JsonStore = <JsonStore>bot.dataStore;
+
+        await store.reload();
+        ConsumerAPI.store = store;
+
+        const storedCounter = store.get("case_counter");
+
+        ConsumerAPI.caseCounter = storedCounter ? storedCounter : 0;
+    }
 }
 
 start();

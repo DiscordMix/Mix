@@ -126,7 +126,7 @@ export default class Utils {
      */
     static async writeJson(path: string, data: any): Promise<any> {
         return new Promise((resolve) => {
-            fs.writeFile(path, JSON.stringify(data), (error: any) => {
+            fs.writeFile(path, JSON.stringify(data), (error: Error) => {
                 if (error) {
                     throw error;
                 }

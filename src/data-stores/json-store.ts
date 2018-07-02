@@ -1,4 +1,6 @@
 import ObjectStore from "./object-store";
+import Log from "../core/log";
+import Utils from "../core/utils";
 
 const fs = require("fs");
 const _ = require("lodash");
@@ -28,7 +30,7 @@ export default class JsonStore extends ObjectStore {
      * @return {Promise<*>}
      */
     async reload(): Promise<any> {
-        this.validate();
+        await this.validate();
 
         return new Promise((resolve) => {
             fs.readFile(this.path, (error: any, data: any) => {
@@ -48,25 +50,21 @@ export default class JsonStore extends ObjectStore {
      * @return {Promise<*>}
      */
     async save(): Promise<any> {
-        this.validate();
+        await this.validate();
 
-        return new Promise((resolve) => {
-            fs.writeFile(this.path, JSON.stringify(this.data), (error: any) => {
-                if (error) {
-                    throw error;
-                }
-
-                resolve();
-            });
-        });
+        return Utils.writeJson(this.path, this.data);
     }
 
     /**
      * Ensure that the source file exists
      */
-    validate(): void {
+    async validate(): Promise<void> {
         if (!fs.existsSync(this.path)) {
-            throw new Error(`[JsonAdapter] Path does not exist: ${this.path}`);
+            // TODO: Commented out
+            // throw new Error(`[JsonAdapter] Path does not exist: ${this.path}`);
+            Log.info("[JsonAdapter] Data source does not exist, creating default");
+
+            await Utils.writeJson(this.path, {});
         }
     }
 

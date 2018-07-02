@@ -51,15 +51,23 @@ const behaviour: BehaviourOptions = {
 
                     // TODO: Warn
                 }
-                else if (message.mentions.members.array().length > 4 || message.mentions.roles.array().length > 4 || message.mentions.users.array().length > 4) {
-                    if (message.deletable) {
-                        await message.delete();
+                else {
+                    const mentions = message.mentions.members;
+
+                    if (mentions) {
+                        const mentionedUsers: Array<GuildMember> = mentions.array();
+
+                        if (mentionedUsers.length > 4 || mentionedUsers.length > 4 || mentionedUsers.length > 4) {
+                            if (message.deletable) {
+                                await message.delete();
+                            }
+
+                            // Mute the user
+                            mute(message.member);
+
+                            message.reply("You have been muted until further notice for mass pinging.");
+                        }
                     }
-
-                    // Mute the user
-                    mute(message.member);
-
-                    message.reply("You have been muted until further notice for mass pinging.");
                 }
 
                 // TODO: What about if it has been taken action against?
@@ -70,25 +78,27 @@ const behaviour: BehaviourOptions = {
                     await api.flagMessage(message, suspectedViolation);
                 }
 
-                message.mentions.members.array().map((member: GuildMember) => {
-                    if (!message.author.bot && member.id !== message.author.id && member.roles.map((role) => role.id).includes("458827341196427265")) {
-                        message.reply("Please refrain from pinging this person under any circumstances. He/she is either a partner or special guest and should not be pinged.");
+                if (message && message.mentions && message.mentions.members) {
+                    message.mentions.members.array().map((member: GuildMember) => {
+                        if (!message.author.bot && member.id !== message.author.id && member.roles.map((role) => role.id).includes("458827341196427265")) {
+                            message.reply("Please refrain from pinging this person under any circumstances. He/she is either a partner or special guest and should not be pinged.");
 
-                        const channel = message.guild.channels.get(channels.modLog);
+                            const channel = message.guild.channels.get(channels.modLog);
 
-                        if (channel) {
-                            warn({
-                                user: message.author,
-                                reason: "pinging a partner or special guest",
-                                moderator: message.guild.me.user,
-                                channel: channel
-                            });
+                            if (channel) {
+                                warn({
+                                    user: message.author,
+                                    reason: "pinging a partner or special guest",
+                                    moderator: message.guild.me.user,
+                                    channel: channel
+                                });
+                            }
+                            else {
+                                Log.warn("[ProtectionBehaviour] ModLog channel is either missing or invalid");
+                            }
                         }
-                        else {
-                            Log.warn("[ProtectionBehaviour] ModLog channel is either missing or invalid");
-                        }
-                    }
-                });
+                    });
+                }
             }
         });
 

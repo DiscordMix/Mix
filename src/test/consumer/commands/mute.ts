@@ -1,9 +1,7 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
-import Utils from "../../../core/utils";
 import Permission from "../../../core/permission";
 import ChatEnvironment from "../../../core/chat-environment";
-import {GuildMember, Message, RichEmbed, User} from "discord.js";
 
 const command: CommandOptions = {
     meta: {

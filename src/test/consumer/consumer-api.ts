@@ -97,8 +97,10 @@ export default abstract class ConsumerAPI {
     static async mute(options: MuteOptions): Promise<void> {
         await options.user.addRole(options.user.guild.roles.find("name", "Muted"));
 
+        const caseNum: number = ConsumerAPI.getCase();
+
         options.channel.send(new RichEmbed()
-            .setTitle(`Mute | Case #${ConsumerAPI.getCase()}`)
+            .setTitle(`Mute | Case #${caseNum}`)
             .addField("Member", `<@${options.user.id}> (${options.user.user.username})`)
             .addField("Reason", options.reason)
             .addField("Moderator", `<@${options.moderator.id}> (${options.moderator.username})`)
@@ -107,14 +109,9 @@ export default abstract class ConsumerAPI {
             .setColor("BLUE"));
 
         (await options.user.createDM()).send(new RichEmbed()
-        // TODO: Case number
-            .setTitle(`Mute | Case #0`)
-            .addField("Member", `<@${options.user.id}> (${options.user.user.username})`)
-            .addField("Reason", options.reason)
-            .addField("Moderator", `<@${options.moderator.id}> (${options.moderator.username})`)
-            .setThumbnail(options.evidence ? options.evidence : "")
-            .setFooter(`Muted by ${options.moderator.username}`, options.moderator.avatarURL)
-            .setColor("BLUE"));
+            .setDescription(`You were muted by <@${options.moderator.id}> (${options.moderator.username}) for **${options.reason}**`)
+            .setColor("BLUE")
+            .setTitle(`Case #${caseNum}`));
     }
 
     static getCase(): number {

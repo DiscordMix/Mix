@@ -2,6 +2,7 @@ import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 import Permission from "../../../core/permission";
 import ChatEnvironment from "../../../core/chat-environment";
+import ConsumerAPI from "../consumer-api";
 
 const command: CommandOptions = {
     meta: {
@@ -28,7 +29,7 @@ const command: CommandOptions = {
         ]
     },
 
-    executed: (context: CommandExecutionContext, api: any): void => {
+    executed: (context: CommandExecutionContext, api: ConsumerAPI): void => {
         const target = context.message.guild.member(context.arguments[0]);
         const modLog = context.message.guild.channels.get("458794765308395521");
 

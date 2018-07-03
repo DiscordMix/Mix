@@ -5,6 +5,8 @@ import Bot from "../core/bot";
 import Command from "./command";
 import CommandAuthStore from "./command-auth-store";
 import CommandExecutionContext from "./command-execution-context";
+import {Permissions, TextChannel} from "discord.js";
+import Permission from "../core/permission";
 
 const Typer = require("@raxor1234/typer/typer");
 // import Collection from "../core/collection";
@@ -370,6 +372,14 @@ export default class CommandManager /* extends Collection */ {
 
                 if (context.bot.autoDeleteCommands && context.message.deletable) {
                     context.message.delete();
+                }
+                else if (context.bot.checkSuccessfulCommands && context.message.channel instanceof TextChannel) {
+                    // TODO: Check if can add reaction
+                    /* if (context.message.channel.permissionsFor(context.message.guild.me).has(Permissions.FLAGS.ADD_REACTIONS)) {
+
+                    } */
+
+                    context.message.react(":white_check_mark:");
                 }
 
                 return result;

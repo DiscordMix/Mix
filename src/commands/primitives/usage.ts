@@ -7,7 +7,7 @@ const command: CommandOptions = {
         desc: "View how to use a certain command",
 
         args: {
-            command: "!:string"
+            command: "!string"
         }
     },
 

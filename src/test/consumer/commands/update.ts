@@ -27,9 +27,9 @@ const command: CommandOptions = {
                 context.ok(`Pulling successfully completed. Restarting!\n\`\`\`${stdOut}\`\`\``);
 
                 // TODO: Use resolved path instead
-                exec("pm2 delete 0 && yarn build && node dist/test/consumer/consumer.js", (error: any) => {
+                exec("pm2 delete 0 && npm run build && node dist/test/consumer/consumer.js", (error: any) => {
                     if (error) {
-                        context.fail(`There was an error while restarting. (${error.message})`);
+                        context.fail(`There was an error while restarting. (${error.message})`, false);
 
                         return;
                     }

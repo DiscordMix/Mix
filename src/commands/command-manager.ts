@@ -379,7 +379,7 @@ export default class CommandManager /* extends Collection */ {
 
                     } */
 
-                    context.message.react(":white_check_mark:");
+                    context.message.react("✅");
                 }
 
                 return result;

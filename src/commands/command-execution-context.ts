@@ -193,13 +193,14 @@ export default class CommandExecutionContext {
 
     /**
      * @param {string} text
+     * @param {boolean} [autoDelete=true]
      * @return {Promise<EditableMessage | null>}
      */
-    async fail(text: string): Promise<EditableMessage | null> {
+    async fail(text: string, autoDelete: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
             text: `:thinking: ${text}`,
             color: "RED"
-        }, true);
+        }, autoDelete);
     }
 
     /**

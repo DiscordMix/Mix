@@ -19,7 +19,7 @@ const command: CommandOptions = {
 
             return;
         }
-        else if (!targetCommand.args) {
+        else if (Object.keys(targetCommand.args).length === 0) {
             context.fail("That command doesn't accept any arguments.");
 
             return;
@@ -27,10 +27,12 @@ const command: CommandOptions = {
 
         const argKeys: Array<string> = Object.keys(targetCommand.args);
 
-        let args: Array<string> = [];
+        let args: Array<string> = [targetCommand.name];
 
         for (let i: number = 0; i < argKeys.length; i++) {
-            args.push(argKeys[i].startsWith("!") ? argKeys[i] : `[${argKeys[i]}]`);
+            const arg = argKeys[i].replace(":", "");
+
+            args.push(targetCommand.args[argKeys[i]].startsWith("!") ? arg : `[${arg}]`);
         }
 
         context.ok(args.join(" "));

@@ -10,7 +10,7 @@ const command: CommandOptions = {
         desc: "Warn an user",
 
         args: {
-            target: "!:user",
+            user: "!:user",
             reason: "!string",
             evidence: "string"
         }

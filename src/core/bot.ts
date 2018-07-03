@@ -146,7 +146,7 @@ export default class Bot extends EventEmitter {
          * @type {Array<string>}
          * @readonly
          */
-        this.primitiveCommands = options.primitiveCommands ? options.primitiveCommands : ["help", "ping", "auth"];
+        this.primitiveCommands = options.primitiveCommands ? options.primitiveCommands : ["help", "usage", "ping", "auth"];
 
         /**
          * @type {*|null}

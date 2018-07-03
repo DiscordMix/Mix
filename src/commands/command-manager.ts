@@ -349,7 +349,8 @@ export default class CommandManager /* extends Collection */ {
         }
         else {
             try {
-                const result: any = command.executed(context, this.bot.api);
+                const actualResult = command.executed(context, this.bot.api);
+                const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
 
                 const commandCooldown: CommandCooldown = {
                     context: context,
@@ -371,7 +372,7 @@ export default class CommandManager /* extends Collection */ {
                 context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command), result);
 
                 if (context.bot.autoDeleteCommands && context.message.deletable) {
-                    context.message.delete();
+                    await context.message.delete();
                 }
                 else if (context.bot.checkSuccessfulCommands && context.message.channel instanceof TextChannel) {
                     // TODO: Check if can add reaction

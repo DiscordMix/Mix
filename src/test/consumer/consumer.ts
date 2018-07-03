@@ -41,7 +41,7 @@ async function start() {
 
         dataStore: new JsonStore(path.resolve(path.join(__dirname, "data.json"))),
 
-        autoDeleteCommands: true
+        autoDeleteCommands: false
     }).setup();
 
     bot.connect();

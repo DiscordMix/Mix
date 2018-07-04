@@ -44,7 +44,7 @@ async function start() {
         autoDeleteCommands: false
     }).setup();
 
-    bot.connect();
+    await bot.connect();
 
     if (bot.dataStore) {
         const store: JsonStore = <JsonStore>bot.dataStore;
@@ -55,6 +55,15 @@ async function start() {
         const storedCounter = store.get("case_counter");
 
         ConsumerAPI.caseCounter = storedCounter ? storedCounter : 0;
+        ConsumerAPI.modLogChannel = bot.client.guilds.get("286352649610199052").channels.get("458794765308395521"); // Gaming Corner => mod-log
+
+        await ConsumerAPI.reportCase({
+            color: "RED",
+            reason: "test",
+            moderator: bot.client.guilds.get("286352649610199052").member("439373663905513473"),
+            member: bot.client.guilds.get("286352649610199052").member("285578743324606482"),
+            title: "Ban"
+        });
     }
 }
 

@@ -1,6 +1,7 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 import Permission from "../../../core/permission";
+import Utils from "../../../core/utils";
 
 const command: CommandOptions = {
     meta: {
@@ -11,7 +12,7 @@ const command: CommandOptions = {
 
     executed: (context: CommandExecutionContext): void => {
         context.sections({
-            Uptime: context.bot.client.uptime,
+            Uptime: Utils.timeAgoFromNow(context.bot.client.uptime),
             Members: context.message.guild.memberCount
         });
     },

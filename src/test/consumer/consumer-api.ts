@@ -61,9 +61,11 @@ const SuspectedViolation: any = {
 };
 
 export interface CaseOptions {
+    readonly member: GuildMember;
     readonly color: string;
     readonly reason: string;
     readonly moderator: User;
+    readonly title: string;
     readonly evidence?: string;
 }
 
@@ -78,10 +80,12 @@ export default abstract class ConsumerAPI {
 
         const embed = new RichEmbed()
             .setColor(options.color)
-            .setTitle(`Case #${caseNum}`)
+            .setAuthor(`Case #${caseNum} | ${options.title}`, options.member.user.avatarURL)
+            .addField("User", `<@${options.member.user.id}> (${options.member.user.tag})`)
             .addField("Reason", options.reason)
             .addField("Moderator", `<@${options.moderator.id}> (${options.moderator.tag})`)
-            .addField("Time", "*Permanent*");
+            .addField("Time", "*Permanent*")
+            .setFooter(`Requested by ${options.moderator.username}`, options.moderator.avatarURL);
 
         if (options.evidence) {
             embed.setThumbnail(options.evidence);

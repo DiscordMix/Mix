@@ -1,6 +1,7 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 import {Message, RichEmbed} from "discord.js";
+import Utils from "../../../core/utils";
 
 const command: CommandOptions = {
     meta: {
@@ -21,10 +22,12 @@ const command: CommandOptions = {
         const lastDeletedChannelMessage: Message = api.getLastDeletedMessage(context.message.channel.id);
 
         if (lastDeletedChannelMessage) {
+            const embed = lastDeletedChannelMessage.content.length === 0 && lastDeletedChannelMessage.embeds.length > 0;
+
             context.message.channel.send(new RichEmbed()
-                .setTitle("Message Deleted")
-                .addField("Message", lastDeletedChannelMessage.content.length > 0 ? lastDeletedChannelMessage.content : "Empty message (Probably embed)")
-                .addField("Author", `<@${lastDeletedChannelMessage.author.id}> (${lastDeletedChannelMessage.author.username})`)
+                .addField("Message", embed ? "*Embedded Message*" : lastDeletedChannelMessage.content)
+                .addField("Author", `<@${lastDeletedChannelMessage.author.id}> (${lastDeletedChannelMessage.author.tag})`)
+                .addField("Time", Utils.timeAgo(lastDeletedChannelMessage.createdTimestamp))
                 .addField("Message ID", lastDeletedChannelMessage.id)
                 .setColor("GREEN"));
         }

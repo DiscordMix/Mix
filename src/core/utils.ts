@@ -97,10 +97,17 @@ export default class Utils {
 
     /**
      * @param {number} timestamp
+     * @param {boolean} capitalize Whether to capitalize the time
      * @return {string}
      */
-    static timeAgo(timestamp: number): string {
-        return timeAgo.format(timestamp);
+    static timeAgo(timestamp: number, capitalize: boolean = true): string {
+        let time: string = timeAgo.format(timestamp);
+
+        if (capitalize) {
+            time = time.charAt(0).toUpperCase() + time.slice(1);
+        }
+
+        return time;
     }
 
     /**

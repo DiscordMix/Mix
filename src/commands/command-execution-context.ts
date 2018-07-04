@@ -94,11 +94,12 @@ export default class CommandExecutionContext {
     }
 
     /**
+     * @todo Content parameter type
      * @param {Object|EmbedBuilder} content
      * @param {boolean} [autoDelete=false]
      * @return {Promise<EditableMessage>|null}
      */
-    async respond(content: any | EmbedBuilder, autoDelete: boolean = false): Promise<EditableMessage | null> {
+    async respond(content: EmbedBuilder | any, autoDelete: boolean = false): Promise<EditableMessage | null> {
         let embed = null;
 
         if (content.text) {
@@ -160,6 +161,7 @@ export default class CommandExecutionContext {
     }
 
     /**
+     * @todo For some reason not having 'Requested by' footer
      * @param {Object} sections
      * @param {string} color
      * @return {Promise<EditableMessage>}

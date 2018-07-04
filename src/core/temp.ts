@@ -26,14 +26,14 @@ export default class Temp {
             if (!fs.existsSync(this.resolvedPath)) {
                 fs.mkdir(this.resolvedPath, (error: Error) => {
                     if (error) {
-                        Log.error(`There was an error creating the temp folder for bot: ${this.id} (${error.message})`);
+                        Log.error(`There was an error creating the temp folder for the bot: ${this.id} (${error.message})`);
                     }
 
                     resolve();
                 });
             }
             else {
-                Log.warn(`[Temp.create] Temp folder already exists for bot: ${this.id}. This may be due to an improper bot shutdown.`);
+                Log.warn(`[Temp.create] Temp folder already exists for the bot: ${this.id}. This may be due to an improper bot shutdown.`);
             }
         });
     }

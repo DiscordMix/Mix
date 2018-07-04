@@ -17,7 +17,7 @@ const command: CommandOptions = {
     },
 
     executed: async (context: CommandExecutionContext, api: any): Promise<void> => {
-        const setup = SetupHelper.fromContext(context, "Setup Test");
+        /* const setup = SetupHelper.fromContext(context, "Setup Test");
 
         if (setup) {
             const responses = await setup
@@ -27,7 +27,8 @@ const command: CommandOptions = {
                 .finish();
 
             console.log(responses);
-        }
+        } */
+        context.ok("test");
     }
 };
 

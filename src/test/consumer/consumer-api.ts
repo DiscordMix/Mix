@@ -60,10 +60,35 @@ const SuspectedViolation: any = {
     None: "None"
 };
 
+export interface CaseOptions {
+    readonly color: string;
+    readonly reason: string;
+    readonly moderator: User;
+    readonly evidence?: string;
+}
+
 export default abstract class ConsumerAPI {
     static deletedMessages: any = [];
     static store: JsonStore;
     static caseCounter: number;
+    static modLogChannel: TextChannel;
+
+    static async reportCase(options: CaseOptions): Promise<void> {
+        const caseNum = ConsumerAPI.getCase();
+
+        const embed = new RichEmbed()
+            .setColor(options.color)
+            .setTitle(`Case #${caseNum}`)
+            .addField("Reason", options.reason)
+            .addField("Moderator", `<@${options.moderator.id}> (${options.moderator.tag})`)
+            .addField("Time", "*Permanent*");
+
+        if (options.evidence) {
+            embed.setThumbnail(options.evidence);
+        }
+
+        ConsumerAPI.modLogChannel.send(embed);
+    }
 
     static async warn(options: WarnOptions): Promise<boolean> {
         if (!(options.channel instanceof TextChannel)) {

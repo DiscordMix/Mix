@@ -33,7 +33,7 @@ export interface BotOptions {
     readonly commandArgumentStyle?: CommandArgumentStyle;
     readonly autoDeleteCommands?: boolean;
     readonly userGroups?: Array<UserGroup>;
-    readonly checkSuccessfulCommands?: boolean;
+    readonly checkCommands?: boolean;
 }
 
 /**
@@ -57,7 +57,7 @@ export default class Bot extends EventEmitter {
     readonly commandArgumentStyle: CommandArgumentStyle;
     readonly autoDeleteCommands: boolean;
     readonly userGroups: Array<UserGroup>;
-    readonly checkSuccessfulCommands: boolean;
+    readonly checkCommands: boolean;
 
     private setupStart: number = 0;
 
@@ -177,7 +177,7 @@ export default class Bot extends EventEmitter {
          * @type {boolean}
          * @readonly
          */
-        this.checkSuccessfulCommands = options.checkSuccessfulCommands !== undefined ? options.checkSuccessfulCommands : true;
+        this.checkCommands = options.checkCommands !== undefined ? options.checkCommands : true;
 
         return this;
     }

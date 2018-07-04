@@ -374,7 +374,7 @@ export default class CommandManager /* extends Collection */ {
                 if (context.bot.autoDeleteCommands && context.message.deletable) {
                     await context.message.delete();
                 }
-                else if (context.bot.checkSuccessfulCommands && context.message.channel instanceof TextChannel) {
+                else if (context.bot.checkCommands && context.message.channel instanceof TextChannel) {
                     // TODO: Check if can add reaction
                     /* if (context.message.channel.permissionsFor(context.message.guild.me).has(Permissions.FLAGS.ADD_REACTIONS)) {
 

@@ -11,7 +11,7 @@ import Log from "./log";
 import DataStore from "../data-stores/data-store";
 import CommandAuthStore from "../commands/command-auth-store";
 import Temp from "./temp";
-import {GuildMember, Message, Role} from "discord.js";
+import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
 import {CommandArgumentStyle, UserGroup} from "../commands/command";
@@ -34,6 +34,7 @@ export interface BotOptions {
     readonly autoDeleteCommands?: boolean;
     readonly userGroups?: Array<UserGroup>;
     readonly checkCommands?: boolean;
+    readonly owner?: Snowflake;
 }
 
 /**
@@ -58,6 +59,7 @@ export default class Bot extends EventEmitter {
     readonly autoDeleteCommands: boolean;
     readonly userGroups: Array<UserGroup>;
     readonly checkCommands: boolean;
+    readonly owner?: Snowflake;
 
     private setupStart: number = 0;
 
@@ -178,6 +180,12 @@ export default class Bot extends EventEmitter {
          * @readonly
          */
         this.checkCommands = options.checkCommands !== undefined ? options.checkCommands : true;
+
+        /**
+         * @type {Snowflake | undefined}
+         * @readonly
+         */
+        this.owner = options.owner;
 
         return this;
     }

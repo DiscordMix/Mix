@@ -24,7 +24,7 @@ const command: CommandOptions = {
             context.message.channel.send(new RichEmbed()
                 .setTitle("Message Deleted")
                 .addField("Message", lastDeletedChannelMessage.content.length > 0 ? lastDeletedChannelMessage.content : "Empty message (Probably embed)")
-                .addField("Author", `<@${lastDeletedChannelMessage.author.id} (${lastDeletedChannelMessage.author.username})`)
+                .addField("Author", `<@${lastDeletedChannelMessage.author.id}> (${lastDeletedChannelMessage.author.username})`)
                 .addField("Message ID", lastDeletedChannelMessage.id)
                 .setColor("GREEN"));
         }

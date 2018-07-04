@@ -42,7 +42,7 @@ const command: CommandOptions = {
             .addField("Account Created", Utils.timeAgo(member.user.createdTimestamp))
             .addField("Last Message", member.lastMessage ? member.lastMessage.content : "*None*")
             .addField("Roles", finalRoles)
-            .addField("Id", member.id));
+            .addField("User ID", member.id));
     }
 };
 

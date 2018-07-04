@@ -10,7 +10,7 @@ const command: CommandOptions = {
         desc: "Mute a user",
 
         args: {
-            user: "!:user",
+            user: "!:member",
             reason: "!string",
             evidence: "string"
         }
@@ -30,7 +30,7 @@ const command: CommandOptions = {
     },
 
     executed: (context: CommandExecutionContext, api: any): void => {
-        const target = context.message.guild.member(context.arguments[0]);
+        const target = context.arguments[0];
         const modLog = context.message.guild.channels.get("458794765308395521");
 
         if (!target) {

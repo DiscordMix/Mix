@@ -1,6 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
-import Permission from "../../../core/permission";
 
 const command: CommandOptions = {
     meta: {

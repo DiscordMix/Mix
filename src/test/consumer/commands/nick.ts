@@ -5,7 +5,7 @@ import Permission from "../../../core/permission";
 const command: CommandOptions = {
     meta: {
         name: "nick",
-        desc: "Change your nickname",
+        desc: "Manage nicknames",
         aliases: ["nickname"],
 
         args: {

@@ -36,7 +36,8 @@ const messages: any = {
         "{user} just came out of your closet",
         "{user} was hiding under your bed",
         "The sea has washed {user} to shore",
-        "{user} has achieved transcendence"
+        "{user} has achieved transcendence",
+        "owo {user} is here"
     ],
 
     goodbye: [
@@ -73,7 +74,7 @@ function getRandomInt(min: number, max: number): number {
 }
 
 function getMessage(category: string, user: User): string {
-    return messages[category][getRandomInt(0, messages[category].length)].replace(/\{user\}/g, `<@${user.id}> (${user.username})`);
+    return messages[category][getRandomInt(0, messages[category].length)].replace(/\{user\}/g, `<@${user.id}>`);
 }
 
 const sendGeneral = (text: string, titleSuffix: string, member: GuildMember, color = "GREEN") => {
@@ -92,7 +93,7 @@ const behaviour: BehaviourOptions = {
 
     enabled: (bot: Bot) => {
         bot.client.on("guildMemberAdd", (member: GuildMember) => {
-            sendGeneral(getMessage("welcome", member.user), "Joined", member);
+            sendGeneral(`${getMessage("welcome", member.user)}\n\n*Make sure to read the <#458708940809699368>!*`, "Joined", member);
         });
 
         bot.client.on("guildMemberRemove", (member: GuildMember) => {

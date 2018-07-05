@@ -1,5 +1,5 @@
 import {CommandOptions} from "../command";
-import CommandExecutionContext from "../command-execution-context";
+import CommandContext from "../command-context";
 import JsonAuthStore from "../auth-stores/json-auth-store";
 import {GuildMember} from "discord.js";
 
@@ -18,7 +18,7 @@ export default <CommandOptions>{
         auth: -1 // Owner
     },
 
-    executed: async (context: CommandExecutionContext): Promise<void> => {
+    executed: async (context: CommandContext): Promise<void> => {
         if (context.arguments[1] < 0) {
             await context.fail("Authorization level must be higher than zero.");
 

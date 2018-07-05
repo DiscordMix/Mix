@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import ChatEnvironment from "../../../core/chat-environment";
 import Utils from "../../../core/utils";
 
@@ -27,7 +27,7 @@ export default <CommandOptions>{
     },
 
     // TODO: Throws unknown message
-    executed: async (context: CommandExecutionContext, api: any): Promise<void> => { // TODO: api type not working for some reason
+    executed: async (context: CommandContext, api: any): Promise<void> => { // TODO: api type not working for some reason
         const target = context.message.guild.member(Utils.resolveId(context.arguments[0].id));
         const modLog = context.message.guild.channels.get("458794765308395521");
 

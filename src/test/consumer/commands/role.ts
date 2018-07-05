@@ -1,6 +1,6 @@
 import {CommandOptions} from "../../../commands/command";
 import Permission from "../../../core/permission";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import {GuildMember, Role} from "discord.js";
 
 export default <CommandOptions>{
@@ -17,7 +17,7 @@ export default <CommandOptions>{
         issuerPerms: [Permission.ManageRoles, Permission.ManageGuild]
     },
 
-    executed: (context: CommandExecutionContext, api: any): void => {
+    executed: (context: CommandContext, api: any): void => {
         if (!context.arguments[1]) {
             context.fail("No member found");
 

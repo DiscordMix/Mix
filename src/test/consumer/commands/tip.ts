@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 
 const channels = {
     media: "382054707029475348",
@@ -53,7 +53,7 @@ export default <CommandOptions>{
         cooldown: 5
     },
 
-    executed: (context: CommandExecutionContext, api: any): void => {
+    executed: (context: CommandContext, api: any): void => {
         let tipIndex = lastTipIndex;
 
         while (tipIndex === lastTipIndex) {

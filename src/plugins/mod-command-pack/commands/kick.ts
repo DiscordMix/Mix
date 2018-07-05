@@ -1,10 +1,10 @@
 import {CommandOptions} from "../../../commands/command";
 import Permission from "../../../core/permission";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import ChatEnvironment from "../../../core/chat-environment";
 
 const command: CommandOptions = {
-    executed: async (context: CommandExecutionContext) => {
+    executed: async (context: CommandContext) => {
         const targetMember = context.message.guild.member(context.arguments[0]);
 
         if (targetMember) {

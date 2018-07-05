@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import {exec} from "child_process";
 
 export default <CommandOptions>{
@@ -15,7 +15,7 @@ export default <CommandOptions>{
         ]
     },
 
-    executed: (context: CommandExecutionContext): Promise<void> => {
+    executed: (context: CommandContext): Promise<void> => {
         return new Promise((resolve) => {
             exec("git pull", (error: any, stdOut: string | Buffer) => {
                 if (error) {

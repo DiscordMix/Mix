@@ -1,8 +1,8 @@
 import CommandParser from "../commands/command-parser";
-import CommandExecutionContext, {CommandExecutionContextOptions} from "../commands/command-execution-context";
+import CommandContext, {CommandExecutionContextOptions} from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
 import EmojiMenuManager from "../emoji-ui/emoji-menu-manager";
-import CommandManager from "../commands/command-manager";
+import CommandStore from "../commands/command-store";
 import Utils from "./utils";
 import EmojiCollection from "../collections/emoji-collection";
 import Settings from "./settings";
@@ -49,7 +49,7 @@ export default class Bot extends EventEmitter {
     readonly emojis?: EmojiCollection;
     readonly client: Client; // TODO
     readonly behaviours: BehaviourManager;
-    readonly commands: CommandManager;
+    readonly commands: CommandStore;
     readonly commandLoader: CommandLoader;
     readonly console: ConsoleInterface;
     readonly menus: EmojiMenuManager;
@@ -117,10 +117,10 @@ export default class Bot extends EventEmitter {
         this.behaviours = new BehaviourManager(this, this.settings.paths.behaviours);
 
         /**
-         * @type {CommandManager}
+         * @type {CommandStore}
          * @readonly
          */
-        this.commands = new CommandManager(this, this.settings.paths.commands, this.authStore, options.argumentTypes ? options.argumentTypes : {});
+        this.commands = new CommandStore(this, this.settings.paths.commands, this.authStore, options.argumentTypes ? options.argumentTypes : {});
 
         /**
          * @type {CommandLoader}
@@ -316,7 +316,7 @@ export default class Bot extends EventEmitter {
 
             if (command) {
                 this.commands.handle(
-                    new CommandExecutionContext(executionOptions),
+                    new CommandContext(executionOptions),
                     command
                 );
             }

@@ -1,5 +1,5 @@
 import PreventableCommandEvent from "./preventable-command-event";
-import CommandExecutionContext from "../commands/command-execution-context";
+import CommandContext from "../commands/command-context";
 import Command from "../commands/command";
 
 /**
@@ -9,10 +9,10 @@ export default class CommandWillExecuteEvent extends PreventableCommandEvent {
     readonly command: Command;
 
     /**
-     * @param {CommandExecutionContext} context
+     * @param {CommandContext} context
      * @param {Command} command
      */
-    constructor(context: CommandExecutionContext, command: Command) {
+    constructor(context: CommandContext, command: Command) {
         super(context);
 
         /**

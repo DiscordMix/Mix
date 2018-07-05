@@ -1,8 +1,8 @@
 import Bot from "./core/bot";
 import CommandArgumentParser from "./commands/command-argument-parser";
-import CommandExecutionContext from "./commands/command-execution-context";
+import CommandContext from "./commands/command-context";
 import CommandLoader from "./commands/command-loader";
-import CommandManager, {CommandManagerEvent} from "./commands/command-manager";
+import CommandStore, {CommandManagerEvent} from "./commands/command-store";
 import Command, {CommandMetaOptions, CommandRestrictOptions, CommandOptions} from "./commands/command";
 import ConsoleInterface from "./console/console-interface";
 import CommandParser from "./commands/command-parser";
@@ -41,9 +41,9 @@ import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 export {
     // Commands
     CommandArgumentParser,
-    CommandExecutionContext,
+    CommandContext,
     CommandLoader,
-    CommandManager,
+    CommandStore,
     CommandManagerEvent,
     CommandParser,
     Command,

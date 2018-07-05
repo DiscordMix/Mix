@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 
 export default <CommandOptions>{
     meta: {
@@ -12,7 +12,7 @@ export default <CommandOptions>{
     },
 
     // TODO: Return type, should be void
-    executed: async (context: CommandExecutionContext): Promise<any> => {
+    executed: async (context: CommandContext): Promise<any> => {
         return new Promise((resolve) => {
             // TODO: Fix incompatibility with autoDeleteCommand? Something's wrong
             context.message.channel.bulkDelete(context.arguments[0]).then(() => {

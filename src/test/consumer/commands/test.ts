@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import SetupHelper from "../../../core/setup-helper";
 
 export default <CommandOptions>{
@@ -16,7 +16,7 @@ export default <CommandOptions>{
         cooldown: 5
     },
 
-    executed: async (context: CommandExecutionContext, api: any): Promise<void> => {
+    executed: async (context: CommandContext, api: any): Promise<void> => {
         /* const setup = SetupHelper.fromContext(context, "Setup Test");
 
         if (setup) {

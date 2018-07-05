@@ -1,14 +1,14 @@
-import CommandExecutionContext from "../commands/command-execution-context";
+import CommandContext from "../commands/command-context";
 
 export default class CommandEvent {
-    readonly context: CommandExecutionContext;
+    readonly context: CommandContext;
 
     /**
-     * @param {CommandExecutionContext} context
+     * @param {CommandContext} context
      */
-    constructor(context: CommandExecutionContext) {
+    constructor(context: CommandContext) {
         /**
-         * @type {CommandExecutionContext}
+         * @type {CommandContext}
          * @readonly
          */
         this.context = context;

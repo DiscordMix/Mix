@@ -15,7 +15,7 @@ export interface CommandExecutionContextOptions {
     readonly label: string | null;
 }
 
-export default class CommandExecutionContext {
+export default class CommandContext {
     readonly message: Message;
     readonly arguments: Array<any>;
     readonly bot: Bot;

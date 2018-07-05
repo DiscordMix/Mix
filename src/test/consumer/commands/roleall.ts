@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 
 export default <CommandOptions>{
     meta: {
@@ -11,7 +11,7 @@ export default <CommandOptions>{
         }
     },
 
-    executed: (context: CommandExecutionContext): void => {
+    executed: (context: CommandContext): void => {
         // TODO
     }
 };

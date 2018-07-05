@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import {Message, RichEmbed} from "discord.js";
 import Utils from "../../../core/utils";
 
@@ -18,7 +18,7 @@ export default <CommandOptions>{
         ]
     },
 
-    executed: (context: CommandExecutionContext, api: any) => {
+    executed: (context: CommandContext, api: any) => {
         const lastDeletedChannelMessage: Message = api.getLastDeletedMessage(context.message.channel.id);
 
         if (lastDeletedChannelMessage) {

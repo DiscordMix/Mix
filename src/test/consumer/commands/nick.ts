@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import Permission from "../../../core/permission";
 
 export default <CommandOptions>{
@@ -17,7 +17,7 @@ export default <CommandOptions>{
         selfPerms: [Permission.ManageNicknames]
     },
 
-    executed: async (context: CommandExecutionContext): Promise<void> => {
+    executed: async (context: CommandContext): Promise<void> => {
         await context.message.member.setNickname(context.arguments[0]);
     }
 };

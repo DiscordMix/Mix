@@ -1,5 +1,5 @@
 import {Client, Message, RichEmbed, Snowflake, TextChannel, User} from "discord.js";
-import CommandExecutionContext from "../commands/command-execution-context";
+import CommandContext from "../commands/command-context";
 import Log from "./log";
 
 export enum SetupHelperActionType {
@@ -117,7 +117,7 @@ export default class SetupHelper {
         });
     }
 
-    static fromContext(context: CommandExecutionContext, title?: string, embed?: boolean, timeout?: number): SetupHelper | null {
+    static fromContext(context: CommandContext, title?: string, embed?: boolean, timeout?: number): SetupHelper | null {
         if (context.message.channel instanceof TextChannel) {
             return new SetupHelper(context.bot.client, context.message.channel, context.sender.id, title, timeout, embed);
         }

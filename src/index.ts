@@ -22,10 +22,10 @@ import BotBuilder from "./builders/bot-builder";
 export default {
     // Commands
     CommandArgumentParser: require("./commands/command-argument-parser").default,
-    CommandExecutionContext: require("./commands/command-execution-context").default,
+    CommandExecutionContext: require("./commands/command-context").default,
     CommandLoader: require("./commands/command-loader").default,
-    CommandManager: require("./commands/command-manager").default,
-    CommandManagerEvent: require("./commands/command-manager").CommandManagerEvent,
+    CommandManager: require("./commands/command-store").default,
+    CommandManagerEvent: require("./commands/command-store").CommandManagerEvent,
     CommandParser: require("./commands/command-parser").default,
     Command: Command,
     CommandMetaOptions: require("./commands/command").CommandMetaOptions,

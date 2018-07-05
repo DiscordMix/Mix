@@ -1,5 +1,5 @@
 import CommandEvent from "./command-event";
-import CommandExecutionContext from "../commands/command-execution-context";
+import CommandContext from "../commands/command-context";
 
 /**
  * @extends CommandEvent
@@ -8,9 +8,9 @@ export default class PreventableCommandEvent extends CommandEvent {
     prevented: boolean = false;
 
     /**
-     * @param {CommandExecutionContext} context
+     * @param {CommandContext} context
      */
-    constructor(context: CommandExecutionContext) {
+    constructor(context: CommandContext) {
         super(context);
     }
 

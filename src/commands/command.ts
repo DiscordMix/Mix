@@ -1,5 +1,5 @@
 import ChatEnvironment from "../core/chat-environment";
-import CommandExecutionContext from "./command-execution-context";
+import CommandContext from "./command-context";
 
 const Typer = require("@raxor1234/typer/typer");
 
@@ -11,7 +11,7 @@ export enum CommandArgumentStyle {
 }
 
 export interface CommandOptions {
-    readonly executed: (context: CommandExecutionContext, api: any) => any;
+    readonly executed: (context: CommandContext, api: any) => any;
     readonly meta: CommandMetaOptions;
     readonly restrict?: CommandRestrictOptions;
     readonly canExecute?: Function;
@@ -50,7 +50,7 @@ export default class Command {
     readonly name: string;
     readonly description?: string;
     readonly aliases: Array<string>;
-    readonly executed: (context: CommandExecutionContext, api: any) => any;
+    readonly executed: (context: CommandContext, api: any) => any;
     readonly canExecute: Function | boolean;
     readonly args: any;
     readonly newArgs: Array<CommandMetaArgument>;

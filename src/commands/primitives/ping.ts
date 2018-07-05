@@ -1,5 +1,5 @@
 import {CommandOptions} from "../command";
-import CommandExecutionContext from "../command-execution-context";
+import CommandContext from "../command-context";
 
 export default <CommandOptions>{
     meta: {
@@ -7,7 +7,7 @@ export default <CommandOptions>{
         desc: "View the latency and heartbeat of the bot"
     },
 
-    executed: (context: CommandExecutionContext): void => {
+    executed: (context: CommandContext): void => {
         context.ok(`:ping_pong: ${context.bot.client.ping}ms`); // TODO: Missing heartbeat
     }
 };

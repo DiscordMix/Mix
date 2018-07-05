@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import Permission from "../../../core/permission";
 import Utils from "../../../core/utils";
 
@@ -10,7 +10,7 @@ export default <CommandOptions>{
         aliases: ["uptime"]
     },
 
-    executed: (context: CommandExecutionContext): void => {
+    executed: (context: CommandContext): void => {
         context.sections({
             Uptime: Utils.timeAgoFromNow(context.bot.client.uptime),
             Members: context.message.guild.memberCount

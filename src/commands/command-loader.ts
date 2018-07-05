@@ -1,19 +1,19 @@
 import Command from "./command";
 import Log from "../core/log";
-import CommandManager from "./command-manager";
+import CommandStore from "./command-store";
 
 const fs = require("fs");
 const path = require("path");
 
 export default class CommandLoader {
-    private readonly manager: CommandManager;
+    private readonly manager: CommandStore;
 
     /**
-     * @param {CommandManager} manager
+     * @param {CommandStore} manager
      */
-    constructor(manager: CommandManager) {
+    constructor(manager: CommandStore) {
         /**
-         * @type {CommandManager}
+         * @type {CommandStore}
          * @private
          * @readonly
          */

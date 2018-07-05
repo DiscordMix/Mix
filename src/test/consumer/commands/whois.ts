@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import {GuildMember, RichEmbed} from "discord.js";
 import Utils from "../../../core/utils";
 
@@ -13,7 +13,7 @@ export default <CommandOptions>{
         }
     },
 
-    executed: async (context: CommandExecutionContext): Promise<void> => {
+    executed: async (context: CommandContext): Promise<void> => {
         const member: GuildMember = context.arguments[0];
 
         if (!member) {

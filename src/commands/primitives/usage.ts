@@ -1,5 +1,5 @@
 import {default as Command, CommandOptions} from "../command";
-import CommandExecutionContext from "../command-execution-context";
+import CommandContext from "../command-context";
 
 export default <CommandOptions>{
     meta: {
@@ -11,7 +11,7 @@ export default <CommandOptions>{
         }
     },
 
-    executed: (context: CommandExecutionContext): void => {
+    executed: (context: CommandContext): void => {
         const targetCommand: Command | null = context.bot.commands.getByName(context.arguments[0]);
 
         if (!targetCommand) {

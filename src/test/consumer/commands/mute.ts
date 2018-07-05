@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import Permission from "../../../core/permission";
 import ChatEnvironment from "../../../core/chat-environment";
 
@@ -28,7 +28,7 @@ export default <CommandOptions>{
         ]
     },
 
-    executed: (context: CommandExecutionContext, api: any): void => {
+    executed: (context: CommandContext, api: any): void => {
         const target = context.arguments[0];
         const modLog = context.message.guild.channels.get("458794765308395521");
 

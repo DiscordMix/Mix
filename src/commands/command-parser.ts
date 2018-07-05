@@ -1,17 +1,17 @@
 import Utils from "../core/utils";
-import CommandManager from "./command-manager";
+import CommandStore from "./command-store";
 import Command from "./command";
-import CommandExecutionContext from "./command-execution-context";
+import CommandContext from "./command-context";
 import {Message} from "discord.js";
 
 export default class CommandParser {
     /**
      * @param {string} commandString
-     * @param {CommandManager} manager
+     * @param {CommandStore} manager
      * @param {Array<string>} prefixes
      * @return {Command|null}
      */
-    static parse(commandString: string, manager: CommandManager, prefixes: Array<string>): Command | null {
+    static parse(commandString: string, manager: CommandStore, prefixes: Array<string>): Command | null {
         const commandBase = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
@@ -23,11 +23,11 @@ export default class CommandParser {
 
     /**
      * @param {string} commandString
-     * @param {CommandManager} manager
+     * @param {CommandStore} manager
      * @param {string} prefixes
      * @return {boolean}
      */
-    static isValid(commandString: string, manager: CommandManager, prefixes: Array<string>): boolean {
+    static isValid(commandString: string, manager: CommandStore, prefixes: Array<string>): boolean {
         for (let i: number = 0; i < prefixes.length; i++) {
             if (commandString.startsWith(prefixes[i])) {
                 const commandBase = this.getCommandBase(commandString, prefixes);

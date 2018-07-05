@@ -1,5 +1,5 @@
 import {CommandOptions} from "../../../commands/command";
-import CommandExecutionContext from "../../../commands/command-execution-context";
+import CommandContext from "../../../commands/command-context";
 import {GuildMember} from "discord.js";
 import Permission from "../../../core/permission";
 import {CaseOptions} from "../consumer-api";
@@ -21,7 +21,7 @@ export default <CommandOptions>{
         selfPerms: [Permission.BanMembers]
     },
 
-    executed: (context: CommandExecutionContext, api: any): Promise<void> => {
+    executed: (context: CommandContext, api: any): Promise<void> => {
         return new Promise((resolve) => {
             const member: GuildMember = context.arguments[0];
 

@@ -1,7 +1,6 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 import ChatEnvironment from "../../../core/chat-environment";
-import ConsumerAPI from "../consumer-api";
 import Utils from "../../../core/utils";
 
 const command: CommandOptions = {

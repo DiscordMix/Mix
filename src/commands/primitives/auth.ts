@@ -8,7 +8,9 @@ const command: CommandOptions = {
     },
 
     executed: (context: CommandExecutionContext): void => {
-        context.ok(`Your authentication level is **${context.bot.authStore.getAuthLevel(context.message.guild.id, context.sender.id)}**`);
+        const authLevel: string | null = context.bot.authStore.getSchemaRankName(context.bot.authStore.getAuthLevel(context.message.guild.id, context.sender.id));
+
+        context.ok(`:zap: Your authentication level is **${authLevel !== null ? authLevel.charAt(0).toUpperCase() + authLevel.slice(1) : "Unknown"}**`);
     }
 };
 

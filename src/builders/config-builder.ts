@@ -1,4 +1,4 @@
-import CommandAuthStore from "../commands/command-auth-store";
+import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import DataStore from "../data-stores/data-store";
 
 export default class ConfigBuilder {

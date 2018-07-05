@@ -34,7 +34,7 @@ import ObjectStore from "./data-stores/object-store";
 import JsonStore from "./data-stores/json-store";
 import SqliteStore from "./data-stores/sqlite-store";
 import MysqlStore from "./data-stores/mysql-store";
-import CommandAuthStore from "./commands/command-auth-store";
+import CommandAuthStore from "./commands/auth-stores/command-auth-store";
 import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
 import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 

@@ -1,4 +1,4 @@
-import CommandAuthStore from "../command-auth-store";
+import CommandAuthStore from "./command-auth-store";
 import Log from "../../core/log";
 import {Snowflake} from "discord.js";
 
@@ -31,7 +31,6 @@ export default class ObjectAuthStore extends CommandAuthStore {
     }
 
     /**
-     * @todo Handle default/error auth level (-1)
      * @param {Snowflake} guildId
      * @param {*} identifier
      * @return {number}
@@ -45,7 +44,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
             }
         }
 
-        return -1;
+        return 0;
     }
 
     /**
@@ -82,6 +81,49 @@ export default class ObjectAuthStore extends CommandAuthStore {
         }
 
         return byId;
+    }
+
+    /**
+     * @param {string} guildId
+     * @param {string} userId
+     * @param {number} authLevel
+     */
+    setUserAuthority(guildId: string, userId: string, authLevel: number): boolean {
+        if (!this.authLevelExists(authLevel)) {
+            return false;
+        }
+
+        // TODO: Should start with @ for userIds
+        console.log(this.data);
+
+        if (!this.data[guildId][authLevel]) {
+            for (let i: number = this.data[guildId].length; i < authLevel; i++) {
+                this.data[guildId][i] = [];
+            }
+        }
+
+        // TODO: What if the user already has other authLevel assigned somewhere else? Delete that one and set this one instead
+        if (!this.data[guildId][authLevel].includes(userId)) {
+            this.data[guildId][authLevel].push(userId);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param {number} authLevel
+     * @return {boolean}
+     */
+    authLevelExists(authLevel: number): boolean {
+        const schemaKeys = Object.keys(this.schema);
+
+        for (let i: number = 0; i < schemaKeys.length; i++) {
+            if (this.schema[schemaKeys[i]].rank == authLevel) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

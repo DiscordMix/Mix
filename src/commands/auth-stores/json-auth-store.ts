@@ -34,9 +34,6 @@ export default class JsonAuthStore extends ObjectAuthStore {
          */
         this.storePath = storePath;
 
-        // Initially load the data
-        this.reload();
-
         // Automatically save the currently loaded data when a guild is created
         this.on("guildCreated", () => {
             this.save();
@@ -63,7 +60,7 @@ export default class JsonAuthStore extends ObjectAuthStore {
         if (!this.exists) {
             this.data = {};
             await Utils.writeJson(this.storePath, this.data);
-            // this.schema
+            Log.info("[JsonAuthStore.reload] Auth store path did not exist, created default");
         }
         else {
             this.data = await Utils.readJson(this.storePath);

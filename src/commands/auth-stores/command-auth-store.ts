@@ -52,6 +52,14 @@ export default abstract class CommandAuthStore extends EventEmitter {
     abstract remove(guildId: Snowflake): boolean;
 
     /**
+     * Manage the Auth Level of an user
+     * @param {Snowflake} guildId
+     * @param {Snowflake} userId
+     * @param {number} authLevel
+     */
+    abstract setUserAuthority(guildId: Snowflake, userId: Snowflake, authLevel: number): boolean;
+
+    /**
      * Determine whether this auth store contains an entry
      * @param {Snowflake} guildId
      * @return {boolean} Whether the entry exists

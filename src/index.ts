@@ -81,7 +81,7 @@ export default {
     MysqlStore: require("./data-stores/mysql-store").default,
 
     // Auth Stores
-    CommandAuthStore: require("./commands/command-auth-store").default,
+    CommandAuthStore: require("./commands/auth-stores/command-auth-store").default,
     ObjectAuthStore: require("./commands/auth-stores/object-auth-store").default,
     JsonAuthStore: require("./commands/auth-stores/json-auth-store").default
 }

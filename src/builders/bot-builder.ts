@@ -1,4 +1,4 @@
-import CommandAuthStore from "../commands/command-auth-store";
+import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Bot from "../core/bot";
 import Settings from "../core/settings";
 

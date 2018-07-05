@@ -9,7 +9,7 @@ import Settings from "./settings";
 import CommandLoader from "../commands/command-loader";
 import Log from "./log";
 import DataStore from "../data-stores/data-store";
-import CommandAuthStore from "../commands/command-auth-store";
+import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
 import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
@@ -148,7 +148,13 @@ export default class Bot extends EventEmitter {
          * @type {Array<string>}
          * @readonly
          */
-        this.primitiveCommands = options.primitiveCommands ? options.primitiveCommands : ["help", "usage", "ping", "auth"];
+        this.primitiveCommands = options.primitiveCommands ? options.primitiveCommands : [
+            "help",
+            "usage",
+            "ping",
+            "auth",
+            "setauth"
+        ];
 
         /**
          * @type {*|null}
@@ -314,6 +320,11 @@ export default class Bot extends EventEmitter {
      * Setup the bot's auth store
      */
     async setupAuthStore(): Promise<void> {
+        // Initially load data if it is a JsonAuthStore
+        if (this.authStore instanceof JsonAuthStore) {
+            await this.authStore.reload();
+        }
+
         const guilds = this.client.guilds.array();
 
         let entries = 0;
@@ -331,7 +342,7 @@ export default class Bot extends EventEmitter {
         }
 
         if (entries > 0) {
-            Log.success(`[Bot.setupAuthStore] Added a total of ${entries} new auth store entries`);
+            Log.info(`[Bot.setupAuthStore] Added a total of ${entries} new auth store entries`);
         }
 
         Log.success("[Bot.setupAuthStore] Auth store setup completed");

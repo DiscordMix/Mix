@@ -3,7 +3,7 @@ import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
 import Bot from "../core/bot";
 import Command from "./command";
-import CommandAuthStore from "./command-auth-store";
+import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandExecutionContext from "./command-execution-context";
 import {Permissions, TextChannel} from "discord.js";
 import Permission from "../core/permission";
@@ -349,6 +349,7 @@ export default class CommandManager /* extends Collection */ {
         }
         else {
             try {
+                // TODO: Only check if result is true, make sure commands return booleans
                 const actualResult = command.executed(context, this.bot.api);
                 const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
 

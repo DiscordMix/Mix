@@ -15,9 +15,13 @@
     "default": 0, // Always have the default rank in the store
 
 	"954320520342343244": [ // Guild id
-	    1: [ // User IDs/role IDs
-	        "94324238532592342", // Someone's ID
-	        "59452034023040560"  // Some role's ID
+	    [ // User IDs/role IDs, auth level by index
+	        "94324238532592342", // Someone's ID, in the future it should start with @ for user IDs
+	        "59452034023040560"  // Some role's ID, in the future it should start with & for role IDs
 	    ]
 	]
 }
+
+
+0 = Default
+-1 = Owner

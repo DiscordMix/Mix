@@ -309,18 +309,6 @@ export default class Bot extends EventEmitter {
 
         // TODO: Cannot do .startsWith with a prefix array
         if ((!message.author.bot || (message.author.bot && !this.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.isValid(message.content, this.commandStore, this.settings.general.prefixes)) {
-            const executionOptions: CommandExecutionContextOptions = {
-                message: message,
-                args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commandHandler.argumentTypes, resolvers, message),
-                bot: this,
-
-                // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
-                // TODO: CRITICAL: Default access level set to 0
-                auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
-                emojis: this.emojis,
-                label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
-            };
-
             const command = CommandParser.parse(
                 message.content,
                 this.commandStore,
@@ -329,7 +317,17 @@ export default class Bot extends EventEmitter {
 
             if (command) {
                 this.commandHandler.handle(
-                    new CommandContext(executionOptions),
+                    new CommandContext({
+                        message: message,
+                        args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commandHandler.argumentTypes, resolvers, message),
+                        bot: this,
+
+                        // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
+                        // TODO: CRITICAL: Default access level set to 0
+                        auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
+                        emojis: this.emojis,
+                        label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
+                    }),
                     command
                 );
             }

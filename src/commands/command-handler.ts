@@ -10,14 +10,14 @@ import CommandAuthStore from "./auth-stores/command-auth-store";
 const typer = require("@raxor1234/typer/typer");
 
 export interface CommandHandlerOptions {
-    readonly commands: CommandStore;
+    readonly commandStore: CommandStore;
     readonly authStore: CommandAuthStore;
     readonly errorHandlers: Array<Function>;
     readonly argumentTypes: any;
 }
 
 export default class CommandHandler {
-    readonly commands: CommandStore;
+    readonly commandStore: CommandStore;
     readonly authStore: CommandAuthStore;
     readonly errorHandlers: Array<Function>;
     readonly argumentTypes: any;
@@ -30,7 +30,7 @@ export default class CommandHandler {
          * @type {CommandStore}
          * @readonly
          */
-        this.commands = options.commands;
+        this.commandStore = options.commandStore;
 
         /**
          * @type {CommandAuthStore}
@@ -158,12 +158,12 @@ export default class CommandHandler {
                 context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
-        else if (command.cooldown && !this.commands.cooldownExpired(context, command)) {
+        else if (command.cooldown && !this.commandStore.cooldownExpired(context, command)) {
             if (this.errorHandlers[CommandManagerEvent.UnderCooldown]) {
                 this.errorHandlers[CommandManagerEvent.UnderCooldown](context, command);
             }
             else {
-                const timeLeft: CommandCooldown | null = this.commands.getCooldown(command);
+                const timeLeft: CommandCooldown | null = this.commandStore.getCooldown(command);
 
                 if (timeLeft) {
                     context.fail(`You must wait **${(timeLeft.end - Date.now()) / 1000}** seconds before using that command again.`);
@@ -176,8 +176,8 @@ export default class CommandHandler {
         }
         else {
             try {
-                // TODO: Only check if result is true, make sure commands return booleans
-                const actualResult = command.executed(context, this.commands.bot.api);
+                // TODO: Only check if result is true, make sure commandStore return booleans
+                const actualResult = command.executed(context, this.commandStore.bot.api);
                 const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
 
                 const commandCooldown: CommandCooldown = {
@@ -189,14 +189,14 @@ export default class CommandHandler {
                     end: Date.now() + (command.cooldown * 1000)
                 };
 
-                const lastCooldown = this.commands.getCooldown(command);
+                const lastCooldown = this.commandStore.getCooldown(command);
 
                 // Delete the last cooldown before adding the new one for this command + user
                 if (lastCooldown) {
-                    this.commands.cooldowns.splice(this.commands.cooldowns.indexOf(lastCooldown), 1);
+                    this.commandStore.cooldowns.splice(this.commandStore.cooldowns.indexOf(lastCooldown), 1);
                 }
 
-                this.commands.cooldowns.push(commandCooldown);
+                this.commandStore.cooldowns.push(commandCooldown);
                 context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command), result);
 
                 if (context.bot.autoDeleteCommands && context.message.deletable) {

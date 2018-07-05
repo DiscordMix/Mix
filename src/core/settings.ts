@@ -58,7 +58,7 @@ export default class Settings {
          */
         this.paths = {
             // TODO: Find a way to simplify this process
-            commands: options.paths && options.paths.commands ? options.paths.commands : "./commands",
+            commands: options.paths && options.paths.commands ? options.paths.commands : "./commandStore",
             plugins: options.paths && options.paths.plugins ? options.paths.plugins : "./plugins",
             emojis: options.paths && options.paths.emojis ? options.paths.emojis : "./emojis",
             behaviours: options.paths && options.paths.behaviours ? options.paths.behaviours : "./behaviours"

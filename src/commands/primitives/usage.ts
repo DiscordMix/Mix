@@ -12,7 +12,7 @@ export default <CommandOptions>{
     },
 
     executed: (context: CommandContext): void => {
-        const targetCommand: Command | null = context.bot.commands.getByName(context.arguments[0]);
+        const targetCommand: Command | null = context.bot.commandStore.getByName(context.arguments[0]);
 
         if (!targetCommand) {
             context.fail("That command doesn't exist.");

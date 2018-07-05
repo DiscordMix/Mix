@@ -35,7 +35,6 @@ export default class CommandStore /* extends Collection */ {
     readonly bot: Bot;
     readonly path: string;
     readonly authStore: CommandAuthStore;
-    readonly argumentTypes: any;
     readonly cooldowns: Array<CommandCooldown>;
 
     commands: Array<Command>;
@@ -44,9 +43,8 @@ export default class CommandStore /* extends Collection */ {
      * @param {Bot} bot
      * @param {string} path
      * @param {CommandAuthStore} authStore
-     * @param {Object} argumentTypes
      */
-    constructor(bot: Bot, path: string, authStore: CommandAuthStore, argumentTypes: any) {
+    constructor(bot: Bot, path: string, authStore: CommandAuthStore) {
         /**
          * @type {Bot}
          * @private
@@ -192,7 +190,7 @@ export default class CommandStore /* extends Collection */ {
     }
 
     /**
-     * Unload all commands
+     * Unload all commandStore
      */
     unloadAll(): void {
         if (this.commands.length > 0) {

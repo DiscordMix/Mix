@@ -276,7 +276,7 @@ describe("Settings.fromFile()", () => {
             expect(result.general.token).to.equal("another_secret_token");
 
             expect(result.paths.commands).to.be.an("string");
-            expect(result.paths.commands).to.equal("./commands");
+            expect(result.paths.commands).to.equal("./commandStore");
 
             expect(result.paths.plugins).to.be.an("string");
             expect(result.paths.plugins).to.equal("./plugins");

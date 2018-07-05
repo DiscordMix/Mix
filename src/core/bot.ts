@@ -16,6 +16,7 @@ import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
 import {CommandArgumentStyle, UserGroup} from "../commands/command";
 import JsonProvider from "../data-providers/json-provider";
+import CommandHandler from "../commands/command-handler";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -49,7 +50,8 @@ export default class Bot extends EventEmitter {
     readonly emojis?: EmojiCollection;
     readonly client: Client; // TODO
     readonly behaviours: BehaviourManager;
-    readonly commands: CommandStore;
+    readonly commandStore: CommandStore;
+    readonly commandHandler: CommandHandler;
     readonly commandLoader: CommandLoader;
     readonly console: ConsoleInterface;
     readonly menus: EmojiMenuManager;
@@ -120,13 +122,24 @@ export default class Bot extends EventEmitter {
          * @type {CommandStore}
          * @readonly
          */
-        this.commands = new CommandStore(this, this.settings.paths.commands, this.authStore, options.argumentTypes ? options.argumentTypes : {});
+        this.commandStore = new CommandStore(this, this.settings.paths.commands, this.authStore);
+
+        /**
+         * @type {CommandHandler}
+         * @readonly
+         */
+        this.commandHandler = new CommandHandler({
+            commandStore: this.commandStore,
+            errorHandlers: [], // TODO: Is this like it was? Is it ok?
+            authStore: this.authStore,
+            argumentTypes: options.argumentTypes || {}
+        });
 
         /**
          * @type {CommandLoader}
          * @readonly
          */
-        this.commandLoader = new CommandLoader(this.commands);
+        this.commandLoader = new CommandLoader(this.commandStore);
 
         /**
          * @type {ConsoleInterface}
@@ -218,11 +231,11 @@ export default class Bot extends EventEmitter {
         Log.success(`[Bot.setup] Loaded ${behavioursLoaded} behaviours`);
         this.behaviours.enableAll();
 
-        // Load commands
+        // Load commandStore
         await this.commandLoader.reloadAll();
 
         // TODO: Primitives should be loaded first
-        // Load primitive commands
+        // Load primitive commandStore
         await this.commandLoader.loadPrimitives(this.primitiveCommands);
 
         // Setup the Discord client's events
@@ -295,10 +308,10 @@ export default class Bot extends EventEmitter {
         };
 
         // TODO: Cannot do .startsWith with a prefix array
-        if ((!message.author.bot || (message.author.bot && !this.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.isValid(message.content, this.commands, this.settings.general.prefixes)) {
+        if ((!message.author.bot || (message.author.bot && !this.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.isValid(message.content, this.commandStore, this.settings.general.prefixes)) {
             const executionOptions: CommandExecutionContextOptions = {
                 message: message,
-                args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers, message),
+                args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commandHandler.argumentTypes, resolvers, message),
                 bot: this,
 
                 // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
@@ -310,12 +323,12 @@ export default class Bot extends EventEmitter {
 
             const command = CommandParser.parse(
                 message.content,
-                this.commands,
+                this.commandStore,
                 this.settings.general.prefixes
             );
 
             if (command) {
-                this.commands.handle(
+                this.commandHandler.handle(
                     new CommandContext(executionOptions),
                     command
                 );
@@ -382,7 +395,7 @@ export default class Bot extends EventEmitter {
         Log.verbose("[Bot.restart] Restarting");
 
         if (reloadModules) {
-            // TODO: Actually reload all the features and commands
+            // TODO: Actually reload all the features and commandStore
             // this.features.reloadAll(this);
             await this.commandLoader.reloadAll();
         }

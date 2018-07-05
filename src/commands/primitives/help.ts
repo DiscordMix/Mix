@@ -8,7 +8,7 @@ export default <CommandOptions>{
     },
 
     executed: (context: CommandContext): void => {
-        context.ok(context.bot.commands.commands
+        context.ok(context.bot.commandStore.commands
             .map((command) => `${command.name} => ${command.description || "No description provided"}`)
             .join("\n"), "Help - Available Commands");
     }

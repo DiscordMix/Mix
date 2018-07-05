@@ -18,7 +18,7 @@ export default class ConfigBuilder {
      * @return {ConfigBuilder}
      */
     setCommandsPath(path: string): ConfigBuilder {
-        this.properties.paths.commands = path;
+        this.properties.paths.commandStore = path;
 
         return this;
     }

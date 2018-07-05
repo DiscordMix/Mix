@@ -21,7 +21,7 @@ export default class CommandLoader {
     }
 
     /**
-     * Load all the commands from the command manager's commands path
+     * Load all the commandStore from the command manager's commandStore path
      * @return {Promise<number>}
      */
     reloadAll(): Promise<number> {
@@ -70,9 +70,9 @@ export default class CommandLoader {
     }
 
     /**
-     * Extract and load all commands from a directory
+     * Extract and load all commandStore from a directory
      * @param {string} directoryPath
-     * @return {Promise<number>} The amount of successfully loaded commands
+     * @return {Promise<number>} The amount of successfully loaded commandStore
      */
     loadAll(directoryPath: string): Promise<number> {
         // TODO: Implement

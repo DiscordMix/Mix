@@ -24,7 +24,7 @@ export default <CommandOptions>{
 
         const roles = member.roles.array();
 
-        let finalRoles = roles.slice(0, 10).map((role) => `<@&${role.id}>`).join(" ");
+        let finalRoles = roles.slice(1, 10).map((role) => `<@&${role.id}>`).join(" ");
 
         if (roles.length > 10) {
             finalRoles += ` **+ ${roles.length - 10} more**`;

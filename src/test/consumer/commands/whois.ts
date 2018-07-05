@@ -9,12 +9,12 @@ export default <CommandOptions>{
         desc: "View information about a user",
 
         args: {
-            user: "!:member"
+            user: ":member"
         }
     },
 
     executed: async (context: CommandContext): Promise<void> => {
-        const member: GuildMember = context.arguments[0];
+        const member: GuildMember = context.arguments.length > 0 ? context.arguments[0] : context.message.member;
 
         if (!member) {
             context.fail("User not found");

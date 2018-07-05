@@ -1,16 +1,16 @@
-import DataStore from "./data-store";
+import DataProvider from "./data-provider";
 
 /**
- * @extends DataStore
+ * @extends DataProvider
  */
-export default class SqliteStore extends DataStore {
+export default class SqliteProvider extends DataProvider {
     /**
      * Retrieve guild data
      * @param {string} path
      * @return {*}
      */
     get(path: string): any {
-        throw new Error("[SqliteStore.get] Method not implemented.");
+        throw new Error("[SqliteProvider.get] Method not implemented.");
     }
 
     /**
@@ -19,7 +19,7 @@ export default class SqliteStore extends DataStore {
      * @param {*} value
      */
     set(path: string, value: any): void {
-        throw new Error("[SqliteStore.set] Method not implemented.");
+        throw new Error("[SqliteProvider.set] Method not implemented.");
     }
 
     /**
@@ -28,6 +28,6 @@ export default class SqliteStore extends DataStore {
      * @param {*} value
      */
     merge(path: string, value: any): void {
-        throw new Error("[SqliteStore.merge] Method not implemented.");
+        throw new Error("[SqliteProvider.merge] Method not implemented.");
     }
 }

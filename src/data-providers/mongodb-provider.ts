@@ -1,11 +1,11 @@
-import DataStore from "./data-store";
+import DataProvider from "./data-provider";
 
 const mongodb = require("mongodb");
 
 /**
- * @extends DataStore
+ * @extends DataProvider
  */
-export default class MongodbStore extends DataStore {
+export default class MongodbProvider extends DataProvider {
     readonly url: string;
     readonly client: any;
 

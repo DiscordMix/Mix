@@ -1,11 +1,11 @@
-import DataStore from "./data-store";
+import DataProvider from "./data-provider";
 
 const _ = require("lodash");
 
 /**
- * @extends DataStore
+ * @extends DataProvider
  */
-export default class ObjectStore extends DataStore {
+export default class ObjectProvider extends DataProvider {
     protected data: any;
 
     /**
@@ -46,6 +46,6 @@ export default class ObjectStore extends DataStore {
      * @param {*} value
      */
     merge(path: string, value: any): void {
-        throw new Error("[ObjectStore.merge] Method not implemented.");
+        throw new Error("[ObjectProvider.merge] Method not implemented.");
     }
 }

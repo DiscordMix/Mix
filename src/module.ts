@@ -29,11 +29,11 @@ import EmojiMenuManager from "./emoji-ui/emoji-menu-manager";
 import EmojiMenu from "./emoji-ui/emoji-menu";
 import CommandWillExecuteEvent from "./events/command-will-execute-event";
 import CommandExecutedEvent from "./events/command-executed-event";
-import DataStore from "./data-stores/data-store";
-import ObjectStore from "./data-stores/object-store";
-import JsonStore from "./data-stores/json-store";
-import SqliteStore from "./data-stores/sqlite-store";
-import MysqlStore from "./data-stores/mysql-store";
+import DataProvider from "./data-providers/data-provider";
+import ObjectProvider from "./data-providers/object-provider";
+import JsonProvider from "./data-providers/json-provider";
+import SqliteProvider from "./data-providers/sqlite-provider";
+import MysqlProvider from "./data-providers/mysql-provider";
 import CommandAuthStore from "./commands/auth-stores/command-auth-store";
 import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
 import JsonAuthStore from "./commands/auth-stores/json-auth-store";
@@ -93,11 +93,11 @@ export {
     CommandExecutedEvent,
 
     // Data Stores
-    DataStore,
-    ObjectStore,
-    JsonStore,
-    SqliteStore,
-    MysqlStore,
+    DataProvider,
+    ObjectProvider,
+    JsonProvider,
+    SqliteProvider,
+    MysqlProvider,
 
     // Auth Stores
     CommandAuthStore,

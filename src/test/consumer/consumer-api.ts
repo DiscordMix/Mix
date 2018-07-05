@@ -1,6 +1,6 @@
 import {GuildMember, Message, RichEmbed, Snowflake, TextChannel, User} from "discord.js";
 import Log from "../../core/log";
-import JsonStore from "../../data-stores/json-store";
+import JsonProvider from "../../data-providers/json-provider";
 
 const reviewChannelId = "462109996260261899";
 
@@ -71,7 +71,7 @@ export interface CaseOptions {
 
 export default abstract class ConsumerAPI {
     static deletedMessages: any = [];
-    static store: JsonStore;
+    static store: JsonProvider;
     static caseCounter: number;
     static modLogChannel: TextChannel;
 

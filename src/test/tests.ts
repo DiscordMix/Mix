@@ -2,7 +2,7 @@ import Utils from "../core/utils";
 import Rgb from "../misc/rgb";
 import Rgba from "../misc/rgba";
 import Collection from "../collections/collection";
-import ObjectStore from "../data-stores/object-store";
+import ObjectProvider from "../data-providers/object-provider";
 import Settings from "../core/settings";
 
 const { expect } = require("chai");
@@ -32,7 +32,7 @@ const subjects = {
         name: "John Doe"
     }]),
 
-    objAdapter: new ObjectStore({
+    objAdapter: new ObjectProvider({
         person: {
             doe: {
                 name: "John Doe"
@@ -217,7 +217,7 @@ describe("Collection.find()", () => {
     });
 });
 
-describe("ObjectStore.get()", () => {
+describe("ObjectProvider.get()", () => {
     it("should return the item in the specified path", () => {
         const result = subjects.objAdapter.get("person.doe");
 
@@ -227,7 +227,7 @@ describe("ObjectStore.get()", () => {
     });
 });
 
-describe("ObjectStore.set()", () => {
+describe("ObjectProvider.set()", () => {
     it("should set data in the item at the specified path", () => {
         subjects.objAdapter.set("person.doe.name", "Doe John");
 

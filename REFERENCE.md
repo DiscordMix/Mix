@@ -34,12 +34,12 @@ Below are the properties you may use to create your bot:
 | paths.emojis   | string    | The location of your emojis file       | No        | null          |
 | authStore      | [CommandAuthStore](https://cloudrex.github.io/Anvil/class/src/commands/command-auth-store.ts~CommandAuthStore.html) | Your authorization store               | **Yes**   | -             |
 | argumentTypes  | object    | Your custom argument types             | No        | {}            |
-| dataStore      | [DataStore](https://cloudrex.github.io/Anvil/class/src/data-stores/data-store.ts~DataStore.html) | Your data store                        | No        | null          |
+| dataStore      | [DataProvider](https://cloudrex.github.io/Anvil/class/src/data-stores/data-provider.ts~DataProvider.html) | Your data store                        | No        | null          |
 
 Example:
 
 ```js
-const { Bot, JsonAuthStore, JsonStore } = require("discord-anvil");
+const { Bot, JsonAuthStore, JsonProvider } = require("discord-anvil");
 
 const bot = new Bot({
     paths: {
@@ -49,7 +49,7 @@ const bot = new Bot({
     },
     
     authStore: new JsonAuthStore("auth-schema.json", "auth-store.json"),
-    dataStore: new JsonStore("data-store.json")
+    dataStore: new JsonProvider("data-store.json")
 });
 
 ...

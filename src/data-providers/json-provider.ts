@@ -1,4 +1,4 @@
-import ObjectStore from "./object-store";
+import ObjectProvider from "./object-provider";
 import Log from "../core/log";
 import Utils from "../core/utils";
 
@@ -6,9 +6,9 @@ const fs = require("fs");
 const _ = require("lodash");
 
 /**
- * @extends ObjectStore
+ * @extends ObjectProvider
  */
-export default class JsonStore extends ObjectStore {
+export default class JsonProvider extends ObjectProvider {
     private readonly path: string;
 
     /**
@@ -75,7 +75,7 @@ export default class JsonStore extends ObjectStore {
      */
     get(path: string): any {
         if (!this.loaded) {
-            throw new Error("[JsonStore.get] No data is currently loaded.");
+            throw new Error("[JsonProvider.get] No data is currently loaded.");
         }
 
         return _.get(this.data, path);
@@ -88,7 +88,7 @@ export default class JsonStore extends ObjectStore {
      */
     set(path: string, value: any): void {
         if (!this.loaded) {
-            throw new Error("[JsonStore.set] No data is currently loaded.");
+            throw new Error("[JsonProvider.set] No data is currently loaded.");
         }
 
         _.set(this.data, path, value);
@@ -101,10 +101,10 @@ export default class JsonStore extends ObjectStore {
      */
     merge(path: string, value: any): void {
         if (!this.loaded) {
-            throw new Error("[JsonStore.merge] No data is currently loaded.");
+            throw new Error("[JsonProvider.merge] No data is currently loaded.");
         }
 
-        throw new Error("[JsonStore.merge] Method not implemented.");
+        throw new Error("[JsonProvider.merge] Method not implemented.");
     }
 
     /**

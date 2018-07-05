@@ -74,11 +74,11 @@ export default {
     CommandExecutedEvent: require("./events/command-executed-event").default,
 
     // Data Stores
-    DataStore: require("./data-stores/data-store").default,
-    ObjectStore: require("./data-stores/object-store").default,
-    JsonStore: require("./data-stores/json-store").default,
-    SqliteStore: require("./data-stores/sqlite-store").default,
-    MysqlStore: require("./data-stores/mysql-store").default,
+    DataStore: require("./data-providers/data-provider").default,
+    ObjectStore: require("./data-providers/object-provider").default,
+    JsonStore: require("./data-providers/json-provider").default,
+    SqliteStore: require("./data-providers/sqlite-provider").default,
+    MysqlStore: require("./data-providers/mysql-provider").default,
 
     // Auth Stores
     CommandAuthStore: require("./commands/auth-stores/command-auth-store").default,

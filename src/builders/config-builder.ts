@@ -1,5 +1,5 @@
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
-import DataStore from "../data-stores/data-store";
+import DataProvider from "../data-providers/data-provider";
 
 export default class ConfigBuilder {
     private readonly properties: any;
@@ -64,10 +64,10 @@ export default class ConfigBuilder {
     }
 
     /**
-     * @param {DataStore} dataStore
+     * @param {DataProvider} dataStore
      * @return {ConfigBuilder}
      */
-    setDataStore(dataStore: DataStore): ConfigBuilder {
+    setDataStore(dataStore: DataProvider): ConfigBuilder {
         this.properties.dataStore = dataStore;
 
         return this;

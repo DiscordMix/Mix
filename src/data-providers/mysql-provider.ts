@@ -1,4 +1,4 @@
-import DataStore from "./data-store";
+import DataProvider from "./data-provider";
 import Log from "../core/log";
 import {Snowflake} from "discord.js";
 
@@ -6,9 +6,9 @@ const mysql = require("mysql");
 const _ = require("lodash");
 
 /**
- * @extends DataStore
+ * @extends DataProvider
  */
-export default class MysqlStore extends DataStore {
+export default class MysqlProvider extends DataProvider {
     private readonly connection: any;
 
     readonly data: any;
@@ -44,9 +44,9 @@ export default class MysqlStore extends DataStore {
 
     /**
      * Connect to the database
-     * @return {Promise<MysqlStore>}
+     * @return {Promise<MysqlProvider>}
      */
-    connect(): Promise<MysqlStore> {
+    connect(): Promise<MysqlProvider> {
         return new Promise((resolve, reject) => {
             this.connection.connect((error: Error) => {
                 // TODO: Should throw error instead?
@@ -63,9 +63,9 @@ export default class MysqlStore extends DataStore {
 
     /**
      * Disconnect from the database
-     * @return {Promise<MysqlStore>}
+     * @return {Promise<MysqlProvider>}
      */
-    disconnect(): Promise<MysqlStore> {
+    disconnect(): Promise<MysqlProvider> {
         return new Promise((resolve, reject) => {
             this.connection.end((error: Error) => {
                 // TODO: Should throw error instead?
@@ -117,7 +117,7 @@ export default class MysqlStore extends DataStore {
      */
     async get(path: string, guildId: Snowflake | null = null) {
         if (!this.loaded) {
-            Log.error("[MysqlStore.get] No data is currently loaded.");
+            Log.error("[MysqlProvider.get] No data is currently loaded.");
 
             return;
         }
@@ -125,7 +125,7 @@ export default class MysqlStore extends DataStore {
         let query = "SELECT * FROM ?? WHERE id = ?";
 
         // TODO: Temporary "" default value hotfix
-        const splitPath: any = MysqlStore.cleanPath(path, guildId ? guildId : "");
+        const splitPath: any = MysqlProvider.cleanPath(path, guildId ? guildId : "");
 
         if (splitPath.length === 1) {
             query = "SELECT * FROM ??";
@@ -173,7 +173,7 @@ export default class MysqlStore extends DataStore {
      */
     async set(path: string, value: any, guildId: Snowflake | null = null) {
         if (!this.loaded) {
-            Log.error("[MysqlStore.set] No data is currently loaded.");
+            Log.error("[MysqlProvider.set] No data is currently loaded.");
 
             return;
         }
@@ -181,7 +181,7 @@ export default class MysqlStore extends DataStore {
         const query = "UPDATE ?? SET ??=? WHERE  `id`=?;";
 
         // TODO: Temporary "" default value hotfix again
-        const splitPath = MysqlStore.cleanPath(path, guildId ? guildId : "");
+        const splitPath = MysqlProvider.cleanPath(path, guildId ? guildId : "");
 
         if (splitPath.length < 3) {
             throw new Error(`[MysqlAdapter.set] Invalid path: ${path}`);
@@ -209,10 +209,10 @@ export default class MysqlStore extends DataStore {
      */
     merge(path: string, value: any, guildId: Snowflake | null = null) {
         if (!this.loaded) {
-            throw new Error("[MysqlStore.merge] No data is currently loaded.");
+            throw new Error("[MysqlProvider.merge] No data is currently loaded.");
         }
 
-        throw new Error("[MysqlStore.merge] Method not implemented.");
+        throw new Error("[MysqlProvider.merge] Method not implemented.");
     }
 
     /**

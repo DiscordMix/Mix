@@ -8,14 +8,14 @@ import EmojiCollection from "../collections/emoji-collection";
 import Settings from "./settings";
 import CommandLoader from "../commands/command-loader";
 import Log from "./log";
-import DataStore from "../data-stores/data-store";
+import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
 import {Client, GuildMember, Message, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
 import {CommandArgumentStyle, UserGroup} from "../commands/command";
-import JsonStore from "../data-stores/json-store";
+import JsonProvider from "../data-providers/json-provider";
 
 const Discord = require("discord.js");
 const EventEmitter = require("events");
@@ -25,7 +25,7 @@ const {performance} = require("perf_hooks");
 export interface BotOptions {
     readonly settings: Settings;
     readonly authStore: CommandAuthStore;
-    readonly dataStore?: DataStore;
+    readonly dataStore?: DataProvider;
     readonly argumentTypes?: any;
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: Array<string>;
@@ -44,7 +44,7 @@ export interface BotOptions {
 export default class Bot extends EventEmitter {
     readonly settings: Settings;
     readonly temp: Temp;
-    readonly dataStore?: DataStore;
+    readonly dataStore?: DataProvider;
     readonly authStore: CommandAuthStore;
     readonly emojis?: EmojiCollection;
     readonly client: Client; // TODO
@@ -87,7 +87,7 @@ export default class Bot extends EventEmitter {
         this.temp = new Temp();
 
         /**
-         * @type {DataStore | undefined}
+         * @type {DataProvider | undefined}
          * @readonly
          */
         this.dataStore = options.dataStore;
@@ -405,8 +405,8 @@ export default class Bot extends EventEmitter {
         }
 
         // Save data before exiting
-        if (this.dataStore && this.dataStore instanceof JsonStore) {
-            Log.verbose("[Bot.disconnect] Saving JsonStore");
+        if (this.dataStore && this.dataStore instanceof JsonProvider) {
+            Log.verbose("[Bot.disconnect] Saving JsonProvider");
             await this.dataStore.save();
         }
 

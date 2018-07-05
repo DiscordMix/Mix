@@ -26,7 +26,7 @@ First, make sure to install Anvil: `npm install discord-anvil --save`
 
 index.js:
 ```js
-const { Bot, ObjectStore, JsonAuthStore } = require("discord-anvil");
+const { Bot, ObjectProvider, JsonAuthStore } = require("discord-anvil");
 const path = require("path");
 
 // Create the bot

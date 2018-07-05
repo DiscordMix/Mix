@@ -1,4 +1,4 @@
-export default abstract class DataStore {
+export default abstract class DataProvider {
     /**
      * Retrieve guild data
      * @abstract

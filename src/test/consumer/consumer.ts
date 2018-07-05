@@ -3,7 +3,7 @@ import Bot from "../../core/bot";
 import Settings from "../../core/settings";
 import Log, {LogLevel} from "../../core/log";
 import ConsumerAPI from "./consumer-api";
-import JsonStore from "../../data-stores/json-store";
+import JsonProvider from "../../data-providers/json-provider";
 import {TextChannel} from "discord.js";
 
 const path = require("path");
@@ -40,7 +40,7 @@ async function start() {
 
         authStore: new JsonAuthStore(path.resolve(path.join(baseDir, "auth/schema.json")), path.resolve(path.join(baseDir, "auth/store.json"))),
 
-        dataStore: new JsonStore(path.resolve(path.join(__dirname, "data.json"))),
+        dataStore: new JsonProvider(path.resolve(path.join(__dirname, "data.json"))),
 
         autoDeleteCommands: false
     }).setup();
@@ -48,7 +48,7 @@ async function start() {
     await bot.connect();
 
     if (bot.dataStore) {
-        const store: JsonStore = <JsonStore>bot.dataStore;
+        const store: JsonProvider = <JsonProvider>bot.dataStore;
 
         await store.reload();
         ConsumerAPI.store = store;

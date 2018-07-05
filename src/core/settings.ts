@@ -69,7 +69,7 @@ export default class Settings {
          * @type {SettingsKeys}
          * @readonly
          */
-        this.keys = options.keys ? options.keys : {};
+        this.keys = options.keys || {};
     }
 
     /**
@@ -102,24 +102,5 @@ export default class Settings {
 
         // TODO: Make sure pure objects work
         return new Settings(fileSettings);
-
-        // TODO
-        /* return new Settings({
-            general: {
-                token: fileSettings.general.token,
-                prefix: fileSettings.general.prefix
-            },
-
-            paths: {
-                // TODO: Even tho it has a default value here, when initiating it in code it
-                // should also have a default value.
-                commands: fileSettings.paths.commands
-            },
-
-            keys: {
-                dbl: fileSettings.keys.dbl,
-                bfd: fileSettings.keys.bfd
-            }
-        }); */
     }
 }

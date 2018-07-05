@@ -55,7 +55,7 @@ export default class Bot extends EventEmitter {
     readonly menus: EmojiMenuManager;
     readonly prefixCommand: boolean;
     readonly primitiveCommands: Array<string>;
-    readonly api: any;
+    readonly api?: any;
     readonly commandArgumentStyle: CommandArgumentStyle;
     readonly autoDeleteCommands: boolean;
     readonly userGroups: Array<UserGroup>;
@@ -87,19 +87,19 @@ export default class Bot extends EventEmitter {
         this.temp = new Temp("777");
 
         /**
-         * @type {DataStore}
+         * @type {DataStore | undefined}
          * @readonly
          */
-        this.dataStore = options.dataStore ? options.dataStore : undefined;
+        this.dataStore = options.dataStore;
 
         /**
          * @type {CommandAuthStore}
          * @readonly
          */
-        this.authStore = options.authStore ? options.authStore : new JsonAuthStore("auth/schema.json", "auth/store.json");
+        this.authStore =  options.authStore || new JsonAuthStore("auth/schema.json", "auth/store.json");
 
         /**
-         * @type {EmojiCollection|null}
+         * @type {EmojiCollection | undefined}
          * @readonly
          */
         this.emojis = fs.existsSync(this.settings.paths.emojis) ? EmojiCollection.fromFile(this.settings.paths.emojis) : undefined;
@@ -144,13 +144,13 @@ export default class Bot extends EventEmitter {
          * @type {boolean}
          * @readonly
          */
-        this.prefixCommand = options.prefixCommand ? options.prefixCommand : true;
+        this.prefixCommand = options.prefixCommand || true;
 
         /**
          * @type {Array<string>}
          * @readonly
          */
-        this.primitiveCommands = options.primitiveCommands ? options.primitiveCommands : [
+        this.primitiveCommands = options.primitiveCommands || [
             "help",
             "usage",
             "ping",
@@ -160,29 +160,29 @@ export default class Bot extends EventEmitter {
         ];
 
         /**
-         * @type {*|null}
+         * @type {* | undefined}
          * @readonly
          */
-        this.api = options.api ? options.api : null;
+        this.api = options.api;
 
         /**
          * @type {CommandArgumentStyle}
          * @readonly
          */
-        this.commandArgumentStyle = options.commandArgumentStyle ? options.commandArgumentStyle : CommandArgumentStyle.Specific;
+        this.commandArgumentStyle = options.commandArgumentStyle || CommandArgumentStyle.Specific;
 
         /**
          * @type {boolean}
          * @readonly
          */
-        this.autoDeleteCommands = options.autoDeleteCommands ? options.autoDeleteCommands : false;
+        this.autoDeleteCommands = options.autoDeleteCommands || false;
 
         // TODO: Make use of the userGroups property
         /**
          * @type {Array<UserGroup>}
          * @readonly
          */
-        this.userGroups = options.userGroups ? options.userGroups : [];
+        this.userGroups = options.userGroups || [];
 
         /**
          * @type {boolean}

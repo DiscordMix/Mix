@@ -15,7 +15,7 @@ export default class BotBuilder {
 
     /**
      * @param {string} token
-     * @returns {BotBuilder}
+     * @return {BotBuilder}
      */
     setToken(token: string): BotBuilder {
         this.settings.general.token = token;
@@ -65,7 +65,7 @@ export default class BotBuilder {
 
     /**
      * @param {boolean} prefixCommand
-     * @returns {BotBuilder}
+     * @return {BotBuilder}
      */
     setPrefixCommand(prefixCommand: boolean): BotBuilder {
         this.bot.prefixCommand = prefixCommand;

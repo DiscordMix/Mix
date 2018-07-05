@@ -3,7 +3,7 @@ import CommandExecutionContext from "../../../commands/command-execution-context
 import ChatEnvironment from "../../../core/chat-environment";
 import Utils from "../../../core/utils";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "warn",
         desc: "Warn an user",
@@ -62,5 +62,3 @@ const command: CommandOptions = {
         });
     }
 };
-
-export default command;

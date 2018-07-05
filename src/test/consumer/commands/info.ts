@@ -3,7 +3,7 @@ import CommandExecutionContext from "../../../commands/command-execution-context
 import Permission from "../../../core/permission";
 import Utils from "../../../core/utils";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "info",
         desc: "View information about the server",
@@ -21,5 +21,3 @@ const command: CommandOptions = {
         issuerPerms: [Permission.ManageGuild]
     }
 };
-
-export default command;

@@ -1,7 +1,7 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "roles",
         desc: "Display the server's roles",
@@ -28,5 +28,3 @@ const command: CommandOptions = {
             .substr(0, 2048));
     }
 };
-
-export default command;

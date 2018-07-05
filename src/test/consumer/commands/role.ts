@@ -3,7 +3,7 @@ import Permission from "../../../core/permission";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 import {GuildMember, Role} from "discord.js";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "role",
 
@@ -55,5 +55,3 @@ const command: CommandOptions = {
 
     }
 };
-
-export default command;

@@ -3,7 +3,7 @@ import CommandExecutionContext from "../../../commands/command-execution-context
 import {Message, RichEmbed} from "discord.js";
 import Utils from "../../../core/utils";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "snipe",
         desc: "View the last deleted message in this channel"
@@ -36,5 +36,3 @@ const command: CommandOptions = {
         }
     }
 };
-
-export default command;

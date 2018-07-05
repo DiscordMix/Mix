@@ -2,7 +2,7 @@ import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 import SetupHelper from "../../../core/setup-helper";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "test",
         desc: "Test stuff"
@@ -31,5 +31,3 @@ const command: CommandOptions = {
         context.ok("test");
     }
 };
-
-export default command;

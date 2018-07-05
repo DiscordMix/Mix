@@ -43,7 +43,7 @@ const tips = [
     "We host events randomly! Stay tuned and keep an eye under the Events category for special event channels"
 ];
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "tip",
         desc: "View a random tip"
@@ -64,5 +64,3 @@ const command: CommandOptions = {
         lastTipIndex = tipIndex;
     }
 };
-
-export default command;

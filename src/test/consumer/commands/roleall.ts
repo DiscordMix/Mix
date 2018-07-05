@@ -1,7 +1,7 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "roleall",
         desc: "Add a role to all members",
@@ -15,5 +15,3 @@ const command: CommandOptions = {
         // TODO
     }
 };
-
-export default command;

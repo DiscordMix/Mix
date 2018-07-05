@@ -3,7 +3,7 @@ import CommandExecutionContext from "../command-execution-context";
 import JsonAuthStore from "../auth-stores/json-auth-store";
 import {GuildMember} from "discord.js";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "setauth",
         desc: "Manage authentication levels",
@@ -44,5 +44,3 @@ const command: CommandOptions = {
         await context.ok(`<@${member.id}> now has authorization level of **${context.arguments[1]}**.`);
     }
 };
-
-export default command;

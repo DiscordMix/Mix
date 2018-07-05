@@ -3,7 +3,7 @@ import CommandExecutionContext from "../../../commands/command-execution-context
 import {GuildMember, RichEmbed} from "discord.js";
 import Utils from "../../../core/utils";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "whois",
         desc: "View information about a user",
@@ -45,5 +45,3 @@ const command: CommandOptions = {
             .addField("User ID", member.id));
     }
 };
-
-export default command;

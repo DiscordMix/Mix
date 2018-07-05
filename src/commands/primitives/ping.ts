@@ -1,7 +1,7 @@
 import {CommandOptions} from "../command";
 import CommandExecutionContext from "../command-execution-context";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "ping",
         desc: "View the latency and heartbeat of the bot"
@@ -11,5 +11,3 @@ const command: CommandOptions = {
         context.ok(`:ping_pong: ${context.bot.client.ping}ms`); // TODO: Missing heartbeat
     }
 };
-
-export default command;

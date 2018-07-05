@@ -1,7 +1,7 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "purge",
         desc: "Delete messages in bulk",
@@ -31,5 +31,3 @@ const command: CommandOptions = {
         ]
     }
 };
-
-export default command;

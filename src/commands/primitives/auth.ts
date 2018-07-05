@@ -1,7 +1,7 @@
 import {CommandOptions} from "../command";
 import CommandExecutionContext from "../command-execution-context";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "auth",
         desc: "View your authentication level"
@@ -13,5 +13,3 @@ const command: CommandOptions = {
         await context.ok(`:zap: Your authentication level is **${authLevel !== null ? authLevel.charAt(0).toUpperCase() + authLevel.slice(1) : "Unknown"}**`);
     }
 };
-
-export default command;

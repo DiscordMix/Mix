@@ -1,7 +1,7 @@
 import {CommandOptions} from "../command";
 import CommandExecutionContext from "../command-execution-context";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "help",
         desc: "View available commands and their descriptions"
@@ -13,5 +13,3 @@ const command: CommandOptions = {
             .join("\n"), "Help - Available Commands");
     }
 };
-
-export default command;

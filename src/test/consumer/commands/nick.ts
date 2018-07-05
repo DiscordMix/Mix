@@ -2,7 +2,7 @@ import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 import Permission from "../../../core/permission";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "nick",
         desc: "Manage nicknames",
@@ -21,5 +21,3 @@ const command: CommandOptions = {
         await context.message.member.setNickname(context.arguments[0]);
     }
 };
-
-export default command;

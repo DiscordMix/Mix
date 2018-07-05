@@ -2,9 +2,8 @@ import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 import Permission from "../../../core/permission";
 import ChatEnvironment from "../../../core/chat-environment";
-import ConsumerAPI from "../consumer-api";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "mute",
         desc: "Mute a user",
@@ -54,5 +53,3 @@ const command: CommandOptions = {
         });
     }
 };
-
-export default command;

@@ -2,7 +2,7 @@ import {CommandOptions} from "../../../commands/command";
 import CommandExecutionContext from "../../../commands/command-execution-context";
 import {exec} from "child_process";
 
-const command: CommandOptions = {
+export default <CommandOptions>{
     meta: {
         name: "update",
         desc: "Pull changes from the git repository",
@@ -40,5 +40,3 @@ const command: CommandOptions = {
         });
     }
 };
-
-export default command;

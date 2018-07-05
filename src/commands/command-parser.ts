@@ -8,11 +8,11 @@ export default class CommandParser {
     /**
      * @param {string} commandString
      * @param {CommandManager} manager
-     * @param {string} prefix
+     * @param {Array<string>} prefixes
      * @return {Command|null}
      */
-    static parse(commandString: string, manager: CommandManager, prefix: string): Command | null {
-        const commandBase = this.getCommandBase(commandString, prefix);
+    static parse(commandString: string, manager: CommandManager, prefixes: Array<string>): Command | null {
+        const commandBase = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
             return manager.getByName(commandBase);
@@ -24,15 +24,17 @@ export default class CommandParser {
     /**
      * @param {string} commandString
      * @param {CommandManager} manager
-     * @param {string} prefix
+     * @param {string} prefixes
      * @return {boolean}
      */
-    static isValid(commandString: string, manager: CommandManager, prefix: string): boolean {
-        if (commandString.startsWith(prefix)) {
-            const commandBase = this.getCommandBase(commandString, prefix);
+    static isValid(commandString: string, manager: CommandManager, prefixes: Array<string>): boolean {
+        for (let i: number = 0; i < prefixes.length; i++) {
+            if (commandString.startsWith(prefixes[i])) {
+                const commandBase = this.getCommandBase(commandString, prefixes);
 
-            if (commandBase) {
-                return manager.isRegistered(commandBase);
+                if (commandBase) {
+                    return manager.isRegistered(commandBase);
+                }
             }
         }
 
@@ -41,14 +43,16 @@ export default class CommandParser {
 
     /**
      * @param {string} commandString
-     * @param {string} prefix
+     * @param {Array<string>} prefixes
      * @return {string|null}
      */
-    static getCommandBase(commandString: string, prefix: string): string | null {
-        const regexResult = new RegExp(`^${Utils.escapeRegexString(prefix)}([a-zA-Z]+)`).exec(commandString);
+    static getCommandBase(commandString: string, prefixes: Array<string>): string | null {
+        for (let i: number = 0; i < prefixes.length; i++) {
+            const regexResult = new RegExp(`^${Utils.escapeRegexString(prefixes[i])}([a-zA-Z]+)`).exec(commandString);
 
-        if (regexResult) {
-            return regexResult[1];
+            if (regexResult) {
+                return regexResult[1];
+            }
         }
 
         return null;

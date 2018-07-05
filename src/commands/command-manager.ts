@@ -237,6 +237,7 @@ export default class CommandManager /* extends Collection */ {
     }
 
     /**
+     * @todo Split this method into a class
      * @todo Since it's returning a Promise, review
      * @param {CommandExecutionContext} context
      * @param {Command} command The command to handle

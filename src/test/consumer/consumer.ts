@@ -13,7 +13,7 @@ Log.level = LogLevel.Debug;
 const settings = new Settings({
     general: {
         token: process.env.AC_TOKEN ? process.env.AC_TOKEN : "",
-        prefix: process.env.AC_PREFIX ? process.env.AC_PREFIX : "="
+        prefixes: [process.env.AC_PREFIX ? process.env.AC_PREFIX : "="]
     },
 
     paths: {

@@ -35,6 +35,7 @@ export interface BotOptions {
     readonly userGroups?: Array<UserGroup>;
     readonly checkCommands?: boolean;
     readonly owner?: Snowflake;
+    readonly ignoreBots?: boolean;
 }
 
 /**
@@ -60,6 +61,7 @@ export default class Bot extends EventEmitter {
     readonly userGroups: Array<UserGroup>;
     readonly checkCommands: boolean;
     readonly owner?: Snowflake;
+    readonly ignoreBots: boolean;
 
     private setupStart: number = 0;
 
@@ -153,7 +155,8 @@ export default class Bot extends EventEmitter {
             "usage",
             "ping",
             "auth",
-            "setauth"
+            "setauth",
+            "trigger"
         ];
 
         /**
@@ -192,6 +195,12 @@ export default class Bot extends EventEmitter {
          * @readonly
          */
         this.owner = options.owner;
+
+        /**
+         * @type {boolean}
+         * @readonly
+         */
+        this.ignoreBots = options.ignoreBots !== undefined ? options.ignoreBots : true;
 
         return this;
     }
@@ -233,27 +242,6 @@ export default class Bot extends EventEmitter {
     setupEvents(): void {
         Log.verbose("[Bot.setupEvents] Setting up Discord events");
 
-        // TODO: Should be a property/option on Bot, not hardcoded
-        // TODO: Find better position
-        // TODO: Merge this resolvers with the (if provided) provided
-        // ones by the user.
-        const resolvers: any = {
-            user: (arg: string) => Utils.resolveId(arg),
-            channel: (arg: string) => Utils.resolveId(arg),
-            role: (arg: string) => Utils.resolveId(arg),
-            state: (arg: string) => Utils.translateState(arg),
-
-            member: (arg: string, message: Message): GuildMember | null => {
-                const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg));
-
-                if (resolvedMember) {
-                    return resolvedMember;
-                }
-
-                return null;
-            }
-        };
-
         // Discord client events
         this.client.on("ready", async () => {
             if (!this.console.ready) {
@@ -277,43 +265,65 @@ export default class Bot extends EventEmitter {
             Log.success(`[Bot.setupEvents] Ready | Took ${rounded}${suffix}`);
         });
 
-        this.client.on("message", async (message: any) => {
-            // TODO: Add support for multiple prefixes
-            if (!message.author.bot && message.content.startsWith(this.settings.general.prefix) && CommandParser.isValid(message.content, this.commands, this.settings.general.prefix)) {
-                const executionOptions: CommandExecutionContextOptions = {
-                    message: message,
-                    args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers, message),
-                    bot: this,
-
-                    // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
-                    // TODO: CRITICAL: Default access level set to 0
-                    auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.member.roles.array().map((role: Role) => role.name), message.author.id) : 0,
-                    emojis: this.emojis,
-                    label: CommandParser.getCommandBase(message.content, this.settings.general.prefix)
-                };
-
-                const command = CommandParser.parse(
-                    message.content,
-                    this.commands,
-                    this.settings.general.prefix
-                );
-
-                if (command) {
-                    this.commands.handle(
-                        new CommandExecutionContext(executionOptions),
-                        command
-                    );
-                }
-                else {
-                    Log.error("[Bot.setupEvents] Failed parsing command");
-                }
-            }
-            else if (message.content === "?prefix" && this.prefixCommand) {
-                message.channel.send(`Command prefix: **${this.settings.general.prefix}** | Powered by Anvil v**${await Utils.getAnvilVersion()}**`);
-            }
-        });
-
+        this.client.on("message", this.handleMessage.bind(this));
         Log.success("[Bot.setupEvents] Discord events setup completed");
+    }
+
+    private async handleMessage(message: Message): Promise<void> {
+        // TODO: Should be a property/option on Bot, not hardcoded
+        // TODO: Find better position
+        // TODO: Merge this resolvers with the (if provided) provided
+        // ones by the user.
+        const resolvers: any = {
+            user: (arg: string) => Utils.resolveId(arg),
+            channel: (arg: string) => Utils.resolveId(arg),
+            role: (arg: string) => Utils.resolveId(arg),
+            state: (arg: string) => Utils.translateState(arg),
+
+            member: (arg: string, message: Message): GuildMember | null => {
+                const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg));
+
+                if (resolvedMember) {
+                    return resolvedMember;
+                }
+
+                return null;
+            }
+        };
+
+        // TODO: Cannot do .startsWith with a prefix array
+        if ((!message.author.bot || (message.author.bot && !this.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.isValid(message.content, this.commands, this.settings.general.prefixes)) {
+            const executionOptions: CommandExecutionContextOptions = {
+                message: message,
+                args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commands.argumentTypes, resolvers, message),
+                bot: this,
+
+                // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
+                // TODO: CRITICAL: Default access level set to 0
+                auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
+                emojis: this.emojis,
+                label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
+            };
+
+            const command = CommandParser.parse(
+                message.content,
+                this.commands,
+                this.settings.general.prefixes
+            );
+
+            if (command) {
+                this.commands.handle(
+                    new CommandExecutionContext(executionOptions),
+                    command
+                );
+            }
+            else {
+                Log.error("[Bot.setupEvents] Failed parsing command");
+            }
+        }
+        else if (message.content === "?prefix" && this.prefixCommand) {
+            message.channel.send(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by Anvil v**${await Utils.getAnvilVersion()}**`);
+        }
     }
 
     /**

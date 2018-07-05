@@ -24,11 +24,11 @@ export default class BotBuilder {
     }
 
     /**
-     * @param {string} prefix
+     * @param {Array<string>} prefixes
      * @return {BotBuilder}
      */
-    setPrefix(prefix: string): BotBuilder {
-        this.settings.general.prefix = prefix;
+    setPrefixes(prefixes: Array<string>): BotBuilder {
+        this.settings.general.prefixes = prefixes;
 
         return this;
     }

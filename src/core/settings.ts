@@ -9,7 +9,7 @@ const Typer = require("@raxor1234/typer/typer");
 // in code.
 export interface SettingsGeneral {
     readonly token: string;
-    readonly prefix: string;
+    readonly prefixes: Array<string>;
 }
 
 export interface SettingsKeys {

@@ -7,10 +7,10 @@ const command: CommandOptions = {
         desc: "View your authentication level"
     },
 
-    executed: (context: CommandExecutionContext): void => {
+    executed: async (context: CommandExecutionContext): Promise<void> => {
         const authLevel: string | null = context.bot.authStore.getSchemaRankName(context.bot.authStore.getAuthLevel(context.message.guild.id, context.sender.id));
 
-        context.ok(`:zap: Your authentication level is **${authLevel !== null ? authLevel.charAt(0).toUpperCase() + authLevel.slice(1) : "Unknown"}**`);
+        await context.ok(`:zap: Your authentication level is **${authLevel !== null ? authLevel.charAt(0).toUpperCase() + authLevel.slice(1) : "Unknown"}**`);
     }
 };
 

@@ -4,6 +4,7 @@ import {GuildMember, Message, RichEmbed, User} from "discord.js";
 import Utils from "../../../core/utils";
 import Log from "../../../core/log";
 import ConsumerAPI from "../consumer-api";
+import CommandParser from "../../../commands/command-parser";
 
 function mute(member: GuildMember): void {
     member.addRole(member.guild.roles.find("name", "Muted"));
@@ -105,7 +106,7 @@ const behaviour: BehaviourOptions = {
         // Save deleted messages for snipe command
         bot.client.on("messageDelete", (message: Message) => {
             // TODO: Temporary hotfix
-            if (message.content.substr(bot.settings.general.prefix.length) === "snipe") {
+            if (CommandParser.getCommandBase(message.content, bot.settings.general.prefixes) === "snipe") {
                 return;
             }
 

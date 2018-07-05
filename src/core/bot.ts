@@ -156,7 +156,7 @@ export default class Bot extends EventEmitter {
             "ping",
             "auth",
             "setauth",
-            "trigger"
+            "prefix"
         ];
 
         /**
@@ -225,9 +225,6 @@ export default class Bot extends EventEmitter {
         // Load primitive commands
         await this.commandLoader.loadPrimitives(this.primitiveCommands);
 
-        // Create the temp folder
-        await this.temp.create();
-
         // Setup the Discord client's events
         this.setupEvents();
 
@@ -246,6 +243,9 @@ export default class Bot extends EventEmitter {
         this.client.on("ready", async () => {
             // Setup temp
             this.temp.setup(this.client.user.id);
+
+            // Create the temp folder
+            await this.temp.create();
 
             if (!this.console.ready) {
                 // Setup the console command interface
@@ -409,6 +409,9 @@ export default class Bot extends EventEmitter {
             Log.verbose("[Bot.disconnect] Saving JsonStore");
             await this.dataStore.save();
         }
+
+        // Reset the temp folder before shutdown
+        await this.temp.reset();
 
         // TODO
         //this.settings.save();

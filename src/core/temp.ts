@@ -31,6 +31,10 @@ export default class Temp {
     async create(): Promise<any> {
         return new Promise((resolve) => {
             if (!fs.existsSync(this.resolvedPath)) {
+                if (!fs.existsSync("tmp")) {
+                    fs.mkdirSync("tmp");
+                }
+
                 fs.mkdir(this.resolvedPath, (error: Error) => {
                     if (error) {
                         Log.error(`There was an error creating the temp folder for the bot: ${this.id} (${error.message})`);
@@ -41,6 +45,23 @@ export default class Temp {
             }
             else {
                 Log.warn(`[Temp.create] Temp folder already exists for the bot: ${this.id}. This may be due to an improper bot shutdown.`);
+
+                resolve();
+            }
+        });
+    }
+
+    // TODO: Return type
+    async reset(): Promise<any> {
+        return new Promise((resolve) => {
+            if (fs.existsSync(this.resolvedPath)) {
+                fs.unlink(this.resolvedPath, (error: Error) => {
+                    if (error) {
+                        Log.error(`[Temp.reset] There was an error while resetting the temp folder: ${error.message}`)
+                    }
+
+                    resolve();
+                });
             }
         });
     }

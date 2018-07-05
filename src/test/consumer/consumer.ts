@@ -4,6 +4,7 @@ import Settings from "../../core/settings";
 import Log, {LogLevel} from "../../core/log";
 import ConsumerAPI from "./consumer-api";
 import JsonStore from "../../data-stores/json-store";
+import {TextChannel} from "discord.js";
 
 const path = require("path");
 const baseDir = "./src/test/consumer";
@@ -55,7 +56,22 @@ async function start() {
         const storedCounter = store.get("case_counter");
 
         ConsumerAPI.caseCounter = storedCounter ? storedCounter : 0;
-        ConsumerAPI.modLogChannel = bot.client.guilds.get("286352649610199052").channels.get("458794765308395521"); // Gaming Corner => mod-log
+
+        const gamingCorner = bot.client.guilds.get("286352649610199052");
+
+        if (gamingCorner) {
+            const modLogChannel: TextChannel = <TextChannel>gamingCorner.channels.get("458794765308395521");
+
+            if (modLogChannel) {
+                ConsumerAPI.modLogChannel = modLogChannel;
+            }
+            else {
+                Log.error("[Consumer.start] The ModLog channel was not found");
+            }
+        }
+        else {
+            Log.error("[Consumer.start] The Gaming Corner guild was not found");
+        }
 
         /* await ConsumerAPI.reportCase({
             color: "RED",

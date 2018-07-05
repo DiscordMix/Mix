@@ -1,18 +1,25 @@
 import Log from "./log";
 import Utils from "./utils";
+import {Snowflake} from "discord.js";
 
 const fs = require("fs");
 const path = require("path");
 
 export default class Temp {
-    readonly id: string;
-    readonly resolvedPath: string;
+    private id?: string;
+    private resolvedPath?: string;
 
     /**
      * @todo Temp base path should be optionally determined from settings
-     * @param {string} id
      */
-    constructor(id: string) {
+    constructor() {
+        //
+    }
+
+    /**
+     * @param {Snowflake} id
+     */
+    setup(id: Snowflake): void {
         this.id = id;
         this.resolvedPath = Temp.resolvePath(this.id);
     }

@@ -11,7 +11,7 @@ import Log from "./log";
 import DataStore from "../data-stores/data-store";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import {GuildMember, Message, Role, Snowflake} from "discord.js";
+import {Client, GuildMember, Message, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
 import {CommandArgumentStyle, UserGroup} from "../commands/command";
@@ -47,7 +47,7 @@ export default class Bot extends EventEmitter {
     readonly dataStore?: DataStore;
     readonly authStore: CommandAuthStore;
     readonly emojis?: EmojiCollection;
-    readonly client: any; // TODO
+    readonly client: Client; // TODO
     readonly behaviours: BehaviourManager;
     readonly commands: CommandManager;
     readonly commandLoader: CommandLoader;
@@ -84,7 +84,7 @@ export default class Bot extends EventEmitter {
          * @type {Temp}
          * @readonly
          */
-        this.temp = new Temp("777");
+        this.temp = new Temp();
 
         /**
          * @type {DataStore | undefined}
@@ -244,6 +244,9 @@ export default class Bot extends EventEmitter {
 
         // Discord client events
         this.client.on("ready", async () => {
+            // Setup temp
+            this.temp.setup(this.client.user.id);
+
             if (!this.console.ready) {
                 // Setup the console command interface
                 this.console.setup(this);

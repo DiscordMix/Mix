@@ -18,7 +18,7 @@ const settings = new Settings({
     },
 
     paths: {
-        commands: path.resolve(path.join(__dirname, "./commandStore")),
+        commands: path.resolve(path.join(__dirname, "./commands")),
         behaviours: path.resolve(path.join(__dirname, "./behaviours"))
     }
 });

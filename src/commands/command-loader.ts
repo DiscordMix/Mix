@@ -6,18 +6,18 @@ const fs = require("fs");
 const path = require("path");
 
 export default class CommandLoader {
-    private readonly manager: CommandStore;
+    private readonly commandStore: CommandStore;
 
     /**
-     * @param {CommandStore} manager
+     * @param {CommandStore} commandStore
      */
-    constructor(manager: CommandStore) {
+    constructor(commandStore: CommandStore) {
         /**
          * @type {CommandStore}
          * @private
          * @readonly
          */
-        this.manager = manager;
+        this.commandStore = commandStore;
     }
 
     /**
@@ -25,9 +25,9 @@ export default class CommandLoader {
      * @return {Promise<number>}
      */
     reloadAll(): Promise<number> {
-        this.manager.unloadAll();
+        this.commandStore.unloadAll();
 
-        return this.loadAll(this.manager.path);
+        return this.loadAll(this.commandStore.path);
     }
 
     /**
@@ -37,7 +37,7 @@ export default class CommandLoader {
      */
     load(file: string, moduleName: string): boolean {
         if (!file.startsWith("@") && file.endsWith(".js")) {
-            const modulePath = path.join(this.manager.path, moduleName);
+            const modulePath = path.join(this.commandStore.path, moduleName);
 
             let module = require(modulePath);
 
@@ -54,7 +54,7 @@ export default class CommandLoader {
 
             // Validate the command before registering it
             if (Command.validate(module)) {
-                this.manager.register(new Command(module));
+                this.commandStore.register(new Command(module));
 
                 return true;
             }
@@ -126,7 +126,7 @@ export default class CommandLoader {
 
             // Validate the command before registering it
             if (Command.validate(module)) {
-                this.manager.register(new Command(module));
+                this.commandStore.register(new Command(module));
 
                 resolve(true);
             }

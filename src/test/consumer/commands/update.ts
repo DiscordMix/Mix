@@ -17,7 +17,7 @@ export default <CommandOptions>{
 
     executed: (context: CommandContext): Promise<void> => {
         return new Promise((resolve) => {
-            exec("git pull", (error: any, stdOut: string | Buffer) => {
+            exec("git pull", async (error: any, stdOut: string | Buffer) => {
                 if (error) {
                     context.fail(`There was an error while pulling changes. (${error.message})`, false);
 
@@ -27,15 +27,9 @@ export default <CommandOptions>{
                 context.ok(`Pulling successfully completed. Restarting!\n\`\`\`${stdOut}\`\`\``);
 
                 // TODO: Use resolved path instead
-                exec("npm run build && pm2 start dist/test/consumer/consumer.js && pm2 delete 0", (error: any) => {
-                    if (error) {
-                        context.fail(`There was an error while restarting. (${error.message})`, false);
-
-                        return;
-                    }
-
-                    resolve();
-                });
+                await context.bot.disconnect();
+                exec("./start.sh");
+                resolve();
             });
         });
     }

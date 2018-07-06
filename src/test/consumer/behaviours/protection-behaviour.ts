@@ -1,7 +1,6 @@
 import {BehaviourOptions} from "../../../behaviours/behaviour";
 import Bot from "../../../core/bot";
-import {GuildMember, Message, User} from "discord.js";
-import Utils from "../../../core/utils";
+import {GuildMember, Message} from "discord.js";
 import Log from "../../../core/log";
 import ConsumerAPI, {ConsumerAPIv2} from "../consumer-api";
 import CommandParser from "../../../commands/command-parser";
@@ -9,25 +8,6 @@ import CommandParser from "../../../commands/command-parser";
 function mute(member: GuildMember): void {
     member.addRole(member.guild.roles.find("name", "Muted"));
 }
-
-interface WarnOptions {
-    readonly moderator: User;
-    readonly user: User;
-    readonly channel: any;
-    readonly reason: string;
-}
-
-// TODO: Return type
-const warn = (options: WarnOptions): Promise<any> => {
-    return Utils.send({
-        channel: options.channel,
-        user: options.moderator,
-        footer: `Warned by ${options.moderator.username}`,
-        message: `<@${options.user.id}> was warned for **${options.reason}**`,
-        title: "Warn | Case #0",
-        color: "GOLD"
-    });
-};
 
 export default <BehaviourOptions>{
     name: "Protection",

@@ -24,11 +24,7 @@ export default <CommandOptions>{
                     return;
                 }
 
-                context.ok(`Pulling successfully completed. Restarting!\n\`\`\`${stdOut}\`\`\``);
-
-                // TODO: Use resolved path instead
-                await context.bot.disconnect();
-                exec("./start.sh");
+                context.ok(`Pulling successfully completed.\n\`\`\`${stdOut}\`\`\``);
                 resolve();
             });
         });

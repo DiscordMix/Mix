@@ -27,7 +27,7 @@ export default <CommandOptions>{
                 context.ok(`Pulling successfully completed. Restarting!\n\`\`\`${stdOut}\`\`\``);
 
                 // TODO: Use resolved path instead
-                exec("pm2 delete 0 && npm run build && node dist/test/consumer/consumer.js", (error: any) => {
+                exec("npm run build && pm2 start dist/test/consumer/consumer.js && pm2 delete 0", (error: any) => {
                     if (error) {
                         context.fail(`There was an error while restarting. (${error.message})`, false);
 

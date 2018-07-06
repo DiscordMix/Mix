@@ -41,7 +41,7 @@ export default <CommandOptions>{
             .addField("Joined Server", Utils.timeAgo(member.joinedTimestamp))
             .addField("Account Created", Utils.timeAgo(member.user.createdTimestamp))
             .addField("Last Message", member.lastMessage ? member.lastMessage.content : "*None*")
-            .addField("Roles", finalRoles)
+            .addField(`Roles [${roles.length - 1}]`, finalRoles)
             .addField("User ID", member.id));
     }
 };

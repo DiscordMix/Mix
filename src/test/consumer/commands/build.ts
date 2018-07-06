@@ -11,7 +11,9 @@ export default <CommandOptions>{
     restrict: {
         specific: [
             "@285578743324606482" // Owner
-        ]
+        ],
+
+        cooldown: 5
     },
 
     executed: (context: CommandContext): Promise<void> => {

@@ -51,7 +51,10 @@ export default class Temp {
         });
     }
 
-    // TODO: Return type
+    /**
+     * @todo: Return type
+     * @returns {Promise<*>}
+     */
     async reset(): Promise<any> {
         return new Promise((resolve) => {
             if (fs.existsSync(this.resolvedPath)) {

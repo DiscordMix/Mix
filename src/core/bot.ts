@@ -37,6 +37,8 @@ export interface BotOptions {
     readonly owner?: Snowflake;
     readonly ignoreBots?: boolean;
     readonly updateOnMessageEdit?: boolean;
+
+    // TODO: Make use of authGroups
     readonly authGroups?: any;
 }
 

@@ -53,7 +53,7 @@ export default class Temp {
 
     /**
      * @todo: Return type
-     * @returns {Promise<*>}
+     * @return {Promise<*>}
      */
     async reset(): Promise<any> {
         return new Promise((resolve) => {

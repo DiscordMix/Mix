@@ -29,7 +29,7 @@ export default class EditableMessage {
         }
 
         /**
-         * @type {Discord.Message}
+         * @type {Message}
          * @private
          * @readonly
          */

@@ -40,7 +40,7 @@ export default class BehaviourManager {
 
     /**
      * @param {Behaviour} behaviour
-     * @returns {boolean}
+     * @return {boolean}
      */
     register(behaviour: Behaviour): boolean {
         if (!this.getBehaviour(behaviour.name)) {
@@ -54,7 +54,7 @@ export default class BehaviourManager {
 
     /**
      * @param {Array<Behaviour>} multipleBehaviours
-     * @returns {number}
+     * @return {number}
      */
     registerMultiple(multipleBehaviours: Array<Behaviour>): number {
         let registered: number = 0;
@@ -70,7 +70,7 @@ export default class BehaviourManager {
 
     /**
      * @param {string} name
-     * @returns {boolean}
+     * @return {boolean}
      */
     enable(name: string): boolean {
         const behaviour: Behaviour | null = this.getBehaviour(name);

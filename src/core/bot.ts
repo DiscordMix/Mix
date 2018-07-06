@@ -230,7 +230,7 @@ export default class Bot extends EventEmitter {
     }
 
     /**
-     * @returns {*}
+     * @return {*}
      */
     getAPI(): any {
         return this.api;

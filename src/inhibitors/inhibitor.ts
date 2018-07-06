@@ -14,8 +14,20 @@ export default class Inhibitor {
     readonly meta: InhibitorMeta;
     readonly inspector: (context: CommandContext) => void;
 
+    /**
+     * @param {InhibitorOptions} options
+     */
     constructor(options: InhibitorOptions) {
+        /**
+         * @type {InhibitorMeta}
+         * @readonly
+         */
         this.meta = options.meta;
+
+        /**
+         * @type {(context: CommandContext) => void}
+         * @readonly
+         */
         this.inspector = options.inspector;
     }
 }

@@ -67,6 +67,7 @@ export default class CommandHandler {
      * @todo Since it's returning a Promise, review
      * @param {CommandContext} context
      * @param {Command} command The command to handle
+     * @param {*} api
      * @return {Promise<Boolean>} Whether the command was successfully executed
      */
     async handle(context: CommandContext, command: Command): Promise<boolean> {
@@ -177,7 +178,8 @@ export default class CommandHandler {
         else {
             try {
                 // TODO: Only check if result is true, make sure commandStore return booleans
-                const actualResult = command.executed(context, this.commandStore.bot.api);
+                // TODO: Bot should be accessed protected (from this class)
+                const actualResult = command.executed(context, this.commandStore.bot.getAPI());
                 const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
 
                 const commandCooldown: CommandCooldown = {

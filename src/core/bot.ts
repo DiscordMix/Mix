@@ -212,6 +212,13 @@ export default class Bot extends EventEmitter {
     }
 
     /**
+     * @returns {*}
+     */
+    getAPI(): any {
+        return this.api;
+    }
+
+    /**
      * Setup the bot
      * @return {Promise<Bot>}
      */
@@ -220,10 +227,13 @@ export default class Bot extends EventEmitter {
         this.setupStart = performance.now();
 
         // Load behaviours
-        const behavioursLoaded = this.behaviours.loadAllSync();
+        const behavioursLoaded: number = this.behaviours.loadAllSync();
 
-        Log.success(`[Bot.setup] Loaded ${behavioursLoaded} behaviours`);
-        this.behaviours.enableAll();
+        Log.verbose(`[Bot.setup] Loaded ${behavioursLoaded} behaviours`);
+
+        const behavioursEnabled: number = this.behaviours.enableAll();
+
+        Log.success(`[Bot.setup] Enabled ${behavioursEnabled} behaviours`);
 
         // Load commandStore
         await this.commandLoader.reloadAll();
@@ -322,6 +332,7 @@ export default class Bot extends EventEmitter {
                         emojis: this.emojis,
                         label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
                     }),
+
                     command
                 );
             }

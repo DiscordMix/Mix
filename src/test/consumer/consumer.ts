@@ -59,7 +59,7 @@ async function start() {
         });
 
         await (await bot.setup(api)).connect();
-
+        api.setup();
 
         //////////////
         ConsumerAPI.store = store;

@@ -38,7 +38,7 @@ const warn = (options: WarnOptions): Promise<any> => {
 };
 
 export default <BehaviourOptions>{
-    name: "Special Channels",
+    name: "Protection",
 
     enabled: (bot: Bot, api: any): void => {
         bot.client.on("message", async (message: Message) => {
@@ -72,8 +72,9 @@ export default <BehaviourOptions>{
                 }
 
                 // TODO: What about if it has been taken action against?
-                // TODO: Something around posting suspected violations giving uncatched missing permissions error
-                const suspectedViolation: string = api.isMessageSuspicious(message);
+                // TODO: Something around posting suspected violations giving uncaught missing permissions error
+                // TODO: Disabled because of API v2
+                /*const suspectedViolation: string = api.isMessageSuspicious(message);
 
                 if (suspectedViolation !== "None") {
                     await api.flagMessage(message, suspectedViolation);
@@ -99,7 +100,7 @@ export default <BehaviourOptions>{
                             }
                         }
                     });
-                }
+                }*/
             }
         });
 

@@ -17,7 +17,7 @@ export default <CommandOptions>{
         issuerPerms: [Permission.ManageRoles, Permission.ManageGuild]
     },
 
-    executed: (context: CommandContext, api: any): void => {
+    executed: (context: CommandContext): void => {
         if (!context.arguments[1]) {
             context.fail("No member found");
 

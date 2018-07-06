@@ -98,24 +98,27 @@ export interface ConsumerAPIv2Options {
 }
 
 export class ConsumerAPIv2 {
+    readonly unresolvedChannels: ConsumerAPIChannels;
+
     private readonly bot: Bot;
     private readonly guild: Snowflake;
 
     // TODO: Type
     private deletedMessages: any;
-    private readonly channels: ConsumerAPIResolvedChannels;
+    private channels?: ConsumerAPIResolvedChannels;
 
     constructor(options: ConsumerAPIv2Options) {
         this.bot = options.bot;
-
         this.guild = options.guild;
-
-        this.channels = {
-            modLog: this.getChannel(options.channels.modLog),
-            suggestions: this.getChannel(options.channels.suggestions)
-        };
-
+        this.unresolvedChannels = options.channels;
         this.deletedMessages = [];
+    }
+
+    setup(): void {
+        this.channels = {
+            modLog: this.getChannel(this.unresolvedChannels.modLog),
+            suggestions: this.getChannel(this.unresolvedChannels.suggestions)
+        };
     }
 
     getGuild(): Guild {
@@ -145,6 +148,8 @@ export class ConsumerAPIv2 {
     }
 
     getCase(): number {
+        // TODO
+
         return 0;
     }
 
@@ -205,9 +210,16 @@ export class ConsumerAPIv2 {
     }
 
     async addSuggestion(suggestion: string, author: GuildMember): Promise<boolean> {
+        if (!this.channels) {
+            Log.throw("[ConsumerAPIv2.addSuggestion] Consumer API is not setup");
+
+            return false;
+        }
+
         const suggestionMessage: Message = <Message>(await this.channels.suggestions.send(new RichEmbed()
             .setFooter(`Suggested by ${author.user.username}`, author.user.avatarURL)
-            .setDescription(suggestion)));
+            .setDescription(suggestion)
+            .setColor("GREEN")));
 
         if (suggestionMessage) {
             await suggestionMessage.react("⬆");
@@ -218,6 +230,12 @@ export class ConsumerAPIv2 {
     }
 
     async reportCase(options: CaseOptions): Promise<void> {
+        if (!this.channels) {
+            Log.throw("[ConsumerAPIv2.reportCase] Consumer API is not setup");
+
+            return;
+        }
+
         const caseNum = this.getCase();
 
         const embed = new RichEmbed()

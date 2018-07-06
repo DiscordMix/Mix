@@ -2,7 +2,7 @@ import {CommandOptions} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 import ChatEnvironment from "../../../core/chat-environment";
 import Utils from "../../../core/utils";
-import ConsumerAPI, {ConsumerAPIv2} from "../consumer-api";
+import {ConsumerAPIv2} from "../consumer-api";
 
 export default <CommandOptions>{
     meta: {

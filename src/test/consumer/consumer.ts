@@ -42,7 +42,9 @@ async function start() {
 
         autoDeleteCommands: false,
 
-        owner: "285578743324606482"
+        owner: "285578743324606482",
+
+        updateOnMessageEdit: true
     });
 
     if (bot.dataStore) {
@@ -56,7 +58,8 @@ async function start() {
 
             channels: {
                 suggestions: "458337067299242004",
-                modLog: "458794765308395521"
+                modLog: "458794765308395521",
+                review: "464911303291699210"
             },
 
             roles: {

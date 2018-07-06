@@ -1,6 +1,6 @@
 import {BehaviourOptions} from "../../../behaviours/behaviour";
 import Bot from "../../../core/bot";
-import {GuildMember, Message} from "discord.js";
+import {Collection, Guild, GuildMember, Message, Snowflake} from "discord.js";
 import Log from "../../../core/log";
 import ConsumerAPI, {ConsumerAPIv2} from "../consumer-api";
 import CommandParser from "../../../commands/command-parser";
@@ -28,7 +28,7 @@ export default <BehaviourOptions>{
                     // TODO: Warn
                 }
                 else {
-                    const mentions = message.mentions.members;
+                    const mentions: Collection<Snowflake, GuildMember> = message.mentions.members;
 
                     if (mentions) {
                         const mentionedUsers: Array<GuildMember> = mentions.array();
@@ -42,41 +42,41 @@ export default <BehaviourOptions>{
                             // TODO: Use/implement in Consumer API v2
                             mute(message.member);
 
-                            await message.reply("You have been muted until further notice for mass pinging.");
+                            const response: Message = <Message>(await message.reply("You have been automatically muted until further notice for mass pinging."));
+
+                            if (response) {
+                                response.delete(8000);
+                            }
                         }
                     }
                 }
 
                 // TODO: What about if it has been taken action against?
                 // TODO: Something around posting suspected violations giving uncaught missing permissions error
-                // TODO: Disabled because of API v2
-                /*const suspectedViolation: string = api.isMessageSuspicious(message);
+                const suspectedViolation: string = ConsumerAPIv2.isMessageSuspicious(message);
 
                 if (suspectedViolation !== "None") {
                     await api.flagMessage(message, suspectedViolation);
                 }
 
                 if (message && message.mentions && message.mentions.members) {
-                    message.mentions.members.array().map((member: GuildMember) => {
+                    message.mentions.members.array().map(async (member: GuildMember) => {
                         if (!message.author.bot && member.id !== message.author.id && member.roles.map((role) => role.id).includes("458827341196427265")) {
-                            message.reply("Please refrain from pinging this person under any circumstances. He/she is either a partner or special guest and should not be pinged.");
+                            const response: Message = <Message>(await message.reply("Please refrain from pinging this person under any circumstances. He/she is either a partner or special guest and should not be pinged."));
 
-                            const channel = message.guild.channels.get(channels.modLog);
+                            if (response) {
+                                response.delete(8000);
+                            }
 
-                            if (channel) {
-                                warn({
-                                    user: message.author,
-                                    reason: "pinging a partner or special guest",
-                                    moderator: message.guild.me.user,
-                                    channel: channel
-                                });
-                            }
-                            else {
-                                Log.warn("[ProtectionBehaviour] ModLog channel is either missing or invalid");
-                            }
+                            await api.warn({
+                                user: message.member,
+                                reason: "Pinging a 'Dont Ping' member",
+                                moderator: message.guild.me.user,
+                                message: message
+                            });
                         }
                     });
-                }*/
+                }
             }
         });
 

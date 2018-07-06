@@ -30,15 +30,9 @@ export default <CommandOptions>{
     // TODO: Throws unknown message
     executed: async (context: CommandContext, api: ConsumerAPIv2): Promise<void> => { // TODO: api type not working for some reason
         const target = context.message.guild.member(Utils.resolveId(context.arguments[0].id));
-        const modLog = context.message.guild.channels.get("458794765308395521");
 
         if (!target) {
             context.fail("Guild member not found");
-
-            return;
-        }
-        else if (!modLog) {
-            context.fail("ModLog channel not found");
 
             return;
         }
@@ -57,8 +51,7 @@ export default <CommandOptions>{
             moderator: context.sender,
             reason: context.arguments[1],
             user: target,
-            channel: modLog,
-            evidence: context.arguments.length === 3 ? context.arguments[2] : null,
+            evidence: context.arguments.length === 3 ? context.arguments[2] : undefined,
             message: context.message
         });
     }

@@ -4,7 +4,6 @@ import JsonProvider from "../../data-providers/json-provider";
 import Bot from "../../core/bot";
 import DataProvider from "../../data-providers/data-provider";
 import {StoredWarning} from "./commands/warnings";
-import auth from "../../commands/primitives/auth";
 
 const badWords = [
     "asshole",
@@ -46,7 +45,6 @@ export interface WarnOptionsv2 {
     readonly user: GuildMember;
     readonly moderator: User;
     readonly reason: string;
-    readonly channel: any;
     readonly message: Message;
     readonly evidence?: string;
 }
@@ -84,11 +82,13 @@ export interface CaseOptions {
 export interface ConsumerAPIChannels {
     readonly modLog: Snowflake;
     readonly suggestions: Snowflake;
+    readonly review: Snowflake;
 }
 
 export interface ConsumerAPIResolvedChannels {
     readonly modLog: TextChannel;
     readonly suggestions: TextChannel;
+    readonly review: TextChannel;
 }
 
 export interface ConsumerAPIRoles {
@@ -124,7 +124,8 @@ export class ConsumerAPIv2 {
     setup(): void {
         this.channels = {
             modLog: this.getChannel(this.unresolvedChannels.modLog),
-            suggestions: this.getChannel(this.unresolvedChannels.suggestions)
+            suggestions: this.getChannel(this.unresolvedChannels.suggestions),
+            review: this.getChannel(this.unresolvedChannels.review)
         };
     }
 
@@ -185,15 +186,21 @@ export class ConsumerAPIv2 {
     }
 
     async warn(options: WarnOptionsv2): Promise<boolean> {
-        if (!(options.channel instanceof TextChannel)) {
-            Log.error("[ConsumerAPI.warn] Expecting channel to be of type 'TextChannel'");
+        if (!this.channels) {
+            Log.error("[ConsumerAPI.warn] Expecting channels");
+
+            return false;
+        }
+
+        if (!(this.channels.modLog instanceof TextChannel)) {
+            Log.error("[ConsumerAPI.warn] Expecting ModLog channel to be of type 'TextChannel'");
 
             return false;
         }
 
         const caseNum: number = ConsumerAPI.getCase();
 
-        options.channel.send(new RichEmbed()
+        this.channels.modLog.send(new RichEmbed()
             .setTitle(`Warn | Case #${caseNum}`)
             .addField("Member", `<@${options.user.id}> (${options.user.user.username})`)
             .addField("Reason", options.reason)
@@ -259,6 +266,52 @@ export class ConsumerAPIv2 {
         }
 
         this.channels.modLog.send(embed);
+    }
+
+    // TODO: Using ConsumerAPI
+    static isMessageSuspicious(message: Message): string {
+        if (message.content.length > 500) {
+            return SuspectedViolation.Long;
+        }
+        else if (message.mentions.users.size > 3) {
+            return SuspectedViolation.MassMentions;
+        }
+        else if (!message.author.bot && message.content.split("`").length < 6 && message.content.split("\n").length > 2) {
+            return SuspectedViolation.MultipleNewLines;
+        }
+        else if (ConsumerAPI.countBadWords(message.content) > 2) {
+            return SuspectedViolation.ExcessiveProfanity;
+        }
+        else if (ConsumerAPI.containsRacialSlurs(message.content)) {
+            return SuspectedViolation.RacialSlurs;
+        }
+
+        // TODO: Add missing checks
+
+        return SuspectedViolation.None;
+    }
+
+    async flagMessage(message: Message, suspectedViolation: string): Promise<void> {
+        if (!this.channels) {
+            Log.error("[ConsumerAPI.flagMessage] Expecting channels");
+
+            return;
+        }
+        else if (!this.channels.review) {
+            Log.error("[ConsumerAPI.flagMessage] Review channel does not exist, failed to flag message");
+
+            return;
+        }
+
+        await this.channels.review.send(new RichEmbed()
+            .setTitle("Suspicious Message")
+            .addField("Sender", `<@${message.author.id}> (${message.author.username})`)
+            .addField("Message", message.content)
+            .addField("Channel", `<#${message.channel.id}>`)
+            .addField("Suspected Violation", suspectedViolation)
+            .addField("Message ID", message.id));
+
+        return;
     }
 }
 
@@ -399,53 +452,11 @@ export default abstract class ConsumerAPI {
         return false;
     }
 
-    static isMessageSuspicious(message: Message): string {
-        if (message.content.length > 500) {
-            return SuspectedViolation.Long;
-        }
-        else if (message.mentions.users.size > 3) {
-            return SuspectedViolation.MassMentions;
-        }
-        else if (!message.author.bot && message.content.split("\n").length > 2) {
-            return SuspectedViolation.MultipleNewLines;
-        }
-        else if (this.countBadWords(message.content) > 2) {
-            return SuspectedViolation.ExcessiveProfanity;
-        }
-        else if (this.containsRacialSlurs(message.content)) {
-            return SuspectedViolation.RacialSlurs;
-        }
-
-        // TODO: Add missing checks
-
-        return SuspectedViolation.None;
-    }
-
     static getLastDeletedMessage(channelId: Snowflake): Message | null {
         if (ConsumerAPI.deletedMessages[channelId]) {
             return ConsumerAPI.deletedMessages[channelId];
         }
 
         return null;
-    }
-
-    static async flagMessage(message: Message, suspectedViolation: string): Promise<void> {
-        const reviewChannel: any = message.guild.channels.get("1"); // TODO
-
-        if (!reviewChannel) {
-            Log.error("[ConsumerAPI.flagMessage] Review channel does not exist, failed to flag message");
-
-            return;
-        }
-
-        await reviewChannel.send(new RichEmbed()
-            .setTitle("Suspicious Message")
-            .addField("Sender", `<@${message.author.id}> (${message.author.username})`)
-            .addField("Message", message.content)
-            .addField("Channel", `<#${message.channel.id}>`)
-            .addField("Suspected Violation", suspectedViolation)
-            .addField("Message ID", message.id));
-
-        return;
     }
 }

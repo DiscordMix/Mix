@@ -60,6 +60,6 @@ export default <CommandOptions>{
             return;
         }
 
-        context.ok(warnings.map((warning: StoredWarning, index: number) => `**${index + 1}** ${warning.reason} - ${Utils.timeAgo(warning.time)}`).join("\n"));
+        context.ok(warnings.map((warning: StoredWarning, index: number) => `**${index + 1}**. ${warning.reason} - ${Utils.timeAgo(warning.time)}`).join("\n"));
     }
 };

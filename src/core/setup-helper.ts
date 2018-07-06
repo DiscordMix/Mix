@@ -85,7 +85,7 @@ export default class SetupHelper {
      * @param {(response: string) => string} responseHandler
      * @return {Promise<SetupHelperResult>}
      */
-    async finish(responseHandler?: (response: string) => string): Promise<SetupHelperResult> {
+    async finish(responseHandler?: (response: string, index: number) => string): Promise<SetupHelperResult> {
         const responses: Array<string> = [];
 
         for (let i = 0; i < this.actionMap.length; i++) {
@@ -106,7 +106,7 @@ export default class SetupHelper {
             const response = await this.awaitResponse();
 
             if (response !== null) {
-                responses.push(responseHandler ? responseHandler(response) : response);
+                responses.push(responseHandler ? responseHandler(response, i) : response);
             }
             else {
                 return {
@@ -115,8 +115,6 @@ export default class SetupHelper {
                 };
             }
         }
-
-        console.log("done");
 
         return {
             responses: responses,

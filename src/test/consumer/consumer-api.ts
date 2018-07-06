@@ -91,14 +91,20 @@ export interface ConsumerAPIResolvedChannels {
     readonly suggestions: TextChannel;
 }
 
+export interface ConsumerAPIRoles {
+    readonly muted: Snowflake;
+}
+
 export interface ConsumerAPIv2Options {
     readonly bot: Bot;
     readonly guild: Snowflake;
+    readonly roles: ConsumerAPIRoles;
     readonly channels: ConsumerAPIChannels;
 }
 
 export class ConsumerAPIv2 {
     readonly unresolvedChannels: ConsumerAPIChannels;
+    readonly roles: ConsumerAPIRoles;
 
     private readonly bot: Bot;
     private readonly guild: Snowflake;
@@ -110,6 +116,7 @@ export class ConsumerAPIv2 {
     constructor(options: ConsumerAPIv2Options) {
         this.bot = options.bot;
         this.guild = options.guild;
+        this.roles = options.roles;
         this.unresolvedChannels = options.channels;
         this.deletedMessages = [];
     }

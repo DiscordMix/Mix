@@ -40,7 +40,9 @@ async function start() {
 
         dataStore: new JsonProvider(path.resolve(path.join(__dirname, "data.json"))),
 
-        autoDeleteCommands: false
+        autoDeleteCommands: false,
+
+        owner: "285578743324606482"
     });
 
     if (bot.dataStore) {
@@ -55,6 +57,10 @@ async function start() {
             channels: {
                 suggestions: "458337067299242004",
                 modLog: "458794765308395521"
+            },
+
+            roles: {
+                muted: "463500384812531715"
             }
         });
 

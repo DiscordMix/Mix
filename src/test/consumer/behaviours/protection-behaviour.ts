@@ -1,22 +1,14 @@
 import {BehaviourOptions} from "../../../behaviours/behaviour";
 import Bot from "../../../core/bot";
-import {GuildMember, Message, RichEmbed, User} from "discord.js";
+import {GuildMember, Message, User} from "discord.js";
 import Utils from "../../../core/utils";
 import Log from "../../../core/log";
-import ConsumerAPI from "../consumer-api";
+import ConsumerAPI, {ConsumerAPIv2} from "../consumer-api";
 import CommandParser from "../../../commands/command-parser";
 
 function mute(member: GuildMember): void {
     member.addRole(member.guild.roles.find("name", "Muted"));
 }
-
-const channels = {
-    general: "286352649610199052",
-    suggestions: "458337067299242004",
-    modLog: "458794765308395521"
-};
-
-const guildId = "286352649610199052";
 
 interface WarnOptions {
     readonly moderator: User;
@@ -40,15 +32,18 @@ const warn = (options: WarnOptions): Promise<any> => {
 export default <BehaviourOptions>{
     name: "Protection",
 
-    enabled: (bot: Bot, api: any): void => {
+    enabled: (bot: Bot, api: ConsumerAPIv2): void => {
         bot.client.on("message", async (message: Message) => {
-            if (message.author.id !== "285578743324606482") {
-                if (/https?:\/\/discord\.gg\/[a-zA-Z0-9]+/gi.test(message.content) || /https?:\/\/discordapp\.com\/invite\/[a-zA-Z0-9]+/gi.test(message.content)) {
+            if (message.author.id !== bot.owner) {
+                if (message.member.roles.has(api.roles.muted) && message.deletable) {
+                    await message.delete();
+                }
+                else if (/https?:\/\/discord\.gg\/[a-zA-Z0-9]+/gi.test(message.content) || /https?:\/\/discordapp\.com\/invite\/[a-zA-Z0-9]+/gi.test(message.content)) {
                     if (message.deletable) {
                         await message.delete();
                     }
 
-                    message.reply("Discord server invites are not allowed in this server.");
+                    await message.reply("Discord server invites are not allowed in this server.");
 
                     // TODO: Warn
                 }
@@ -64,9 +59,10 @@ export default <BehaviourOptions>{
                             }
 
                             // Mute the user
+                            // TODO: Use/implement in Consumer API v2
                             mute(message.member);
 
-                            message.reply("You have been muted until further notice for mass pinging.");
+                            await message.reply("You have been muted until further notice for mass pinging.");
                         }
                     }
                 }

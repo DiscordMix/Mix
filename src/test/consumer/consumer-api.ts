@@ -308,7 +308,7 @@ export class ConsumerAPIv2 {
             .addField("Sender", `<@${message.author.id}> (${message.author.username})`)
             .addField("Message", message.content)
             .addField("Channel", `<#${message.channel.id}>`)
-            .addField("Suspected Violation", suspectedViolation)
+            .addField("Reason", suspectedViolation)
             .addField("Message ID", message.id));
 
         return;

@@ -11,7 +11,7 @@ import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import {Client, GuildMember, Message, Role, Snowflake} from "discord.js";
+import {Client, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
 import {CommandArgumentStyle, UserGroup} from "../commands/command";
@@ -371,7 +371,9 @@ export default class Bot extends EventEmitter {
             }
         }
         else if (message.content === "?prefix" && this.prefixCommand) {
-            message.channel.send(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by Anvil v**${await Utils.getAnvilVersion()}**`);
+            message.channel.send(new RichEmbed()
+                .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [Anvil v**${await Utils.getAnvilVersion()}**](http://test.com/)`)
+                .setColor("GREEN"));
         }
     }
 

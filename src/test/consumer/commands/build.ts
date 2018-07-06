@@ -16,7 +16,7 @@ export default <CommandOptions>{
 
     executed: (context: CommandContext): Promise<void> => {
         return new Promise(async (resolve) => {
-            await context.ok("Building.");
+            await context.ok("Building the project. This may take a while.");
 
             exec("yarn build", (error: any, stdOut: string) => {
                 if (error) {

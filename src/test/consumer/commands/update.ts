@@ -24,7 +24,7 @@ export default <CommandOptions>{
                     return;
                 }
 
-                context.ok(`Pulling successfully completed.\n\`\`\`${stdOut}\`\`\``);
+                context.ok(`\`\`\`${stdOut}\`\`\``);
                 resolve();
             });
         });

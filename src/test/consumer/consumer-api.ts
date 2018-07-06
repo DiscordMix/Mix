@@ -1,6 +1,9 @@
 import {GuildMember, Message, RichEmbed, Snowflake, TextChannel, User} from "discord.js";
 import Log from "../../core/log";
 import JsonProvider from "../../data-providers/json-provider";
+import Bot from "../../core/bot";
+import DataProvider from "../../data-providers/data-provider";
+import {StoredWarning} from "./commands/warnings";
 
 const reviewChannelId = "462109996260261899";
 
@@ -36,6 +39,7 @@ export interface WarnOptions {
     readonly reason: string;
     readonly channel: any;
     readonly message: Message;
+    readonly dataProvider?: DataProvider;
     readonly evidence?: string;
 }
 
@@ -121,7 +125,33 @@ export default abstract class ConsumerAPI {
             await options.message.delete();
         }
 
+        ConsumerAPI.addWarning(options);
+
         return true;
+    }
+
+    static async addWarning(options: WarnOptions): Promise<void> {
+        if (!options.dataProvider) {
+            Log.error("[ConsumerAPI.addWarning] Expecting a data provider");
+
+            return;
+        }
+        else if (!(options.dataProvider instanceof JsonProvider)) {
+            Log.error("[ConsumerAPI.addWarning] Expecting data provider to be of type 'JsonProvider'");
+
+            return;
+        }
+
+        const jsonStore: JsonProvider = options.dataProvider;
+
+        jsonStore.push(`warnings.u${options.user.id}`, <StoredWarning>{
+            reason: options.reason,
+            moderator: options.moderator.id,
+            evidence: options.evidence,
+            time: Date.now()
+        });
+
+        await jsonStore.save();
     }
 
     static async mute(options: MuteOptions): Promise<void> {

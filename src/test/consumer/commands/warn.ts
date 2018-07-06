@@ -2,6 +2,7 @@ import {CommandOptions} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 import ChatEnvironment from "../../../core/chat-environment";
 import Utils from "../../../core/utils";
+import ConsumerAPI from "../consumer-api";
 
 export default <CommandOptions>{
     meta: {
@@ -52,13 +53,14 @@ export default <CommandOptions>{
             return;
         }
 
-        api.warn({
+        await ConsumerAPI.warn({
             moderator: context.sender,
             reason: context.arguments[1],
             user: target,
             channel: modLog,
             evidence: context.arguments.length === 3 ? context.arguments[2] : null,
-            message: context.message
+            message: context.message,
+            dataProvider: context.bot.dataStore
         });
     }
 };

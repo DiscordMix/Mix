@@ -37,6 +37,7 @@ export interface BotOptions {
     readonly owner?: Snowflake;
     readonly ignoreBots?: boolean;
     readonly updateOnMessageEdit?: boolean;
+    readonly authGroups?: any;
 }
 
 /**
@@ -64,6 +65,7 @@ export default class Bot extends EventEmitter {
     readonly owner?: Snowflake;
     readonly ignoreBots: boolean;
     readonly updateOnMessageEdit: boolean;
+    readonly authGroups: any;
 
     private api?: any;
     private setupStart: number = 0;
@@ -216,6 +218,12 @@ export default class Bot extends EventEmitter {
          */
         this.updateOnMessageEdit = options.updateOnMessageEdit !== undefined ? options.updateOnMessageEdit : false;
 
+        /**
+         * @type {*}
+         * @readonly
+         */
+        this.authGroups = options.authGroups || {};
+
         return this;
     }
 
@@ -294,9 +302,21 @@ export default class Bot extends EventEmitter {
         });
 
         this.client.on("message", this.handleMessage.bind(this));
+
+        // If enabled, handle message edits (if valid) as commands
+        if (this.updateOnMessageEdit) {
+            this.client.on("messageUpdate", async (oldMessage: Message, newMessage: Message) => {
+                await this.handleMessage(newMessage);
+            });
+        }
+
         Log.success("[Bot.setupEvents] Discord events setup completed");
     }
 
+    /**
+     * @param {Message} message
+     * @return {Promise<void>}
+     */
     private async handleMessage(message: Message): Promise<void> {
         // TODO: Should be a property/option on Bot, not hardcoded
         // TODO: Find better position

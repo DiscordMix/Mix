@@ -24,7 +24,7 @@ export default <CommandOptions>{
                     return;
                 }
 
-                context.ok(`\`\`\`${stdOut}\`\`\``);
+                context.ok(`\`\`\`css\n${stdOut}\`\`\``);
                 resolve();
             });
         });

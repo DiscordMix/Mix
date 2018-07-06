@@ -1,9 +1,10 @@
-import {GuildMember, Message, RichEmbed, Snowflake, TextChannel, User} from "discord.js";
+import {Guild, GuildMember, Message, RichEmbed, Snowflake, TextChannel, User} from "discord.js";
 import Log from "../../core/log";
 import JsonProvider from "../../data-providers/json-provider";
 import Bot from "../../core/bot";
 import DataProvider from "../../data-providers/data-provider";
 import {StoredWarning} from "./commands/warnings";
+import auth from "../../commands/primitives/auth";
 
 const badWords = [
     "asshole",
@@ -80,32 +81,77 @@ export interface CaseOptions {
     readonly evidence?: string;
 }
 
+export interface ConsumerAPIChannels {
+    readonly modLog: Snowflake;
+    readonly suggestions: Snowflake;
+}
+
+export interface ConsumerAPIResolvedChannels {
+    readonly modLog: TextChannel;
+    readonly suggestions: TextChannel;
+}
+
 export interface ConsumerAPIv2Options {
     readonly bot: Bot;
-    readonly modLogChannel: Snowflake;
+    readonly guild: Snowflake;
+    readonly channels: ConsumerAPIChannels;
 }
 
 export class ConsumerAPIv2 {
     private readonly bot: Bot;
+    private readonly guild: Snowflake;
 
     // TODO: Type
     private deletedMessages: any;
-    private modLogChannelId: Snowflake;
+    private readonly channels: ConsumerAPIResolvedChannels;
 
     constructor(options: ConsumerAPIv2Options) {
         this.bot = options.bot;
-        this.modLogChannelId = options.modLogChannel;
+
+        this.guild = options.guild;
+
+        this.channels = {
+            modLog: this.getChannel(options.channels.modLog),
+            suggestions: this.getChannel(options.channels.suggestions)
+        };
+
         this.deletedMessages = [];
+    }
+
+    getGuild(): Guild {
+        const guild: Guild | undefined = this.bot.client.guilds.get(this.guild);
+
+        if (!guild) {
+            // TODO: Rethrowing to avoid IDE error
+            Log.throw("[ConsumerAPIv2.getGuild] Expecting guild");
+
+            throw new Error("[ConsumerAPIv2.getGuild] Expecting guild");
+        }
+
+        return guild;
+    }
+
+    getChannel(id: Snowflake): TextChannel {
+        const channel = this.getGuild().channels.get(id);
+
+        if (!channel) {
+            Log.throw("[ConsumerAPIv2.getChannel] Expecting channel");
+        }
+        else if (!(channel instanceof TextChannel)) {
+            Log.throw("[ConsumerAPIv2.getChannel] Expecting channel type to be 'TextChannel'");
+        }
+
+        return <TextChannel>channel;
     }
 
     async addWarning(options: WarnOptionsv2): Promise<void> {
         if (!this.bot.dataStore) {
-            Log.error("[ConsumerAPI.addWarning] Expecting a data provider");
+            Log.error("[ConsumerAPIv2.addWarning] Expecting a data provider");
 
             return;
         }
         else if (!(this.bot.dataStore instanceof JsonProvider)) {
-            Log.error("[ConsumerAPI.addWarning] Expecting data provider to be of type 'JsonProvider'");
+            Log.error("[ConsumerAPIv2.addWarning] Expecting data provider to be of type 'JsonProvider'");
 
             return;
         }
@@ -120,6 +166,19 @@ export class ConsumerAPIv2 {
         });
 
         await jsonStore.save();
+    }
+
+    async addSuggestion(suggestion: string, author: GuildMember): Promise<boolean> {
+        const suggestionMessage: Message = <Message>(await this.channels.suggestions.send(new RichEmbed()
+            .setFooter(`Suggested by ${author.user.username}`, author.user.avatarURL)
+            .setDescription(suggestion)));
+
+        if (suggestionMessage) {
+            await suggestionMessage.react("⬆");
+            await suggestionMessage.react("⬇");
+        }
+
+        return false;
     }
 }
 

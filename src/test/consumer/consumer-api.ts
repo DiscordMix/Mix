@@ -5,8 +5,6 @@ import Bot from "../../core/bot";
 import DataProvider from "../../data-providers/data-provider";
 import {StoredWarning} from "./commands/warnings";
 
-const reviewChannelId = "462109996260261899";
-
 const badWords = [
     "asshole",
     "fuck",
@@ -23,14 +21,14 @@ const badWords = [
 ];
 
 const racialSlurs = [
-    "nigger",
-    "nigga",
+    "nigg",
     "zipperhead",
     "bobo",
     "amigo",
     "blaxican",
     "brownie",
-    "faggot"
+    "faggot",
+    "nibba"
 ];
 
 export interface WarnOptions {
@@ -40,6 +38,15 @@ export interface WarnOptions {
     readonly channel: any;
     readonly message: Message;
     readonly dataProvider?: DataProvider;
+    readonly evidence?: string;
+}
+
+export interface WarnOptionsv2 {
+    readonly user: GuildMember;
+    readonly moderator: User;
+    readonly reason: string;
+    readonly channel: any;
+    readonly message: Message;
     readonly evidence?: string;
 }
 
@@ -71,6 +78,49 @@ export interface CaseOptions {
     readonly moderator: User;
     readonly title: string;
     readonly evidence?: string;
+}
+
+export interface ConsumerAPIv2Options {
+    readonly bot: Bot;
+    readonly modLogChannel: Snowflake;
+}
+
+export class ConsumerAPIv2 {
+    private readonly bot: Bot;
+
+    // TODO: Type
+    private deletedMessages: any;
+    private modLogChannelId: Snowflake;
+
+    constructor(options: ConsumerAPIv2Options) {
+        this.bot = options.bot;
+        this.modLogChannelId = options.modLogChannel;
+        this.deletedMessages = [];
+    }
+
+    async addWarning(options: WarnOptionsv2): Promise<void> {
+        if (!this.bot.dataStore) {
+            Log.error("[ConsumerAPI.addWarning] Expecting a data provider");
+
+            return;
+        }
+        else if (!(this.bot.dataStore instanceof JsonProvider)) {
+            Log.error("[ConsumerAPI.addWarning] Expecting data provider to be of type 'JsonProvider'");
+
+            return;
+        }
+
+        const jsonStore: JsonProvider = this.bot.dataStore;
+
+        jsonStore.push(`warnings.u${options.user.id}`, <StoredWarning>{
+            reason: options.reason,
+            moderator: options.moderator.id,
+            evidence: options.evidence,
+            time: Date.now()
+        });
+
+        await jsonStore.save();
+    }
 }
 
 export default abstract class ConsumerAPI {
@@ -241,7 +291,7 @@ export default abstract class ConsumerAPI {
     }
 
     static async flagMessage(message: Message, suspectedViolation: string): Promise<void> {
-        const reviewChannel: any = message.guild.channels.get(reviewChannelId);
+        const reviewChannel: any = message.guild.channels.get("1"); // TODO
 
         if (!reviewChannel) {
             Log.error("[ConsumerAPI.flagMessage] Review channel does not exist, failed to flag message");

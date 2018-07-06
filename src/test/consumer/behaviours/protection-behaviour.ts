@@ -37,7 +37,7 @@ const warn = (options: WarnOptions): Promise<any> => {
     });
 };
 
-const behaviour: BehaviourOptions = {
+export default <BehaviourOptions>{
     name: "Special Channels",
 
     enabled: (bot: Bot, api: any): void => {
@@ -123,5 +123,3 @@ const behaviour: BehaviourOptions = {
         }
     }
 };
-
-export default behaviour;

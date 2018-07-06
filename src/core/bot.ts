@@ -30,7 +30,6 @@ export interface BotOptions {
     readonly argumentTypes?: any;
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: Array<string>;
-    readonly api?: any;
     readonly commandArgumentStyle?: CommandArgumentStyle;
     readonly autoDeleteCommands?: boolean;
     readonly userGroups?: Array<UserGroup>;
@@ -57,7 +56,6 @@ export default class Bot extends EventEmitter {
     readonly menus: EmojiMenuManager;
     readonly prefixCommand: boolean;
     readonly primitiveCommands: Array<string>;
-    readonly api?: any;
     readonly commandArgumentStyle: CommandArgumentStyle;
     readonly autoDeleteCommands: boolean;
     readonly userGroups: Array<UserGroup>;
@@ -65,6 +63,7 @@ export default class Bot extends EventEmitter {
     readonly owner?: Snowflake;
     readonly ignoreBots: boolean;
 
+    private api?: any;
     private setupStart: number = 0;
 
     /**
@@ -173,12 +172,6 @@ export default class Bot extends EventEmitter {
         ];
 
         /**
-         * @type {* | undefined}
-         * @readonly
-         */
-        this.api = options.api;
-
-        /**
          * @type {CommandArgumentStyle}
          * @readonly
          */
@@ -222,7 +215,8 @@ export default class Bot extends EventEmitter {
      * Setup the bot
      * @return {Promise<Bot>}
      */
-    async setup(): Promise<Bot> {
+    async setup(api?: any): Promise<Bot> {
+        this.api = api;
         this.setupStart = performance.now();
 
         // Load behaviours

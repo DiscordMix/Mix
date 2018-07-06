@@ -144,6 +144,10 @@ export class ConsumerAPIv2 {
         return <TextChannel>channel;
     }
 
+    getCase(): number {
+        return 0;
+    }
+
     async addWarning(options: WarnOptionsv2): Promise<void> {
         if (!this.bot.dataStore) {
             Log.error("[ConsumerAPIv2.addWarning] Expecting a data provider");
@@ -168,6 +172,38 @@ export class ConsumerAPIv2 {
         await jsonStore.save();
     }
 
+    async warn(options: WarnOptionsv2): Promise<boolean> {
+        if (!(options.channel instanceof TextChannel)) {
+            Log.error("[ConsumerAPI.warn] Expecting channel to be of type 'TextChannel'");
+
+            return false;
+        }
+
+        const caseNum: number = ConsumerAPI.getCase();
+
+        options.channel.send(new RichEmbed()
+            .setTitle(`Warn | Case #${caseNum}`)
+            .addField("Member", `<@${options.user.id}> (${options.user.user.username})`)
+            .addField("Reason", options.reason)
+            .addField("Moderator", `<@${options.moderator.id}> (${options.moderator.username})`)
+            .setThumbnail(options.evidence ? options.evidence : "")
+            .setFooter(`Warned by ${options.moderator.username}`, options.moderator.avatarURL)
+            .setColor("GOLD"));
+
+        (await options.user.createDM()).send(new RichEmbed()
+            .setDescription(`You were warned by <@${options.moderator.id}> (${options.moderator.username}) for **${options.reason}**`)
+            .setColor("GOLD")
+            .setTitle(`Case #${caseNum}`));
+
+        if (options.message.deletable) {
+            await options.message.delete();
+        }
+
+        await this.addWarning(options);
+
+        return true;
+    }
+
     async addSuggestion(suggestion: string, author: GuildMember): Promise<boolean> {
         const suggestionMessage: Message = <Message>(await this.channels.suggestions.send(new RichEmbed()
             .setFooter(`Suggested by ${author.user.username}`, author.user.avatarURL)
@@ -179,6 +215,25 @@ export class ConsumerAPIv2 {
         }
 
         return false;
+    }
+
+    async reportCase(options: CaseOptions): Promise<void> {
+        const caseNum = this.getCase();
+
+        const embed = new RichEmbed()
+            .setColor(options.color)
+            .setAuthor(`Case #${caseNum} | ${options.title}`, options.member.user.avatarURL)
+            .addField("User", `<@${options.member.user.id}> (${options.member.user.tag})`)
+            .addField("Reason", options.reason)
+            .addField("Moderator", `<@${options.moderator.id}> (${options.moderator.tag})`)
+            .addField("Time", "*Permanent*")
+            .setFooter(`Requested by ${options.moderator.username}`, options.moderator.avatarURL);
+
+        if (options.evidence) {
+            embed.setThumbnail(options.evidence);
+        }
+
+        this.channels.modLog.send(embed);
     }
 }
 

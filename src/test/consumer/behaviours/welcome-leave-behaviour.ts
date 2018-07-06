@@ -88,7 +88,7 @@ const sendGeneral = (text: string, titleSuffix: string, member: GuildMember, col
     });
 };
 
-const behaviour: BehaviourOptions = {
+export default <BehaviourOptions>{
     name: "Welcome & Leave",
 
     enabled: (bot: Bot) => {
@@ -101,5 +101,3 @@ const behaviour: BehaviourOptions = {
         });
     }
 };
-
-export default behaviour;

@@ -2,7 +2,7 @@ import {CommandOptions} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 import ChatEnvironment from "../../../core/chat-environment";
 import Utils from "../../../core/utils";
-import ConsumerAPI from "../consumer-api";
+import ConsumerAPI, {ConsumerAPIv2} from "../consumer-api";
 
 export default <CommandOptions>{
     meta: {
@@ -28,7 +28,7 @@ export default <CommandOptions>{
     },
 
     // TODO: Throws unknown message
-    executed: async (context: CommandContext, api: any): Promise<void> => { // TODO: api type not working for some reason
+    executed: async (context: CommandContext, api: ConsumerAPIv2): Promise<void> => { // TODO: api type not working for some reason
         const target = context.message.guild.member(Utils.resolveId(context.arguments[0].id));
         const modLog = context.message.guild.channels.get("458794765308395521");
 
@@ -53,14 +53,13 @@ export default <CommandOptions>{
             return;
         }
 
-        await ConsumerAPI.warn({
+        await api.warn({
             moderator: context.sender,
             reason: context.arguments[1],
             user: target,
             channel: modLog,
             evidence: context.arguments.length === 3 ? context.arguments[2] : null,
-            message: context.message,
-            dataProvider: context.bot.dataStore
+            message: context.message
         });
     }
 };

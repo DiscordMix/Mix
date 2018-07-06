@@ -2,6 +2,7 @@ import {CommandOptions} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 import Permission from "../../../core/permission";
 import ChatEnvironment from "../../../core/chat-environment";
+import {ConsumerAPIv2} from "../consumer-api";
 
 export default <CommandOptions>{
     meta: {
@@ -28,7 +29,7 @@ export default <CommandOptions>{
         ]
     },
 
-    executed: (context: CommandContext, api: any): void => {
+    executed: async (context: CommandContext, api: ConsumerAPIv2): Promise<void> => {
         const target = context.arguments[0];
         const modLog = context.message.guild.channels.get("458794765308395521");
 
@@ -43,13 +44,22 @@ export default <CommandOptions>{
             return;
         }
 
-        api.mute({
+        await api.reportCase({
+            member: target,
+            title: "Mute",
+            evidence: context.arguments.length === 3 ? context.arguments[2] : undefined,
+            moderator: context.message.author,
+            reason: context.arguments[1],
+            color: "GOLD"
+        });
+
+        /* api.mute({
             moderator: context.sender,
             reason: context.arguments[1],
             user: target,
             channel: modLog,
             evidence: context.arguments.length === 3 ? context.arguments[2] : null,
             message: context.message
-        });
+        }); */
     }
 };

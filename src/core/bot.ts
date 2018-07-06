@@ -36,6 +36,7 @@ export interface BotOptions {
     readonly checkCommands?: boolean;
     readonly owner?: Snowflake;
     readonly ignoreBots?: boolean;
+    readonly updateOnMessageEdit?: boolean;
 }
 
 /**
@@ -62,6 +63,7 @@ export default class Bot extends EventEmitter {
     readonly checkCommands: boolean;
     readonly owner?: Snowflake;
     readonly ignoreBots: boolean;
+    readonly updateOnMessageEdit: boolean;
 
     private api?: any;
     private setupStart: number = 0;
@@ -207,6 +209,12 @@ export default class Bot extends EventEmitter {
          * @readonly
          */
         this.ignoreBots = options.ignoreBots !== undefined ? options.ignoreBots : true;
+
+        /**
+         * @type {boolean}
+         * @readonly
+         */
+        this.updateOnMessageEdit = options.updateOnMessageEdit !== undefined ? options.updateOnMessageEdit : false;
 
         return this;
     }

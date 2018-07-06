@@ -8,6 +8,6 @@ export default <CommandOptions>{
     },
 
     executed: (context: CommandContext): void => {
-        context.ok(`:ping_pong: ${Math.round(context.bot.client.ping)}ms`); // TODO: Missing heartbeat
+        context.ok(`:ping_pong: Pong! ${Math.round(context.bot.client.ping)}ms`); // TODO: Missing heartbeat
     }
 };

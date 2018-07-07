@@ -36,11 +36,11 @@ const settings = new Settings({
     }
 });
 
-const mongoUrl = "mongodb://localhost:27017";
+/* const mongoUrl = "mongodb://localhost:27017";
 
 const stores: any = {
     warnings: new MongoDbProviderV2(mongoUrl, "warnings")
-};
+}; */
 
 async function setupStores() {
     const storesKeys: Array<string> = Object.keys(stores);

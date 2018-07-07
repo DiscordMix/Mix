@@ -14,14 +14,14 @@ const baseDir = "./src/test/consumer";
 Log.level = LogLevel.Debug;
 
 ////////////////// test
-const qb = new SqlQuery("warnings");
+/* const qb = new SqlQuery("warnings");
 
 qb.insert({
     username: "test",
     age: 15
 });
 
-console.log(qb.build());
+console.log(qb.build()); */
 ////////////////// test
 
 const settings = new Settings({

@@ -10,14 +10,14 @@ export default <CommandOptions>{
         aliases: ["uptime"]
     },
 
+    restrict: {
+        issuerPerms: [Permission.ManageGuild]
+    },
+
     executed: (context: CommandContext): void => {
         context.sections({
             Uptime: Utils.timeAgoFromNow(context.bot.client.uptime),
             Members: context.message.guild.memberCount
         });
-    },
-
-    restrict: {
-        issuerPerms: [Permission.ManageGuild]
     }
 };

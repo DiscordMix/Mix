@@ -39,7 +39,7 @@
         "javascript-time-ago": "^1.0.30",
         "lodash": "^4.17.5",
         "minimist": "^1.2.0",
-        "mongodb": "^3.0.7",
+        "mongodb": "^3.1.1",
         "mysql": "^2.15.0",
         "querystring": "^0.2.0",
         "request": "^2.83.0"

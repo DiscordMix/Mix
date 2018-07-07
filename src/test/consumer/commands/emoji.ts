@@ -26,7 +26,6 @@ export default <CommandOptions>{
     executed: (context: CommandContext): Promise<void> => {
         return new Promise((resolve) => {
             request.get(context.arguments[1], async (error: Error, response: any, body: any) => {
-                console.log("e");
                 await context.message.guild.createEmoji(body, context.arguments[0], undefined, `Requested by ${context.sender.tag} (${context.sender.id})`);
                 await context.ok(`Emoji **${context.arguments[0]}** successfully created.`);
                 resolve();

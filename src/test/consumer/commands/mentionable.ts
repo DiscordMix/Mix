@@ -23,7 +23,7 @@ export default <CommandOptions>{
 
     // TODO: Add support by id
     executed: async (context: CommandContext): Promise<void> => {
-        const role: Role | undefined = context.message.guild.roles.get(context.arguments[0]);
+        const role: Role | undefined = context.message.guild.roles.find("name", context.arguments[0]);
 
         if (!role) {
             await context.fail("Role not found.");

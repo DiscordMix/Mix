@@ -5,6 +5,7 @@ import Log, {LogLevel} from "../../core/log";
 import ConsumerAPI, {ConsumerAPIv2} from "./consumer-api";
 import JsonProvider from "../../data-providers/json-provider";
 import {TextChannel} from "discord.js";
+import {MongoDbProviderV2} from "../../data-providers/mongodb-provider";
 
 const path = require("path");
 const baseDir = "./src/test/consumer";
@@ -22,6 +23,20 @@ const settings = new Settings({
         behaviours: path.resolve(path.join(__dirname, "./behaviours"))
     }
 });
+
+const mongoUrl = "mongodb://localhost:27017";
+
+const stores: any = {
+    warnings: new MongoDbProviderV2(mongoUrl, "warnings")
+};
+
+async function setupStores() {
+    const storesKeys: Array<string> = Object.keys(stores);
+
+    for (let i: number = 0; i < storesKeys.length; i++) {
+        await stores[storesKeys[i]].connect();
+    }
+}
 
 async function start() {
     const userMentionRegex = /(^[0-9]{17,18}$|^<@!?[0-9]{17,18}>$)/;
@@ -103,4 +118,5 @@ async function start() {
     }
 }
 
+setupStores();
 start();

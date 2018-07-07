@@ -161,7 +161,7 @@ export class ConsumerAPIv2 {
         return 0;
     }
 
-    async addWarning(options: WarnOptionsv2): Promise<void> {
+    async saveWarning(options: WarnOptionsv2): Promise<void> {
         if (!this.bot.dataStore) {
             Log.error("[ConsumerAPIv2.addWarning] Expecting a data provider");
 
@@ -218,7 +218,7 @@ export class ConsumerAPIv2 {
             await options.message.delete();
         }
 
-        await this.addWarning(options);
+        await this.saveWarning(options);
 
         return true;
     }

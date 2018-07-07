@@ -6,11 +6,23 @@ import ConsumerAPI, {ConsumerAPIv2} from "./consumer-api";
 import JsonProvider from "../../data-providers/json-provider";
 import {TextChannel} from "discord.js";
 import {MongoDbProviderV2} from "../../data-providers/mongodb-provider";
+import SqlQuery from "../../builders/sql-query";
 
 const path = require("path");
 const baseDir = "./src/test/consumer";
 
 Log.level = LogLevel.Debug;
+
+////////////////// test
+const qb = new SqlQuery("warnings");
+
+qb.insert({
+    username: "test",
+    age: 15
+});
+
+console.log(qb.build());
+////////////////// test
 
 const settings = new Settings({
     general: {

@@ -1,5 +1,6 @@
 import {CommandOptions} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
+import ConsumerAPI from "../consumer-api";
 
 const channels = {
     media: "382054707029475348",
@@ -53,11 +54,11 @@ export default <CommandOptions>{
         cooldown: 5
     },
 
-    executed: (context: CommandContext, api: any): void => {
+    executed: (context: CommandContext): void => {
         let tipIndex = lastTipIndex;
 
         while (tipIndex === lastTipIndex) {
-            tipIndex = api.getRandomInt(0, tips.length);
+            tipIndex = ConsumerAPI.getRandomInt(0, tips.length);
         }
 
         context.ok(tips[tipIndex], `Tip #${tipIndex + 1}`);

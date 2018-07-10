@@ -2,6 +2,7 @@ import {CommandOptions} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 import {Message, RichEmbed} from "discord.js";
 import Utils from "../../../core/utils";
+import {ConsumerAPIv2} from "../consumer-api";
 
 export default <CommandOptions>{
     meta: {
@@ -18,8 +19,8 @@ export default <CommandOptions>{
         ]
     },
 
-    executed: (context: CommandContext, api: any) => {
-        const lastDeletedChannelMessage: Message = api.getLastDeletedMessage(context.message.channel.id);
+    executed: async (context: CommandContext, api: ConsumerAPIv2): Promise<void> => {
+        const lastDeletedChannelMessage: Message | null = api.getLastDeletedMessage(context.message.channel.id);
 
         if (lastDeletedChannelMessage) {
             const embed = lastDeletedChannelMessage.content.length === 0 && lastDeletedChannelMessage.embeds.length > 0;
@@ -32,7 +33,7 @@ export default <CommandOptions>{
                 .setColor("GREEN"));
         }
         else {
-            context.fail("No message has been deleted in this channel within the last 30 minutes");
+            await context.fail("No message has been deleted in this channel within the last 30 minutes.");
         }
     }
 };

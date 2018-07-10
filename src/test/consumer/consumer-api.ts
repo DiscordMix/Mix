@@ -313,6 +313,14 @@ export class ConsumerAPIv2 {
 
         return;
     }
+
+    getLastDeletedMessage(channelId: Snowflake): Message | null {
+        if (ConsumerAPI.deletedMessages[channelId]) {
+            return ConsumerAPI.deletedMessages[channelId];
+        }
+
+        return null;
+    }
 }
 
 export default abstract class ConsumerAPI {
@@ -450,13 +458,5 @@ export default abstract class ConsumerAPI {
         }
 
         return false;
-    }
-
-    static getLastDeletedMessage(channelId: Snowflake): Message | null {
-        if (ConsumerAPI.deletedMessages[channelId]) {
-            return ConsumerAPI.deletedMessages[channelId];
-        }
-
-        return null;
     }
 }

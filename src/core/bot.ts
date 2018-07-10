@@ -37,6 +37,7 @@ export interface BotOptions {
     readonly owner?: Snowflake;
     readonly ignoreBots?: boolean;
     readonly updateOnMessageEdit?: boolean;
+    readonly allowCommandChain?: boolean;
 
     // TODO: Make use of authGroups
     readonly authGroups?: any;
@@ -67,6 +68,7 @@ export default class Bot extends EventEmitter {
     readonly owner?: Snowflake;
     readonly ignoreBots: boolean;
     readonly updateOnMessageEdit: boolean;
+    readonly allowCommandChain: boolean;
     readonly authGroups: any;
 
     private api?: any;
@@ -226,6 +228,12 @@ export default class Bot extends EventEmitter {
          */
         this.authGroups = options.authGroups || {};
 
+        /**
+         * @type {boolean}
+         * @readonly
+         */
+        this.allowCommandChain = options.allowCommandChain !== undefined ? options.allowCommandChain : true;
+
         return this;
     }
 
@@ -343,37 +351,52 @@ export default class Bot extends EventEmitter {
 
         // TODO: Cannot do .startsWith with a prefix array
         if ((!message.author.bot || (message.author.bot && !this.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.isValid(message.content, this.commandStore, this.settings.general.prefixes)) {
-            const command = CommandParser.parse(
-                message.content,
-                this.commandStore,
-                this.settings.general.prefixes
-            );
+            if (this.allowCommandChain) {
+                const chain: Array<string> = message.content.split("&");
 
-            if (command) {
-                this.commandHandler.handle(
-                    new CommandContext({
-                        message: message,
-                        args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commandHandler.argumentTypes, resolvers, message),
-                        bot: this,
-
-                        // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
-                        // TODO: CRITICAL: Default access level set to 0
-                        auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
-                        emojis: this.emojis,
-                        label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
-                    }),
-
-                    command
-                );
+                // TODO: What if commandChecks is enabled and the bot tries to react twice or more?
+                for (let i: number = 0; i < chain.length; i++) {
+                    await this.handleCommandMessage(message, chain[i].trim(), resolvers);
+                }
             }
             else {
-                Log.error("[Bot.setupEvents] Failed parsing command");
+                await this.handleCommandMessage(message, message.content, resolvers);
             }
         }
+        // TODO: ?prefix should also be chain-able
         else if (message.content === "?prefix" && this.prefixCommand) {
             message.channel.send(new RichEmbed()
                 .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [Anvil v**${await Utils.getAnvilVersion()}**](http://test.com/)`)
                 .setColor("GREEN"));
+        }
+    }
+
+    private async handleCommandMessage(message: Message, content: string, resolvers: any) {
+        const command = CommandParser.parse(
+            content,
+            this.commandStore,
+            this.settings.general.prefixes
+        );
+
+        if (command) {
+            this.commandHandler.handle(
+                new CommandContext({
+                    message: message,
+                    args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
+                    bot: this,
+
+                    // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
+                    // TODO: CRITICAL: Default access level set to 0
+                    auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
+                    emojis: this.emojis,
+                    label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
+                }),
+
+                command
+            );
+        }
+        else {
+            Log.error("[Bot.setupEvents] Failed parsing command");
         }
     }
 

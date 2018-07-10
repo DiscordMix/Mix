@@ -379,7 +379,7 @@ export default class Bot extends EventEmitter {
         );
 
         if (command) {
-            this.commandHandler.handle(
+            await this.commandHandler.handle(
                 new CommandContext({
                     message: message,
                     args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),

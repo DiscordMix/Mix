@@ -1,5 +1,5 @@
 import CommandParser from "../commands/command-parser";
-import CommandContext, {CommandExecutionContextOptions} from "../commands/command-context";
+import CommandContext from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
 import EmojiMenuManager from "../emoji-ui/emoji-menu-manager";
 import CommandStore from "../commands/command-store";
@@ -105,7 +105,7 @@ export default class Bot extends EventEmitter {
          * @type {CommandAuthStore}
          * @readonly
          */
-        this.authStore =  options.authStore || new JsonAuthStore("auth/schema.json", "auth/store.json");
+        this.authStore = options.authStore || new JsonAuthStore("auth/schema.json", "auth/store.json");
 
         /**
          * @type {EmojiCollection | undefined}

@@ -41,6 +41,7 @@ export interface BotOptions {
 
     // TODO: Make use of authGroups
     readonly authGroups?: any;
+    readonly asciiTitle?: boolean;
 }
 
 /**
@@ -70,6 +71,7 @@ export default class Bot extends EventEmitter {
     readonly updateOnMessageEdit: boolean;
     readonly allowCommandChain: boolean;
     readonly authGroups: any;
+    readonly asciiTitle: boolean;
 
     private api?: any;
     private setupStart: number = 0;
@@ -234,6 +236,13 @@ export default class Bot extends EventEmitter {
          */
         this.allowCommandChain = options.allowCommandChain !== undefined ? options.allowCommandChain : true;
 
+        /**
+         * Whether to display the Anvil logo in ascii text at bot startup
+         * @type {boolean}
+         * @readonly
+         */
+        this.asciiTitle = options.asciiTitle !== undefined ? options.asciiTitle : true;
+
         return this;
     }
 
@@ -249,6 +258,10 @@ export default class Bot extends EventEmitter {
      * @return {Promise<Bot>}
      */
     async setup(api?: any): Promise<Bot> {
+        if (this.asciiTitle) {
+            console.log(fs.readFileSync("./title.txt").toString());
+        }
+
         this.api = api;
         this.setupStart = performance.now();
 

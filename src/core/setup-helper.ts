@@ -7,6 +7,22 @@ export enum SetupHelperActionType {
     Question
 }
 
+export interface FromContextOptions {
+    readonly context: CommandContext;
+    readonly title?: string;
+    readonly embed?: boolean;
+    readonly timeout?: number
+}
+
+export interface SetupHelperOptions {
+    readonly client: Client;
+    readonly channel: TextChannel;
+    readonly userId: Snowflake;
+    readonly title?: string;
+    readonly timeout?: number;
+    readonly embed?: boolean;
+}
+
 export interface SetupHelperAction {
     readonly type: SetupHelperActionType;
     readonly text: string;
@@ -26,16 +42,23 @@ export default class SetupHelper {
     private readonly embed: boolean;
     private readonly actionMap: Array<SetupHelperAction>;
 
-    constructor(client: any, channel: TextChannel, userId: Snowflake, title?: string, timeout: number = 60, embed: boolean = true) {
-        this.client = client;
-        this.channel = channel;
-        this.userId = userId;
-        this.title = title;
-        this.timeout = timeout;
-        this.embed = embed;
+    /**
+     * @param {SetupHelperOptions} options
+     */
+    constructor(options: SetupHelperOptions) {
+        this.client = options.client;
+        this.channel = options.channel;
+        this.userId = options.userId;
+        this.title = options.title;
+        this.timeout = options.timeout || 60;
+        this.embed = options.embed !== undefined ? options.embed : true;
         this.actionMap = [];
     }
 
+    /**
+     * @param {string} text
+     * @return {SetupHelper}
+     */
     input(text: string): SetupHelper {
         this.actionMap.push({
             type: SetupHelperActionType.Input,
@@ -45,6 +68,10 @@ export default class SetupHelper {
         return this;
     }
 
+    /**
+     * @param {string} text
+     * @return {SetupHelper}
+     */
     question(text: string): SetupHelper {
         this.actionMap.push({
             type: SetupHelperActionType.Question,
@@ -54,7 +81,11 @@ export default class SetupHelper {
         return this;
     }
 
-    async finish(responseHandler?: (response: string) => string): Promise<SetupHelperResult> {
+    /**
+     * @param {(response: string) => string} responseHandler
+     * @return {Promise<SetupHelperResult>}
+     */
+    async finish(responseHandler?: (response: string, index: number) => string): Promise<SetupHelperResult> {
         const responses: Array<string> = [];
 
         for (let i = 0; i < this.actionMap.length; i++) {
@@ -75,7 +106,7 @@ export default class SetupHelper {
             const response = await this.awaitResponse();
 
             if (response !== null) {
-                responses.push(responseHandler ? responseHandler(response) : response);
+                responses.push(responseHandler ? responseHandler(response, i) : response);
             }
             else {
                 return {
@@ -85,14 +116,15 @@ export default class SetupHelper {
             }
         }
 
-        console.log("done");
-
         return {
             responses: responses,
             expired: false
         };
     }
 
+    /**
+     * @return {Promise<string | null>}
+     */
     private awaitResponse(): Promise<string | null> {
         return new Promise((resolve) => {
             // Timeout after x seconds
@@ -117,12 +149,24 @@ export default class SetupHelper {
         });
     }
 
-    static fromContext(context: CommandContext, title?: string, embed?: boolean, timeout?: number): SetupHelper | null {
-        if (context.message.channel instanceof TextChannel) {
-            return new SetupHelper(context.bot.client, context.message.channel, context.sender.id, title, timeout, embed);
+    /**
+     * @param {FromContextOptions} options
+     * @return {SetupHelper | null}
+     */
+    static fromContext(options: FromContextOptions): SetupHelper | null {
+        if (options.context.message.channel instanceof TextChannel) {
+            //context.bot.client, context.message.channel, context.sender.id, title, timeout, embed
+            return new SetupHelper({
+                client: options.context.bot.client,
+                channel: options.context.message.channel,
+                userId: options.context.sender.id,
+                title: options.title,
+                embed: options.embed,
+                timeout: options.timeout
+            });
         }
         else {
-            Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${context.message.channel.type}'`);
+            Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${options.context.message.channel.type}'`);
 
             return null;
         }

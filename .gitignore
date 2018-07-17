@@ -3,7 +3,10 @@ dist/
 .idea
 .vscode/
 temp/*
+tmp/
 botty.db
 visualize_gource.bat
 bot.log
 desktop.ini
+*.bat
+*.sh

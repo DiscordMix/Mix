@@ -1,6 +1,7 @@
 import DataProvider from "./data-provider";
+import Log from "../core/log";
 
-const mongodb = require("mongodb");
+const MongoClient = require("mongodb").MongoClient;
 
 /**
  * @extends DataProvider
@@ -25,11 +26,12 @@ export default class MongodbProvider extends DataProvider {
         this.url = url;
 
         /**
+         * @todo
          * @type {MongoClient}
          * @private
          * @readonly
          */
-        this.client = mongodb.MongoClient;
+        //this.client = mongodb.MongoClient;
 
         /**
          * @type {*}
@@ -77,5 +79,68 @@ export default class MongodbProvider extends DataProvider {
      */
     merge(path: string, data: any): void {
         throw new Error("[MongoDb.merge] Method not implemented.");
+    }
+}
+
+export class MongoDbProviderV2 {
+    readonly url: string;
+    readonly databaseName: string;
+
+    // TODO: Type
+    private client: any;
+
+    // TODO: Type
+    private database: any;
+
+    constructor(url: string, database: string) {
+        this.url = url;
+        this.databaseName = database;
+    }
+
+    /**
+     * Connect to the database
+     * @return {Promise<void>}
+     */
+    connect(): Promise<void> {
+        return new Promise((resolve) => {
+            // TODO: Client type
+            MongoClient.connect(this.url, (error: Error, client: any) => {
+                if (error) {
+                    Log.error(`[MongoDbProviderV2.connect] Unable to connect: ${error.message}`);
+
+                    resolve();
+
+                    return;
+                }
+
+                this.client = client;
+                this.database = this.client.db(this.databaseName);
+                resolve();
+            });
+        });
+    }
+
+    // TODO: Return type
+    getClient(): any {
+        return this.client;
+    }
+
+    // TODO: Return type
+    getDatabase(): any {
+        return this.database;
+    }
+
+    /**
+     * Close the connection
+     * @return {boolean}
+     */
+    close(): boolean {
+        if (this.client) {
+            this.client.close();
+
+            return true;
+        }
+
+        return false;
     }
 }

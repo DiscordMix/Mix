@@ -3,6 +3,7 @@ import EmbedBuilder from "../builders/embed-builder";
 import {Message, Role, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import EmojiCollection from "../collections/emoji-collection";
+import Log from "../core/log";
 
 const Discord = require("discord.js");
 
@@ -87,7 +88,7 @@ export default class CommandContext {
     /**
      * @param {*} stream
      * @param {string} name
-     * @return {Promise<EditableMessage>|null}
+     * @return {Promise<EditableMessage> | null}
      */
     async fileStream(stream: any, name: string): Promise<EditableMessage> {
         return new EditableMessage(await this.message.channel.send(new Discord.Attachment(stream, name)));
@@ -97,7 +98,7 @@ export default class CommandContext {
      * @todo Content parameter type
      * @param {Object|EmbedBuilder} content
      * @param {boolean} [autoDelete=false]
-     * @return {Promise<EditableMessage>|null}
+     * @return {Promise<EditableMessage> | null}
      */
     async respond(content: EmbedBuilder | any, autoDelete: boolean = false): Promise<EditableMessage | null> {
         let embed = null;
@@ -137,7 +138,8 @@ export default class CommandContext {
         }
 
         if (autoDelete && messageResult) {
-            const fields = embed.build().fields;
+            const buildEmbed = embed.build();
+            const fields = buildEmbed.fields;
 
             let contentSize = 0;
 
@@ -147,14 +149,16 @@ export default class CommandContext {
                 }
             }
 
-            // TODO: static time for images, probably need function
-            const timeInSeconds = (4000 + (100 * contentSize * 1000));
+            if (buildEmbed.description) {
+                contentSize += buildEmbed.description.length;
+            }
 
-            messageResult.delete(4000);
+            const timeToLive: number = 4000 + (100 * contentSize);
 
-            // TODO
-            // this.bot.log.info(messageResult.content.length);
-            // this.bot.log.info(`time : ${timeInSeconds}`);
+            Log.debug("Time to live: " + timeToLive);
+
+            // Time depends on length
+            messageResult.delete(timeToLive);
         }
 
         return (messageResult !== undefined ? new EditableMessage(messageResult) : null);

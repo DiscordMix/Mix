@@ -23,30 +23,63 @@ export default class DataCollector {
     private fromType: MemberType;
     private whereCondition?: (member: GuildMember) => boolean;
 
+    /**
+     * @param {Guild} guild
+     */
     constructor(guild: Guild) {
+        /**
+         * @type {Guild}
+         * @private
+         * @readonly
+         */
         this.guild = guild;
+
+        /**
+         * @type {MemberDataType}
+         * @private
+         */
         this.collectType = MemberDataType.Everything;
+
+        /**
+         * @type {MemberType}
+         * @private
+         */
         this.fromType = MemberType.Everyone;
     }
 
+    /**
+     * @param {MemberDataType} dataType
+     * @return {DataCollector}
+     */
     collect(dataType: MemberDataType): DataCollector {
         // TODO
 
         return this;
     }
 
+    /**
+     * @param {MemberType} memberType
+     * @return {DataCollector}
+     */
     from(memberType: MemberType): DataCollector {
         this.fromType = memberType;
 
         return this;
     }
 
+    /**
+     * @param {(GuildMember) => boolean} condition
+     * @return {DataCollector}
+     */
     where(condition: (member: GuildMember) => boolean): DataCollector {
         this.whereCondition = condition;
 
         return this;
     }
 
+    /**
+     * @return {Array<GuildMember>}
+     */
     finish(): Array<GuildMember> {
         const members = this.guild.members.array();
 

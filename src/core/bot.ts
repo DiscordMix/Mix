@@ -1,5 +1,5 @@
 import CommandParser from "../commands/command-parser";
-import CommandContext, {CommandExecutionContextOptions} from "../commands/command-context";
+import CommandContext from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
 import EmojiMenuManager from "../emoji-ui/emoji-menu-manager";
 import CommandStore from "../commands/command-store";
@@ -11,7 +11,7 @@ import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import {Client, GuildMember, Message, Role, Snowflake} from "discord.js";
+import {Client, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
 import {CommandArgumentStyle, UserGroup} from "../commands/command";
@@ -30,13 +30,18 @@ export interface BotOptions {
     readonly argumentTypes?: any;
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: Array<string>;
-    readonly api?: any;
     readonly commandArgumentStyle?: CommandArgumentStyle;
     readonly autoDeleteCommands?: boolean;
     readonly userGroups?: Array<UserGroup>;
     readonly checkCommands?: boolean;
     readonly owner?: Snowflake;
     readonly ignoreBots?: boolean;
+    readonly updateOnMessageEdit?: boolean;
+    readonly allowCommandChain?: boolean;
+
+    // TODO: Make use of authGroups
+    readonly authGroups?: any;
+    readonly asciiTitle?: boolean;
 }
 
 /**
@@ -57,14 +62,18 @@ export default class Bot extends EventEmitter {
     readonly menus: EmojiMenuManager;
     readonly prefixCommand: boolean;
     readonly primitiveCommands: Array<string>;
-    readonly api?: any;
     readonly commandArgumentStyle: CommandArgumentStyle;
     readonly autoDeleteCommands: boolean;
     readonly userGroups: Array<UserGroup>;
     readonly checkCommands: boolean;
     readonly owner?: Snowflake;
     readonly ignoreBots: boolean;
+    readonly updateOnMessageEdit: boolean;
+    readonly allowCommandChain: boolean;
+    readonly authGroups: any;
+    readonly asciiTitle: boolean;
 
+    private api?: any;
     private setupStart: number = 0;
 
     /**
@@ -98,7 +107,7 @@ export default class Bot extends EventEmitter {
          * @type {CommandAuthStore}
          * @readonly
          */
-        this.authStore =  options.authStore || new JsonAuthStore("auth/schema.json", "auth/store.json");
+        this.authStore = options.authStore || new JsonAuthStore("auth/schema.json", "auth/store.json");
 
         /**
          * @type {EmojiCollection | undefined}
@@ -173,12 +182,6 @@ export default class Bot extends EventEmitter {
         ];
 
         /**
-         * @type {* | undefined}
-         * @readonly
-         */
-        this.api = options.api;
-
-        /**
          * @type {CommandArgumentStyle}
          * @readonly
          */
@@ -215,21 +218,61 @@ export default class Bot extends EventEmitter {
          */
         this.ignoreBots = options.ignoreBots !== undefined ? options.ignoreBots : true;
 
+        /**
+         * @type {boolean}
+         * @readonly
+         */
+        this.updateOnMessageEdit = options.updateOnMessageEdit !== undefined ? options.updateOnMessageEdit : false;
+
+        /**
+         * @type {*}
+         * @readonly
+         */
+        this.authGroups = options.authGroups || {};
+
+        /**
+         * @type {boolean}
+         * @readonly
+         */
+        this.allowCommandChain = options.allowCommandChain !== undefined ? options.allowCommandChain : true;
+
+        /**
+         * Whether to display the Anvil logo in ascii text at bot startup
+         * @type {boolean}
+         * @readonly
+         */
+        this.asciiTitle = options.asciiTitle !== undefined ? options.asciiTitle : true;
+
         return this;
+    }
+
+    /**
+     * @return {*}
+     */
+    getAPI(): any {
+        return this.api;
     }
 
     /**
      * Setup the bot
      * @return {Promise<Bot>}
      */
-    async setup(): Promise<Bot> {
+    async setup(api?: any): Promise<Bot> {
+        if (this.asciiTitle) {
+            console.log(fs.readFileSync("./title.txt").toString());
+        }
+
+        this.api = api;
         this.setupStart = performance.now();
 
         // Load behaviours
-        const behavioursLoaded = this.behaviours.loadAllSync();
+        const behavioursLoaded: number = this.behaviours.loadAllSync();
 
-        Log.success(`[Bot.setup] Loaded ${behavioursLoaded} behaviours`);
-        this.behaviours.enableAll();
+        Log.verbose(`[Bot.setup] Loaded ${behavioursLoaded} behaviours`);
+
+        const behavioursEnabled: number = this.behaviours.enableAll();
+
+        Log.success(`[Bot.setup] Enabled ${behavioursEnabled} behaviours`);
 
         // Load commandStore
         await this.commandLoader.reloadAll();
@@ -282,9 +325,21 @@ export default class Bot extends EventEmitter {
         });
 
         this.client.on("message", this.handleMessage.bind(this));
+
+        // If enabled, handle message edits (if valid) as commands
+        if (this.updateOnMessageEdit) {
+            this.client.on("messageUpdate", async (oldMessage: Message, newMessage: Message) => {
+                await this.handleMessage(newMessage);
+            });
+        }
+
         Log.success("[Bot.setupEvents] Discord events setup completed");
     }
 
+    /**
+     * @param {Message} message
+     * @return {Promise<void>}
+     */
     private async handleMessage(message: Message): Promise<void> {
         // TODO: Should be a property/option on Bot, not hardcoded
         // TODO: Find better position
@@ -309,34 +364,52 @@ export default class Bot extends EventEmitter {
 
         // TODO: Cannot do .startsWith with a prefix array
         if ((!message.author.bot || (message.author.bot && !this.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.isValid(message.content, this.commandStore, this.settings.general.prefixes)) {
-            const command = CommandParser.parse(
-                message.content,
-                this.commandStore,
-                this.settings.general.prefixes
-            );
+            if (this.allowCommandChain) {
+                const chain: Array<string> = message.content.split("&");
 
-            if (command) {
-                this.commandHandler.handle(
-                    new CommandContext({
-                        message: message,
-                        args: CommandParser.resolveArguments(CommandParser.getArguments(message.content), this.commandHandler.argumentTypes, resolvers, message),
-                        bot: this,
-
-                        // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
-                        // TODO: CRITICAL: Default access level set to 0
-                        auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
-                        emojis: this.emojis,
-                        label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
-                    }),
-                    command
-                );
+                // TODO: What if commandChecks is enabled and the bot tries to react twice or more?
+                for (let i: number = 0; i < chain.length; i++) {
+                    await this.handleCommandMessage(message, chain[i].trim(), resolvers);
+                }
             }
             else {
-                Log.error("[Bot.setupEvents] Failed parsing command");
+                await this.handleCommandMessage(message, message.content, resolvers);
             }
         }
+        // TODO: ?prefix should also be chain-able
         else if (message.content === "?prefix" && this.prefixCommand) {
-            message.channel.send(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by Anvil v**${await Utils.getAnvilVersion()}**`);
+            message.channel.send(new RichEmbed()
+                .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [Anvil v**${await Utils.getAnvilVersion()}**](http://test.com/)`)
+                .setColor("GREEN"));
+        }
+    }
+
+    private async handleCommandMessage(message: Message, content: string, resolvers: any) {
+        const command = CommandParser.parse(
+            content,
+            this.commandStore,
+            this.settings.general.prefixes
+        );
+
+        if (command) {
+            await this.commandHandler.handle(
+                new CommandContext({
+                    message: message,
+                    args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
+                    bot: this,
+
+                    // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
+                    // TODO: CRITICAL: Default access level set to 0
+                    auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
+                    emojis: this.emojis,
+                    label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
+                }),
+
+                command
+            );
+        }
+        else {
+            Log.error("[Bot.setupEvents] Failed parsing command");
         }
     }
 

@@ -1,10 +1,18 @@
-import "babel-polyfill";
-import ConsoleCommand from "./console/console-command";
 import Bot from "./core/bot";
-import EditableMessage from "./message/editable-message";
+import CommandArgumentParser from "./commands/command-argument-parser";
+import CommandContext from "./commands/command-context";
+import CommandLoader from "./commands/command-loader";
+import CommandStore, {CommandManagerEvent} from "./commands/command-store";
+import Command, {CommandMetaOptions, CommandRestrictOptions, CommandOptions} from "./commands/command";
+import ConsoleInterface from "./console/console-interface";
+import CommandParser from "./commands/command-parser";
+import ConsoleCommand from "./console/console-command";
+import BotBuilder from "./builders/bot-builder";
 import EmbedBuilder from "./builders/embed-builder";
-import Log, {LogLevel} from "./core/log";
+import ConfigBuilder from "./builders/config-builder";
 import MessageBuilder from "./builders/message-builder";
+import EditableMessage from "./message/editable-message";
+import Log, {LogLevel} from "./core/log";
 import Rgb from "./misc/rgb";
 import Rgba from "./misc/rgba";
 import Settings from "./core/settings";
@@ -13,75 +21,86 @@ import TimeSuffixType from "./time/time-suffix-type";
 import Utils from "./core/utils";
 import Permission from "./core/permission";
 import ChatEnvironment from "./core/chat-environment";
-import ConfigBuilder from "./builders/config-builder";
+import PluginManager from "./core/plugin-manager";
+import Collection from "./collections/collection";
+import EmojiCollection from "./collections/emoji-collection";
+import EmojiButton from "./emoji-ui/emoji-button";
+import EmojiMenuManager from "./emoji-ui/emoji-menu-manager";
+import EmojiMenu from "./emoji-ui/emoji-menu";
 import CommandWillExecuteEvent from "./events/command-will-execute-event";
-import Command from "./commands/command";
-import ConsoleInterface from "./console/console-interface";
-import BotBuilder from "./builders/bot-builder";
+import CommandExecutedEvent from "./events/command-executed-event";
+import DataProvider from "./data-providers/data-provider";
+import ObjectProvider from "./data-providers/object-provider";
+import JsonProvider from "./data-providers/json-provider";
+import SqliteProvider from "./data-providers/sqlite-provider";
+import MysqlProvider from "./data-providers/mysql-provider";
+import CommandAuthStore from "./commands/auth-stores/command-auth-store";
+import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
+import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 
-export default {
+export {
     // Commands
-    CommandArgumentParser: require("./commands/command-argument-parser").default,
-    CommandExecutionContext: require("./commands/command-context").default,
-    CommandLoader: require("./commands/command-loader").default,
-    CommandManager: require("./commands/command-store").default,
-    CommandManagerEvent: require("./commands/command-store").CommandManagerEvent,
-    CommandParser: require("./commands/command-parser").default,
-    Command: Command,
-    CommandMetaOptions: require("./commands/command").CommandMetaOptions,
-    CommandRestrictOptions: require("./commands/command").CommandRestrictOptions,
-    CommandOptions: require("./commands/command").CommandOptions,
+    CommandArgumentParser,
+    CommandContext,
+    CommandLoader,
+    CommandStore,
+    CommandManagerEvent,
+    CommandParser,
+    Command,
+    CommandMetaOptions,
+    CommandRestrictOptions,
+    CommandOptions,
 
     // Console
-    ConsoleInterface: ConsoleInterface,
-    ConsoleCommand: ConsoleCommand,
+    ConsoleInterface,
+    ConsoleCommand,
 
     // Builder
-    BotBuilder: BotBuilder,
-    EmbedBuilder: EmbedBuilder,
-    ConfigBuilder: ConfigBuilder,
-    MessageBuilder: MessageBuilder,
+    BotBuilder,
+    EmbedBuilder,
+    ConfigBuilder,
+    MessageBuilder,
 
     // Core
-    Bot: Bot,
-    EditableMessage: EditableMessage,
-    Log: Log,
-    LogLevel: LogLevel,
-    Rgb: Rgb,
-    Rgba: Rgba,
-    Settings: Settings,
-    TimeParser: TimeParser,
-    TimeSuffixType: TimeSuffixType,
-    Utils: Utils,
-    Permission: Permission,
-    ChatEnvironment: ChatEnvironment,
+    Bot,
+    EditableMessage,
+    Log,
+    LogLevel,
+    Rgb,
+    Rgba,
+    Settings,
+    TimeParser,
+    TimeSuffixType,
+    Utils,
+    Permission,
+    ChatEnvironment,
 
     // Plugins
-    Plugin: require("./core/plugin").default,
-    PluginManager: require("./core/plugin-manager").default,
+    // Plugin, // Why error?
+    PluginManager,
 
     // Collections
-    Collection: require("./collections/collection").default,
-    EmojiCollection: require("./collections/emoji-collection").default,
+    Collection,
+    EmojiCollection,
 
     // Emoji UI
-    EmojiButton: require("./emoji-ui/emoji-button").default,
-    EmojiMenuManager: require("./emoji-ui/emoji-menu-manager").default,
-    EmojiMenu: require("./emoji-ui/emoji-menu").default,
+    EmojiButton,
+    EmojiMenuManager,
+    EmojiMenu,
 
     // Events
-    CommandWillExecuteEvent: CommandWillExecuteEvent,
-    CommandExecutedEvent: require("./events/command-executed-event").default,
+    CommandWillExecuteEvent,
+    CommandExecutedEvent,
 
     // Data Stores
-    DataStore: require("./data-providers/data-provider").default,
-    ObjectStore: require("./data-providers/object-provider").default,
-    JsonStore: require("./data-providers/json-provider").default,
-    SqliteStore: require("./data-providers/sqlite-provider").default,
-    MysqlStore: require("./data-providers/mysql-provider").default,
+    DataProvider,
+    ObjectProvider,
+    JsonProvider,
+    SqliteProvider,
+    MysqlProvider,
 
     // Auth Stores
-    CommandAuthStore: require("./commands/auth-stores/command-auth-store").default,
-    ObjectAuthStore: require("./commands/auth-stores/object-auth-store").default,
-    JsonAuthStore: require("./commands/auth-stores/json-auth-store").default
-}
+    CommandAuthStore,
+    ObjectAuthStore,
+    JsonAuthStore
+};

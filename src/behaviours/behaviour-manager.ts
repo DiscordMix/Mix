@@ -11,6 +11,10 @@ export default class BehaviourManager {
     private readonly path: string;
     private readonly behaviours: Array<Behaviour>;
 
+    /**
+     * @param {Bot} bot
+     * @param {string} path
+     */
     constructor(bot: Bot, path: string) {
         /**
          * @type {Bot}
@@ -34,6 +38,10 @@ export default class BehaviourManager {
         this.behaviours = [];
     }
 
+    /**
+     * @param {Behaviour} behaviour
+     * @return {boolean}
+     */
     register(behaviour: Behaviour): boolean {
         if (!this.getBehaviour(behaviour.name)) {
             this.behaviours.push(behaviour);
@@ -44,6 +52,10 @@ export default class BehaviourManager {
         return false;
     }
 
+    /**
+     * @param {Array<Behaviour>} multipleBehaviours
+     * @return {number}
+     */
     registerMultiple(multipleBehaviours: Array<Behaviour>): number {
         let registered: number = 0;
 
@@ -53,14 +65,18 @@ export default class BehaviourManager {
             }
         }
 
-        return registered;
+        return registered + 1;
     }
 
+    /**
+     * @param {string} name
+     * @return {boolean}
+     */
     enable(name: string): boolean {
-        const behaviour = this.getBehaviour(name);
+        const behaviour: Behaviour | null = this.getBehaviour(name);
 
         if (behaviour) {
-            behaviour.enabled(this.bot, this.bot.api);
+            behaviour.enabled(this.bot, this.bot.getAPI());
 
             return true;
         }
@@ -84,6 +100,10 @@ export default class BehaviourManager {
         return enabled;
     }
 
+    /**
+     * @param {string} name
+     * @return {Behaviour | null}
+     */
     getBehaviour(name: string): Behaviour | null {
         for (let i = 0; i < this.behaviours.length; i++) {
             if (this.behaviours[i].name === name) {
@@ -94,8 +114,11 @@ export default class BehaviourManager {
         return null;
     }
 
+    /**
+     * @return {number}
+     */
     loadAllSync(): number {
-        const loadedBehaviours = BehaviourManager.loadAllSync(this.path);
+        const loadedBehaviours: Array<Behaviour> | null = BehaviourManager.loadAllSync(this.path);
 
         if (loadedBehaviours) {
             return this.registerMultiple(loadedBehaviours);
@@ -104,6 +127,10 @@ export default class BehaviourManager {
         return 0;
     }
 
+    /**
+     * @param {string} directory
+     * @return {Array<Behaviour> | null}
+     */
     static loadAllSync(directory: string): Array<Behaviour> | null {
         if (!fs.existsSync(directory)) {
             Log.error(`[BehaviourManager.loadAll] Target directory does not exist, no behaviours were loaded: ${directory}`);

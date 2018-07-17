@@ -95,6 +95,30 @@ export default class JsonProvider extends ObjectProvider {
     }
 
     /**
+     * @param {string} path
+     * @param value
+     * @param {boolean} create
+     * @return {boolean}
+     */
+    push(path: string, value: any, create: boolean = true): boolean {
+        const currentValue: any = _.get(this.data, path);
+
+        if (Array.isArray(currentValue)) {
+            currentValue.push(value);
+            this.set(path, currentValue);
+
+            return true;
+        }
+        else if (create) {
+            this.set(path, [value]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Merge guild data
      * @param {string} path
      * @param {*} value

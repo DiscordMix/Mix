@@ -64,9 +64,7 @@ export default abstract class CommandAuthStore extends EventEmitter {
      * @param {Snowflake} guildId
      * @return {boolean} Whether the entry exists
      */
-    contains(guildId: Snowflake): boolean {
-        return Object.keys(this.data).includes(guildId);
-    }
+    abstract contains(guildId: Snowflake): boolean;
 
     /**
      * @param {Snowflake} guildId

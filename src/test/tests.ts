@@ -109,15 +109,6 @@ describe("Utils.shuffle()", () => {
     });
 });
 
-describe("Utils.shuffle()", () => {
-    it("should shuffle an array", () => {
-        const result = Utils.shuffle(["hello", "my", "name", "is", "john doe"]);
-
-        expect(result).to.be.an("array");
-        expect(result.join(" ")).to.not.equal("hello my name is john doe");
-    });
-});
-
 describe("Rgb.toString()", () => {
     it("should return the Rgb in string format", () => {
         const result = subjects.rgb.toString();

@@ -250,7 +250,7 @@ describe("Settings.fromFile()", () => {
 
         settingsPromise.then((result: Settings) => {
             expect(result.general.prefixes).to.be.an("array");
-            expect(result.general.prefixes).to.equal(["!"]);
+            expect(result.general.prefixes[0]).to.equal("!");
 
             expect(result.general.token).to.be.an("string");
             expect(result.general.token).to.equal("my_secret_token");
@@ -270,7 +270,7 @@ describe("Settings.fromFile()", () => {
 
         return settingsSecondPromise.then((result: Settings) => {
             expect(result.general.prefixes).to.be.an("array");
-            expect(result.general.prefixes).to.equal(["."]);
+            expect(result.general.prefixes[0]).to.equal(".");
 
             expect(result.general.token).to.be.an("string");
             expect(result.general.token).to.equal("another_secret_token");

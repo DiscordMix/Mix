@@ -29,6 +29,8 @@
     "license": "MIT",
     "dependencies": {
         "@raxor1234/typer": "^1.0.1",
+        "@types/chai": "^4.1.4",
+        "@types/mocha": "^5.2.5",
         "argparse": "^1.0.10",
         "babel-polyfill": "^6.26.0",
         "colors": "latest",

@@ -17,6 +17,7 @@ export default class CommandExecutedEvent extends CommandEvent {
 
         /**
          * @type {Command}
+         * @readonly
          */
         this.command = command;
     }

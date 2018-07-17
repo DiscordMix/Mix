@@ -5,7 +5,7 @@ import CommandContext from "../commands/command-context";
  * @extends CommandEvent
  */
 export default class PreventableCommandEvent extends CommandEvent {
-    prevented: boolean = false;
+    private prevented: boolean = false;
 
     /**
      * @param {CommandContext} context
@@ -23,5 +23,9 @@ export default class PreventableCommandEvent extends CommandEvent {
          * @readonly
          */
         this.prevented = prevent;
+    }
+
+    isPrevented(): boolean {
+        return this.prevented;
     }
 }

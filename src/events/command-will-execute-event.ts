@@ -17,6 +17,7 @@ export default class CommandWillExecuteEvent extends PreventableCommandEvent {
 
         /**
          * @type {Command}
+         * @readonly
          */
         this.command = command;
     }

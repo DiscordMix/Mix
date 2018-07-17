@@ -98,7 +98,7 @@ export default class Settings {
             Log.throw("[Settings.fromFile] Could not load settings: File does not exist");
         }
 
-        const fileSettings = await Utils.readJson(path);
+        const fileSettings: any = await Utils.readJson(path);
 
         // TODO: Make sure pure objects work
         return new Settings(fileSettings);

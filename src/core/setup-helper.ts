@@ -46,20 +46,61 @@ export default class SetupHelper {
      * @param {SetupHelperOptions} options
      */
     constructor(options: SetupHelperOptions) {
+        /**
+         * @type {*}
+         * @private
+         * @readonly
+         */
         this.client = options.client;
+
+        /**
+         * @type {TextChannel}
+         * @private
+         * @readonly
+         */
         this.channel = options.channel;
+
+        /**
+         * @type {Snowflake}
+         * @private
+         * @readonly
+         */
         this.userId = options.userId;
+
+        /**
+         * @type {string | undefined}
+         * @private
+         * @readonly
+         */
         this.title = options.title;
+
+        /**
+         * @type {number}
+         * @private
+         * @readonly
+         */
         this.timeout = options.timeout || 60;
+
+        /**
+         * @type {boolean}
+         * @private
+         * @readonly
+         */
         this.embed = options.embed !== undefined ? options.embed : true;
+
+        /**
+         * @type {Array<SetupHelperAction>}
+         * @private
+         * @readonly
+         */
         this.actionMap = [];
     }
 
     /**
      * @param {string} text
-     * @return {SetupHelper}
+     * @return {this}
      */
-    input(text: string): SetupHelper {
+    input(text: string): this {
         this.actionMap.push({
             type: SetupHelperActionType.Input,
             text: text
@@ -70,9 +111,9 @@ export default class SetupHelper {
 
     /**
      * @param {string} text
-     * @return {SetupHelper}
+     * @return {this}
      */
-    question(text: string): SetupHelper {
+    question(text: string): this {
         this.actionMap.push({
             type: SetupHelperActionType.Question,
             text: text

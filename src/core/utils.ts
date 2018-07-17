@@ -33,8 +33,8 @@ export default class Utils {
     }
 
     /**
-     * @param {number} min
-     * @param {number} max
+     * @param {number} min The minimum amount
+     * @param {number} max The maximum amount
      * @return {number} The random number
      */
     static getRandomInt(min: number, max: number): number {
@@ -69,7 +69,7 @@ export default class Utils {
     /**
      * @todo Return type
      * @param {SendOptions} options
-     * @return {Promise<Discord.Message>}
+     * @return {Promise<Discord.Message>} The message sent
      */
     static async send(options: SendOptions): Promise<any> {
         return await options.channel.send(new RichEmbed()
@@ -120,7 +120,7 @@ export default class Utils {
 
     /**
      * @param {string} state
-     * @return {boolean}
+     * @return {boolean} Whether the state string representation was positive
      */
     static translateState(state: string): boolean {
         return /^(1|true|on|y|yes)$/i.test(state);
@@ -145,7 +145,7 @@ export default class Utils {
 
     /**
      * @param {string} path
-     * @return {Promise<Object>}
+     * @return {Promise<Object>} The data from the specified path
      */
     static async readJson(path: string): Promise<any> {
         return new Promise((resolve) => {
@@ -160,7 +160,7 @@ export default class Utils {
     }
 
     /**
-     * @param {string} string The string to escape
+     * @param {string} string The string to escape regex of
      * @return {string} The escaped string
      */
     static escapeRegexString(string: string): string {
@@ -175,6 +175,6 @@ export default class Utils {
         // return (await this.readJson("package.json")).version;
 
         // TODO: Hard coded
-        return "1.1.21";
+        return "1.1.22";
     }
 }

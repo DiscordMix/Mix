@@ -18,18 +18,30 @@ export default class Temp {
 
     /**
      * @param {Snowflake} id
+     * @return {this}
      */
-    setup(id: Snowflake): void {
+    setup(id: Snowflake): this {
+        /**
+         * @type {string | undefined}
+         * @private
+         */
         this.id = id;
+
+        /**
+         * @type {string | undefined}
+         * @private
+         */
         this.resolvedPath = Temp.resolvePath(this.id);
+
+        return this;
     }
 
     /**
      * Create the temp folder for the bot
-     * @return {Promise<*>}
+     * @return {Promise<this>}
      */
-    async create(): Promise<any> {
-        return new Promise((resolve) => {
+    async create(): Promise<this> {
+        return new Promise<this>((resolve) => {
             if (!fs.existsSync(this.resolvedPath)) {
                 if (!fs.existsSync("tmp")) {
                     fs.mkdirSync("tmp");
@@ -40,13 +52,13 @@ export default class Temp {
                         Log.error(`There was an error creating the temp folder for the bot: ${this.id} (${error.message})`);
                     }
 
-                    resolve();
+                    resolve(this);
                 });
             }
             else {
                 Log.warn(`[Temp.create] Temp folder already exists for the bot: ${this.id}. This may be due to an improper bot shutdown.`);
 
-                resolve();
+                resolve(this);
             }
         });
     }
@@ -55,17 +67,19 @@ export default class Temp {
      * @todo: Return type
      * @return {Promise<*>}
      */
-    async reset(): Promise<any> {
-        return new Promise((resolve) => {
+    async reset(): Promise<this> {
+        return new Promise<this>((resolve) => {
             if (fs.existsSync(this.resolvedPath)) {
                 fs.unlink(this.resolvedPath, (error: Error) => {
                     if (error) {
                         Log.error(`[Temp.reset] There was an error while resetting the temp folder: ${error.message}`)
                     }
 
-                    resolve();
+                    resolve(this);
                 });
             }
+
+            resolve(this);
         });
     }
 

@@ -133,7 +133,7 @@ export default class BehaviourManager {
      */
     static loadAllSync(directory: string): Array<Behaviour> | null {
         if (!fs.existsSync(directory)) {
-            Log.error(`[BehaviourManager.loadAll] Target directory does not exist, no behaviours were loaded: ${directory}`);
+            Log.warn(`[BehaviourManager.loadAll] Target directory does not exist, no behaviours were loaded: ${directory}`);
 
             return null;
         }

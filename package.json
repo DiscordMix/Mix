@@ -15,18 +15,16 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/CloudRex/Anvil.git"
+        "url": "https://gitlab.com/cloudrex/anvil.git"
     },
     "scripts": {
         "watch": "tsc --watch",
         "build": "tsc",
         "type-check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js",
-        "prepublish": "npm run build",
-        "docs": "./node_modules/.bin/esdoc",
-        "rdocs": "npm run docs && git add ./docs/* && git commit -m 'Regenerated docs' && git push"
+        "prepublish": "npm run build"
     },
-    "author": "Phantom <private.phantom@outlook.com>",
+    "author": "CloudRex <cloudrex@outlook.com>",
     "contributors": [
         "AL_1 <allen.m.lantz@gmail.com> (https://al1l.com/)"
     ],
@@ -58,8 +56,6 @@
         "@babel/preset-typescript": "^7.0.0-beta.44",
         "typescript": "^2.8.1",
         "chai": "^4.1.2",
-        "esdoc": "^1.1.0",
-        "esdoc-standard-plugin": "^1.0.0",
         "eslint": "^4.19.1",
         "eslint-config-airbnb-base": "^12.1.0",
         "eslint-plugin-import": "^2.10.0",

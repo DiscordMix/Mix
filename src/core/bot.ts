@@ -47,7 +47,7 @@ export interface BotOptions {
 /**
  * @extends EventEmitter
  */
-export default class Bot extends EventEmitter {
+export default class Bot<ApiType = any> extends EventEmitter {
     readonly settings: Settings;
     readonly temp: Temp;
     readonly dataStore?: DataProvider;
@@ -73,7 +73,7 @@ export default class Bot extends EventEmitter {
     readonly authGroups: any;
     readonly asciiTitle: boolean;
 
-    private api?: any;
+    private api?: ApiType;
     private setupStart: number = 0;
 
     /**
@@ -249,20 +249,30 @@ export default class Bot extends EventEmitter {
     /**
      * @return {*}
      */
-    getAPI(): any {
+    getAPI(): ApiType | undefined {
         return this.api;
     }
 
     /**
      * Setup the bot
-     * @return {Promise<Bot>}
+     * @return {Promise<this>}
      */
-    async setup(api?: any): Promise<Bot> {
+    async setup(api?: ApiType): Promise<this> {
         if (this.asciiTitle) {
             console.log(fs.readFileSync("./title.txt").toString());
         }
 
+        /**
+         * @type {*}
+         * @private
+         * @readonly
+         */
         this.api = api;
+
+        /**
+         * @type {number}
+         * @private
+         */
         this.setupStart = performance.now();
 
         // Load behaviours
@@ -292,7 +302,7 @@ export default class Bot extends EventEmitter {
     /**
      * Setup the client's events
      */
-    setupEvents(): void {
+    private setupEvents(): void {
         Log.verbose("[Bot.setupEvents] Setting up Discord events");
 
         // Discord client events
@@ -409,7 +419,7 @@ export default class Bot extends EventEmitter {
             );
         }
         else {
-            Log.error("[Bot.setupEvents] Failed parsing command");
+            Log.error("[Bot.handleCommandMessage] Failed parsing command");
         }
     }
 

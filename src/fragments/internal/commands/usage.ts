@@ -1,5 +1,5 @@
-import {default as Command} from "../command";
-import CommandContext from "../command-context";
+import {default as Command} from "../../../commands/command";
+import CommandContext from "../../../commands/command-context";
 
 export default abstract class Usage extends Command {
     readonly meta = {

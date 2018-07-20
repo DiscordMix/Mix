@@ -1,5 +1,5 @@
-import CommandContext from "../command-context";
-import { Command } from "../..";
+import CommandContext from "../../../commands/command-context";
+import { Command } from "../../..";
 
 export default abstract class Prefix extends Command {
     readonly meta = {

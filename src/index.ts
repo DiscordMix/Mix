@@ -37,6 +37,7 @@ import MysqlProvider from "./data-providers/mysql-provider";
 import CommandAuthStore from "./commands/auth-stores/command-auth-store";
 import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
 import JsonAuthStore from "./commands/auth-stores/json-auth-store";
+import SetupHelper, { SetupHelperResult } from "./core/setup-helper";
 
 export {
     // Commands
@@ -99,5 +100,9 @@ export {
     // Auth Stores
     CommandAuthStore,
     ObjectAuthStore,
-    JsonAuthStore
+    JsonAuthStore,
+
+    // Setup Helper
+    SetupHelper,
+    SetupHelperResult
 };

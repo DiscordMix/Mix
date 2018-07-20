@@ -1,6 +1,6 @@
-import Command from "../command";
-import CommandContext from "../command-context";
-import JsonAuthStore from "../auth-stores/json-auth-store";
+import Command from "../../../commands/command";
+import CommandContext from "../../../commands/command-context";
+import JsonAuthStore from "../../../commands/auth-stores/json-auth-store";
 import {GuildMember} from "discord.js";
 
 export default abstract class SetAuth extends Command {

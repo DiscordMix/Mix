@@ -1,6 +1,5 @@
 import {RichEmbed} from "discord.js";
-
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
 export default class EmbedBuilder {
     private readonly embed: RichEmbed;

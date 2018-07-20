@@ -1,7 +1,7 @@
 import Log from "./log";
 import Utils from "./utils";
+import fs from "fs";
 
-const fs = require("fs");
 const Typer = require("@raxor1234/typer/typer");
 
 // TODO: All these interfaces probably shouldn't be

@@ -1,4 +1,5 @@
-const EventEmitter = require("events");
+import EventEmitter from "events";
+
 const _ = require("lodash");
 
 /**

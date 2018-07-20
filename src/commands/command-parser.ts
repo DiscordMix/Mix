@@ -1,7 +1,6 @@
 import Utils from "../core/utils";
 import CommandStore from "./command-store";
 import Command from "./command";
-import CommandContext from "./command-context";
 import {Message} from "discord.js";
 
 export default class CommandParser {

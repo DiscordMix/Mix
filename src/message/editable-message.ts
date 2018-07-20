@@ -1,7 +1,6 @@
 import Log from "../core/log";
 import {Message} from "discord.js";
-
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
 export interface MessageEditOptions {
     readonly message: string;
@@ -44,9 +43,9 @@ export default class EditableMessage {
     async edit(options: MessageEditOptions): Promise<Message> {
         // TODO: Default values?
         return this.message.edit("", new Discord.RichEmbed()
-            .setColor(options.color)
+            .setColor(options.color ? options.color : "")
             .setDescription(options.message)
             .setAuthor(options.title, options.thumbnailUrl)
-            .setImage(options.imageUrl));
+            .setImage(options.imageUrl ? options.imageUrl : ""));
     }
 }

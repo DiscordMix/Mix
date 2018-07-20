@@ -17,11 +17,10 @@ import BehaviourManager from "../behaviours/behaviour-manager";
 import {CommandArgumentStyle, UserGroup} from "../commands/command";
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
-
-const Discord = require("discord.js");
-const EventEmitter = require("events");
-const fs = require("fs");
-const {performance} = require("perf_hooks");
+import Discord from "discord.js";
+import EventEmitter from "events";
+import fs from "fs";
+import {performance} from "perf_hooks";
 
 export interface BotOptions {
     readonly settings: Settings;
@@ -523,7 +522,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
         if (fs.existsSync("./temp")) {
             fs.readdir("./temp", (error: any, files: any) => {
                 for (let i = 0; i < files.length; i++) {
-                    fs.unlink(`./temp/${files[i]}`);
+                    fs.unlink(`./temp/${files[i]}`, (error: Error) => {
+                        throw error;
+                    });
                 }
             });
         }

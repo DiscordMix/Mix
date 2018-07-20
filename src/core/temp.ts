@@ -1,9 +1,8 @@
 import Log from "./log";
 import Utils from "./utils";
 import {Snowflake} from "discord.js";
-
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
 export default class Temp {
     private id?: string;
@@ -42,6 +41,10 @@ export default class Temp {
      */
     async create(): Promise<this> {
         return new Promise<this>((resolve) => {
+            if (!this.resolvedPath) {
+                throw new Error("[Temp.create] Trying to create when the resolved path is undefined");
+            }
+
             if (!fs.existsSync(this.resolvedPath)) {
                 if (!fs.existsSync("tmp")) {
                     fs.mkdirSync("tmp");
@@ -69,6 +72,10 @@ export default class Temp {
      */
     async reset(): Promise<this> {
         return new Promise<this>((resolve) => {
+            if (!this.resolvedPath) {
+                throw new Error("[Temp.reset] Trying to reset when the resolved path is undefined");
+            }
+
             if (fs.existsSync(this.resolvedPath)) {
                 fs.unlink(this.resolvedPath, (error: Error) => {
                     if (error) {
@@ -90,6 +97,10 @@ export default class Temp {
      * @return {Promise<boolean>}
      */
     store(data: any, file: string): Promise<boolean> {
+        if (!this.resolvedPath) {
+            throw new Error("[Temp.store] Trying to store when the resolved path is undefined");
+        }
+
         return Utils.writeJson(path.resolve(path.join(this.resolvedPath, file)), data);
     }
 

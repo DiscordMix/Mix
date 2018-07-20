@@ -1,10 +1,8 @@
 import Bot from "../core/bot";
 import Behaviour from "./behaviour";
 import Log from "../core/log";
-
-const fs = require("fs");
-
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
 export default class BehaviourManager {
     private readonly bot: Bot;

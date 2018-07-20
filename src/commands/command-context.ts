@@ -4,8 +4,7 @@ import {Message, Role, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import EmojiCollection from "../collections/emoji-collection";
 import Log from "../core/log";
-
-const Discord = require("discord.js");
+import Discord from "discord.js";
 
 export interface CommandExecutionContextOptions {
     readonly message: Message;

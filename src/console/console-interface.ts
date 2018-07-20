@@ -1,9 +1,8 @@
 import Log from "../core/log";
 import Utils from "../core/utils";
 import Bot from "../core/bot";
-
-const readline = require("readline");
-const { performance } = require("perf_hooks");
+import readline from "readline";
+import { performance } from "perf_hooks";
 
 export default class ConsoleInterface {
     ready: boolean;

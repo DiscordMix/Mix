@@ -1,5 +1,6 @@
+import fs from "fs";
+
 const colors = require("colors");
-const fs = require("fs");
 
 export enum LogLevel {
     Fatal,

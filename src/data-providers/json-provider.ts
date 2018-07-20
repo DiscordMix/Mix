@@ -1,8 +1,8 @@
 import ObjectProvider from "./object-provider";
 import Log from "../core/log";
 import Utils from "../core/utils";
+import fs from "fs";
 
-const fs = require("fs");
 const _ = require("lodash");
 
 /**

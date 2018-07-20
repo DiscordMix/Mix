@@ -159,7 +159,7 @@ export default class CommandHandler {
                 context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
-        else if (command.cooldown && !this.commandStore.cooldownExpired(context, command)) {
+        else if (command.cooldown && !this.commandStore.cooldownExpired(command)) {
             if (this.errorHandlers[CommandManagerEvent.UnderCooldown]) {
                 this.errorHandlers[CommandManagerEvent.UnderCooldown](context, command);
             }

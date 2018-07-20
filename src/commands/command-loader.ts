@@ -1,9 +1,8 @@
 import Command from "./command";
 import Log from "../core/log";
 import CommandStore from "./command-store";
-
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
 export default class CommandLoader {
     private readonly commandStore: CommandStore;

@@ -1,6 +1,6 @@
-import {DMChannel, GroupDMChannel, GuildChannel, Message, RichEmbed, TextChannel, User} from "discord.js";
+import {RichEmbed, User} from "discord.js";
+import fs from "fs";
 
-const fs = require("fs");
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
 

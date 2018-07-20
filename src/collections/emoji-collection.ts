@@ -1,6 +1,5 @@
 import Collection from "./collection";
-
-const fs = require("fs");
+import fs from "fs";
 
 /**
  * @extends Collection

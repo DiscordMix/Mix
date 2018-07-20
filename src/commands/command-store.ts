@@ -1,12 +1,8 @@
-import CommandExecutedEvent from "../events/command-executed-event";
 import Log from "../core/log";
-import ChatEnvironment from "../core/chat-environment";
 import Bot from "../core/bot";
 import Command from "./command";
 import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandContext from "./command-context";
-import {Permissions, TextChannel} from "discord.js";
-import Permission from "../core/permission";
 // import Collection from "../core/collection";
 
 /**
@@ -183,7 +179,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {Command} command
      * @return {boolean}
      */
-    cooldownExpired(context: CommandContext, command: Command): boolean {
+    cooldownExpired(command: Command): boolean {
         const cooldown: CommandCooldown | null = this.getCooldown(command);
 
         return (cooldown !== null && Date.now() > cooldown.end) || cooldown === null;

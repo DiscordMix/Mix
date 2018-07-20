@@ -38,6 +38,7 @@ import CommandAuthStore from "./commands/auth-stores/command-auth-store";
 import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
 import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 import SetupHelper, { SetupHelperResult } from "./core/setup-helper";
+import Behaviour, { BehaviourOptions } from "./behaviours/behaviour";
 
 export {
     // Commands
@@ -104,5 +105,9 @@ export {
 
     // Setup Helper
     SetupHelper,
-    SetupHelperResult
+    SetupHelperResult,
+
+    // Behaviours
+    Behaviour,
+    BehaviourOptions
 };

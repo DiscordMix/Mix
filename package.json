@@ -46,7 +46,9 @@
         "mongodb": "^3.1.1",
         "mysql": "^2.15.0",
         "querystring": "^0.2.0",
-        "request": "^2.83.0"
+        "request": "^2.83.0",
+        "require-main-filename": "^1.0.1",
+        "rimraf": "^2.6.2"
     },
     "devDependencies": {
         "@babel/cli": "^7.0.0-beta.44",

@@ -4,6 +4,9 @@ import {Snowflake} from "discord.js";
 import fs from "fs";
 import path from "path";
 
+const rimraf = require("rimraf");
+const main = require("require-main-filename");
+
 export default class Temp {
     private id?: string;
     private resolvedPath?: string;
@@ -77,7 +80,7 @@ export default class Temp {
             }
 
             if (fs.existsSync(this.resolvedPath)) {
-                fs.unlink(this.resolvedPath, (error: Error) => {
+                rimraf(this.resolvedPath, (error: Error) => {
                     if (error) {
                         Log.error(`[Temp.reset] There was an error while resetting the temp folder: ${error.message}`)
                     }
@@ -85,8 +88,9 @@ export default class Temp {
                     resolve(this);
                 });
             }
-
-            resolve(this);
+            else {
+                resolve(this);
+            }
         });
     }
 
@@ -109,6 +113,6 @@ export default class Temp {
      * @return {string}
      */
     static resolvePath(id: string): string {
-        return path.join("tmp", `u${id}`);
+        return path.join(path.dirname(main()), "tmp", `u${id}`);
     }
 }

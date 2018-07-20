@@ -1,24 +1,24 @@
-import {CommandOptions} from "../command";
+import Command from "../command";
 import CommandContext from "../command-context";
 import JsonAuthStore from "../auth-stores/json-auth-store";
 import {GuildMember} from "discord.js";
 
-export default <CommandOptions>{
-    meta: {
+export default abstract class SetAuth extends Command {
+    readonly meta = {
         name: "setauth",
-        desc: "Manage authentication levels",
+        description: "Manage authentication levels"
+    };
 
-        args: {
-            user: "!:member",
-            auth: "!number"
-        }
-    },
+    readonly args = {
+        user: "!:member",
+        auth: "!number"
+    };
 
-    restrict: {
+    readonly restrict = {
         auth: -1 // Owner
-    },
+    };
 
-    executed: async (context: CommandContext): Promise<void> => {
+    public static async executed(context: CommandContext): Promise<void> {
         if (context.arguments[1] < 0) {
             await context.fail("Authorization level must be higher than zero.");
 

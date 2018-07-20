@@ -30,6 +30,7 @@ export default class CommandLoader {
     }
 
     /**
+     * @deprecated Use the Fragment Loader instead
      * @param {string} file The path to the command file
      * @param {string} moduleName
      * @return {boolean} Whether the command was validated and loaded successfully
@@ -47,19 +48,12 @@ export default class CommandLoader {
             }
 
             // Support for ES6-compiled modules
-            if (module.default && typeof module.default === "object") {
+            if (module.default) {
                 module = module.default;
             }
 
-            // Validate the command before registering it
-            if (Command.validate(module)) {
-                this.commandStore.register(new Command(module));
-
-                return true;
-            }
-            else {
-                Log.warn(`[CommandLoader.load] Skipping invalid command: ${moduleName}`);
-            }
+            this.commandStore.register(module);
+            return true;
         }
         else if (!file.endsWith(".d.ts")) {
             Log.verbose(`[CommandLoader.load] Skipping file: ${moduleName} (excluded or invalid name)`);
@@ -119,20 +113,12 @@ export default class CommandLoader {
             let module = require(modulePath);
 
             // Support for ES6-compiled modules
-            if (module.default && typeof module.default === "object") {
+            if (module.default) {
                 module = module.default;
             }
 
-            // Validate the command before registering it
-            if (Command.validate(module)) {
-                this.commandStore.register(new Command(module));
-
-                resolve(true);
-            }
-            else {
-                Log.warn(`[CommandLoader.loadPrimitive] Primitive was found, but was validated invalid: ${name}`);
-                resolve(false);
-            }
+            this.commandStore.register(module);
+            resolve(true);
         });
     }
 

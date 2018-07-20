@@ -64,7 +64,10 @@ export default class ConsoleInterface {
                     const startTime = performance.now();
 
                     await bot.disconnect();
-                    await bot.commandLoader.reloadAll();
+
+                    // TODO: New fragment system
+                    // await bot.commandLoader.reloadAll();
+                    
                     await bot.connect();
 
                     const endTime = performance.now();

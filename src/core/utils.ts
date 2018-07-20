@@ -1,5 +1,6 @@
 import {RichEmbed, User} from "discord.js";
 import fs from "fs";
+import path from "path";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
@@ -39,6 +40,38 @@ export default class Utils {
      */
     static getRandomInt(min: number, max: number): number {
         return Math.floor(Math.random() * max) + min;
+    }
+
+    /**
+     * @param {string} directory The directory to scan
+     * @param {boolean} [absolutePath=false] Whether to return the absolute path of the files
+     */
+    public static getFiles(directory: string, absolutePath: boolean = false): Promise<Array<string> | null> {
+        return new Promise((resolve) => {
+            if (!fs.existsSync(directory)) {
+                resolve(null);
+
+                return;
+            }
+    
+            fs.readdir(directory, (error: Error, files: Array<string>) => {
+                if (error) {
+                    throw new Error(`[Utils.getFiles] There was an error while reading directory '${directory}': ${error.message}`);
+                }
+
+                let result: Array<string> = files;
+
+                if (absolutePath) {
+                    for (let i = 0; i < result.length; i++) {
+                        result[i] = path.resolve(path.join(directory, result[i]));
+                    }
+                }
+
+                resolve(result);
+
+                return;
+            });
+        });
     }
 
     /**

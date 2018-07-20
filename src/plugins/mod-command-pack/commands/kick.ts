@@ -1,10 +1,41 @@
-import {CommandOptions} from "../../../commands/command";
 import Permission from "../../../core/permission";
 import CommandContext from "../../../commands/command-context";
 import ChatEnvironment from "../../../core/chat-environment";
+import { Command } from "../../..";
 
-const command: CommandOptions = {
-    executed: async (context: CommandContext) => {
+export default abstract class Kick extends Command {
+    readonly meta = {
+        name: "kick",
+        description: "Kick a member from the server"
+    };
+
+    readonly args = {
+        target: "!:user",
+        reason: "string"
+    };
+
+    readonly newArgs = [
+        {
+            name: "member",
+            desc: "The guild member to kick",
+            type: ":user",
+            required: true
+        },
+        {
+            name: "reason",
+            desc: "The reason for performing this action",
+            type: "string"
+        }
+    ];
+
+    // TODO: Restrict is not in 'Command'
+    readonly restrict = {
+        env: ChatEnvironment.Guild,
+        selfPerms: [Permission.KickMembers],
+        issuerPerms: [Permission.KickMembers]
+    };
+
+    public executed(context: CommandContext): void {
         const targetMember = context.message.guild.member(context.arguments[0]);
 
         if (targetMember) {
@@ -26,33 +57,5 @@ const command: CommandOptions = {
         }
 
         return;
-    },
-    meta: {
-        name: "kick",
-        desc: "Kick an user or bot from the server",
-        args: {
-            target: "!:user",
-            reason: "string"
-        },
-        newArgs: [
-            {
-                name: "member",
-                desc: "The guild member to kick",
-                type: ":user",
-                required: true
-            },
-            {
-                name: "reason",
-                desc: "The reason for performing this action",
-                type: "string"
-            }
-        ]
-    },
-    restrict: {
-        env: ChatEnvironment.Guild,
-        selfPerms: [Permission.KickMembers],
-        issuerPerms: [Permission.KickMembers]
     }
-};
-
-export default command;
+}

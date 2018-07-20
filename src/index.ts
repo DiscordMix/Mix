@@ -3,7 +3,7 @@ import CommandArgumentParser from "./commands/command-argument-parser";
 import CommandContext from "./commands/command-context";
 import CommandLoader from "./commands/command-loader";
 import CommandStore, {CommandManagerEvent} from "./commands/command-store";
-import Command, {CommandMetaOptions, CommandRestrictOptions, CommandOptions} from "./commands/command";
+import Command from "./commands/command";
 import ConsoleInterface from "./console/console-interface";
 import CommandParser from "./commands/command-parser";
 import ConsoleCommand from "./console/console-command";
@@ -47,9 +47,6 @@ export {
     CommandManagerEvent,
     CommandParser,
     Command,
-    CommandMetaOptions,
-    CommandRestrictOptions,
-    CommandOptions,
 
     // Console
     ConsoleInterface,

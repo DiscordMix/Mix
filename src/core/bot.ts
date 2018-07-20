@@ -6,7 +6,6 @@ import CommandStore from "../commands/command-store";
 import Utils from "./utils";
 import EmojiCollection from "../collections/emoji-collection";
 import Settings from "./settings";
-import CommandLoader from "../commands/command-loader";
 import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
@@ -14,13 +13,18 @@ import Temp from "./temp";
 import {Client, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
-import {CommandArgumentStyle, UserGroup} from "../commands/command";
+import Command, {CommandArgumentStyle, UserGroup} from "../commands/command";
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
 import Discord from "discord.js";
 import EventEmitter from "events";
 import fs from "fs";
 import {performance} from "perf_hooks";
+import path from "path";
+import FragmentLoader from "../fragments/fragment-loader";
+import Fragment from "../fragments/fragment";
+
+const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
 export interface BotOptions {
     readonly settings: Settings;
@@ -41,6 +45,7 @@ export interface BotOptions {
     // TODO: Make use of authGroups
     readonly authGroups?: any;
     readonly asciiTitle?: boolean;
+    readonly consoleInterface?: boolean;
 }
 
 /**
@@ -56,7 +61,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
     readonly behaviours: BehaviourManager;
     readonly commandStore: CommandStore;
     readonly commandHandler: CommandHandler;
-    readonly commandLoader: CommandLoader;
     readonly console: ConsoleInterface;
     readonly menus: EmojiMenuManager;
     readonly prefixCommand: boolean;
@@ -71,6 +75,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     readonly allowCommandChain: boolean;
     readonly authGroups: any;
     readonly asciiTitle: boolean;
+    readonly consoleInterface: boolean;
 
     private api?: ApiType;
     private setupStart: number = 0;
@@ -142,12 +147,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
             authStore: this.authStore,
             argumentTypes: options.argumentTypes || {}
         });
-
-        /**
-         * @type {CommandLoader}
-         * @readonly
-         */
-        this.commandLoader = new CommandLoader(this.commandStore);
 
         /**
          * @type {ConsoleInterface}
@@ -242,13 +241,20 @@ export default class Bot<ApiType = any> extends EventEmitter {
          */
         this.asciiTitle = options.asciiTitle !== undefined ? options.asciiTitle : true;
 
+        /**
+         * Whether to enable the console interface
+         * @type {boolean}
+         * @readonly
+         */
+        this.consoleInterface = options.consoleInterface !== undefined ? options.consoleInterface : true;
+
         return this;
     }
 
     /**
      * @return {*}
      */
-    getAPI(): ApiType | undefined {
+    public getAPI(): ApiType | undefined {
         return this.api;
     }
 
@@ -256,9 +262,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * Setup the bot
      * @return {Promise<this>}
      */
-    async setup(api?: ApiType): Promise<this> {
+    public async setup(api?: ApiType): Promise<this> {
         if (this.asciiTitle) {
-            console.log(fs.readFileSync("./title.txt").toString());
+            console.log("\n" + fs.readFileSync(path.resolve(path.join(__dirname, "../../src/core/title.txt"))).toString() + "\n");
         }
 
         /**
@@ -274,21 +280,37 @@ export default class Bot<ApiType = any> extends EventEmitter {
          */
         this.setupStart = performance.now();
 
-        // Load behaviours
-        const behavioursLoaded: number = this.behaviours.loadAllSync();
+        Log.verbose("[Bot.setup] Attempting to load internal fragments");
 
-        Log.verbose(`[Bot.setup] Loaded ${behavioursLoaded} behaviours`);
+        // Load internal fragments
+        const internalFragmentCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(internalFragmentsPath);
 
-        const behavioursEnabled: number = this.behaviours.enableAll();
+        if (!internalFragmentCandidates) {
+            throw new Error("[Bot.setup] Failed to load internal fragments");
+        }
 
-        Log.success(`[Bot.setup] Enabled ${behavioursEnabled} behaviours`);
+        if (internalFragmentCandidates.length > 0) {
+            Log.verbose(`[Bot.setup] Loading ${internalFragmentCandidates.length} internal fragments`);
+        }
+        else {
+            Log.warn("[Bot.setup] No internal fragments were detected");
+        }
 
-        // Load commandStore
-        await this.commandLoader.reloadAll();
+        const internalFragments: Array<Fragment> | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
 
-        // TODO: Primitives should be loaded first
-        // Load primitive commandStore
-        await this.commandLoader.loadPrimitives(this.primitiveCommands);
+        if (!internalFragments || internalFragments.length === 0) {
+            Log.warn("[Bot.setup] No internal fragments were loaded");
+        }
+        else {
+            const enabled: number = this.enableFragments(internalFragments);
+
+            if (enabled === 0) {
+                Log.warn("[Bot.setup] No internal fragments were enabled");
+            }
+            else {
+                Log.success(`[Bot.setup] Enabled ${enabled}/${internalFragments.length} internal fragments`);
+            }
+        }
 
         // Setup the Discord client's events
         this.setupEvents();
@@ -296,6 +318,24 @@ export default class Bot<ApiType = any> extends EventEmitter {
         Log.success("[Bot.setup] Bot setup completed");
 
         return this;
+    }
+
+    private enableFragments(fragments: Array<Fragment>): number {
+        let enabled: number = 0;
+
+        for (let i: number = 0; i < fragments.length; i++) {
+            if ((fragments[i] as any).prototype instanceof Command) {
+                const fragment: any = fragments[i];
+                
+                this.commandStore.register(new fragment());
+                enabled++;
+            }
+            else {
+                Log.warn(`[Bot.enableFragments] Unknown fragment instance for fragment: ${fragments[i].meta.name}, ignoring`);
+            }
+        }
+
+        return enabled;
     }
 
     /**
@@ -312,7 +352,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             // Create the temp folder
             await this.temp.create();
 
-            if (!this.console.ready) {
+            if (this.consoleInterface && !this.console.ready) {
                 // Setup the console command interface
                 this.console.setup(this);
             }
@@ -477,7 +517,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
         if (reloadModules) {
             // TODO: Actually reload all the features and commandStore
             // this.features.reloadAll(this);
-            await this.commandLoader.reloadAll();
+            // TODO: New fragments system
+            // await this.commandLoader.reloadAll();
         }
 
         await this.disconnect();

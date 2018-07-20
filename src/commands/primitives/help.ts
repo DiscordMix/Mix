@@ -1,15 +1,15 @@
-import {CommandOptions} from "../command";
 import CommandContext from "../command-context";
+import { Command } from "../..";
 
-export default <CommandOptions>{
-    meta: {
+export default abstract class Help extends Command {
+    readonly meta = {
         name: "help",
-        desc: "View available commands and their descriptions"
-    },
+        description: "View available commands and their descriptions"
+    };
 
-    executed: (context: CommandContext): void => {
+    executed(context: CommandContext): void {
         context.ok(context.bot.commandStore.commands
-            .map((command) => `${command.name} => ${command.description || "No description provided"}`)
+            .map((command) => `${command.meta.name} => ${command.meta.description || "No description provided"}`)
             .join("\n"), "Help - Available Commands");
     }
 };

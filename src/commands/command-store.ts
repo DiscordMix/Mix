@@ -152,7 +152,7 @@ export default class CommandStore /* extends Collection */ {
      */
     getByName(name: string): Command | null {
         for (let i = 0; i < this.commands.length; i++) {
-            if (this.commands[i].name === name || this.commands[i].aliases.includes(name)) {
+            if (this.commands[i].meta.name === name || this.commands[i].aliases.includes(name)) {
                 return this.commands[i];
             }
         }

@@ -1,17 +1,17 @@
-import {CommandOptions} from "../command";
 import CommandContext from "../command-context";
+import { Command } from "../..";
 
-export default <CommandOptions>{
-    meta: {
+export default abstract class Prefix extends Command {
+    readonly meta = {
         name: "prefix",
-        desc: "Manage bot prefixes",
+        description: "Manage bot prefixes"
+    };
 
-        args: {
-            prefix: "!string"
-        }
-    },
+    readonly args = {
+        prefix: "!string"
+    };
 
-    executed: (context: CommandContext): void => {
+    executed(context: CommandContext): void {
         // TODO
     }
 };

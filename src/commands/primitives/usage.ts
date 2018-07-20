@@ -1,17 +1,17 @@
-import {default as Command, CommandOptions} from "../command";
+import {default as Command} from "../command";
 import CommandContext from "../command-context";
 
-export default <CommandOptions>{
-    meta: {
+export default abstract class Usage extends Command {
+    readonly meta = {
         name: "usage",
-        desc: "View how to use a certain command",
+        description: "View the usage of a command"
+    };
 
-        args: {
-            command: "!string"
-        }
-    },
+    readonly args = {
+        command: "!string"
+    };
 
-    executed: (context: CommandContext): void => {
+    executed(context: CommandContext): void {
         const targetCommand: Command | null = context.bot.commandStore.getByName(context.arguments[0]);
 
         if (!targetCommand) {
@@ -27,7 +27,7 @@ export default <CommandOptions>{
 
         const argKeys: Array<string> = Object.keys(targetCommand.args);
 
-        let args: Array<string> = [targetCommand.name];
+        let args: Array<string> = [targetCommand.meta.name];
 
         for (let i: number = 0; i < argKeys.length; i++) {
             const arg = argKeys[i].replace(":", "");

@@ -1,4 +1,5 @@
 import Bot from "../core/bot";
+import Fragment from "../fragments/fragment";
 
 export interface BehaviourOptions {
     readonly name: string;
@@ -9,54 +10,17 @@ export interface BehaviourOptions {
     readonly listeners?: Array<string>;
 }
 
-/**
- * @deprecated Use fragments instead
- */
-export default class Behaviour {
-    readonly name: string;
-    readonly description: string;
-    readonly enabled: (bot: Bot, api?: any) => void;
+export default abstract class Behaviour extends Fragment {
     readonly disabled?: (bot: Bot, api?: any) => void;
-    readonly canEnable: ((bot: Bot, api?: any) => boolean) | boolean;
-    readonly listeners: Array<string>;
+    readonly canEnable: ((bot: Bot, api?: any) => boolean) | boolean = true;
+    readonly listeners: Array<string> = [];
 
     /**
      * @param {BehaviourOptions} options
      */
     constructor(options: BehaviourOptions) {
-        /**
-         * @type {string}
-         * @readonly
-         */
-        this.name = options.name;
-
-        /**
-         * @type {string}
-         * @readonly
-         */
-        this.description = options.description ? options.description : "No description provided";
-
-        /**
-         * @type {Function}
-         */
-        this.enabled = options.enabled;
-
-        if (options.disabled) {
-            /**
-             * @type {Function|undefined}
-             */
-            this.disabled = options.disabled;
-        }
-
-        /**
-         * @type {Function|boolean}
-         */
-        this.canEnable = options.canEnable ? options.canEnable : true;
-
-        /**
-         * @type {Array<string>}
-         * @readonly
-         */
-        this.listeners = options.listeners || [];
+        super();
     }
+
+    abstract enabled(bot: Bot, api?: any): void;
 }

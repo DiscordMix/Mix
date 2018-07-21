@@ -29,7 +29,6 @@ export interface CommandCooldown {
 
 export default class CommandStore /* extends Collection */ {
     readonly bot: Bot;
-    readonly path: string;
     readonly authStore: CommandAuthStore;
     readonly cooldowns: Array<CommandCooldown>;
 
@@ -37,23 +36,15 @@ export default class CommandStore /* extends Collection */ {
 
     /**
      * @param {Bot} bot
-     * @param {string} path
      * @param {CommandAuthStore} authStore
      */
-    constructor(bot: Bot, path: string, authStore: CommandAuthStore) {
+    constructor(bot: Bot, authStore: CommandAuthStore) {
         /**
          * @type {Bot}
          * @private
          * @readonly
          */
         this.bot = bot;
-
-        /**
-         * @type {string}
-         * @private
-         * @readonly
-         */
-        this.path = path;
 
         /**
          * @type {CommandAuthStore}

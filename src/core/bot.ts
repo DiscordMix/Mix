@@ -131,13 +131,13 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @type {BehaviourManager}
          * @readonly
          */
-        this.behaviours = new BehaviourManager(this, this.settings.paths.behaviours);
+        this.behaviours = new BehaviourManager(this);
 
         /**
          * @type {CommandStore}
          * @readonly
          */
-        this.commandStore = new CommandStore(this, this.settings.paths.commands, this.authStore);
+        this.commandStore = new CommandStore(this, this.authStore);
 
         /**
          * @type {CommandHandler}

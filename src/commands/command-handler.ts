@@ -7,8 +7,6 @@ import CommandExecutedEvent from "../events/command-executed-event";
 import {TextChannel} from "discord.js";
 import CommandAuthStore from "./auth-stores/command-auth-store";
 
-const typer = require("@raxor1234/typer/typer");
-
 export interface CommandHandlerOptions {
     readonly commandStore: CommandStore;
     readonly authStore: CommandAuthStore;
@@ -131,7 +129,8 @@ export default class CommandHandler {
                 context.fail("That command cannot be executed right now.");
             }
         }
-        else if (!command.singleArg && (!typer.validate(command.args, CommandHandler.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes))) {
+        // TODO: CRITICAL Project no longer uses Typer.
+        else if (!command.singleArg /* && (!typer.validate(command.args, CommandHandler.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) */) {
             if (this.errorHandlers[CommandManagerEvent.InvalidArguments]) {
                 this.errorHandlers[CommandManagerEvent.InvalidArguments](context, command);
             }

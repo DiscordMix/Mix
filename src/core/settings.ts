@@ -2,8 +2,6 @@ import Log from "./log";
 import Utils from "./utils";
 import fs from "fs";
 
-const Typer = require("@raxor1234/typer/typer");
-
 // TODO: All these interfaces probably shouldn't be
 // read-only since it should be allowed to change them
 // in code.
@@ -70,22 +68,6 @@ export default class Settings {
          * @readonly
          */
         this.keys = options.keys || {};
-    }
-
-    /**
-     * @todo Probably not needed anymore also x2
-     * Validate the settings
-     * @return {Settings}
-     */
-    validate(): Settings {
-        if (!Typer.validate({
-            token: "!string",
-            prefix: "!string"
-        }, this.general)) {
-            Log.throw("[Settings.validate] Invalid settings provided");
-        }
-
-        return this;
     }
 
     /**

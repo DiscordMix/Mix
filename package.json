@@ -1,8 +1,8 @@
 {
     "name": "discord-anvil",
-    "version": "2.0.0",
+    "version": "2.0.4",
     "description": "Powerful Discord bot framework",
-    "main": "dist/index.js",
+    "main": "./dist/index.js",
     "keywords": [
         "discord",
         "discord-bot",
@@ -19,10 +19,10 @@
     },
     "scripts": {
         "watch": "tsc --watch",
-        "build": "tsc",
+        "build": "tsc && node after-build.js",
         "type-check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js",
-        "prepublish": "npm run build"
+        "prepublishOnly": "npm run build"
     },
     "author": "CloudRex <cloudrex@outlook.com>",
     "contributors": [
@@ -62,5 +62,8 @@
         "eslint-config-airbnb-base": "^12.1.0",
         "eslint-plugin-import": "^2.10.0",
         "mocha": "^5.1.1"
-    }
+    },
+    "files": [
+        "dist"
+    ]
 }

@@ -2,8 +2,6 @@ import CommandAuthStore from "./command-auth-store";
 import Log from "../../core/log";
 import {Snowflake} from "discord.js";
 
-const Typer = require("@raxor1234/typer");
-
 /**
  * @extends CommandAuthStore
  */
@@ -144,14 +142,6 @@ export default class ObjectAuthStore extends CommandAuthStore {
                 if (schemaKeys[i].toLowerCase() === "default") {
                     if (seenDefault) {
                         Log.throw("[ObjectAuthStore] Auth schema may not contain more than one default auth level");
-                    }
-
-                    const validDefault = Typer.validate({
-                        rank: "!number"
-                    }, authLevel);
-
-                    if (!validDefault) {
-                        Log.throw("[ObjectAuthStore] Unable to create default auth store entry: Invalid default auth level");
                     }
 
                     seenDefault = true;

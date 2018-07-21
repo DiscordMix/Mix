@@ -264,7 +264,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      */
     public async setup(api?: ApiType): Promise<this> {
         if (this.asciiTitle) {
-            console.log("\n" + fs.readFileSync(path.resolve(path.join(__dirname, "../../src/core/title.txt"))).toString() + "\n");
+            console.log("\n" + fs.readFileSync(path.resolve(path.join(__dirname, "../../dist/title.txt"))).toString() + "\n");
         }
 
         /**

@@ -4,6 +4,9 @@ import Log from "../core/log";
 import fs from "fs";
 import path from "path";
 
+/**
+ * @deprecated Use fragments instead
+ */
 export default class BehaviourManager {
     private readonly bot: Bot;
     private readonly path: string;

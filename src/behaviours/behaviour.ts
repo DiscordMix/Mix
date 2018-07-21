@@ -9,6 +9,9 @@ export interface BehaviourOptions {
     readonly listeners?: Array<string>;
 }
 
+/**
+ * @deprecated Use fragments instead
+ */
 export default class Behaviour {
     readonly name: string;
     readonly description: string;

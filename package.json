@@ -25,9 +25,6 @@
         "prepublishOnly": "npm run build"
     },
     "author": "CloudRex <cloudrex@outlook.com>",
-    "contributors": [
-        "AL_1 <allen.m.lantz@gmail.com> (https://al1l.com/)"
-    ],
     "license": "MIT",
     "dependencies": {
         "@types/chai": "^4.1.4",

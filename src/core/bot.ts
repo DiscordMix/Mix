@@ -23,6 +23,7 @@ import {performance} from "perf_hooks";
 import path from "path";
 import FragmentLoader from "../fragments/fragment-loader";
 import Fragment from "../fragments/fragment";
+import Language from "../language/language";
 
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
@@ -52,30 +53,31 @@ export interface BotOptions {
  * @extends EventEmitter
  */
 export default class Bot<ApiType = any> extends EventEmitter {
-    readonly settings: Settings;
-    readonly temp: Temp;
-    readonly dataStore?: DataProvider;
-    readonly authStore: CommandAuthStore;
-    readonly emojis?: EmojiCollection;
-    readonly client: Client; // TODO
-    readonly behaviours: BehaviourManager;
-    readonly commandStore: CommandStore;
-    readonly commandHandler: CommandHandler;
-    readonly console: ConsoleInterface;
-    readonly menus: EmojiMenuManager;
-    readonly prefixCommand: boolean;
-    readonly primitiveCommands: Array<string>;
-    readonly commandArgumentStyle: CommandArgumentStyle;
-    readonly autoDeleteCommands: boolean;
-    readonly userGroups: Array<UserGroup>;
-    readonly checkCommands: boolean;
-    readonly owner?: Snowflake;
-    readonly ignoreBots: boolean;
-    readonly updateOnMessageEdit: boolean;
-    readonly allowCommandChain: boolean;
-    readonly authGroups: any;
-    readonly asciiTitle: boolean;
-    readonly consoleInterface: boolean;
+    public readonly settings: Settings;
+    public readonly temp: Temp;
+    public readonly dataStore?: DataProvider;
+    public readonly authStore: CommandAuthStore;
+    public readonly emojis?: EmojiCollection;
+    public readonly client: Client; // TODO
+    public readonly behaviours: BehaviourManager;
+    public readonly commandStore: CommandStore;
+    public readonly commandHandler: CommandHandler;
+    public readonly console: ConsoleInterface;
+    public readonly menus: EmojiMenuManager;
+    public readonly prefixCommand: boolean;
+    public readonly primitiveCommands: Array<string>;
+    public readonly commandArgumentStyle: CommandArgumentStyle;
+    public readonly autoDeleteCommands: boolean;
+    public readonly userGroups: Array<UserGroup>;
+    public readonly checkCommands: boolean;
+    public readonly owner?: Snowflake;
+    public readonly ignoreBots: boolean;
+    public readonly updateOnMessageEdit: boolean;
+    public readonly allowCommandChain: boolean;
+    public readonly authGroups: any;
+    public readonly asciiTitle: boolean;
+    public readonly consoleInterface: boolean;
+    public readonly language?: Language;
 
     private api?: ApiType;
     private setupStart: number = 0;
@@ -247,6 +249,13 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @readonly
          */
         this.consoleInterface = options.consoleInterface !== undefined ? options.consoleInterface : true;
+
+        /**
+         * Localization
+         * @type {Language | undefined}
+         * @readonly
+         */
+        this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
 
         return this;
     }
@@ -465,7 +474,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     /**
      * Setup the bot's auth store
      */
-    async setupAuthStore(): Promise<void> {
+    public async setupAuthStore(): Promise<void> {
         // Initially load data if it is a JsonAuthStore
         if (this.authStore instanceof JsonAuthStore) {
             await this.authStore.reload();
@@ -498,7 +507,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * Connect the client
      * @return {Promise<Bot>}
      */
-    async connect(): Promise<Bot> {
+    public async connect(): Promise<Bot> {
         Log.verbose("[Bot.connect] Starting");
         await this.client.login(this.settings.general.token);
 
@@ -511,7 +520,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @param {boolean} reloadModules Whether to reload all modules
      * @return {Promise<Bot>}
      */
-    async restart(reloadModules: boolean = true): Promise<Bot> {
+    public async restart(reloadModules: boolean = true): Promise<Bot> {
         Log.verbose("[Bot.restart] Restarting");
 
         if (reloadModules) {
@@ -531,7 +540,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * Disconnect the client
      * @return {Promise<Bot>}
      */
-    async disconnect(): Promise<Bot> {
+    public async disconnect(): Promise<Bot> {
         // Save auth store if it's a JsonAuthStore
         if (this.authStore instanceof JsonAuthStore) {
             Log.verbose("[Bot.disconnect] Saving auth store");
@@ -559,7 +568,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * Clear all the files inside the temp folder
      * @return {Promise<*>}
      */
-    static async clearTemp(): Promise<any> {
+    public static async clearTemp(): Promise<any> {
         if (fs.existsSync("./temp")) {
             fs.readdir("./temp", (error: any, files: any) => {
                 for (let i = 0; i < files.length; i++) {

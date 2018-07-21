@@ -20,6 +20,7 @@ export interface DefiniteSettingsPaths {
     readonly plugins: string;
     readonly emojis: string;
     readonly behaviours: string;
+    readonly languages?: string;
 }
 
 export interface SettingsPaths {
@@ -27,6 +28,7 @@ export interface SettingsPaths {
     readonly plugins?: string;
     readonly emojis?: string;
     readonly behaviours?: string;
+    readonly languages?: string;
 }
 
 export interface SettingsOptions {
@@ -36,9 +38,9 @@ export interface SettingsOptions {
 }
 
 export default class Settings {
-    general: SettingsGeneral;
-    paths: DefiniteSettingsPaths;
-    keys: SettingsKeys;
+    public general: SettingsGeneral;
+    public paths: DefiniteSettingsPaths;
+    public keys: SettingsKeys;
 
     /**
      * @param {SettingsOptions} options
@@ -59,7 +61,8 @@ export default class Settings {
             commands: options.paths && options.paths.commands ? options.paths.commands : "./commandStore",
             plugins: options.paths && options.paths.plugins ? options.paths.plugins : "./plugins",
             emojis: options.paths && options.paths.emojis ? options.paths.emojis : "./emojis",
-            behaviours: options.paths && options.paths.behaviours ? options.paths.behaviours : "./behaviours"
+            behaviours: options.paths && options.paths.behaviours ? options.paths.behaviours : "./behaviours",
+            languages: options.paths && options.paths.languages ? options.paths.languages : undefined
         };
 
         /**
@@ -75,7 +78,7 @@ export default class Settings {
      * @param {string} path The file containing the settings
      * @return {Promise<Settings>}
      */
-    static async fromFile(path: string): Promise<Settings> {
+    public static async fromFile(path: string): Promise<Settings> {
         if (!fs.existsSync(path)) {
             Log.throw("[Settings.fromFile] Could not load settings: File does not exist");
         }

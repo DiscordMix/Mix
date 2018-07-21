@@ -130,7 +130,7 @@ export default class CommandHandler {
             }
         }
         // TODO: CRITICAL Project no longer uses Typer.
-        else if (!command.singleArg /* && (!typer.validate(command.args, CommandHandler.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) */) {
+        else if (false/* !command.singleArg /* && (!typer.validate(command.args, CommandHandler.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) */) {
             if (this.errorHandlers[CommandManagerEvent.InvalidArguments]) {
                 this.errorHandlers[CommandManagerEvent.InvalidArguments](context, command);
             }

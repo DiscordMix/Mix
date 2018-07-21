@@ -154,8 +154,6 @@ export default class CommandContext {
 
             const timeToLive: number = 4000 + (100 * contentSize);
 
-            Log.debug("Time to live: " + timeToLive);
-
             // Time depends on length
             messageResult.delete(timeToLive);
         }

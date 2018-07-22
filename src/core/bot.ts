@@ -328,7 +328,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             Log.warn(`[Bot.setup] No commands were detected under '${this.settings.paths.commands}'`);
         }
         else {
-            Log.verbose(`[Bot.setup] Loading ${consumerCommandCandidates.length} commands`);
+            Log.verbose(`[Bot.setup] Loading ${consumerCommandCandidates.length} command(s)`);
 
             const commandsLoaded: Array<Fragment> | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
 
@@ -336,7 +336,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 Log.warn(`[Bot.setup] No commands were loaded`);
             }
             else {
-                Log.success(`[Bot.setup] Loaded ${commandsLoaded.length} commands`);
+                Log.success(`[Bot.setup] Loaded ${commandsLoaded.length} command(s)`);
+                this.commandStore.registerMultiple(commandsLoaded as Array<Command>);
             }
         }
 

@@ -1,6 +1,6 @@
 {
     "name": "discord-anvil",
-    "version": "2.1.2",
+    "version": "2.1.4",
     "description": "Powerful Discord bot framework",
     "main": "./dist/index.js",
     "keywords": [

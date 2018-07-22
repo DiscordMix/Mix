@@ -291,7 +291,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         Log.verbose("[Bot.setup] Attempting to load internal fragments");
 
-        // Load internal fragments
+        // Load & enable internal fragments
         const internalFragmentCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(internalFragmentsPath);
 
         if (!internalFragmentCandidates) {
@@ -321,7 +321,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
         }
 
-        // Load consumer command fragments
+        // Load & enable consumer command fragments
         const consumerCommandCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(this.settings.paths.commands);
 
         if (!consumerCommandCandidates || consumerCommandCandidates.length === 0) {
@@ -337,7 +337,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
             else {
                 Log.success(`[Bot.setup] Loaded ${commandsLoaded.length} command(s)`);
-                this.commandStore.registerMultiple(commandsLoaded as Array<Command>);
+                this.enableFragments(commandsLoaded);
             }
         }
 

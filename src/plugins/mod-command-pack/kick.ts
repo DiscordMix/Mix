@@ -25,12 +25,13 @@ export default abstract class Kick extends Command {
         }
     ];
 
-    // TODO: Restrict is not in 'Command'
-    readonly restrict = {
-        env: ChatEnvironment.Guild,
-        selfPerms: [Permission.KickMembers],
-        issuerPerms: [Permission.KickMembers]
-    };
+    constructor() {
+        super();
+
+        this.restrict.environment = ChatEnvironment.Guild;
+        this.restrict.selfPermissions = [Permission.KickMembers];
+        this.restrict.issuerPermissions = [Permission.KickMembers];
+    }
 
     public executed(context: CommandContext): void {
         const targetMember = context.message.guild.member(context.arguments[0]);

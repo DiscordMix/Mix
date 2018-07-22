@@ -72,7 +72,7 @@ export default class CommandHandler {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 
-        if (!CommandHandler.validateEnvironment(command.environment, context.message.channel.type)) {
+        if (!CommandHandler.validateEnvironment(command.restrict.environment, context.message.channel.type)) {
             if (this.errorHandlers[CommandManagerEvent.DisallowedEnvironment]) {
                 this.errorHandlers[CommandManagerEvent.DisallowedEnvironment](context, command);
             }
@@ -88,15 +88,15 @@ export default class CommandHandler {
                 context.fail("That command is disabled and may not be used.");
             }
         }
-        else if (command.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
+        else if (command.restrict.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
             context.fail("You are not allowed to use that command");
         }
-        else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.auth)) {
+        else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.restrict.auth)) {
             if (this.errorHandlers[CommandManagerEvent.NoAuthority]) {
                 this.errorHandlers[CommandManagerEvent.NoAuthority](context, command);
             }
             else {
-                const minAuthority = this.authStore.getSchemaRankName(command.auth);
+                const minAuthority = this.authStore.getSchemaRankName(command.restrict.auth);
 
                 let rankName = "Unknown"; // TODO: Unknown should be a reserved auth level name (schema)
 
@@ -138,27 +138,27 @@ export default class CommandHandler {
                 context.fail("Invalid argument usage. Please use the `usage` command.");
             }
         }
-        else if (command.selfPermissions.length > 0 && !context.message.guild.me.hasPermission(command.selfPermissions.map((permissionObj) => permissionObj.permission))) {
+        else if (command.restrict.selfPermissions.length > 0 && !context.message.guild.me.hasPermission(command.restrict.selfPermissions.map((permissionObj) => permissionObj.permission))) {
             if (this.errorHandlers[CommandManagerEvent.MissingSelfPermissions]) {
                 this.errorHandlers[CommandManagerEvent.MissingSelfPermissions](context, command);
             }
             else {
-                const permissions = command.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
+                const permissions = command.restrict.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`I need the following permission(s) to execute that command: ${permissions}`);
             }
         }
-        else if (command.issuerPermissions.length > 0 && !context.message.member.hasPermission(command.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
+        else if (command.restrict.issuerPermissions.length > 0 && !context.message.member.hasPermission(command.restrict.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
             if (this.errorHandlers[CommandManagerEvent.MissingIssuerPermissions]) {
                 this.errorHandlers[CommandManagerEvent.MissingIssuerPermissions](context, command);
             }
             else {
-                const permissions = command.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
+                const permissions = command.restrict.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
-        else if (command.cooldown && !this.commandStore.cooldownExpired(command)) {
+        else if (command.restrict.cooldown && !this.commandStore.cooldownExpired(command)) {
             if (this.errorHandlers[CommandManagerEvent.UnderCooldown]) {
                 this.errorHandlers[CommandManagerEvent.UnderCooldown](context, command);
             }
@@ -187,7 +187,7 @@ export default class CommandHandler {
 
                     // TODO: User should be able to specify more than just seconds (maybe cooldown
                     // multiplier option?)
-                    end: Date.now() + (command.cooldown * 1000)
+                    end: Date.now() + (command.restrict.cooldown * 1000)
                 };
 
                 const lastCooldown = this.commandStore.getCooldown(command);
@@ -232,10 +232,10 @@ export default class CommandHandler {
     static specificMet(command: Command, context: CommandContext): boolean {
         let met = false;
 
-        for (let i = 0; i < command.specific.length; i++) {
-            switch (command.specific[i][0]) {
+        for (let i = 0; i < command.restrict.specific.length; i++) {
+            switch (command.restrict.specific[i][0]) {
                 case "@": {
-                    if (context.sender.id === command.specific[i].substring(1)) {
+                    if (context.sender.id === command.restrict.specific[i].substring(1)) {
                         met = true;
                     }
 
@@ -243,7 +243,7 @@ export default class CommandHandler {
                 }
 
                 case "&": {
-                    if (context.message.member.roles.find("id", command.specific[i].substr(1, command.specific[i].length))) {
+                    if (context.message.member.roles.find("id", command.restrict.specific[i].substr(1, command.restrict.specific[i].length))) {
                         met = true;
                     }
 
@@ -251,7 +251,7 @@ export default class CommandHandler {
                 }
 
                 default: {
-                    Log.error(`[CommandManager.specificMet] Invalid specific prefix: ${command.specific[0]}`)
+                    Log.error(`[CommandManager.specificMet] Invalid specific prefix: ${command.restrict.specific[0]}`)
                 }
             }
 

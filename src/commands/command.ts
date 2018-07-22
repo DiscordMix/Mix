@@ -18,6 +18,15 @@ export interface CommandMetaArgument {
     readonly required?: boolean;
 }
 
+export interface CommandRestrict {
+    selfPermissions: Array<any>;
+    issuerPermissions: Array<any>;
+    environment: ChatEnvironment;
+    auth: number;
+    specific: Array<string>;
+    cooldown: number;
+}
+
 /**
  * @extends Fragment
  */
@@ -26,14 +35,17 @@ export default abstract class Command extends Fragment {
     readonly args: any = {};
     readonly newArgs: Array<CommandMetaArgument> = [];
     readonly isEnabled: boolean = true;
-    readonly cooldown: number = 0;
-    readonly selfPermissions: Array<any> = []; // TODO: Type hotfix
-    readonly issuerPermissions: Array<any> = []; // TODO: Type hotfix again
-    readonly environment: ChatEnvironment = ChatEnvironment.Anywhere;
-    readonly auth: number = 0;
     readonly exclude: Array<string> = [];
     readonly singleArg: boolean = false;
-    readonly specific: Array<string> = [];
+
+    readonly restrict: CommandRestrict = {
+        auth: 0,
+        cooldown: 0,
+        environment: ChatEnvironment.Anywhere,
+        issuerPermissions: [],
+        selfPermissions: [],
+        specific: []
+    };
 
     /**
      * @param {CommandOptions} options

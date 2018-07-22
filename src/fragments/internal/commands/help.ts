@@ -1,7 +1,7 @@
 import CommandContext from "../../../commands/command-context";
 import { Command } from "../../..";
 
-export default abstract class Help extends Command {
+export default class Help extends Command {
     readonly meta = {
         name: "help",
         description: "View available commands and their descriptions"

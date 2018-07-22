@@ -1,7 +1,7 @@
 import CommandContext from "../../../commands/command-context";
 import { Command } from "../../..";
 
-export default abstract class Prefix extends Command {
+export default class Prefix extends Command {
     readonly meta = {
         name: "prefix",
         description: "Manage bot prefixes"
@@ -11,7 +11,7 @@ export default abstract class Prefix extends Command {
         prefix: "!string"
     };
 
-    executed(context: CommandContext): void {
+    public executed(context: CommandContext): void {
         // TODO
     }
 };

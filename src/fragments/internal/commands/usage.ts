@@ -1,7 +1,7 @@
 import {default as Command} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 
-export default abstract class Usage extends Command {
+export default class Usage extends Command {
     readonly meta = {
         name: "usage",
         description: "View the usage of a command"
@@ -11,7 +11,7 @@ export default abstract class Usage extends Command {
         command: "!string"
     };
 
-    executed(context: CommandContext): void {
+    public executed(context: CommandContext): void {
         const targetCommand: Command | null = context.bot.commandStore.getByName(context.arguments[0]);
 
         if (!targetCommand) {

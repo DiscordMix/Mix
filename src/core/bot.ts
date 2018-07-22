@@ -321,6 +321,25 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
         }
 
+        // Load consumer command fragments
+        const consumerCommandCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(this.settings.paths.commands);
+
+        if (!consumerCommandCandidates || consumerCommandCandidates.length === 0) {
+            Log.warn(`[Bot.setup] No commands were detected under '${this.settings.paths.commands}'`);
+        }
+        else {
+            Log.verbose(`[Bot.setup] Loading ${consumerCommandCandidates.length} commands`);
+
+            const commandsLoaded: Array<Fragment> | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
+
+            if (!commandsLoaded || commandsLoaded.length === 0) {
+                Log.warn(`[Bot.setup] No commands were loaded`);
+            }
+            else {
+                Log.success(`[Bot.setup] Loaded ${commandsLoaded.length} commands`);
+            }
+        }
+
         // Setup the Discord client's events
         this.setupEvents();
 

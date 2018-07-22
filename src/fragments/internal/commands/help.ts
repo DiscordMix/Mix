@@ -9,7 +9,7 @@ export default abstract class Help extends Command {
 
     executed(context: CommandContext): void {
         context.ok(context.bot.commandStore.commands
-            .map((command) => `${command.meta.name} => ${command.meta.description || "No description provided"}`)
+            .map((command: Command) => `${command.meta.name} => ${command.meta.description || "No description provided"}`)
             .join("\n"), "Help - Available Commands");
     }
 };

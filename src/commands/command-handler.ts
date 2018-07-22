@@ -220,7 +220,7 @@ export default class CommandHandler {
                 }
                 else {
                     // TODO: Include stack trace
-                    Log.error(`There was an error while executing the ${command.meta.name} command: ${error.message}`);
+                    Log.error(`There was an error while executing the '${command.meta.name}' command: ${error.message}`);
                     context.fail(`There was an error executing that command. (${error.message})`);
                 }
             }

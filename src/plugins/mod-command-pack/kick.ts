@@ -1,7 +1,4 @@
-import Permission from "../../../core/permission";
-import CommandContext from "../../../commands/command-context";
-import ChatEnvironment from "../../../core/chat-environment";
-import { Command } from "../../..";
+import { Command, ChatEnvironment, Permission, CommandContext } from "../..";
 
 export default abstract class Kick extends Command {
     readonly meta = {

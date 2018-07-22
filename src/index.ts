@@ -1,7 +1,6 @@
 import Bot from "./core/bot";
 import CommandArgumentParser from "./commands/command-argument-parser";
 import CommandContext from "./commands/command-context";
-import CommandLoader from "./commands/command-loader";
 import CommandStore, {CommandManagerEvent} from "./commands/command-store";
 import Command from "./commands/command";
 import ConsoleInterface from "./console/console-interface";
@@ -44,7 +43,6 @@ export {
     // Commands
     CommandArgumentParser,
     CommandContext,
-    CommandLoader,
     CommandStore,
     CommandManagerEvent,
     CommandParser,

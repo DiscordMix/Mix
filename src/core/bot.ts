@@ -368,7 +368,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
             // Setup the command auth store
             await this.setupAuthStore();
-            Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag} | ${this.client.guilds.size} guilds`);
+            Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag} | ${this.client.guilds.size} guild(s)`);
 
             let suffix = "s";
             let took = (performance.now() - this.setupStart) / 1000;

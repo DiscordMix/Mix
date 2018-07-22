@@ -130,6 +130,14 @@ export default class CommandStore /* extends Collection */ {
     }
 
     /**
+     * Get all the registered commands
+     * @return {ReadonlyArray<Command>}
+     */
+    getAll(): ReadonlyArray<Command> {
+        return this.commands as ReadonlyArray<Command>;
+    }
+
+    /**
      * @param {string} commandBase
      * @return {boolean}
      */

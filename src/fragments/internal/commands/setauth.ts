@@ -18,7 +18,7 @@ export default abstract class SetAuth extends Command {
         auth: -1 // Owner
     };
 
-    public static async executed(context: CommandContext): Promise<void> {
+    async executed(context: CommandContext): Promise<void> {
         if (context.arguments[1] < 0) {
             await context.fail("Authorization level must be higher than zero.");
 

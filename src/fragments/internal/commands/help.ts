@@ -7,9 +7,9 @@ export default abstract class Help extends Command {
         description: "View available commands and their descriptions"
     };
 
-    executed(context: CommandContext): void {
-        context.ok(context.bot.commandStore.commands
-            .map((command: Command) => `${command.meta.name} => ${command.meta.description || "No description provided"}`)
+    public async executed(context: CommandContext): Promise<void> {
+        await context.ok(context.bot.commandStore.commands
+            .map((command: Command) => `**${command.meta.name}**: ${command.meta.description}`)
             .join("\n"), "Help - Available Commands");
     }
 };

@@ -321,6 +321,26 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
         }
 
+        // Load & enable behaviours
+        const consumerBehaviourCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(this.settings.paths.behaviours);
+
+        if (!consumerBehaviourCandidates || consumerBehaviourCandidates.length === 0) {
+            Log.verbose(`[Bot.setup] No behaviours were detected under '${this.settings.paths.behaviours}'`);
+        }
+        else {
+            Log.verbose(`[Bot.setup] Loading ${consumerBehaviourCandidates.length} behaviour(s)`);
+
+            const behavioursLoaded: Array<Fragment> | null = await FragmentLoader.loadMultiple(consumerBehaviourCandidates);
+
+            if (!behavioursLoaded || behavioursLoaded.length === 0) {
+                Log.warn("[Bot.setup] No behaviours were loaded");
+            }
+            else {
+                Log.success(`[Bot.setup] Loaded ${behavioursLoaded.length} behaviour(s)`);
+                this.enableFragments(behavioursLoaded);
+            }
+        }
+
         // Load & enable consumer command fragments
         const consumerCommandCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(this.settings.paths.commands);
 
@@ -333,7 +353,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             const commandsLoaded: Array<Fragment> | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
 
             if (!commandsLoaded || commandsLoaded.length === 0) {
-                Log.warn(`[Bot.setup] No commands were loaded`);
+                Log.warn("[Bot.setup] No commands were loaded");
             }
             else {
                 Log.success(`[Bot.setup] Loaded ${commandsLoaded.length} command(s)`);

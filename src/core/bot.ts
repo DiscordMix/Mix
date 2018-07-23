@@ -24,6 +24,7 @@ import path from "path";
 import FragmentLoader from "../fragments/fragment-loader";
 import Fragment from "../fragments/fragment";
 import Language from "../language/language";
+import Behaviour from "../behaviours/behaviour";
 
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
@@ -379,8 +380,15 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 this.commandStore.register(new fragment());
                 enabled++;
             }
+            else if ((fragments[i] as any).prototype instanceof Behaviour) {
+                const fragment: any = fragments[i];
+
+                this.behaviours.register(new fragment());
+                enabled++;
+            }
             else {
-                Log.warn(`[Bot.enableFragments] Unknown fragment instance for fragment: ${fragments[i].meta.name}, ignoring`);
+                // TODO: Also add someway to identify the fragment
+                Log.warn(`[Bot.enableFragments] Unknown fragment instance for fragment, ignoring`);
             }
         }
 

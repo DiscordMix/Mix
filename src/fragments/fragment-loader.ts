@@ -2,6 +2,7 @@ import fs from "fs";
 import Fragment from "./fragment";
 import Log from "../core/log";
 import Utils from "../core/utils";
+import path from "path";
 
 export default abstract class FragmentLoader {
     /**
@@ -65,7 +66,7 @@ export default abstract class FragmentLoader {
                         scanQueue.push(files[file]);
                     }
 
-                    if (!files[file].startsWith("@") && !files[file].startsWith(".") && files[file].endsWith(".js")) {
+                    if (!path.basename(files[file]).startsWith("@") && !path.basename(files[file]).startsWith(".") && files[file].endsWith(".js")) {
                         result.push(files[file]);
                     }
                 }

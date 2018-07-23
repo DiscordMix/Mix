@@ -342,6 +342,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
         }
 
+        // After loading behaviours, enable all of them
+        this.behaviours.enableAll();
+
         // Load & enable consumer command fragments
         const consumerCommandCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(this.settings.paths.commands);
 

@@ -28,6 +28,7 @@
     "license": "MIT",
     "dependencies": {
         "@types/chai": "^4.1.4",
+        "@types/knex": "^0.14.17",
         "@types/mocha": "^5.2.5",
         "@types/node": "^10.5.2",
         "argparse": "^1.0.10",
@@ -37,6 +38,7 @@
         "discord.js": "^11.3.2",
         "hoek": "^4.2.1",
         "javascript-time-ago": "^1.0.30",
+        "knex": "^0.15.2",
         "lodash": "^4.17.5",
         "minimist": "^1.2.0",
         "mongodb": "^3.1.1",

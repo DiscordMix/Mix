@@ -86,7 +86,7 @@ export default class Collection extends EventEmitter {
     }
 
     /**
-     * @todo Move this method into the Utils class
+     * @todo Move this method into the Utils class?
      * Find an item in this collection
      * @param {string} path
      * @param {*} value

@@ -200,10 +200,10 @@ export default class CommandHandler {
                 this.commandStore.cooldowns.push(commandCooldown);
                 context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command), result);
 
-                if (context.bot.autoDeleteCommands && context.message.deletable) {
+                if (context.bot.options.autoDeleteCommands && context.message.deletable) {
                     await context.message.delete();
                 }
-                else if (context.bot.checkCommands && context.message.channel instanceof TextChannel) {
+                else if (context.bot.options.checkCommands && context.message.channel instanceof TextChannel) {
                     // TODO: Check if can add reaction
                     /* if (context.message.channel.permissionsFor(context.message.guild.me).has(Permissions.FLAGS.ADD_REACTIONS)) {
 

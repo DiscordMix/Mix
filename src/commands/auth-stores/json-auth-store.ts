@@ -63,7 +63,10 @@ export default class JsonAuthStore extends ObjectAuthStore {
             Log.info("[JsonAuthStore.reload] Auth store path did not exist, created default");
         }
         else {
-            this.data = await Utils.readJson(this.storePath);
+            this.data = await Utils.readJson(this.storePath).catch((error: Error) => {
+                // TODO: No connection to the bot to check for 'autoResetAuthStore'
+                Log.warn("[JsonAuthStore.reload] There was an error reloading the auth store. Either data is corrupt or invalid. Set the 'autoResetAuthStore' bot option to true to automatically reset the auth store.");
+            });
         }
 
         if (!fs.existsSync(this.schemaPath)) {

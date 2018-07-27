@@ -35,19 +35,33 @@ export interface BotOptions {
     readonly argumentTypes?: any;
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: Array<string>;
-    readonly commandArgumentStyle?: CommandArgumentStyle;
-    readonly autoDeleteCommands?: boolean;
     readonly userGroups?: Array<UserGroup>;
-    readonly checkCommands?: boolean;
     readonly owner?: Snowflake;
-    readonly ignoreBots?: boolean;
-    readonly updateOnMessageEdit?: boolean;
-    readonly allowCommandChain?: boolean;
+    readonly options?: BotExtraOptions;
+}
 
-    // TODO: Make use of authGroups
-    readonly authGroups?: any;
+export interface BotExtraOptions {
     readonly asciiTitle?: boolean;
     readonly consoleInterface?: boolean;
+    readonly allowCommandChain?: boolean;
+    readonly updateOnMessageEdit?: boolean;
+    readonly checkCommands?: boolean;
+    readonly autoDeleteCommands?: boolean;
+    readonly commandArgumentStyle?: CommandArgumentStyle;
+    readonly ignoreBots?: boolean;
+    readonly autoResetAuthStore?: boolean;
+}
+
+export interface DefiniteBotExtraOptions {
+    readonly asciiTitle: boolean;
+    readonly consoleInterface: boolean;
+    readonly allowCommandChain: boolean;
+    readonly updateOnMessageEdit: boolean;
+    readonly checkCommands: boolean;
+    readonly autoDeleteCommands: boolean;
+    readonly commandArgumentStyle: CommandArgumentStyle;
+    readonly ignoreBots: boolean;
+    readonly autoResetAuthStore: boolean;
 }
 
 /**
@@ -67,17 +81,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly menus: EmojiMenuManager;
     public readonly prefixCommand: boolean;
     public readonly primitiveCommands: Array<string>;
-    public readonly commandArgumentStyle: CommandArgumentStyle;
-    public readonly autoDeleteCommands: boolean;
     public readonly userGroups: Array<UserGroup>;
-    public readonly checkCommands: boolean;
     public readonly owner?: Snowflake;
-    public readonly ignoreBots: boolean;
-    public readonly updateOnMessageEdit: boolean;
-    public readonly allowCommandChain: boolean;
-    public readonly authGroups: any;
-    public readonly asciiTitle: boolean;
-    public readonly consoleInterface: boolean;
+    public readonly options: DefiniteBotExtraOptions;
     public readonly language?: Language;
 
     private api?: ApiType;
@@ -85,17 +91,17 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * Setup the bot from an object
-     * @param {BotOptions} options
+     * @param {BotOptions} botOptions
      * @return {Promise<Bot>}
      */
-    constructor(options: BotOptions) {
+    constructor(botOptions: BotOptions) {
         super();
 
         /**
          * @type {Settings}
          * @readonly
          */
-        this.settings = options.settings;
+        this.settings = botOptions.settings;
 
         /**
          * @todo Temporary hard-coded user id
@@ -108,13 +114,13 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @type {DataProvider | undefined}
          * @readonly
          */
-        this.dataStore = options.dataStore;
+        this.dataStore = botOptions.dataStore;
 
         /**
          * @type {CommandAuthStore}
          * @readonly
          */
-        this.authStore = options.authStore || new JsonAuthStore("auth/schema.json", "auth/store.json");
+        this.authStore = botOptions.authStore || new JsonAuthStore("auth/schema.json", "auth/store.json");
 
         /**
          * @type {EmojiCollection | undefined}
@@ -148,7 +154,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             commandStore: this.commandStore,
             errorHandlers: [], // TODO: Is this like it was? Is it ok?
             authStore: this.authStore,
-            argumentTypes: options.argumentTypes || {}
+            argumentTypes: botOptions.argumentTypes || {}
         });
 
         /**
@@ -167,13 +173,13 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @type {boolean}
          * @readonly
          */
-        this.prefixCommand = options.prefixCommand || true;
+        this.prefixCommand = botOptions.prefixCommand || true;
 
         /**
          * @type {Array<string>}
          * @readonly
          */
-        this.primitiveCommands = options.primitiveCommands || [
+        this.primitiveCommands = botOptions.primitiveCommands || [
             "help",
             "usage",
             "ping",
@@ -183,73 +189,33 @@ export default class Bot<ApiType = any> extends EventEmitter {
         ];
 
         /**
-         * @type {CommandArgumentStyle}
+         * @type {DefiniteBotExtraOptions}
          * @readonly
          */
-        this.commandArgumentStyle = options.commandArgumentStyle || CommandArgumentStyle.Specific;
-
-        /**
-         * @type {boolean}
-         * @readonly
-         */
-        this.autoDeleteCommands = options.autoDeleteCommands || false;
+        this.options = {
+            allowCommandChain: botOptions.options && botOptions.options.allowCommandChain !== undefined ? botOptions.options.allowCommandChain : true,
+            commandArgumentStyle: botOptions.options && botOptions.options.commandArgumentStyle || CommandArgumentStyle.Specific,
+            autoDeleteCommands: botOptions.options && botOptions.options.autoDeleteCommands || false,
+            checkCommands: botOptions.options && botOptions.options.checkCommands !== undefined ? botOptions.options.checkCommands : true,
+            ignoreBots: botOptions.options && botOptions.options.ignoreBots !== undefined ? botOptions.options.ignoreBots : true,
+            updateOnMessageEdit: botOptions.options && botOptions.options.updateOnMessageEdit !== undefined ? botOptions.options.updateOnMessageEdit : false,
+            asciiTitle: botOptions.options && botOptions.options.asciiTitle !== undefined ? botOptions.options.asciiTitle : true,
+            consoleInterface: botOptions.options && botOptions.options.consoleInterface !== undefined ? botOptions.options.consoleInterface : true,
+            autoResetAuthStore: botOptions.options && botOptions.options.autoResetAuthStore !== undefined ? botOptions.options.autoResetAuthStore : false
+        };
 
         // TODO: Make use of the userGroups property
         /**
          * @type {Array<UserGroup>}
          * @readonly
          */
-        this.userGroups = options.userGroups || [];
-
-        /**
-         * @type {boolean}
-         * @readonly
-         */
-        this.checkCommands = options.checkCommands !== undefined ? options.checkCommands : true;
+        this.userGroups = botOptions.userGroups || [];
 
         /**
          * @type {Snowflake | undefined}
          * @readonly
          */
-        this.owner = options.owner;
-
-        /**
-         * @type {boolean}
-         * @readonly
-         */
-        this.ignoreBots = options.ignoreBots !== undefined ? options.ignoreBots : true;
-
-        /**
-         * @type {boolean}
-         * @readonly
-         */
-        this.updateOnMessageEdit = options.updateOnMessageEdit !== undefined ? options.updateOnMessageEdit : false;
-
-        /**
-         * @type {*}
-         * @readonly
-         */
-        this.authGroups = options.authGroups || {};
-
-        /**
-         * @type {boolean}
-         * @readonly
-         */
-        this.allowCommandChain = options.allowCommandChain !== undefined ? options.allowCommandChain : true;
-
-        /**
-         * Whether to display the Anvil logo in ascii text at bot startup
-         * @type {boolean}
-         * @readonly
-         */
-        this.asciiTitle = options.asciiTitle !== undefined ? options.asciiTitle : true;
-
-        /**
-         * Whether to enable the console interface
-         * @type {boolean}
-         * @readonly
-         */
-        this.consoleInterface = options.consoleInterface !== undefined ? options.consoleInterface : true;
+        this.owner = botOptions.owner;
 
         /**
          * Localization
@@ -273,7 +239,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @return {Promise<this>}
      */
     public async setup(api?: ApiType): Promise<this> {
-        if (this.asciiTitle) {
+        if (this.options.asciiTitle) {
             console.log("\n" + fs.readFileSync(path.resolve(path.join(__dirname, "../../dist/title.txt"))).toString() + "\n");
         }
 
@@ -412,7 +378,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             // Create the temp folder
             await this.temp.create();
 
-            if (this.consoleInterface && !this.console.ready) {
+            if (this.options.consoleInterface && !this.console.ready) {
                 // Setup the console command interface
                 this.console.setup(this);
             }
@@ -436,7 +402,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.client.on("message", this.handleMessage.bind(this));
 
         // If enabled, handle message edits (if valid) as commands
-        if (this.updateOnMessageEdit) {
+        if (this.options.updateOnMessageEdit) {
             this.client.on("messageUpdate", async (oldMessage: Message, newMessage: Message) => {
                 await this.handleMessage(newMessage);
             });
@@ -472,8 +438,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
         };
 
         // TODO: Cannot do .startsWith with a prefix array
-        if ((!message.author.bot || (message.author.bot && !this.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.isValid(message.content, this.commandStore, this.settings.general.prefixes)) {
-            if (this.allowCommandChain) {
+        if ((!message.author.bot || (message.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.isValid(message.content, this.commandStore, this.settings.general.prefixes)) {
+            if (this.options.allowCommandChain) {
                 const chain: Array<string> = message.content.split("&");
 
                 // TODO: What if commandChecks is enabled and the bot tries to react twice or more?

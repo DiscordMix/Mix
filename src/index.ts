@@ -38,6 +38,7 @@ import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
 import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 import SetupHelper, { SetupHelperResult } from "./core/setup-helper";
 import Behaviour, { BehaviourOptions } from "./behaviours/behaviour";
+import KnexTable from "./data-providers/knex-table";
 
 export {
     // Commands
@@ -107,5 +108,8 @@ export {
 
     // Behaviours
     Behaviour,
-    BehaviourOptions
+    BehaviourOptions,
+
+    // Misc
+    KnexTable
 };

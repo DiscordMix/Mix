@@ -181,13 +181,26 @@ export default class Utils {
      * @return {Promise<Object>} The data from the specified path
      */
     static async readJson(path: string): Promise<any> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             fs.readFile(path, (error: Error, data: any) => {
                 if (error) {
-                    throw error;
+                    reject(error);
+
+                    return;
                 }
 
-                resolve(JSON.parse(data.toString()));
+                let parsed;
+
+                try {
+                    parsed = JSON.parse(data.toString());
+                }
+                catch (error) {
+                    reject(error);
+
+                    return;
+                }
+
+                resolve(parsed);
             });
         });
     }

@@ -64,8 +64,8 @@ export default class JsonAuthStore extends ObjectAuthStore {
         }
         else {
             this.data = await Utils.readJson(this.storePath).catch((error: Error) => {
-                // TODO: No connection to the bot to check for 'autoResetAuthStore'
-                Log.warn("[JsonAuthStore.reload] There was an error reloading the auth store. Either data is corrupt or invalid. Set the 'autoResetAuthStore' bot option to true to automatically reset the auth store.");
+                // TODO: No connection to the bot to check for 'autoResetAuth'
+                Log.throw(`[JsonAuthStore.reload] There was an error reloading the auth STORE. Either data is corrupt or invalid. Set the 'autoResetAuth' bot option to true to automatically reset the auth STORE: ${error.message}`);
             });
         }
 
@@ -73,7 +73,10 @@ export default class JsonAuthStore extends ObjectAuthStore {
             Log.throw(`[JsonAuthStore] Schema file does not exist in path: ${this.schemaPath}`);
         }
 
-        this.schema = await Utils.readJson(this.schemaPath);
+        this.schema = await Utils.readJson(this.schemaPath).catch((error: Error) => {
+            // TODO: No connection to the bot to check for 'autoResetAuthStore'
+            Log.throw(`[JsonAuthStore.reload] There was an error reloading the auth SCHEMA. Either data is corrupt or invalid. Set the 'autoResetAuth' bot option to true to automatically reset the auth SCHEMA: ${error.message}`);
+        });
     }
 
     /**

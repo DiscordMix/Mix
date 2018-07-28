@@ -1,6 +1,6 @@
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import Command from "./command";
+import Command, { CommandArgument, ArgumentType } from "./command";
 import CommandStore, {CommandCooldown, CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
@@ -15,10 +15,10 @@ export interface CommandHandlerOptions {
 }
 
 export default class CommandHandler {
-    readonly commandStore: CommandStore;
-    readonly authStore: CommandAuthStore;
-    readonly errorHandlers: Array<Function>;
-    readonly argumentTypes: any;
+    public readonly commandStore: CommandStore;
+    public readonly authStore: CommandAuthStore;
+    public readonly errorHandlers: Array<Function>;
+    public readonly argumentTypes: any;
 
     /**
      * @param {CommandHandlerOptions} options
@@ -54,21 +54,13 @@ export default class CommandHandler {
      * @param {Function} handler
      * @return {CommandStore}
      */
-    setErrorHandler(event: CommandManagerEvent, handler: Function): CommandHandler {
+    public setErrorHandler(event: CommandManagerEvent, handler: Function): CommandHandler {
         this.errorHandlers[event] = handler;
 
         return this;
     }
 
-    /**
-     * @todo Split this method into a class
-     * @todo Since it's returning a Promise, review
-     * @param {CommandContext} context
-     * @param {Command} command The command to handle
-     * @param {*} api
-     * @return {Promise<Boolean>} Whether the command was successfully executed
-     */
-    async handle(context: CommandContext, command: Command): Promise<boolean> {
+    private meetsRequirements(context: CommandContext, command: Command, args: Array<CommandArgument>): boolean {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 
@@ -107,7 +99,7 @@ export default class CommandHandler {
                 context.fail(`You don't have the authority to use that command. You must be at least a(n) **${rankName}**.`);
             }
         }
-        else if (!command.singleArg && (context.arguments.length > command.maxArguments || context.arguments.length < command.minArguments)) {
+        else if (!command.singleArg && (args.length > command.maxArguments || args.length < command.minArguments)) {
             if (this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch]) {
                 this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);
             }
@@ -175,61 +167,83 @@ export default class CommandHandler {
             }
         }
         else {
-            try {
-                // TODO: Only check if result is true, make sure commandStore return booleans
-                // TODO: Bot should be accessed protected (from this class)
-                const actualResult = command.executed(context, this.commandStore.bot.getAPI());
-                const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
+            return true;
+        }
 
-                const commandCooldown: CommandCooldown = {
-                    context: context,
-                    command: command,
+        return false;
+    }
 
-                    // TODO: User should be able to specify more than just seconds (maybe cooldown
-                    // multiplier option?)
-                    end: Date.now() + (command.restrict.cooldown * 1000)
-                };
+    /**
+     * @todo Split this method into a class
+     * @todo Since it's returning a Promise, review
+     * @param {CommandContext} context
+     * @param {Command} command The command to handle
+     * @param {*} args
+     * @return {Promise<Boolean>} Whether the command was successfully executed
+     */
+    public async handle(context: CommandContext, command: Command, args: any): Promise<boolean> {
+        // TODO: Debugging
+        Log.debug("I received the following");
+        console.log("handler received ", args);
 
-                const lastCooldown = this.commandStore.getCooldown(command);
+        if (!this.meetsRequirements(context, command, args)) {
+            return false;
+        }
+        
+        try {
+            // TODO: Only check if result is true, make sure commandStore return booleans
+            // TODO: Bot should be accessed protected (from this class)
+            const actualResult = command.executed(context, args, this.commandStore.bot.getAPI());
+            const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
 
-                // Delete the last cooldown before adding the new one for this command + user
-                if (lastCooldown) {
-                    this.commandStore.cooldowns.splice(this.commandStore.cooldowns.indexOf(lastCooldown), 1);
-                }
+            const commandCooldown: CommandCooldown = {
+                context: context,
+                command: command,
 
-                this.commandStore.cooldowns.push(commandCooldown);
-                context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command), result);
+                // TODO: User should be able to specify more than just seconds (maybe cooldown
+                // multiplier option?)
+                end: Date.now() + (command.restrict.cooldown * 1000)
+            };
 
-                if (context.bot.options.autoDeleteCommands && context.message.deletable) {
-                    await context.message.delete();
-                }
-                else if (context.bot.options.checkCommands && context.message.channel instanceof TextChannel) {
-                    // TODO: Check if can add reaction
-                    /* if (context.message.channel.permissionsFor(context.message.guild.me).has(Permissions.FLAGS.ADD_REACTIONS)) {
+            const lastCooldown = this.commandStore.getCooldown(command);
 
-                    } */
-
-                    context.message.react("✅");
-                }
-
-                return result;
+            // Delete the last cooldown before adding the new one for this command + user
+            if (lastCooldown) {
+                this.commandStore.cooldowns.splice(this.commandStore.cooldowns.indexOf(lastCooldown), 1);
             }
-            catch (error) {
-                if (this.errorHandlers[CommandManagerEvent.CommandError]) {
-                    this.errorHandlers[CommandManagerEvent.CommandError](context, command, error);
-                }
-                else {
-                    // TODO: Include stack trace
-                    Log.error(`There was an error while executing the '${command.meta.name}' command: ${error.message}`);
-                    context.fail(`There was an error executing that command. (${error.message})`);
-                }
+
+            this.commandStore.cooldowns.push(commandCooldown);
+            context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command), result);
+
+            if (context.bot.options.autoDeleteCommands && context.message.deletable) {
+                await context.message.delete();
+            }
+            else if (context.bot.options.checkCommands && context.message.channel instanceof TextChannel) {
+                // TODO: Check if can add reaction
+                /* if (context.message.channel.permissionsFor(context.message.guild.me).has(Permissions.FLAGS.ADD_REACTIONS)) {
+
+                } */
+
+                context.message.react("✅");
+            }
+
+            return result;
+        }
+        catch (error) {
+            if (this.errorHandlers[CommandManagerEvent.CommandError]) {
+                this.errorHandlers[CommandManagerEvent.CommandError](context, command, error);
+            }
+            else {
+                // TODO: Include stack trace
+                Log.error(`There was an error while executing the '${command.meta.name}' command: ${error.message}`);
+                context.fail(`There was an error executing that command. (${error.message})`);
             }
         }
 
         return false;
     }
 
-    static specificMet(command: Command, context: CommandContext): boolean {
+    public static specificMet(command: Command, context: CommandContext): boolean {
         let met = false;
 
         for (let i = 0; i < command.restrict.specific.length; i++) {
@@ -269,7 +283,7 @@ export default class CommandHandler {
      * @param {string} type
      * @return {boolean}
      */
-    static validateChannelTypeEnv(environment: ChatEnvironment, type: string): boolean {
+    public static validateChannelTypeEnv(environment: ChatEnvironment, type: string): boolean {
         if (environment === ChatEnvironment.Anywhere) {
             return true;
         }
@@ -288,7 +302,7 @@ export default class CommandHandler {
      * @param {string} channelType
      * @return {boolean}
      */
-    static validateEnvironment(environment: ChatEnvironment, channelType: string): boolean {
+    public static validateEnvironment(environment: ChatEnvironment, channelType: string): boolean {
         if (Array.isArray(environment)) {
             for (let i = 0; i < environment.length; i++) {
                 if (CommandHandler.validateChannelTypeEnv(environment, channelType)) {
@@ -301,24 +315,5 @@ export default class CommandHandler {
         }
 
         return false;
-    }
-
-    /**
-     * @param {Object} rules
-     * @param {Array<string>} args
-     * @return {Object} The assembled arguments
-     */
-    static assembleArguments(rules: any, args: Array<string>): any {
-        const result: any = {};
-
-        if (rules.length !== args.length) {
-            Log.debug("AssembleArguments: Not same length");
-        }
-
-        for (let i = 0; i < rules.length; i++) {
-            result[rules[i]] = (isNaN(parseInt(args[i])) ? args[i] : parseInt(args[i]));
-        }
-
-        return result;
     }
 }

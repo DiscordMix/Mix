@@ -147,7 +147,7 @@ export default class CommandStore /* extends Collection */ {
 
     /**
      * @param {string} name
-     * @return {(Command|null)}
+     * @return {(Command | null)}
      */
     getByName(name: string): Command | null {
         for (let i = 0; i < this.commands.length; i++) {

@@ -112,7 +112,7 @@ export default class MysqlProvider extends DataProvider {
      * @todo Instead of setting Snowflake to null use ? (typescript) instead
      * Retrieve guild data
      * @param {string} path
-     * @param {Snowflake|null} [guildId=null]
+     * @param {Snowflake | null} [guildId=null]
      * @return {Promise}
      */
     async get(path: string, guildId: Snowflake | null = null) {
@@ -168,7 +168,7 @@ export default class MysqlProvider extends DataProvider {
      * Set guild data
      * @param {string} path
      * @param {*} value
-     * @param {Snowflake|null} [guildId=null]
+     * @param {Snowflake | null} [guildId=null]
      * @return {Promise<Object>}
      */
     async set(path: string, value: any, guildId: Snowflake | null = null) {
@@ -205,7 +205,7 @@ export default class MysqlProvider extends DataProvider {
      * Merge guild data
      * @param {string} path
      * @param {*} value
-     * @param {Snowflake|null} [guildId=null]
+     * @param {Snowflake | null} [guildId=null]
      */
     merge(path: string, value: any, guildId: Snowflake | null = null) {
         if (!this.loaded) {

@@ -1,19 +1,49 @@
 import ChatEnvironment from "../core/chat-environment";
 import CommandContext from "./command-context";
 import Fragment from "../fragments/fragment";
+import { Message } from "discord.js";
 
 export type UserGroup = Array<string>;
 
 export enum CommandArgumentStyle {
-    Specific,
+    Explicit,
     Descriptive
 }
 
-// TODO: Make use of this
-export interface CommandMetaArgument {
+export type ArgumentTypeChecker = (argument: any, message: Message) => boolean;
+
+/**
+ * PrimitiveArgumentType : Internal check
+ * RegExp                : Inline check
+ * ArgumentTypeChecker   : Provided type check by method
+ */
+export type ArgumentType = PrimitiveArgumentType | ArgumentTypeChecker | RegExp | string;
+
+export interface UserDefinedArgType {
     readonly name: string;
-    readonly type: string;
-    readonly desc?: string;
+    readonly check: ArgumentTypeChecker | RegExp;
+}
+
+export type RawArguments = Array<string>;
+
+export enum PrimitiveArgumentType {
+    String,
+    Integer,
+    WholeNumber,
+    NonZeroWholeNumber,
+    Boolean
+}
+
+export interface CommandArgumentResolver {
+    readonly name: string;
+    readonly resolve: (argument: any, message: Message) => any;
+}
+
+// TODO: Make use of this
+export interface CommandArgument {
+    readonly name: string;
+    readonly type: ArgumentType;
+    readonly description?: string;
     readonly defaultValue?: any;
     readonly required?: boolean;
 }
@@ -32,8 +62,7 @@ export interface CommandRestrict {
  */
 export default abstract class Command extends Fragment {
     readonly aliases: Array<string> = [];
-    readonly args: any = {};
-    readonly newArgs: Array<CommandMetaArgument> = [];
+    readonly arguments: Array<CommandArgument> = [];
     readonly isEnabled: boolean = true;
     readonly exclude: Array<string> = [];
     readonly singleArg: boolean = false;
@@ -54,7 +83,7 @@ export default abstract class Command extends Fragment {
         super();
     }
 
-    abstract executed(context: CommandContext, api: any): any;
+    abstract executed(context: CommandContext, args: any, api: any): any;
 
     canExecute(context: CommandContext): boolean {
         return true;
@@ -72,12 +101,10 @@ export default abstract class Command extends Fragment {
      * @return {number} The minimum amount of required arguments that this command accepts
      */
     get minArguments(): number {
-        const keys = Object.keys(this.args);
-
         let counter = 0;
 
-        for (let i = 0; i < keys.length; i++) {
-            if (this.args[keys[i]].startsWith("!")) {
+        for (let i: number = 0; i < this.arguments.length; i++) {
+            if (this.arguments[i].required) {
                 counter++;
             }
         }
@@ -89,6 +116,6 @@ export default abstract class Command extends Fragment {
      * @return {number} The maximum amount of arguments that this command accepts
      */
     get maxArguments(): number {
-        return Object.keys(this.args).length;
+        return this.arguments.length;
     }
 }

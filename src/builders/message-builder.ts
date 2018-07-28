@@ -23,8 +23,8 @@ export default class MessageBuilder {
     }
 
     /**
-     * @param {string|null} [language=null]
-     * @param {string|null} [code=null]
+     * @param {string | null} [language=null]
+     * @param {string | null} [code=null]
      * @return {MessageBuilder}
      */
     codeBlock(language = null, code = null): MessageBuilder {

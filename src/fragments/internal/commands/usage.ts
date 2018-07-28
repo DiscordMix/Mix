@@ -1,5 +1,9 @@
-import {default as Command} from "../../../commands/command";
+import {default as Command, CommandArgument, ArgumentType, PrimitiveArgumentType} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
+
+export interface IUsageArguments {
+    readonly command: string;
+}
 
 export default class Usage extends Command {
     readonly meta = {
@@ -7,34 +11,35 @@ export default class Usage extends Command {
         description: "View the usage of a command"
     };
 
-    readonly args = {
-        command: "!string"
-    };
+    readonly arguments: Array<CommandArgument> = [
+        {
+            name: "command",
+            type: PrimitiveArgumentType.String,
+            required: true,
+            description: "The command to inspect"
+        }
+    ];
 
-    public executed(context: CommandContext): void {
-        const targetCommand: Command | null = context.bot.commandStore.getByName(context.arguments[0]);
+    public executed(context: CommandContext, args: IUsageArguments): void {
+        const targetCommand: Command | null = context.bot.commandStore.getByName(args.command);
 
         if (!targetCommand) {
             context.fail("That command doesn't exist.");
 
             return;
         }
-        else if (Object.keys(targetCommand.args).length === 0) {
+        else if (targetCommand.arguments.length === 0) {
             context.fail("That command doesn't accept any arguments.");
 
             return;
         }
 
-        const argKeys: Array<string> = Object.keys(targetCommand.args);
+        let usageArgs: Array<string> = [targetCommand.meta.name];
 
-        let args: Array<string> = [targetCommand.meta.name];
-
-        for (let i: number = 0; i < argKeys.length; i++) {
-            const arg = argKeys[i].replace(":", "");
-
-            args.push(targetCommand.args[argKeys[i]].startsWith("!") ? arg : `[${arg}]`);
+        for (let i: number = 0; i < targetCommand.arguments.length; i++) {
+            usageArgs.push(targetCommand.arguments[i].required ? targetCommand.arguments[i].name : `[${targetCommand.arguments[i].name}]`);
         }
 
-        context.ok(args.join(" "));
+        context.ok(usageArgs.join(" "));
     }
 };

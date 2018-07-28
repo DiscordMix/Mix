@@ -9,13 +9,13 @@ export default class ObjectProvider extends DataProvider {
     protected data: any;
 
     /**
-     * @param {Object} data
+     * @param {object} data
      */
     constructor(data: any) {
         super();
 
         /**
-         * @type {object|null}
+         * @type {object | null}
          * @private
          */
         this.data = data;
@@ -24,7 +24,7 @@ export default class ObjectProvider extends DataProvider {
     /**
      * Retrieve guild data
      * @param {string} path
-     * @return {Object}
+     * @return {object}
      */
     get(path: string): any {
         return _.get(this.data, path);

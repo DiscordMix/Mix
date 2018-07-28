@@ -11,7 +11,7 @@ export interface RgbaOptions {
  * @extends Rgb
  */
 export default class Rgba extends Rgb {
-    readonly alpha: number;
+    public readonly alpha: number;
 
     /**
      * @param {RgbaOptions} options
@@ -29,14 +29,15 @@ export default class Rgba extends Rgb {
     /**
      * @return {string}
      */
-    toString(): string {
+    public toString(): string {
         return `${this.red}, ${this.green}, ${this.blue}, ${this.alpha}`;
     }
 
     /**
-     * @return {Object}
+     * @return {object}
+     * @return {*}
      */
-    toObject(): any {
+    public toObject(): any {
         return {
             red: this.red,
             green: this.green,
@@ -47,9 +48,9 @@ export default class Rgba extends Rgb {
 
     /**
      * @param {string} hex
-     * @return {Rgba|null}
+     * @return {Rgba | null}
      */
-    static fromHex(hex: string): Rgba | null {
+    public static fromHex(hex: string): Rgba | null {
         const result: any = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
         const options: RgbaOptions = {

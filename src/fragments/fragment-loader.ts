@@ -39,7 +39,7 @@ export default abstract class FragmentLoader {
      * Scan a specific directory for candidate fragments
      * @param {string} directory The directory to scan
      * @param {boolean} [recursive=true] Whether to also scan subdirectories
-     * @return {Promise<Array<string> |null>}
+     * @return {Promise<Array<string> | null>}
      */
     public static async pickupCandidates(directory: string, recursive: boolean = true): Promise<Array<string> | null> {
         return new Promise<Array<string> | null>(async (resolve) => {

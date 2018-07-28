@@ -1,4 +1,11 @@
 import { Command, ChatEnvironment, Permission, CommandContext } from "../..";
+import { GuildMember } from "discord.js";
+import { PrimitiveArgumentType, CommandArgument } from "../../commands/command";
+
+export interface KickArgs {
+    readonly member: GuildMember;
+    readonly reason: string;
+}
 
 export default abstract class Kick extends Command {
     readonly meta = {
@@ -6,22 +13,17 @@ export default abstract class Kick extends Command {
         description: "Kick a member from the server"
     };
 
-    readonly args = {
-        target: "!:user",
-        reason: "string"
-    };
-
-    readonly newArgs = [
+    readonly arguments: Array<CommandArgument> = [
         {
             name: "member",
-            desc: "The guild member to kick",
-            type: ":user",
+            description: "The guild member to kick",
+            type: "member",
             required: true
         },
         {
             name: "reason",
-            desc: "The reason for performing this action",
-            type: "string"
+            description: "The reason for performing this action",
+            type: PrimitiveArgumentType.String
         }
     ];
 
@@ -33,25 +35,18 @@ export default abstract class Kick extends Command {
         this.restrict.issuerPermissions = [Permission.KickMembers];
     }
 
-    public executed(context: CommandContext): void {
-        const targetMember = context.message.guild.member(context.arguments[0]);
+    public executed(context: CommandContext, args: KickArgs): void {
+        if (args.member.kickable) {
+            const name = `${args.member.displayName} (${args.member.id})`;
 
-        if (targetMember) {
-            if (targetMember.kickable) {
-                const name = `${targetMember.displayName} (${targetMember.id})`;
-
-                targetMember.kick(context.arguments.length === 2 ? context.arguments[2] : undefined).then(() => {
-                    context.ok(`${name} was successfully kicked from this server.`);
-                }).catch((error: Error) => {
-                    context.fail(`I was unable to kick that person. (${error.message})`);
-                });
-            }
-            else {
-                context.fail("I cannot kick that person.");
-            }
+            args.member.kick(args.reason).then(() => {
+                context.ok(`${name} was successfully kicked from this server.`);
+            }).catch((error: Error) => {
+                context.fail(`I was unable to kick that person. (${error.message})`);
+            });
         }
         else {
-            context.fail("Couldn't find that person. Are you sure they're in this server?");
+            context.fail("I cannot kick that person.");
         }
 
         return;

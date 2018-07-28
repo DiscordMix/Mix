@@ -1,16 +1,31 @@
 import Utils from "../core/utils";
 import CommandStore from "./command-store";
-import Command from "./command";
+import Command, { ArgumentType, CommandArgumentResolver, PrimitiveArgumentType, CommandArgument, RawArguments, ArgumentTypeChecker, UserDefinedArgType } from "./command";
 import {Message} from "discord.js";
+import Log from "../core/log";
+
+export interface ResolveArgumentsOptions {
+    readonly arguments: RawArguments;
+    readonly schema: Array<CommandArgument>;
+    readonly resolvers: Array<CommandArgumentResolver>;
+    readonly message: Message;
+}
+
+export interface CheckArgumentsOptions {
+    readonly arguments: RawArguments;
+    readonly schema: Array<CommandArgument>;
+    readonly types: Array<UserDefinedArgType>;
+    readonly message: Message;
+}
 
 export default class CommandParser {
     /**
      * @param {string} commandString
      * @param {CommandStore} manager
      * @param {Array<string>} prefixes
-     * @return {Command|null}
+     * @return {Command | null}
      */
-    static parse(commandString: string, manager: CommandStore, prefixes: Array<string>): Command | null {
+    public static parse(commandString: string, manager: CommandStore, prefixes: Array<string>): Command | null {
         const commandBase = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
@@ -26,7 +41,7 @@ export default class CommandParser {
      * @param {string} prefixes
      * @return {boolean}
      */
-    static isValid(commandString: string, manager: CommandStore, prefixes: Array<string>): boolean {
+    public static isValid(commandString: string, manager: CommandStore, prefixes: Array<string>): boolean {
         for (let i: number = 0; i < prefixes.length; i++) {
             if (commandString.startsWith(prefixes[i])) {
                 const commandBase = this.getCommandBase(commandString, prefixes);
@@ -43,9 +58,9 @@ export default class CommandParser {
     /**
      * @param {string} commandString
      * @param {Array<string>} prefixes
-     * @return {string|null}
+     * @return {string | null}
      */
-    static getCommandBase(commandString: string, prefixes: Array<string>): string | null {
+    public static getCommandBase(commandString: string, prefixes: Array<string>): string | null {
         for (let i: number = 0; i < prefixes.length; i++) {
             const regexResult = new RegExp(`^${Utils.escapeRegexString(prefixes[i])}([a-zA-Z]+)`).exec(commandString);
 
@@ -62,10 +77,10 @@ export default class CommandParser {
      * @param {string} commandString
      * @return {Array<string>}
      */
-    static getArguments(commandString: string): Array<string> {
+    public static getArguments(commandString: string): RawArguments {
         const expression = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;
         const argCleanExpression = /(```|`|'|"|)(.+)\1/;
-        const result = [];
+        const result: RawArguments = [];
 
         let match = expression.exec(commandString);
 
@@ -83,41 +98,166 @@ export default class CommandParser {
         return result;
     }
 
-    // TODO: Also take in arg schema to avoid matching accidental args.
     /**
-     * @param {Array<string>} args
-     * @param {Object} types
-     * @param {Object} resolvers
-     * @param {Message} message
-     * @return {Array<string>} The resolved arguments
+     * Resolve the command arguments' values
+     * @param {ResolveArgumentsOptions} options
+     * @return {Array<*>} The resolved arguments
      */
-    static resolveArguments(args: Array<string>, types: any, resolvers: any, message: Message): Array<string> {
-        const result = args;
-        const typeKeys = Object.keys(types);
+    public static resolveArguments(options: ResolveArgumentsOptions): any {
+        const result: any = {};
 
-        for (let argIdx = 0; argIdx < result.length; argIdx++) {
-            for (let typeIdx = 0; typeIdx < typeKeys.length; typeIdx++) {
-                let match = false;
+        for (let a: number = 0; a < options.arguments.length; a++) {
+            let typeFound = false;
 
-                if (typeof types[typeKeys[typeIdx]] === "function") {
-                    match = types[typeKeys[typeIdx]](args[argIdx]);
-                }
-                else if (types[typeKeys[typeIdx]] instanceof RegExp) {
-                    match = types[typeKeys[typeIdx]].test(args[argIdx]);
-                }
-
-                if (match) {
-                    if (typeof resolvers[typeKeys[typeIdx]] === "function") {
-                        result[argIdx] = resolvers[typeKeys[typeIdx]](result[argIdx], message);
+            for (let r: number = 0; r < options.resolvers.length; r++) {
+                // Loop through all the schema types, check if they have resolvers
+                for (let t: number = 0; t < options.schema.length; t++) {
+                    // If a resolver exists for this schema type, resolve the value
+                    if (options.resolvers[r].name === options.schema[t].name) {
+                        typeFound = true;
+                        result[options.schema[a].name] = options.resolvers[r].resolve(options.arguments[a], options.message);
                     }
-                    // TODO: Issue further testing, there's a chance this is a bug.
-                    /* else {
-                        Log.error(`[CommandParser.resolveArguments] Expecting function but got '${typeof resolvers[typeKeys[typeIdx]]}'.`);
-                    } */
                 }
+            }
+
+            // Leave the value as-is if the resolver does not exist
+            if (!typeFound) {
+                result[options.schema[a].name] = options.arguments[a];
             }
         }
 
+        // Return the resolved arguments to be passed to the command executed() method
         return result;
+    }
+
+    /**
+     * @param {CheckArgumentsOptions} options
+     * @return {boolean}
+     */
+    public static checkArguments(options: CheckArgumentsOptions): boolean {
+        // TODO: Will this work with optional args?
+        for (let i: number = 0; i < options.arguments.length; i++) {
+            // In-command primitive type
+            if (CommandParser.isTypePrimitive(options.schema[i].type)) {
+                if (options.schema[i].type === PrimitiveArgumentType.String) {
+                    if (typeof(options.arguments[i]) !== "string") {
+                        return false;
+                    }
+                }
+                else if (options.schema[i].type === PrimitiveArgumentType.Boolean) {
+                    if (CommandParser.parseBoolean(options.arguments[i]) === null) {
+                        return false;
+                    }
+                }
+                else {
+                    const value: number = parseInt(options.arguments[i]);
+
+                    // Value must be a number at this point
+                    if (isNaN(value)) {
+                        return false;
+                    }
+
+                    switch (options.schema[i].type) {
+                        case PrimitiveArgumentType.Integer: {
+                            // Integer covers all numbers
+
+                            break;
+                        }
+
+                        case PrimitiveArgumentType.WholeNumber: {
+                            // Value must be higher or equal to zero
+                            if (value < 0) {
+                                return false;
+                            }
+
+                            break;
+                        }
+
+                        case PrimitiveArgumentType.NonZeroWholeNumber: {
+                            // Value must be one or higher
+                            if (value < 1) {
+                                return false;
+                            }
+
+                            break;
+                        }
+
+                        default: {
+                            // Shouldn't reach this point in code
+                            Log.warn(`[CommandParser.checkArguments] You should not be able to reach this point in code under any circumstances while checking type: ${options.schema[i].name}`);
+
+                            return false;
+                        }
+                    }
+                }
+            }
+            // User-defined type (argumentTypes)
+            else if (typeof(options.schema[i].type) === "string") {
+                let found = false;
+
+                for (let t: number = 0; t < options.types.length; t++) {
+                    if (options.types[t].name === options.schema[i].type) {
+                        found = true;
+
+                        if (options.types[t].check instanceof RegExp && !(options.types[t].check as RegExp).test(options.arguments[i])) {
+                            return false;
+                        }
+                        else if (typeof(options.types[t].check) === "function") {
+                            if (!(options.types[t].check as ArgumentTypeChecker)(options.arguments[i], options.message)) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                if (!found) {
+                    Log.warn(`[CommandParser.checkArguments] Missing user-defined type check for type: ${options.schema[i].type}`);
+
+                    return false;
+                }
+            }
+            // In-command regex expression
+            else if (options.schema[i].type instanceof RegExp) {
+                if (!(options.schema[i].type as RegExp).test(options.arguments[i])) {
+                    return false;
+                }
+            }
+            // In-command method check
+            else if (typeof(options.schema[i].type) === "function") {
+                if (!(options.schema[i].type as ArgumentTypeChecker)(options.arguments[i], options.message)) {
+                    return false;
+                }
+            }
+            else {
+                Log.throw(`[CommandParser.checkArguments] Invalid argument type type, expected either a function or a regex expression: ${options.schema[i].name}`);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param {ArgumentType} type
+     * @return {boolean}
+     */
+    private static isTypePrimitive(type: ArgumentType): boolean {
+        return typeof(type) === "number" && PrimitiveArgumentType[type] !== undefined;
+    }
+
+    /**
+     * @param {string} value
+     * @return {boolean | null}
+     */
+    private static parseBoolean(value: string): boolean | null {
+        const lowerCaseValue: string = value.toLowerCase();
+
+        if (lowerCaseValue == "true" || lowerCaseValue == "1" || lowerCaseValue == "yes") {
+            return true;
+        }
+        else if (lowerCaseValue == "false" || lowerCaseValue == "0" || lowerCaseValue == "no") {
+            return false;
+        }
+
+        return null;
     }
 }

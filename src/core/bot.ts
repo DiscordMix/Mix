@@ -13,7 +13,7 @@ import Temp from "./temp";
 import {Client, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import BehaviourManager from "../behaviours/behaviour-manager";
-import Command, {CommandArgumentStyle, UserGroup} from "../commands/command";
+import Command, {CommandArgumentStyle, UserGroup, CommandArgument, CommandArgumentResolver, ArgumentType, RawArguments, UserDefinedArgType} from "../commands/command";
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
 import Discord from "discord.js";
@@ -32,12 +32,13 @@ export interface BotOptions {
     readonly settings: Settings;
     readonly authStore: CommandAuthStore;
     readonly dataStore?: DataProvider;
-    readonly argumentTypes?: any;
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: Array<string>;
     readonly userGroups?: Array<UserGroup>;
     readonly owner?: Snowflake;
     readonly options?: BotExtraOptions;
+    readonly argumentResolvers?: Array<CommandArgumentResolver>;
+    readonly argumentTypes?: Array<UserDefinedArgType>;
 }
 
 export interface BotExtraOptions {
@@ -85,6 +86,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly owner?: Snowflake;
     public readonly options: DefiniteBotExtraOptions;
     public readonly language?: Language;
+    public readonly argumentResolvers: Array<CommandArgumentResolver>;
+    public readonly argumentTypes: Array<UserDefinedArgType>;
 
     private api?: ApiType;
     private setupStart: number = 0;
@@ -194,7 +197,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
          */
         this.options = {
             allowCommandChain: botOptions.options && botOptions.options.allowCommandChain !== undefined ? botOptions.options.allowCommandChain : true,
-            commandArgumentStyle: botOptions.options && botOptions.options.commandArgumentStyle || CommandArgumentStyle.Specific,
+            commandArgumentStyle: botOptions.options && botOptions.options.commandArgumentStyle || CommandArgumentStyle.Explicit,
             autoDeleteCommands: botOptions.options && botOptions.options.autoDeleteCommands || false,
             checkCommands: botOptions.options && botOptions.options.checkCommands !== undefined ? botOptions.options.checkCommands : true,
             ignoreBots: botOptions.options && botOptions.options.ignoreBots !== undefined ? botOptions.options.ignoreBots : true,
@@ -223,6 +226,18 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @readonly
          */
         this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
+
+        /**
+         * @type {Array<CommandArgumentResolver>}
+         * @readonly
+         */
+        this.argumentResolvers = botOptions.argumentResolvers || [];
+
+        /**
+         * @type {Array<UserDefinedArgType>}
+         * @readonly
+         */
+        this.argumentTypes = botOptions.argumentTypes || [];
 
         return this;
     }
@@ -460,17 +475,51 @@ export default class Bot<ApiType = any> extends EventEmitter {
     }
 
     private async handleCommandMessage(message: Message, content: string, resolvers: any) {
-        const command = CommandParser.parse(
+        const command: Command | null = CommandParser.parse(
             content,
             this.commandStore,
             this.settings.general.prefixes
         );
 
-        if (command) {
+        if (command !== null) {
+            const rawArgs: RawArguments = CommandParser.getArguments(content);
+
+            const validArguments: boolean = CommandParser.checkArguments({
+                arguments: rawArgs,
+                schema: command.arguments,
+                types: this.argumentTypes,
+                message: message
+            });
+
+            if (!validArguments) {
+                Log.warn(`[Bot.handleCommandMessage] Invalid arguments (arg validation failed) for command: ${command.meta.name}`);
+
+                return;
+            }
+            else {
+                Log.debug(`valid args for command: ${command.meta.name}`);
+            }
+
+            console.log({
+                rawArgs: rawArgs,
+                resolvers: this.argumentResolvers,
+                schema: command.arguments
+            });
+
+            const args: any | null = CommandParser.resolveArguments({
+                arguments: rawArgs,
+                message: message,
+                resolvers: this.argumentResolvers,
+                schema: command.arguments
+            });
+
+            // TODO: Debugging
+            console.log("resolved args: ", args);
+
             await this.commandHandler.handle(
                 new CommandContext({
                     message: message,
-                    args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
+                    // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
                     bot: this,
 
                     // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
@@ -480,7 +529,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
                     label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
                 }),
 
-                command
+                command,
+
+                args
             );
         }
         else {

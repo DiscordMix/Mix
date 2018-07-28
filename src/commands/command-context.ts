@@ -3,12 +3,10 @@ import EmbedBuilder from "../builders/embed-builder";
 import {Message, Role, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import EmojiCollection from "../collections/emoji-collection";
-import Log from "../core/log";
 import Discord from "discord.js";
 
 export interface CommandExecutionContextOptions {
     readonly message: Message;
-    readonly args: Array<string>;
     readonly bot: Bot;
     readonly auth: number;
     readonly emojis?: EmojiCollection;
@@ -17,7 +15,6 @@ export interface CommandExecutionContextOptions {
 
 export default class CommandContext {
     readonly message: Message;
-    readonly arguments: Array<any>;
     readonly bot: Bot;
     readonly auth: number;
     readonly emojis?: EmojiCollection;
@@ -32,12 +29,6 @@ export default class CommandContext {
          * @readonly
          */
         this.message = options.message;
-
-        /**
-         * @type {Array<string>}
-         * @readonly
-         */
-        this.arguments = options.args;
 
         /**
          * @type {Bot}

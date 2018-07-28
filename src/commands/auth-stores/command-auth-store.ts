@@ -79,7 +79,7 @@ export default abstract class CommandAuthStore extends EventEmitter {
 
     /**
      * @param {number} rank
-     * @return {string|null}
+     * @return {string | null}
      */
     getSchemaRankName(rank: number): string | null {
         const keys = Object.keys(this.schema);

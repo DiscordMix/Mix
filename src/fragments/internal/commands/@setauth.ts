@@ -3,6 +3,11 @@ import CommandContext from "../../../commands/command-context";
 import JsonAuthStore from "../../../commands/auth-stores/json-auth-store";
 import {GuildMember} from "discord.js";
 
+export interface ISetAuthArgs {
+    readonly member: GuildMember;
+    readonly auth: number;
+}
+
 export default class SetAuth extends Command {
     readonly meta = {
         name: "setauth",
@@ -21,19 +26,17 @@ export default class SetAuth extends Command {
         this.restrict.auth = -1;
     }
 
-    public async executed(context: CommandContext): Promise<void> {
-        if (context.arguments[1] < 0) {
+    public async executed(context: CommandContext, args: ISetAuthArgs): Promise<void> {
+        if (args.auth < 0) {
             await context.fail("Authorization level must be higher than zero.");
 
             return;
         }
 
-        const member: GuildMember = <GuildMember>context.arguments[0];
-
         const result: boolean = (<JsonAuthStore>context.bot.authStore).setUserAuthority(
             context.message.guild.id,
-            member.id,
-            context.arguments[1]
+            args.member.id,
+            args.auth
         );
 
         await (<JsonAuthStore>context.bot.authStore).save();
@@ -44,6 +47,6 @@ export default class SetAuth extends Command {
             return;
         }
 
-        await context.ok(`<@${member.id}> now has authorization level of **${context.arguments[1]}**.`);
+        await context.ok(`<@${args.member.id}> now has authorization level of **${args.auth}**.`);
     }
 };

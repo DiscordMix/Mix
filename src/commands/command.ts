@@ -10,7 +10,7 @@ export enum CommandArgumentStyle {
     Descriptive
 }
 
-export type ArgumentTypeChecker = (argument: any, message: Message) => boolean;
+export type ArgumentTypeChecker = (argument: string, message: Message) => boolean;
 
 /**
  * PrimitiveArgumentType : Internal check
@@ -36,7 +36,7 @@ export enum PrimitiveArgumentType {
 
 export interface CommandArgumentResolver {
     readonly name: string;
-    readonly resolve: (argument: any, message: Message) => any;
+    readonly resolve: (argument: string, message: Message) => any;
 }
 
 // TODO: Make use of this

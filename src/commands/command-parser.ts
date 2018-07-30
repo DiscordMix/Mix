@@ -135,6 +135,11 @@ export default class CommandParser {
      * @return {boolean}
      */
     public static checkArguments(options: CheckArgumentsOptions): boolean {
+        // No arguments provided when we need more than zero
+        if (options.arguments.length === 0 && options.schema.length > 0) {
+            return false;
+        }
+
         // TODO: Will this work with optional args?
         for (let i: number = 0; i < options.arguments.length; i++) {
             // In-command primitive type

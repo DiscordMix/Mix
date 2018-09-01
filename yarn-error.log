@@ -1,0 +1,103 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js publish
+
+PATH: 
+  c:\program files (x86)\amd app\bin\x86_64;c:\program files (x86)\amd app\bin\x86;c:\programdata\oracle\java\javapath;c:\windows\system32;c:\windows;c:\windows\system32\wbem;c:\windows\system32\windowspowershell\v1.0\;c:\programdata\chocolatey\bin;c:\program files\git\cmd;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Users\raxor\.windows-build-tools\python27;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\PuTTY\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;D:\Microsoft VS Code Insiders\bin;C:\Users\raxor\AppData\Local\Microsoft\WindowsApps;C:\Users\raxor\AppData\Local\.meteor;C:\Program Files\Heroku\bin;C:\gource\;C:\users\raxor\desktop\ffmepg\bin\;C:\Users\raxor\AppData\Roaming\npm;C:\Users\raxor\AppData\Local\Yarn\bin;C:\Users\raxor\AppData\Local\hyper\app-2.0.0\resources\bin;D:\Docker Toolbox
+
+Yarn version: 
+  1.7.0
+
+Node version: 
+  10.2.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:131036:13)
+      at Interface.emit (events.js:182:13)
+      at Interface._ttyWrite (readline.js:783:16)
+      at ReadStream.onkeypress (readline.js:168:10)
+      at ReadStream.emit (events.js:182:13)
+      at emitKeys (internal/readline.js:422:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1022:36)
+      at ReadStream.emit (events.js:182:13)
+      at addChunk (_stream_readable.js:279:12)
+
+npm manifest: 
+  {
+      "name": "discord-anvil",
+      "version": "2.4.1",
+      "description": "Powerful Discord bot framework",
+      "main": "./dist/index.js",
+      "keywords": [
+          "discord",
+          "discord-bot",
+          "discord-library",
+          "discord-framework"
+      ],
+      "presets": [
+          "env",
+          "es2015"
+      ],
+      "repository": {
+          "type": "git",
+          "url": "https://gitlab.com/cloudrex/anvil.git"
+      },
+      "scripts": {
+          "watch": "tsc --watch",
+          "build": "tsc && node after-build.js",
+          "type-check": "tsc --noEmit",
+          "test": "npm run build && mocha dist/test/tests.js",
+          "prepublishOnly": "npm run build"
+      },
+      "author": "CloudRex <cloudrex@outlook.com>",
+      "license": "MIT",
+      "dependencies": {
+          "@types/chai": "^4.1.4",
+          "@types/knex": "^0.14.17",
+          "@types/mocha": "^5.2.5",
+          "@types/node": "^10.5.2",
+          "argparse": "^1.0.10",
+          "babel-polyfill": "^6.26.0",
+          "colors": "latest",
+          "dblapi.js": "^2.0.0",
+          "discord.js": "^11.3.2",
+          "hoek": "^4.2.1",
+          "javascript-time-ago": "^1.0.30",
+          "knex": "^0.15.2",
+          "lodash": "^4.17.5",
+          "minimist": "^1.2.0",
+          "mongodb": "^3.1.1",
+          "mysql": "^2.15.0",
+          "querystring": "^0.2.0",
+          "request": "^2.83.0",
+          "require-main-filename": "^1.0.1",
+          "rimraf": "^2.6.2"
+      },
+      "devDependencies": {
+          "@babel/cli": "^7.0.0-beta.44",
+          "@babel/core": "^7.0.0-beta.44",
+          "@babel/plugin-proposal-class-properties": "^7.0.0-beta.44",
+          "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.44",
+          "@babel/preset-env": "^7.0.0-beta.44",
+          "@babel/preset-typescript": "^7.0.0-beta.44",
+          "typescript": "^2.8.1",
+          "chai": "^4.1.2",
+          "eslint": "^4.19.1",
+          "eslint-config-airbnb-base": "^12.1.0",
+          "eslint-plugin-import": "^2.10.0",
+          "mocha": "^5.1.1"
+      },
+      "files": [
+          "dist"
+      ]
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

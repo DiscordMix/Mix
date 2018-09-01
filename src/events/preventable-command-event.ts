@@ -17,7 +17,7 @@ export default class PreventableCommandEvent extends CommandEvent {
     /**
      * @param {boolean} [prevent
      */
-    prevent(prevent = true): void {
+    public prevent(prevent = true): void {
         /**
          * @type {boolean}
          * @readonly
@@ -25,7 +25,7 @@ export default class PreventableCommandEvent extends CommandEvent {
         this.prevented = prevent;
     }
 
-    isPrevented(): boolean {
+    public isPrevented(): boolean {
         return this.prevented;
     }
 }

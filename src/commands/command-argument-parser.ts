@@ -7,7 +7,7 @@ export default class CommandArgumentParser {
      * @param {Object} resolvers
      * @return {*}
      */
-    static resolve(type: string, arg: string, resolvers: any): any {
+    public static resolve(type: string, arg: string, resolvers: any): any {
         const keys = Object.keys(resolvers);
 
         for (let i = 0; i < keys.length; i++) {

@@ -18,7 +18,7 @@ export default class PluginManager {
      * @param {string} name
      * @return {void}
      */
-    load(name: string): /* Plugin */ void {
+    public load(name: string): /* Plugin */ void {
         // TODO
     }
 }

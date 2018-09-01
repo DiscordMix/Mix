@@ -78,6 +78,11 @@ export default abstract class FragmentLoader {
         });
     }
 
+    /**
+     * @param {Array<string>} candidates
+     * @param {boolean} isolate
+     * @return {Promise<Array<Fragment> | null>}
+     */
     public static async loadMultiple(candidates: Array<string>, isolate: boolean = false): Promise<Array<Fragment> | null> {
         if (candidates.length === 0) {
             Log.warn("[FragmentLoader.loadMultiple] Candidates array is empty");

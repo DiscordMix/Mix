@@ -100,7 +100,7 @@ export default class SetupHelper {
      * @param {string} text
      * @return {this}
      */
-    input(text: string): this {
+    public input(text: string): this {
         this.actionMap.push({
             type: SetupHelperActionType.Input,
             text: text
@@ -113,7 +113,7 @@ export default class SetupHelper {
      * @param {string} text
      * @return {this}
      */
-    question(text: string): this {
+    public question(text: string): this {
         this.actionMap.push({
             type: SetupHelperActionType.Question,
             text: text
@@ -126,7 +126,7 @@ export default class SetupHelper {
      * @param {(response: string) => string} responseHandler
      * @return {Promise<SetupHelperResult>}
      */
-    async finish(responseHandler?: (response: string, index: number) => string): Promise<SetupHelperResult> {
+    public async finish(responseHandler?: (response: string, index: number) => string): Promise<SetupHelperResult> {
         const responses: Array<string> = [];
 
         for (let i = 0; i < this.actionMap.length; i++) {
@@ -194,7 +194,7 @@ export default class SetupHelper {
      * @param {FromContextOptions} options
      * @return {SetupHelper | null}
      */
-    static fromContext(options: FromContextOptions): SetupHelper | null {
+    public static fromContext(options: FromContextOptions): SetupHelper | null {
         if (options.context.message.channel instanceof TextChannel) {
             //context.bot.client, context.message.channel, context.sender.id, title, timeout, embed
             return new SetupHelper({

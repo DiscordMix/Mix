@@ -1,4 +1,4 @@
-import { Table } from "knex";
+import {Table} from "knex";
 
 export default class KnexTable<Model> {
     public readonly name: string;

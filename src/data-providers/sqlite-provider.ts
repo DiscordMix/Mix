@@ -9,7 +9,7 @@ export default class SqliteProvider extends DataProvider {
      * @param {string} path
      * @return {*}
      */
-    get(path: string): any {
+    public get(path: string): any {
         throw new Error("[SqliteProvider.get] Method not implemented.");
     }
 
@@ -18,7 +18,7 @@ export default class SqliteProvider extends DataProvider {
      * @param {string} path
      * @param {*} value
      */
-    set(path: string, value: any): void {
+    public set(path: string, value: any): void {
         throw new Error("[SqliteProvider.set] Method not implemented.");
     }
 
@@ -27,7 +27,7 @@ export default class SqliteProvider extends DataProvider {
      * @param {string} path
      * @param {*} value
      */
-    merge(path: string, value: any): void {
+    public merge(path: string, value: any): void {
         throw new Error("[SqliteProvider.merge] Method not implemented.");
     }
 }

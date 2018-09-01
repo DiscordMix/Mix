@@ -11,7 +11,8 @@ export default class Prefix extends Command {
         prefix: "!string"
     };
 
-    public executed(context: CommandContext): void {
+    public async executed(context: CommandContext): Promise<void> {
         // TODO
+        await context.ok("Command not yet implemented.");
     }
 };

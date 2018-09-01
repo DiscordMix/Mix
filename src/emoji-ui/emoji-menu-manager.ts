@@ -6,11 +6,11 @@ export default class EmojiMenuManager {
     private readonly awaiting: Array<any>;
 
     /**
-     * @param {Discord.Client} client
+     * @param {Client} client
      */
     constructor(client: Client) {
         /**
-         * @type {Discord.Client}
+         * @type {Client}
          * @private
          * @readonly
          */
@@ -25,15 +25,17 @@ export default class EmojiMenuManager {
 
         // TODO: Types
         this.client.on("messageReactionAdd", (reaction: any, user: any) => {
-            if (!user.bot) {
-                for (let i = 0; i < this.awaiting.length; i++) {
-                    if (this.awaiting[i].messageId === reaction.message.id) {
-                        for (let buttonIndex = 0; buttonIndex < this.awaiting[i].menu.buttons.length; buttonIndex++) {
-                            if (this.awaiting[i].menu.buttons[buttonIndex].emoji === reaction.emoji.name) {
-                                this.awaiting[i].menu.buttons[buttonIndex].handle(reaction.message, user);
+            if (user.bot) {
+                return;
+            }
 
-                                break;
-                            }
+            for (let i = 0; i < this.awaiting.length; i++) {
+                if (this.awaiting[i].messageId === reaction.message.id) {
+                    for (let buttonIndex = 0; buttonIndex < this.awaiting[i].menu.buttons.length; buttonIndex++) {
+                        if (this.awaiting[i].menu.buttons[buttonIndex].emoji === reaction.emoji.name) {
+                            this.awaiting[i].menu.buttons[buttonIndex].handle(reaction.message, user);
+
+                            break;
                         }
                     }
                 }
@@ -46,7 +48,7 @@ export default class EmojiMenuManager {
      * @param {EmojiMenu} menu
      * @return {Promise<Message>}
      */
-    async show(channel: any, menu: EmojiMenu): Promise<Message> {
+    public async show(channel: any, menu: EmojiMenu): Promise<Message> {
         const sentMessage = await channel.send(menu.content);
 
         for (let i = 0; i < menu.buttons.length; i++) {

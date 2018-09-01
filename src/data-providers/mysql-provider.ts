@@ -1,9 +1,8 @@
 import DataProvider from "./data-provider";
 import Log from "../core/log";
 import {Snowflake} from "discord.js";
-
-const mysql = require("mysql");
-const _ = require("lodash");
+import mysql from "mysql";
+import {default as _} from "lodash";
 
 /**
  * @extends DataProvider

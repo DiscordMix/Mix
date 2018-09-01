@@ -6,7 +6,7 @@ import Command from "../commands/command";
  * @extends CommandEvent
  */
 export default class CommandExecutedEvent extends CommandEvent {
-    readonly command: Command;
+    public readonly command: Command;
 
     /**
      * @param {CommandContext} context

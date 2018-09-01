@@ -1,4 +1,4 @@
-import {RichEmbed, User} from "discord.js";
+import {Message, RichEmbed, Snowflake, User} from "discord.js";
 import fs from "fs";
 import path from "path";
 
@@ -23,7 +23,7 @@ export default class Utils {
      * @param {string} mention
      * @return {string}
      */
-    static resolveId(mention: string): string {
+    public static resolveId(mention: string): string {
         return mention
             .replace("<", "")
             .replace(">", "")
@@ -38,7 +38,7 @@ export default class Utils {
      * @param {number} max The maximum amount
      * @return {number} The random number
      */
-    static getRandomInt(min: number, max: number): number {
+    public static getRandomInt(min: number, max: number): number {
         return Math.floor(Math.random() * max) + min;
     }
 
@@ -78,7 +78,7 @@ export default class Utils {
      * @param {Array<*>} array The array to shuffle
      * @return {Array<*>} The shuffled array
      */
-    static shuffle(array: Array<any>): Array<any> {
+    public static shuffle(array: Array<any>): Array<any> {
         let counter = array.length;
 
         // While there are elements in the array
@@ -102,9 +102,9 @@ export default class Utils {
     /**
      * @todo Return type
      * @param {SendOptions} options
-     * @return {Promise<Discord.Message>} The message sent
+     * @return {Promise<Message>} The message sent
      */
-    static async send(options: SendOptions): Promise<any> {
+    public static async send(options: SendOptions): Promise<any> {
         return await options.channel.send(new RichEmbed()
             .setColor(options.color ? options.color : "GREEN")
             .setTitle(options.title ? options.title : "")
@@ -122,7 +122,7 @@ export default class Utils {
      * @param {number} [years=0]
      * @return {number}
      */
-    static timeFromNow(milliseconds: number, seconds: number = 0, minutes: number = 0, hours: number = 0, days: number = 0, months: number = 0, years: number = 0): number {
+    public static timeFromNow(milliseconds: number, seconds: number = 0, minutes: number = 0, hours: number = 0, days: number = 0, months: number = 0, years: number = 0): number {
         const now = new Date();
 
         return new Date(years + now.getFullYear(), months + now.getMonth(), days + now.getDate(), hours + now.getHours(), minutes + now.getMinutes(), seconds + now.getSeconds(), milliseconds + now.getMilliseconds()).getTime();
@@ -133,7 +133,7 @@ export default class Utils {
      * @param {boolean} capitalize Whether to capitalize the time
      * @return {string}
      */
-    static timeAgo(timestamp: number, capitalize: boolean = true): string {
+    public static timeAgo(timestamp: number, capitalize: boolean = true): string {
         let time: string = timeAgo.format(timestamp);
 
         if (capitalize) {
@@ -147,7 +147,7 @@ export default class Utils {
      * @param {number} timestamp
      * @return {string}
      */
-    static timeAgoFromNow(timestamp: number): string {
+    public static timeAgoFromNow(timestamp: number): string {
         return Utils.timeAgo(Date.now() - timestamp);
     }
 
@@ -155,7 +155,7 @@ export default class Utils {
      * @param {string} state
      * @return {boolean} Whether the state string representation was positive
      */
-    static translateState(state: string): boolean {
+    public static translateState(state: string): boolean {
         return /^(1|true|on|y|yes)$/i.test(state);
     }
 
@@ -164,7 +164,7 @@ export default class Utils {
      * @param {Object} data
      * @return {Promise<*>}
      */
-    static async writeJson(path: string, data: any): Promise<any> {
+    public static async writeJson(path: string, data: any): Promise<any> {
         return new Promise((resolve) => {
             fs.writeFile(path, JSON.stringify(data), (error: Error) => {
                 if (error) {
@@ -180,7 +180,7 @@ export default class Utils {
      * @param {string} path
      * @return {Promise<Object>} The data from the specified path
      */
-    static async readJson(path: string): Promise<any> {
+    public static async readJson(path: string): Promise<any> {
         return new Promise((resolve, reject) => {
             fs.readFile(path, (error: Error, data: any) => {
                 if (error) {
@@ -209,18 +209,44 @@ export default class Utils {
      * @param {string} string The string to escape regex of
      * @return {string} The escaped string
      */
-    static escapeRegexString(string: string): string {
+    public static escapeRegexString(string: string): string {
         return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
     /**
      * @return {Promise<string>}
      */
-    static async getAnvilVersion(): Promise<string> {
+    public static async getAnvilVersion(): Promise<string> {
         // TODO
         // return (await this.readJson("package.json")).version;
 
         // TODO: Hard coded
         return "1.1.22";
+    }
+
+    /**
+     * @param {Message} message
+     * @param {User} user
+     * @return {boolean}
+     */
+    public static hasMentionPrefix(message: Message, user: Snowflake | User): boolean {
+        const id: Snowflake = typeof user === "string" ? user : user.id;
+
+        return message.content.startsWith(`<@${id}`) || message.content.startsWith(`<@!${id}>`);
+    }
+
+    /**
+     * @param {Message} message
+     * @param {Array<string>} strings
+     * @return {boolean}
+     */
+    public static hasStringsPrefix(message: Message, strings: Array<string>): boolean {
+        for (let i = 0; i < strings.length; i++) {
+            if (message.content.startsWith(strings[i])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

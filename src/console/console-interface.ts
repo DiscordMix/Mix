@@ -5,7 +5,7 @@ import readline from "readline";
 import { performance } from "perf_hooks";
 
 export default class ConsoleInterface {
-    ready: boolean;
+    public ready: boolean;
 
     constructor() {
         /**
@@ -19,7 +19,7 @@ export default class ConsoleInterface {
      * @param {Bot} bot
      * @return {ConsoleInterface}
      */
-    setup(bot: Bot): ConsoleInterface {
+    public setup(bot: Bot): ConsoleInterface {
         Log.verbose("[ConsoleInterface] Setting up console interface");
 
         const ci = readline.createInterface({

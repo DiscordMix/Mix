@@ -1,7 +1,7 @@
 export default class Rgb {
-    readonly red: number;
-    readonly green: number;
-    readonly blue: number;
+    public readonly red: number;
+    public readonly green: number;
+    public readonly blue: number;
 
     /**
      * @param {number} red
@@ -31,7 +31,7 @@ export default class Rgb {
     /**
      * @return {string} The string equivalent
      */
-    toString(): string {
+    public toString(): string {
         return `${this.red}, ${this.green}, ${this.blue}`;
     }
 }

@@ -61,13 +61,13 @@ export interface CommandRestrict {
  * @extends Fragment
  */
 export default abstract class Command extends Fragment {
-    readonly aliases: Array<string> = [];
-    readonly arguments: Array<CommandArgument> = [];
-    readonly isEnabled: boolean = true;
-    readonly exclude: Array<string> = [];
-    readonly singleArg: boolean = false;
+    public readonly aliases: Array<string> = [];
+    public readonly arguments: Array<CommandArgument> = [];
+    public readonly isEnabled: boolean = true;
+    public readonly exclude: Array<string> = [];
+    public readonly singleArg: boolean = false;
 
-    readonly restrict: CommandRestrict = {
+    public readonly restrict: CommandRestrict = {
         auth: 0,
         cooldown: 0,
         environment: ChatEnvironment.Anywhere,
@@ -76,16 +76,13 @@ export default abstract class Command extends Fragment {
         specific: []
     };
 
-    /**
-     * @param {CommandOptions} options
-     */
-    constructor() {
+    protected constructor() {
         super();
     }
 
-    abstract executed(context: CommandContext, args: any, api: any): any;
+    public abstract executed(context: CommandContext, args: any, api: any): any;
 
-    canExecute(context: CommandContext): boolean {
+    public canExecute(context: CommandContext): boolean {
         return true;
     }
 
@@ -93,14 +90,14 @@ export default abstract class Command extends Fragment {
      * @param {string} query
      * @return {boolean} Whether the query is excluded
      */
-    isExcluded(query: string): boolean {
+    public isExcluded(query: string): boolean {
         return this.exclude.includes(query);
     }
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts
      */
-    get minArguments(): number {
+    public get minArguments(): number {
         let counter = 0;
 
         for (let i: number = 0; i < this.arguments.length; i++) {
@@ -115,7 +112,7 @@ export default abstract class Command extends Fragment {
     /**
      * @return {number} The maximum amount of arguments that this command accepts
      */
-    get maxArguments(): number {
+    public get maxArguments(): number {
         return this.arguments.length;
     }
 }

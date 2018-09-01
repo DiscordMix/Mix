@@ -2,7 +2,7 @@ import TimeSuffixType from "./time-suffix-type";
 import Utils from "../core/utils";
 
 export default class TimeParser {
-    readonly timeString: string;
+    public readonly timeString: string;
 
     /**
      * @param {string} timeString
@@ -19,14 +19,14 @@ export default class TimeParser {
     /**
      * @return {*}
      */
-    getMatch(): any {
+    public getMatch(): any {
         return /^([0-9]+)(ms|s|m|h|d|mo|y)$/.exec(this.timeString);
     }
 
     /**
      * @return {number}
      */
-    getTimeFromNow(): number {
+    public getTimeFromNow(): number {
         switch (this.suffix) {
             case TimeSuffixType.Millisecond: {
                 return Utils.timeFromNow(this.amount);
@@ -66,14 +66,14 @@ export default class TimeParser {
      * @todo Return type
      * @return {TimeSuffixType}
      */
-    get suffix(): any {
+    public get suffix(): any {
         return TimeSuffixType.fromShort(this.getMatch()[2]);
     }
 
     /**
      * @return {number}
      */
-    get amount(): number {
+    public get amount(): number {
         return parseInt(this.getMatch()[1]);
     }
 }

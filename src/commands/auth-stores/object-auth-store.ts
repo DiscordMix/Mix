@@ -33,7 +33,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {*} identifier
      * @return {number}
      */
-    getAuthLevel(guildId: Snowflake, identifier: any): number {
+    public getAuthLevel(guildId: Snowflake, identifier: any): number {
         const authLevels = this.data[guildId];
 
         for (let i = 0; i < authLevels.length; i++) {
@@ -50,7 +50,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {Array<string>} roles
      * @return {number}
      */
-    getHighestAuthLevelByRoles(guildId: Snowflake, roles: Array<string>): number {
+    public getHighestAuthLevelByRoles(guildId: Snowflake, roles: Array<string>): number {
         let highest = 0;
 
         for (let i = 0; i < roles.length; i++) {
@@ -70,7 +70,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {Array<string>} roles
      * @return {number} The authority of the user
      */
-    getAuthority(guildId: Snowflake, userId: Snowflake, roles: Array<string> = ["@everyone"]): number {
+    public getAuthority(guildId: Snowflake, userId: Snowflake, roles: Array<string> = ["@everyone"]): number {
         const byRoles = this.getHighestAuthLevelByRoles(guildId, roles);
         const byId = this.getAuthLevel(guildId, userId);
 
@@ -86,7 +86,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {string} userId
      * @param {number} authLevel
      */
-    setUserAuthority(guildId: string, userId: string, authLevel: number): boolean {
+    public setUserAuthority(guildId: string, userId: string, authLevel: number): boolean {
         if (!this.authLevelExists(authLevel)) {
             return false;
         }
@@ -112,7 +112,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {number} authLevel
      * @return {boolean}
      */
-    authLevelExists(authLevel: number): boolean {
+    public authLevelExists(authLevel: number): boolean {
         const schemaKeys = Object.keys(this.schema);
 
         for (let i: number = 0; i < schemaKeys.length; i++) {
@@ -129,7 +129,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {Snowflake} guildId
      * @return {boolean} Whether the entry was created
      */
-    create(guildId: Snowflake): boolean {
+    public create(guildId: Snowflake): boolean {
         if (!this.contains(guildId)) {
             const schemaKeys = Object.keys(this.schema);
             const entry = [];
@@ -170,7 +170,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {Snowflake} guildId
      * @return {boolean} Whether the entry was removed
      */
-    remove(guildId: Snowflake): boolean {
+    public remove(guildId: Snowflake): boolean {
         Log.throw("[ObjectAuthStore.remove] Method not implemented");
 
         return false;
@@ -181,7 +181,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
      * @param {Snowflake} guildId
      * @return {boolean} Whether the entry exists
      */
-    contains(guildId: Snowflake): boolean {
+    public contains(guildId: Snowflake): boolean {
         return Object.keys(this.data).includes(guildId);
     }
 }

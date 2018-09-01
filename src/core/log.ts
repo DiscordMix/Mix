@@ -1,6 +1,5 @@
 import fs from "fs";
-
-const colors = require("colors");
+import colors from "colors";
 
 export enum LogLevel {
     Fatal,
@@ -13,24 +12,25 @@ export enum LogLevel {
 }
 
 export interface ComposeOptions {
-    readonly message: string;
+    readonly message: any;
+    readonly params: Array<any>;
     readonly type: LogLevel;
     readonly color?: string;
     readonly prefix?: string;
 }
 
 export default class Log {
-    static level: LogLevel = LogLevel.Success;
+    public static level: LogLevel = LogLevel.Success;
 
     /**
      * @param {ComposeOptions} options
      * @return {Promise<void>}
      */
-    static async compose(options: ComposeOptions): Promise<any> {
+    public static async compose(options: ComposeOptions): Promise<any> {
         const finalColor = options.color ? options.color : "white";
-        const finalPrefix = options.prefix ? options.prefix : "";
+        const finalPrefix = options.prefix ? options.prefix : null;
 
-        let finalMessage = options.message;
+        let message = options.message;
 
         return new Promise((resolve) => {
             // TODO: Make sure check is working as intended, seems a bit suspicious
@@ -44,15 +44,21 @@ export default class Log {
 
             // TODO: Make this next line work on the vps
             // process.stdout.write(`\x1B[2D[${date}] ${colors[color](message)}\n> `);
-            console.log(`[${date}] ${colors[finalColor](finalMessage)}`);
-
-            if (finalPrefix !== null) {
-                finalMessage = `<${finalPrefix.toUpperCase()}> ${finalMessage}`;
+            if (typeof message === "string") {
+                console.log(`[${date}] ${colors[finalColor](message)}`, ...options.params);
+            }
+            else {
+                console.log(`[${date}] `, message, ...options.params);
             }
 
-            fs.writeFile("bot.log", `[${date}] ${finalMessage}\n`, {
+            // TODO
+            /* if (finalPrefix !== null) {
+                finalMessages = `<${finalPrefix.toUpperCase()}> ${finalMessages}`;
+            } */
+
+            fs.writeFile("bot.log", `[${date}] ${message} ${options.params.map((param: any) => param.toString()).join(" ")}\n`, {
                 flag: "a"
-            }, (error: any) => {
+            }, (error: Error) => {
                 if (error) {
                     throw error;
                 }
@@ -63,12 +69,14 @@ export default class Log {
     }
 
     /**
-     * @param {string} message
+     * @param {*} message
+     * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    static info(message: string): Promise<any> {
+    public static info(message: any, ...params: Array<any>): Promise<any> {
         const options: ComposeOptions = {
             message: message,
+            params: params,
             type: LogLevel.Info,
             color: "cyan",
             prefix: "info"
@@ -78,12 +86,14 @@ export default class Log {
     }
 
     /**
-     * @param {string} message
+     * @param {*} message
+     * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    static success(message: string): Promise<any> {
+    public static success(message: any, ...params: Array<any>): Promise<any> {
         const options: ComposeOptions = {
             message: message,
+            params: params,
             type: LogLevel.Success,
             color: "green",
             prefix: "sucs"
@@ -93,12 +103,14 @@ export default class Log {
     }
 
     /**
-     * @param {string} message
+     * @param {*} message
+     * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    static warn(message: string): Promise<any> {
+    public static warn(message: any, ...params: Array<any>): Promise<any> {
         const options: ComposeOptions = {
             message: message,
+            params: params,
             type: LogLevel.Warn,
             color: "yellow",
             prefix: "warn"
@@ -108,12 +120,14 @@ export default class Log {
     }
 
     /**
-     * @param {string} message
+     * @param {*} message
+     * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    static error(message: string): Promise<any> {
+    public static error(message: any, ...params: Array<any>): Promise<any> {
         const options: ComposeOptions = {
             message: message,
+            params: params,
             type: LogLevel.Error,
             color: "red",
             prefix: "dang"
@@ -123,13 +137,14 @@ export default class Log {
     }
 
     /**
-     * @param {string} message
-     * @param {boolean} exit
+     * @param {*} message
+     * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    static throw(message: string, exit: boolean = true): Promise<any> {
+    public static throw(message: any, ...params: Array<any>): Promise<any> {
         const options: ComposeOptions = {
             message: message,
+            params: params,
             type: LogLevel.Fatal,
             color: "red",
             prefix: "fata"
@@ -137,20 +152,20 @@ export default class Log {
 
         const result = Log.compose(options);
 
-        if (exit) {
-            process.exit(1);
-        }
+        process.exit(1);
 
         return result;
     }
 
     /**
-     * @param {string} message
+     * @param {*} message
+     * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    static verbose(message: string): Promise<any> {
+    public static verbose(message: any, ...params: Array<any>): Promise<any> {
         const options: ComposeOptions = {
             message: message,
+            params: params,
             type: LogLevel.Verbose,
             color: "grey",
             prefix: "verb"
@@ -160,12 +175,14 @@ export default class Log {
     }
 
     /**
-     * @param {string} message
+     * @param {*} message
+     * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    static debug(message: string): Promise<any> {
+    public static debug(message: any, ...params: Array<any>): Promise<any> {
         const options: ComposeOptions = {
             message: message,
+            params: params,
             type: LogLevel.Debug,
             color: "magenta",
             prefix: "dbug"

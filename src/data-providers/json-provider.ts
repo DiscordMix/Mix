@@ -2,8 +2,7 @@ import ObjectProvider from "./object-provider";
 import Log from "../core/log";
 import Utils from "../core/utils";
 import fs from "fs";
-
-const _ = require("lodash");
+import {default as _} from "lodash";
 
 /**
  * @extends ObjectProvider
@@ -29,7 +28,7 @@ export default class JsonProvider extends ObjectProvider {
      * Reload the data from the source file
      * @return {Promise<*>}
      */
-    async reload(): Promise<any> {
+    public async reload(): Promise<any> {
         await this.validate();
 
         return new Promise((resolve) => {
@@ -49,7 +48,7 @@ export default class JsonProvider extends ObjectProvider {
      * Save the data into the source file
      * @return {Promise<*>}
      */
-    async save(): Promise<any> {
+    public async save(): Promise<any> {
         await this.validate();
 
         return Utils.writeJson(this.path, this.data);
@@ -58,7 +57,7 @@ export default class JsonProvider extends ObjectProvider {
     /**
      * Ensure that the source file exists
      */
-    async validate(): Promise<void> {
+    public async validate(): Promise<void> {
         if (!fs.existsSync(this.path)) {
             // TODO: Commented out
             // throw new Error(`[JsonAdapter] Path does not exist: ${this.path}`);
@@ -73,7 +72,7 @@ export default class JsonProvider extends ObjectProvider {
      * @param {string} path
      * @return {*}
      */
-    get(path: string): any {
+    public get(path: string): any {
         if (!this.loaded) {
             throw new Error("[JsonProvider.get] No data is currently loaded.");
         }
@@ -86,7 +85,7 @@ export default class JsonProvider extends ObjectProvider {
      * @param {string} path
      * @param {*} value
      */
-    set(path: string, value: any): void {
+    public set(path: string, value: any): void {
         if (!this.loaded) {
             throw new Error("[JsonProvider.set] No data is currently loaded.");
         }
@@ -100,7 +99,7 @@ export default class JsonProvider extends ObjectProvider {
      * @param {boolean} create
      * @return {boolean}
      */
-    push(path: string, value: any, create: boolean = true): boolean {
+    public push(path: string, value: any, create: boolean = true): boolean {
         const currentValue: any = _.get(this.data, path);
 
         if (Array.isArray(currentValue)) {
@@ -123,7 +122,7 @@ export default class JsonProvider extends ObjectProvider {
      * @param {string} path
      * @param {*} value
      */
-    merge(path: string, value: any): void {
+    public merge(path: string, value: any): void {
         if (!this.loaded) {
             throw new Error("[JsonProvider.merge] No data is currently loaded.");
         }
@@ -135,7 +134,7 @@ export default class JsonProvider extends ObjectProvider {
      * Determine whether any data is loaded
      * @return {boolean} Whether any data is currently loaded
      */
-    get loaded(): boolean {
+    public get loaded(): boolean {
         return this.data !== null;
     }
 }

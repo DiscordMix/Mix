@@ -51,6 +51,7 @@ export interface BotExtraOptions {
     readonly commandArgumentStyle?: CommandArgumentStyle;
     readonly ignoreBots?: boolean;
     readonly autoResetAuthStore?: boolean;
+    readonly dmHelp: boolean;
 }
 
 export interface DefiniteBotExtraOptions {
@@ -63,6 +64,7 @@ export interface DefiniteBotExtraOptions {
     readonly commandArgumentStyle: CommandArgumentStyle;
     readonly ignoreBots: boolean;
     readonly autoResetAuthStore: boolean;
+    readonly dmHelp: boolean;
 }
 
 /**
@@ -204,7 +206,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
             updateOnMessageEdit: botOptions.options && botOptions.options.updateOnMessageEdit !== undefined ? botOptions.options.updateOnMessageEdit : false,
             asciiTitle: botOptions.options && botOptions.options.asciiTitle !== undefined ? botOptions.options.asciiTitle : true,
             consoleInterface: botOptions.options && botOptions.options.consoleInterface !== undefined ? botOptions.options.consoleInterface : true,
-            autoResetAuthStore: botOptions.options && botOptions.options.autoResetAuthStore !== undefined ? botOptions.options.autoResetAuthStore : false
+            autoResetAuthStore: botOptions.options && botOptions.options.autoResetAuthStore !== undefined ? botOptions.options.autoResetAuthStore : false,
+            dmHelp: botOptions.options && botOptions.options.dmHelp !== undefined ? botOptions.options.dmHelp : true
         };
 
         // TODO: Make use of the userGroups property
@@ -494,17 +497,16 @@ export default class Bot<ApiType = any> extends EventEmitter {
             if (!validArguments) {
                 Log.warn(`[Bot.handleCommandMessage] Invalid arguments (arg validation failed) for command: ${command.meta.name}`);
 
+
                 return;
             }
             else {
-                Log.debug(`valid args for command: ${command.meta.name}`);
+                Log.debug(`valid args for command: ${command.meta.name}`, {
+                    rawArgs: rawArgs,
+                    resolvers: this.argumentResolvers,
+                    schema: command.arguments
+                });
             }
-
-            console.log({
-                rawArgs: rawArgs,
-                resolvers: this.argumentResolvers,
-                schema: command.arguments
-            });
 
             const args: any | null = CommandParser.resolveArguments({
                 arguments: rawArgs,
@@ -514,7 +516,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             });
 
             // TODO: Debugging
-            console.log("resolved args: ", args);
+            //console.log("resolved args: ", args);
 
             await this.commandHandler.handle(
                 new CommandContext({

@@ -6,7 +6,7 @@ import Command from "../commands/command";
  * @extends PreventableCommandEvent
  */
 export default class CommandWillExecuteEvent extends PreventableCommandEvent {
-    readonly command: Command;
+    public readonly command: Command;
 
     /**
      * @param {CommandContext} context

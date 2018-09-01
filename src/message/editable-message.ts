@@ -40,7 +40,7 @@ export default class EditableMessage {
      * @param {MessageEditOptions} options
      * @return {Promise<Message>}
      */
-    async edit(options: MessageEditOptions): Promise<Message> {
+    public async edit(options: MessageEditOptions): Promise<Message> {
         // TODO: Default values?
         return this.message.edit("", new Discord.RichEmbed()
             .setColor(options.color ? options.color : "")

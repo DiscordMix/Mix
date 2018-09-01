@@ -2,7 +2,12 @@ import Bot from "./core/bot";
 import CommandArgumentParser from "./commands/command-argument-parser";
 import CommandContext from "./commands/command-context";
 import CommandStore, {CommandManagerEvent} from "./commands/command-store";
-import Command, { CommandArgument, UserDefinedArgType, ArgumentTypeChecker } from "./commands/command";
+import Command, {
+    ArgumentTypeChecker,
+    CommandArgument,
+    PrimitiveArgumentType,
+    UserDefinedArgType
+} from "./commands/command";
 import ConsoleInterface from "./console/console-interface";
 import CommandParser from "./commands/command-parser";
 import ConsoleCommand from "./console/console-command";
@@ -36,8 +41,8 @@ import MysqlProvider from "./data-providers/mysql-provider";
 import CommandAuthStore from "./commands/auth-stores/command-auth-store";
 import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
 import JsonAuthStore from "./commands/auth-stores/json-auth-store";
-import SetupHelper, { SetupHelperResult } from "./core/setup-helper";
-import Behaviour, { BehaviourOptions } from "./behaviours/behaviour";
+import SetupHelper, {SetupHelperResult} from "./core/setup-helper";
+import Behaviour, {BehaviourOptions} from "./behaviours/behaviour";
 import KnexTable from "./data-providers/knex-table";
 
 export {
@@ -51,6 +56,7 @@ export {
     UserDefinedArgType,
     ArgumentTypeChecker,
     Command,
+    PrimitiveArgumentType,
 
     // Console
     ConsoleInterface,

@@ -183,8 +183,8 @@ export default class CommandHandler {
      */
     public async handle(context: CommandContext, command: Command, args: any): Promise<boolean> {
         // TODO: Debugging
-        Log.debug("I received the following");
-        console.log("handler received ", args);
+        //Log.debug("I received the following");
+        //console.log("handler received ", args);
 
         if (!this.meetsRequirements(context, command, args)) {
             return false;

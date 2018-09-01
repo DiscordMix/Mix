@@ -44,7 +44,7 @@ export default class MongodbProvider extends DataProvider {
      * @todo Should return a boolean indicating whether connected or not
      * @param {string} database The database name
      */
-    connect(database: string): void {
+    public connect(database: string): void {
         this.client.connect(this.url, (error: Error, db: any) => {
             if (error) {
                 throw error;
@@ -59,7 +59,7 @@ export default class MongodbProvider extends DataProvider {
      * @param {string} path
      * @return {*}
      */
-    get(path: string): any {
+    public get(path: string): any {
         throw new Error("[MongoDb.get] Method not implemented.");
     }
 
@@ -68,7 +68,7 @@ export default class MongodbProvider extends DataProvider {
      * @param {string} path
      * @param {*} data
      */
-    set(path: string, data: any): void {
+    public set(path: string, data: any): void {
         throw new Error("[MongoDb.set] Method not implemented.");
     }
 
@@ -77,14 +77,14 @@ export default class MongodbProvider extends DataProvider {
      * @param {string} path
      * @param {*} data
      */
-    merge(path: string, data: any): void {
+    public merge(path: string, data: any): void {
         throw new Error("[MongoDb.merge] Method not implemented.");
     }
 }
 
 export class MongoDbProviderV2 {
-    readonly url: string;
-    readonly databaseName: string;
+    public readonly url: string;
+    public readonly databaseName: string;
 
     // TODO: Type
     private client: any;
@@ -101,7 +101,7 @@ export class MongoDbProviderV2 {
      * Connect to the database
      * @return {Promise<void>}
      */
-    connect(): Promise<void> {
+    public connect(): Promise<void> {
         return new Promise((resolve) => {
             // TODO: Client type
             MongoClient.connect(this.url, (error: Error, client: any) => {
@@ -121,12 +121,12 @@ export class MongoDbProviderV2 {
     }
 
     // TODO: Return type
-    getClient(): any {
+    public getClient(): any {
         return this.client;
     }
 
     // TODO: Return type
-    getDatabase(): any {
+    public getDatabase(): any {
         return this.database;
     }
 
@@ -134,7 +134,7 @@ export class MongoDbProviderV2 {
      * Close the connection
      * @return {boolean}
      */
-    close(): boolean {
+    public close(): boolean {
         if (this.client) {
             this.client.close();
 

@@ -3,9 +3,8 @@ import Utils from "./utils";
 import {Snowflake} from "discord.js";
 import fs from "fs";
 import path from "path";
-
-const rimraf = require("rimraf");
-const main = require("require-main-filename");
+import rimraf from "rimraf";
+import {default as main} from "require-main-filename"
 
 export default class Temp {
     private id?: string;
@@ -22,7 +21,7 @@ export default class Temp {
      * @param {Snowflake} id
      * @return {this}
      */
-    setup(id: Snowflake): this {
+    public setup(id: Snowflake): this {
         /**
          * @type {string | undefined}
          * @private
@@ -42,7 +41,7 @@ export default class Temp {
      * Create the temp folder for the bot
      * @return {Promise<this>}
      */
-    async create(): Promise<this> {
+    public async create(): Promise<this> {
         return new Promise<this>((resolve) => {
             if (!this.resolvedPath) {
                 throw new Error("[Temp.create] Trying to create when the resolved path is undefined");
@@ -73,7 +72,7 @@ export default class Temp {
      * @todo: Return type
      * @return {Promise<*>}
      */
-    async reset(): Promise<this> {
+    public async reset(): Promise<this> {
         return new Promise<this>((resolve) => {
             if (!this.resolvedPath) {
                 throw new Error("[Temp.reset] Trying to reset when the resolved path is undefined");
@@ -100,7 +99,7 @@ export default class Temp {
      * @param {string} file The file in which to store the data
      * @return {Promise<boolean>}
      */
-    store(data: any, file: string): Promise<boolean> {
+    public store(data: any, file: string): Promise<boolean> {
         if (!this.resolvedPath) {
             throw new Error("[Temp.store] Trying to store when the resolved path is undefined");
         }
@@ -112,7 +111,7 @@ export default class Temp {
      * @param {string} id
      * @return {string}
      */
-    static resolvePath(id: string): string {
+    public static resolvePath(id: string): string {
         return path.join(path.dirname(main()), "tmp", `u${id}`);
     }
 }

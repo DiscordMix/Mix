@@ -1,6 +1,5 @@
 import DataProvider from "./data-provider";
-
-const _ = require("lodash");
+import {default as _} from "lodash";
 
 /**
  * @extends DataProvider
@@ -26,7 +25,7 @@ export default class ObjectProvider extends DataProvider {
      * @param {string} path
      * @return {object}
      */
-    get(path: string): any {
+    public get(path: string): any {
         return _.get(this.data, path);
     }
 
@@ -35,7 +34,7 @@ export default class ObjectProvider extends DataProvider {
      * @param {string} path
      * @param {*} value
      */
-    set(path: string, value: any): void {
+    public set(path: string, value: any): void {
         _.set(this.data, path, value);
     }
 
@@ -45,7 +44,7 @@ export default class ObjectProvider extends DataProvider {
      * @param {string} path
      * @param {*} value
      */
-    merge(path: string, value: any): void {
+    public merge(path: string, value: any): void {
         throw new Error("[ObjectProvider.merge] Method not implemented.");
     }
 }

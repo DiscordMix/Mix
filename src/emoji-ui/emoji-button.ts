@@ -1,6 +1,6 @@
 export default class EmojiButton {
-    readonly emoji: string;
-    readonly handle: Function;
+    public readonly emoji: string;
+    public readonly handle: Function;
 
     /**
      * @todo Function parameters and types

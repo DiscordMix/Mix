@@ -28,11 +28,11 @@ export interface CommandCooldown {
 }
 
 export default class CommandStore /* extends Collection */ {
-    readonly bot: Bot;
-    readonly authStore: CommandAuthStore;
-    readonly cooldowns: Array<CommandCooldown>;
+    public readonly bot: Bot;
+    public readonly authStore: CommandAuthStore;
+    public readonly cooldowns: Array<CommandCooldown>;
 
-    commands: Array<Command>;
+    public commands: Array<Command>;
 
     /**
      * @param {Bot} bot
@@ -69,7 +69,7 @@ export default class CommandStore /* extends Collection */ {
     /**
      * @param {Command} command
      */
-    register(command: Command): void {
+    public register(command: Command): void {
         this.commands.push(command);
     }
 
@@ -77,7 +77,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {string} commandBase
      * @return {boolean} Whether the command was removed
      */
-    removeByBase(commandBase: string): boolean {
+    public removeByBase(commandBase: string): boolean {
         const command = this.getByName(commandBase);
 
         if (command) {
@@ -91,7 +91,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {Command} command
      * @return {boolean}
      */
-    remove(command: Command): boolean {
+    public remove(command: Command): boolean {
         return this.removeAt(this.commands.indexOf(command));
     }
 
@@ -99,7 +99,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {number} index
      * @return {boolean}
      */
-    removeAt(index: number): boolean {
+    public removeAt(index: number): boolean {
         if (this.commands[index]) {
             this.commands.splice(index, 1);
 
@@ -113,7 +113,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {string} commandBase
      * @return {boolean}
      */
-    contains(commandBase: string): boolean {
+    public contains(commandBase: string): boolean {
         return this.getByName(commandBase) !== null;
     }
 
@@ -121,7 +121,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {Array<Command>} commands
      * @return {CommandStore}
      */
-    registerMultiple(commands: Array<Command>): CommandStore {
+    public registerMultiple(commands: Array<Command>): CommandStore {
         for (let i = 0; i < commands.length; i++) {
             this.register(commands[i]);
         }
@@ -133,7 +133,7 @@ export default class CommandStore /* extends Collection */ {
      * Get all the registered commands
      * @return {ReadonlyArray<Command>}
      */
-    getAll(): ReadonlyArray<Command> {
+    public getAll(): ReadonlyArray<Command> {
         return this.commands as ReadonlyArray<Command>;
     }
 
@@ -141,7 +141,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {string} commandBase
      * @return {boolean}
      */
-    isRegistered(commandBase: string): boolean {
+    public isRegistered(commandBase: string): boolean {
         return this.getByName(commandBase) != null;
     }
 
@@ -149,7 +149,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {string} name
      * @return {(Command | null)}
      */
-    getByName(name: string): Command | null {
+    public getByName(name: string): Command | null {
         for (let i = 0; i < this.commands.length; i++) {
             if (this.commands[i].meta.name === name || this.commands[i].aliases.includes(name)) {
                 return this.commands[i];
@@ -163,7 +163,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {Command} command
      * @return {CommandCooldown | null}
      */
-    getCooldown(command: Command): CommandCooldown | null {
+    public getCooldown(command: Command): CommandCooldown | null {
         for (let i: number = 0; i < this.cooldowns.length; i++) {
             if (this.cooldowns[i].command === command) {
                 return this.cooldowns[i];
@@ -174,11 +174,10 @@ export default class CommandStore /* extends Collection */ {
     }
 
     /**
-     * @param {CommandContext} context
      * @param {Command} command
      * @return {boolean}
      */
-    cooldownExpired(command: Command): boolean {
+    public cooldownExpired(command: Command): boolean {
         const cooldown: CommandCooldown | null = this.getCooldown(command);
 
         return (cooldown !== null && Date.now() > cooldown.end) || cooldown === null;
@@ -187,7 +186,7 @@ export default class CommandStore /* extends Collection */ {
     /**
      * Unload all commandStore
      */
-    unloadAll(): void {
+    public unloadAll(): void {
         if (this.commands.length > 0) {
             const count = this.commands.length;
             this.commands = [];

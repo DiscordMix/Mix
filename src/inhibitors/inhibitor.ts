@@ -11,8 +11,8 @@ export interface InhibitorOptions {
 }
 
 export default class Inhibitor {
-    readonly meta: InhibitorMeta;
-    readonly inspector: (context: CommandContext) => void;
+    public readonly meta: InhibitorMeta;
+    public readonly inspector: (context: CommandContext) => void;
 
     /**
      * @param {InhibitorOptions} options

@@ -1,8 +1,7 @@
 import Utils from "../core/utils";
 import path from "path";
 import fs from "fs";
-
-const main = require("require-main-filename");
+import {default as main} from "require-main-filename";
 
 export type LanguageSource = any;
 

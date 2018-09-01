@@ -14,11 +14,11 @@ export interface CommandExecutionContextOptions {
 }
 
 export default class CommandContext {
-    readonly message: Message;
-    readonly bot: Bot;
-    readonly auth: number;
-    readonly emojis?: EmojiCollection;
-    readonly label: string | null;
+    public readonly message: Message;
+    public readonly bot: Bot;
+    public readonly auth: number;
+    public readonly emojis?: EmojiCollection;
+    public readonly label: string | null;
 
     /**
      * @param {CommandExecutionContextOptions} options
@@ -59,7 +59,7 @@ export default class CommandContext {
      * @param {Snowflake} userId
      * @return {number}
      */
-    getAuth(userId: Snowflake): number {
+    public getAuth(userId: Snowflake): number {
         return this.bot.authStore.getAuthority(this.message.guild.id, userId, this.message.guild.member(userId).roles.array().map((role: Role) => role.name));
     }
 
@@ -67,7 +67,7 @@ export default class CommandContext {
      * Join all command arguments into a single string
      * @return {string}
      */
-    joinArguments(): string {
+    public joinArguments(): string {
         if (!this.label) {
             return this.message.content;
         }
@@ -80,7 +80,7 @@ export default class CommandContext {
      * @param {string} name
      * @return {Promise<EditableMessage> | null}
      */
-    async fileStream(stream: any, name: string): Promise<EditableMessage> {
+    public async fileStream(stream: any, name: string): Promise<EditableMessage> {
         return new EditableMessage(await this.message.channel.send(new Discord.Attachment(stream, name)));
     }
 
@@ -90,7 +90,7 @@ export default class CommandContext {
      * @param {boolean} [autoDelete=false]
      * @return {Promise<EditableMessage> | null}
      */
-    async respond(content: EmbedBuilder | any, autoDelete: boolean = false): Promise<EditableMessage | null> {
+    public async respond(content: EmbedBuilder | any, autoDelete: boolean = false): Promise<EditableMessage | null> {
         let embed = null;
 
         if (content.text) {
@@ -158,7 +158,7 @@ export default class CommandContext {
      * @param {string} color
      * @return {Promise<EditableMessage>}
      */
-    async sections(sections: any, color: string = "GREEN"): Promise<EditableMessage | null> {
+    public async sections(sections: any, color: string = "GREEN"): Promise<EditableMessage | null> {
         return await this.respond(EmbedBuilder.sections(sections, color));
     }
 
@@ -167,7 +167,7 @@ export default class CommandContext {
      * @param {string} [title=""]
      * @return {Promise<EditableMessage>}
      */
-    async ok(text: string, title: string = ""): Promise<EditableMessage | null> {
+    public async ok(text: string, title: string = ""): Promise<EditableMessage | null> {
         return await this.respond({
             text: `${text}`,
             title: title
@@ -178,7 +178,7 @@ export default class CommandContext {
      * @param {string} text
      * @return {Promise<EditableMessage>}
      */
-    async loading(text: string): Promise<EditableMessage | null> {
+    public async loading(text: string): Promise<EditableMessage | null> {
         return await this.respond({
             text: `${text}`,
             color: "BLUE"
@@ -190,7 +190,7 @@ export default class CommandContext {
      * @param {boolean} [autoDelete=true]
      * @return {Promise<EditableMessage | null>}
      */
-    async fail(text: string, autoDelete: boolean = true): Promise<EditableMessage | null> {
+    public async fail(text: string, autoDelete: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
             text: `:thinking: ${text}`,
             color: "RED"
@@ -201,7 +201,7 @@ export default class CommandContext {
      * @param {string} message
      * @return {Promise<Message | Null>}
      */
-    async reply(message: string): Promise<Message | Message[] | null> {
+    public async reply(message: string): Promise<Message | Message[] | null> {
         return await this.message.reply(message);
     }
 
@@ -209,21 +209,21 @@ export default class CommandContext {
      * @param {string} message
      * @return {Promise<Message | Message>}
      */
-    async privateReply(message: string): Promise<Message | Message[]> {
+    public async privateReply(message: string): Promise<Message | Message[]> {
         return await this.message.author.send(message);
     }
 
     /**
      * @return {number}
      */
-    get senderAuth(): number {
+    public get senderAuth(): number {
         return this.getAuth(this.sender.id);
     }
 
     /**
      * @return {User}
      */
-    get sender(): User {
+    public get sender(): User {
         return this.message.author;
     }
 }

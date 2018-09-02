@@ -14,7 +14,7 @@ import ConsoleCommand from "./console/console-command";
 import BotBuilder from "./builders/bot-builder";
 import EmbedBuilder from "./builders/embed-builder";
 import ConfigBuilder from "./builders/config-builder";
-import MessageBuilder from "./builders/message-builder";
+import FormattedMessage from "./builders/formatted-message";
 import EditableMessage from "./message/editable-message";
 import Log, {LogLevel} from "./core/log";
 import Rgb from "./misc/rgb";
@@ -66,7 +66,7 @@ export {
     BotBuilder,
     EmbedBuilder,
     ConfigBuilder,
-    MessageBuilder,
+    FormattedMessage,
 
     // Core
     Bot,

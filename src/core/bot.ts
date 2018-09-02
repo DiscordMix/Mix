@@ -481,6 +481,12 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
     }
 
+    /**
+     * @param {Message} message
+     * @param {string} content
+     * @param {*} resolvers
+     * @return {Promise<void>}
+     */
     private async handleCommandMessage(message: Message, content: string, resolvers: any) {
         const command: Command | null = CommandParser.parse(
             content,

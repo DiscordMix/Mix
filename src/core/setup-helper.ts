@@ -1,4 +1,4 @@
-import {Client, Message, RichEmbed, Snowflake, TextChannel, User} from "discord.js";
+import {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
 import CommandContext from "../commands/command-context";
 import Log from "./log";
 

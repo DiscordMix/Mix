@@ -1,4 +1,4 @@
-import { Permissions as DiscordPermission } from "discord.js";
+import {Permissions as DiscordPermission} from "discord.js";
 
 /**
  * @enum {Object}

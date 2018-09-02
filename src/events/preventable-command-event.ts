@@ -25,6 +25,9 @@ export default class PreventableCommandEvent extends CommandEvent {
         this.prevented = prevent;
     }
 
+    /**
+     * @return {boolean}
+     */
     public isPrevented(): boolean {
         return this.prevented;
     }

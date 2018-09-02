@@ -1,6 +1,5 @@
-import Log from '../core/log';
-
-const parseArgs = require("minimist");
+import Log from "../core/log";
+import {default as parseArgs} from "minimist";
 
 export default class ConsoleCommand {
     public readonly base: string;

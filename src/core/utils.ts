@@ -11,7 +11,9 @@ const timeAgo = new TimeAgo("en-US");
 
 export interface SendOptions {
     readonly user: User;
-    readonly channel: any/* TextChannel | GroupDMChannel | DMChannel | GuildChannel */; // TODO: Type
+    readonly channel: any
+    /* TextChannel | GroupDMChannel | DMChannel | GuildChannel */
+    ; // TODO: Type
     readonly message: string;
     readonly color?: string;
     readonly footer?: string;
@@ -53,7 +55,7 @@ export default class Utils {
 
                 return;
             }
-    
+
             fs.readdir(directory, (error: Error, files: Array<string>) => {
                 if (error) {
                     throw new Error(`[Utils.getFiles] There was an error while reading directory '${directory}': ${error.message}`);

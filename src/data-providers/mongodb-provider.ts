@@ -7,8 +7,8 @@ const MongoClient = require("mongodb").MongoClient;
  * @extends DataProvider
  */
 export default class MongodbProvider extends DataProvider {
-    readonly url: string;
-    readonly client: any;
+    public readonly url: string;
+    public readonly client: any;
 
     private db: any;
 

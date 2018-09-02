@@ -1,4 +1,4 @@
-import { CommandContext, Command } from "../../..";
+import {Command, CommandContext} from "../../..";
 
 export default class Ping extends Command {
     readonly meta = {

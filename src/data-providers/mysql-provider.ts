@@ -10,10 +10,10 @@ import {default as _} from "lodash";
 export default class MysqlProvider extends DataProvider {
     private readonly connection: any;
 
-    readonly data: any;
+    public readonly data: any;
 
     // TODO: Can be modified externally
-    connected: boolean;
+    public connected: boolean;
 
     /**
      * @param {Object} data
@@ -45,7 +45,7 @@ export default class MysqlProvider extends DataProvider {
      * Connect to the database
      * @return {Promise<MysqlProvider>}
      */
-    connect(): Promise<MysqlProvider> {
+    public connect(): Promise<MysqlProvider> {
         return new Promise((resolve, reject) => {
             this.connection.connect((error: Error) => {
                 // TODO: Should throw error instead?
@@ -64,7 +64,7 @@ export default class MysqlProvider extends DataProvider {
      * Disconnect from the database
      * @return {Promise<MysqlProvider>}
      */
-    disconnect(): Promise<MysqlProvider> {
+    public disconnect(): Promise<MysqlProvider> {
         return new Promise((resolve, reject) => {
             this.connection.end((error: Error) => {
                 // TODO: Should throw error instead?
@@ -84,9 +84,9 @@ export default class MysqlProvider extends DataProvider {
      * @param {string} query
      * @param {Array<*>} args
      * @param {number} [timeout=5000]
-     * @return {Promise<Object>}
+     * @return {Promise<object>}
      */
-    query(query: string, args: Array<any> = [], timeout = 5000): Promise<object> {
+    public query(query: string, args: Array<any> = [], timeout = 5000): Promise<any> {
         return new Promise((resolve, reject) => {
             this.connection.query({
                 sql: query,
@@ -112,9 +112,9 @@ export default class MysqlProvider extends DataProvider {
      * Retrieve guild data
      * @param {string} path
      * @param {Snowflake | null} [guildId=null]
-     * @return {Promise}
+     * @return {Promise<*>}
      */
-    async get(path: string, guildId: Snowflake | null = null) {
+    public async get(path: string, guildId: Snowflake | null = null): Promise<any> {
         if (!this.loaded) {
             Log.error("[MysqlProvider.get] No data is currently loaded.");
 
@@ -168,9 +168,9 @@ export default class MysqlProvider extends DataProvider {
      * @param {string} path
      * @param {*} value
      * @param {Snowflake | null} [guildId=null]
-     * @return {Promise<Object>}
+     * @return {Promise<object>}
      */
-    async set(path: string, value: any, guildId: Snowflake | null = null) {
+    public async set(path: string, value: any, guildId: Snowflake | null = null): Promise<any> {
         if (!this.loaded) {
             Log.error("[MysqlProvider.set] No data is currently loaded.");
 
@@ -206,7 +206,7 @@ export default class MysqlProvider extends DataProvider {
      * @param {*} value
      * @param {Snowflake | null} [guildId=null]
      */
-    merge(path: string, value: any, guildId: Snowflake | null = null) {
+    public merge(path: string, value: any, guildId: Snowflake | null = null): void {
         if (!this.loaded) {
             throw new Error("[MysqlProvider.merge] No data is currently loaded.");
         }
@@ -219,7 +219,7 @@ export default class MysqlProvider extends DataProvider {
      * @param {Snowflake} guildId
      * @return {Array<string>}
      */
-    static cleanPath(path: string, guildId: Snowflake) {
+    public static cleanPath(path: string, guildId: Snowflake): Array<string> {
         return `${guildId ? `guilds.${guildId}.` : ""}${path}`.split(".");
     }
 
@@ -227,7 +227,7 @@ export default class MysqlProvider extends DataProvider {
      * Determine whether any data is loaded
      * @return {boolean} Whether any data is currently loaded
      */
-    get loaded() {
+    public get loaded(): boolean {
         return this.data !== null && this.connected;
     }
 }

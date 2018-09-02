@@ -7,7 +7,7 @@ export interface PluginMeta {
 }
 
 export default class Plugin {
-    readonly meta: PluginMeta;
+    public readonly meta: PluginMeta;
 
     /**
      * @param {PluginMeta} meta

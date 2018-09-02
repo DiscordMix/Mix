@@ -1,6 +1,6 @@
-import { Command, ChatEnvironment, Permission, CommandContext } from "../..";
-import { GuildMember } from "discord.js";
-import { PrimitiveArgumentType, CommandArgument } from "../../commands/command";
+import {ChatEnvironment, Command, CommandContext, Permission} from "../..";
+import {GuildMember} from "discord.js";
+import {CommandArgument, PrimitiveArgumentType} from "../../commands/command";
 
 export interface KickArgs {
     readonly member: GuildMember;

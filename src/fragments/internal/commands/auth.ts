@@ -1,5 +1,5 @@
 import CommandContext from "../../../commands/command-context";
-import { Command } from "../../..";
+import {Command} from "../../..";
 
 export default class Auth extends Command {
     readonly meta = {

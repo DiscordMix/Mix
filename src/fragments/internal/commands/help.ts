@@ -1,5 +1,5 @@
 import CommandContext from "../../../commands/command-context";
-import { Command } from "../../..";
+import {Command} from "../../..";
 import {RichEmbed} from "discord.js";
 
 export default class Help extends Command {
@@ -13,16 +13,16 @@ export default class Help extends Command {
             .map((command: Command) => `**${command.meta.name}**: ${command.meta.description}`)
             .join("\n");
 
-        if (context.bot.options.dmHelp){
+        if (context.bot.options.dmHelp) {
             await (await context.sender.createDM()).send(new RichEmbed()
                 .setColor("GREEN")
                 .setDescription(commands)).catch(async (error: Error) => {
-                    if (error.message === "Cannot send messages to this user") {
-                        await context.fail("You're not accepting direct messages.");
-                    }
-                    else {
-                        await context.fail(`I was unable to send you my commands. (${error.message})`);
-                    }
+                if (error.message === "Cannot send messages to this user") {
+                    await context.fail("You're not accepting direct messages.");
+                }
+                else {
+                    await context.fail(`I was unable to send you my commands. (${error.message})`);
+                }
             });
         }
         else {

@@ -1,4 +1,4 @@
-import {default as Command, CommandArgument, ArgumentType, PrimitiveArgumentType} from "../../../commands/command";
+import {CommandArgument, default as Command, PrimitiveArgumentType} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 
 export interface IUsageArguments {

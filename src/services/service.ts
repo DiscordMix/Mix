@@ -22,5 +22,9 @@ export default abstract class Service extends Fragment {
         super();
     }
 
-    abstract enabled(bot: Bot, api?: any): void;
+    /**
+     * @param {Bot} bot
+     * @param {*} api
+     */
+    public abstract enabled(bot: Bot, api?: any): void;
 }

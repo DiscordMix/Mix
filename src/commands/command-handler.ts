@@ -249,6 +249,11 @@ export default class CommandHandler {
         return false;
     }
 
+    /**
+     * @param {Command} command
+     * @param {CommandContext} context
+     * @return {boolean}
+     */
     public static specificMet(command: Command, context: CommandContext): boolean {
         let met = false;
 

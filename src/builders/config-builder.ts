@@ -17,7 +17,7 @@ export default class ConfigBuilder {
      * @param {string} path
      * @return {ConfigBuilder}
      */
-    setCommandsPath(path: string): ConfigBuilder {
+    public setCommandsPath(path: string): ConfigBuilder {
         this.properties.paths.commandStore = path;
 
         return this;
@@ -27,7 +27,7 @@ export default class ConfigBuilder {
      * @param {CommandAuthStore} authStore
      * @return {ConfigBuilder}
      */
-    setAuthStore(authStore: CommandAuthStore): ConfigBuilder {
+    public setAuthStore(authStore: CommandAuthStore): ConfigBuilder {
         this.properties.authStore = authStore;
 
         return this;
@@ -37,7 +37,7 @@ export default class ConfigBuilder {
      * @param {string} path
      * @return {ConfigBuilder}
      */
-    setSettingsPath(path: string): ConfigBuilder {
+    public setSettingsPath(path: string): ConfigBuilder {
         this.properties.paths.settings = path;
 
         return this;
@@ -47,7 +47,7 @@ export default class ConfigBuilder {
      * @param {string} path
      * @return {ConfigBuilder}
      */
-    setEmojisPath(path: string): ConfigBuilder {
+    public setEmojisPath(path: string): ConfigBuilder {
         this.properties.paths.emojis = path;
 
         return this;
@@ -57,7 +57,7 @@ export default class ConfigBuilder {
      * @param {Object} argumentTypes
      * @return {ConfigBuilder}
      */
-    setArgumentTypes(argumentTypes: any): ConfigBuilder {
+    public setArgumentTypes(argumentTypes: any): ConfigBuilder {
         this.properties.argumentTypes = argumentTypes;
 
         return this;
@@ -67,7 +67,7 @@ export default class ConfigBuilder {
      * @param {DataProvider} dataStore
      * @return {ConfigBuilder}
      */
-    setDataStore(dataStore: DataProvider): ConfigBuilder {
+    public setDataStore(dataStore: DataProvider): ConfigBuilder {
         this.properties.dataStore = dataStore;
 
         return this;
@@ -76,7 +76,7 @@ export default class ConfigBuilder {
     /**
      * @return {Object}
      */
-    build(): any {
+    public build(): any {
         return this.properties;
     }
 }

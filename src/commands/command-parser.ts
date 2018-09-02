@@ -82,7 +82,7 @@ export default class CommandParser {
         const argCleanExpression = /(```|`|'|"|)(.+)\1/;
         const result: RawArguments = [];
 
-        let match = expression.exec(commandString);
+        let match: RegExpExecArray | null = expression.exec(commandString);
 
         while (match != null) {
             // TODO: Hotfix/review

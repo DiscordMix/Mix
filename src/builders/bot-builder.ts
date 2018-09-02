@@ -17,7 +17,7 @@ export default class BotBuilder {
      * @param {string} token
      * @return {BotBuilder}
      */
-    setToken(token: string): BotBuilder {
+    public setToken(token: string): BotBuilder {
         this.settings.general.token = token;
 
         return this;
@@ -27,7 +27,7 @@ export default class BotBuilder {
      * @param {Array<string>} prefixes
      * @return {BotBuilder}
      */
-    setPrefixes(prefixes: Array<string>): BotBuilder {
+    public setPrefixes(prefixes: Array<string>): BotBuilder {
         this.settings.general.prefixes = prefixes;
 
         return this;
@@ -37,7 +37,7 @@ export default class BotBuilder {
      * @param {Array<string>} primitiveCommands
      * @return {BotBuilder}
      */
-    setPrimitiveCommands(primitiveCommands: Array<string>): BotBuilder {
+    public setPrimitiveCommands(primitiveCommands: Array<string>): BotBuilder {
         this.bot.primitiveCommands = primitiveCommands;
 
         return this;
@@ -47,7 +47,7 @@ export default class BotBuilder {
      * @param {CommandAuthStore} authStore
      * @return {BotBuilder}
      */
-    setAuthStore(authStore: CommandAuthStore): BotBuilder {
+    public setAuthStore(authStore: CommandAuthStore): BotBuilder {
         this.bot.authStore = authStore;
 
         return this;
@@ -57,7 +57,7 @@ export default class BotBuilder {
      * @param {*} argumentTypes
      * @return {BotBuilder}
      */
-    setArgumentTypes(argumentTypes: any): BotBuilder {
+    public setArgumentTypes(argumentTypes: any): BotBuilder {
         this.bot.argumentTypes = argumentTypes;
 
         return this;
@@ -67,7 +67,7 @@ export default class BotBuilder {
      * @param {boolean} prefixCommand
      * @return {BotBuilder}
      */
-    setPrefixCommand(prefixCommand: boolean): BotBuilder {
+    public setPrefixCommand(prefixCommand: boolean): BotBuilder {
         this.bot.prefixCommand = prefixCommand;
 
         return this;
@@ -77,7 +77,7 @@ export default class BotBuilder {
      * @param {Settings} settings
      * @return {BotBuilder}
      */
-    setSettings(settings: Settings): BotBuilder {
+    public setSettings(settings: Settings): BotBuilder {
         this.bot.settings = settings;
 
         return this;
@@ -86,7 +86,7 @@ export default class BotBuilder {
     /**
      * @return {Bot}
      */
-    build(): Bot {
+    public build(): Bot {
         // TODO
         return new Bot(this.bot);
     }

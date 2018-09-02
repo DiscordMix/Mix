@@ -91,7 +91,7 @@ export default class CommandContext {
      * @return {Promise<EditableMessage> | null}
      */
     public async respond(content: EmbedBuilder | any, autoDelete: boolean = false): Promise<EditableMessage | null> {
-        let embed = null;
+        let embed: EmbedBuilder | null = null;
 
         if (content.text) {
             if (content.text.toString().trim() === "" || content.text === undefined || content.text === null) {

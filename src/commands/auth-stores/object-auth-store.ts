@@ -132,7 +132,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
     public create(guildId: Snowflake): boolean {
         if (!this.contains(guildId)) {
             const schemaKeys = Object.keys(this.schema);
-            const entry = [];
+            const entry: Array<any> = [];
 
             let seenDefault = false;
 

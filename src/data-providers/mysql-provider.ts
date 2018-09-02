@@ -135,7 +135,7 @@ export default class MysqlProvider extends DataProvider {
         const fields = queryResult.fields;
 
         if (splitPath.length === 1) {
-            const rtn = [];
+            const rtn: Array<any> = [];
 
             for (let i = 0; i < results.length; i++) {
                 const row = results[i];

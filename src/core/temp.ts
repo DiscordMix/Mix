@@ -4,7 +4,7 @@ import {Snowflake} from "discord.js";
 import fs from "fs";
 import path from "path";
 import rimraf from "rimraf";
-import {default as main} from "require-main-filename"
+import {default as main} from "require-main-filename";
 
 export default class Temp {
     private id?: string;

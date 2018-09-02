@@ -199,7 +199,7 @@ export default class CommandHandler {
         try {
             // TODO: Only check if result is true, make sure commandStore return booleans
             // TODO: Bot should be accessed protected (from this class)
-            const actualResult = command.executed(context, args, this.commandStore.bot.getAPI());
+            const actualResult = command.executed(context, args, context.bot.getAPI());
             const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
 
             const commandCooldown: CommandCooldown = {

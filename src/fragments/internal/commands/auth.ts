@@ -14,7 +14,7 @@ export default class Auth extends Command {
             authLevel = context.bot.authStore.getSchemaRankName(context.bot.authStore.getAuthLevel(context.message.guild.id, context.sender.id));
         }
         else {
-            authLevel = "Owner";
+            authLevel = ":crown: Owner | All-access overrides";
         }
 
 

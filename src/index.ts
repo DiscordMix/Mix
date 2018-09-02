@@ -42,7 +42,7 @@ import CommandAuthStore from "./commands/auth-stores/command-auth-store";
 import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
 import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 import SetupHelper, {SetupHelperResult} from "./core/setup-helper";
-import Behaviour, {BehaviourOptions} from "./behaviours/behaviour";
+import Service, {ServiceOptions} from "./services/service";
 import KnexTable from "./data-providers/knex-table";
 
 export {
@@ -115,9 +115,9 @@ export {
     SetupHelper,
     SetupHelperResult,
 
-    // Behaviours
-    Behaviour,
-    BehaviourOptions,
+    // Services
+    Service,
+    ServiceOptions,
 
     // Misc
     KnexTable

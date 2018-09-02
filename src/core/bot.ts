@@ -12,7 +12,7 @@ import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
 import {Client, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
-import BehaviourManager from "../behaviours/behaviour-manager";
+import ServiceManager from "../services/service-manager";
 import Command, {CommandArgumentStyle, UserGroup, CommandArgument, CommandArgumentResolver, ArgumentType, RawArguments, UserDefinedArgType} from "../commands/command";
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
@@ -24,7 +24,7 @@ import path from "path";
 import FragmentLoader from "../fragments/fragment-loader";
 import Fragment from "../fragments/fragment";
 import Language from "../language/language";
-import Behaviour from "../behaviours/behaviour";
+import Service from "../services/service";
 
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
@@ -77,7 +77,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly authStore: CommandAuthStore;
     public readonly emojis?: EmojiCollection;
     public readonly client: Client; // TODO
-    public readonly behaviours: BehaviourManager;
+    public readonly services: ServiceManager;
     public readonly commandStore: CommandStore;
     public readonly commandHandler: CommandHandler;
     public readonly console: ConsoleInterface;
@@ -140,10 +140,10 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.client = new Discord.Client();
 
         /**
-         * @type {BehaviourManager}
+         * @type {ServiceManager}
          * @readonly
          */
-        this.behaviours = new BehaviourManager(this);
+        this.services = new ServiceManager(this);
 
         /**
          * @type {CommandStore}
@@ -306,28 +306,28 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
         }
 
-        // Load & enable behaviours
-        const consumerBehaviourCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(this.settings.paths.behaviours);
+        // Load & enable services
+        const consumerServiceCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(this.settings.paths.services);
 
-        if (!consumerBehaviourCandidates || consumerBehaviourCandidates.length === 0) {
-            Log.verbose(`[Bot.setup] No behaviours were detected under '${this.settings.paths.behaviours}'`);
+        if (!consumerServiceCandidates || consumerServiceCandidates.length === 0) {
+            Log.verbose(`[Bot.setup] No services were detected under '${this.settings.paths.services}'`);
         }
         else {
-            Log.verbose(`[Bot.setup] Loading ${consumerBehaviourCandidates.length} behaviour(s)`);
+            Log.verbose(`[Bot.setup] Loading ${consumerServiceCandidates.length} service(s)`);
 
-            const behavioursLoaded: Array<Fragment> | null = await FragmentLoader.loadMultiple(consumerBehaviourCandidates);
+            const servicesLoaded: Array<Fragment> | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
 
-            if (!behavioursLoaded || behavioursLoaded.length === 0) {
-                Log.warn("[Bot.setup] No behaviours were loaded");
+            if (!servicesLoaded || servicesLoaded.length === 0) {
+                Log.warn("[Bot.setup] No services were loaded");
             }
             else {
-                Log.success(`[Bot.setup] Loaded ${behavioursLoaded.length} behaviour(s)`);
-                this.enableFragments(behavioursLoaded);
+                Log.success(`[Bot.setup] Loaded ${servicesLoaded.length} service(s)`);
+                this.enableFragments(servicesLoaded);
             }
         }
 
-        // After loading behaviours, enable all of them
-        this.behaviours.enableAll();
+        // After loading services, enable all of them
+        this.services.enableAll();
 
         // Load & enable consumer command fragments
         const consumerCommandCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(this.settings.paths.commands);
@@ -367,10 +367,10 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 this.commandStore.register(new fragment());
                 enabled++;
             }
-            else if ((fragments[i] as any).prototype instanceof Behaviour) {
+            else if ((fragments[i] as any).prototype instanceof Service) {
                 const fragment: any = fragments[i];
 
-                this.behaviours.register(new fragment());
+                this.services.register(new fragment());
                 enabled++;
             }
             else {

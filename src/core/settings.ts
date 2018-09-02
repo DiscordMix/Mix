@@ -19,7 +19,7 @@ export interface DefiniteSettingsPaths {
     readonly commands: string;
     readonly plugins: string;
     readonly emojis: string;
-    readonly behaviours: string;
+    readonly services: string;
     readonly languages?: string;
 }
 
@@ -27,7 +27,7 @@ export interface SettingsPaths {
     readonly commands?: string;
     readonly plugins?: string;
     readonly emojis?: string;
-    readonly behaviours?: string;
+    readonly services?: string;
     readonly languages?: string;
 }
 
@@ -61,7 +61,7 @@ export default class Settings {
             commands: options.paths && options.paths.commands ? options.paths.commands : "./commandStore",
             plugins: options.paths && options.paths.plugins ? options.paths.plugins : "./plugins",
             emojis: options.paths && options.paths.emojis ? options.paths.emojis : "./emojis",
-            behaviours: options.paths && options.paths.behaviours ? options.paths.behaviours : "./behaviours",
+            services: options.paths && options.paths.services ? options.paths.services : "./services",
             languages: options.paths && options.paths.languages ? options.paths.languages : undefined
         };
 

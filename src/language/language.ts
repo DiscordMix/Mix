@@ -6,20 +6,30 @@ import {default as main} from "require-main-filename";
 export type LanguageSource = any;
 
 export default class Language {
-    private languages: Map<string, LanguageSource>;
+    private readonly languages: Map<string, LanguageSource>;
+    
     private default?: LanguageSource;
 
     public readonly directory?: string;
 
+    /**
+     * @param {string} directory
+     */
     constructor(directory?: string) {
         this.directory = directory;
         this.languages = new Map<string, any>();
     }
 
+    /**
+     * @return {ReadonlyMap<string, LanguageSource>}
+     */
     public getLanguages(): ReadonlyMap<string, LanguageSource> {
         return this.languages as ReadonlyMap<string, any>;
     }
 
+    /**
+     * @param {string} name
+     */
     public setDefault(name: string): void {
         if (this.languages.size === 0) {
             throw new Error("[Language.setDefault] No language sources have been loaded");
@@ -31,6 +41,10 @@ export default class Language {
         this.default = this.languages.get(name);
     }
 
+    /**
+     * @param {string} key
+     * @return {any}
+     */
     public get(key: string): any {
         if (!this.default) {
             throw new Error("[Language.get] No language source has been set as default");
@@ -39,6 +53,10 @@ export default class Language {
         return this.default[key];
     }
 
+    /**
+     * @param {string} name
+     * @return {Promise<this>}
+     */
     public async load(name: string): Promise<this> {
         if (!this.directory) {
             throw new Error("[Language.load] No base directory has been specified");

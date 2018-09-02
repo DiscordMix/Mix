@@ -1,4 +1,5 @@
 import Log from "../core/log";
+import {CommandArgument} from "./command";
 
 export default class CommandArgumentParser {
     /**
@@ -17,5 +18,13 @@ export default class CommandArgumentParser {
         }
 
         Log.error(`[CommandArgumentParser.resolve] Argument resolver missing: ${type}`);
+    }
+
+    /**
+     * @param {Array<CommandArgument>} schema
+     * @return {Array<CommandArgument>}
+     */
+    public static getRequiredArguments(schema: Array<CommandArgument>): Array<CommandArgument> {
+        return schema.filter((arg: CommandArgument) => arg.required);
     }
 }

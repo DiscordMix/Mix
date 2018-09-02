@@ -480,7 +480,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         };
 
         // TODO: Cannot do .startsWith with a prefix array
-        if ((!message.author.bot || (message.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.isValid(message.content, this.commandStore, this.settings.general.prefixes)) {
+        if ((!message.author.bot || (message.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(message.content, this.commandStore, this.settings.general.prefixes)) {
             if (this.options.allowCommandChain) {
                 const chain: Array<string> = message.content.split("&");
 

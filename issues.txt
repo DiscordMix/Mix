@@ -1,6 +1,6 @@
 === ISSUES ===
 
-* Overloading arguments throws error
+[FIXED] * Overloading arguments throws error
     1) Execute command with extra arguments
 
 === IDEAS ===

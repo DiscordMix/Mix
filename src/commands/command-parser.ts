@@ -3,6 +3,7 @@ import CommandStore from "./command-store";
 import Command, { ArgumentType, CommandArgumentResolver, PrimitiveArgumentType, CommandArgument, RawArguments, ArgumentTypeChecker, UserDefinedArgType } from "./command";
 import {Message} from "discord.js";
 import Log from "../core/log";
+import CommandArgumentParser from "./command-argument-parser";
 
 export interface ResolveArgumentsOptions {
     readonly arguments: RawArguments;
@@ -41,7 +42,7 @@ export default class CommandParser {
      * @param {string} prefixes
      * @return {boolean}
      */
-    public static isValid(commandString: string, manager: CommandStore, prefixes: Array<string>): boolean {
+    public static validate(commandString: string, manager: CommandStore, prefixes: Array<string>): boolean {
         for (let i: number = 0; i < prefixes.length; i++) {
             if (commandString.startsWith(prefixes[i])) {
                 const commandBase = this.getCommandBase(commandString, prefixes);
@@ -137,6 +138,13 @@ export default class CommandParser {
     public static checkArguments(options: CheckArgumentsOptions): boolean {
         // No arguments provided when we need more than zero
         if (options.arguments.length === 0 && options.schema.length > 0) {
+            return false;
+        }
+
+        const requiredArguments: number = CommandArgumentParser.getRequiredArguments(options.schema).length;
+
+        // Invalid argument count
+        if (options.arguments.length < requiredArguments || options.arguments.length > options.schema.length) {
             return false;
         }
 

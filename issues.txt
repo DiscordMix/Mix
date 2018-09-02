@@ -1,0 +1,8 @@
+=== ISSUES ===
+
+* Overloading arguments throws error
+    1) Execute command with extra arguments
+
+=== IDEAS ===
+
+* Upon clicking on the OK command check, delete command + response

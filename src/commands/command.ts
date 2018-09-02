@@ -76,12 +76,19 @@ export default abstract class Command extends Fragment {
         specific: []
     };
 
-    protected constructor() {
-        super();
-    }
-
+    /**
+     * @param {CommandContext} context
+     * @param {*} args
+     * @param {*} api
+     * @return {*}
+     */
     public abstract executed(context: CommandContext, args: any, api: any): any;
 
+    /**
+     * @todo canExecute should default boolean, same concept as Service
+     * @param {CommandContext} context
+     * @return {boolean} Whether this command may be executed
+     */
     public canExecute(context: CommandContext): boolean {
         return true;
     }

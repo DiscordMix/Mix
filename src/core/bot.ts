@@ -10,13 +10,20 @@ import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import {Client, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
+import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
-import Command, {CommandArgumentStyle, UserGroup, CommandArgumentResolver, RawArguments, UserDefinedArgType} from "../commands/command";
+
+import Command, {
+    CommandArgumentResolver,
+    CommandArgumentStyle,
+    RawArguments,
+    UserDefinedArgType,
+    UserGroup
+} from "../commands/command";
+
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
-import Discord from "discord.js";
 import EventEmitter from "events";
 import fs from "fs";
 import {performance} from "perf_hooks";
@@ -254,7 +261,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
     }
 
     /**
-     * @return {*}
+     * @todo Should return null instead of undefined
+     * @return {* | undefined}
      */
     public getAPI(): ApiType | undefined {
         return this.api;

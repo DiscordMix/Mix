@@ -45,7 +45,7 @@ export default class Log {
             // TODO: Make this next line work on the vps
             // process.stdout.write(`\x1B[2D[${date}] ${colors[color](message)}\n> `);
             if (typeof message === "string") {
-                console.log(`[${date}] ${colors[finalColor](message)}`, ...options.params);
+                console.log(`[${date}] ${(colors as any)[finalColor](message)}`, ...options.params);
             }
             else {
                 console.log(`[${date}] `, message, ...options.params);

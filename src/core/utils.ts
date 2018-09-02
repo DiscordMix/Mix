@@ -1,9 +1,29 @@
-import {Message, RichEmbed, Snowflake, User} from "discord.js";
+import {
+    Guild,
+    GuildChannel,
+    GuildMember,
+    Message,
+    PermissionResolvable,
+    RichEmbed,
+    Snowflake,
+    TextChannel,
+    User
+} from "discord.js";
 import fs from "fs";
 import path from "path";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
+
+const moderationPermissions: Array<PermissionResolvable> = [
+    "MANAGE_GUILD",
+    "ADMINISTRATOR",
+    "BAN_MEMBERS",
+    "KICK_MEMBERS",
+    "MANAGE_CHANNELS",
+    "MANAGE_MESSAGES",
+    "MANAGE_ROLES_OR_PERMISSIONS"
+];
 
 TimeAgo.locale(en);
 
@@ -250,5 +270,67 @@ export default class Utils {
         }
 
         return false;
+    }
+
+    /**
+     * @param {GuildMember} member
+     * @return {boolean}
+     */
+    public static hasModerationPowers(member: GuildMember): boolean {
+        for (let i = 0; i < moderationPermissions.length; i++) {
+            if (member.hasPermission(moderationPermissions[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param {Guild} guild
+     * @param {string} name
+     * @param {boolean} textChannel
+     * @param {boolean} caseSensitive
+     * @returns {GuildChannel | null}
+     */
+    public static findChannelByName(guild: Guild, name: string, textChannel: boolean = true, caseSensitive: boolean = false): GuildChannel | null {
+        const channels: Array<GuildChannel> = guild.channels.array();
+
+        for (let i = 0; i < channels.length; i++) {
+            if (channels[i].type === "category") {
+                continue;
+            }
+
+            if (!textChannel && channels[i].type === "voice") {
+                continue;
+            }
+
+            if (caseSensitive && channels[i].name === name) {
+                return channels[i];
+            }
+            else if (!caseSensitive && channels[i].name.toLowerCase() === name.toLowerCase()) {
+                return channels[i];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param {Guild} guild
+     * @returns {TextChannel | null}
+     */
+    public static findDefaultChannel(guild: Guild): TextChannel | null {
+        let channel: TextChannel | null = guild.defaultChannel || null;
+
+        if (!channel || channel.type !== "text") {
+            channel = Utils.findChannelByName(guild, "general") as TextChannel | null;
+
+            if (!channel) {
+                return null;
+            }
+        }
+
+        return channel;
     }
 }

@@ -26,6 +26,14 @@ import Fragment from "../fragments/fragment";
 import Language from "../language/language";
 import Service from "../services/service";
 
+const title: string =
+    " █████╗ ███╗   ██╗██╗   ██╗██╗██╗     \n" +
+    "██╔══██╗████╗  ██║██║   ██║██║██║     \n" +
+    "███████║██╔██╗ ██║██║   ██║██║██║     \n" +
+    "██╔══██║██║╚██╗██║╚██╗ ██╔╝██║██║     \n" +
+    "██║  ██║██║ ╚████║ ╚████╔╝ ██║███████╗\n" +
+    "╚═╝  ╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚══════╝ {version}";
+
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
 export interface BotOptions {
@@ -258,7 +266,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      */
     public async setup(api?: ApiType): Promise<this> {
         if (this.options.asciiTitle) {
-            console.log("\n" + fs.readFileSync(path.resolve(path.join(__dirname, "../../dist/title.txt"))).toString() + "\n");
+            console.log("\n" + title.replace("{version}", "beta") + "\n");
         }
 
         /**

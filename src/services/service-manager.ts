@@ -28,7 +28,7 @@ export default class ServiceManager {
      * @param {Service} service
      * @return {boolean}
      */
-    register(service: Service): boolean {
+    public register(service: Service): boolean {
         if (!this.getService(service.meta.name)) {
             this.services.push(service);
 
@@ -42,7 +42,7 @@ export default class ServiceManager {
      * @param {Array<Service>} multipleServices
      * @return {number}
      */
-    registerMultiple(multipleServices: Array<Service>): number {
+    public registerMultiple(multipleServices: Array<Service>): number {
         let registered: number = 0;
 
         for (let i: number = 0; i < multipleServices.length; i++) {
@@ -58,7 +58,7 @@ export default class ServiceManager {
      * @param {string} name
      * @return {boolean}
      */
-    enable(name: string): boolean {
+    public enable(name: string): boolean {
         const service: Service | null = this.getService(name);
 
         if (service) {
@@ -74,7 +74,7 @@ export default class ServiceManager {
      * Enable all services
      * @return {number} The amount of successfully enabled services
      */
-    enableAll(): number {
+    public enableAll(): number {
         let enabled: number = 0;
 
         for (let i = 0; i < this.services.length; i++) {
@@ -90,7 +90,7 @@ export default class ServiceManager {
      * @param {string} name
      * @return {Service | null}
      */
-    getService(name: string): Service | null {
+    public getService(name: string): Service | null {
         for (let i = 0; i < this.services.length; i++) {
             if (this.services[i].meta.name === name) {
                 return this.services[i];

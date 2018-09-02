@@ -27,7 +27,7 @@ export default abstract class Kick extends Command {
         }
     ];
 
-    constructor() {
+    protected constructor() {
         super();
 
         this.restrict.environment = ChatEnvironment.Guild;

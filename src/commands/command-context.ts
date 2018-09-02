@@ -199,9 +199,9 @@ export default class CommandContext {
 
     /**
      * @param {string} message
-     * @return {Promise<Message | Null>}
+     * @return {Promise<Message | Array<Message> | null>}
      */
-    public async reply(message: string): Promise<Message | Message[] | null> {
+    public async reply(message: string): Promise<Message | Array<Message> | null> {
         return await this.message.reply(message);
     }
 

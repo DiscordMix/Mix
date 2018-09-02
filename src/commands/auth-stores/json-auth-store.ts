@@ -1,8 +1,7 @@
 import Utils from "../../core/utils";
 import ObjectAuthStore from "./object-auth-store";
 import Log from "../../core/log";
-
-const fs = require("fs");
+import fs from "fs";
 
 /**
  * @extends ObjectAuthStore
@@ -48,7 +47,7 @@ export default class JsonAuthStore extends ObjectAuthStore {
     /**
      * @return {boolean}
      */
-    validate(): boolean {
+    public validate(): boolean {
         return fs.existsSync(this.schemaPath) && fs.existsSync(this.storePath);
     }
 
@@ -56,7 +55,7 @@ export default class JsonAuthStore extends ObjectAuthStore {
      * @todo Complete
      * @return {Promise<*>}
      */
-    async reload(): Promise<any> {
+    public async reload(): Promise<any> {
         if (!this.exists) {
             this.data = {};
             await Utils.writeJson(this.storePath, this.data);
@@ -83,7 +82,7 @@ export default class JsonAuthStore extends ObjectAuthStore {
      * Save the currently loaded data into the store file
      * @return {Promise<*>}
      */
-    async save(): Promise<boolean> {
+    public async save(): Promise<boolean> {
         return Utils.writeJson(this.storePath, this.data);
     }
 
@@ -91,7 +90,7 @@ export default class JsonAuthStore extends ObjectAuthStore {
      * Determine whether the store file exists
      * @return {boolean} Whether the store file exists
      */
-    get exists(): boolean {
+    public get exists(): boolean {
         return fs.existsSync(this.storePath) && fs.existsSync(this.schemaPath);
     }
 }

@@ -4,9 +4,9 @@ import Rgba from "../misc/rgba";
 import Collection from "../collections/collection";
 import ObjectProvider from "../data-providers/object-provider";
 import Settings from "../core/settings";
+import path from "path";
 
 const { expect } = require("chai");
-const path = require("path");
 
 const globalAny: any = global;
 const describe: any = globalAny.describe;

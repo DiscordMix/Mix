@@ -18,7 +18,7 @@ export default abstract class Service extends Fragment {
     /**
      * @param {ServiceOptions} options
      */
-    constructor(options: ServiceOptions) {
+    protected constructor(options: ServiceOptions) {
         super();
     }
 

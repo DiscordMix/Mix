@@ -10,3 +10,4 @@ bot.log
 desktop.ini
 *.bat
 *.sh
+yarn-error.log

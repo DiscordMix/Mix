@@ -13,7 +13,7 @@ import Temp from "./temp";
 import {Client, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
-import Command, {CommandArgumentStyle, UserGroup, CommandArgument, CommandArgumentResolver, ArgumentType, RawArguments, UserDefinedArgType} from "../commands/command";
+import Command, {CommandArgumentStyle, UserGroup, CommandArgumentResolver, RawArguments, UserDefinedArgType} from "../commands/command";
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
 import Discord from "discord.js";
@@ -357,13 +357,17 @@ export default class Bot<ApiType = any> extends EventEmitter {
         return this;
     }
 
+    /**
+     * @param {Array<Fragment>} fragments
+     * @return {number}
+     */
     private enableFragments(fragments: Array<Fragment>): number {
         let enabled: number = 0;
 
         for (let i: number = 0; i < fragments.length; i++) {
             if ((fragments[i] as any).prototype instanceof Command) {
                 const fragment: any = fragments[i];
-                
+
                 this.commandStore.register(new fragment());
                 enabled++;
             }

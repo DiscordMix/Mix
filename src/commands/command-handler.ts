@@ -1,6 +1,6 @@
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import Command, { CommandArgument, ArgumentType } from "./command";
+import Command, {CommandArgument} from "./command";
 import CommandStore, {CommandCooldown, CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
@@ -60,6 +60,12 @@ export default class CommandHandler {
         return this;
     }
 
+    /**
+     * @param {CommandContext} context
+     * @param {Command} command
+     * @param {Array<CommandArgument>} args
+     * @return {boolean}
+     */
     private meetsRequirements(context: CommandContext, command: Command, args: Array<CommandArgument>): boolean {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
@@ -189,7 +195,7 @@ export default class CommandHandler {
         if (!this.meetsRequirements(context, command, args)) {
             return false;
         }
-        
+
         try {
             // TODO: Only check if result is true, make sure commandStore return booleans
             // TODO: Bot should be accessed protected (from this class)

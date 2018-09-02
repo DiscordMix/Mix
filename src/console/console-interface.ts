@@ -2,7 +2,7 @@ import Log from "../core/log";
 import Utils from "../core/utils";
 import Bot from "../core/bot";
 import readline from "readline";
-import { performance } from "perf_hooks";
+import {performance} from "perf_hooks";
 
 export default class ConsoleInterface {
     public ready: boolean;
@@ -67,7 +67,7 @@ export default class ConsoleInterface {
 
                     // TODO: New fragment system
                     // await bot.commandLoader.reloadAll();
-                    
+
                     await bot.connect();
 
                     const endTime = performance.now();

@@ -1,9 +1,8 @@
 import EditableMessage from "../message/editable-message";
 import EmbedBuilder from "../builders/embed-builder";
-import {Message, Role, Snowflake, User} from "discord.js";
+import Discord, {Message, Role, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import EmojiCollection from "../collections/emoji-collection";
-import Discord from "discord.js";
 
 export interface CommandExecutionContextOptions {
     readonly message: Message;

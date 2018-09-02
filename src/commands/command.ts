@@ -1,7 +1,7 @@
 import ChatEnvironment from "../core/chat-environment";
 import CommandContext from "./command-context";
 import Fragment from "../fragments/fragment";
-import { Message } from "discord.js";
+import {Message} from "discord.js";
 
 export type UserGroup = Array<string>;
 

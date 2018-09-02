@@ -1,9 +1,9 @@
-export type SqlQueryWhereOperatorV2 = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
+export type SqlQueryOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
 
 export interface SqlQueryWhere {
     readonly property: string;
     readonly value: any;
-    readonly operator?: SqlQueryWhereOperatorV2;
+    readonly operator?: SqlQueryOperator;
 }
 
 export default class SqlQuery {
@@ -14,13 +14,20 @@ export default class SqlQuery {
     private wheres: Array<SqlQueryWhere>;
     private limitAmount?: number;
 
+    /**
+     * @param {string} table
+     */
     constructor(table: string) {
         this.table = table;
         this.prefix = "SELECT * FROM ";
         this.wheres = [];
     }
 
-    where(search: any): SqlQuery {
+    /**
+     * @param search
+     * @return {SqlQuery}
+     */
+    public where(search: any): SqlQuery {
         const searchKeys: Array<string> = Object.keys(search);
 
         for (let i: number = 0; i < searchKeys.length; i++) {
@@ -33,19 +40,31 @@ export default class SqlQuery {
         return this;
     }
 
-    limit(amount: number): SqlQuery {
+    /**
+     * @param {number} amount
+     * @return {SqlQuery}
+     */
+    public limit(amount: number): SqlQuery {
         this.limitAmount = amount;
 
         return this;
     }
 
-    select(properties: Array<string>): SqlQuery {
+    /**
+     * @param {Array<string>} properties
+     * @return {SqlQuery}
+     */
+    public select(properties: Array<string>): SqlQuery {
         this.prefix = `SELECT (${properties.join(",")})`;
 
         return this;
     }
 
-    update(values: any): SqlQuery {
+    /**
+     * @param values
+     * @return {SqlQuery}
+     */
+    public update(values: any): SqlQuery {
         const valuesKeys: Array<string> = Object.keys(values);
         const setAddition: Array<string> = [];
 
@@ -59,7 +78,11 @@ export default class SqlQuery {
         return this;
     }
 
-    insert(values: any): SqlQuery {
+    /**
+     * @param values
+     * @return {SqlQuery}
+     */
+    public insert(values: any): SqlQuery {
         const valuesKeys: Array<string> = Object.keys(values);
         const columns: Array<string> = [];
         const finalValues: Array<string> = [];
@@ -75,7 +98,10 @@ export default class SqlQuery {
         return this;
     }
 
-    build(): string {
+    /**
+     * @return {string}
+     */
+    public build(): string {
         let query = `${this.prefix}${this.table}${this.suffix || ""}`;
 
         if (this.wheres.length > 0) {
@@ -97,6 +123,10 @@ export default class SqlQuery {
         return `${query};`;
     }
 
+    /**
+     * @param value
+     * @return {string}
+     */
     private static getValueQueryForm(value: any): string {
         if (typeof(value) === "string") {
             return `"${value}"`;

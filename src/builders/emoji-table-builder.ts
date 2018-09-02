@@ -1,6 +1,6 @@
 export default class EmojiTableBuilder {
-    readonly width: number;
-    readonly height: number;
+    public readonly width: number;
+    public readonly height: number;
 
     // 2D Array
     private readonly table: Array<any>;
@@ -20,14 +20,14 @@ export default class EmojiTableBuilder {
      * @param {number} row
      * @param {string} emoji
      */
-    set(col: number, row: number, emoji: string): void {
+    public set(col: number, row: number, emoji: string): void {
         this.table[col][row] = emoji;
     }
 
     /**
      * @return {string}
      */
-    build(): string {
+    public build(): string {
         let result = "";
 
         for (let col = 0; col < this.height; col++) {

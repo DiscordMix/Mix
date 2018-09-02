@@ -2,29 +2,36 @@ import Bot from "../core/bot";
 import Fragment from "../fragments/fragment";
 
 export interface ServiceOptions {
-    readonly name: string;
-    readonly description?: string;
-    readonly enabled: (bot: Bot, api?: any) => void;
-    readonly disabled?: (bot: Bot, api?: any) => void;
-    readonly canEnable?: (bot: Bot, api?: any) => boolean;
-    readonly listeners?: Array<string>;
+    readonly bot: Bot;
+    readonly api?: any;
 }
 
 export default abstract class Service extends Fragment {
-    readonly disabled?: (bot: Bot, api?: any) => void;
-    readonly canEnable: ((bot: Bot, api?: any) => boolean) | boolean = true;
-    readonly listeners: Array<string> = [];
+    public readonly stop?: () => void;
+    public readonly canStart: (() => boolean) | boolean = true;
+    public readonly listeners: Array<string> = [];
+
+    protected readonly bot: Bot;
+    protected readonly api?: any;
 
     /**
      * @param {ServiceOptions} options
      */
     protected constructor(options: ServiceOptions) {
         super();
+
+        /**
+         * @type {Bot}
+         * @readonly
+         */
+        this.bot = options.bot;
+
+        /**
+         * @type {*}
+         * @readonly
+         */
+        this.api = options.api;
     }
 
-    /**
-     * @param {Bot} bot
-     * @param {*} api
-     */
-    public abstract enabled(bot: Bot, api?: any): void;
+    public abstract start(): void;
 }

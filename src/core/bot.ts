@@ -380,14 +380,18 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 enabled++;
             }
             else if ((fragments[i] as any).prototype instanceof Service) {
-                const fragment: any = fragments[i];
+                const service: any = fragments[i];
 
-                this.services.register(new fragment());
+                this.services.register(new service({
+                    bot: this,
+                    api: this.getAPI()
+                }));
+
                 enabled++;
             }
             else {
                 // TODO: Also add someway to identify the fragment
-                Log.warn(`[Bot.enableFragments] Unknown fragment instance for fragment, ignoring`);
+                Log.warn("[Bot.enableFragments] Unknown fragment instance, ignoring");
             }
         }
 
@@ -472,7 +476,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             if (this.options.allowCommandChain) {
                 const chain: Array<string> = message.content.split("&");
 
-                // TODO: What if commandChecks is enabled and the bot tries to react twice or more?
+                // TODO: What if commandChecks is start and the bot tries to react twice or more?
                 for (let i: number = 0; i < chain.length; i++) {
                     await this.handleCommandMessage(message, chain[i].trim(), resolvers);
                 }

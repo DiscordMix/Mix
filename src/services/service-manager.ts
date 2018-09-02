@@ -62,7 +62,7 @@ export default class ServiceManager {
         const service: Service | null = this.getService(name);
 
         if (service) {
-            service.enabled(this.bot, this.bot.getAPI());
+            service.start();
 
             return true;
         }

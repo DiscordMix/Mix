@@ -1,11 +1,12 @@
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import Command, {CommandArgument} from "./command";
+import Command, {CommandArgument, RawArguments} from "./command";
 import CommandStore, {CommandCooldown, CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
 import {TextChannel} from "discord.js";
 import CommandAuthStore from "./auth-stores/command-auth-store";
+import CommandParser from "./command-parser";
 
 export interface CommandHandlerOptions {
     readonly commandStore: CommandStore;
@@ -63,10 +64,10 @@ export default class CommandHandler {
     /**
      * @param {CommandContext} context
      * @param {Command} command
-     * @param {Array<CommandArgument>} args
+     * @param {Array<CommandArgument>} rawArgs
      * @return {boolean}
      */
-    private meetsRequirements(context: CommandContext, command: Command, args: Array<CommandArgument>): boolean {
+    private meetsRequirements(context: CommandContext, command: Command, rawArgs: Array<string>): boolean {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 
@@ -105,7 +106,13 @@ export default class CommandHandler {
                 context.fail(`You don't have the authority to use that command. You must be at least a(n) **${rankName}**.`);
             }
         }
-        else if (!command.singleArg && (args.length > command.maxArguments || args.length < command.minArguments)) {
+        else if (!CommandParser.checkArguments({
+            schema: command.arguments,
+            arguments: rawArgs,
+            message: context.message,
+            types: context.bot.argumentTypes,
+            command: command
+        })) {
             if (this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch]) {
                 this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);
             }
@@ -184,22 +191,29 @@ export default class CommandHandler {
      * @todo Since it's returning a Promise, review
      * @param {CommandContext} context
      * @param {Command} command The command to handle
-     * @param {*} args
+     * @param {RawArguments} rawArgs
      * @return {Promise<Boolean>} Whether the command was successfully executed
      */
-    public async handle(context: CommandContext, command: Command, args: any): Promise<boolean> {
+    public async handle(context: CommandContext, command: Command, rawArgs: RawArguments): Promise<boolean> {
         // TODO: Debugging
         //Log.debug("I received the following");
         //console.log("handler received ", args);
 
-        if (!this.meetsRequirements(context, command, args)) {
+        if (!this.meetsRequirements(context, command, rawArgs)) {
             return false;
         }
+
+        const resolvedArgs: any | null = CommandParser.resolveArguments({
+            arguments: rawArgs,
+            message: context.message,
+            resolvers: context.bot.argumentResolvers,
+            schema: command.arguments
+        });
 
         try {
             // TODO: Only check if result is true, make sure commandStore return booleans
             // TODO: Bot should be accessed protected (from this class)
-            const actualResult = command.executed(context, args, context.bot.getAPI());
+            const actualResult = command.executed(context, resolvedArgs, context.bot.getAPI());
             const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
 
             const commandCooldown: CommandCooldown = {

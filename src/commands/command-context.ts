@@ -192,7 +192,10 @@ export default class CommandContext {
     public async fail(text: string, autoDelete: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
             text: `:thinking: ${text}`,
-            color: "RED"
+            color: "RED",
+
+            // TODO: Returns static image, and won't change to random
+            //thumbnail: "https://cataas.com/cat"
         }, autoDelete);
     }
 

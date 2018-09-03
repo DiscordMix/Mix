@@ -517,37 +517,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
         if (command !== null) {
             const rawArgs: RawArguments = CommandParser.getArguments(content);
 
-            const validArguments: boolean = CommandParser.checkArguments({
-                arguments: rawArgs,
-                schema: command.arguments,
-                types: this.argumentTypes,
-                message: message
-            });
-
-            if (!validArguments) {
-                Log.warn(`[Bot.handleCommandMessage] Invalid arguments (arg validation failed) for command: ${command.meta.name}`);
-
-
-                return;
-            }
-            else {
-                Log.debug(`valid args for command: ${command.meta.name}`, {
-                    rawArgs: rawArgs,
-                    resolvers: this.argumentResolvers,
-                    schema: command.arguments
-                });
-            }
-
-            const args: any | null = CommandParser.resolveArguments({
-                arguments: rawArgs,
-                message: message,
-                resolvers: this.argumentResolvers,
-                schema: command.arguments
-            });
-
-            // TODO: Debugging
-            //console.log("resolved args: ", args);
-
             await this.commandHandler.handle(
                 new CommandContext({
                     message: message,
@@ -563,7 +532,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
                 command,
 
-                args
+                rawArgs
             );
         }
         else {

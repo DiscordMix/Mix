@@ -17,6 +17,7 @@ export interface CheckArgumentsOptions {
     readonly schema: Array<CommandArgument>;
     readonly types: Array<UserDefinedArgType>;
     readonly message: Message;
+    readonly command: Command;
 }
 
 export default class CommandParser {
@@ -27,7 +28,7 @@ export default class CommandParser {
      * @return {Command | null}
      */
     public static parse(commandString: string, manager: CommandStore, prefixes: Array<string>): Command | null {
-        const commandBase = this.getCommandBase(commandString, prefixes);
+        const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
             return manager.getByName(commandBase);
@@ -79,15 +80,15 @@ export default class CommandParser {
      * @return {Array<string>}
      */
     public static getArguments(commandString: string): RawArguments {
-        const expression = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;
-        const argCleanExpression = /(```|`|'|"|)(.+)\1/;
+        const expression: RegExp = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;
+        const argCleanExpression: RegExp = /(```|`|'|"|)(.+)\1/;
         const result: RawArguments = [];
 
         let match: RegExpExecArray | null = expression.exec(commandString);
 
         while (match != null) {
             // TODO: Hotfix/review
-            const match1 = argCleanExpression.exec(match[1]);
+            const match1: RegExpExecArray | null = argCleanExpression.exec(match[1]);
 
             if (match1) {
                 result.push(match1[2]);
@@ -136,15 +137,8 @@ export default class CommandParser {
      * @return {boolean}
      */
     public static checkArguments(options: CheckArgumentsOptions): boolean {
-        // No arguments provided when we need more than zero
-        if (options.arguments.length === 0 && options.schema.length > 0) {
-            return false;
-        }
-
-        const requiredArguments: number = CommandArgumentParser.getRequiredArguments(options.schema).length;
-
-        // Invalid argument count
-        if (options.arguments.length < requiredArguments || options.arguments.length > options.schema.length) {
+        // Invalid amount of arguments
+        if (!CommandParser.validateArgumentCount(options.command, options.arguments)) {
             return false;
         }
 
@@ -247,6 +241,15 @@ export default class CommandParser {
         }
 
         return true;
+    }
+
+    /**
+     * @param {Command} command
+     * @param {RawArguments} args
+     * @return {boolean}
+     */
+    public static validateArgumentCount(command: Command, args: RawArguments): boolean {
+        return !(!command.singleArg && (args.length > command.maxArguments || args.length < command.minArguments));
     }
 
     /**

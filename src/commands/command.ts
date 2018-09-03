@@ -5,6 +5,11 @@ import {Message} from "discord.js";
 
 export type UserGroup = Array<string>;
 
+export enum CommandAuth {
+    Default = 0,
+    Owner = -1
+}
+
 export enum CommandArgumentStyle {
     Explicit,
     Descriptive
@@ -105,15 +110,7 @@ export default abstract class Command extends Fragment {
      * @return {number} The minimum amount of required arguments that this command accepts
      */
     public get minArguments(): number {
-        let counter = 0;
-
-        for (let i: number = 0; i < this.arguments.length; i++) {
-            if (this.arguments[i].required) {
-                counter++;
-            }
-        }
-
-        return counter;
+        return this.arguments.filter((arg: CommandArgument) => arg.required).length;
     }
 
     /**

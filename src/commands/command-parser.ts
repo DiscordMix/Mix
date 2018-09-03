@@ -246,10 +246,17 @@ export default class CommandParser {
     /**
      * @param {Command} command
      * @param {RawArguments} args
-     * @return {boolean}
+     * @return {boolean} Whether the argument count is valid
      */
-    public static validateArgumentCount(command: Command, args: RawArguments): boolean {
-        return !(!command.singleArg && (args.length > command.maxArguments || args.length < command.minArguments));
+    private static validateArgumentCount(command: Command, args: RawArguments): boolean {
+        if (command.singleArg && (args.length < command.maxArguments || args.length > command.minArguments)) {
+            return false;
+        }
+        else if (args.length > command.maxArguments || args.length < command.minArguments) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

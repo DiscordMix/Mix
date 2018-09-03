@@ -1,7 +1,9 @@
 === ISSUES ===
 
-[FIXED] * Overloading arguments throws error
-    1) Execute command with extra arguments
+[FIXED] * Overloading arguments throws error.
+    1) Execute command with extra arguments.
+
+* Internal commands use auth for restricting, however owner auth (-1) does not work, it allows anyone to use them.
 
 === IDEAS ===
 

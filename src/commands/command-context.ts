@@ -3,6 +3,7 @@ import EmbedBuilder from "../builders/embed-builder";
 import Discord, {Message, Role, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import EmojiCollection from "../collections/emoji-collection";
+import FormattedMessage from "../builders/formatted-message";
 
 export interface CommandExecutionContextOptions {
     readonly message: Message;
@@ -166,9 +167,9 @@ export default class CommandContext {
      * @param {string} [title=""]
      * @return {Promise<EditableMessage>}
      */
-    public async ok(text: string, title: string = ""): Promise<EditableMessage | null> {
+    public async ok(text: string | FormattedMessage, title: string = ""): Promise<EditableMessage | null> {
         return await this.respond({
-            text: `${text}`,
+            text: typeof text === "string" ? `${text}` : text.build(),
             title: title
         });
     }

@@ -27,7 +27,7 @@ export default class FormattedMessage {
      * @param {string | null} [code=null]
      * @return {FormattedMessage}
      */
-    public codeBlock(language = null, code = null): FormattedMessage {
+    public codeBlock(code: string | null = null, language: string | null = null): FormattedMessage {
         let result = "```";
 
         if (language !== null) {

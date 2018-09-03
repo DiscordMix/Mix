@@ -1,4 +1,4 @@
-import Command from "../../../commands/command";
+import Command, {CommandAuth} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 import JsonAuthStore from "../../../commands/auth-stores/json-auth-store";
 import {GuildMember} from "discord.js";
@@ -22,8 +22,7 @@ export default class SetAuth extends Command {
     constructor() {
         super();
 
-        // Owner only
-        this.restrict.auth = -1;
+        this.restrict.auth = CommandAuth.Owner;
     }
 
     public async executed(context: CommandContext, args: ISetAuthArgs): Promise<void> {

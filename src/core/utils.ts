@@ -333,4 +333,12 @@ export default class Utils {
 
         return channel;
     }
+
+    /**
+     * @param {Guild} guild
+     * @return {Array<"discord.js".GuildMember>}
+     */
+    public static getOwners(guild: Guild): Array<GuildMember> {
+        return guild.members.filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).array();
+    }
 }

@@ -264,11 +264,10 @@ export default class Bot<ApiType = any> extends EventEmitter {
     }
 
     /**
-     * @todo Should return null instead of undefined
-     * @return {* | undefined}
+     * @return {* | null}
      */
-    public getAPI(): ApiType | undefined {
-        return this.api;
+    public getAPI(): ApiType | null {
+        return this.api || null;
     }
 
     /**

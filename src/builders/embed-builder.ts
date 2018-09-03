@@ -81,12 +81,12 @@ export default class EmbedBuilder {
 
     /**
      * Set the text of the embed
-     * @todo Limit text to Discord's embed char limit
+     * @todo Limit text to Discord's embed char limit (done, needs testing)
      * @param {string} text
      * @return {EmbedBuilder}
      */
     public text(text: string): EmbedBuilder {
-        this.embed.setDescription(text);
+        this.embed.setDescription(text.substr(0, 1024));
 
         return this;
     }

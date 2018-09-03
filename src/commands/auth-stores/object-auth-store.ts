@@ -2,7 +2,14 @@ import CommandAuthStore from "./command-auth-store";
 import Log from "../../core/log";
 import {Snowflake} from "discord.js";
 
+export enum SchemaValidationResult {
+    OK,
+    InvalidDefault, // If a rank has an auth of '0' and the 'default' rank is not defined
+    InvalidAuth // If a rank has an invalid auth (less than -1 is considered invalid)
+}
+
 /**
+ * @deprecated Use Auth Service instead
  * @extends CommandAuthStore
  */
 export default class ObjectAuthStore extends CommandAuthStore {

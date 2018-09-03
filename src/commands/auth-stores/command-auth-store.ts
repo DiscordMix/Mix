@@ -2,6 +2,7 @@ import {Message, Role, Snowflake} from "discord.js";
 import {EventEmitter} from "events";
 
 /**
+ * @deprecated Use Auth Service instead
  * @todo CRITICAL (not here maybe) When loading auth store .json, if it's empty (not containing "[]") it will throw "Unexpected end of JSON" error
  * @extends EventEmitter
  */
@@ -69,9 +70,14 @@ export default abstract class CommandAuthStore extends EventEmitter {
      * @param {Snowflake} guildId
      * @param {Message} message
      * @param {number} authLevel
+     * @param {Snowflake} owner
      * @return {boolean}
      */
-    public hasAuthority(guildId: Snowflake, message: Message, authLevel: number): boolean {
+    public hasAuthority(guildId: Snowflake, message: Message, authLevel: number, owner?: Snowflake): boolean {
+        if (owner && owner === message.author.id) {
+            return true;
+        }
+
         // TODO: Message.member may return undefined in private channels (DMs)
         return this.getAuthority(guildId, message.author.id, message.member.roles.array().map((role: Role) => role.name)) >= authLevel;
     }
@@ -81,7 +87,7 @@ export default abstract class CommandAuthStore extends EventEmitter {
      * @return {string | null}
      */
     public getSchemaRankName(rank: number): string | null {
-        const keys = Object.keys(this.schema);
+        const keys: Array<string> = Object.keys(this.schema);
 
         for (let i = 0; i < keys.length; i++) {
             if (this.schema[keys[i]].rank === rank) {

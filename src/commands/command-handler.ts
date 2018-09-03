@@ -87,17 +87,18 @@ export default class CommandHandler {
                 context.fail("That command is disabled and may not be used.");
             }
         }
+        // TODO: If command.ownerOnly, if true and owner is executor, skip next 2 checks (specific, hasAuthority)
         else if (command.restrict.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
             context.fail("You are not allowed to use that command");
         }
-        else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.restrict.auth)) {
+        else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.restrict.auth, context.bot.owner)) {
             if (this.errorHandlers[CommandManagerEvent.NoAuthority]) {
                 this.errorHandlers[CommandManagerEvent.NoAuthority](context, command);
             }
             else {
                 const minAuthority = this.authStore.getSchemaRankName(command.restrict.auth);
 
-                let rankName = "Unknown"; // TODO: Unknown should be a reserved auth level name (schema)
+                let rankName: string = "Unknown"; // TODO: Unknown should be a reserved auth level name (schema)
 
                 if (minAuthority !== null) {
                     rankName = minAuthority.charAt(0).toUpperCase() + minAuthority.slice(1);
@@ -134,7 +135,7 @@ export default class CommandHandler {
                 context.fail("That command cannot be executed right now.");
             }
         }
-        // TODO: CRITICAL Project no longer uses Typer.
+        // TODO: CRITICAL Project no longer uses Typer. Is this already handled by checkArguments()?
         else if (false/* !command.singleArg /* && (!typer.validate(command.args, CommandHandler.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) */) {
             if (this.errorHandlers[CommandManagerEvent.InvalidArguments]) {
                 this.errorHandlers[CommandManagerEvent.InvalidArguments](context, command);
@@ -195,10 +196,6 @@ export default class CommandHandler {
      * @return {Promise<Boolean>} Whether the command was successfully executed
      */
     public async handle(context: CommandContext, command: Command, rawArgs: RawArguments): Promise<boolean> {
-        // TODO: Debugging
-        //Log.debug("I received the following");
-        //console.log("handler received ", args);
-
         if (!this.meetsRequirements(context, command, rawArgs)) {
             return false;
         }

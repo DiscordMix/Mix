@@ -1,4 +1,4 @@
-===> Schema -> Define your auth levels (manual)
+===> Schema (OLD) -> Define your auth levels (manual)
 
 {
 	"default": {
@@ -8,6 +8,19 @@
 		"rank": 1
 	}
 }
+
+===> Schema (NEW -> Not yet implemented/created) -> Define your auth levels (manual)
+
+[
+    {
+        "name": "default",
+        "auth": 0
+    },
+    {
+        "name": "member",
+        "auth": 1
+    }
+]
 
 ===> Store -> Store auth level data (automatic)
 

@@ -4,6 +4,7 @@ import Log from "../../core/log";
 import fs from "fs";
 
 /**
+ * @deprecated Use Auth Service instead
  * @extends ObjectAuthStore
  */
 export default class JsonAuthStore extends ObjectAuthStore {

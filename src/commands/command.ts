@@ -60,6 +60,7 @@ export interface CommandRestrict {
     auth: number;
     specific: Array<string>;
     cooldown: number;
+    ownerOnly: boolean;
 }
 
 /**
@@ -78,7 +79,8 @@ export default abstract class Command extends Fragment {
         environment: ChatEnvironment.Anywhere,
         issuerPermissions: [],
         selfPermissions: [],
-        specific: []
+        specific: [],
+        ownerOnly: false
     };
 
     /**

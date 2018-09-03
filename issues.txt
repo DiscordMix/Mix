@@ -5,6 +5,12 @@
 
 * Internal commands use auth for restricting, however owner auth (-1) does not work, it allows anyone to use them.
 
+* Finish implementing/creating the new auth system. OR:
+    *) Possibly the auth system is not really needed, it'll just create a mess.
+        Instead of using a per-guild auth system ... what if? Haven't thought
+        of an alternative, but I'm sure it's not really effective nor worth
+        time investing.
+
 === IDEAS ===
 
 * Upon clicking on the OK command check, delete command + response

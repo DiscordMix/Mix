@@ -198,6 +198,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.prefixCommand = botOptions.prefixCommand || true;
 
         /**
+         * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific primitives can be loaded.
          * @type {Array<string>}
          * @readonly
          */
@@ -207,7 +208,10 @@ export default class Bot<ApiType = any> extends EventEmitter {
             "ping",
             "auth",
             "setauth",
-            "prefix"
+            "prefix",
+            "prefix",
+            "cli",
+            "throw"
         ];
 
         /**

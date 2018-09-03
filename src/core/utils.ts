@@ -202,8 +202,8 @@ export default class Utils {
      * @param {string} path
      * @return {Promise<Object>} The data from the specified path
      */
-    public static async readJson(path: string): Promise<any> {
-        return new Promise((resolve, reject) => {
+    public static async readJson<ReturnType = any>(path: string): Promise<ReturnType> {
+        return new Promise<ReturnType>((resolve, reject) => {
             fs.readFile(path, (error: Error, data: any) => {
                 if (error) {
                     reject(error);
@@ -222,9 +222,33 @@ export default class Utils {
                     return;
                 }
 
-                resolve(parsed);
+                resolve(parsed as ReturnType);
             });
         });
+    }
+
+    /**
+     * @param {string} path
+     * @param data
+     * @return {boolean}
+     */
+    public static writeJsonSync(path: string, data: any): boolean {
+        if (!fs.existsSync(path)) {
+            return false;
+        }
+
+        fs.writeFileSync(path, data);
+
+        return true;
+    }
+
+    /**
+     * @todo Check for errors
+     * @param {string} path
+     * @return {ReturnType | null}
+     */
+    public static readJsonSync<ReturnType = any>(path: string): ReturnType | null {
+        return JSON.parse(fs.readFileSync(path).toString()) as ReturnType || null;
     }
 
     /**
@@ -335,6 +359,7 @@ export default class Utils {
     }
 
     /**
+     * Determine the guild owners by searching for members with the MANAGE_GUILD permission
      * @param {Guild} guild
      * @return {Array<"discord.js".GuildMember>}
      */

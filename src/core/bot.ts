@@ -10,7 +10,7 @@ import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
+import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
 
@@ -66,7 +66,8 @@ export interface BotExtraOptions {
     readonly commandArgumentStyle?: CommandArgumentStyle;
     readonly ignoreBots?: boolean;
     readonly autoResetAuthStore?: boolean;
-    readonly dmHelp: boolean;
+    readonly logMessages?: boolean;
+    readonly dmHelp?: boolean;
 }
 
 export interface DefiniteBotExtraOptions {
@@ -79,6 +80,7 @@ export interface DefiniteBotExtraOptions {
     readonly commandArgumentStyle: CommandArgumentStyle;
     readonly ignoreBots: boolean;
     readonly autoResetAuthStore: boolean;
+    readonly logMessages: boolean;
     readonly dmHelp: boolean;
 }
 
@@ -222,7 +224,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
             asciiTitle: botOptions.options && botOptions.options.asciiTitle !== undefined ? botOptions.options.asciiTitle : true,
             consoleInterface: botOptions.options && botOptions.options.consoleInterface !== undefined ? botOptions.options.consoleInterface : true,
             autoResetAuthStore: botOptions.options && botOptions.options.autoResetAuthStore !== undefined ? botOptions.options.autoResetAuthStore : false,
-            dmHelp: botOptions.options && botOptions.options.dmHelp !== undefined ? botOptions.options.dmHelp : true
+            dmHelp: botOptions.options && botOptions.options.dmHelp !== undefined ? botOptions.options.dmHelp : true,
+            logMessages: botOptions.options && botOptions.options.logMessages !== undefined ? botOptions.options.logMessages : false
         };
 
         // TODO: Make use of the userGroups property
@@ -458,6 +461,10 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @return {Promise<void>}
      */
     private async handleMessage(message: Message): Promise<void> {
+        if (this.options.logMessages) {
+            Log.info(`[${message.author.tag}@${message.guild.name}#${(message.channel as TextChannel).name}] ${message.content}`);
+        }
+
         // TODO: Should be a property/option on Bot, not hardcoded
         // TODO: Find better position
         // TODO: Merge this resolvers with the (if provided) provided

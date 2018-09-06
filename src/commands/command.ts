@@ -34,8 +34,8 @@ export type RawArguments = Array<string>;
 export enum PrimitiveArgumentType {
     String,
     Integer,
-    WholeNumber,
-    NonZeroWholeNumber,
+    UnsignedInteger,
+    NonZeroInteger,
     Boolean
 }
 

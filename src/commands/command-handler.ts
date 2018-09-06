@@ -207,7 +207,12 @@ export default class CommandHandler {
             schema: command.arguments
         });
 
-        Log.debug("resolved args, ", resolvedArgs);
+        // Do not execute command if arguments failed to resolve
+        if (resolvedArgs === null) {
+            Log.warn(`[CommandHandler.handle] Command '${command.meta.name}' failed to execute: Failed to resolve arguments`);
+
+            return false;
+        }
 
         try {
             // TODO: Only check if result is true, make sure commandStore return booleans

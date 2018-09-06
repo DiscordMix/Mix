@@ -103,29 +103,41 @@ export default class CommandParser {
     /**
      * Resolve the command arguments' values
      * @param {ResolveArgumentsOptions} options
-     * @return {Array<*>} The resolved arguments
+     * @return {Array<*> | null} The resolved arguments
      */
-    public static resolveArguments(options: ResolveArgumentsOptions): any {
+    public static resolveArguments(options: ResolveArgumentsOptions): any | null {
         const result: any = {};
 
+        // If the command accept no arguments, return an empty object
+        if (options.schema.length === 0) {
+            return result;
+        }
+
         for (let a: number = 0; a < options.arguments.length; a++) {
-            let typeFound = false;
+            const schemaEntry: any = options.schema[a];
+
+            let typeFound: boolean = false;
+
+            // Ignore the type if it's not a string
+            if (CommandParser.isTypeValid(schemaEntry.type)) {
+                Log.error(`[CommandParser.resolveArguments] Expecting type of schema entry '${schemaEntry.name}' to be either a string or a primitive type`);
+
+                return null;
+            }
 
             for (let r: number = 0; r < options.resolvers.length; r++) {
-                // Loop through all the schema types, check if they have resolvers
-                for (let t: number = 0; t < options.schema.length; t++) {
-                    // If a resolver exists for this schema type, resolve the value
-                    if (options.resolvers[r].name === options.schema[t].type) {
-                        typeFound = true;
-                        result[options.schema[a].name] = options.resolvers[r].resolve(options.arguments[a], options.message);
-                    }
+                // If a resolver exists for this schema type, resolve the value
+                if (options.resolvers[r].name === schemaEntry.type) {
+                    typeFound = true;
+                    result[options.schema[a].name] = options.resolvers[r].resolve(options.arguments[a], options.message);
+
+                    break;
                 }
             }
 
             // Leave the value as-is if the resolver does not exist
             if (!typeFound) {
                 result[options.schema[a].name] = options.arguments[a];
-                Log.debug(`resolver wasn't found for '${options.schema[a].name}' => set to '${options.arguments[a]}'`)
             }
         }
 
@@ -172,7 +184,7 @@ export default class CommandParser {
                             break;
                         }
 
-                        case PrimitiveArgumentType.WholeNumber: {
+                        case PrimitiveArgumentType.UnsignedInteger: {
                             // Value must be higher or equal to zero
                             if (value < 0) {
                                 return false;
@@ -181,7 +193,7 @@ export default class CommandParser {
                             break;
                         }
 
-                        case PrimitiveArgumentType.NonZeroWholeNumber: {
+                        case PrimitiveArgumentType.NonZeroInteger: {
                             // Value must be one or higher
                             if (value < 1) {
                                 return false;
@@ -266,6 +278,14 @@ export default class CommandParser {
      */
     private static isTypePrimitive(type: ArgumentType): boolean {
         return typeof(type) === "number" && PrimitiveArgumentType[type] !== undefined;
+    }
+
+    /**
+     * @param {ArgumentType} type
+     * @return {boolean} Whether the provided type is valid
+     */
+    private static isTypeValid(type: ArgumentType): boolean {
+        return typeof type !== "string" && !CommandParser.isTypePrimitive(type);
     }
 
     /**

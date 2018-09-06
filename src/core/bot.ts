@@ -527,6 +527,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
         if (command !== null) {
             const rawArgs: RawArguments = CommandParser.getArguments(content);
 
+            Log.debug("raw args, ", rawArgs);
+
             await this.commandHandler.handle(
                 new CommandContext({
                     message: message,

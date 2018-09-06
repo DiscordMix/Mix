@@ -207,6 +207,8 @@ export default class CommandHandler {
             schema: command.arguments
         });
 
+        Log.debug("resolved args, ", resolvedArgs);
+
         try {
             // TODO: Only check if result is true, make sure commandStore return booleans
             // TODO: Bot should be accessed protected (from this class)

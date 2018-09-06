@@ -115,7 +115,7 @@ export default class CommandParser {
                 // Loop through all the schema types, check if they have resolvers
                 for (let t: number = 0; t < options.schema.length; t++) {
                     // If a resolver exists for this schema type, resolve the value
-                    if (options.resolvers[r].name === options.schema[t].name) {
+                    if (options.resolvers[r].name === options.schema[t].type) {
                         typeFound = true;
                         result[options.schema[a].name] = options.resolvers[r].resolve(options.arguments[a], options.message);
                     }
@@ -125,6 +125,7 @@ export default class CommandParser {
             // Leave the value as-is if the resolver does not exist
             if (!typeFound) {
                 result[options.schema[a].name] = options.arguments[a];
+                Log.debug(`resolver wasn't found for '${options.schema[a].name}' => set to '${options.arguments[a]}'`)
             }
         }
 

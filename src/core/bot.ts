@@ -10,7 +10,7 @@ import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
+import Discord, {Client, GuildChannel, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
 
@@ -465,7 +465,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      */
     private async handleMessage(message: Message): Promise<void> {
         if (this.options.logMessages) {
-            Log.info(`[${message.author.tag}@${message.guild.name}#${(message.channel as TextChannel).name}] ${message.content}`);
+            Log.info(`[${message.author.tag}@${message.guild.name}#${(message.channel as GuildChannel).name}] ${message.content}`);
         }
 
         // TODO: Should be a property/option on Bot, not hardcoded

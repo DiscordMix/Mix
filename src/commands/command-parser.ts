@@ -1,9 +1,16 @@
 import Utils from "../core/utils";
 import CommandStore from "./command-store";
-import Command, { ArgumentType, CommandArgumentResolver, PrimitiveArgumentType, CommandArgument, RawArguments, ArgumentTypeChecker, UserDefinedArgType } from "./command";
+import Command, {
+    ArgumentType,
+    ArgumentTypeChecker,
+    CommandArgument,
+    CommandArgumentResolver,
+    PrimitiveArgumentType,
+    RawArguments,
+    UserDefinedArgType
+} from "./command";
 import {Message} from "discord.js";
 import Log from "../core/log";
-import CommandArgumentParser from "./command-argument-parser";
 
 export interface ResolveArgumentsOptions {
     readonly arguments: RawArguments;

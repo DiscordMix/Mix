@@ -1,5 +1,4 @@
-import {RichEmbed} from "discord.js";
-import Discord from "discord.js";
+import Discord, {RichEmbed} from "discord.js";
 
 export default class EmbedBuilder {
     private readonly embed: RichEmbed;

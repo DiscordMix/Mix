@@ -1,6 +1,5 @@
 import Log from "../core/log";
-import {Message} from "discord.js";
-import Discord from "discord.js";
+import Discord, {Message} from "discord.js";
 
 export interface MessageEditOptions {
     readonly message: string;

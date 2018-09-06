@@ -1,5 +1,5 @@
 import CommandContext from "../../../commands/command-context";
-import {Command, CommandArgument, PrimitiveArgumentType} from "../../..";
+import {Command} from "../../..";
 import {exec} from "child_process";
 import FormattedMessage from "../../../builders/formatted-message";
 import {CommandAuth} from "../../../commands/command";

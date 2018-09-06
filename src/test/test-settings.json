@@ -1,14 +1,14 @@
 {
     "general": {
         "token": "my_secret_token",
-        "prefixes": ["!"]
+        "prefixes": [
+            "!"
+        ]
     },
-
     "paths": {
         "commands": "./my_commands",
         "plugins": "./my_plugins"
     },
-
     "keys": {
         "dbl": "my_dbl_key",
         "bfd": "my_bfd_key"

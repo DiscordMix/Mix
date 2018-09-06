@@ -7,7 +7,7 @@ export type LanguageSource = any;
 
 export default class Language {
     private readonly languages: Map<string, LanguageSource>;
-    
+
     private default?: LanguageSource;
 
     public readonly directory?: string;

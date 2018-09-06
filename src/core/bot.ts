@@ -10,7 +10,7 @@ import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import Discord, {Client, GuildChannel, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
+import Discord, {Client, GuildChannel, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
 

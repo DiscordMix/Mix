@@ -23,7 +23,8 @@
         "type-check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js",
         "prepublishOnly": "npm run build",
-        "prepublish": "npm run build"
+        "prepublish": "npm run build",
+        "preinstall": "node tasks/docker-test.js"
     },
     "author": "CloudRex <cloudrex@outlook.com>",
     "license": "MIT",

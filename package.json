@@ -1,6 +1,6 @@
 {
     "name": "discord-anvil",
-    "version": "2.8.0",
+    "version": "2.8.2",
     "description": "Powerful Discord bot framework",
     "main": "./dist/index.js",
     "keywords": [
@@ -19,7 +19,7 @@
     },
     "scripts": {
         "watch": "tsc --watch",
-        "build": "tsc && node after-build.js",
+        "build": "tsc && node tasks/after-build.js",
         "type-check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js",
         "prepublishOnly": "npm run build"

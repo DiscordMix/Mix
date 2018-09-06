@@ -649,7 +649,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * Clear all the files inside the temp folder
      * @return {Promise<*>}
      */
-    public static async clearTemp(): Promise<any> {
+    public static clearTemp(): void {
         if (fs.existsSync("./temp")) {
             fs.readdir("./temp", (error: any, files: any) => {
                 for (let i = 0; i < files.length; i++) {

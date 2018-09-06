@@ -9,6 +9,7 @@ export default class PluginManager {
     constructor(bot: Bot) {
         /**
          * @type {Bot}
+         * @private
          * @readonly
          */
         this.bot = bot;

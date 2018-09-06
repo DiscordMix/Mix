@@ -5,8 +5,7 @@ import Collection from "../collections/collection";
 import ObjectProvider from "../data-providers/object-provider";
 import Settings from "../core/settings";
 import path from "path";
-
-const { expect } = require("chai");
+import {expect} from "chai";
 
 const globalAny: any = global;
 const describe: any = globalAny.describe;

@@ -209,7 +209,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
             "auth",
             "setauth",
             "prefix",
-            "prefix",
             "cli",
             "throw"
         ];
@@ -387,7 +386,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         let enabled: number = 0;
 
         for (let i: number = 0; i < fragments.length; i++) {
-            if ((fragments[i] as any).prototype instanceof Command) {
+            if ((fragments[i] as any).prototype instanceof Command && this.primitiveCommands.includes(fragments[i].meta.name)) {
                 const fragment: any = fragments[i];
 
                 this.commandStore.register(new fragment());

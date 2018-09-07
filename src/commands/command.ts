@@ -15,6 +15,8 @@ export enum CommandArgumentStyle {
     Descriptive
 }
 
+export type DefaultValueResolver = (message: Message) => string;
+
 export type ArgumentTypeChecker = (argument: string, message: Message) => boolean;
 
 /**
@@ -49,7 +51,7 @@ export interface CommandArgument {
     readonly name: string;
     readonly type: ArgumentType;
     readonly description?: string;
-    readonly defaultValue?: string | ((message: Message) => string);
+    readonly defaultValue?: string | DefaultValueResolver;
     readonly required?: boolean;
 }
 

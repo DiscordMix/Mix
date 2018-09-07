@@ -4,7 +4,7 @@ import Command, {
     ArgumentType,
     ArgumentTypeChecker,
     CommandArgument,
-    CommandArgumentResolver,
+    CommandArgumentResolver, DefaultValueResolver,
     PrimitiveArgumentType,
     RawArguments,
     UserDefinedArgType
@@ -166,10 +166,19 @@ export default class CommandParser {
         const result: RawArguments = [];
 
         for (let i = 0; i < options.schema.length; i++) {
-            let value: any = options.arguments[i];
+            let value: string = options.arguments[i];
 
             if (options.schema[i].required === false && options.arguments[i] === undefined && options.schema[i].defaultValue !== undefined) {
-                value = (typeof options.schema[i].defaultValue === "function" ? options.schema[i].defaultValue(options.message) : options.schema[i].defaultValue).toString();
+                if (options.schema[i].defaultValue === undefined) {
+                    throw new Error("[CommandParser.resolveDefaultArgs] Expecting default value");
+                }
+
+                if (typeof options.schema[i].defaultValue === "function") {
+                    value = (options.schema[i].defaultValue as DefaultValueResolver)(options.message);
+                }
+                else if (typeof options.schema[i].defaultValue === "string") {
+                    value = options.schema[i].defaultValue as string;
+                }
             }
 
             result[i] = value;

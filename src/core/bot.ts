@@ -390,7 +390,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 const fragment: any = new (fragments[i] as any)();
 
                 // Command is not registered in primitive commands
-                if (!this.primitiveCommands.includes(fragments[i].meta.name)) {
+                if (!this.primitiveCommands.includes(fragment.meta.name)) {
                     continue;
                 }
 

@@ -22,7 +22,7 @@
         "build": "tsc",
         "type-check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js",
-        "postinstall": "ls /app/ && echo <--app\n && echo anvil-->\n ls /app/node_modules/discord-anvil && node tasks/docker-test.js && npm run build"
+        "postinstall": "ls /app/ && echo '<--app\n' && echo 'anvil-->\n' ls /app/node_modules/discord-anvil && node tasks/docker-test.js && npm run build"
     },
     "author": "CloudRex <cloudrex@outlook.com>",
     "license": "MIT",

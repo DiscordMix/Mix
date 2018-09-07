@@ -25,7 +25,7 @@
         "prepublishOnly": "npm run build",
         "prepublish": "npm run build",
         "prepare": "npm run build",
-        "postinstall": "npm run build"
+        "postinstall": "tsc"
     },
     "author": "CloudRex <cloudrex@outlook.com>",
     "license": "MIT",

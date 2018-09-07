@@ -317,7 +317,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             Log.warn("[Bot.setup] No internal fragments were loaded");
         }
         else {
-            const enabled: number = this.enableFragments(internalFragments);
+            const enabled: number = this.enableFragments(internalFragments, true);
 
             if (enabled === 0) {
                 Log.warn("[Bot.setup] No internal fragments were enabled");
@@ -380,9 +380,10 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * @param {Array<Fragment>} fragments
+     * @param {boolean} internal Whether the fragments are internal
      * @return {number}
      */
-    private enableFragments(fragments: Array<Fragment>): number {
+    private enableFragments(fragments: Array<Fragment>, internal: boolean = false): number {
         let enabled: number = 0;
 
         for (let i: number = 0; i < fragments.length; i++) {
@@ -390,7 +391,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 const fragment: any = new (fragments[i] as any)();
 
                 // Command is not registered in primitive commands
-                if (!this.primitiveCommands.includes(fragment.meta.name)) {
+                if (internal && !this.primitiveCommands.includes(fragment.meta.name)) {
                     continue;
                 }
 

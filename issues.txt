@@ -14,6 +14,9 @@
 * Check command's schema types when loading, as when executed the resolve function will throw error if a command has
     a type that is not either a string nor a primitive type.
 
+* When primitive commands are removed from the consumer list, it will say "... enabled 5/6 commands" make it say
+    "... enabled 5/6 commands (1 undesired)" instead.
+
 === IDEAS ===
 
 * Upon clicking on the OK command check, delete command + response

@@ -535,7 +535,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 schema: command.arguments,
 
                 // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
-                message: message
+                message: message,
+                command: command
             });
 
             // TODO: Debugging

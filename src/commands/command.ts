@@ -51,7 +51,7 @@ export interface CommandArgument {
     readonly name: string;
     readonly type: ArgumentType;
     readonly description?: string;
-    readonly defaultValue?: string | DefaultValueResolver;
+    readonly defaultValue?: string | number | DefaultValueResolver;
     readonly required?: boolean;
 }
 

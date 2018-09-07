@@ -23,6 +23,7 @@ export interface ResolveDefaultArgsOptions {
     readonly arguments: RawArguments;
     readonly schema: Array<CommandArgument>;
     readonly message: Message;
+    readonly command: Command;
 }
 
 export interface CheckArgumentsOptions {
@@ -170,14 +171,22 @@ export default class CommandParser {
 
             if (options.schema[i].required === false && options.arguments[i] === undefined && options.schema[i].defaultValue !== undefined) {
                 if (options.schema[i].defaultValue === undefined) {
-                    throw new Error("[CommandParser.resolveDefaultArgs] Expecting default value");
+                    throw new Error(`[CommandParser.resolveDefaultArgs] Expecting default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'`);
                 }
 
-                if (typeof options.schema[i].defaultValue === "function") {
+                const type: string = typeof options.schema[i].defaultValue;
+
+                if (type === "function") {
                     value = (options.schema[i].defaultValue as DefaultValueResolver)(options.message);
                 }
-                else if (typeof options.schema[i].defaultValue === "string") {
+                else if (type === "string") {
                     value = options.schema[i].defaultValue as string;
+                }
+                else if (type === "number") {
+                    value = (options.schema[i].defaultValue as number).toString();
+                }
+                else {
+                    throw new Error(`[CommandParser.resolveDefaultArgs] Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
                 }
             }
 

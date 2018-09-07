@@ -19,7 +19,7 @@
     },
     "scripts": {
         "watch": "tsc --watch",
-        "build": "tsc && node tasks/after-build.js",
+        "build": "tsc",
         "type-check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js",
         "prepublishOnly": "npm run build",

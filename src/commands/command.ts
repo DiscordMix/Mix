@@ -49,7 +49,7 @@ export interface CommandArgument {
     readonly name: string;
     readonly type: ArgumentType;
     readonly description?: string;
-    readonly defaultValue?: any;
+    readonly defaultValue?: string | ((message: Message) => string);
     readonly required?: boolean;
 }
 

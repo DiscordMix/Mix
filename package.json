@@ -22,7 +22,7 @@
         "build": "tsc",
         "type-check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js",
-        "postinstall": "npm run build"
+        "postinstall": "npm run build && node tasks/docker-test.js"
     },
     "author": "CloudRex <cloudrex@outlook.com>",
     "license": "MIT",

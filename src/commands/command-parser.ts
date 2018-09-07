@@ -19,6 +19,12 @@ export interface ResolveArgumentsOptions {
     readonly message: Message;
 }
 
+export interface ResolveDefaultArgsOptions {
+    readonly arguments: RawArguments;
+    readonly schema: Array<CommandArgument>;
+    readonly message: Message;
+}
+
 export interface CheckArgumentsOptions {
     readonly arguments: RawArguments;
     readonly schema: Array<CommandArgument>;
@@ -149,6 +155,26 @@ export default class CommandParser {
         }
 
         // Return the resolved arguments to be passed to the command executed() method
+        return result;
+    }
+
+    /**
+     * @param {ResolveDefaultArgsOptions} options
+     * @return {*}
+     */
+    public static resolveDefaultArgs(options: ResolveDefaultArgsOptions): RawArguments {
+        const result: RawArguments = [];
+
+        for (let i = 0; i < options.schema.length; i++) {
+            let value: any = options.arguments[i];
+
+            if (options.schema[i].required === false && options.arguments[i] === undefined && options.schema[i].defaultValue !== undefined) {
+                value = (typeof options.schema[i].defaultValue === "function" ? options.schema[i].defaultValue(options.message) : options.schema[i].defaultValue).toString();
+            }
+
+            result[i] = value;
+        }
+
         return result;
     }
 

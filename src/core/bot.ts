@@ -530,8 +530,15 @@ export default class Bot<ApiType = any> extends EventEmitter {
         );
 
         if (command !== null) {
-            const rawArgs: RawArguments = CommandParser.getArguments(content);
+            const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
+                arguments: CommandParser.getArguments(content),
+                schema: command.arguments,
 
+                // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
+                message: message
+            });
+
+            // TODO: Debugging
             Log.debug("raw args, ", rawArgs);
 
             await this.commandHandler.handle(

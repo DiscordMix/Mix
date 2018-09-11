@@ -530,6 +530,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
         );
 
         if (command !== null) {
+            console.log("gotten args, ", CommandParser.getArguments(content));
+
             const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
                 arguments: CommandParser.getArguments(content),
                 schema: command.arguments,
@@ -595,6 +597,14 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         Log.success("[Bot.setupAuthStore] Auth store setup completed");
+    }
+
+    /**
+     * @param {*} api
+     * @return {Promise<void>}
+     */
+    public async setupAndConnect(api?: ApiType): Promise<void> {
+        await (await this.setup(api)).connect();
     }
 
     /**

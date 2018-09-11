@@ -366,4 +366,12 @@ export default class Utils {
     public static getOwners(guild: Guild): Array<GuildMember> {
         return guild.members.filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).array();
     }
+
+    /**
+     * @param {*} enumerator
+     * @return {Array<string>}
+     */
+    public static getEnumKeys(enumerator: any): Array<string> {
+        return Object.keys(enumerator).filter((key: string) => isNaN(key as any));
+    }
 }

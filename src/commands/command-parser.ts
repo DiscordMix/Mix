@@ -192,6 +192,10 @@ export default class CommandParser {
                     throw new Error(`[CommandParser.resolveDefaultArgs] Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
                 }
             }
+            else if (options.schema[i].required === false && options.arguments[i] === undefined && options.schema[i].defaultValue === undefined) {
+                // Don't leave an 'undefined' spot
+                continue;
+            }
 
             result[i] = value;
         }

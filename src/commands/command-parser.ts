@@ -151,7 +151,10 @@ export default class CommandParser {
 
             // Leave the value as-is if the resolver does not exist
             if (!typeFound) {
-                result[options.schema[a].name] = options.arguments[a];
+                // Don't add an 'undefined' spot
+                if (options.arguments[a] !== undefined) {
+                    result[options.schema[a].name] = options.arguments[a];
+                }
             }
         }
 

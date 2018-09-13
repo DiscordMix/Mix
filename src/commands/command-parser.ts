@@ -172,7 +172,7 @@ export default class CommandParser {
         for (let i = 0; i < options.schema.length; i++) {
             let value: string = options.arguments[i];
 
-            if (options.schema[i].required === false && options.arguments[i] === undefined && options.schema[i].defaultValue !== undefined) {
+            if (!options.schema[i].required && options.arguments[i] === undefined && options.schema[i].defaultValue !== undefined) {
                 if (options.schema[i].defaultValue === undefined) {
                     throw new Error(`[CommandParser.resolveDefaultArgs] Expecting default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'`);
                 }
@@ -192,7 +192,7 @@ export default class CommandParser {
                     throw new Error(`[CommandParser.resolveDefaultArgs] Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
                 }
             }
-            else if (options.schema[i].required === false && options.arguments[i] === undefined && options.schema[i].defaultValue === undefined) {
+            else if (!options.schema[i] && options.arguments[i] === undefined && options.schema[i].defaultValue === undefined) {
                 // Don't leave an 'undefined' spot
                 continue;
             }

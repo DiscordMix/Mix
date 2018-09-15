@@ -107,7 +107,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly language?: Language;
     public readonly argumentResolvers: Array<CommandArgumentResolver>;
     public readonly argumentTypes: Array<UserDefinedArgType>;
-    
+
     public  suspended: boolean;
 
     private api?: ApiType;

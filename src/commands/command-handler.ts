@@ -304,12 +304,8 @@ export default class CommandHandler {
                 }
             }
             else if (typeof specific === "number" && CommandRestrictGroup[specific] !== undefined) {
-                Log.debug("NOT undefined");
-
                 switch (specific) {
                     case CommandRestrictGroup.ServerOwner: {
-                        Log.debug("owner");
-
                         const owners: Array<Snowflake> = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
 
                         if (owners.includes(context.sender.id)) {
@@ -320,8 +316,6 @@ export default class CommandHandler {
                     }
 
                     case CommandRestrictGroup.ServerModerator: {
-                        Log.debug("moderator");
-
                         const moderators: Array<Snowflake> = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
 
                         if (moderators.includes(context.sender.id)) {

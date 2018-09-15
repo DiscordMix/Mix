@@ -11,6 +11,7 @@ import {
 } from "discord.js";
 import fs from "fs";
 import path from "path";
+import Patterns from "./patterns";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
@@ -373,5 +374,28 @@ export default class Utils {
      */
     public static getEnumKeys(enumerator: any): Array<string> {
         return Object.keys(enumerator).filter((key: string) => isNaN(key as any));
+    }
+
+    /**
+     * Filter mentions and embeds from a message
+     * @param {Message} message
+     * @return {string}
+     */
+    public static cleanMessage(message: Message): string {
+        let filteredMessage: string = message.content;
+
+        while (Patterns.mention.test(filteredMessage)) {
+            filteredMessage = filteredMessage.replace(Patterns.mention, "[Mention]");
+        }
+
+        if (message.embeds.length > 0) {
+            if (filteredMessage.length > 0) {
+                filteredMessage += " ";
+            }
+
+            filteredMessage += "[Embed]";
+        }
+
+        return filteredMessage;
     }
 }

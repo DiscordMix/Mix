@@ -468,7 +468,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @param {Message} message
      * @return {Promise<void>}
      */
-    private async handleMessage(message: Message): Promise<void> {
+    public async handleMessage(message: Message): Promise<void> {
         if (this.options.logMessages) {
             Log.info(`[${message.author.tag}@${message.guild.name}#${(message.channel as GuildChannel).name}] ${message.content}`);
         }
@@ -522,7 +522,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @param {*} resolvers
      * @return {Promise<void>}
      */
-    private async handleCommandMessage(message: Message, content: string, resolvers: any) {
+    public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
         const command: Command | null = CommandParser.parse(
             content,
             this.commandStore,

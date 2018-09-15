@@ -107,6 +107,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly language?: Language;
     public readonly argumentResolvers: Array<CommandArgumentResolver>;
     public readonly argumentTypes: Array<UserDefinedArgType>;
+    public readonly suspended: boolean;
 
     private api?: ApiType;
     private setupStart: number = 0;
@@ -262,6 +263,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @readonly
          */
         this.argumentTypes = botOptions.argumentTypes || [];
+
+        /**
+         * @type {boolean}
+         */
+        this.suspended = false;
 
         return this;
     }
@@ -469,6 +475,10 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @return {Promise<void>}
      */
     public async handleMessage(message: Message): Promise<void> {
+        if (this.suspended) {
+            return;
+        }
+
         if (this.options.logMessages) {
             Log.info(`[${message.author.tag}@${message.guild.name}#${(message.channel as GuildChannel).name}] ${message.content}`);
         }

@@ -304,6 +304,8 @@ export default class CommandHandler {
                 }
             }
             else if (CommandRestrictGroup[specific] !== undefined) {
+                Log.debug("NOT undefined");
+
                 switch (specific) {
                     case CommandRestrictGroup.ServerOwner: {
                         Log.debug("owner");
@@ -339,6 +341,7 @@ export default class CommandHandler {
             }
 
             if (!valid) {
+                Log.debug(CommandRestrictGroup, CommandRestrictGroup[specific]);
                 Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`)
             }
 

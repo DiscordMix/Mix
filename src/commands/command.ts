@@ -70,33 +70,38 @@ export interface CommandRestrict {
     ownerOnly: boolean;
 }
 
+export type CommandExecuted = (context: CommandContext, args: any, api: any) => any;
+
+export const DefaultCommandRestrict: CommandRestrict = {
+    auth: 0,
+    cooldown: 0,
+    environment: ChatEnvironment.Anywhere,
+    issuerPermissions: [],
+    selfPermissions: [],
+    specific: [],
+    ownerOnly: false
+};
+
+export abstract class GenericCommand extends Fragment {
+    public readonly aliases: Array<string> = [];
+    public readonly arguments: Array<CommandArgument> = [];
+    public readonly restrict: CommandRestrict = DefaultCommandRestrict;
+    public readonly exclude: Array<string> = [];
+    public readonly singleArg: boolean = false;
+    public readonly isEnabled: boolean = true;
+}
+
+export abstract class Subcommand extends GenericCommand {
+    public abstract executed: CommandExecuted;
+}
+
 /**
  * @extends Fragment
  */
-export default abstract class Command extends Fragment {
-    public readonly aliases: Array<string> = [];
-    public readonly arguments: Array<CommandArgument> = [];
-    public readonly isEnabled: boolean = true;
-    public readonly exclude: Array<string> = [];
-    public readonly singleArg: boolean = false;
+export default abstract class Command extends GenericCommand {
+    public readonly subcommands: Array<Subcommand> = [];
 
-    public readonly restrict: CommandRestrict = {
-        auth: 0,
-        cooldown: 0,
-        environment: ChatEnvironment.Anywhere,
-        issuerPermissions: [],
-        selfPermissions: [],
-        specific: [],
-        ownerOnly: false
-    };
-
-    /**
-     * @param {CommandContext} context
-     * @param {*} args
-     * @param {*} api
-     * @return {*}
-     */
-    public abstract executed(context: CommandContext, args: any, api: any): any;
+    public abstract executed: CommandExecuted;
 
     /**
      * @todo canExecute should default boolean, same concept as Service

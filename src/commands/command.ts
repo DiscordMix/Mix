@@ -80,6 +80,9 @@ export const DefaultCommandRestrict: CommandRestrict = {
     ownerOnly: false
 };
 
+/**
+ * @extends Fragment
+ */
 export abstract class GenericCommand extends Fragment {
     public readonly aliases: Array<string> = [];
     public readonly arguments: Array<CommandArgument> = [];
@@ -113,12 +116,15 @@ export abstract class GenericCommand extends Fragment {
     }
 }
 
+/**
+ * @extends GenericCommand
+ */
 export abstract class Subcommand extends GenericCommand {
     //
 }
 
 /**
- * @extends Fragment
+ * @extends GenericCommand
  */
 export default abstract class Command extends GenericCommand {
     public readonly subcommands: Array<Subcommand> = [];

@@ -70,8 +70,6 @@ export interface CommandRestrict {
     ownerOnly: boolean;
 }
 
-export type CommandExecuted = (context: CommandContext, args: any, api: any) => any;
-
 export const DefaultCommandRestrict: CommandRestrict = {
     auth: 0,
     cooldown: 0,
@@ -89,36 +87,8 @@ export abstract class GenericCommand extends Fragment {
     public readonly exclude: Array<string> = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
-}
 
-export abstract class Subcommand extends GenericCommand {
-    public abstract executed: CommandExecuted;
-}
-
-/**
- * @extends Fragment
- */
-export default abstract class Command extends GenericCommand {
-    public readonly subcommands: Array<Subcommand> = [];
-
-    public abstract executed: CommandExecuted;
-
-    /**
-     * @todo canExecute should default boolean, same concept as Service
-     * @param {CommandContext} context
-     * @return {boolean} Whether this command may be executed
-     */
-    public canExecute(context: CommandContext): boolean {
-        return true;
-    }
-
-    /**
-     * @param {string} query
-     * @return {boolean} Whether the query is excluded
-     */
-    public isExcluded(query: string): boolean {
-        return this.exclude.includes(query);
-    }
+    public abstract executed(context: CommandContext, args: any, api: any): any;
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts
@@ -132,5 +102,33 @@ export default abstract class Command extends GenericCommand {
      */
     public get maxArguments(): number {
         return this.arguments.length;
+    }
+
+    /**
+     * @param {string} query
+     * @return {boolean} Whether the query is excluded
+     */
+    public isExcluded(query: string): boolean {
+        return this.exclude.includes(query);
+    }
+}
+
+export abstract class Subcommand extends GenericCommand {
+    //
+}
+
+/**
+ * @extends Fragment
+ */
+export default abstract class Command extends GenericCommand {
+    public readonly subcommands: Array<Subcommand> = [];
+
+    /**
+     * @todo canExecute should default boolean, same concept as Service
+     * @param {CommandContext} context
+     * @return {boolean} Whether this command may be executed
+     */
+    public canExecute(context: CommandContext): boolean {
+        return true;
     }
 }

@@ -306,7 +306,9 @@ export default class CommandHandler {
             else if (CommandRestrictGroup[specific] !== undefined) {
                 switch (specific) {
                     case CommandRestrictGroup.ServerOwner: {
-                        const owners: Array<Snowflake> = context.message.guild.members.filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
+                        Log.debug("owner");
+
+                        const owners: Array<Snowflake> = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
 
                         if (owners.includes(context.sender.id)) {
                             met = true;
@@ -316,7 +318,9 @@ export default class CommandHandler {
                     }
 
                     case CommandRestrictGroup.ServerModerator: {
-                        const moderators: Array<Snowflake> = context.message.guild.members.filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
+                        Log.debug("moderator");
+
+                        const moderators: Array<Snowflake> = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
 
                         if (moderators.includes(context.sender.id)) {
                             met = true;

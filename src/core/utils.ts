@@ -398,4 +398,12 @@ export default class Utils {
 
         return filteredMessage;
     }
+
+    public static getUserIdentifier(user: User): string {
+        return `<@${user.id}> (${user.tag}:${user.id})`;
+    }
+
+    public static getMemberIdentifier(member: GuildMember): string {
+        return Utils.getUserIdentifier(member.user);
+    }
 }

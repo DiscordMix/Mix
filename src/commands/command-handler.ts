@@ -1,10 +1,10 @@
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import Command, {CommandArgument, RawArguments} from "./command";
+import Command, {CommandArgument, CommandRestrictGroup, RawArguments} from "./command";
 import CommandStore, {CommandCooldown, CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
-import {TextChannel} from "discord.js";
+import {Guild, GuildMember, Snowflake, TextChannel} from "discord.js";
 import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandParser from "./command-parser";
 
@@ -276,26 +276,66 @@ export default class CommandHandler {
         let met = false;
 
         for (let i = 0; i < command.restrict.specific.length; i++) {
-            switch (command.restrict.specific[i][0]) {
-                case "@": {
-                    if (context.sender.id === command.restrict.specific[i].substring(1)) {
-                        met = true;
+            let specific: string | CommandRestrictGroup = command.restrict.specific[i];
+
+            let valid: boolean = true;
+
+            if ((specific.startsWith("@") || specific.startsWith("&"))) {
+                switch (specific[0]) {
+                    case "@": {
+                        if (context.sender.id === specific.substring(1)) {
+                            met = true;
+                        }
+
+                        break;
                     }
 
-                    break;
-                }
+                    case "&": {
+                        if (context.message.member.roles.find("id", specific.substr(1, specific.length))) {
+                            met = true;
+                        }
 
-                case "&": {
-                    if (context.message.member.roles.find("id", command.restrict.specific[i].substr(1, command.restrict.specific[i].length))) {
-                        met = true;
+                        break;
                     }
 
-                    break;
+                    default: {
+                        valid = false;
+                    }
                 }
+            }
+            else if (CommandRestrictGroup[specific] !== undefined) {
+                switch (specific) {
+                    case CommandRestrictGroup.ServerOwner: {
+                        const owners: Array<Snowflake> = context.message.guild.members.filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
 
-                default: {
-                    Log.error(`[CommandManager.specificMet] Invalid specific prefix: ${command.restrict.specific[0]}`)
+                        if (owners.includes(context.sender.id)) {
+                            met = true;
+                        }
+
+                        break;
+                    }
+
+                    case CommandRestrictGroup.ServerModerator: {
+                        const moderators: Array<Snowflake> = context.message.guild.members.filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
+
+                        if (moderators.includes(context.sender.id)) {
+                            met = true;
+                        }
+
+                        break;
+                    }
+
+                    default: {
+                        valid = false;
+                    }
                 }
+            }
+            else {
+                valid = false;
+            }
+
+            if (!valid) {
+                Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`)
             }
 
             if (met) {

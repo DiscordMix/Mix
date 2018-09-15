@@ -280,7 +280,7 @@ export default class CommandHandler {
 
             let valid: boolean = true;
 
-            if ((specific.startsWith("@") || specific.startsWith("&"))) {
+            if (typeof specific === "string" && (specific.startsWith("@") || specific.startsWith("&"))) {
                 switch (specific[0]) {
                     case "@": {
                         if (context.sender.id === specific.substring(1)) {
@@ -303,7 +303,7 @@ export default class CommandHandler {
                     }
                 }
             }
-            else if (CommandRestrictGroup[specific] !== undefined) {
+            else if (typeof specific === "number" && CommandRestrictGroup[specific] !== undefined) {
                 Log.debug("NOT undefined");
 
                 switch (specific) {

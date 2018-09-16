@@ -89,7 +89,7 @@ export default class CommandHandler {
         }
         // TODO: If command.ownerOnly, if true and owner is executor, skip next 2 checks (specific, hasAuthority)
         else if (command.restrict.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
-            context.fail("You are not allowed to use that command");
+            context.fail("You're not allowed to use that command");
         }
         else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.restrict.auth, context.bot.owner)) {
             if (this.errorHandlers[CommandManagerEvent.NoAuthority]) {
@@ -281,6 +281,8 @@ export default class CommandHandler {
             let specific: string | CommandRestrictGroup = command.restrict.specific[i];
 
             let valid: boolean = true;
+
+            console.log("specific", specific);
 
             if (typeof specific === "string" && (specific.startsWith("@") || specific.startsWith("&"))) {
                 switch (specific[0]) {

@@ -484,7 +484,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         if (this.options.logMessages) {
-            Log.info(`[${message.author.tag}@${message.guild.name}#${(message.channel as GuildChannel).name}] ${Utils.cleanMessage(message)}${!(edited) || " [Edited]"}`);
+            Log.info(`[${message.author.tag}@${message.guild.name}#${(message.channel as GuildChannel).name}] ${Utils.cleanMessage(message)}${edited ? " [Edited]" : ""}`);
         }
 
         // TODO: Should be a property/option on Bot, not hardcoded

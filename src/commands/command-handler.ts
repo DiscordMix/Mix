@@ -282,6 +282,7 @@ export default class CommandHandler {
 
             let valid: boolean = true;
 
+            console.log("command ", command);
             console.log("specific", specific);
 
             if (typeof specific === "string" && (specific.startsWith("@") || specific.startsWith("&"))) {

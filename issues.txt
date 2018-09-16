@@ -22,6 +22,8 @@
 * Invalid arguments message is not displayed when providing an invalid argument; Instead, max/min arg message is displayed.
     *) Example: whois 1234 => That command only accepts up to 1 and a minimum of 0 arguments.
 
+* Executing plain command without required args throws "replace of undefined" error (ex. ".ban")
+
 === IDEAS ===
 
 * NSFW Chat environment for command execution

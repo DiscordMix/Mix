@@ -100,6 +100,7 @@ export default class CommandContext {
                 finalContent.text = ":thinking: *Empty response*";
             }
             else if (finalContent.text.length > 2048) {
+                // TODO: ... not being added at the end
                 finalContent.text = finalContent.text.substring(0, 2044) + " ...";
                 Log.warn("[CommandContext.respond] Attempted to send a message with more than 2048 characters (Discord limit); The message was automatically trimmed");
             }

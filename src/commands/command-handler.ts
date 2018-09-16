@@ -163,15 +163,15 @@ export default class CommandHandler {
                 context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
-        else if (command.restrict.cooldown && !this.commandStore.cooldownExpired(command)) {
+        else if (command.restrict.cooldown && !this.commandStore.cooldownExpired(context.sender.id, command.meta.name)) {
             if (this.errorHandlers[CommandManagerEvent.UnderCooldown]) {
                 this.errorHandlers[CommandManagerEvent.UnderCooldown](context, command);
             }
             else {
-                const timeLeft: CommandCooldown | null = this.commandStore.getCooldown(command);
+                const timeLeft: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 
                 if (timeLeft) {
-                    context.fail(`You must wait **${(timeLeft.end - Date.now()) / 1000}** seconds before using that command again.`);
+                    context.fail(`You must wait **${(timeLeft - Date.now()) / 1000}** seconds before using that command again.`);
                 }
                 else {
                     Log.warn("[CommandStore.handle] Command cooldown returned null or undefined, this shouldn't happen");
@@ -218,26 +218,20 @@ export default class CommandHandler {
             // TODO: Bot should be accessed protected (from this class)
             const actualResult = command.executed(context, resolvedArgs, context.bot.getAPI());
             const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
-
-            const commandCooldown: CommandCooldown = {
-                context: context,
-                command: command,
-
-                // TODO: User should be able to specify more than just seconds (maybe cooldown
-                // multiplier option?)
-                end: Date.now() + (command.restrict.cooldown * 1000)
-            };
+            const commandCooldown: number = Date.now() + (command.restrict.cooldown * 1000);
 
             console.log(`Cooldown is ${command.restrict.cooldown * 1000} second(s)`);
 
-            const lastCooldown = this.commandStore.getCooldown(command);
+            const lastCooldown: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 
             // Delete the last cooldown before adding the new one for this command + user
-            if (lastCooldown) {
-                this.commandStore.cooldowns.splice(this.commandStore.cooldowns.indexOf(lastCooldown), 1);
+            if (lastCooldown !== null) {
+                if (!this.commandStore.clearCooldown(context.sender.id, command.meta.name)) {
+                    Log.error(`[CommandHandler.handle] Expecting cooldown of '${context.sender.id} (${context.sender.tag})' to exist for command '${command.meta.name}'`);
+                }
             }
 
-            this.commandStore.cooldowns.push(commandCooldown);
+            this.commandStore.setCooldown(context.sender.id, commandCooldown, command.meta.name);
             context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command), result);
 
             if (context.bot.options.autoDeleteCommands && context.message.deletable) {

@@ -3,6 +3,7 @@ import Bot from "../core/bot";
 import Command from "./command";
 import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandContext from "./command-context";
+import {Snowflake} from "discord.js";
 // import Collection from "../core/collection";
 
 /**
@@ -30,7 +31,7 @@ export interface CommandCooldown {
 export default class CommandStore /* extends Collection */ {
     public readonly bot: Bot;
     public readonly authStore: CommandAuthStore;
-    public readonly cooldowns: Array<CommandCooldown>;
+    public readonly cooldowns: Map<Snowflake, Map<string, number>>;
 
     public commands: Array<Command>;
 
@@ -63,7 +64,7 @@ export default class CommandStore /* extends Collection */ {
          * @type {Array<CommandCooldown>}
          * @private
          */
-        this.cooldowns = [];
+        this.cooldowns = new Map();
     }
 
     /**
@@ -160,27 +161,58 @@ export default class CommandStore /* extends Collection */ {
     }
 
     /**
-     * @param {Command} command
-     * @return {CommandCooldown | null}
+     * @param {Snowflake} userId
+     * @param {string} commandName
+     * @return {number | null} The cooldown
      */
-    public getCooldown(command: Command): CommandCooldown | null {
-        for (let i: number = 0; i < this.cooldowns.length; i++) {
-            if (this.cooldowns[i].command === command) {
-                return this.cooldowns[i];
-            }
+    public getCooldown(userId: Snowflake, commandName: string): number | null {
+        const issuerCooldowns: Map<string, number> | null = this.cooldowns.get(userId) || null;
+
+        if (issuerCooldowns === null) {
+            return null;
         }
 
-        return null;
+        return issuerCooldowns.get(commandName) || null;
     }
 
     /**
-     * @param {Command} command
+     * @param {Snowflake} userId
+     * @param {Command} commandName
      * @return {boolean}
      */
-    public cooldownExpired(command: Command): boolean {
-        const cooldown: CommandCooldown | null = this.getCooldown(command);
+    public cooldownExpired(userId: Snowflake, commandName: string): boolean {
+        const cooldown: number | null = this.getCooldown(userId, commandName);
 
-        return (cooldown !== null && Date.now() > cooldown.end) || cooldown === null;
+        return (cooldown !== null && Date.now() > cooldown) || cooldown === null;
+    }
+
+    public clearCooldown(userId: Snowflake, commandName: string): boolean {
+        const issuerCooldowns: Map<string, number> | null = this.cooldowns.get(userId) || null;
+
+        if (issuerCooldowns) {
+            issuerCooldowns.delete(commandName);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public setCooldown(userId: Snowflake, cooldown: number, commandName: string): void {
+        const currentCooldown: number | null = this.getCooldown(userId, commandName);
+
+        if (currentCooldown !== null) {
+            // Must exist at this point
+            (this.cooldowns.get(userId) as Map<string, number>).set(commandName, cooldown);
+
+            return;
+        }
+
+        const newCooldowns: Map<string, number> = new Map();
+
+        newCooldowns.set(commandName, cooldown);
+
+        this.cooldowns.set(userId, newCooldowns);
     }
 
     /**

@@ -4,6 +4,7 @@ import Discord, {Message, Role, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import EmojiCollection from "../collections/emoji-collection";
 import FormattedMessage from "../builders/formatted-message";
+import Log from "../core/log";
 
 export interface CommandExecutionContextOptions {
     readonly message: Message;
@@ -92,29 +93,34 @@ export default class CommandContext {
      */
     public async respond(content: EmbedBuilder | any, autoDelete: boolean = false): Promise<EditableMessage | null> {
         let embed: EmbedBuilder | null = null;
+        let finalContent: EmbedBuilder | any = Object.assign({}, content);
 
-        if (content.text) {
-            if (content.text.toString().trim() === "" || content.text === undefined || content.text === null) {
-                content.text = ":thinking: *Empty response.*";
+        if (typeof (finalContent as any).text === "string") {
+            if (finalContent.text.trim() === "" || finalContent.text === undefined || finalContent.text === null) {
+                finalContent.text = ":thinking: *Empty response*";
+            }
+            else if (finalContent.text.length > 2048) {
+                finalContent.text = finalContent.text.substring(0, 2044) + " ...";
+                Log.warn("[CommandContext.respond] Attempted to send a message with more than 2048 characters (Discord limit); The message was automatically trimmed");
             }
         }
 
-        if (content instanceof EmbedBuilder) {
-            embed = content;
+        if (finalContent instanceof EmbedBuilder) {
+            embed = finalContent;
         }
         else {
-            if (!content.color) {
-                content.color = "GREEN";
+            if (!finalContent.color) {
+                finalContent.color = "GREEN";
             }
 
-            if (!content.footer) {
-                content.footer = {
+            if (!finalContent.footer) {
+                finalContent.footer = {
                     text: `Requested by ${this.sender.username}`,
                     icon: this.sender.avatarURL
                 };
             }
 
-            embed = EmbedBuilder.fromObject(content);
+            embed = EmbedBuilder.fromObject(finalContent);
         }
 
         let messageResult = await this.message.channel.send(embed.build()).catch((error: Error) => {

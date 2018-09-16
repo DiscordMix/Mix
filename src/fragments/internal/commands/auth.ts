@@ -17,7 +17,6 @@ export default class Auth extends Command {
             authLevel = ":crown: Owner | All-access override";
         }
 
-
         await context.ok(`:zap: Your authentication level is **${authLevel !== null ? authLevel.charAt(0).toUpperCase() + authLevel.slice(1) : "Unknown"}**`);
     }
 };

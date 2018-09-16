@@ -229,6 +229,8 @@ export default class CommandHandler {
                 end: Date.now() + (command.restrict.cooldown * 1000)
             };
 
+            console.log(`Cooldown is ${command.restrict.cooldown * 1000} second(s)`);
+
             const lastCooldown = this.commandStore.getCooldown(command);
 
             // Delete the last cooldown before adding the new one for this command + user

@@ -4,7 +4,7 @@ import Command, {CommandArgument, CommandRestrictGroup, RawArguments} from "./co
 import CommandStore, {CommandCooldown, CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
-import {Guild, GuildMember, Snowflake, TextChannel} from "discord.js";
+import {GuildMember, Snowflake, TextChannel} from "discord.js";
 import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandParser from "./command-parser";
 
@@ -87,7 +87,6 @@ export default class CommandHandler {
                 context.fail("That command is disabled and may not be used.");
             }
         }
-        // TODO: If command.ownerOnly, if true and owner is executor, skip next 2 checks (specific, hasAuthority)
         else if (command.restrict.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
             context.fail("You're not allowed to use that command");
         }
@@ -326,6 +325,12 @@ export default class CommandHandler {
                         if (moderators.includes(context.sender.id)) {
                             met = true;
                         }
+
+                        break;
+                    }
+
+                    case CommandRestrictGroup.BotOwner: {
+                        met = context.sender.id === context.bot.owner;
 
                         break;
                     }

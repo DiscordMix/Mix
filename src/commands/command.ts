@@ -7,7 +7,8 @@ export type UserGroup = Array<string>;
 
 export enum CommandRestrictGroup {
     ServerOwner,
-    ServerModerator
+    ServerModerator,
+    BotOwner
 }
 
 export enum CommandAuth {
@@ -67,7 +68,6 @@ export interface CommandRestrict {
     auth: number;
     specific: Array<string | CommandRestrictGroup>;
     cooldown: number;
-    ownerOnly: boolean;
 }
 
 export const DefaultCommandRestrict: CommandRestrict = {
@@ -76,8 +76,7 @@ export const DefaultCommandRestrict: CommandRestrict = {
     environment: ChatEnvironment.Anywhere,
     issuerPermissions: [],
     selfPermissions: [],
-    specific: [],
-    ownerOnly: false
+    specific: []
 };
 
 /**

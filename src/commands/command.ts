@@ -85,7 +85,7 @@ export const DefaultCommandRestrict: CommandRestrict = {
 export abstract class GenericCommand extends Fragment {
     public readonly aliases: Array<string> = [];
     public readonly arguments: Array<CommandArgument> = [];
-    public readonly restrict: CommandRestrict = DefaultCommandRestrict;
+    public readonly restrict: CommandRestrict = Object.assign({}, DefaultCommandRestrict);
     public readonly exclude: Array<string> = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;

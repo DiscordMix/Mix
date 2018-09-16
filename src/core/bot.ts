@@ -466,7 +466,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         // If enabled, handle message edits (if valid) as commands
         if (this.options.updateOnMessageEdit) {
             this.client.on("messageUpdate", async (oldMessage: Message, newMessage: Message) => {
-                await this.handleMessage(newMessage);
+                await this.handleMessage(newMessage, true);
             });
         }
 
@@ -475,15 +475,16 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * @param {Message} message
+     * @param {boolean} [edited=false] Whether the message was edited
      * @return {Promise<void>}
      */
-    public async handleMessage(message: Message): Promise<void> {
+    public async handleMessage(message: Message, edited: boolean = false): Promise<void> {
         if (this.suspended) {
             return;
         }
 
         if (this.options.logMessages) {
-            Log.info(`[${message.author.tag}@${message.guild.name}#${(message.channel as GuildChannel).name}] ${Utils.cleanMessage(message)}`);
+            Log.info(`[${message.author.tag}@${message.guild.name}#${(message.channel as GuildChannel).name}] ${Utils.cleanMessage(message)}${!(edited) || " [Edited]"}`);
         }
 
         // TODO: Should be a property/option on Bot, not hardcoded

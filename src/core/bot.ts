@@ -402,7 +402,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
                     continue;
                 }
 
-                console.log(`loading command, ${fragment.meta.name}, restrict, `, fragment.retrict);
+                console.log(`loading command, ${fragment.meta.name}, fragment, `, fragment);
 
                 this.commandStore.register(fragment);
                 enabled++;

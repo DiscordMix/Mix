@@ -10,7 +10,7 @@ import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import Discord, {Client, GuildChannel, GuildMember, Message, RichEmbed, Role, Snowflake} from "discord.js";
+import Discord, {Client, GuildChannel, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
 
@@ -42,6 +42,15 @@ const title: string =
     "╚═╝  ╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚══════╝ {version}";
 
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
+
+type MessageInfo = {
+    guildName: string;
+    channelName: string;
+    authorId: Snowflake;
+    authorTag: string;
+    message: string;
+    time: number;
+};
 
 export interface BotOptions {
     readonly settings: Settings;
@@ -484,7 +493,22 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         if (this.options.logMessages) {
-            Log.info(`[${message.author.tag}@${message.guild.name}#${(message.channel as GuildChannel).name}] ${Utils.cleanMessage(message)}${edited ? " [Edited]" : ""}`);
+            const names: any = {};
+
+            if (message.type === "text" && message.guild) {
+                names.guild = message.guild.name;
+                names.channel = ` # ${(message.channel as TextChannel).name}`;
+            }
+            else if (message.type === "dm" && !message.guild) {
+                names.guild = "";
+                names.channel = "Direct Messages";
+            }
+            else {
+                names.guild = "Unknown";
+                names.channel = " # Unknown";
+            }
+
+            Log.info(`[${message.author.tag} @ ${names.guild}${names.channel}] ${Utils.cleanMessage(message)}${edited ? " [Edited]" : ""}`);
         }
 
         // TODO: Should be a property/option on Bot, not hardcoded

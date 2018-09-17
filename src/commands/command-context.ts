@@ -176,7 +176,7 @@ export default class CommandContext {
      */
     public async ok(text: string | FormattedMessage, title: string = ""): Promise<EditableMessage | null> {
         return await this.respond({
-            text: typeof text === "string" ? `${text}` : text.build(),
+            text: typeof text === "string" ? `${this.bot.options.emojis.success} ${text}` : text.build(),
             title: title
         });
     }
@@ -199,7 +199,7 @@ export default class CommandContext {
      */
     public async fail(text: string, autoDelete: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
-            text: `:thinking: ${text}`,
+            text: `${this.bot.options.emojis.error} ${text}`,
             color: "RED",
 
             // TODO: Returns static image, and won't change to random

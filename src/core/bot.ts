@@ -65,6 +65,21 @@ export interface BotOptions {
     readonly argumentTypes?: Array<UserDefinedArgType>;
 }
 
+export const DefaultBotEmojiOptions: DefiniteBotEmojiOptions = {
+    success: ":white_check_mark:",
+    error: ":thinking:"
+};
+
+export type BotEmojiOptions = {
+    readonly success?: string;
+    readonly error?: string;
+};
+
+export type DefiniteBotEmojiOptions = {
+    readonly success: string;
+    readonly error: string;
+};
+
 export interface BotExtraOptions {
     readonly asciiTitle?: boolean;
     readonly consoleInterface?: boolean;
@@ -77,6 +92,7 @@ export interface BotExtraOptions {
     readonly autoResetAuthStore?: boolean;
     readonly logMessages?: boolean;
     readonly dmHelp?: boolean;
+    readonly emojis?: BotEmojiOptions;
 }
 
 export interface DefiniteBotExtraOptions {
@@ -91,6 +107,7 @@ export interface DefiniteBotExtraOptions {
     readonly autoResetAuthStore: boolean;
     readonly logMessages: boolean;
     readonly dmHelp: boolean;
+    readonly emojis: DefiniteBotEmojiOptions;
 }
 
 /**
@@ -239,7 +256,12 @@ export default class Bot<ApiType = any> extends EventEmitter {
             consoleInterface: botOptions.options && botOptions.options.consoleInterface !== undefined ? botOptions.options.consoleInterface : true,
             autoResetAuthStore: botOptions.options && botOptions.options.autoResetAuthStore !== undefined ? botOptions.options.autoResetAuthStore : false,
             dmHelp: botOptions.options && botOptions.options.dmHelp !== undefined ? botOptions.options.dmHelp : true,
-            logMessages: botOptions.options && botOptions.options.logMessages !== undefined ? botOptions.options.logMessages : false
+            logMessages: botOptions.options && botOptions.options.logMessages !== undefined ? botOptions.options.logMessages : false,
+
+            emojis: botOptions.options && botOptions.options.emojis !== undefined ? {
+                success: botOptions.options.emojis.success || DefaultBotEmojiOptions.success,
+                error: botOptions.options.emojis.error || DefaultBotEmojiOptions.error
+            } : DefaultBotEmojiOptions
         };
 
         // TODO: Make use of the userGroups property

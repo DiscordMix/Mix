@@ -495,11 +495,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
         if (this.options.logMessages) {
             const names: any = {};
 
-            if (message.type === "text" && message.guild) {
+            if (message.channel.type === "text" && message.guild !== undefined) {
                 names.guild = message.guild.name;
                 names.channel = ` # ${(message.channel as TextChannel).name}`;
             }
-            else if (message.type === "dm" && !message.guild) {
+            else if (message.channel.type === "dm" && message.guild === undefined) {
                 names.guild = "";
                 names.channel = "Direct Messages";
             }

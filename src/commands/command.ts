@@ -1,11 +1,11 @@
 import ChatEnvironment from "../core/chat-environment";
-import CommandContext from "./command-context";
+import Context from "./command-context";
 import Fragment from "../fragments/fragment";
 import {Message} from "discord.js";
 
 export type UserGroup = Array<string>;
 
-export enum CommandRestrictGroup {
+export enum RestrictGroup {
     ServerOwner,
     ServerModerator,
     BotOwner
@@ -16,7 +16,7 @@ export enum CommandAuth {
     Owner = -1
 }
 
-export enum CommandArgumentStyle {
+export enum ArgumentStyle {
     Explicit,
     Descriptive
 }
@@ -26,11 +26,11 @@ export type DefaultValueResolver = (message: Message) => string;
 export type ArgumentTypeChecker = (argument: string, message: Message) => boolean;
 
 /**
- * PrimitiveArgumentType : Internal check
+ * PrimitiveArgType : Internal check
  * RegExp                : Inline check
  * ArgumentTypeChecker   : Provided type check by method
  */
-export type ArgumentType = PrimitiveArgumentType | ArgumentTypeChecker | RegExp | string;
+export type ArgumentType = PrimitiveArgType | ArgumentTypeChecker | RegExp | string;
 
 export interface UserDefinedArgType {
     readonly name: string;
@@ -39,7 +39,7 @@ export interface UserDefinedArgType {
 
 export type RawArguments = Array<string>;
 
-export enum PrimitiveArgumentType {
+export enum PrimitiveArgType {
     String,
     Integer,
     UnsignedInteger,
@@ -47,13 +47,13 @@ export enum PrimitiveArgumentType {
     Boolean
 }
 
-export interface CommandArgumentResolver {
+export interface ArgumentResolver {
     readonly name: string;
     readonly resolve: (argument: string, message: Message) => any;
 }
 
 // TODO: Make use of this
-export interface CommandArgument {
+export interface Argument {
     readonly name: string;
     readonly type: ArgumentType;
     readonly description?: string;
@@ -66,7 +66,7 @@ export interface CommandRestrict {
     issuerPermissions: Array<any>;
     environment: ChatEnvironment;
     auth: number;
-    specific: Array<string | CommandRestrictGroup>;
+    specific: Array<string | RestrictGroup>;
     cooldown: number;
 }
 
@@ -84,19 +84,19 @@ export const DefaultCommandRestrict: CommandRestrict = {
  */
 export abstract class GenericCommand extends Fragment {
     public readonly aliases: Array<string> = [];
-    public readonly arguments: Array<CommandArgument> = [];
+    public readonly arguments: Array<Argument> = [];
     public readonly restrict: CommandRestrict = Object.assign({}, DefaultCommandRestrict);
     public readonly exclude: Array<string> = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
 
-    public abstract executed(context: CommandContext, args: any, api: any): any;
+    public abstract executed(context: Context, args: any, api: any): any;
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts
      */
     public get minArguments(): number {
-        return this.arguments.filter((arg: CommandArgument) => arg.required).length;
+        return this.arguments.filter((arg: Argument) => arg.required).length;
     }
 
     /**
@@ -130,10 +130,10 @@ export default abstract class Command extends GenericCommand {
 
     /**
      * @todo canExecute should default boolean, same concept as Service
-     * @param {CommandContext} context
+     * @param {Context} context
      * @return {boolean} Whether this command may be executed
      */
-    public canExecute(context: CommandContext): boolean {
+    public canExecute(context: Context): boolean {
         return true;
     }
 }

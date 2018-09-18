@@ -1,4 +1,4 @@
-import {CommandArgument, default as Command, PrimitiveArgumentType} from "../../../commands/command";
+import {Argument, default as Command, PrimitiveArgType} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 
 export interface IUsageArguments {
@@ -11,10 +11,10 @@ export default class Usage extends Command {
         description: "View the usage of a command"
     };
 
-    readonly arguments: Array<CommandArgument> = [
+    readonly arguments: Array<Argument> = [
         {
             name: "command",
-            type: PrimitiveArgumentType.String,
+            type: PrimitiveArgType.String,
             required: true,
             description: "The command to inspect"
         }

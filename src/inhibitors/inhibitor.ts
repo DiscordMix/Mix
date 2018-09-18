@@ -25,7 +25,7 @@ export default class Inhibitor {
         this.meta = options.meta;
 
         /**
-         * @type {(context: CommandContext) => void}
+         * @type {(context: Context) => void}
          * @readonly
          */
         this.inspector = options.inspector;

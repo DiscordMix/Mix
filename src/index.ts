@@ -4,8 +4,8 @@ import CommandContext from "./commands/command-context";
 import CommandStore, {CommandManagerEvent} from "./commands/command-store";
 import Command, {
     ArgumentTypeChecker,
-    CommandArgument,
-    PrimitiveArgumentType,
+    Argument,
+    PrimitiveArgType,
     UserDefinedArgType
 } from "./commands/command";
 import ConsoleInterface from "./console/console-interface";
@@ -52,11 +52,11 @@ export {
     CommandStore,
     CommandManagerEvent,
     CommandParser,
-    CommandArgument,
+    Argument,
     UserDefinedArgType,
     ArgumentTypeChecker,
     Command,
-    PrimitiveArgumentType,
+    PrimitiveArgType,
 
     // Console
     ConsoleInterface,

@@ -15,8 +15,8 @@ import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
 
 import Command, {
-    CommandArgumentResolver,
-    CommandArgumentStyle,
+    ArgumentResolver,
+    ArgumentStyle,
     RawArguments,
     UserDefinedArgType,
     UserGroup
@@ -61,7 +61,7 @@ export interface BotOptions {
     readonly userGroups?: Array<UserGroup>;
     readonly owner?: Snowflake;
     readonly options?: BotExtraOptions;
-    readonly argumentResolvers?: Array<CommandArgumentResolver>;
+    readonly argumentResolvers?: Array<ArgumentResolver>;
     readonly argumentTypes?: Array<UserDefinedArgType>;
 }
 
@@ -87,7 +87,7 @@ export interface BotExtraOptions {
     readonly updateOnMessageEdit?: boolean;
     readonly checkCommands?: boolean;
     readonly autoDeleteCommands?: boolean;
-    readonly commandArgumentStyle?: CommandArgumentStyle;
+    readonly commandArgumentStyle?: ArgumentStyle;
     readonly ignoreBots?: boolean;
     readonly autoResetAuthStore?: boolean;
     readonly logMessages?: boolean;
@@ -102,7 +102,7 @@ export interface DefiniteBotExtraOptions {
     readonly updateOnMessageEdit: boolean;
     readonly checkCommands: boolean;
     readonly autoDeleteCommands: boolean;
-    readonly commandArgumentStyle: CommandArgumentStyle;
+    readonly commandArgumentStyle: ArgumentStyle;
     readonly ignoreBots: boolean;
     readonly autoResetAuthStore: boolean;
     readonly logMessages: boolean;
@@ -131,7 +131,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly owner?: Snowflake;
     public readonly options: DefiniteBotExtraOptions;
     public readonly language?: Language;
-    public readonly argumentResolvers: Array<CommandArgumentResolver>;
+    public readonly argumentResolvers: Array<ArgumentResolver>;
     public readonly argumentTypes: Array<UserDefinedArgType>;
 
     public  suspended: boolean;
@@ -247,7 +247,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
          */
         this.options = {
             allowCommandChain: botOptions.options && botOptions.options.allowCommandChain !== undefined ? botOptions.options.allowCommandChain : true,
-            commandArgumentStyle: botOptions.options && botOptions.options.commandArgumentStyle || CommandArgumentStyle.Explicit,
+            commandArgumentStyle: botOptions.options && botOptions.options.commandArgumentStyle || ArgumentStyle.Explicit,
             autoDeleteCommands: botOptions.options && botOptions.options.autoDeleteCommands || false,
             checkCommands: botOptions.options && botOptions.options.checkCommands !== undefined ? botOptions.options.checkCommands : true,
             ignoreBots: botOptions.options && botOptions.options.ignoreBots !== undefined ? botOptions.options.ignoreBots : true,
@@ -285,7 +285,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
 
         /**
-         * @type {Array<CommandArgumentResolver>}
+         * @type {Array<ArgumentResolver>}
          * @readonly
          */
         this.argumentResolvers = botOptions.argumentResolvers || [];

@@ -1,6 +1,6 @@
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import Command, {CommandArgument, CommandRestrictGroup, RawArguments} from "./command";
+import Command, {Argument, RestrictGroup, RawArguments} from "./command";
 import CommandStore, {CommandCooldown, CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
@@ -64,7 +64,7 @@ export default class CommandHandler {
     /**
      * @param {CommandContext} context
      * @param {Command} command
-     * @param {Array<CommandArgument>} rawArgs
+     * @param {Array<Argument>} rawArgs
      * @return {boolean}
      */
     private meetsRequirements(context: CommandContext, command: Command, rawArgs: Array<string>): boolean {
@@ -271,7 +271,7 @@ export default class CommandHandler {
         let met = false;
 
         for (let i = 0; i < command.restrict.specific.length; i++) {
-            let specific: string | CommandRestrictGroup = command.restrict.specific[i];
+            let specific: string | RestrictGroup = command.restrict.specific[i];
 
             let valid: boolean = true;
 
@@ -298,7 +298,7 @@ export default class CommandHandler {
                     }
                 }
             }
-            else if (typeof specific === "number" && CommandRestrictGroup[specific] !== undefined) {
+            else if (typeof specific === "number" && RestrictGroup[specific] !== undefined) {
                 // Override for bot owner
                 if (context.sender.id === context.bot.owner) {
                     met = true;
@@ -307,7 +307,7 @@ export default class CommandHandler {
                 }
 
                 switch (specific) {
-                    case CommandRestrictGroup.ServerOwner: {
+                    case RestrictGroup.ServerOwner: {
                         const owners: Array<Snowflake> = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
 
                         if (owners.includes(context.sender.id)) {
@@ -317,7 +317,7 @@ export default class CommandHandler {
                         break;
                     }
 
-                    case CommandRestrictGroup.ServerModerator: {
+                    case RestrictGroup.ServerModerator: {
                         const moderators: Array<Snowflake> = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
 
                         if (moderators.includes(context.sender.id)) {
@@ -327,7 +327,7 @@ export default class CommandHandler {
                         break;
                     }
 
-                    case CommandRestrictGroup.BotOwner: {
+                    case RestrictGroup.BotOwner: {
                         met = context.sender.id === context.bot.owner;
 
                         break;
@@ -343,7 +343,7 @@ export default class CommandHandler {
             }
 
             if (!valid) {
-                Log.debug(CommandRestrictGroup, CommandRestrictGroup[specific]);
+                Log.debug(RestrictGroup, RestrictGroup[specific]);
                 Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`)
             }
 

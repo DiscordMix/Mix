@@ -17,11 +17,11 @@ export default class Cli extends Command {
     readonly aliases = ["exec", "exe"];
 
     // TODO: Disabled for security
-    /* readonly arguments: Array<CommandArgument> = [
+    /* readonly arguments: Array<Argument> = [
         {
             name: "command",
             description: "The command to execute",
-            type: PrimitiveArgumentType.String,
+            type: PrimitiveArgType.String,
             required: true
         }
     ]; */

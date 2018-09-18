@@ -3,9 +3,9 @@ import CommandStore from "./command-store";
 import Command, {
     ArgumentType,
     ArgumentTypeChecker,
-    CommandArgument,
-    CommandArgumentResolver, DefaultValueResolver,
-    PrimitiveArgumentType,
+    Argument,
+    ArgumentResolver, DefaultValueResolver,
+    PrimitiveArgType,
     RawArguments,
     UserDefinedArgType
 } from "./command";
@@ -14,21 +14,21 @@ import Log from "../core/log";
 
 export interface ResolveArgumentsOptions {
     readonly arguments: RawArguments;
-    readonly schema: Array<CommandArgument>;
-    readonly resolvers: Array<CommandArgumentResolver>;
+    readonly schema: Array<Argument>;
+    readonly resolvers: Array<ArgumentResolver>;
     readonly message: Message;
 }
 
 export interface ResolveDefaultArgsOptions {
     readonly arguments: RawArguments;
-    readonly schema: Array<CommandArgument>;
+    readonly schema: Array<Argument>;
     readonly message: Message;
     readonly command: Command;
 }
 
 export interface CheckArgumentsOptions {
     readonly arguments: RawArguments;
-    readonly schema: Array<CommandArgument>;
+    readonly schema: Array<Argument>;
     readonly types: Array<UserDefinedArgType>;
     readonly message: Message;
     readonly command: Command;
@@ -217,12 +217,12 @@ export default class CommandParser {
         for (let i: number = 0; i < options.arguments.length; i++) {
             // In-command primitive type
             if (CommandParser.isTypePrimitive(options.schema[i].type)) {
-                if (options.schema[i].type === PrimitiveArgumentType.String) {
+                if (options.schema[i].type === PrimitiveArgType.String) {
                     if (typeof(options.arguments[i]) !== "string") {
                         return false;
                     }
                 }
-                else if (options.schema[i].type === PrimitiveArgumentType.Boolean) {
+                else if (options.schema[i].type === PrimitiveArgType.Boolean) {
                     if (CommandParser.parseBoolean(options.arguments[i]) === null) {
                         return false;
                     }
@@ -236,13 +236,13 @@ export default class CommandParser {
                     }
 
                     switch (options.schema[i].type) {
-                        case PrimitiveArgumentType.Integer: {
+                        case PrimitiveArgType.Integer: {
                             // Integer covers all numbers
 
                             break;
                         }
 
-                        case PrimitiveArgumentType.UnsignedInteger: {
+                        case PrimitiveArgType.UnsignedInteger: {
                             // Value must be higher or equal to zero
                             if (value < 0) {
                                 return false;
@@ -251,7 +251,7 @@ export default class CommandParser {
                             break;
                         }
 
-                        case PrimitiveArgumentType.NonZeroInteger: {
+                        case PrimitiveArgType.NonZeroInteger: {
                             // Value must be one or higher
                             if (value < 1) {
                                 return false;
@@ -335,7 +335,7 @@ export default class CommandParser {
      * @return {boolean}
      */
     private static isTypePrimitive(type: ArgumentType): boolean {
-        return typeof(type) === "number" && PrimitiveArgumentType[type] !== undefined;
+        return typeof(type) === "number" && PrimitiveArgType[type] !== undefined;
     }
 
     /**

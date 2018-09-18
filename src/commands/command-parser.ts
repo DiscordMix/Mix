@@ -7,7 +7,7 @@ import Command, {
     ArgumentResolver, DefaultValueResolver,
     PrimitiveArgType,
     RawArguments,
-    UserDefinedArgType
+    CustomArgType
 } from "./command";
 import {Message} from "discord.js";
 import Log from "../core/log";
@@ -29,7 +29,7 @@ export interface ResolveDefaultArgsOptions {
 export interface CheckArgumentsOptions {
     readonly arguments: RawArguments;
     readonly schema: Array<Argument>;
-    readonly types: Array<UserDefinedArgType>;
+    readonly types: Array<CustomArgType>;
     readonly message: Message;
     readonly command: Command;
 }

@@ -18,7 +18,7 @@ import Command, {
     ArgumentResolver,
     ArgumentStyle,
     RawArguments,
-    UserDefinedArgType,
+    CustomArgType,
     UserGroup
 } from "../commands/command";
 
@@ -62,7 +62,7 @@ export interface BotOptions {
     readonly owner?: Snowflake;
     readonly options?: BotExtraOptions;
     readonly argumentResolvers?: Array<ArgumentResolver>;
-    readonly argumentTypes?: Array<UserDefinedArgType>;
+    readonly argumentTypes?: Array<CustomArgType>;
 }
 
 export const DefaultBotEmojiOptions: DefiniteBotEmojiOptions = {
@@ -132,7 +132,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly options: DefiniteBotExtraOptions;
     public readonly language?: Language;
     public readonly argumentResolvers: Array<ArgumentResolver>;
-    public readonly argumentTypes: Array<UserDefinedArgType>;
+    public readonly argumentTypes: Array<CustomArgType>;
 
     public  suspended: boolean;
 
@@ -291,7 +291,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.argumentResolvers = botOptions.argumentResolvers || [];
 
         /**
-         * @type {Array<UserDefinedArgType>}
+         * @type {Array<CustomArgType>}
          * @readonly
          */
         this.argumentTypes = botOptions.argumentTypes || [];

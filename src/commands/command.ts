@@ -32,7 +32,7 @@ export type ArgumentTypeChecker = (argument: string, message: Message) => boolea
  */
 export type ArgumentType = PrimitiveArgType | ArgumentTypeChecker | RegExp | string;
 
-export interface UserDefinedArgType {
+export interface CustomArgType {
     readonly name: string;
     readonly check: ArgumentTypeChecker | RegExp;
 }

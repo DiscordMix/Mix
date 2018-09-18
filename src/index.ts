@@ -6,7 +6,7 @@ import Command, {
     ArgumentTypeChecker,
     Argument,
     PrimitiveArgType,
-    UserDefinedArgType
+    CustomArgType
 } from "./commands/command";
 import ConsoleInterface from "./console/console-interface";
 import CommandParser from "./commands/command-parser";
@@ -53,7 +53,7 @@ export {
     CommandManagerEvent,
     CommandParser,
     Argument,
-    UserDefinedArgType,
+    CustomArgType,
     ArgumentTypeChecker,
     Command,
     PrimitiveArgType,

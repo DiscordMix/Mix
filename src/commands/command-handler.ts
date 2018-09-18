@@ -299,6 +299,13 @@ export default class CommandHandler {
                 }
             }
             else if (typeof specific === "number" && CommandRestrictGroup[specific] !== undefined) {
+                // Override for bot owner
+                if (context.sender.id === context.bot.owner) {
+                    met = true;
+
+                    break;
+                }
+
                 switch (specific) {
                     case CommandRestrictGroup.ServerOwner: {
                         const owners: Array<Snowflake> = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);

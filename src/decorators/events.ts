@@ -1,5 +1,7 @@
+export const BotEvents: Map<string, any> = new Map();
+
 export function on(eventName: string) {
     return function(target, propertyKey: string, descriptor: PropertyDescriptor) {
-        console.log("on: ", target, " : ", propertyKey, " : ", descriptor);
+        BotEvents.set(eventName, descriptor.value);
     }
 }

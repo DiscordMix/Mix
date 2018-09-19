@@ -32,6 +32,7 @@ import FragmentLoader from "../fragments/fragment-loader";
 import Fragment from "../fragments/fragment";
 import Language from "../language/language";
 import Service from "../services/service";
+import {BotEvents} from "../decorators/events";
 
 const title: string =
     " █████╗ ███╗   ██╗██╗   ██╗██╗██╗     \n" +
@@ -498,6 +499,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 await this.handleMessage(newMessage, true);
             });
         }
+
+        // Setup user events
+        BotEvents.forEach((value: any, key: string) => {
+            this.client.on(key, value);
+        });
 
         Log.success("[Bot.setupEvents] Discord events setup completed");
     }

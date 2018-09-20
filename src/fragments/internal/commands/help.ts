@@ -9,7 +9,8 @@ export default class Help extends Command {
     };
 
     public async executed(context: CommandContext): Promise<void> {
-        const commands: string = context.bot.commandStore.commands
+        // TODO: Decorator commands broke it (can't .map through a Map)
+        /* const commands: string = context.bot.commandStore.getAll()
             .map((command: Command) => `**${command.meta.name}**: ${command.meta.description}`)
             .join("\n");
 
@@ -27,6 +28,6 @@ export default class Help extends Command {
         }
         else {
             await context.ok(commands, "Help - Available Commands");
-        }
+        } */
     }
 };

@@ -5,6 +5,8 @@ import {Message} from "discord.js";
 
 export type UserGroup = Array<string>;
 
+export type CommandExecuted = (context: Context, args: any, api: any) => any;
+
 export enum RestrictGroup {
     ServerOwner,
     ServerModerator,

@@ -11,6 +11,8 @@ import Command, {
 } from "./command";
 import {Message} from "discord.js";
 import Log from "../core/log";
+import {DecoratorCommand, SimpleCommand} from "../decorators/decorators";
+import {WeakCommand} from "..";
 
 export interface ResolveArgumentsOptions {
     readonly arguments: RawArguments;
@@ -41,11 +43,11 @@ export default class CommandParser {
      * @param {Array<string>} prefixes
      * @return {Command | null}
      */
-    public static parse(commandString: string, manager: CommandStore, prefixes: Array<string>): Command | null {
+    public static parse(commandString: string, manager: CommandStore, prefixes: Array<string>): Command | DecoratorCommand | null {
         const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
-            return manager.getByName(commandBase);
+            return manager.get(commandBase);
         }
 
         return null;
@@ -63,7 +65,7 @@ export default class CommandParser {
                 const commandBase = this.getCommandBase(commandString, prefixes);
 
                 if (commandBase) {
-                    return manager.isRegistered(commandBase);
+                    return manager.contains(commandBase);
                 }
             }
         }

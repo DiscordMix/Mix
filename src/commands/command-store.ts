@@ -3,7 +3,9 @@ import Bot from "../core/bot";
 import Command from "./command";
 import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandContext from "./command-context";
-import {Snowflake} from "discord.js";
+import {Message, Snowflake} from "discord.js";
+import {WeakCommand} from "..";
+import {DecoratorCommand, SimpleCommand} from "../decorators/decorators";
 // import Collection from "../core/collection";
 
 /**
@@ -28,12 +30,20 @@ export interface CommandCooldown {
     readonly end: number;
 }
 
+const validCommandNamePattern: RegExp = /^[a-z_0-9]{1,40}$/gmi;
+
+export type CommandMap = Map<string, Command | DecoratorCommand>;
+
+export type ReadonlyCommandMap = ReadonlyMap<string, Command | DecoratorCommand>;
+
 export default class CommandStore /* extends Collection */ {
     public readonly bot: Bot;
     public readonly authStore: CommandAuthStore;
     public readonly cooldowns: Map<Snowflake, Map<string, number>>;
 
-    public commands: Array<Command>;
+    public simpleCommands: Map<string, any>;
+
+    private readonly commands: CommandMap;
 
     /**
      * @param {Bot} bot
@@ -55,59 +65,64 @@ export default class CommandStore /* extends Collection */ {
         this.authStore = authStore;
 
         /**
-         * @type {Array<Command>}
+         * @type {CommandMap}
          * @private
          */
-        this.commands = [];
+        this.commands = new Map();
 
         /**
          * @type {Array<CommandCooldown>}
          * @private
+         * @readonly
          */
         this.cooldowns = new Map();
+
+        /**
+         * @type {Map<string, any>}
+         */
+        this.simpleCommands = new Map();
     }
 
     /**
      * @param {Command} command
      */
-    public register(command: Command): void {
-        this.commands.push(command);
+    public register(command: Command | WeakCommand): void {
+        if (!CommandStore.validateName(command.meta.name)) {
+            Log.warn(`[CommandStore.register] Failed to register command '${command.meta.name}' (Invalid name)`);
+
+            return;
+        }
+        else if (this.commands.get(command.meta.name) !== undefined) {
+            Log.warn(`[CommandStore.register] Failed to register command '${command.meta.name}' (Already exists)`);
+        }
+
+        this.commands.set(command.meta.name, command);
+    }
+
+    /**
+     * @param {SimpleCommand} command The command to register
+     */
+    public registerDecorator(command: DecoratorCommand): void {
+        if (!CommandStore.validateName(command.meta.name)) {
+            Log.error(`[CommandStore.registerSimple] Failed to register simple command '${command.meta.name}' (Invalid name)`);
+
+            return;
+        }
+        else if (this.commands.get(command.meta.name) !== undefined) {
+            Log.error(`[CommandStore.registerSimple] Failed to register simple command '${command.meta.name}' (Already exists)`);
+
+            return;
+        }
+
+        this.commands.set(command.meta.name, command);
     }
 
     /**
      * @param {string} commandBase
      * @return {boolean} Whether the command was removed
      */
-    public removeByBase(commandBase: string): boolean {
-        const command = this.getByName(commandBase);
-
-        if (command) {
-            return this.remove(command);
-        }
-
-        return false;
-    }
-
-    /**
-     * @param {Command} command
-     * @return {boolean}
-     */
-    public remove(command: Command): boolean {
-        return this.removeAt(this.commands.indexOf(command));
-    }
-
-    /**
-     * @param {number} index
-     * @return {boolean}
-     */
-    public removeAt(index: number): boolean {
-        if (this.commands[index]) {
-            this.commands.splice(index, 1);
-
-            return true;
-        }
-
-        return false;
+    public remove(commandBase: string): boolean {
+        return this.commands.delete(commandBase);
     }
 
     /**
@@ -115,14 +130,18 @@ export default class CommandStore /* extends Collection */ {
      * @return {boolean}
      */
     public contains(commandBase: string): boolean {
-        return this.getByName(commandBase) !== null;
+        return this.commands.has(commandBase);
+    }
+
+    public get(commandBase: string): Command | DecoratorCommand | null {
+        return this.commands.get(commandBase) || null;
     }
 
     /**
      * @param {Array<Command>} commands
      * @return {CommandStore}
      */
-    public registerMultiple(commands: Array<Command>): CommandStore {
+    public registerMultiple(commands: Array<Command>): this {
         for (let i = 0; i < commands.length; i++) {
             this.register(commands[i]);
         }
@@ -130,34 +149,20 @@ export default class CommandStore /* extends Collection */ {
         return this;
     }
 
-    /**
-     * Get all the registered commands
-     * @return {ReadonlyArray<Command>}
-     */
-    public getAll(): ReadonlyArray<Command> {
-        return this.commands as ReadonlyArray<Command>;
-    }
-
-    /**
-     * @param {string} commandBase
-     * @return {boolean}
-     */
-    public isRegistered(commandBase: string): boolean {
-        return this.getByName(commandBase) != null;
-    }
-
-    /**
-     * @param {string} name
-     * @return {(Command | null)}
-     */
-    public getByName(name: string): Command | null {
-        for (let i = 0; i < this.commands.length; i++) {
-            if (this.commands[i].meta.name === name || this.commands[i].aliases.includes(name)) {
-                return this.commands[i];
-            }
+    public registerMultipleDecorator(commands: Array<DecoratorCommand>): this {
+        for (let i = 0; i < commands.length; i++) {
+            this.registerDecorator(commands[i]);
         }
 
-        return null;
+        return this;
+    }
+
+    /**
+     * Get all the registered commands
+     * @return {ReadonlyCommandMap}
+     */
+    public getAll(): ReadonlyCommandMap {
+        return this.commands as ReadonlyCommandMap;
     }
 
     /**
@@ -219,10 +224,19 @@ export default class CommandStore /* extends Collection */ {
      * Unload all commandStore
      */
     public unloadAll(): void {
-        if (this.commands.length > 0) {
-            const count = this.commands.length;
-            this.commands = [];
+        if (this.commands.size > 0) {
+            const count = this.commands.size;
+
+            this.commands.clear();
             Log.success(`[CommandManager.unloadAll] Unloaded ${count} command(s)`);
         }
+    }
+
+    /**
+     * @param {string} commandName
+     * @return {boolean} Whether the command name is valid
+     */
+    public static validateName(commandName: string): boolean {
+        return validCommandNamePattern.test(commandName);
     }
 }

@@ -1,5 +1,6 @@
 import {Argument, default as Command, PrimitiveArgType} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
+import {DecoratorCommand} from "../../../decorators/decorators";
 
 export interface IUsageArguments {
     readonly command: string;
@@ -21,14 +22,18 @@ export default class Usage extends Command {
     ];
 
     public executed(context: CommandContext, args: IUsageArguments): void {
-        const targetCommand: Command | null = context.bot.commandStore.getByName(args.command);
+        const targetCommand: Command | DecoratorCommand | null = context.bot.commandStore.get(args.command);
 
         if (!targetCommand) {
             context.fail("That command doesn't exist.");
 
             return;
         }
-        else if (targetCommand.arguments.length === 0) {
+        else if ((targetCommand as any).type !== undefined) {
+
+        }
+        // TODO: New decorator commands broke it
+        /* else if (targetCommand.arguments.length === 0) {
             context.fail("That command doesn't accept any arguments.");
 
             return;
@@ -40,6 +45,6 @@ export default class Usage extends Command {
             usageArgs.push(targetCommand.arguments[i].required ? targetCommand.arguments[i].name : `[${targetCommand.arguments[i].name}]`);
         }
 
-        context.ok(usageArgs.join(" "));
+        context.ok(usageArgs.join(" ")); */
     }
 };

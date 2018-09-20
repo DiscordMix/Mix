@@ -10,17 +10,11 @@ import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import Discord, {Client, GuildChannel, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
+import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
 
-import Command, {
-    ArgumentResolver,
-    ArgumentStyle,
-    RawArguments,
-    CustomArgType,
-    UserGroup
-} from "../commands/command";
+import Command, {ArgumentResolver, ArgumentStyle, CustomArgType, RawArguments, UserGroup} from "../commands/command";
 
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
@@ -32,7 +26,14 @@ import FragmentLoader from "../fragments/fragment-loader";
 import Fragment from "../fragments/fragment";
 import Language from "../language/language";
 import Service from "../services/service";
-import {BotEvents} from "../decorators/decorators";
+import {
+    BotEvents,
+    DecoratorCommand,
+    DecoratorCommands,
+    DecoratorCommandType,
+    SimpleCommand
+} from "../decorators/decorators";
+import {WeakCommand} from "..";
 
 const title: string =
     " █████╗ ███╗   ██╗██╗   ██╗██╗██╗     \n" +
@@ -135,7 +136,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly argumentResolvers: Array<ArgumentResolver>;
     public readonly argumentTypes: Array<CustomArgType>;
 
-    public  suspended: boolean;
+    public suspended: boolean;
 
     private api?: ApiType;
     private setupStart: number = 0;
@@ -409,6 +410,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
         }
 
+        // Load decorator commands
+        this.commandStore.registerMultipleDecorator(DecoratorCommands);
+
         // Setup the Discord client's events
         this.setupEvents();
 
@@ -582,18 +586,60 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * @param {Message} message
+     * @return {CommandContext}
+     */
+    private createCommandContext(message: Message): CommandContext {
+        return new CommandContext({
+            message: message,
+            // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
+            bot: this,
+
+            // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
+            // TODO: CRITICAL: Default access level set to 0
+            auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
+            emojis: this.emojis,
+            label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
+        });
+    }
+
+    /**
+     * @param {Message} message
      * @param {string} content
      * @param {*} resolvers
      * @return {Promise<void>}
      */
     public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
-        const command: Command | null = CommandParser.parse(
+        let command: Command | DecoratorCommand | null = CommandParser.parse(
             content,
             this.commandStore,
             this.settings.general.prefixes
         );
 
         if (command !== null) {
+            if ((command as any).type !== undefined && typeof (command as any).type === "number" && DecoratorCommandType[(command as any).type] !== undefined) {
+                command = command as DecoratorCommand;
+
+                if (command.type === DecoratorCommandType.Simple) {
+                    // TODO: Simple commands have an empty array of arguments, which doesn't look good
+                    (command as SimpleCommand).executed(this.createCommandContext(message), [], this.api);
+
+                    return;
+                }
+                else if (command.type === DecoratorCommandType.Weak) {
+                    //
+                    Log.warn(`[Bot.handleCommandMessage] Weak commands are not yet implemented, ignoring execution for '${command.meta.name}'`);
+
+                    return;
+                }
+                else {
+                    Log.error(`[Bot.handleCommandMessage] Unexpected decorator command type: '${command.type}' for command '${command.meta.name}'`);
+
+                    return;
+                }
+            }
+
+            command = command as Command;
+
             const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
                 arguments: CommandParser.getArguments(content),
                 schema: command.arguments,
@@ -607,17 +653,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             Log.debug("raw args, ", rawArgs);
 
             await this.commandHandler.handle(
-                new CommandContext({
-                    message: message,
-                    // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
-                    bot: this,
-
-                    // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
-                    // TODO: CRITICAL: Default access level set to 0
-                    auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
-                    emojis: this.emojis,
-                    label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
-                }),
+                this.createCommandContext(message),
 
                 command,
 

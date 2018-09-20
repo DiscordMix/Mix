@@ -32,7 +32,7 @@ import FragmentLoader from "../fragments/fragment-loader";
 import Fragment from "../fragments/fragment";
 import Language from "../language/language";
 import Service from "../services/service";
-import {BotEvents} from "../decorators/events";
+import {BotEvents} from "../decorators/decorators";
 
 const title: string =
     " █████╗ ███╗   ██╗██╗   ██╗██╗██╗     \n" +

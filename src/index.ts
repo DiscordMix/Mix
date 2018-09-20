@@ -44,7 +44,8 @@ import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 import SetupHelper, {SetupHelperResult} from "./core/setup-helper";
 import Service, {ServiceOptions} from "./services/service";
 import KnexTable from "./data-providers/knex-table";
-import {on} from "./decorators/events";
+import {on, WeakCommand} from "./decorators/decorators";
+import {command} from "./decorators/decorators";
 
 export {
     // Commands
@@ -124,5 +125,7 @@ export {
     KnexTable,
 
     // Decorators
-    on
+    on,
+    command,
+    WeakCommand
 };

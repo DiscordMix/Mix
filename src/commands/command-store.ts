@@ -89,6 +89,7 @@ export default class CommandStore /* extends Collection */ {
     public register(command: Command | WeakCommand): void {
         if (!validCommandNamePattern.test(command.meta.name)) {
             Log.debug("command name", command.meta.name);
+            Log.debug("result is ", !validCommandNamePattern.test(command.meta.name));
 
             Log.warn(`[CommandStore.register] Failed to register command '${command.meta.name}' (Invalid name)`);
 

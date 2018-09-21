@@ -105,7 +105,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {SimpleCommand} command The command to register
      */
     public registerDecorator(command: DecoratorCommand): void {
-        if (!validCommandNamePattern.test((command.meta.name)) {
+        if (!validCommandNamePattern.test(command.meta.name)) {
             Log.error(`[CommandStore.registerSimple] Failed to register simple command '${command.meta.name}' (Invalid name)`);
 
             return;

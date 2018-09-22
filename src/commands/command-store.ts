@@ -30,7 +30,7 @@ export interface CommandCooldown {
     readonly end: number;
 }
 
-const validCommandNamePattern: RegExp = /^[a-z_0-9]{1,40}$/gmi;
+const validCommandNamePattern: RegExp = /^[a-z_0-9]{1,40}$/mi;
 
 export type CommandMap = Map<string, Command | DecoratorCommand>;
 
@@ -87,23 +87,21 @@ export default class CommandStore /* extends Collection */ {
      * @param {Command} command
      */
     public register(command: Command | WeakCommand): void {
-        Log.debug("command name is ", command.meta.name);
-        Log.debug("pattern is ", validCommandNamePattern.source);
-        Log.debug("test result is ", validCommandNamePattern.test("helllo"));
+        const commandName: string = command.meta.name.trim();
 
-        if (validCommandNamePattern.test(command.meta.name) === false) {
-            Log.debug("command name", command.meta.name);
-            Log.debug("result is ", validCommandNamePattern.test(command.meta.name) === false);
+        if (validCommandNamePattern.test(commandName) === false) {
+            Log.debug("command name", commandName);
+            Log.debug("result is ", validCommandNamePattern.test(commandName) === false);
 
-            Log.warn(`[CommandStore.register] Failed to register command '${command.meta.name}' (Invalid name)`);
+            Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Invalid name)`);
 
             return;
         }
-        else if (this.commands.get(command.meta.name) !== undefined) {
-            Log.warn(`[CommandStore.register] Failed to register command '${command.meta.name}' (Already exists)`);
+        else if (this.commands.get(commandName) !== undefined) {
+            Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Already exists)`);
         }
 
-        this.commands.set(command.meta.name, command);
+        this.commands.set(commandName, command);
     }
 
     /**

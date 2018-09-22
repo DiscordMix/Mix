@@ -293,6 +293,7 @@ describe("SwitchParser.getSwitches()", () => {
         const result4 = SwitchParser.getSwitches(subjects.switches.longQuotedValue);
         const result5 = SwitchParser.getSwitches(subjects.switches.multiple);
         const result6 = SwitchParser.getSwitches(subjects.switches.multipleValues);
+        const result7 = SwitchParser.getSwitches(subjects.switches.multipleQuotedValues);
 
         for (let i = 0; i < result1.length; i++) {
             expect(result1[0]).to.be.an("object");
@@ -357,5 +358,25 @@ describe("SwitchParser.getSwitches()", () => {
         expect(result6[3].key).to.equal("world");
         expect(result6[3].short).to.equal(false);
         expect(result6[3].value).to.equal("hello");
+
+        // Multiple Quoted Values -> -h
+        expect(result7[0].key).to.equal("h");
+        expect(result7[0].short).to.equal(true);
+        expect(result7[0].value).to.equal(null);
+
+        // Multiple Quoted Values -> -q
+        expect(result7[1].key).to.equal("q");
+        expect(result7[1].short).to.equal(true);
+        expect(result7[1].value).to.equal(null);
+
+        // Multiple Quoted Values -> --hello="world hello"
+        expect(result7[2].key).to.equal("hello");
+        expect(result7[2].short).to.equal(false);
+        expect(result7[2].value).to.equal("world hello");
+
+        // Multiple Quoted Values -> --world="hello world"
+        expect(result7[3].key).to.equal("world");
+        expect(result7[3].short).to.equal(false);
+        expect(result7[3].value).to.equal("hello world");
     });
 });

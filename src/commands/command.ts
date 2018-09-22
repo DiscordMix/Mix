@@ -79,7 +79,12 @@ export const DefaultCommandRestrict: CommandRestrict = {
     issuerPermissions: [],
     selfPermissions: [],
     specific: []
-};
+}
+
+export type CommandSwitchInfo = {
+    readonly name: string;
+    readonly shorthand: string | null;
+}
 
 /**
  * @extends Fragment
@@ -88,6 +93,7 @@ export abstract class GenericCommand extends Fragment {
     public readonly aliases: Array<string> = [];
     public readonly arguments: Array<Argument> = [];
     public readonly restrict: CommandRestrict = Object.assign({}, DefaultCommandRestrict);
+    public readonly switches: Array<CommandSwitchInfo> = [];
     public readonly exclude: Array<string> = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;

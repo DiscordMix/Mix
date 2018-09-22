@@ -5,11 +5,11 @@ export default class ArgumentParser {
     /**
      * @param {string} type
      * @param {string} arg
-     * @param {Object} resolvers
+     * @param {object} resolvers
      * @return {*}
      */
     public static resolve(type: string, arg: string, resolvers: any): any {
-        const keys = Object.keys(resolvers);
+        const keys: Array<string> = Object.keys(resolvers);
 
         for (let i = 0; i < keys.length; i++) {
             if (keys[i] === type) {

@@ -35,3 +35,7 @@
 * context.ok(<message>, <emoji?>)
 
 * services + xml? Maybe define listeners, etc.?
+
+=== TODO ===
+
+* Command switches need to be passed into the command executed() function in a similar form of args in order to access value, shorthand, etc.

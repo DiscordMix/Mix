@@ -6,6 +6,7 @@ import ObjectProvider from "../data-providers/object-provider";
 import Settings from "../core/settings";
 import path from "path";
 import {expect} from "chai";
+import SwitchParser from "../commands/switch-parser";
 
 const globalAny: any = global;
 const describe: any = globalAny.describe;
@@ -41,7 +42,17 @@ const subjects = {
 
     settingsPath: path.resolve(path.join(__dirname, "./../../src/test/test-settings.json")),
 
-    settingsPathTwo: path.resolve(path.join(__dirname, "./../../src/test/test-settings-2.json"))
+    settingsPathTwo: path.resolve(path.join(__dirname, "./../../src/test/test-settings-2.json")),
+
+    switches: {
+        short: "base arg -h",
+        long: "base arg --help",
+        longValue: "base --help=hello",
+        longQuotedValue: 'base --help="hello world"',
+        multiple: "base arg -h -q --hello --world",
+        multipleValues: "base arg -h -q --hello=world --world=hello",
+        multipleQuotedValues: 'base arg -h -q --hello="world hello" --world="hello world"'
+    }
 };
 
 describe("Utils.resolveId()", () => {
@@ -271,5 +282,80 @@ describe("Settings.fromFile()", () => {
             expect(result.paths.plugins).to.be.an("string");
             expect(result.paths.plugins).to.equal("./plugins");
         });
+    });
+});
+
+describe("SwitchParser.getSwitches()", () => {
+    it("parse command switches", () => {
+        const result1 = SwitchParser.getSwitches(subjects.switches.short);
+        const result2 = SwitchParser.getSwitches(subjects.switches.long);
+        const result3 = SwitchParser.getSwitches(subjects.switches.longValue);
+        const result4 = SwitchParser.getSwitches(subjects.switches.longQuotedValue);
+        const result5 = SwitchParser.getSwitches(subjects.switches.multiple);
+        const result6 = SwitchParser.getSwitches(subjects.switches.multipleValues);
+
+        for (let i = 0; i < result1.length; i++) {
+            expect(result1[0]).to.be.an("object");
+        }
+        
+        // Short
+        expect(result1[0].key).to.equal("h");
+        expect(result1[0].short).to.equal(true);
+        expect(result1[0].value).to.equal(null);
+
+        // Long
+        expect(result2[0].key).to.equal("help");
+        expect(result2[0].short).to.equal(false);
+        expect(result2[0].value).to.equal(null);
+
+        // Long Value
+        expect(result3[0].key).to.equal("help");
+        expect(result3[0].short).to.equal(false);
+        expect(result3[0].value).to.equal("hello");
+
+        // Long Quoted Value
+        expect(result4[0].key).to.equal("help");
+        expect(result4[0].short).to.equal(false);
+        expect(result4[0].value).to.equal("hello world");
+
+        // Multiple -> -h
+        expect(result5[0].key).to.equal("h");
+        expect(result5[0].short).to.equal(true);
+        expect(result5[0].value).to.equal(null);
+
+        // Multiple -> -q
+        expect(result5[1].key).to.equal("q");
+        expect(result5[1].short).to.equal(true);
+        expect(result5[1].value).to.equal(null);
+
+        // Multiple -> --hello
+        expect(result5[2].key).to.equal("hello");
+        expect(result5[2].short).to.equal(false);
+        expect(result5[2].value).to.equal(null);
+
+        // Multiple -> --world
+        expect(result5[3].key).to.equal("world");
+        expect(result5[3].short).to.equal(false);
+        expect(result5[3].value).to.equal(null);
+
+        // Multiple Values -> -h
+        expect(result6[0].key).to.equal("h");
+        expect(result6[0].short).to.equal(true);
+        expect(result6[0].value).to.equal(null);
+
+        // Multiple Values -> -q
+        expect(result6[1].key).to.equal("q");
+        expect(result6[1].short).to.equal(true);
+        expect(result6[1].value).to.equal(null);
+
+        // Multiple Values -> --hello
+        expect(result6[2].key).to.equal("hello");
+        expect(result6[2].short).to.equal(false);
+        expect(result6[2].value).to.equal("world");
+
+        // Multiple Values -> --world
+        expect(result6[3].key).to.equal("world");
+        expect(result6[3].short).to.equal(false);
+        expect(result6[3].value).to.equal("hello");
     });
 });

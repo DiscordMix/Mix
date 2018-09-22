@@ -10,7 +10,7 @@ import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
+import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel, Guild} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
 import Command, {ArgumentResolver, ArgumentStyle, CustomArgType, RawArguments, UserGroup} from "../commands/command";
@@ -33,8 +33,6 @@ import {
     SimpleCommand,
     ChannelMessageEvents
 } from "../decorators/decorators";
-
-import {WeakCommand} from "..";
 
 const title: string =
     " █████╗ ███╗   ██╗██╗   ██╗██╗██╗     \n" +

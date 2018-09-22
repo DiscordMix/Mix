@@ -31,7 +31,8 @@ import {
     DecoratorCommand,
     DecoratorCommands,
     DecoratorCommandType,
-    SimpleCommand
+    SimpleCommand,
+    ChannelMessageEvents
 } from "../decorators/decorators";
 import {WeakCommand} from "..";
 
@@ -507,6 +508,14 @@ export default class Bot<ApiType = any> extends EventEmitter {
         // Setup user events
         BotEvents.forEach((value: any, key: string) => {
             this.client.on(key, value);
+        });
+
+        ChannelMessageEvents.forEach((value: any, key: Snowflake) => {
+            this.client.on("message", (message: Message) => {
+                if (message.channel.id === key) {
+                    value();
+                }
+            });
         });
 
         Log.success("[Bot.setupEvents] Discord events setup completed");

@@ -2,14 +2,69 @@ import {CommandExecuted, CommandRestrict} from "../commands/command";
 import {Argument} from "..";
 import {FragmentMeta} from "../fragments/fragment";
 import Log from "../core/log";
+import {Snowflake} from "discord.js";
+
+export enum DiscordEvent {
+    Message = "message",
+    ChannelCreated = "channelCreate",
+    ChannelDeleted = "channelDelete",
+    ChannelPinsUpdated = "channelPinsUpdate",
+    ChannelUpdated = "channelUpdate",
+    ClientUserGuildSettingsUpdated = "clientUserGuildSettingsUpdate",
+    ClientUserSettingsUpdated = "clientUserSettingsUpdate",
+    Disconnected = "disconnect",
+    EmojiCreated = "emojiCreate",
+    EmojiDeleted = "emojiDelete",
+    EmojiUpdated = "emojiUpdate",
+    Error = "error",
+    GuildBanAdded = "guildBanAdd",
+    GuildBanRemoved = "guildBanRemove",
+    GuildJoined = "guildCreate",
+    GuildLeft = "guildDelete",
+    GuildMemberJoined = "guildMemberAdd",
+    GuildMemberAvailable = "guildMemberAvailable",
+    GuildMemberLeft = "guildMemberRemove",
+    GuildMembersChunk = "guildMembersChunk",
+    GuildMemberSpeaking = "guildMemberSpeaking",
+    GuildMemberUpdated = "guildMemberUpdate",
+    GuildUnavailable = "guildUnavailable",
+    GuildUpdated = "guildUpdate",
+    MessageDeleted = "messageDelete",
+    MessagesBulkDeleted = "messageDeletedBulk",
+    MessageReactionAdded = "messageReactionAdd",
+    MessageReactionRemoved = "messageReactionRemove",
+    MessageReactionsRemoved = "messageReactionRemoveAll",
+    MessageUpdated = "messageUpdate",
+    PresenceUpdated = "presenceUpdate",
+    RateLimit = "rateLimit",
+    Ready = "ready",
+    Reconnecting = "reconnecting",
+    Resume = "resume",
+    RoleCreated = "roleCreate",
+    RoleDeleted = "roleDelete",
+    RoleUpdated = "roleUpdate",
+    TypingStarted = "typingStart",
+    TypingStopped = "typingStop",
+    UserNoteUpdated = "userNoteUpdate",
+    UserUpdated = "userUpdate",
+    VoiceStateUpdated = "voiceStateUpdate",
+    Warn = "warn"
+}
 
 export const BotEvents: Map<string, any> = new Map();
+export const ChannelMessageEvents: Map<Snowflake, any> = new Map();
 
 export const DecoratorCommands: Array<DecoratorCommand> = [];
 
-export function on(eventName: string) {
+export function on(eventName: DiscordEvent | string) {
     return function(target, propertyKey: string, descriptor: PropertyDescriptor) {
         BotEvents.set(eventName, descriptor.value);
+    }
+}
+
+export function message(channel: Snowflake) {
+    return function(target, propertyKey: string, descriptor: PropertyDescriptor) {
+        ChannelMessageEvents.set(channel, descriptor.value);
     }
 }
 

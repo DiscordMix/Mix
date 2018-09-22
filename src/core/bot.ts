@@ -53,7 +53,7 @@ type MessageInfo = {
     time: number;
 }
 
-export interface BotOptions {
+export type BotOptions = {
     readonly settings: Settings;
     readonly authStore: CommandAuthStore;
     readonly dataStore?: DataProvider;
@@ -81,7 +81,7 @@ export type DefiniteBotEmojiOptions = {
     readonly error: string;
 }
 
-export interface BotExtraOptions {
+export type BotExtraOptions = {
     readonly asciiTitle?: boolean;
     readonly consoleInterface?: boolean;
     readonly allowCommandChain?: boolean;
@@ -96,7 +96,7 @@ export interface BotExtraOptions {
     readonly emojis?: BotEmojiOptions;
 }
 
-export interface DefiniteBotExtraOptions {
+export type DefiniteBotExtraOptions = {
     readonly asciiTitle: boolean;
     readonly consoleInterface: boolean;
     readonly allowCommandChain: boolean;

@@ -57,13 +57,13 @@ export const ChannelMessageEvents: Map<Snowflake, any> = new Map();
 export const DecoratorCommands: Array<DecoratorCommand> = [];
 
 export function on(eventName: DiscordEvent | string) {
-    return function(target, propertyKey: string, descriptor: PropertyDescriptor) {
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         BotEvents.set(eventName, descriptor.value);
     }
 }
 
 export function message(channel: Snowflake) {
-    return function(target, propertyKey: string, descriptor: PropertyDescriptor) {
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         ChannelMessageEvents.set(channel, descriptor.value);
     }
 }
@@ -94,7 +94,7 @@ export interface SimpleCommand extends DecoratorCommand {
 
 // options: command name | WeakCommand
 export function command(options: string | PartialWeakCommand, description?: string) {
-    return function(target, propertyKey: string, descriptor: PropertyDescriptor) {
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         if (descriptor.value === undefined) {
             Log.error("[Decorators.command] Expecting value for command decorator");
 

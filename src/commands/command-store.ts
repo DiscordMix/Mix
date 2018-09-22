@@ -88,6 +88,8 @@ export default class CommandStore /* extends Collection */ {
      */
     public register(command: Command | WeakCommand): void {
         Log.debug("command name is ", command.meta.name);
+        Log.debug("pattern is ", validCommandNamePattern.source);
+        Log.debug("test result is ", validCommandNamePattern.test("helllo"));
 
         if (validCommandNamePattern.test(command.meta.name) === false) {
             Log.debug("command name", command.meta.name);
@@ -108,7 +110,7 @@ export default class CommandStore /* extends Collection */ {
      * @param {SimpleCommand} command The command to register
      */
     public registerDecorator(command: DecoratorCommand): void {
-        if (!validCommandNamePattern.test(command.meta.name)) {
+        if (validCommandNamePattern.test(command.meta.name) === false) {
             Log.error(`[CommandStore.registerSimple] Failed to register simple command '${command.meta.name}' (Invalid name)`);
 
             return;

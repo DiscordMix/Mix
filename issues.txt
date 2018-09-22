@@ -29,3 +29,7 @@
 * NSFW Chat environment for command execution
 
 * Upon clicking on the OK command check, delete command + response
+
+* Ability to define command info (arguments, types, etc.) in XML (optionally)
+
+* context.ok(<message>, <emoji?>)

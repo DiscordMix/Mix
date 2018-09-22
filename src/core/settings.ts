@@ -4,18 +4,20 @@ import fs from "fs";
 
 // TODO: All these interfaces probably shouldn't be
 // read-only since it should be allowed to change them
-// in code.
-export interface SettingsGeneral {
+// in code. OR maybe use the react-redux and vscode style
+// of doing things, and make a copy of the current settings
+// and upon disconnect save/rewrite them!
+export type SettingsGeneral = {
     readonly token: string;
     readonly prefixes: Array<string>;
 }
 
-export interface SettingsKeys {
+export type SettingsKeys = {
     readonly dbl?: string;
     readonly bfd?: string;
 }
 
-export interface DefiniteSettingsPaths {
+export type DefiniteSettingsPaths = {
     readonly commands: string;
     readonly plugins: string;
     readonly emojis: string;
@@ -23,7 +25,7 @@ export interface DefiniteSettingsPaths {
     readonly languages?: string;
 }
 
-export interface SettingsPaths {
+export type SettingsPaths = {
     readonly commands?: string;
     readonly plugins?: string;
     readonly emojis?: string;
@@ -31,7 +33,7 @@ export interface SettingsPaths {
     readonly languages?: string;
 }
 
-export interface SettingsOptions {
+export type SettingsOptions = {
     readonly general: SettingsGeneral;
     readonly paths?: SettingsPaths;
     readonly keys?: SettingsKeys;

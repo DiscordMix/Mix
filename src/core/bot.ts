@@ -13,9 +13,7 @@ import Temp from "./temp";
 import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
-
 import Command, {ArgumentResolver, ArgumentStyle, CustomArgType, RawArguments, UserGroup} from "../commands/command";
-
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
 import EventEmitter from "events";
@@ -26,6 +24,7 @@ import FragmentLoader from "../fragments/fragment-loader";
 import Fragment from "../fragments/fragment";
 import Language from "../language/language";
 import Service from "../services/service";
+
 import {
     BotEvents,
     DecoratorCommand,
@@ -34,6 +33,7 @@ import {
     SimpleCommand,
     ChannelMessageEvents
 } from "../decorators/decorators";
+
 import {WeakCommand} from "..";
 
 const title: string =
@@ -425,7 +425,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     /**
      * @param {Array<Fragment>} fragments
      * @param {boolean} internal Whether the fragments are internal
-     * @return {number}
+     * @return {number} The amount of enabled fragments
      */
     private enableFragments(fragments: Array<Fragment>, internal: boolean = false): number {
         let enabled: number = 0;
@@ -624,54 +624,55 @@ export default class Bot<ApiType = any> extends EventEmitter {
             this.settings.general.prefixes
         );
 
-        if (command !== null) {
-            if ((command as any).type !== undefined && typeof (command as any).type === "number" && DecoratorCommandType[(command as any).type] !== undefined) {
-                command = command as DecoratorCommand;
-
-                if (command.type === DecoratorCommandType.Simple) {
-                    // TODO: Simple commands have an empty array of arguments, which doesn't look good
-                    (command as SimpleCommand).executed(this.createCommandContext(message), [], this.api);
-
-                    return;
-                }
-                else if (command.type === DecoratorCommandType.Weak) {
-                    //
-                    Log.warn(`[Bot.handleCommandMessage] Weak commands are not yet implemented, ignoring execution for '${command.meta.name}'`);
-
-                    return;
-                }
-                else {
-                    Log.error(`[Bot.handleCommandMessage] Unexpected decorator command type: '${command.type}' for command '${command.meta.name}'`);
-
-                    return;
-                }
-            }
-
-            command = command as Command;
-
-            const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
-                arguments: CommandParser.getArguments(content),
-                schema: command.arguments,
-
-                // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
-                message: message,
-                command: command
-            });
-
-            // TODO: Debugging
-            Log.debug("raw args, ", rawArgs);
-
-            await this.commandHandler.handle(
-                this.createCommandContext(message),
-
-                command,
-
-                rawArgs
-            );
-        }
-        else {
+        if (command === null) {
             Log.error("[Bot.handleCommandMessage] Failed parsing command");
+
+            return;
         }
+
+        if ((command as any).type !== undefined && typeof (command as any).type === "number" && DecoratorCommandType[(command as any).type] !== undefined) {
+            command = command as DecoratorCommand;
+
+            if (command.type === DecoratorCommandType.Simple) {
+                // TODO: Simple commands have an empty array of arguments, which doesn't look good
+                (command as SimpleCommand).executed(this.createCommandContext(message), [], this.api);
+
+                return;
+            }
+            else if (command.type === DecoratorCommandType.Weak) {
+                //
+                Log.warn(`[Bot.handleCommandMessage] Weak commands are not yet implemented, ignoring execution for '${command.meta.name}'`);
+
+                return;
+            }
+            else {
+                Log.error(`[Bot.handleCommandMessage] Unexpected decorator command type: '${command.type}' for command '${command.meta.name}'`);
+
+                return;
+            }
+        }
+
+        command = command as Command;
+
+        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
+            arguments: CommandParser.getArguments(content),
+            schema: command.arguments,
+
+            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
+            message: message,
+            command: command
+        });
+
+        // TODO: Debugging
+        Log.debug("raw args, ", rawArgs);
+
+        await this.commandHandler.handle(
+            this.createCommandContext(message),
+
+            command,
+
+            rawArgs
+        );
     }
 
     /**
@@ -683,11 +684,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
             await this.authStore.reload();
         }
 
-        const guilds = this.client.guilds.array();
+        const guilds: Array<Guild> = this.client.guilds.array();
 
         let entries = 0;
 
-        for (let i = 0; i < guilds.length; i++) {
+        for (let i: number = 0; i < guilds.length; i++) {
             if (!this.authStore.contains(guilds[i].id)) {
                 this.authStore.create(guilds[i].id);
                 entries++;
@@ -716,9 +717,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * Connect the client
-     * @return {Promise<Bot>}
+     * @return {Promise<this>}
      */
-    public async connect(): Promise<Bot> {
+    public async connect(): Promise<this> {
         Log.verbose("[Bot.connect] Starting");
         await this.client.login(this.settings.general.token);
 
@@ -729,9 +730,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @todo Use the reload modules param
      * Restart the client
      * @param {boolean} reloadModules Whether to reload all modules
-     * @return {Promise<Bot>}
+     * @return {Promise<this>}
      */
-    public async restart(reloadModules: boolean = true): Promise<Bot> {
+    public async restart(reloadModules: boolean = true): Promise<this> {
         Log.verbose("[Bot.restart] Restarting");
 
         if (reloadModules) {
@@ -749,9 +750,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * Disconnect the client
-     * @return {Promise<Bot>}
+     * @return {Promise<this>}
      */
-    public async disconnect(): Promise<Bot> {
+    public async disconnect(): Promise<this> {
         // Save auth store if it's a JsonAuthStore
         if (this.authStore instanceof JsonAuthStore) {
             Log.verbose("[Bot.disconnect] Saving auth store");
@@ -777,7 +778,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * Clear all the files inside the temp folder
-     * @return {Promise<*>}
      */
     public static clearTemp(): void {
         if (fs.existsSync("./temp")) {

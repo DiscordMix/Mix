@@ -33,6 +33,8 @@ export interface SetupHelperResult {
     readonly expired: boolean;
 }
 
+export type ResponseHandler = (response: string, index: number) => string;
+
 export default class SetupHelper {
     private readonly client: any;
     private readonly channel: TextChannel;
@@ -123,10 +125,10 @@ export default class SetupHelper {
     }
 
     /**
-     * @param {(response: string) => string} responseHandler
+     * @param {ResponseHandler} responseHandler
      * @return {Promise<SetupHelperResult>}
      */
-    public async finish(responseHandler?: (response: string, index: number) => string): Promise<SetupHelperResult> {
+    public async finish(responseHandler?: ResponseHandler): Promise<SetupHelperResult> {
         const responses: Array<string> = [];
 
         for (let i = 0; i < this.actionMap.length; i++) {
@@ -206,10 +208,9 @@ export default class SetupHelper {
                 timeout: options.timeout
             });
         }
-        else {
-            Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${options.context.message.channel.type}'`);
+        
+        Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${options.context.message.channel.type}'`);
 
-            return null;
-        }
+        return null;
     }
 }

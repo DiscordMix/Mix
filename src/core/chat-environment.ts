@@ -1,6 +1,3 @@
-/**
- * @enum {number}
- */
 enum ChatEnvironment {
     Private,
     Guild,

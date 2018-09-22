@@ -9,6 +9,7 @@ import {
     TextChannel,
     User
 } from "discord.js";
+
 import fs from "fs";
 import path from "path";
 import Patterns from "./patterns";
@@ -28,9 +29,9 @@ const moderationPermissions: Array<PermissionResolvable> = [
 
 TimeAgo.locale(en);
 
-const timeAgo = new TimeAgo("en-US");
+const timeAgo: any = new TimeAgo("en-US");
 
-export interface SendOptions {
+export type SendOptions = {
     readonly user: User;
     readonly channel: any
     /* TextChannel | GroupDMChannel | DMChannel | GuildChannel */
@@ -212,6 +213,7 @@ export default class Utils {
                     return;
                 }
 
+                // TODO: Type
                 let parsed;
 
                 try {
@@ -362,7 +364,7 @@ export default class Utils {
     /**
      * Determine the guild owners by searching for members with the MANAGE_GUILD permission
      * @param {Guild} guild
-     * @return {Array<"discord.js".GuildMember>}
+     * @return {Array<GuildMember>}
      */
     public static getOwners(guild: Guild): Array<GuildMember> {
         return guild.members.filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).array();

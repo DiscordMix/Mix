@@ -49,9 +49,9 @@ export default class DataCollector {
 
     /**
      * @param {MemberDataType} dataType
-     * @return {DataCollector}
+     * @return {this}
      */
-    public collect(dataType: MemberDataType): DataCollector {
+    public collect(dataType: MemberDataType): this {
         // TODO
 
         return this;
@@ -59,9 +59,9 @@ export default class DataCollector {
 
     /**
      * @param {MemberType} memberType
-     * @return {DataCollector}
+     * @return {this}
      */
-    public from(memberType: MemberType): DataCollector {
+    public from(memberType: MemberType): this {
         this.fromType = memberType;
 
         return this;
@@ -69,9 +69,9 @@ export default class DataCollector {
 
     /**
      * @param {(GuildMember) => boolean} condition
-     * @return {DataCollector}
+     * @return {this}
      */
-    public where(condition: (member: GuildMember) => boolean): DataCollector {
+    public where(condition: (member: GuildMember) => boolean): this {
         this.whereCondition = condition;
 
         return this;
@@ -81,7 +81,7 @@ export default class DataCollector {
      * @return {Array<GuildMember>}
      */
     public finish(): Array<GuildMember> {
-        const members = this.guild.members.array();
+        const members: Array<GuildMember> = this.guild.members.array();
 
         let result: Array<GuildMember> = [];
 

@@ -4,7 +4,7 @@ export type CommandSwitch = {
     readonly key: string;
     readonly value: string | null;
     readonly short: boolean;
-};
+}
 
 export default abstract class SwitchParser {
     public static getSwitches(commandString: string): Array<CommandSwitch> {

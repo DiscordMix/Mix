@@ -53,7 +53,7 @@ type MessageInfo = {
     authorTag: string;
     message: string;
     time: number;
-};
+}
 
 export interface BotOptions {
     readonly settings: Settings;
@@ -71,17 +71,17 @@ export interface BotOptions {
 export const DefaultBotEmojiOptions: DefiniteBotEmojiOptions = {
     success: ":white_check_mark:",
     error: ":thinking:"
-};
+}
 
 export type BotEmojiOptions = {
     readonly success?: string;
     readonly error?: string;
-};
+}
 
 export type DefiniteBotEmojiOptions = {
     readonly success: string;
     readonly error: string;
-};
+}
 
 export interface BotExtraOptions {
     readonly asciiTitle?: boolean;

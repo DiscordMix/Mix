@@ -13,7 +13,7 @@ export type AuthLevel = DefaultAuthLevel | number;
 export type AuthSchemaEntry = {
     readonly name: string;
     readonly auth: AuthLevel;
-};
+}
 
 export type AuthSchema = Array<AuthSchemaEntry>;
 

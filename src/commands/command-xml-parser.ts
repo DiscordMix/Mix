@@ -1,11 +1,10 @@
 import {parseString} from "xml2js";
-import {Command, Utils} from "..";
 import fs from "fs";
 
 export type CommandInfo = {
     readonly name: string;
     readonly aliases: Array<string>;
-};
+}
 
 export default abstract class CommandXmlParser {
     public static parse(xmlString: string): Promise<CommandInfo | null> {

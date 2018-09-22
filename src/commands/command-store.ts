@@ -87,6 +87,8 @@ export default class CommandStore /* extends Collection */ {
      * @param {Command} command
      */
     public register(command: Command | WeakCommand): void {
+        Log.debug("command name is ", command.meta.name);
+
         if (validCommandNamePattern.test(command.meta.name) === false) {
             Log.debug("command name", command.meta.name);
             Log.debug("result is ", validCommandNamePattern.test(command.meta.name) === false);

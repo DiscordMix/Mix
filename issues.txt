@@ -33,3 +33,5 @@
 * Ability to define command info (arguments, types, etc.) in XML (optionally)
 
 * context.ok(<message>, <emoji?>)
+
+* services + xml? Maybe define listeners, etc.?

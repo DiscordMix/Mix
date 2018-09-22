@@ -90,9 +90,6 @@ export default class CommandStore /* extends Collection */ {
         const commandName: string = command.meta.name.trim();
 
         if (validCommandNamePattern.test(commandName) === false) {
-            Log.debug("command name", commandName);
-            Log.debug("result is ", validCommandNamePattern.test(commandName) === false);
-
             Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Invalid name)`);
 
             return;

@@ -1,7 +1,7 @@
 import Log from "../core/log";
 import Discord, {Message} from "discord.js";
 
-export interface MessageEditOptions {
+export type MessageEditOptions = {
     readonly message: string;
     readonly title?: string;
     readonly color?: string;
@@ -14,9 +14,9 @@ export default class EditableMessage {
 
     /**
      * @todo Verify param "message"'s type
-     * @param {Discord.Message|Array<Discord.Message>} message
+     * @param {Message | Array<Message>} message
      */
-    constructor(message: Message | Message[]) {
+    constructor(message: Message | Array<Message>) {
         // TODO: Hotfix
         if (Array.isArray(message)) {
             message = message[0];

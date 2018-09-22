@@ -36,6 +36,8 @@
 
 * services + xml? Maybe define listeners, etc.?
 
+* Log pipe, ex. this.log.error("testing") => [ServiceNameHere] testing, injecting the log pipe into commands + services.
+
 === TODO ===
 
 * Command switches need to be passed into the command executed() function in a similar form of args in order to access value, shorthand, etc.

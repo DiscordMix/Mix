@@ -49,7 +49,7 @@ export default class EmojiMenuManager {
      * @return {Promise<Message>}
      */
     public async show(channel: any, menu: EmojiMenu): Promise<Message> {
-        const sentMessage = await channel.send(menu.content);
+        const sentMessage: Message = await channel.send(menu.content) as Message;
 
         for (let i = 0; i < menu.buttons.length; i++) {
             await sentMessage.react(menu.buttons[i].emoji);

@@ -33,6 +33,7 @@ import {
     SimpleCommand,
     ChannelMessageEvents
 } from "../decorators/decorators";
+import StatCounter from "./stat-counter";
 
 const title: string =
     " █████╗ ███╗   ██╗██╗   ██╗██╗██╗     \n" +
@@ -139,6 +140,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     private api?: ApiType;
     private setupStart: number = 0;
+
+    private readonly statCounter: StatCounter;
 
     /**
      * Setup the bot from an object
@@ -301,6 +304,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @type {boolean}
          */
         this.suspended = false;
+
+        /**
+         * @type {StatCounter}
+         */
+        this.statCounter = new StatCounter();
 
         return this;
     }

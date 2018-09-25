@@ -13,7 +13,7 @@ import Temp from "./temp";
 import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel, Guild} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
-import Command, {ArgumentResolver, ArgumentStyle, CustomArgType, RawArguments, UserGroup} from "../commands/command";
+import Command, {ArgumentResolver, ArgumentStyle, CustomArgType, RawArguments, UserGroup, DefaultCommandRestrict} from "../commands/command";
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
 import EventEmitter from "events";
@@ -443,6 +443,17 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 // Command is not registered in primitive commands
                 if (internal && !this.primitiveCommands.includes(fragment.meta.name)) {
                     continue;
+                }
+
+                // Overwrite command restrict with default values
+                fragment.restrict = {
+                    ...DefaultCommandRestrict,
+                    ...fragment.restrict
+                };
+
+                // TODO: Debugging
+                if (fragment.meta.name === "permissions") {
+                    console.log("New permissions cmd restrict is ", fragment.restrict);
                 }
 
                 this.commandStore.register(fragment);

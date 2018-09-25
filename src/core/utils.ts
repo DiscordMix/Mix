@@ -43,6 +43,14 @@ export type SendOptions = {
 }
 
 export default class Utils {
+    public static readonly botLists: Array<Snowflake> = [
+        "374071874222686211", // Bots for Discord (BFD)
+        "264445053596991498", // Discord Bot List (DBL)
+        "110373943822540800", // Discord Bots
+        "387812458661937152", // Botlist.space
+        "450100127256936458"  // Discord Bot List (2)
+    ];
+
     /**
      * @param {string} mention
      * @return {string}

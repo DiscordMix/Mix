@@ -2,12 +2,14 @@ import Bot from "./core/bot";
 import ArgumentParser from "./commands/argument-parser";
 import CommandContext from "./commands/command-context";
 import CommandStore, {CommandManagerEvent} from "./commands/command-store";
+
 import Command, {
     ArgumentTypeChecker,
     Argument,
     PrimitiveArgType,
     CustomArgType
 } from "./commands/command";
+
 import ConsoleInterface from "./console/console-interface";
 import CommandParser from "./commands/command-parser";
 import ConsoleCommand from "./console/console-command";

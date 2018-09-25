@@ -24,9 +24,6 @@
 
 * Executing plain command without required args throws "replace of undefined" error (ex. ".ban")
 
-* The export const (not Object.assign()) default restrict values might be getting carried over like last time
-    *) Evidence from console.log on command fragment load (command.restrict)
-
 === IDEAS ===
 
 * NSFW Chat environment for command execution

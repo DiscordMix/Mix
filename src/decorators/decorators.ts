@@ -65,7 +65,7 @@ export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         console.log("meta is ", target.meta);
 
-        console.log("new constructor is ", new target());
+        console.log("jsonied is ", JSON.stringify(target));
 
         BotEvents.push({
             name: eventName,

@@ -4,6 +4,9 @@ import Log from "../core/log";
 import Utils from "../core/utils";
 import path from "path";
 
+const validFragmentNamePattern: RegExp = /^(?:[a-z]{0,}[a-z0-9-_\S]+){2,50}$/i;
+const validFragmentDescPattern: RegExp = /^(?:[a-z]{0,}[^\n\r\t\0]+){1,100}$/i;
+
 export default abstract class FragmentLoader {
     /**
      * @todo Make use of the 'isolate' parameter
@@ -35,6 +38,20 @@ export default abstract class FragmentLoader {
 
             return null;
         }
+    }
+
+    public static validate(fragment: any): boolean {
+        if (!fragment.meta) {
+            return false;
+        }
+        else if (!fragment.meta.name || !fragment.meta.description) {
+            return false;
+        }
+        else if (!validFragmentNamePattern.test(fragment.meta.name) || !validFragmentDescPattern.test(fragment.meta.name) || fragment.meta.name.length > 100 || fragment.meta.description.length > 100) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

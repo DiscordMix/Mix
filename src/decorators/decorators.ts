@@ -65,7 +65,7 @@ export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         BotEvents.push({
             name: eventName,
-            handler: descriptor.value.bind(target)
+            handler: descriptor.value.apply(target)
         });
     }
 }
@@ -74,7 +74,7 @@ export function message(channel: Snowflake) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         ChannelMessageEvents.push({
             name: channel,
-            handler: descriptor.value.bind(target)
+            handler: descriptor.value.apply(target)
         });
     }
 }

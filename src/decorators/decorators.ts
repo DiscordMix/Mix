@@ -58,6 +58,8 @@ export const DecoratorCommands: Array<DecoratorCommand> = [];
 
 export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
+        console.log("meta is ", target.meta);
+
         BotEvents.set(eventName, descriptor.value.apply(target));
     }
 }

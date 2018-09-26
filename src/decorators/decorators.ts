@@ -61,6 +61,7 @@ export const ChannelMessageEvents: Array<BotEvent> = [];
 
 export const DecoratorCommands: Array<DecoratorCommand> = [];
 
+// Maybe keep this for global static listeners?
 // TODO: Find a better way, like use the start method instead to define listeners, since decorators are called on class definition NOT instanciation
 export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {

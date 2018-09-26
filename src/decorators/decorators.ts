@@ -58,6 +58,7 @@ export const DecoratorCommands: Array<DecoratorCommand> = [];
 
 export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
+        console.log("target is ", target);
         BotEvents.set(eventName, descriptor.value);
     }
 }

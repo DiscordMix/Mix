@@ -143,6 +143,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     private api?: ApiType;
     private setupStart: number = 0;
 
+    // TODO: Implement stat counter
     private readonly statCounter: StatCounter;
 
     /**

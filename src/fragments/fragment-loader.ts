@@ -29,6 +29,8 @@ export default abstract class FragmentLoader {
             return module;
         }
         catch (exception) {
+            throw exception;
+
             Log.warn(`[FragmentLoader.load] There was an error while loading a fragment: ${exception}`);
 
             return null;

@@ -521,17 +521,17 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         // Setup user events
-        BotEvents.forEach((value: any, key: string) => {
-            this.client.on(key, value);
-        });
+        for (let i = 0; i < BotEvents.length; i++) {
+            this.client.on(BotEvents[i].name, BotEvents[i].handler);
+        }
 
-        ChannelMessageEvents.forEach((value: any, key: Snowflake) => {
+        for (let i = 0; i < ChannelMessageEvents.length; i++) {
             this.client.on("message", (message: Message) => {
-                if (message.channel.id === key) {
-                    value();
+                if (message.channel.id === ChannelMessageEvents[i].name) {
+                    ChannelMessageEvents[i].handler();
                 }
             });
-        });
+        }
 
         Log.success("[Bot.setupEvents] Discord events setup completed");
     }

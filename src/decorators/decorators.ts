@@ -51,22 +51,31 @@ export enum DiscordEvent {
     Warn = "warn"
 }
 
-export const BotEvents: Map<string, any> = new Map();
-export const ChannelMessageEvents: Map<Snowflake, any> = new Map();
+export type BotEvent = {
+    readonly name: string;
+    readonly handler: any;
+}
+
+export const BotEvents: Array<BotEvent> = [];
+export const ChannelMessageEvents: Array<BotEvent> = [];
 
 export const DecoratorCommands: Array<DecoratorCommand> = [];
 
 export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
-        console.log("meta is ", target.meta);
-
-        BotEvents.set(eventName, descriptor.value.bind(target));
+        BotEvents.push({
+            name: eventName,
+            handler: descriptor.value.bind(target)
+        });
     }
 }
 
 export function message(channel: Snowflake) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
-        ChannelMessageEvents.set(channel, descriptor.value.bind(target));
+        ChannelMessageEvents.push({
+            name: channel,
+            handler: descriptor.value.bind(target)
+        });
     }
 }
 

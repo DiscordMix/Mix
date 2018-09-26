@@ -60,13 +60,13 @@ export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         console.log("meta is ", target.meta);
 
-        BotEvents.set(eventName, descriptor.value.apply(target));
+        BotEvents.set(eventName, descriptor.value.bind(target));
     }
 }
 
 export function message(channel: Snowflake) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
-        ChannelMessageEvents.set(channel, descriptor.value.apply(target));
+        ChannelMessageEvents.set(channel, descriptor.value.bind(target));
     }
 }
 

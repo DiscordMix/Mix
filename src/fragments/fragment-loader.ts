@@ -50,6 +50,9 @@ export default abstract class FragmentLoader {
         else if (!validFragmentNamePattern.test(fragment.meta.name) || !validFragmentDescPattern.test(fragment.meta.name) || fragment.meta.name.length > 100 || fragment.meta.description.length > 100) {
             return false;
         }
+        else if (typeof fragment.meta !== "object" || typeof fragment.meta.name !== "string" || typeof fragment.meta.description !== "string") {
+            return false;
+        }
 
         return true;
     }

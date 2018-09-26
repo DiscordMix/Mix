@@ -65,6 +65,8 @@ export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         console.log("meta is ", target.meta);
 
+        console.log("new constructor is ", new target());
+
         BotEvents.push({
             name: eventName,
             handler: descriptor.value.apply(target)

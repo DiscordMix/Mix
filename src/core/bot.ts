@@ -453,11 +453,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
                     ...fragment.restrict
                 };
 
-                // TODO: Debugging
-                if (fragment.meta.name === "permissions") {
-                    console.log("New permissions cmd restrict is ", fragment.restrict);
-                }
-
                 this.commandStore.register(fragment);
                 enabled++;
             }

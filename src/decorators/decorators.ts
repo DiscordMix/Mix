@@ -58,14 +58,13 @@ export const DecoratorCommands: Array<DecoratorCommand> = [];
 
 export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
-        console.log("target is ", target);
-        BotEvents.set(eventName, descriptor.value);
+        BotEvents.set(eventName, descriptor.value.bind(target));
     }
 }
 
 export function message(channel: Snowflake) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
-        ChannelMessageEvents.set(channel, descriptor.value);
+        ChannelMessageEvents.set(channel, descriptor.value.bind(target));
     }
 }
 

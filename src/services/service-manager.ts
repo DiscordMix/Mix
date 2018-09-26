@@ -1,9 +1,10 @@
 import Bot from "../core/bot";
 import Service from "./service";
+import {Log} from "..";
 
 export default class ServiceManager {
     private readonly bot: Bot;
-    private readonly services: Array<Service>;
+    private readonly services: Map<string, Service>;
 
     /**
      * @param {Bot} bot
@@ -17,11 +18,11 @@ export default class ServiceManager {
         this.bot = bot;
 
         /**
-         * @type {Array<Service>}
+         * @type {Map<string, Service>}
          * @private
          * @readonly
          */
-        this.services = [];
+        this.services = new Map();
     }
 
     /**
@@ -29,8 +30,8 @@ export default class ServiceManager {
      * @return {boolean}
      */
     public register(service: Service): boolean {
-        if (!this.getService(service.meta.name)) {
-            this.services.push(service);
+        if (!this.services.has(service.meta.name)) {
+            this.services.set(service.meta.name, service);
 
             return true;
         }
@@ -56,15 +57,40 @@ export default class ServiceManager {
 
     /**
      * @param {string} name
-     * @return {boolean}
+     * @return {boolean} Whether the service was started
      */
     public enable(name: string): boolean {
-        const service: Service | null = this.getService(name);
+        const service: Service | null = this.services.get(name) || null;
 
-        if (service) {
+        if (typeof service !== "object") {
+            Log.warn(`[ServiceManager.enable] Failed to enable service '${name}' because it is not an object`);
+        }
+        else if (service !== null) {
+            if (typeof service.canStart === "boolean") {
+                if (!service.canStart) {
+                    return false;
+                }
+            }
+            else if (typeof service.canStart === "function") {
+                if (!service.canStart()) {
+                    return false;
+                }
+            }
+            else {
+                Log.error(`[ServiceManager.enable] Unexpected type of canEnable service property, expecting either a boolean or function for service '${name}'`);
+
+                return false;
+            }
+
             service.start();
 
             return true;
+        }
+        else if (service === null) {
+            Log.warn(`[ServiceManager.enable] Attempted to enable an unregistered service '${name}'`);
+        }
+        else {
+            Log.warn(`[ServiceManager.enable] Unexpected composition of service '${name}'. (Your service may be invalid)`);
         }
 
         return false;
@@ -77,8 +103,8 @@ export default class ServiceManager {
     public enableAll(): number {
         let enabled: number = 0;
 
-        for (let i = 0; i < this.services.length; i++) {
-            if (this.enable(this.services[i].meta.name)) {
+        for (let [name, service] of this.services) {
+            if (this.enable(name)) {
                 enabled++;
             }
         }
@@ -90,13 +116,7 @@ export default class ServiceManager {
      * @param {string} name
      * @return {Service | null}
      */
-    public getService(name: string): Service | null {
-        for (let i = 0; i < this.services.length; i++) {
-            if (this.services[i].meta.name === name) {
-                return this.services[i];
-            }
-        }
-
-        return null;
+    public getService(name: string): Readonly<Service> | null {
+        return this.services.get(name) || null;
     }
 }

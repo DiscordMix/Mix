@@ -61,11 +61,12 @@ export const ChannelMessageEvents: Array<BotEvent> = [];
 
 export const DecoratorCommands: Array<DecoratorCommand> = [];
 
+// TODO: Find a better way, like use the start method instead to define listeners, since decorators are called on class definition NOT instanciation
 export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         console.log("meta is ", target.meta);
 
-        console.log("jsonied is ", JSON.stringify(descriptor.value));
+        console.log("jsonied is ", JSON.stringify(descriptor));
 
         BotEvents.push({
             name: eventName,

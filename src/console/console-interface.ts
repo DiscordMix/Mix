@@ -27,6 +27,7 @@ export default class ConsoleInterface {
             output: process.stdout
         });
 
+        ci.setPrompt(`${bot.client.user.tag} > `);
         ci.prompt(true);
 
         ci.on("line", async (input: string) => {

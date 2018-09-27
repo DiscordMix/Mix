@@ -3,6 +3,7 @@ import Utils from "../core/utils";
 import Bot from "../core/bot";
 import readline from "readline";
 import {performance} from "perf_hooks";
+import {Guild} from "discord.js";
 
 export default class ConsoleInterface {
     public ready: boolean;
@@ -57,6 +58,12 @@ export default class ConsoleInterface {
 
                 case "uptime": {
                     console.log(`Started ${Utils.timeAgoFromNow(bot.client.uptime)}`);
+
+                    break;
+                }
+
+                case "guilds": {
+                    console.log("\n" + bot.client.guilds.map((guild: Guild) => `${guild.name} ${guild.id}\n`));
 
                     break;
                 }

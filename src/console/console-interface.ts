@@ -3,7 +3,7 @@ import Utils from "../core/utils";
 import Bot from "../core/bot";
 import readline from "readline";
 import {performance} from "perf_hooks";
-import {Guild} from "discord.js";
+import {Guild, GuildMember} from "discord.js";
 
 export default class ConsoleInterface {
     public ready: boolean;
@@ -31,8 +31,10 @@ export default class ConsoleInterface {
         ci.setPrompt(`${bot.client.user.tag} > `);
         ci.prompt(true);
 
+        let using: Guild | null = null;
+
         ci.on("line", async (input: string) => {
-            switch (input.trim()) {
+            switch (input.trim().toLowerCase()) {
                 case "": {
                     break;
                 }
@@ -68,8 +70,59 @@ export default class ConsoleInterface {
                     break;
                 }
 
+                case "use": {
+                    const guild: string = input.trim().split(" ")[1];
+
+                    if (bot.client.guilds.has(guild)) {
+                        using = bot.client.guilds.get(guild) || null;
+
+                        if (using !== null) {
+                            console.log(`\nUsing ${using.name} (${using.id})\n`);
+                        }
+                        else {
+                            console.log("\nGuild does not exist in the client\n");
+                        }
+                    }
+                    else {
+                        console.log("\nGuild does not exist in the client\n");
+                    }
+
+                    break;
+                }
+
+                case "membercount": {
+                    if (using !== null) {
+                        console.log(`\n${using.name} has ${using.memberCount} member(s)\n`);
+                    }
+                    else {
+                        console.log(`\nNot using any guild\n`);
+                    }
+
+                    break;
+                }
+
+                case "member": {
+                    const memberId: string = input.trim().split(" ")[1];
+
+                    if (using !== null) {
+                        const member: GuildMember | null = await using.member(memberId) || null;
+
+                        if (member === null) {
+                            console.log(`\nGuild '${using.name}' does not contain such member\n`);
+                        }
+                        else {
+                            console.log("\n", member, "\n");
+                        }
+                    }
+                    else {
+                        console.log(`\nNot using any guild\n`);
+                    }
+
+                    break;
+                }
+
                 case "reload": {
-                    const startTime = performance.now();
+                    const startTime: number = performance.now();
 
                     await bot.disconnect();
 

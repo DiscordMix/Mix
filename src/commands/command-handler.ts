@@ -219,9 +219,6 @@ export default class CommandHandler {
             const actualResult = command.executed(context, resolvedArgs, context.bot.getAPI());
             const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
             const commandCooldown: number = Date.now() + (command.restrict.cooldown * 1000);
-
-            console.log(`Cooldown is ${command.restrict.cooldown * 1000} second(s)`);
-
             const lastCooldown: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 
             // Delete the last cooldown before adding the new one for this command + user

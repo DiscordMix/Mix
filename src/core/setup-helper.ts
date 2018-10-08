@@ -29,7 +29,7 @@ export interface SetupHelperAction {
 }
 
 export interface SetupHelperResult {
-    readonly responses: Array<string>;
+    readonly responses: string[];
     readonly expired: boolean;
 }
 
@@ -129,7 +129,7 @@ export default class SetupHelper {
      * @return {Promise<SetupHelperResult>}
      */
     public async finish(responseHandler?: ResponseHandler): Promise<SetupHelperResult> {
-        const responses: Array<string> = [];
+        const responses: string[] = [];
 
         for (let i = 0; i < this.actionMap.length; i++) {
             // TODO: Inefficient check position

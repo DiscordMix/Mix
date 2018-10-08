@@ -13,7 +13,7 @@ export default abstract class Kick extends Command {
         description: "Kick a member from the server"
     };
 
-    readonly arguments: Array<Argument> = [
+    readonly arguments: Argument[] = [
         {
             name: "member",
             description: "The guild member to kick",

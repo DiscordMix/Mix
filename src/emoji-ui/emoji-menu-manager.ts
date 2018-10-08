@@ -3,7 +3,7 @@ import EmojiMenu from "./emoji-menu";
 
 export default class EmojiMenuManager {
     private readonly client: Client;
-    private readonly awaiting: Array<any>;
+    private readonly awaiting: any[];
 
     /**
      * @param {Client} client

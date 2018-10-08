@@ -40,28 +40,19 @@ const title: string =
 
 "███████╗ ██████╗ ██████╗  ██████╗ ███████╗\n" +
 "██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝\n" +
-"█████╗  ██║   ██║██████╔╝██║  ███╗█████╗  \n"
-"██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝  \n"
-"██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗\n"
+"█████╗  ██║   ██║██████╔╝██║  ███╗█████╗  \n" +
+"██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝  \n" +
+"██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗\n" +
 "╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝ {version}";
 
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
-
-type MessageInfo = {
-    guildName: string;
-    channelName: string;
-    authorId: Snowflake;
-    authorTag: string;
-    message: string;
-    time: number;
-}
 
 export type BotOptions = {
     readonly settings: Settings;
     readonly authStore: CommandAuthStore;
     readonly dataStore?: DataProvider;
     readonly prefixCommand?: boolean;
-    readonly primitiveCommands?: Array<string>;
+    readonly primitiveCommands?: string[];
     readonly userGroups?: Array<UserGroup>;
     readonly owner?: Snowflake;
     readonly options?: BotExtraOptions;
@@ -130,7 +121,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly console: ConsoleInterface;
     public readonly menus: EmojiMenuManager;
     public readonly prefixCommand: boolean;
-    public readonly primitiveCommands: Array<string>;
+    public readonly primitiveCommands: string[];
     public readonly userGroups: Array<UserGroup>;
     public readonly owner?: Snowflake;
     public readonly options: DefiniteBotExtraOptions;
@@ -234,7 +225,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         /**
          * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific primitives can be loaded.
-         * @type {Array<string>}
+         * @type {string[]}
          * @readonly
          */
         this.primitiveCommands = botOptions.primitiveCommands || [
@@ -348,7 +339,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         Log.verbose("[Bot.setup] Attempting to load internal fragments");
 
         // Load & enable internal fragments
-        const internalFragmentCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(internalFragmentsPath);
+        const internalFragmentCandidates: string[] | null = await FragmentLoader.pickupCandidates(internalFragmentsPath);
 
         if (!internalFragmentCandidates) {
             throw new Error("[Bot.setup] Failed to load internal fragments");
@@ -378,7 +369,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         // Load & enable services
-        const consumerServiceCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(this.settings.paths.services);
+        const consumerServiceCandidates: string[] | null = await FragmentLoader.pickupCandidates(this.settings.paths.services);
 
         if (!consumerServiceCandidates || consumerServiceCandidates.length === 0) {
             Log.verbose(`[Bot.setup] No services were detected under '${this.settings.paths.services}'`);
@@ -401,7 +392,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.services.enableAll();
 
         // Load & enable consumer command fragments
-        const consumerCommandCandidates: Array<string> | null = await FragmentLoader.pickupCandidates(this.settings.paths.commands);
+        const consumerCommandCandidates: string[] | null = await FragmentLoader.pickupCandidates(this.settings.paths.commands);
 
         if (!consumerCommandCandidates || consumerCommandCandidates.length === 0) {
             Log.warn(`[Bot.setup] No commands were detected under '${this.settings.paths.commands}'`);
@@ -521,17 +512,17 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         // Setup user events
-        BotEvents.forEach((value: any, key: string) => {
-            this.client.on(key, value);
-        });
+        for (let i = 0; i < BotEvents.length; i++) {
+            this.client.on(BotEvents[i].name, BotEvents[i].handler);
+        }
 
-        ChannelMessageEvents.forEach((value: any, key: Snowflake) => {
+        for (let i = 0; i < ChannelMessageEvents.length; i++) {
             this.client.on("message", (message: Message) => {
-                if (message.channel.id === key) {
-                    value();
+                if (message.channel.id === ChannelMessageEvents[i].name) {
+                    ChannelMessageEvents[i].handler();
                 }
             });
-        });
+        }
 
         Log.success("[Bot.setupEvents] Discord events setup completed");
     }
@@ -589,7 +580,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         // TODO: Cannot do .startsWith with a prefix array
         if ((!message.author.bot || (message.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(message.content, this.commandStore, this.settings.general.prefixes)) {
             if (this.options.allowCommandChain) {
-                const chain: Array<string> = message.content.split("&");
+                const chain: string[] = message.content.split("&");
 
                 // TODO: What if commandChecks is start and the bot tries to react twice or more?
                 for (let i: number = 0; i < chain.length; i++) {

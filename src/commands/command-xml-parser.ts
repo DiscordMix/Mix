@@ -3,7 +3,7 @@ import fs from "fs";
 
 export type CommandInfo = {
     readonly name: string;
-    readonly aliases: Array<string>;
+    readonly aliases: string[];
 }
 
 export default abstract class CommandXmlParser {

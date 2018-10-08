@@ -5,12 +5,12 @@ import {default as _} from "lodash";
  * @extends EventEmitter
  */
 export default class Collection extends EventEmitter {
-    private readonly items: Array<any>;
+    private readonly items: any[];
 
     /**
      * @param {Array} items
      */
-    constructor(items: Array<any> = []) {
+    constructor(items: any[] = []) {
         super();
 
         /**

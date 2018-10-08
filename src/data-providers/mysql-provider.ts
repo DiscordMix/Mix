@@ -86,7 +86,7 @@ export default class MysqlProvider extends DataProvider {
      * @param {number} [timeout=5000]
      * @return {Promise<object>}
      */
-    public query(query: string, args: Array<any> = [], timeout = 5000): Promise<any> {
+    public query(query: string, args: any[] = [], timeout = 5000): Promise<any> {
         return new Promise((resolve, reject) => {
             this.connection.query({
                 sql: query,
@@ -135,7 +135,7 @@ export default class MysqlProvider extends DataProvider {
         const fields = queryResult.fields;
 
         if (splitPath.length === 1) {
-            const rtn: Array<any> = [];
+            const rtn: any[] = [];
 
             for (let i = 0; i < results.length; i++) {
                 const row = results[i];
@@ -217,9 +217,9 @@ export default class MysqlProvider extends DataProvider {
     /**
      * @param {string} path
      * @param {Snowflake} guildId
-     * @return {Array<string>}
+     * @return {string[]}
      */
-    public static cleanPath(path: string, guildId: Snowflake): Array<string> {
+    public static cleanPath(path: string, guildId: Snowflake): string[] {
         return `${guildId ? `guilds.${guildId}.` : ""}${path}`.split(".");
     }
 

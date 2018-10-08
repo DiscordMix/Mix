@@ -1,7 +1,7 @@
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import Command, {Argument, RestrictGroup, RawArguments} from "./command";
-import CommandStore, {CommandCooldown, CommandManagerEvent} from "./command-store";
+import Command, {RestrictGroup, RawArguments} from "./command";
+import CommandStore, {CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
 import {GuildMember, Snowflake, TextChannel} from "discord.js";
@@ -64,10 +64,10 @@ export default class CommandHandler {
     /**
      * @param {CommandContext} context
      * @param {Command} command
-     * @param {Array<Argument>} rawArgs
+     * @param {Argument[]} rawArgs
      * @return {boolean}
      */
-    private meetsRequirements(context: CommandContext, command: Command, rawArgs: Array<string>): boolean {
+    private meetsRequirements(context: CommandContext, command: Command, rawArgs: string[]): boolean {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 
@@ -219,9 +219,6 @@ export default class CommandHandler {
             const actualResult = command.executed(context, resolvedArgs, context.bot.getAPI());
             const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
             const commandCooldown: number = Date.now() + (command.restrict.cooldown * 1000);
-
-            console.log(`Cooldown is ${command.restrict.cooldown * 1000} second(s)`);
-
             const lastCooldown: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 
             // Delete the last cooldown before adding the new one for this command + user

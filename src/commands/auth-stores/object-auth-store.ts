@@ -54,10 +54,10 @@ export default class ObjectAuthStore extends CommandAuthStore {
 
     /**
      * @param {Snowflake} guildId
-     * @param {Array<string>} roles
+     * @param {string[]} roles
      * @return {number}
      */
-    public getHighestAuthLevelByRoles(guildId: Snowflake, roles: Array<string>): number {
+    public getHighestAuthLevelByRoles(guildId: Snowflake, roles: string[]): number {
         let highest = 0;
 
         for (let i = 0; i < roles.length; i++) {
@@ -74,10 +74,10 @@ export default class ObjectAuthStore extends CommandAuthStore {
     /**
      * @param {Snowflake} guildId
      * @param {Snowflake} userId
-     * @param {Array<string>} roles
+     * @param {string[]} roles
      * @return {number} The authority of the user
      */
-    public getAuthority(guildId: Snowflake, userId: Snowflake, roles: Array<string> = ["@everyone"]): number {
+    public getAuthority(guildId: Snowflake, userId: Snowflake, roles: string[] = ["@everyone"]): number {
         const byRoles = this.getHighestAuthLevelByRoles(guildId, roles);
         const byId = this.getAuthLevel(guildId, userId);
 
@@ -139,7 +139,7 @@ export default class ObjectAuthStore extends CommandAuthStore {
     public create(guildId: Snowflake): boolean {
         if (!this.contains(guildId)) {
             const schemaKeys = Object.keys(this.schema);
-            const entry: Array<any> = [];
+            const entry: any[] = [];
 
             let seenDefault = false;
 

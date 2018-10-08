@@ -51,22 +51,47 @@ export enum DiscordEvent {
     Warn = "warn"
 }
 
-export const BotEvents: Map<string, any> = new Map();
-export const ChannelMessageEvents: Map<Snowflake, any> = new Map();
+export type BotEvent = {
+    readonly name: string;
+    readonly handler: any;
+}
+
+export const BotEvents: Array<BotEvent> = [];
+export const ChannelMessageEvents: Array<BotEvent> = [];
 
 export const DecoratorCommands: Array<DecoratorCommand> = [];
 
+// Maybe keep this for global static listeners?
+// TODO: Find a better way, like use the start method instead to define listeners, since decorators are called on class definition NOT instanciation
 export function on(eventName: DiscordEvent | string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
-        console.log("meta is ", target.meta);
+        if (descriptor.value === undefined || descriptor.value === null) {
+            throw new Error("[Decorators.on] Expecting handler (undefined or null)");
+        }
+        else if (typeof descriptor.value !== "function") {
+            throw new Error(`[Decorators.on] Handler must be of type function, got '${typeof descriptor.value}' instead`);
+        }
 
-        BotEvents.set(eventName, descriptor.value.bind(target));
+        BotEvents.push({
+            name: eventName,
+            handler: descriptor.value
+        });
     }
 }
 
 export function message(channel: Snowflake) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
-        ChannelMessageEvents.set(channel, descriptor.value.bind(target));
+        if (descriptor.value === undefined || descriptor.value === null) {
+            throw new Error("[Decorators.message] Expecting handler (undefined or null)");
+        }
+        else if (typeof descriptor.value !== "function") {
+            throw new Error(`[Decorators.message] Handler must be of type function, got '${typeof descriptor.value}' instead`);
+        }
+
+        ChannelMessageEvents.push({
+            name: channel,
+            handler: descriptor.value
+        });
     }
 }
 
@@ -85,9 +110,9 @@ export interface WeakCommand extends PartialWeakCommand {
 }
 
 export interface PartialWeakCommand extends DecoratorCommand {
-    readonly aliases?: Array<string>;
+    readonly aliases?: string[];
     readonly restrict?: CommandRestrict;
-    readonly arguments?: Array<Argument>;
+    readonly arguments?: Argument[];
 }
 
 export interface SimpleCommand extends DecoratorCommand {

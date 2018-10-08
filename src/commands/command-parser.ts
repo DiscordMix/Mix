@@ -16,21 +16,21 @@ import {WeakCommand} from "..";
 
 export interface ResolveArgumentsOptions {
     readonly arguments: RawArguments;
-    readonly schema: Array<Argument>;
+    readonly schema: Argument[];
     readonly resolvers: Array<ArgumentResolver>;
     readonly message: Message;
 }
 
 export interface ResolveDefaultArgsOptions {
     readonly arguments: RawArguments;
-    readonly schema: Array<Argument>;
+    readonly schema: Argument[];
     readonly message: Message;
     readonly command: Command;
 }
 
 export interface CheckArgumentsOptions {
     readonly arguments: RawArguments;
-    readonly schema: Array<Argument>;
+    readonly schema: Argument[];
     readonly types: Array<CustomArgType>;
     readonly message: Message;
     readonly command: Command;
@@ -40,10 +40,10 @@ export default class CommandParser {
     /**
      * @param {string} commandString
      * @param {CommandStore} manager
-     * @param {Array<string>} prefixes
+     * @param {string[]} prefixes
      * @return {Command | null}
      */
-    public static parse(commandString: string, manager: CommandStore, prefixes: Array<string>): Command | DecoratorCommand | null {
+    public static parse(commandString: string, manager: CommandStore, prefixes: string[]): Command | DecoratorCommand | null {
         const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
@@ -59,7 +59,7 @@ export default class CommandParser {
      * @param {string} prefixes
      * @return {boolean}
      */
-    public static validate(commandString: string, manager: CommandStore, prefixes: Array<string>): boolean {
+    public static validate(commandString: string, manager: CommandStore, prefixes: string[]): boolean {
         for (let i: number = 0; i < prefixes.length; i++) {
             if (commandString.startsWith(prefixes[i])) {
                 const commandBase = this.getCommandBase(commandString, prefixes);
@@ -75,10 +75,10 @@ export default class CommandParser {
 
     /**
      * @param {string} commandString
-     * @param {Array<string>} prefixes
+     * @param {string[]} prefixes
      * @return {string | null}
      */
-    public static getCommandBase(commandString: string, prefixes: Array<string>): string | null {
+    public static getCommandBase(commandString: string, prefixes: string[]): string | null {
         for (let i: number = 0; i < prefixes.length; i++) {
             const regexResult = new RegExp(`^${Utils.escapeRegexString(prefixes[i])}([a-zA-Z]+)`).exec(commandString);
 
@@ -93,7 +93,7 @@ export default class CommandParser {
     /**
      *
      * @param {string} commandString
-     * @return {Array<string>}
+     * @return {string[]}
      */
     public static getArguments(commandString: string): RawArguments {
         const expression: RegExp = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;

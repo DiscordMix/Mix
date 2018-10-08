@@ -9,7 +9,7 @@ export interface ServiceOptions {
 export default abstract class Service extends Fragment {
     public readonly stop?: () => void;
     public readonly canStart: (() => boolean) | boolean = true;
-    public readonly listeners: Array<string> = [];
+    public readonly listeners: string[] = [];
 
     protected readonly bot: Bot;
     protected readonly api?: any;

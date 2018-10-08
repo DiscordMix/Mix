@@ -9,7 +9,7 @@ import fs from "fs";
 // and upon disconnect save/rewrite them!
 export type SettingsGeneral = {
     readonly token: string;
-    readonly prefixes: Array<string>;
+    readonly prefixes: string[];
 }
 
 export type SettingsKeys = {

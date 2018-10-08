@@ -3,7 +3,7 @@ import Context from "./command-context";
 import Fragment from "../fragments/fragment";
 import {Message} from "discord.js";
 
-export type UserGroup = Array<string>;
+export type UserGroup = string[];
 
 export type CommandExecuted = (context: Context, args: any, api: any) => any;
 
@@ -39,7 +39,7 @@ export interface CustomArgType {
     readonly check: ArgumentTypeChecker | RegExp;
 }
 
-export type RawArguments = Array<string>;
+export type RawArguments = string[];
 
 export enum PrimitiveArgType {
     String,
@@ -64,8 +64,8 @@ export interface Argument {
 }
 
 export interface CommandRestrict {
-    selfPermissions: Array<any>;
-    issuerPermissions: Array<any>;
+    selfPermissions: any[];
+    issuerPermissions: any[];
     environment: ChatEnvironment;
     auth: number;
     specific: Array<string | RestrictGroup>;
@@ -90,11 +90,11 @@ export type CommandSwitchInfo = {
  * @extends Fragment
  */
 export abstract class GenericCommand extends Fragment {
-    public readonly aliases: Array<string> = [];
-    public readonly arguments: Array<Argument> = [];
+    public readonly aliases: string[] = [];
+    public readonly arguments: Argument[] = [];
     public readonly restrict: CommandRestrict = Object.assign({}, DefaultCommandRestrict);
     public readonly switches: Array<CommandSwitchInfo> = [];
-    public readonly exclude: Array<string> = [];
+    public readonly exclude: string[] = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
 

@@ -110,9 +110,9 @@ export interface WeakCommand extends PartialWeakCommand {
 }
 
 export interface PartialWeakCommand extends DecoratorCommand {
-    readonly aliases?: Array<string>;
+    readonly aliases?: string[];
     readonly restrict?: CommandRestrict;
-    readonly arguments?: Array<Argument>;
+    readonly arguments?: Argument[];
 }
 
 export interface SimpleCommand extends DecoratorCommand {

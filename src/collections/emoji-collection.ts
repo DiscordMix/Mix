@@ -6,9 +6,9 @@ import fs from "fs";
  */
 export default class EmojiCollection extends Collection {
     /**
-     * @param {Array<Object>} emojis
+     * @param {Array<*>} emojis
      */
-    constructor(emojis: Array<any> = []) {
+    constructor(emojis: any[] = []) {
         super(emojis);
     }
 

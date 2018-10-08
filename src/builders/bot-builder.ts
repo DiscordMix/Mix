@@ -24,20 +24,20 @@ export default class BotBuilder {
     }
 
     /**
-     * @param {Array<string>} prefixes
+     * @param {string[]} prefixes
      * @return {BotBuilder}
      */
-    public setPrefixes(prefixes: Array<string>): BotBuilder {
+    public setPrefixes(prefixes: string[]): BotBuilder {
         this.settings.general.prefixes = prefixes;
 
         return this;
     }
 
     /**
-     * @param {Array<string>} primitiveCommands
+     * @param {string[]} primitiveCommands
      * @return {BotBuilder}
      */
-    public setPrimitiveCommands(primitiveCommands: Array<string>): BotBuilder {
+    public setPrimitiveCommands(primitiveCommands: string[]): BotBuilder {
         this.bot.primitiveCommands = primitiveCommands;
 
         return this;

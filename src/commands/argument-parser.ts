@@ -9,7 +9,7 @@ export default class ArgumentParser {
      * @return {*}
      */
     public static resolve(type: string, arg: string, resolvers: any): any {
-        const keys: Array<string> = Object.keys(resolvers);
+        const keys: string[] = Object.keys(resolvers);
 
         for (let i = 0; i < keys.length; i++) {
             if (keys[i] === type) {
@@ -21,10 +21,10 @@ export default class ArgumentParser {
     }
 
     /**
-     * @param {Array<Argument>} schema
-     * @return {Array<Argument>}
+     * @param {Argument[]} schema
+     * @return {Argument[]}
      */
-    public static getRequiredArguments(schema: Array<Argument>): Array<Argument> {
+    public static getRequiredArguments(schema: Argument[]): Argument[] {
         return schema.filter((arg: Argument) => arg.required);
     }
 }

@@ -12,7 +12,7 @@ export default class Usage extends Command {
         description: "View the usage of a command"
     };
 
-    readonly arguments: Array<Argument> = [
+    readonly arguments: Argument[] = [
         {
             name: "command",
             type: PrimitiveArgType.String,
@@ -39,7 +39,7 @@ export default class Usage extends Command {
             return;
         }
 
-        let usageArgs: Array<string> = [targetCommand.meta.name];
+        let usageArgs: string[] = [targetCommand.meta.name];
 
         for (let i: number = 0; i < targetCommand.arguments.length; i++) {
             usageArgs.push(targetCommand.arguments[i].required ? targetCommand.arguments[i].name : `[${targetCommand.arguments[i].name}]`);

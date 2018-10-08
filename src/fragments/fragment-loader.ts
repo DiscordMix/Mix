@@ -61,18 +61,18 @@ export default abstract class FragmentLoader {
      * Scan a specific directory for candidate fragments
      * @param {string} directory The directory to scan
      * @param {boolean} [recursive=true] Whether to also scan subdirectories
-     * @return {Promise<Array<string> | null>}
+     * @return {Promise<string[] | null>}
      */
-    public static async pickupCandidates(directory: string, recursive: boolean = true): Promise<Array<string> | null> {
-        return new Promise<Array<string> | null>(async (resolve) => {
+    public static async pickupCandidates(directory: string, recursive: boolean = true): Promise<string[] | null> {
+        return new Promise<string[] | null>(async (resolve) => {
             if (!fs.existsSync(directory)) {
                 resolve(null);
 
                 return;
             }
 
-            const result: Array<string> = [];
-            const scanQueue: Array<string> = [directory];
+            const result: string[] = [];
+            const scanQueue: string[] = [directory];
 
             for (let dir: number = 0; dir < scanQueue.length; dir++) {
                 const files = await Utils.getFiles(scanQueue[dir], true);
@@ -101,11 +101,11 @@ export default abstract class FragmentLoader {
     }
 
     /**
-     * @param {Array<string>} candidates
+     * @param {string[]} candidates
      * @param {boolean} isolate
      * @return {Promise<Array<Fragment> | null>}
      */
-    public static async loadMultiple(candidates: Array<string>, isolate: boolean = false): Promise<Array<Fragment> | null> {
+    public static async loadMultiple(candidates: string[], isolate: boolean = false): Promise<Array<Fragment> | null> {
         if (candidates.length === 0) {
             Log.warn("[FragmentLoader.loadMultiple] Candidates array is empty");
 

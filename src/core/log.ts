@@ -13,7 +13,7 @@ export enum LogLevel {
 
 export interface ComposeOptions {
     readonly message: any;
-    readonly params: Array<any>;
+    readonly params: any[];
     readonly type: LogLevel;
     readonly color?: string;
     readonly prefix?: string;
@@ -73,7 +73,7 @@ export default class Log {
      * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    public static info(message: any, ...params: Array<any>): Promise<any> {
+    public static info(message: any, ...params: any[]): Promise<any> {
         const options: ComposeOptions = {
             message: message,
             params: params,
@@ -90,7 +90,7 @@ export default class Log {
      * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    public static success(message: any, ...params: Array<any>): Promise<any> {
+    public static success(message: any, ...params: any[]): Promise<any> {
         const options: ComposeOptions = {
             message: message,
             params: params,
@@ -107,7 +107,7 @@ export default class Log {
      * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    public static warn(message: any, ...params: Array<any>): Promise<any> {
+    public static warn(message: any, ...params: any[]): Promise<any> {
         const options: ComposeOptions = {
             message: message,
             params: params,
@@ -124,7 +124,7 @@ export default class Log {
      * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    public static error(message: any, ...params: Array<any>): Promise<any> {
+    public static error(message: any, ...params: any[]): Promise<any> {
         const options: ComposeOptions = {
             message: message,
             params: params,
@@ -141,7 +141,7 @@ export default class Log {
      * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    public static throw(message: any, ...params: Array<any>): Promise<any> {
+    public static throw(message: any, ...params: any[]): Promise<any> {
         const options: ComposeOptions = {
             message: message,
             params: params,
@@ -162,7 +162,7 @@ export default class Log {
      * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    public static verbose(message: any, ...params: Array<any>): Promise<any> {
+    public static verbose(message: any, ...params: any[]): Promise<any> {
         const options: ComposeOptions = {
             message: message,
             params: params,
@@ -179,7 +179,7 @@ export default class Log {
      * @param {Array<*>} params
      * @return {Promise<*>}
      */
-    public static debug(message: any, ...params: Array<any>): Promise<any> {
+    public static debug(message: any, ...params: any[]): Promise<any> {
         const options: ComposeOptions = {
             message: message,
             params: params,

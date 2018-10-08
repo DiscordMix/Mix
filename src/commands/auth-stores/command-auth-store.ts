@@ -20,20 +20,20 @@ export default abstract class CommandAuthStore extends EventEmitter {
     /**
      * @abstract
      * @param {Snowflake} guildId
-     * @param {Array<string>} roles
+     * @param {string[]} roles
      * @return {number}
      */
-    public abstract getHighestAuthLevelByRoles(guildId: Snowflake, roles: Array<string>): number;
+    public abstract getHighestAuthLevelByRoles(guildId: Snowflake, roles: string[]): number;
 
     /**
      * @todo TYPESCRIPT Fix initializer in implementations (not allowed in typescript abstract methods)
      * @abstract
      * @param {Snowflake} guildId
      * @param {Snowflake} userId
-     * @param {Array<string>} roles
+     * @param {string[]} roles
      * @return {number} The authority of the user
      */
-    public abstract getAuthority(guildId: Snowflake, userId: Snowflake, roles: Array<string>/* = ["@everyone"]*/): number;
+    public abstract getAuthority(guildId: Snowflake, userId: Snowflake, roles: string[]/* = ["@everyone"]*/): number;
 
     /**
      * Create a default auth store entry
@@ -87,7 +87,7 @@ export default abstract class CommandAuthStore extends EventEmitter {
      * @return {string | null}
      */
     public getSchemaRankName(rank: number): string | null {
-        const keys: Array<string> = Object.keys(this.schema);
+        const keys: string[] = Object.keys(this.schema);
 
         for (let i = 0; i < keys.length; i++) {
             if (this.schema[keys[i]].rank === rank) {

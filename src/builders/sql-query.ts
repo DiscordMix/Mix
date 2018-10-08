@@ -11,7 +11,7 @@ export default class SqlQuery {
 
     private prefix: string;
     private suffix?: string;
-    private wheres: Array<SqlQueryWhere>;
+    private wheres: SqlQueryWhere[];
     private limitAmount?: number;
 
     /**
@@ -28,7 +28,7 @@ export default class SqlQuery {
      * @return {SqlQuery}
      */
     public where(search: any): SqlQuery {
-        const searchKeys: Array<string> = Object.keys(search);
+        const searchKeys: string[] = Object.keys(search);
 
         for (let i: number = 0; i < searchKeys.length; i++) {
             this.wheres.push({
@@ -51,10 +51,10 @@ export default class SqlQuery {
     }
 
     /**
-     * @param {Array<string>} properties
+     * @param {string[]} properties
      * @return {SqlQuery}
      */
-    public select(properties: Array<string>): SqlQuery {
+    public select(properties: string[]): SqlQuery {
         this.prefix = `SELECT (${properties.join(",")})`;
 
         return this;
@@ -65,8 +65,8 @@ export default class SqlQuery {
      * @return {SqlQuery}
      */
     public update(values: any): SqlQuery {
-        const valuesKeys: Array<string> = Object.keys(values);
-        const setAddition: Array<string> = [];
+        const valuesKeys: string[] = Object.keys(values);
+        const setAddition: string[] = [];
 
         for (let i: number = 0; i < valuesKeys.length; i++) {
             setAddition.push(`${valuesKeys[i]} = ${values[valuesKeys[i]]}`);
@@ -83,9 +83,9 @@ export default class SqlQuery {
      * @return {SqlQuery}
      */
     public insert(values: any): SqlQuery {
-        const valuesKeys: Array<string> = Object.keys(values);
-        const columns: Array<string> = [];
-        const finalValues: Array<string> = [];
+        const valuesKeys: string[] = Object.keys(values);
+        const columns: string[] = [];
+        const finalValues: string[] = [];
 
         for (let i: number = 0; i < valuesKeys.length; i++) {
             columns.push(valuesKeys[i]);
@@ -107,7 +107,7 @@ export default class SqlQuery {
         if (this.wheres.length > 0) {
             query += " WHERE ";
 
-            const whereAddition: Array<string> = [];
+            const whereAddition: string[] = [];
 
             for (let i: number = 0; i < this.wheres.length; i++) {
                 whereAddition.push(`${this.wheres[i].property} ${this.wheres[i].operator || "="} ${SqlQuery.getValueQueryForm(this.wheres[i].value)}`);

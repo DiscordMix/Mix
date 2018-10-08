@@ -78,7 +78,7 @@ export default class Utils {
      * @param {string} directory The directory to scan
      * @param {boolean} [absolutePath=false] Whether to return the absolute path of the files
      */
-    public static getFiles(directory: string, absolutePath: boolean = false): Promise<Array<string> | null> {
+    public static getFiles(directory: string, absolutePath: boolean = false): Promise<string[] | null> {
         return new Promise((resolve) => {
             if (!fs.existsSync(directory)) {
                 resolve(null);
@@ -86,12 +86,12 @@ export default class Utils {
                 return;
             }
 
-            fs.readdir(directory, (error: Error, files: Array<string>) => {
+            fs.readdir(directory, (error: Error, files: string[]) => {
                 if (error) {
                     throw new Error(`[Utils.getFiles] There was an error while reading directory '${directory}': ${error.message}`);
                 }
 
-                let result: Array<string> = files;
+                let result: string[] = files;
 
                 if (absolutePath) {
                     for (let i = 0; i < result.length; i++) {
@@ -110,7 +110,7 @@ export default class Utils {
      * @param {Array<*>} array The array to shuffle
      * @return {Array<*>} The shuffled array
      */
-    public static shuffle(array: Array<any>): Array<any> {
+    public static shuffle(array: any[]): any[] {
         let counter = array.length;
 
         // While there are elements in the array
@@ -294,10 +294,10 @@ export default class Utils {
 
     /**
      * @param {Message} message
-     * @param {Array<string>} strings
+     * @param {string[]} strings
      * @return {boolean}
      */
-    public static hasStringsPrefix(message: Message, strings: Array<string>): boolean {
+    public static hasStringsPrefix(message: Message, strings: string[]): boolean {
         for (let i = 0; i < strings.length; i++) {
             if (message.content.startsWith(strings[i])) {
                 return true;
@@ -380,9 +380,9 @@ export default class Utils {
 
     /**
      * @param {*} enumerator
-     * @return {Array<string>}
+     * @return {string[]}
      */
-    public static getEnumKeys(enumerator: any): Array<string> {
+    public static getEnumKeys(enumerator: any): string[] {
         return Object.keys(enumerator).filter((key: string) => isNaN(key as any));
     }
 

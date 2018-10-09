@@ -1,5 +1,6 @@
-import {TextChannel, Client, Message, Channel, Collection} from "discord.js";
+import {TextChannel, Client, Message, Channel, Collection, MessageReaction, User} from "discord.js";
 import {EventEmitter} from "events";
+import {message} from "../decorators/decorators";
 
 export default class ChannelObserver extends EventEmitter {
     private readonly client: Client;
@@ -60,6 +61,41 @@ export default class ChannelObserver extends EventEmitter {
         this.client.on("channelUpdate", (oldChannel: Channel, newChannel: Channel) => {
             if (oldChannel.id === this.channel.id) {
                 this.emit("channelUpdate", oldChannel, newChannel);
+            }
+        });
+
+        // Message Reaction Add
+        this.client.on("messageReactionAdd", (messageReaction: MessageReaction, user: User) => {
+            if (messageReaction.message.channel.id === this.channel.id) {
+                this.emit("messageReactionAdd", messageReaction, user);
+            }
+        });
+
+        // Message Reaction Remove
+        this.client.on("messageReactionRemove", (messageReaction: MessageReaction, user: User) => {
+            if (messageReaction.message.channel.id === this.channel.id) {
+                this.emit("messageReactionRemove", messageReaction, user);
+            }
+        });
+
+        // Message Reaction Remove All
+        this.client.on("messageReactionRemoveAll", (message: Message) => {
+            if (message.channel.id === this.channel.id) {
+                this.emit("nessageReactionRemoveAll", message);
+            }
+        });
+
+        // Typing Start
+        this.client.on("typingStart", (channel: Channel, user: User) => {
+            if (channel.id === this.channel.id) {
+                this.emit("typingStart", channel, user);
+            }
+        });
+
+        // Typing Stop
+        this.client.on("typingStop", (channel: Channel, user: User) => {
+            if (channel.id === this.channel.id) {
+                this.emit("typingStop", channel, user);
             }
         });
     }

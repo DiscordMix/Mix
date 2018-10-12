@@ -172,7 +172,7 @@ export default class CommandStore /* extends Collection */ {
         return this;
     }
 
-    public registerMultipleDecorator(commands: Array<DecoratorCommand>): this {
+    public registerMultipleDecorator(commands: DecoratorCommand[]): this {
         for (let i = 0; i < commands.length; i++) {
             this.registerDecorator(commands[i]);
         }

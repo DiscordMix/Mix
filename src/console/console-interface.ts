@@ -58,6 +58,12 @@ export default class ConsoleInterface {
                         console.log(`\n\nService: ${name}\n\n`, service);
                     }
                 }
+                else if (args[0] === "config") {
+                    console.log("Using bot options:\n\n", bot.options);
+                }
+                else if (args[0] === "settings") {
+                    console.log("Using settings:\n\n", bot.settings);
+                }
                 else {
                     console.log("Unknown subcommand");
                 }

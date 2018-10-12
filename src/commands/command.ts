@@ -93,7 +93,7 @@ export abstract class GenericCommand extends Fragment {
     public readonly aliases: string[] = [];
     public readonly arguments: Argument[] = [];
     public readonly restrict: CommandRestrict = Object.assign({}, DefaultCommandRestrict);
-    public readonly switches: Array<CommandSwitchInfo> = [];
+    public readonly switches: CommandSwitchInfo[] = [];
     public readonly exclude: string[] = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
@@ -134,7 +134,7 @@ export abstract class Subcommand extends GenericCommand {
  * @extends GenericCommand
  */
 export default abstract class Command extends GenericCommand {
-    public readonly subcommands: Array<Subcommand> = [];
+    public readonly subcommands: Subcommand[] = [];
 
     /**
      * @todo canExecute should default boolean, same concept as Service

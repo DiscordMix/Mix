@@ -18,7 +18,7 @@ import {DecoratorCommand} from "../decorators/decorators";
 export interface ResolveArgumentsOptions {
     readonly arguments: RawArguments;
     readonly schema: Argument[];
-    readonly resolvers: Array<ArgumentResolver>;
+    readonly resolvers: ArgumentResolver[];
     readonly message: Message;
 }
 
@@ -32,7 +32,7 @@ export interface ResolveDefaultArgsOptions {
 export interface CheckArgumentsOptions {
     readonly arguments: RawArguments;
     readonly schema: Argument[];
-    readonly types: Array<CustomArgType>;
+    readonly types: CustomArgType[];
     readonly message: Message;
     readonly command: Command;
 }

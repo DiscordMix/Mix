@@ -56,10 +56,10 @@ export type BotEvent = {
     readonly handler: any;
 }
 
-export const BotEvents: Array<BotEvent> = [];
-export const ChannelMessageEvents: Array<BotEvent> = [];
+export const BotEvents: BotEvent[] = [];
+export const ChannelMessageEvents: BotEvent[] = [];
 
-export const DecoratorCommands: Array<DecoratorCommand> = [];
+export const DecoratorCommands: DecoratorCommand[] = [];
 
 // Maybe keep this for global static listeners?
 // TODO: Find a better way, like use the start method instead to define listeners, since decorators are called on class definition NOT instanciation

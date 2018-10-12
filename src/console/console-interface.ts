@@ -4,6 +4,7 @@ import Bot from "../core/bot";
 import readline from "readline";
 import {performance} from "perf_hooks";
 import {Guild, GuildMember} from "discord.js";
+import {ReadonlyCommandMap} from "../commands/command-store";
 
 type ConsoleCommandHandler = (args: string[]) => void;
 
@@ -40,9 +41,20 @@ export default class ConsoleInterface {
         let using: Guild | null = null;
 
         // Setup Commands
-        this.commands.set("bug", (args: string[]) => {
+        if (process.env.FORGE_DEBUG_MODE === "true") {
+            this.commands.set("bug", (args: string[]) => {
+                if (args[0] === "commands") {
+                    const commands: ReadonlyCommandMap = bot.commandStore.getAll();
 
-        });
+                    for (let [base, command] of commands) {
+                        console.log(`\n\nCommand: ${base}\n\n`, command);
+                    }
+                }
+                else if (args[0] === "services") {
+                    // TODO
+                }
+            });
+        }
 
         this.commands.set("ping", () => {
             console.log(`${Math.round(bot.client.ping)}ms`);
@@ -58,7 +70,8 @@ export default class ConsoleInterface {
         });
 
         this.commands.set("uptime", () => {
-            console.log(`Started ${Utils.timeAgo(bot.client.uptime, false)}`);
+            // TODO: Time is getting capitalized
+            console.log(`Started ${Utils.timeAgoFromNow(bot.client.uptime)}`);
         });
 
         this.commands.set("guilds", () => {
@@ -131,7 +144,7 @@ export default class ConsoleInterface {
             console.log("CLI Commands: stop, help, restart, ping, uptime, reload, clear");
         });
 
-        // Old Setup
+        // Prompt setup
         ci.on("line", async (input: string) => {
             const args: string[] = input.trim().split(" ");
             const base: string = args[0];
@@ -139,6 +152,8 @@ export default class ConsoleInterface {
             args.splice(0, 1);
 
             if (base === "") {
+                ci.prompt();
+
                 return;
             }
 

@@ -107,16 +107,16 @@ export default abstract class FragmentLoader {
     /**
      * @param {string[]} candidates
      * @param {boolean} isolate
-     * @return {Promise<Array<Fragment> | null>}
+     * @return {Promise<Fragment[]> | null>}
      */
-    public static async loadMultiple(candidates: string[], isolate: boolean = false): Promise<Array<Fragment> | null> {
+    public static async loadMultiple(candidates: string[], isolate: boolean = false): Promise<Fragment[] | null> {
         if (candidates.length === 0) {
             Log.warn("[FragmentLoader.loadMultiple] Candidates array is empty");
 
             return null;
         }
 
-        const result: Array<Fragment> = [];
+        const result: Fragment[] = [];
 
         for (let i: number = 0; i < candidates.length; i++) {
             const fragment: Fragment | null = await FragmentLoader.load(candidates[i], isolate);

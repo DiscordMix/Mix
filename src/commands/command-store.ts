@@ -115,6 +115,9 @@ export default class CommandStore /* extends Collection */ {
                     return;
                 }
             }
+
+            // TODO: Debugging
+            console.log("Command has aliases: ", command.aliases);
         }
 
         this.commands.set(commandName, command);

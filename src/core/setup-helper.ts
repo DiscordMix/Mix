@@ -42,7 +42,7 @@ export default class SetupHelper {
     private readonly title?: string;
     private readonly timeout: number;
     private readonly embed: boolean;
-    private readonly actionMap: Array<SetupHelperAction>;
+    private readonly actionMap: SetupHelperAction[];
 
     /**
      * @param {SetupHelperOptions} options
@@ -91,7 +91,7 @@ export default class SetupHelper {
         this.embed = options.embed !== undefined ? options.embed : true;
 
         /**
-         * @type {Array<SetupHelperAction>}
+         * @type {SetupHelperAction[]}
          * @private
          * @readonly
          */

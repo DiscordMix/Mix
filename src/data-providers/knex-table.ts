@@ -25,10 +25,10 @@ export default class KnexTable<Model> {
     /**
      * @param {*} query
      * @param {*} value
-     * @return {Promise<Array<ModeL>>}
+     * @return {Promise<Model[]>}
      */
-    public async find(query: any, value?: any): Promise<Array<Model>> {
-        return (await this.connection(this.name).select().where(query, value).then()) as Array<Model>;
+    public async find(query: any, value?: any): Promise<Model[]> {
+        return (await this.connection(this.name).select().where(query, value).then()) as Model[];
     }
 
     /**
@@ -37,7 +37,7 @@ export default class KnexTable<Model> {
      * @return {Promise<Model | null>}
      */
     public async findSingle(query: any, value?: any): Promise<Model | null> {
-        const result: Array<Model> = (await this.find(query, value)) as Array<Model>;
+        const result: Model[] = (await this.find(query, value)) as Model[];
 
         return result && result.length > 0 ? result[0] : null;
     }
@@ -51,10 +51,10 @@ export default class KnexTable<Model> {
     }
 
     /**
-     * @param {Array<Model>} models
+     * @param {Model[]} models
      * @return {Promise<void>}
      */
-    public async insertMultiple(models: Array<Model>): Promise<void> {
+    public async insertMultiple(models: Model[]): Promise<void> {
         for (let i: number = 0; i < models.length; i++) {
             await this.insert(models[i]);
         }

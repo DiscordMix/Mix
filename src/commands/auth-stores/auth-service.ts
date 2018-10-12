@@ -15,7 +15,7 @@ export type AuthSchemaEntry = {
     readonly auth: AuthLevel;
 }
 
-export type AuthSchema = Array<AuthSchemaEntry>;
+export type AuthSchema = AuthSchemaEntry[];
 
 export default class AuthService {
     private readonly path: string;

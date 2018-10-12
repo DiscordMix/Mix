@@ -11,14 +11,14 @@ import CommandParser from "./command-parser";
 export interface CommandHandlerOptions {
     readonly commandStore: CommandStore;
     readonly authStore: CommandAuthStore;
-    readonly errorHandlers: Array<Function>;
+    readonly errorHandlers: Function[];
     readonly argumentTypes: any;
 }
 
 export default class CommandHandler {
     public readonly commandStore: CommandStore;
     public readonly authStore: CommandAuthStore;
-    public readonly errorHandlers: Array<Function>;
+    public readonly errorHandlers: Function[];
     public readonly argumentTypes: any;
 
     /**
@@ -38,7 +38,7 @@ export default class CommandHandler {
         this.authStore = options.authStore;
 
         /**
-         * @type {Array<Function>}
+         * @type {Function[]}
          * @readonly
          */
         this.errorHandlers = options.errorHandlers;
@@ -305,7 +305,7 @@ export default class CommandHandler {
 
                 switch (specific) {
                     case RestrictGroup.ServerOwner: {
-                        const owners: Array<Snowflake> = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
+                        const owners: Snowflake[] = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
 
                         if (owners.includes(context.sender.id)) {
                             met = true;
@@ -315,7 +315,7 @@ export default class CommandHandler {
                     }
 
                     case RestrictGroup.ServerModerator: {
-                        const moderators: Array<Snowflake> = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
+                        const moderators: Snowflake[] = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
 
                         if (moderators.includes(context.sender.id)) {
                             met = true;
@@ -373,7 +373,7 @@ export default class CommandHandler {
     }
 
     /**
-     * @param {ChatEnvironment|Array<ChatEnvironment>} environment
+     * @param {ChatEnvironment|ChatEnvironment[]} environment
      * @param {string} channelType
      * @return {boolean}
      */

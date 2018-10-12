@@ -1,16 +1,16 @@
 import EmojiButton from "./emoji-button";
 
 export default class EmojiMenu {
-    public readonly buttons: Array<EmojiButton>;
+    public readonly buttons: EmojiButton[];
     public readonly content: string;
 
     /**
-     * @param {Array<EmojiButton>} buttons
+     * @param {EmojiButton[]} buttons
      * @param {string} content
      */
-    constructor(buttons: Array<EmojiButton>, content: string) {
+    constructor(buttons: EmojiButton[], content: string) {
         /**
-         * @type {Array<EmojiButton>}
+         * @type {EmojiButton[]}
          * @readonly
          */
         this.buttons = buttons;

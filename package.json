@@ -15,7 +15,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://gitlab.com/cloudrex/anvil.git"
+        "url": "https://gitlab.com/cloudrex/forge.git"
     },
     "scripts": {
         "watch": "tsc --watch",

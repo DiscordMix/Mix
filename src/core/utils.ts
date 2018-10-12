@@ -273,7 +273,7 @@ export default class Utils {
     /**
      * @return {Promise<string>}
      */
-    public static async getAnvilVersion(): Promise<string> {
+    public static async getForgeVersion(): Promise<string> {
         // TODO
         // return (await this.readJson("package.json")).version;
 

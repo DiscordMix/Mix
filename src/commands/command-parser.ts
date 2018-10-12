@@ -1,5 +1,6 @@
 import Utils from "../core/utils";
 import CommandStore from "./command-store";
+
 import Command, {
     ArgumentType,
     ArgumentTypeChecker,
@@ -9,10 +10,10 @@ import Command, {
     RawArguments,
     CustomArgType
 } from "./command";
+
 import {Message} from "discord.js";
 import Log from "../core/log";
-import {DecoratorCommand, SimpleCommand} from "../decorators/decorators";
-import {WeakCommand} from "..";
+import {DecoratorCommand} from "../decorators/decorators";
 
 export interface ResolveArgumentsOptions {
     readonly arguments: RawArguments;
@@ -62,9 +63,9 @@ export default class CommandParser {
     public static validate(commandString: string, manager: CommandStore, prefixes: string[]): boolean {
         for (let i: number = 0; i < prefixes.length; i++) {
             if (commandString.startsWith(prefixes[i])) {
-                const commandBase = this.getCommandBase(commandString, prefixes);
+                const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
-                if (commandBase) {
+                if (commandBase !== null) {
                     return manager.contains(commandBase);
                 }
             }
@@ -91,7 +92,6 @@ export default class CommandParser {
     }
 
     /**
-     *
      * @param {string} commandString
      * @return {string[]}
      */

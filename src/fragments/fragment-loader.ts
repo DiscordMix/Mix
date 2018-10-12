@@ -24,14 +24,18 @@ export default abstract class FragmentLoader {
         try {
             let module: any = require(file);
 
+            // TODO: Make use of function exports as "simple commands"?
+            const validEs6DefaultTypes = ["object", "function"];
+
             // Support for ES6 default module exports
-            if (module.default) {
+            if (module.default !== undefined && validEs6DefaultTypes.includes(typeof module.default)) {
                 module = module.default;
             }
 
             return module;
         }
         catch (exception) {
+            // TODO: Was debugging I guess?
             throw exception;
 
             Log.warn(`[FragmentLoader.load] There was an error while loading a fragment: ${exception}`);

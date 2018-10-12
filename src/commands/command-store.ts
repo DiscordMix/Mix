@@ -96,6 +96,25 @@ export default class CommandStore /* extends Collection */ {
         }
         else if (this.commands.get(commandName) !== undefined) {
             Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Already exists)`);
+
+            return;
+        }
+
+        // Also register aliases
+        if (command.aliases) {
+            for (let i: number = 0; i < command.aliases.length; i++) {
+                if (this.commands.get(command.aliases[i]) !== undefined) {
+                    // TODO: Is undoIdx < i correct? or should it be undoIdx <= i
+                    // Undo
+                    for (let undoIdx = 0; undoIdx < i; undoIdx++) {
+                        this.commands.delete(command.aliases[undoIdx]);
+                    }
+
+                    Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (A command with the same alias already exists)`);
+
+                    return;
+                }
+            }
         }
 
         this.commands.set(commandName, command);

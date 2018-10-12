@@ -51,6 +51,26 @@ const title: string =
 
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
+// TODO: Should be a property/option on Bot, not hardcoded
+// TODO: Merge this resolvers with the (if provided) provided
+// ones by the user.
+const internalResolvers: any = {
+    user: (arg: string) => Utils.resolveId(arg),
+    channel: (arg: string) => Utils.resolveId(arg),
+    role: (arg: string) => Utils.resolveId(arg),
+    state: (arg: string) => Utils.translateState(arg),
+
+    member: (arg: string, message: Message): GuildMember | null => {
+        const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg));
+
+        if (resolvedMember) {
+            return resolvedMember;
+        }
+
+        return null;
+    }
+};
+
 export type BotOptions = {
     readonly settings: Settings;
     readonly authStore: CommandAuthStore;
@@ -80,21 +100,6 @@ export type DefiniteBotEmojiOptions = {
 }
 
 export type BotExtraOptions = {
-    readonly asciiTitle?: boolean;
-    readonly consoleInterface?: boolean;
-    readonly allowCommandChain?: boolean;
-    readonly updateOnMessageEdit?: boolean;
-    readonly checkCommands?: boolean;
-    readonly autoDeleteCommands?: boolean;
-    readonly commandArgumentStyle?: ArgumentStyle;
-    readonly ignoreBots?: boolean;
-    readonly autoResetAuthStore?: boolean;
-    readonly logMessages?: boolean;
-    readonly dmHelp?: boolean;
-    readonly emojis?: BotEmojiOptions;
-}
-
-export type DefiniteBotExtraOptions = {
     readonly asciiTitle: boolean;
     readonly consoleInterface: boolean;
     readonly allowCommandChain: boolean;
@@ -108,6 +113,21 @@ export type DefiniteBotExtraOptions = {
     readonly dmHelp: boolean;
     readonly emojis: DefiniteBotEmojiOptions;
 }
+
+const DefaultBotOptions: BotExtraOptions = {
+    allowCommandChain: true,
+    commandArgumentStyle: ArgumentStyle.Explicit,
+    autoDeleteCommands: false,
+    checkCommands: true,
+    ignoreBots: true,
+    updateOnMessageEdit: false,
+    asciiTitle: true,
+    autoResetAuthStore: false,
+    dmHelp: true,
+    logMessages: false,
+    emojis: DefaultBotEmojiOptions,
+    consoleInterface: true
+};
 
 /**
  * @extends EventEmitter
@@ -128,7 +148,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly primitiveCommands: string[];
     public readonly userGroups: UserGroup[];
     public readonly owner?: Snowflake;
-    public readonly options: DefiniteBotExtraOptions;
+    public readonly options: BotExtraOptions;
     public readonly language?: Language;
     public readonly argumentResolvers: ArgumentResolver[];
     public readonly argumentTypes: CustomArgType[];
@@ -143,11 +163,14 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * Setup the bot from an object
-     * @param {BotOptions} botOptions
-     * @return {Promise<Bot>}
+     * @param {Partial<BotOptions>} botOptions
      */
-    constructor(botOptions: BotOptions) {
+    public constructor(botOptions: Partial<BotOptions>) {
         super();
+
+        if (!botOptions.settings) {
+            throw new Error("[Bot] Missing settings options");
+        }
 
         /**
          * @type {Settings}
@@ -244,26 +267,12 @@ export default class Bot<ApiType = any> extends EventEmitter {
         ];
 
         /**
-         * @type {DefiniteBotExtraOptions}
+         * @type {BotExtraOptions}
          * @readonly
          */
         this.options = {
-            allowCommandChain: botOptions.options && botOptions.options.allowCommandChain !== undefined ? botOptions.options.allowCommandChain : true,
-            commandArgumentStyle: botOptions.options && botOptions.options.commandArgumentStyle || ArgumentStyle.Explicit,
-            autoDeleteCommands: botOptions.options && botOptions.options.autoDeleteCommands || false,
-            checkCommands: botOptions.options && botOptions.options.checkCommands !== undefined ? botOptions.options.checkCommands : true,
-            ignoreBots: botOptions.options && botOptions.options.ignoreBots !== undefined ? botOptions.options.ignoreBots : true,
-            updateOnMessageEdit: botOptions.options && botOptions.options.updateOnMessageEdit !== undefined ? botOptions.options.updateOnMessageEdit : false,
-            asciiTitle: botOptions.options && botOptions.options.asciiTitle !== undefined ? botOptions.options.asciiTitle : true,
-            consoleInterface: botOptions.options && botOptions.options.consoleInterface !== undefined ? botOptions.options.consoleInterface : true,
-            autoResetAuthStore: botOptions.options && botOptions.options.autoResetAuthStore !== undefined ? botOptions.options.autoResetAuthStore : false,
-            dmHelp: botOptions.options && botOptions.options.dmHelp !== undefined ? botOptions.options.dmHelp : true,
-            logMessages: botOptions.options && botOptions.options.logMessages !== undefined ? botOptions.options.logMessages : false,
-
-            emojis: botOptions.options && botOptions.options.emojis !== undefined ? {
-                success: botOptions.options.emojis.success || DefaultBotEmojiOptions.success,
-                error: botOptions.options.emojis.error || DefaultBotEmojiOptions.error
-            } : DefaultBotEmojiOptions
+            ...DefaultBotOptions,
+            ...botOptions.options,
         };
 
         // TODO: Make use of the userGroups property
@@ -312,7 +321,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     }
 
     /**
-     * @return {* | null}
+     * @return {ApiType | null}
      */
     public getAPI(): ApiType | null {
         return this.api || null;
@@ -560,27 +569,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
             Log.info(`[${message.author.tag} @ ${names.guild}${names.channel}] ${Utils.cleanMessage(message)}${edited ? " [Edited]" : ""}`);
         }
 
-        // TODO: Should be a property/option on Bot, not hardcoded
-        // TODO: Find better position
-        // TODO: Merge this resolvers with the (if provided) provided
-        // ones by the user.
-        const resolvers: any = {
-            user: (arg: string) => Utils.resolveId(arg),
-            channel: (arg: string) => Utils.resolveId(arg),
-            role: (arg: string) => Utils.resolveId(arg),
-            state: (arg: string) => Utils.translateState(arg),
-
-            member: (arg: string, message: Message): GuildMember | null => {
-                const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg));
-
-                if (resolvedMember) {
-                    return resolvedMember;
-                }
-
-                return null;
-            }
-        };
-
         // TODO: Cannot do .startsWith with a prefix array
         if ((!message.author.bot || (message.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(message.content, this.commandStore, this.settings.general.prefixes)) {
             if (this.options.allowCommandChain) {
@@ -588,11 +576,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
                 // TODO: What if commandChecks is start and the bot tries to react twice or more?
                 for (let i: number = 0; i < chain.length; i++) {
-                    await this.handleCommandMessage(message, chain[i].trim(), resolvers);
+                    await this.handleCommandMessage(message, chain[i].trim(), internalResolvers);
                 }
             }
             else {
-                await this.handleCommandMessage(message, message.content, resolvers);
+                await this.handleCommandMessage(message, message.content, internalResolvers);
             }
         }
         // TODO: ?prefix should also be chain-able

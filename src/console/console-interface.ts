@@ -5,8 +5,12 @@ import readline from "readline";
 import {performance} from "perf_hooks";
 import {Guild, GuildMember} from "discord.js";
 
+type ConsoleCommandHandler = (args: string[]) => void;
+
 export default class ConsoleInterface {
     public ready: boolean;
+
+    private readonly commands: Map<string, ConsoleCommandHandler>;
 
     constructor() {
         /**
@@ -14,6 +18,8 @@ export default class ConsoleInterface {
          * @type {boolean}
          */
         this.ready = false;
+
+        this.commands = new Map();
     }
 
     /**
@@ -33,126 +39,114 @@ export default class ConsoleInterface {
 
         let using: Guild | null = null;
 
+        // Setup Commands
+        this.commands.set("bug", (args: string[]) => {
+
+        });
+
+        this.commands.set("ping", () => {
+            console.log(`${Math.round(bot.client.ping)}ms`);
+        });
+
+        this.commands.set("restart", async () => {
+            await bot.restart();
+        });
+
+        this.commands.set("stop", async () => {
+            await bot.disconnect();
+            process.exit(0);
+        });
+
+        this.commands.set("uptime", () => {
+            console.log(`Started ${Utils.timeAgo(bot.client.uptime, false)}`);
+        });
+
+        this.commands.set("guilds", () => {
+            console.log("\n" + bot.client.guilds.map((guild: Guild) => `${guild.name} ${guild.id}\n`));
+        });
+
+        this.commands.set("use", (args: string[]) => {
+            const guild: string = args[0];
+
+            if (bot.client.guilds.has(guild)) {
+                using = bot.client.guilds.get(guild) || null;
+
+                if (using !== null) {
+                    console.log(`\nUsing ${using.name} (${using.id})\n`);
+                }
+                else {
+                    console.log("\nGuild does not exist in the client\n");
+                }
+            }
+            else {
+                console.log("\nGuild does not exist in the client\n");
+            }
+        });
+
+        this.commands.set("membercount", () => {
+            if (using !== null) {
+                console.log(`\n${using.name} has ${using.memberCount} member(s)\n`);
+            }
+            else {
+                console.log(`\nNot using any guild\n`);
+            }
+        });
+
+        this.commands.set("member", async (args: string[]) => {
+            const memberId: string = args[0];
+
+            if (using !== null) {
+                const member: GuildMember | null = await using.member(memberId) || null;
+
+                if (member === null) {
+                    console.log(`\nGuild '${using.name}' does not contain such member\n`);
+                }
+                else {
+                    console.log("\n", member, "\n");
+                }
+            }
+            else {
+                console.log(`\nNot using any guild\n`);
+            }
+        });
+
+        this.commands.set("reload", async () => {
+            const startTime: number = performance.now();
+
+            await bot.disconnect();
+
+            // TODO: New fragment system
+            // await bot.commandLoader.reloadAll();
+
+            await bot.connect();
+
+            const endTime = performance.now();
+
+            console.log(`Reload complete | Took ${Math.round(endTime - startTime) / 1000}s`);
+        });
+
+        this.commands.set("clear", console.clear);
+
+        this.commands.set("help", () => {
+            console.log("CLI Commands: stop, help, restart, ping, uptime, reload, clear");
+        });
+
+        // Old Setup
         ci.on("line", async (input: string) => {
-            switch (input.trim().toLowerCase()) {
-                case "": {
-                    break;
-                }
+            const args: string[] = input.trim().split(" ");
+            const base: string = args[0];
 
-                case "stop": {
-                    await bot.disconnect();
-                    process.exit(0);
+            args.splice(0, 1);
 
-                    break;
-                }
+            if (base === "") {
+                return;
+            }
 
-                case "restart": {
-                    await bot.restart();
-
-                    break;
-                }
-
-                case "ping": {
-                    console.log(`${Math.round(bot.client.ping)}ms`);
-
-                    break;
-                }
-
-                case "uptime": {
-                    console.log(`Started ${Utils.timeAgoFromNow(bot.client.uptime)}`);
-
-                    break;
-                }
-
-                case "guilds": {
-                    console.log("\n" + bot.client.guilds.map((guild: Guild) => `${guild.name} ${guild.id}\n`));
-
-                    break;
-                }
-
-                case "use": {
-                    const guild: string = input.trim().split(" ")[1];
-
-                    if (bot.client.guilds.has(guild)) {
-                        using = bot.client.guilds.get(guild) || null;
-
-                        if (using !== null) {
-                            console.log(`\nUsing ${using.name} (${using.id})\n`);
-                        }
-                        else {
-                            console.log("\nGuild does not exist in the client\n");
-                        }
-                    }
-                    else {
-                        console.log("\nGuild does not exist in the client\n");
-                    }
-
-                    break;
-                }
-
-                case "membercount": {
-                    if (using !== null) {
-                        console.log(`\n${using.name} has ${using.memberCount} member(s)\n`);
-                    }
-                    else {
-                        console.log(`\nNot using any guild\n`);
-                    }
-
-                    break;
-                }
-
-                case "member": {
-                    const memberId: string = input.trim().split(" ")[1];
-
-                    if (using !== null) {
-                        const member: GuildMember | null = await using.member(memberId) || null;
-
-                        if (member === null) {
-                            console.log(`\nGuild '${using.name}' does not contain such member\n`);
-                        }
-                        else {
-                            console.log("\n", member, "\n");
-                        }
-                    }
-                    else {
-                        console.log(`\nNot using any guild\n`);
-                    }
-
-                    break;
-                }
-
-                case "reload": {
-                    const startTime: number = performance.now();
-
-                    await bot.disconnect();
-
-                    // TODO: New fragment system
-                    // await bot.commandLoader.reloadAll();
-
-                    await bot.connect();
-
-                    const endTime = performance.now();
-
-                    console.log(`Reload complete | Took ${Math.round(endTime - startTime) / 1000}s`);
-
-                    break;
-                }
-
-                case "clear": {
-                    console.clear();
-
-                    break;
-                }
-
-                case "help": {
-                    console.log("CLI Commands: stop, help, restart, ping, uptime, reload, clear");
-
-                    break;
-                }
-
-                default: {
-                    console.log(`Invalid command: ${input}`);
-                }
+            if (this.commands.has(base)) {
+                (this.commands.get(base) as ConsoleCommandHandler)(args);
+            }
+            else {
+                console.log(`Unknown command: ${input}`);
             }
 
             ci.prompt();

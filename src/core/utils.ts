@@ -389,6 +389,7 @@ export default class Utils {
     /**
      * Filter mentions and embeds from a message
      * @param {Message} message
+     * @param {string} token
      * @return {string}
      */
     public static cleanMessage(message: Message): string {
@@ -407,6 +408,29 @@ export default class Utils {
         }
 
         return filteredMessage;
+    }
+
+    /**
+     * Clean a string from mentions and token
+     * @param {string} text
+     * @param {string} token
+     */
+    public static escapeText(text: string, token: string): string {
+        let finalText: string = text;
+        
+        while (Patterns.mention.test(finalText)) {
+            finalText = finalText.replace(Patterns.mention, "[Mention]");
+        }
+
+        while (Patterns.token.test(finalText)) {
+            finalText = finalText.replace(Patterns.token, "[Token]");
+        }
+
+        while (finalText.includes(token)) {
+            finalText = finalText.replace(token, "[Token]");
+        }
+
+        return finalText;
     }
 
     public static getUserIdentifier(user: User): string {

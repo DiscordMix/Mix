@@ -1,10 +1,11 @@
 import EditableMessage from "../message/editable-message";
 import EmbedBuilder from "../builders/embed-builder";
-import Discord, {Message, Role, Snowflake, User} from "discord.js";
+import Discord, {Message, Role, Snowflake, User, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
 import EmojiCollection from "../collections/emoji-collection";
 import FormattedMessage from "../builders/formatted-message";
 import Log from "../core/log";
+import {Utils} from "..";
 
 export interface CommandExecutionContextOptions {
     readonly message: Message;
@@ -104,6 +105,8 @@ export default class CommandContext {
                 finalContent.text = finalContent.text.substring(0, 2044) + " ...";
                 Log.warn("[Context.respond] Attempted to send a message with more than 2048 characters (Discord limit); The message was automatically trimmed");
             }
+
+            finalContent.text = Utils.escapeText(finalContent, this.bot.client.token);
         }
 
         if (finalContent instanceof EmbedBuilder) {
@@ -135,10 +138,10 @@ export default class CommandContext {
         }
 
         if (autoDelete && messageResult) {
-            const buildEmbed = embed.build();
-            const fields = buildEmbed.fields;
+            const buildEmbed: RichEmbed = embed.build();
+            const fields: any = buildEmbed.fields;
 
-            let contentSize = 0;
+            let contentSize: number = 0;
 
             if (fields) {
                 for (let i = 0; i < fields.length; i++) {
@@ -161,7 +164,7 @@ export default class CommandContext {
 
     /**
      * @todo For some reason not having 'Requested by' footer
-     * @param {Object} sections
+     * @param {object} sections
      * @param {string} color
      * @return {Promise<EditableMessage>}
      */
@@ -174,7 +177,7 @@ export default class CommandContext {
      * @param {string} [title=""]
      * @return {Promise<EditableMessage>}
      */
-    public async ok(text: string | FormattedMessage, title: string = ""): Promise<EditableMessage | null> {
+    public async ok(text: string | FormattedMessage, title: string = "", clean: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
             text: typeof text === "string" ? `${this.bot.options.emojis.success} ${text}` : text.build(),
             title: title
@@ -187,7 +190,8 @@ export default class CommandContext {
      */
     public async loading(text: string): Promise<EditableMessage | null> {
         return await this.respond({
-            text: `${text}`,
+            // TODO: Isn't the emoji missing?
+            text: text,
             color: "BLUE"
         });
     }
@@ -212,7 +216,7 @@ export default class CommandContext {
      * @return {Promise<Message | Array<Message> | null>}
      */
     public async reply(message: string): Promise<Message | Array<Message> | null> {
-        return await this.message.reply(message);
+        return await this.message.reply(Utils.escapeText(message, this.bot.client.token));
     }
 
     /**
@@ -220,7 +224,7 @@ export default class CommandContext {
      * @return {Promise<Message | Message>}
      */
     public async privateReply(message: string): Promise<Message | Message[]> {
-        return await this.message.author.send(message);
+        return await this.message.author.send(Utils.escapeText(message, this.bot.client.token));
     }
 
     /**

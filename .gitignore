@@ -11,3 +11,4 @@ desktop.ini
 *.bat
 *.sh
 yarn-error.log
+docs/

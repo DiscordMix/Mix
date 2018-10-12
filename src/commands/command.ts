@@ -28,7 +28,7 @@ export type DefaultValueResolver = (message: Message) => string;
 export type ArgumentTypeChecker = (argument: string, message: Message) => boolean;
 
 /**
- * PrimitiveArgType : Internal check
+ * PrimitiveArgType      : Internal check
  * RegExp                : Inline check
  * ArgumentTypeChecker   : Provided type check by method
  */

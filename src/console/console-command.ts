@@ -7,7 +7,7 @@ export default class ConsoleCommand {
 
     /**
      * @param {string} base
-     * @param {Object} args
+     * @param {*} args
      */
     constructor(base: string, args: any) {
         /**
@@ -17,7 +17,7 @@ export default class ConsoleCommand {
         this.base = base;
 
         /**
-         * @type {Object}
+         * @type {*}
          * @readonly
          */
         this.args = args;
@@ -29,7 +29,7 @@ export default class ConsoleCommand {
      * @return {ConsoleCommand}
      */
     public static parse(consoleCommandString: string): ConsoleCommand {
-        const split = consoleCommandString.split(" ");
+        const split: string[] = consoleCommandString.split(" ");
 
         Log.info(split.join(" "));
 

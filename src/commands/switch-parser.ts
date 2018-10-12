@@ -7,8 +7,8 @@ export type CommandSwitch = {
 }
 
 export default abstract class SwitchParser {
-    public static getSwitches(commandString: string): Array<CommandSwitch> {
-        const result: Array<CommandSwitch> = [];
+    public static getSwitches(commandString: string): CommandSwitch[] {
+        const result: CommandSwitch[] = [];
 
         let match: RegExpExecArray | null;
 

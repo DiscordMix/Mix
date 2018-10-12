@@ -17,7 +17,7 @@ import Patterns from "./patterns";
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
 
-const moderationPermissions: Array<PermissionResolvable> = [
+const moderationPermissions: PermissionResolvable[] = [
     "MANAGE_GUILD",
     "ADMINISTRATOR",
     "BAN_MEMBERS",
@@ -43,7 +43,7 @@ export type SendOptions = {
 }
 
 export default class Utils {
-    public static readonly botLists: Array<Snowflake> = [
+    public static readonly botLists: Snowflake[] = [
         "374071874222686211", // Bots for Discord (BFD)
         "264445053596991498", // Discord Bot List (DBL)
         "110373943822540800", // Discord Bots
@@ -273,7 +273,7 @@ export default class Utils {
     /**
      * @return {Promise<string>}
      */
-    public static async getAnvilVersion(): Promise<string> {
+    public static async getForgeVersion(): Promise<string> {
         // TODO
         // return (await this.readJson("package.json")).version;
 
@@ -329,7 +329,7 @@ export default class Utils {
      * @returns {GuildChannel | null}
      */
     public static findChannelByName(guild: Guild, name: string, textChannel: boolean = true, caseSensitive: boolean = false): GuildChannel | null {
-        const channels: Array<GuildChannel> = guild.channels.array();
+        const channels: GuildChannel[] = guild.channels.array();
 
         for (let i = 0; i < channels.length; i++) {
             if (channels[i].type === "category") {
@@ -372,9 +372,9 @@ export default class Utils {
     /**
      * Determine the guild owners by searching for members with the MANAGE_GUILD permission
      * @param {Guild} guild
-     * @return {Array<GuildMember>}
+     * @return {GuildMember[]}
      */
-    public static getOwners(guild: Guild): Array<GuildMember> {
+    public static getOwners(guild: Guild): GuildMember[] {
         return guild.members.filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).array();
     }
 

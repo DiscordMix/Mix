@@ -78,12 +78,12 @@ export default class DataCollector {
     }
 
     /**
-     * @return {Array<GuildMember>}
+     * @return {GuildMember[]}
      */
-    public finish(): Array<GuildMember> {
-        const members: Array<GuildMember> = this.guild.members.array();
+    public finish(): GuildMember[] {
+        const members: GuildMember[] = this.guild.members.array();
 
-        let result: Array<GuildMember> = [];
+        let result: GuildMember[] = [];
 
         for (let i = 0; i < members.length; i++) {
             if (this.fromType === MemberType.User && members[i].user.bot) {

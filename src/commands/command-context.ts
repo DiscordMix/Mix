@@ -213,9 +213,9 @@ export default class CommandContext {
 
     /**
      * @param {string} message
-     * @return {Promise<Message | Array<Message> | null>}
+     * @return {Promise<Message | Message[] | null>}
      */
-    public async reply(message: string): Promise<Message | Array<Message> | null> {
+    public async reply(message: string): Promise<Message | Message[] | null> {
         return await this.message.reply(Utils.escapeText(message, this.bot.client.token));
     }
 

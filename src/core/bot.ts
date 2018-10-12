@@ -57,11 +57,11 @@ export type BotOptions = {
     readonly dataStore?: DataProvider;
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: string[];
-    readonly userGroups?: Array<UserGroup>;
+    readonly userGroups?: UserGroup[];
     readonly owner?: Snowflake;
     readonly options?: BotExtraOptions;
-    readonly argumentResolvers?: Array<ArgumentResolver>;
-    readonly argumentTypes?: Array<CustomArgType>;
+    readonly argumentResolvers?: ArgumentResolver[];
+    readonly argumentTypes?: CustomArgType[];
 }
 
 export const DefaultBotEmojiOptions: DefiniteBotEmojiOptions = {
@@ -126,12 +126,12 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly menus: EmojiMenuManager;
     public readonly prefixCommand: boolean;
     public readonly primitiveCommands: string[];
-    public readonly userGroups: Array<UserGroup>;
+    public readonly userGroups: UserGroup[];
     public readonly owner?: Snowflake;
     public readonly options: DefiniteBotExtraOptions;
     public readonly language?: Language;
-    public readonly argumentResolvers: Array<ArgumentResolver>;
-    public readonly argumentTypes: Array<CustomArgType>;
+    public readonly argumentResolvers: ArgumentResolver[];
+    public readonly argumentTypes: CustomArgType[];
 
     public suspended: boolean;
 
@@ -268,7 +268,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         // TODO: Make use of the userGroups property
         /**
-         * @type {Array<UserGroup>}
+         * @type {UserGroup[]}
          * @readonly
          */
         this.userGroups = botOptions.userGroups || [];
@@ -287,13 +287,13 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
 
         /**
-         * @type {Array<ArgumentResolver>}
+         * @type {ArgumentResolver[]}
          * @readonly
          */
         this.argumentResolvers = botOptions.argumentResolvers || [];
 
         /**
-         * @type {Array<CustomArgType>}
+         * @type {CustomArgType[]}
          * @readonly
          */
         this.argumentTypes = botOptions.argumentTypes || [];
@@ -356,7 +356,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             Log.warn("[Bot.setup] No internal fragments were detected");
         }
 
-        const internalFragments: Array<Fragment> | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
+        const internalFragments: Fragment[] | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
 
         if (!internalFragments || internalFragments.length === 0) {
             Log.warn("[Bot.setup] No internal fragments were loaded");
@@ -381,7 +381,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         else {
             Log.verbose(`[Bot.setup] Loading ${consumerServiceCandidates.length} service(s)`);
 
-            const servicesLoaded: Array<Fragment> | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
+            const servicesLoaded: Fragment[] | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
 
             if (!servicesLoaded || servicesLoaded.length === 0) {
                 Log.warn("[Bot.setup] No services were loaded");
@@ -404,7 +404,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         else {
             Log.verbose(`[Bot.setup] Loading ${consumerCommandCandidates.length} command(s)`);
 
-            const commandsLoaded: Array<Fragment> | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
+            const commandsLoaded: Fragment[] | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
 
             if (!commandsLoaded || commandsLoaded.length === 0) {
                 Log.warn("[Bot.setup] No commands were loaded");
@@ -427,11 +427,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
     }
 
     /**
-     * @param {Array<Fragment>} fragments
+     * @param {Fragment[]} fragments
      * @param {boolean} internal Whether the fragments are internal
      * @return {number} The amount of enabled fragments
      */
-    private enableFragments(fragments: Array<Fragment>, internal: boolean = false): number {
+    private enableFragments(fragments: Fragment[], internal: boolean = false): number {
         let enabled: number = 0;
 
         for (let i: number = 0; i < fragments.length; i++) {
@@ -598,7 +598,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         // TODO: ?prefix should also be chain-able
         else if (message.content === "?prefix" && this.prefixCommand) {
             message.channel.send(new RichEmbed()
-                .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [Anvil v**${await Utils.getAnvilVersion()}**](http://test.com/)`)
+                .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [Forge v**${await Utils.getForgeVersion()}**](http://test.com/)`)
                 .setColor("GREEN"));
         }
     }
@@ -694,7 +694,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             await this.authStore.reload();
         }
 
-        const guilds: Array<Guild> = this.client.guilds.array();
+        const guilds: Guild[] = this.client.guilds.array();
 
         let entries = 0;
 

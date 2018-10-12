@@ -598,7 +598,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         // TODO: ?prefix should also be chain-able
         else if (message.content === "?prefix" && this.prefixCommand) {
             message.channel.send(new RichEmbed()
-                .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [Anvil v**${await Utils.getAnvilVersion()}**](http://test.com/)`)
+                .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [Forge v**${await Utils.getForgeVersion()}**](http://test.com/)`)
                 .setColor("GREEN"));
         }
     }

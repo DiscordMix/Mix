@@ -79,7 +79,7 @@ export type BotOptions = {
     readonly primitiveCommands?: string[];
     readonly userGroups?: UserGroup[];
     readonly owner?: Snowflake;
-    readonly options?: BotExtraOptions;
+    readonly options?: Partial<BotExtraOptions>;
     readonly argumentResolvers?: ArgumentResolver[];
     readonly argumentTypes?: CustomArgType[];
 }

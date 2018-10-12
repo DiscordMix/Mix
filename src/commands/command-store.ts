@@ -101,7 +101,7 @@ export default class CommandStore /* extends Collection */ {
         }
 
         // Also register aliases
-        if (command.aliases) {
+        if (command.aliases && command.aliases.length > 0) {
             for (let i: number = 0; i < command.aliases.length; i++) {
                 if (this.commands.get(command.aliases[i]) !== undefined) {
                     // TODO: Is undoIdx < i correct? or should it be undoIdx <= i
@@ -114,10 +114,9 @@ export default class CommandStore /* extends Collection */ {
 
                     return;
                 }
-            }
 
-            // TODO: Debugging
-            console.log("Command has aliases: ", command.aliases);
+                this.commands.set(command.aliases[i], command);
+            }
         }
 
         this.commands.set(commandName, command);

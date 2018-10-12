@@ -36,6 +36,10 @@ import {
 
 import StatCounter from "./stat-counter";
 
+if (process.env.FORGE_DEBUG_MODE === "true") {
+    Log.info("[Forge] Debug mode is enabled");
+}
+
 const title: string =
 
 "███████╗ ██████╗ ██████╗  ██████╗ ███████╗\n" +

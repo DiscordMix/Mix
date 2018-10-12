@@ -3,9 +3,9 @@ import Bot from "../core/bot";
 import Command from "./command";
 import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandContext from "./command-context";
-import {Message, Snowflake} from "discord.js";
+import {Snowflake} from "discord.js";
 import {WeakCommand} from "..";
-import {DecoratorCommand, SimpleCommand} from "../decorators/decorators";
+import {DecoratorCommand} from "../decorators/decorators";
 // import Collection from "../core/collection";
 
 /**

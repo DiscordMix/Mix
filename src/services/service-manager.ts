@@ -2,9 +2,12 @@ import Bot from "../core/bot";
 import Service from "./service";
 import {Log} from "..";
 
+export type ServiceMap = Map<string, Service>;
+export type ReadonlyServiceMap = ReadonlyMap<string, Service>;
+
 export default class ServiceManager {
     private readonly bot: Bot;
-    private readonly services: Map<string, Service>;
+    private readonly services: ServiceMap;
 
     /**
      * @param {Bot} bot
@@ -18,7 +21,7 @@ export default class ServiceManager {
         this.bot = bot;
 
         /**
-         * @type {Map<string, Service>}
+         * @type {ServiceMap}
          * @private
          * @readonly
          */
@@ -40,10 +43,10 @@ export default class ServiceManager {
     }
 
     /**
-     * @param {Array<Service>} multipleServices
+     * @param {Service[]} multipleServices
      * @return {number}
      */
-    public registerMultiple(multipleServices: Array<Service>): number {
+    public registerMultiple(multipleServices: Service[]): number {
         let registered: number = 0;
 
         for (let i: number = 0; i < multipleServices.length; i++) {
@@ -118,5 +121,12 @@ export default class ServiceManager {
      */
     public getService(name: string): Readonly<Service> | null {
         return this.services.get(name) || null;
+    }
+
+    /**
+     * @return {ReadonlyServiceMap}
+     */
+    public getAll(): ReadonlyServiceMap {
+        return this.services as ReadonlyServiceMap;
     }
 }

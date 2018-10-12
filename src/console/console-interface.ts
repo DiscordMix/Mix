@@ -5,6 +5,7 @@ import readline from "readline";
 import {performance} from "perf_hooks";
 import {Guild, GuildMember} from "discord.js";
 import {ReadonlyCommandMap} from "../commands/command-store";
+import {ReadonlyServiceMap} from "../services/service-manager";
 
 type ConsoleCommandHandler = (args: string[]) => void;
 
@@ -46,12 +47,19 @@ export default class ConsoleInterface {
                 if (args[0] === "commands") {
                     const commands: ReadonlyCommandMap = bot.commandStore.getAll();
 
-                    for (let [base, command] of commands) {
+                    for (const [base, command] of commands) {
                         console.log(`\n\nCommand: ${base}\n\n`, command);
                     }
                 }
                 else if (args[0] === "services") {
-                    // TODO
+                    const services: ReadonlyServiceMap = bot.services.getAll();
+
+                    for (const [name, service] of services) {
+                        console.log(`\n\nService: ${name}\n\n`, service);
+                    }
+                }
+                else {
+                    console.log("Unknown subcommand");
                 }
             });
         }

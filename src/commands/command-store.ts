@@ -30,7 +30,7 @@ export interface CommandCooldown {
     readonly end: number;
 }
 
-const validCommandNamePattern: RegExp = /^[a-z_0-9]{1,40}$/mi;
+const validCommandNamePattern: RegExp = /^[a-z_0-9-]{1,40}$/mi;
 
 export type CommandMap = Map<string, Command | DecoratorCommand>;
 

@@ -35,7 +35,7 @@ import {
 } from "../decorators/decorators";
 
 import StatCounter from "./stat-counter";
-import {Patterns} from "..";
+import Patterns from "./patterns";
 
 if (process.env.FORGE_DEBUG_MODE === "true") {
     Log.info("[Forge] Debug mode is enabled");

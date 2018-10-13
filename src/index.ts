@@ -7,7 +7,9 @@ import Command, {
     ArgumentTypeChecker,
     Argument,
     PrimitiveArgType,
-    CustomArgType
+    CustomArgType,
+    ArgumentResolver,
+    RestrictGroup
 } from "./commands/command";
 
 import ConsoleInterface from "./console/console-interface";
@@ -46,8 +48,9 @@ import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 import SetupHelper, {SetupHelperResult} from "./core/setup-helper";
 import Service, {ServiceOptions} from "./services/service";
 import KnexTable from "./data-providers/knex-table";
-import {on, WeakCommand, DecoratorCommand, SimpleCommand} from "./decorators/decorators";
+import {on, WeakCommand, DecoratorCommand, SimpleCommand, DiscordEvent} from "./decorators/decorators";
 import {command} from "./decorators/decorators";
+import Patterns from "./core/patterns";
 
 export {
     // Commands
@@ -61,6 +64,8 @@ export {
     ArgumentTypeChecker,
     Command,
     PrimitiveArgType,
+    ArgumentResolver,
+    RestrictGroup,
 
     // Console
     ConsoleInterface,
@@ -85,6 +90,8 @@ export {
     Utils,
     Permission,
     ChatEnvironment,
+    Patterns,
+    DiscordEvent,
 
     // Plugins
     // Plugin, // Why error?

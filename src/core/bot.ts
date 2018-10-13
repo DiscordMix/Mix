@@ -57,13 +57,6 @@ const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../frag
 // ones by the user.
 const internalArgResolvers: ArgumentResolver[] = [
     {
-        name: InternalArgType.State,
-
-        resolve(arg: string): boolean {
-            return Utils.translateState(arg);
-        }
-    },
-    {
         name: InternalArgType.Member,
 
         resolve(arg: string, message: Message): GuildMember | null {
@@ -74,6 +67,26 @@ const internalArgResolvers: ArgumentResolver[] = [
             }
     
             return null;
+        }
+    },
+    {
+        name: InternalArgType.Role,
+
+        resolve(arg: string, message: Message): Role | null {
+            const resolvedRole: Role | undefined = message.guild.roles.get(Utils.resolveId(arg));
+
+            if (resolvedRole) {
+                return resolvedRole;
+            }
+
+            return null;
+        }
+    },
+    {
+        name: InternalArgType.State,
+
+        resolve(arg: string): boolean {
+            return Utils.translateState(arg);
         }
     },
     {
@@ -98,6 +111,13 @@ const internalArgTypes: CustomArgType[] = [
         
         check(arg: string, message: Message): boolean {
             return message.guild && message.guild.member(arg) !== undefined;
+        }
+    },
+    {
+        name: InternalArgType.Role,
+
+        check(arg: string, message: Message): boolean {
+            return message.guild && message.guild.roles.has(arg);
         }
     },
     {

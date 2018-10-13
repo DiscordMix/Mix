@@ -53,7 +53,8 @@ export enum InternalArgType {
     Snowflake = "snowflake",
     Member = "member",
     State = "state",
-    Channel = "channel"
+    Channel = "channel",
+    Role = "role"
 }
 
 export interface ArgumentResolver {

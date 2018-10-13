@@ -49,6 +49,13 @@ export enum PrimitiveArgType {
     Boolean
 }
 
+export enum InternalArgType {
+    Snowflake = "snowflake",
+    Member = "member",
+    State = "state",
+    Channel = "channel"
+}
+
 export interface ArgumentResolver {
     readonly name: string;
     readonly resolve: (argument: string, message: Message) => any;

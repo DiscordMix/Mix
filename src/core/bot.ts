@@ -13,7 +13,7 @@ import Temp from "./temp";
 import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel, Guild} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
-import Command, {ArgumentResolver, ArgumentStyle, CustomArgType, RawArguments, UserGroup, DefaultCommandRestrict} from "../commands/command";
+import Command, {ArgumentResolver, ArgumentStyle, CustomArgType, RawArguments, UserGroup, DefaultCommandRestrict, InternalArgType, ArgumentType, ArgumentTypeChecker} from "../commands/command";
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
 import EventEmitter from "events";
@@ -35,6 +35,7 @@ import {
 } from "../decorators/decorators";
 
 import StatCounter from "./stat-counter";
+import {Patterns} from "..";
 
 if (process.env.FORGE_DEBUG_MODE === "true") {
     Log.info("[Forge] Debug mode is enabled");
@@ -54,22 +55,60 @@ const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../frag
 // TODO: Should be a property/option on Bot, not hardcoded
 // TODO: Merge this resolvers with the (if provided) provided
 // ones by the user.
-const internalResolvers: any = {
-    user: (arg: string) => Utils.resolveId(arg),
-    channel: (arg: string) => Utils.resolveId(arg),
-    role: (arg: string) => Utils.resolveId(arg),
-    state: (arg: string) => Utils.translateState(arg),
+const internalArgResolvers: ArgumentResolver[] = [
+    {
+        name: InternalArgType.State,
 
-    member: (arg: string, message: Message): GuildMember | null => {
-        const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg));
-
-        if (resolvedMember) {
-            return resolvedMember;
+        resolve(arg: string): boolean {
+            return Utils.translateState(arg);
         }
+    },
+    {
+        name: InternalArgType.Member,
 
-        return null;
+        resolve(arg: string, message: Message): GuildMember | null {
+            const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg));
+    
+            if (resolvedMember) {
+                return resolvedMember;
+            }
+    
+            return null;
+        }
+    },
+    {
+        name: InternalArgType.Snowflake,
+
+        resolve(arg: string): Snowflake {
+            return Utils.resolveId(arg);
+        }
     }
-};
+];
+
+const internalArgTypes: CustomArgType[] = [
+    {
+        name: InternalArgType.Channel,
+
+        check(arg: string, message: Message): boolean {
+            return message.guild && message.guild.channels.has(arg);
+        }
+    },
+    {
+        name: InternalArgType.Member,
+        
+        check(arg: string, message: Message): boolean {
+            return message.guild && !!message.guild.member(arg);
+        }
+    },
+    {
+        name: InternalArgType.Snowflake,
+        check: Patterns.mentionOrSnowflake
+    },
+    {
+        name: InternalArgType.State,
+        check: Patterns.state
+    }
+];
 
 export type BotOptions = {
     readonly settings: Settings;
@@ -222,6 +261,32 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.commandStore = new CommandStore(this, this.authStore);
 
         /**
+         * @type {ArgumentResolver[]}
+         * @readonly
+         */
+        this.argumentResolvers = internalArgResolvers;
+
+        if (botOptions.argumentResolvers) {
+            this.argumentResolvers = [
+                ...this.argumentResolvers,
+                ...botOptions.argumentResolvers
+            ];
+        }
+
+        /**
+         * @type {CustomArgType[]}
+         * @readonly
+         */
+        this.argumentTypes = internalArgTypes;
+
+        if (botOptions.argumentTypes) {
+            this.argumentTypes = [
+                ...this.argumentTypes,
+                ...botOptions.argumentTypes
+            ];
+        }
+
+        /**
          * @type {CommandHandler}
          * @readonly
          */
@@ -229,7 +294,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             commandStore: this.commandStore,
             errorHandlers: [], // TODO: Is this like it was? Is it ok?
             authStore: this.authStore,
-            argumentTypes: botOptions.argumentTypes || {}
+            argumentTypes: this.argumentTypes
         });
 
         /**
@@ -294,18 +359,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @readonly
          */
         this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
-
-        /**
-         * @type {ArgumentResolver[]}
-         * @readonly
-         */
-        this.argumentResolvers = botOptions.argumentResolvers || [];
-
-        /**
-         * @type {CustomArgType[]}
-         * @readonly
-         */
-        this.argumentTypes = botOptions.argumentTypes || [];
 
         /**
          * @type {boolean}
@@ -576,11 +629,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
                 // TODO: What if commandChecks is start and the bot tries to react twice or more?
                 for (let i: number = 0; i < chain.length; i++) {
-                    await this.handleCommandMessage(message, chain[i].trim(), internalResolvers);
+                    await this.handleCommandMessage(message, chain[i].trim(), this.argumentResolvers);
                 }
             }
             else {
-                await this.handleCommandMessage(message, message.content, internalResolvers);
+                await this.handleCommandMessage(message, message.content, this.argumentResolvers);
             }
         }
         // TODO: ?prefix should also be chain-able

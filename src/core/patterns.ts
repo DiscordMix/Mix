@@ -5,7 +5,13 @@ export default abstract class Patterns {
 
     public static token: RegExp = /^[a-zA-Z0-9]{24}\.[a-zA-Z0-9]{3}\-[a-z]{2}\.[_a-zA-Z0-9-]{27}$/gm;
 
-    public static mention: RegExp = /<@!?[0-9]+>/gm;
+    public static mention: RegExp = /<@!?[0-9]{18}>/gm;
+
+    public static snowflake: RegExp = /[0-9]{18}/;
+
+    public static mentionOrSnowflake: RegExp = /<@!?[0-9]{18}>|[0-9]{18}/;
+
+    public static state: RegExp = /^(1|true|on|y|yes)$/i;
 
     /**
      * 1st Group => Long base

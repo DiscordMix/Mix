@@ -188,7 +188,7 @@ export default class Utils {
      * @return {boolean} Whether the state string representation was positive
      */
     public static translateState(state: string): boolean {
-        return /^(1|true|on|y|yes)$/i.test(state);
+        return Patterns.state.test(state);
     }
 
     /**

@@ -97,7 +97,7 @@ const internalArgTypes: CustomArgType[] = [
         name: InternalArgType.Member,
         
         check(arg: string, message: Message): boolean {
-            return message.guild && !!message.guild.member(arg);
+            return message.guild && message.guild.member(arg) !== undefined;
         }
     },
     {

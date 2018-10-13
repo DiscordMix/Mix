@@ -9,7 +9,8 @@ import Command, {
     PrimitiveArgType,
     CustomArgType,
     ArgumentResolver,
-    RestrictGroup
+    RestrictGroup,
+    InternalArgType
 } from "./commands/command";
 
 import ConsoleInterface from "./console/console-interface";
@@ -66,6 +67,7 @@ export {
     PrimitiveArgType,
     ArgumentResolver,
     RestrictGroup,
+    InternalArgType,
 
     // Console
     ConsoleInterface,

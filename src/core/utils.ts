@@ -426,9 +426,6 @@ export default class Utils {
             finalText = finalText.replace(Patterns.token, "[Token]");
         }
 
-        // TODO: Debugging code
-        console.log(finalText);
-
         while (finalText.includes(token)) {
             finalText = finalText.replace(token, "[Token]");
         }

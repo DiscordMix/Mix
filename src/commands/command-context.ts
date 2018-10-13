@@ -106,7 +106,7 @@ export default class CommandContext {
                 Log.warn("[Context.respond] Attempted to send a message with more than 2048 characters (Discord limit); The message was automatically trimmed");
             }
 
-            finalContent.text = Utils.escapeText(finalContent, this.bot.client.token);
+            finalContent.text = Utils.escapeText(finalContent.text, this.bot.client.token);
         }
 
         if (finalContent instanceof EmbedBuilder) {

@@ -98,6 +98,7 @@ const internalArgResolvers: ArgumentResolver[] = [
     }
 ];
 
+// TODO: Message type and resolver
 const internalArgTypes: CustomArgType[] = [
     {
         name: InternalArgType.Channel,

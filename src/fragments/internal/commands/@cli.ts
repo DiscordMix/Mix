@@ -16,7 +16,7 @@ export default class Cli extends Command {
 
     readonly aliases = ["exec", "exe"];
 
-    // TODO: Disabled for security
+    // TODO: Disabled for security reasons
     /* readonly arguments: Argument[] = [
         {
             name: "command",

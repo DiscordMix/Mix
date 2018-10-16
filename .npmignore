@@ -1,2 +1,14 @@
+node_modules
+dist/
+.idea
+.vscode/
+temp/*
+tmp/
+botty.db
+visualize_gource.bat
+bot.log
+desktop.ini
+*.bat
+*.sh
+yarn-error.log
 docs/
-*.log

@@ -1,8 +1,8 @@
-Forge is a powerful, fully-modular and self-contained bot development framework.
+Forge is a powerful, fully-modular and self-contained framework for serious bot development.
 
 **Note**: Forge is a library to create bot systems and not a Discord API library.
 
-=> [View the NPM package](#) (https://www.npmjs.com/package/@cloudrex/forge)
+=> [View the NPM package](https://www.npmjs.com/package/@cloudrex/forge)
 
 => [View the library reference](#) (**Unavailable**)
 

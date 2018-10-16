@@ -10,7 +10,23 @@ Forge is a powerful, fully-modular and self-contained bot development framework.
 
 #### Quick Start
 
-*Quick Start is being updated.*
+Get started quick with your next Discord bot project by using our CLI!
+
+To install and create a template bot in seconds issue the following commands:
+
+`$ npm install --global @cloudrex/forge-cli`
+
+`$ forge new bot`
+
+`$ cd bot`
+
+Your bot will be created under the `bot` directory, you may now install required NPM modules and copy the `.env.example` file to `.env` to configure your bot.
+
+After you've provided your bot's token in the newly created `.env` file, you may start the bot:
+
+`$ npm start`
+
+That's it! You should be presented with the fancy Forge title and you're ready to get started!
 
 #### Building
 

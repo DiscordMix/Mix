@@ -10,7 +10,7 @@ Forge is a powerful, fully-modular and self-contained bot development framework.
 
 #### Quick Start
 
-Get started quick with your next Discord bot project by using our CLI!
+Get started quick with your next Discord bot project by using our CLI tool!
 
 To install and create a template bot in seconds issue the following commands:
 

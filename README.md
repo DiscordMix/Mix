@@ -2,15 +2,21 @@ Forge is a powerful, fully-modular and self-contained bot development framework.
 
 **Note**: Forge is a library to create bot systems and not a Discord API library.
 
-=> [View the NPM package](#) (**Unavilable**)
+=> [View the NPM package](#) (https://www.npmjs.com/package/@cloudrex/forge)
 
 => [View the library reference](#) (**Unavailable**)
 
 => [View the documentation](#) (**Unavailable**)
 
-=> [View CLI tool](https://www.npmjs.com/package/@cloudrex/forge-cli)
+=> [View CLI tool on NPM](https://www.npmjs.com/package/@cloudrex/forge-cli)
 
-#### Quick Start
+#### Installing
+
+To incorporate Forge into an existing project, simply issue the following command:
+
+`$ npm install --save @cloudrex/forge`
+
+#### Quick Start with the CLI tool
 
 Get started quick with your next Discord bot project by using our CLI tool!
 

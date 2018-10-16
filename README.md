@@ -6,7 +6,7 @@ Forge is a powerful, fully-modular and self-contained framework for serious bot 
 
 => [View the library reference](#) (**Unavailable**)
 
-=> [View the documentation](#) (**Unavailable**)
+=> [View the documentation](https://cloudrex.gitbook.io/forge/) (**Still being written**)
 
 => [View CLI tool on NPM](https://www.npmjs.com/package/@cloudrex/forge-cli)
 

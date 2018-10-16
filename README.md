@@ -16,7 +16,7 @@ To incorporate Forge into an existing project, simply issue the following comman
 
 `$ npm install --save @cloudrex/forge`
 
-#### Quick Start with the CLI tool
+#### Quick Start with the CLI tool (recommended)
 
 Get started quick with your next Discord bot project by using our CLI tool!
 

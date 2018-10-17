@@ -97,7 +97,7 @@ export type CommandSwitchInfo = {
 /**
  * @extends Fragment
  */
-export abstract class GenericCommand extends Fragment {
+export abstract class GenericCommand<ArgumentsType> extends Fragment {
     public readonly aliases: string[] = [];
     public readonly arguments: Argument[] = [];
     public readonly restrict: CommandRestrict = Object.assign({}, DefaultCommandRestrict);
@@ -106,7 +106,7 @@ export abstract class GenericCommand extends Fragment {
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
 
-    public abstract executed(context: Context, args: any, api: any): any;
+    public abstract executed(context: Context, args: ArgumentsType, api: any): any;
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts
@@ -134,15 +134,15 @@ export abstract class GenericCommand extends Fragment {
 /**
  * @extends GenericCommand
  */
-export abstract class Subcommand extends GenericCommand {
+export abstract class Subcommand<ArgumentsType> extends GenericCommand<ArgumentsType> {
     //
 }
 
 /**
  * @extends GenericCommand
  */
-export default abstract class Command extends GenericCommand {
-    public readonly subcommands: Subcommand[] = [];
+export default abstract class Command<ArgumentsType> extends GenericCommand<ArgumentsType> {
+    public readonly subcommands: Subcommand<ArgumentsType>[] = [];
 
     /**
      * @todo canExecute should default boolean, same concept as Service

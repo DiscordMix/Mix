@@ -23,6 +23,17 @@ export default class FormattedMessage {
     }
 
     /**
+     * @param {string} text
+     * @return {FormattedMessage}
+     */
+    public addLine(text: string): FormattedMessage {
+        this.add(text);
+        this.line();
+
+        return this;
+    }
+
+    /**
      * @param {string | null} [language=null]
      * @param {string | null} [code=null]
      * @return {FormattedMessage}

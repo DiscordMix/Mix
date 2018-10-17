@@ -8,9 +8,9 @@ type EvalArgs = {
     readonly code: string;
 }
 
-export default class Cli extends Command<EvalArgs> {
+export default class Eval extends Command<EvalArgs> {
     readonly meta = {
-        name: "cli",
+        name: "eval",
         description: "Evaluate code"
     };
 

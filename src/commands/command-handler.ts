@@ -192,7 +192,7 @@ export default class CommandHandler {
      * @param {CommandContext} context
      * @param {Command} command The command to handle
      * @param {RawArguments} rawArgs
-     * @return {Promise<Boolean>} Whether the command was successfully executed
+     * @return {Promise<boolean>} Whether the command was successfully executed
      */
     public async handle(context: CommandContext, command: Command, rawArgs: RawArguments): Promise<boolean> {
         if (!this.meetsRequirements(context, command, rawArgs)) {
@@ -212,6 +212,8 @@ export default class CommandHandler {
 
             return false;
         }
+
+        this.commandStore.bot.emit("handlingCommand", context, command, resolvedArgs);
 
         try {
             // TODO: Only check if result is true, make sure commandStore return booleans
@@ -246,6 +248,8 @@ export default class CommandHandler {
             return result;
         }
         catch (error) {
+            this.commandStore.bot.emit("commandError", error);
+
             if (this.errorHandlers[CommandManagerEvent.CommandError]) {
                 this.errorHandlers[CommandManagerEvent.CommandError](context, command, error);
             }

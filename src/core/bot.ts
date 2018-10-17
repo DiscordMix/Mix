@@ -190,6 +190,34 @@ const DefaultBotOptions: BotExtraOptions = {
 };
 
 /**
+ * Bot events:
+ * 
+ * - setupStart(ApiType?)
+ * - loadInternalFragments()
+ * - loadedInternalFragments(Fragment[]?)
+ * - loadServices()
+ * - loadedServices()
+ * - loadCommands()
+ * - loadedCommands()
+ * - ready()
+ * - handleMessageStart()
+ * - handleMessageEnd()
+ * - handleCommandMessageStart(Discord.Message, string)
+ * - handleCommandMessageEnd(Discord.Message, string)
+ * - restartStart(boolean)
+ * - restartCompleted(boolean)
+ * - disconnecting()
+ * - disconnected()
+ * - clearingTemp()
+ * - clearedTemp()
+ * 
+ * - handlingCommand(CommandContext, Command, Arguments Object)
+ * - commandError(Error)
+ * - commandExecuted(CommandExecutedEvent, command result (any))
+ * - 
+ */
+
+/**
  * @extends EventEmitter
  */
 export default class Bot<ApiType = any> extends EventEmitter {
@@ -406,6 +434,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @return {Promise<this>}
      */
     public async setup(api?: ApiType): Promise<this> {
+        this.emit("setupStart", api);
+
         if (this.options.asciiTitle) {
             console.log("\n" + title.replace("{version}", "beta") + "\n");
         }
@@ -424,6 +454,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.setupStart = performance.now();
 
         Log.verbose("[Bot.setup] Attempting to load internal fragments");
+
+        this.emit("loadInternalFragments");
 
         // Load & enable internal fragments
         const internalFragmentCandidates: string[] | null = await FragmentLoader.pickupCandidates(internalFragmentsPath);
@@ -455,6 +487,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
         }
 
+        this.emit("loadedInternalFragments", internalFragments || []);
+        this.emit("loadServices");
+
         // Load & enable services
         const consumerServiceCandidates: string[] | null = await FragmentLoader.pickupCandidates(this.settings.paths.services);
 
@@ -478,6 +513,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
         // After loading services, enable all of them
         this.services.enableAll();
 
+        this.emit("loadedServices");
+        this.emit("loadCommands");
+
         // Load & enable consumer command fragments
         const consumerCommandCandidates: string[] | null = await FragmentLoader.pickupCandidates(this.settings.paths.commands);
 
@@ -500,6 +538,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         // Load decorator commands
         this.commandStore.registerMultipleDecorator(DecoratorCommands);
+
+        this.emit("loadedCommands");
 
         // Setup the Discord client's events
         this.setupEvents();
@@ -587,6 +627,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
 
             Log.success(`[Bot.setupEvents] Ready | Took ${rounded}${suffix}`);
+            this.emit("ready");
         });
 
         this.client.on("message", this.handleMessage.bind(this));
@@ -623,6 +664,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
         if (this.suspended) {
             return;
         }
+
+        this.emit("handleMessageStart");
 
         if (this.options.logMessages) {
             const names: any = {};
@@ -663,6 +706,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [Forge v**${await Utils.getForgeVersion()}**](http://test.com/)`)
                 .setColor("GREEN"));
         }
+
+        this.emit("handleMessageEnd");
     }
 
     /**
@@ -690,6 +735,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @return {Promise<void>}
      */
     public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
+        this.emit("handleCommandMessageStart", message, content);
+
         let command: Command | DecoratorCommand | null = CommandParser.parse(
             content,
             this.commandStore,
@@ -745,6 +792,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
             rawArgs
         );
+
+        this.emit("handleCommandMessageEnd", message, content);
     }
 
     /**
@@ -805,6 +854,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @return {Promise<this>}
      */
     public async restart(reloadModules: boolean = true): Promise<this> {
+        this.emit("restartStart", reloadModules);
         Log.verbose("[Bot.restart] Restarting");
 
         if (reloadModules) {
@@ -816,6 +866,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         await this.disconnect();
         await this.connect();
+        this.emit("restartCompleted", reloadModules);
 
         return this;
     }
@@ -825,6 +876,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @return {Promise<this>}
      */
     public async disconnect(): Promise<this> {
+        this.emit("disconnecting");
+
         // Save auth store if it's a JsonAuthStore
         if (this.authStore instanceof JsonAuthStore) {
             Log.verbose("[Bot.disconnect] Saving auth store");
@@ -844,6 +897,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         //this.settings.save();
         await this.client.destroy();
         Log.info("[Bot.disconnect] Disconnected");
+        this.emit("disconnected");
 
         return this;
     }
@@ -851,7 +905,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
     /**
      * Clear all the files inside the temp folder
      */
-    public static clearTemp(): void {
+    public clearTemp(): void {
+        this.emit("clearingTemp");
+
         if (fs.existsSync("./temp")) {
             fs.readdir("./temp", (error: any, files: any) => {
                 for (let i = 0; i < files.length; i++) {
@@ -861,5 +917,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 }
             });
         }
+
+        this.emit("clearedTemp");
     }
 }

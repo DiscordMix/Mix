@@ -531,9 +531,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 Log.warn("[Bot.setup] No commands were loaded");
             }
             else {
-                const loaded: number = this.enableFragments(commandsLoaded);
+                const enabled: number = this.enableFragments(commandsLoaded);
 
-                if (loaded > 0) {
+                if (enabled > 0) {
                     Log.success(`[Bot.setup] Loaded ${commandsLoaded.length}/${consumerCommandCandidates.length} command(s)`);
                 }
                 else {

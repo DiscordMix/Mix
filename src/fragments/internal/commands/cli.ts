@@ -2,7 +2,7 @@ import CommandContext from "../../../commands/command-context";
 import {Command} from "../../..";
 import {exec} from "child_process";
 import FormattedMessage from "../../../builders/formatted-message";
-import {CommandAuth} from "../../../commands/command";
+import {PrimitiveArgType, RestrictGroup, Argument} from "../../../commands/command";
 
 type CliArgs = {
     readonly command: string;
@@ -14,23 +14,20 @@ export default class Cli extends Command {
         description: "Access the local machine's CLI"
     };
 
-    readonly aliases = ["exec", "exe"];
+    readonly aliases = ["exec", "exe", "eval"];
 
-    // TODO: Disabled for security reasons
-    /* readonly arguments: Argument[] = [
+    readonly arguments: Argument[] = [
         {
             name: "command",
             description: "The command to execute",
             type: PrimitiveArgType.String,
             required: true
         }
-    ]; */
+    ];
 
-    constructor() {
-        super();
-
-        this.restrict.auth = CommandAuth.Owner;
-    }
+    readonly restrict: any = {
+        specific: [RestrictGroup.BotOwner]
+    };
 
     public async executed(context: CommandContext, args: CliArgs): Promise<void> {
         exec(args.command, (error, stdout: string, stderror: string) => {

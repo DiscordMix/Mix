@@ -15,10 +15,13 @@ export interface CommandHandlerOptions {
     readonly argumentTypes: any;
 }
 
+export type CommandErrorHandler = (context: CommandContext, command: Command) => boolean;
+
 export default class CommandHandler {
     public readonly commandStore: CommandStore;
     public readonly authStore: CommandAuthStore;
     public readonly errorHandlers: Function[];
+    public readonly _errorHandlers: Map<CommandManagerEvent, any>;
     public readonly argumentTypes: any;
 
     /**
@@ -44,21 +47,24 @@ export default class CommandHandler {
         this.errorHandlers = options.errorHandlers;
 
         /**
-         * @type {Object}
+         * @type {*}
          * @readonly
          */
         this.argumentTypes = options.argumentTypes;
+
+        /**
+         * @type {Map<CommandManagerEvent, *>}
+         * @readonly
+         */
+        this._errorHandlers = new Map();
     }
 
-    /**
-     * @param {CommandManagerEvent} event
-     * @param {Function} handler
-     * @return {CommandStore}
-     */
-    public setErrorHandler(event: CommandManagerEvent, handler: Function): CommandHandler {
-        this.errorHandlers[event] = handler;
+    private handleError(event: CommandManagerEvent, context: CommandContext, command: Command): boolean {
+        if (this._errorHandlers.get(event) !== undefined) {
+            return this._errorHandlers.get(event)(context, command);
+        }
 
-        return this;
+        return false;
     }
 
     /**
@@ -72,18 +78,12 @@ export default class CommandHandler {
         // #channelId, &roleId, @userId, $guildId
 
         if (!CommandHandler.validateEnvironment(command.restrict.environment, context.message.channel.type)) {
-            if (this.errorHandlers[CommandManagerEvent.DisallowedEnvironment]) {
-                this.errorHandlers[CommandManagerEvent.DisallowedEnvironment](context, command);
-            }
-            else {
+            if (!this.handleError(CommandManagerEvent.DisallowedEnvironment, context, command)) {
                 context.message.channel.send("That command may not be used here.");
             }
         }
         else if (!command.isEnabled) {
-            if (this.errorHandlers[CommandManagerEvent.DisabledCommand]) {
-                this.errorHandlers[CommandManagerEvent.DisabledCommand](context, command);
-            }
-            else {
+            if (!this.handleError(CommandManagerEvent.DisabledCommand, context, command)) {
                 context.fail("That command is disabled and may not be used.");
             }
         }
@@ -91,11 +91,8 @@ export default class CommandHandler {
             context.fail("You're not allowed to use that command");
         }
         else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.restrict.auth, context.bot.owner)) {
-            if (this.errorHandlers[CommandManagerEvent.NoAuthority]) {
-                this.errorHandlers[CommandManagerEvent.NoAuthority](context, command);
-            }
-            else {
-                const minAuthority = this.authStore.getSchemaRankName(command.restrict.auth);
+            if (!this.handleError(CommandManagerEvent.NoAuthority, context, command)) {
+                const minAuthority: string | null = this.authStore.getSchemaRankName(command.restrict.auth);
 
                 let rankName: string = "Unknown"; // TODO: Unknown should be a reserved auth level name (schema)
 
@@ -127,10 +124,7 @@ export default class CommandHandler {
             }
         }
         else if ((typeof command.canExecute === "function" && !command.canExecute(context)) || typeof command.canExecute === "boolean" && !command.canExecute) {
-            if (this.errorHandlers[CommandManagerEvent.CommandMayNotExecute]) {
-                this.errorHandlers[CommandManagerEvent.CommandMayNotExecute](context, command);
-            }
-            else {
+            if (!this.handleError(CommandManagerEvent.CommandMayNotExecute, context, command)) {
                 context.fail("That command cannot be executed right now.");
             }
         }
@@ -144,30 +138,21 @@ export default class CommandHandler {
             }
         }
         else if (command.restrict.selfPermissions.length > 0 && !context.message.guild.me.hasPermission(command.restrict.selfPermissions.map((permissionObj) => permissionObj.permission))) {
-            if (this.errorHandlers[CommandManagerEvent.MissingSelfPermissions]) {
-                this.errorHandlers[CommandManagerEvent.MissingSelfPermissions](context, command);
-            }
-            else {
+            if (!this.handleError(CommandManagerEvent.MissingSelfPermissions, context, command)) {
                 const permissions = command.restrict.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
-                context.fail(`I need the following permission(s) to execute that command: ${permissions}`);
+                context.fail(`I require the following permission(s) to execute that command: ${permissions}`);
             }
         }
         else if (command.restrict.issuerPermissions.length > 0 && !context.message.member.hasPermission(command.restrict.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
-            if (this.errorHandlers[CommandManagerEvent.MissingIssuerPermissions]) {
-                this.errorHandlers[CommandManagerEvent.MissingIssuerPermissions](context, command);
-            }
-            else {
+            if (!this.handleError(CommandManagerEvent.MissingIssuerPermissions, context, command)) {
                 const permissions = command.restrict.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
         else if (command.restrict.cooldown && !this.commandStore.cooldownExpired(context.sender.id, command.meta.name)) {
-            if (this.errorHandlers[CommandManagerEvent.UnderCooldown]) {
-                this.errorHandlers[CommandManagerEvent.UnderCooldown](context, command);
-            }
-            else {
+            if (!this.handleError(CommandManagerEvent.UnderCooldown, context, command)) {
                 const timeLeft: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 
                 if (timeLeft) {

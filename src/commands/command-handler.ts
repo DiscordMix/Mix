@@ -7,6 +7,7 @@ import CommandExecutedEvent from "../events/command-executed-event";
 import {GuildMember, Snowflake, TextChannel} from "discord.js";
 import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandParser from "./command-parser";
+import Utils from "../core/utils";
 
 export interface CommandHandlerOptions {
     readonly commandStore: CommandStore;
@@ -314,7 +315,7 @@ export default class CommandHandler {
                     }
 
                     case RestrictGroup.BotOwner: {
-                        met = context.sender.id === context.bot.owner;
+                        met = !Utils.isEmpty(context.bot.owner) || context.sender.id === context.bot.owner;
 
                         break;
                     }

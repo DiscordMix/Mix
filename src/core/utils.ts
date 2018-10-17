@@ -75,6 +75,15 @@ export default class Utils {
     }
 
     /**
+     * Determine whether an object or string is empty or missing value
+     * @param {*} input
+     * @return {boolean}
+     */
+    public static isEmpty(input: any): boolean {
+        return input === undefined || input === null || input.toString().trim() === "";
+    }
+
+    /**
      * @param {string} directory The directory to scan
      * @param {boolean} [absolutePath=false] Whether to return the absolute path of the files
      */

@@ -88,7 +88,7 @@ export default class CommandContext {
 
     /**
      * @todo Content parameter type
-     * @param {Object|EmbedBuilder} content
+     * @param {EmbedBuilder | *} content
      * @param {boolean} [autoDelete=false]
      * @return {Promise<EditableMessage> | null}
      */
@@ -101,8 +101,13 @@ export default class CommandContext {
                 finalContent.text = ":thinking: *Empty response*";
             }
             else if (finalContent.text.length > 2048) {
+                if (finalContent.text.endsWith("```")) {
+                    finalContent.text = finalContent.text.substring(0, 2045) + "```";
+                }
+
                 // TODO: ... not being added at the end
                 finalContent.text = finalContent.text.substring(0, 2044) + " ...";
+
                 Log.warn("[Context.respond] Attempted to send a message with more than 2048 characters (Discord limit); The message was automatically trimmed");
             }
 
@@ -129,7 +134,7 @@ export default class CommandContext {
 
         let messageResult = await this.message.channel.send(embed.build()).catch((error: Error) => {
             // TODO: Temporarily disabled due to spamming on unwanted servers.
-            // this.privateReply(`Oh noes! For some reason, I was unable to reply to you in that channel. (${error.message})`);
+            // this.privateReply(`Oh no! For some reason, I was unable to reply to you in that channel. (${error.message})`);
         });
 
         // TODO: Hotfix

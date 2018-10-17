@@ -141,7 +141,7 @@ export abstract class Subcommand<ArgumentsType> extends GenericCommand<Arguments
 /**
  * @extends GenericCommand
  */
-export default abstract class Command<ArgumentsType> extends GenericCommand<ArgumentsType> {
+export default abstract class Command<ArgumentsType = any> extends GenericCommand<ArgumentsType> {
     public readonly subcommands: Subcommand<ArgumentsType>[] = [];
 
     /**

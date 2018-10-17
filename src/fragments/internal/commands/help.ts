@@ -1,6 +1,7 @@
 import CommandContext from "../../../commands/command-context";
 import {Command} from "../../..";
 import {RichEmbed} from "discord.js";
+import {ReadonlyCommandMap} from "../../../commands/command-store";
 
 export default class Help extends Command {
     readonly meta = {
@@ -10,14 +11,24 @@ export default class Help extends Command {
 
     public async executed(context: CommandContext): Promise<void> {
         // TODO: Decorator commands broke it (can't .map through a Map)
-        /* const commands: string = context.bot.commandStore.getAll()
+
+        const commandMap: ReadonlyCommandMap = context.bot.commandStore.getAll();
+        const commands: Command[] = [];
+
+        for (let [base, command] of commandMap) {
+            if (command instanceof Command) {
+                commands.push(command);
+            }
+        }
+
+        const commandsString: string = commands
             .map((command: Command) => `**${command.meta.name}**: ${command.meta.description}`)
             .join("\n");
 
         if (context.bot.options.dmHelp) {
             await (await context.sender.createDM()).send(new RichEmbed()
                 .setColor("GREEN")
-                .setDescription(commands)).catch(async (error: Error) => {
+                .setDescription(commandsString)).catch(async (error: Error) => {
                 if (error.message === "Cannot send messages to this user") {
                     await context.fail("You're not accepting direct messages.");
                 }
@@ -27,7 +38,7 @@ export default class Help extends Command {
             });
         }
         else {
-            await context.ok(commands, "Help - Available Commands");
-        } */
+            await context.ok(commandsString, "Help - Available Commands");
+        }
     }
 };

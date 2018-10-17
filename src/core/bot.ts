@@ -199,7 +199,7 @@ const DefaultBotOptions: BotExtraOptions = {
  * - loadedServices()
  * - loadCommands()
  * - loadedCommands()
- * - ready()
+ * - ready() --> TODO: Seems like it's missing
  * - handleMessageStart()
  * - handleMessageEnd()
  * - handleCommandMessageStart(Discord.Message, string)

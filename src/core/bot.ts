@@ -572,6 +572,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
                     continue;
                 }
 
+                // TODO: Add a way to disable the warning
+                if (!internal && fragment.meta.name === "eval") {
+                    Log.warn("Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Forge.");
+                }
+
                 // Overwrite command restrict with default values
                 fragment.restrict = {
                     ...DefaultCommandRestrict,

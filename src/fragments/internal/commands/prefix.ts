@@ -7,12 +7,13 @@ export default class Prefix extends Command {
         description: "Manage bot prefixes"
     };
 
+    // TODO: Update
     readonly args = {
         prefix: "!string"
     };
 
     public async executed(context: CommandContext): Promise<void> {
-        // TODO
+        // TODO:
         await context.ok("Command not yet implemented.");
     }
 };

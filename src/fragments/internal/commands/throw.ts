@@ -1,5 +1,6 @@
 import CommandContext from "../../../commands/command-context";
 import {Command} from "../../..";
+import {RestrictGroup} from "../../../commands/command";
 
 export default class Throw extends Command {
     readonly meta = {
@@ -7,14 +8,11 @@ export default class Throw extends Command {
         description: "Throw an error"
     };
 
-    constructor() {
-        super();
+    readonly restrict: any = {
+        specific: [RestrictGroup.BotOwner]
+    };
 
-        // Owner only
-        this.restrict.auth = -1;
-    }
-
-    public async executed(context: CommandContext): Promise<void> {
+    public async executed(): Promise<void> {
         throw new Error("Intentionally thrown error");
     }
 };

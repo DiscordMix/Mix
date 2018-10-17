@@ -14,7 +14,7 @@ export default class Cli extends Command {
         description: "Access the local machine's CLI"
     };
 
-    readonly aliases = ["exec", "exe", "eval"];
+    readonly aliases = ["exec", "exe"];
 
     readonly arguments: Argument[] = [
         {

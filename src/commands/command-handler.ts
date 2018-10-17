@@ -315,7 +315,7 @@ export default class CommandHandler {
                     }
 
                     case RestrictGroup.BotOwner: {
-                        met = !Utils.isEmpty(context.bot.owner) || context.sender.id === context.bot.owner;
+                        met = !Utils.isEmpty(context.bot.owner) && context.sender.id === context.bot.owner;
 
                         break;
                     }

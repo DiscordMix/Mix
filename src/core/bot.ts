@@ -531,7 +531,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 Log.warn("[Bot.setup] No commands were loaded");
             }
             else {
-                Log.success(`[Bot.setup] Loaded ${commandsLoaded.length} command(s)`);
+                Log.success(`[Bot.setup] Loaded ${commandsLoaded.length}/${consumerCommandCandidates.length} command(s)`);
                 this.enableFragments(commandsLoaded);
             }
         }

@@ -617,7 +617,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             await this.setupAuthStore();
             Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag} | ${this.client.guilds.size} guild(s)`);
 
-            const took: number = performance.now() - this.setupStart;
+            const took: number = Math.round(performance.now() - this.setupStart);
 
             Log.success(`[Bot.setupEvents] Ready | Took ${took}ms`);
         });

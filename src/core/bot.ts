@@ -632,11 +632,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         // Setup user events
-        for (let i = 0; i < BotEvents.length; i++) {
+        for (let i: number = 0; i < BotEvents.length; i++) {
             this.client.on(BotEvents[i].name, BotEvents[i].handler);
         }
 
-        for (let i = 0; i < ChannelMessageEvents.length; i++) {
+        for (let i: number = 0; i < ChannelMessageEvents.length; i++) {
             this.client.on("message", (message: Message) => {
                 if (message.channel.id === ChannelMessageEvents[i].name) {
                     ChannelMessageEvents[i].handler();
@@ -681,11 +681,25 @@ export default class Bot<ApiType = any> extends EventEmitter {
         // TODO: Cannot do .startsWith with a prefix array
         if ((!message.author.bot || (message.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(message.content, this.commandStore, this.settings.general.prefixes)) {
             if (this.options.allowCommandChain) {
-                const chain: string[] = message.content.split("&");
+                const rawChain: string[] = message.content.split("&");
 
-                // TODO: What if commandChecks is start and the bot tries to react twice or more?
-                for (let i: number = 0; i < chain.length; i++) {
-                    await this.handleCommandMessage(message, chain[i].trim(), this.argumentResolvers);
+                // TODO: Should be bot option
+                const maxChainLength: number = 5;
+
+                let allowed: boolean = true;
+
+                if (rawChain.length > maxChainLength) {
+                    allowed = false;
+                    message.reply(`Maximum allowed chain length is ${maxChainLength} commands. Your commands were not executed.`);
+                }
+
+                if (allowed) {
+                    const chain: string[] = rawChain.slice(0, maxChainLength);
+
+                    // TODO: What if commandChecks is start and the bot tries to react twice or more?
+                    for (let i: number = 0; i < chain.length; i++) {
+                        await this.handleCommandMessage(message, chain[i].trim(), this.argumentResolvers);
+                    }
                 }
             }
             else {

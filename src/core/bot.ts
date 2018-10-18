@@ -765,6 +765,19 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
                 .setColor("GREEN"));
         }
+        // TODO: There should be an option to disable this
+        // TODO: Use embeds
+        else if (message.content === "?undo") {
+            if (!this.commandHandler.undoMemory.has(message.author.id)) {
+                message.reply("You haven't performed any undoable action");
+            }
+            else if (this.commandHandler.undoAction(message.author.id, message)) {
+                await message.reply("The action was successfully undone");
+            }
+            else {
+                await message.reply("The action failed to be undone");
+            }
+        }
 
         this.emit("handleMessageEnd");
     }

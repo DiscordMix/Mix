@@ -4,7 +4,7 @@ import Command, {RestrictGroup, RawArguments} from "./command";
 import CommandStore, {CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
-import {GuildMember, Snowflake, TextChannel} from "discord.js";
+import {GuildMember, Snowflake, TextChannel, Message} from "discord.js";
 import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
@@ -18,14 +18,21 @@ export interface CommandHandlerOptions {
 
 export type CommandErrorHandler = (context: CommandContext, command: Command) => boolean;
 
+export type UndoAction = {
+    readonly command: Command;
+    readonly context: CommandContext;
+}
+
 export default class CommandHandler {
     public readonly commandStore: CommandStore;
     public readonly authStore: CommandAuthStore;
     public readonly errorHandlers: Function[];
     public readonly _errorHandlers: Map<CommandManagerEvent, any>;
     public readonly argumentTypes: any;
+    public readonly undoMemory: Map<Snowflake, UndoAction>;
 
     /**
+     * @todo Replace 'errorHandlers' with '_errorHandlers'
      * @param {CommandHandlerOptions} options
      */
     constructor(options: CommandHandlerOptions) {
@@ -58,6 +65,12 @@ export default class CommandHandler {
          * @readonly
          */
         this._errorHandlers = new Map();
+        
+        /**
+         * @type {Map<Snowflake, UndoAction>}
+         * @readonly
+         */
+        this.undoMemory = new Map();
     }
 
     private handleError(event: CommandManagerEvent, context: CommandContext, command: Command): boolean {
@@ -172,6 +185,16 @@ export default class CommandHandler {
         return false;
     }
 
+    public async undoAction(user: Snowflake, message: Message): Promise<boolean> {
+        if (this.undoMemory.has(user)) {
+            const action: UndoAction = this.undoMemory.get(user) as UndoAction;
+
+            return await action.command.undo(action.context, message);
+        }
+
+        return false;
+    }
+
     /**
      * @todo Split this method into a class
      * @todo Since it's returning a Promise, review
@@ -229,6 +252,13 @@ export default class CommandHandler {
                 } */
 
                 context.message.react("✅");
+            }
+
+            if (command.undoable) {
+                this.undoMemory.set(context.sender.id, {
+                    command,
+                    context
+                });
             }
 
             return result;

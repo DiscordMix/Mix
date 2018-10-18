@@ -106,8 +106,9 @@ export abstract class GenericCommand<ArgumentsType> extends Fragment {
     public readonly exclude: string[] = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
+    public readonly undoable: boolean = false;
 
-    // TODO: Implement
+    // TODO: Implement/shouldn't be negative response?
     public async undo(oldContext: CommandContext, message: Message): Promise<boolean> {
         await message.reply("That action cannot be undone");
 

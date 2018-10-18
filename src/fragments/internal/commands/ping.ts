@@ -11,6 +11,6 @@ export default class Ping extends Command {
     };
 
     public async executed(context: CommandContext): Promise<void> {
-        await context.ok(`:ping_pong: Pong! ${Math.round(context.bot.client.ping)}ms`); // TODO: Missing heartbeat
+        await context.ok(`:ping_pong: Beep Boop! ${Math.round(context.bot.client.ping)}ms`); // TODO: Missing heartbeat
     }
 }

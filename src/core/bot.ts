@@ -767,6 +767,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
         // TODO: There should be an option to disable this
         // TODO: Use embeds
+        // TODO: Verify that it was done in the same environment and that the user still has perms
         else if (message.content === "?undo") {
             if (!this.commandHandler.undoMemory.has(message.author.id)) {
                 message.reply("You haven't performed any undoable action");

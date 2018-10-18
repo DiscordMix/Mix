@@ -762,7 +762,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         // TODO: ?prefix should also be chain-able
         else if (message.content === "?prefix" && this.prefixCommand) {
             message.channel.send(new RichEmbed()
-                .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [Forge v**${await Utils.getForgeVersion()}**](http://test.com/)`)
+                .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
                 .setColor("GREEN"));
         }
 

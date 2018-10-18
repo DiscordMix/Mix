@@ -104,21 +104,21 @@ const internalArgTypes: CustomArgType[] = [
         name: InternalArgType.Channel,
 
         check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.channels.has(arg);
+            return message.guild && message.guild.channels.has(Utils.resolveId(arg));
         }
     },
     {
         name: InternalArgType.Member,
         
         check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.member(arg) !== undefined;
+            return message.guild && message.guild.member(Utils.resolveId(arg)) !== undefined;
         }
     },
     {
         name: InternalArgType.Role,
 
         check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.roles.has(arg);
+            return message.guild && message.guild.roles.has(Utils.resolveId(arg));
         }
     },
     {

@@ -657,6 +657,48 @@ export default class Bot<ApiType = any> extends EventEmitter {
         Log.success("[Bot.setupEvents] Discord events setup completed");
     }
 
+    public async triggerCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
+        const content: string = `${base} ${args.join(" ")}`.trim();
+
+        let command: Command | DecoratorCommand | null = CommandParser.parse(
+            content,
+            this.commandStore,
+            this.settings.general.prefixes
+        );
+
+        if (command === null) {
+            Log.error("[Bot.handleCommandMessage] Failed parsing command");
+
+            return;
+        }
+
+        if ((command as any).type !== undefined && typeof (command as any).type === "number" && DecoratorCommandType[(command as any).type] !== undefined) {
+            Log.warn("[Bot.triggerCommand] Triggering weak, simple or decorator commands is not supported.");
+
+            return;
+        }
+
+        command = command as Command;
+
+        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
+            arguments: CommandParser.getArguments(content),
+            schema: command.arguments,
+
+            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
+            message: referer,
+            command: command
+        });
+
+        // TODO: Debugging
+        Log.debug("raw args, ", rawArgs);
+
+        return this.commandHandler.handle(
+            this.createCommandContext(referer),
+            command,
+            rawArgs
+        );
+    }
+
     /**
      * @param {Message} message
      * @param {boolean} [edited=false] Whether the message was edited

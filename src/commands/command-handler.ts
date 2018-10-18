@@ -21,6 +21,7 @@ export type CommandErrorHandler = (context: CommandContext, command: Command) =>
 export type UndoAction = {
     readonly command: Command;
     readonly context: CommandContext;
+    readonly args?: any;
 }
 
 export default class CommandHandler {
@@ -189,7 +190,7 @@ export default class CommandHandler {
         if (this.undoMemory.has(user)) {
             const action: UndoAction = this.undoMemory.get(user) as UndoAction;
 
-            return await action.command.undo(action.context, message);
+            return await action.command.undo(action.context, message, action.args);
         }
 
         return false;
@@ -257,7 +258,8 @@ export default class CommandHandler {
             if (command.undoable) {
                 this.undoMemory.set(context.sender.id, {
                     command,
-                    context
+                    context,
+                    args: resolvedArgs
                 });
             }
 

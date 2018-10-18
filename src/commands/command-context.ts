@@ -169,7 +169,7 @@ export default class CommandContext {
 
     /**
      * @todo For some reason not having 'Requested by' footer
-     * @param {object} sections
+     * @param {*} sections
      * @param {string} color
      * @return {Promise<EditableMessage>}
      */

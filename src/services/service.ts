@@ -6,13 +6,13 @@ export interface ServiceOptions {
     readonly api?: any;
 }
 
-export default abstract class Service<ApiType = any> extends Fragment {
+export default abstract class Service<ApiType = undefined | any> extends Fragment {
     public readonly stop?: () => void;
     public readonly canStart: (() => boolean) | boolean = true;
     public readonly listeners: string[] = [];
 
     protected readonly bot: Bot;
-    protected readonly api?: ApiType;
+    protected readonly api: ApiType;
 
     /**
      * @param {ServiceOptions} options

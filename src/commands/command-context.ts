@@ -15,12 +15,14 @@ export interface CommandExecutionContextOptions {
     readonly label: string | null;
 }
 
-export default class CommandContext {
+export default class CommandContext<DataType = any> {
     public readonly message: Message;
     public readonly bot: Bot;
     public readonly auth: number;
     public readonly emojis?: EmojiCollection;
     public readonly label: string | null;
+
+    public data?: DataType;
 
     /**
      * @param {CommandExecutionContextOptions} options

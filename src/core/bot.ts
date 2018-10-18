@@ -773,6 +773,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
             else if (this.commandHandler.undoAction(message.author.id, message)) {
                 await message.reply("The action was successfully undone");
+                this.commandHandler.undoMemory.delete(message.author.id);
             }
             else {
                 await message.reply("The action failed to be undone");
@@ -859,9 +860,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         await this.commandHandler.handle(
             this.createCommandContext(message),
-
             command,
-
             rawArgs
         );
 

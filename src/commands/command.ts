@@ -2,6 +2,7 @@ import ChatEnvironment from "../core/chat-environment";
 import Context from "./command-context";
 import Fragment from "../fragments/fragment";
 import {Message} from "discord.js";
+import CommandContext from "./command-context";
 
 export type UserGroup = string[];
 
@@ -105,6 +106,13 @@ export abstract class GenericCommand<ArgumentsType> extends Fragment {
     public readonly exclude: string[] = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
+
+    // TODO: Implement
+    public async undo(oldContext: CommandContext, message: Message): Promise<boolean> {
+        await message.reply("That action cannot be undone");
+
+        return false;
+    }
 
     public abstract executed(context: Context, args: ArgumentsType, api: any): any;
 

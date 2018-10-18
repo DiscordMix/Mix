@@ -760,7 +760,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
         }
         // TODO: ?prefix should also be chain-able
-        else if (message.content === "?prefix" && this.prefixCommand) {
+        else if (message.author.bot && message.content === "?prefix" && this.prefixCommand) {
             message.channel.send(new RichEmbed()
                 .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
                 .setColor("GREEN"));
@@ -768,7 +768,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         // TODO: There should be an option to disable this
         // TODO: Use embeds
         // TODO: Verify that it was done in the same environment and that the user still has perms
-        else if (message.content === "?undo") {
+        else if (message.author.bot && message.content === "?undo") {
             if (!this.commandHandler.undoMemory.has(message.author.id)) {
                 message.reply("You haven't performed any undoable action");
             }

@@ -660,6 +660,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public async triggerCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
         const content: string = `${base} ${args.join(" ")}`.trim();
 
+        // TODO: Debugging
+        Log.debug("trigger content is", content);
+
         let command: Command | DecoratorCommand | null = CommandParser.parse(
             content,
             this.commandStore,

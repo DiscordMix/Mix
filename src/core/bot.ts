@@ -658,10 +658,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
     }
 
     public async triggerCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
-        const content: string = `${base} ${args.join(" ")}`.trim();
-
-        // TODO: Debugging
-        Log.debug("trigger content is", content);
+        // Use any registered prefix, default to index 0
+        const content: string = `${this.settings.general.prefixes[0]}${base} ${args.join(" ")}`.trim();
 
         let command: Command | DecoratorCommand | null = CommandParser.parse(
             content,

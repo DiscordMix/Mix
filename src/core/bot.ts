@@ -373,8 +373,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
             "help",
             "usage",
             "ping",
-            "auth",
-            "setauth",
             "prefix",
             "cli",
             "throw",

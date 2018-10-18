@@ -9,6 +9,8 @@ export interface ServiceOptions {
 export default abstract class Service<ApiType = undefined | any> extends Fragment {
     public readonly stop?: () => void;
     public readonly canStart: (() => boolean) | boolean = true;
+
+    // TODO: Is this being used?
     public readonly listeners: string[] = [];
 
     protected readonly bot: Bot;

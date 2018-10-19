@@ -164,7 +164,7 @@ export default class Utils {
      * @return {number}
      */
     public static timeFromNow(milliseconds: number, seconds: number = 0, minutes: number = 0, hours: number = 0, days: number = 0, months: number = 0, years: number = 0): number {
-        const now = new Date();
+        const now: Date = new Date();
 
         return new Date(years + now.getFullYear(), months + now.getMonth(), days + now.getDate(), hours + now.getHours(), minutes + now.getMinutes(), seconds + now.getSeconds(), milliseconds + now.getMilliseconds()).getTime();
     }
@@ -291,14 +291,12 @@ export default class Utils {
     }
 
     /**
-     * @param {Message} message
-     * @param {User} user
+     * @param {string} text
+     * @param {Snowflake} userId
      * @return {boolean}
      */
-    public static hasMentionPrefix(message: Message, user: Snowflake | User): boolean {
-        const id: Snowflake = typeof user === "string" ? user : user.id;
-
-        return message.content.startsWith(`<@${id}`) || message.content.startsWith(`<@!${id}>`);
+    public static hasMentionPrefix(text: string, userId: Snowflake): boolean {
+        return text.startsWith(`<@${userId}>`) || text.startsWith(`<@!${userId}>`);
     }
 
     /**
@@ -427,8 +425,8 @@ export default class Utils {
     public static escapeText(text: string, token: string): string {
         let finalText: string = text;
         
-        while (Patterns.mention.test(finalText)) {
-            finalText = finalText.replace(Patterns.mention, "[Mention]");
+        while (Patterns.anyMention.test(finalText)) {
+            finalText = finalText.replace(Patterns.anyMention, "[Mention]");
         }
 
         while (Patterns.token.test(finalText)) {

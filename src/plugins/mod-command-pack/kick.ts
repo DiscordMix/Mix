@@ -2,12 +2,12 @@ import {ChatEnvironment, Command, CommandContext, Permission} from "../..";
 import {GuildMember} from "discord.js";
 import {Argument, PrimitiveArgType} from "../../commands/command";
 
-export interface KickArgs {
+export type KickArgs = {
     readonly member: GuildMember;
     readonly reason: string;
 }
 
-export default abstract class Kick extends Command {
+export default abstract class KickCommand extends Command<KickArgs> {
     readonly meta = {
         name: "kick",
         description: "Kick a member from the server"
@@ -27,17 +27,15 @@ export default abstract class Kick extends Command {
         }
     ];
 
-    protected constructor() {
-        super();
-
-        this.restrict.environment = ChatEnvironment.Guild;
-        this.restrict.selfPermissions = [Permission.KickMembers];
-        this.restrict.issuerPermissions = [Permission.KickMembers];
-    }
+    readonly restrict: any = {
+        environment: ChatEnvironment.Guild,
+        selfPermissions: [Permission.KickMembers],
+        issuerPermissions: [Permission.KickMembers]
+    };
 
     public executed(context: CommandContext, args: KickArgs): void {
         if (args.member.kickable) {
-            const name = `${args.member.displayName} (${args.member.id})`;
+            const name: string = `${args.member.displayName} (${args.member.id})`;
 
             args.member.kick(args.reason).then(() => {
                 context.ok(`${name} was successfully kicked from this server.`);

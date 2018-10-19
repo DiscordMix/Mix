@@ -1,8 +1,9 @@
 import ChatEnvironment from "../core/chat-environment";
 import Context from "./command-context";
 import Fragment from "../fragments/fragment";
-import {Message} from "discord.js";
+import {Message, RichEmbed} from "discord.js";
 import CommandContext from "./command-context";
+import {Bot} from "..";
 
 export type UserGroup = string[];
 
@@ -95,6 +96,16 @@ export type CommandSwitchInfo = {
     readonly shorthand: string | null;
 }
 
+export enum GenericCommandStatus {
+    OK = 0,
+    Failed = 1
+}
+
+export type CommandResult = {
+    readonly responses: Array<string | RichEmbed>;
+    readonly status: GenericCommandStatus | number;
+}
+
 /**
  * @extends Fragment
  */
@@ -107,6 +118,19 @@ export abstract class GenericCommand<ArgumentsType> extends Fragment {
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
     public readonly undoable: boolean = false;
+    
+    private readonly bot: Bot;
+
+    public constructor(bot: Bot) {
+        super();
+
+        /**
+         * @type {Bot}
+         * @private
+         * @readonly
+         */
+        this.bot = bot;
+    }
 
     // TODO: Implement/shouldn't be negative response?
     public async undo(oldContext: CommandContext, message: Message, args: ArgumentsType): Promise<boolean> {
@@ -115,7 +139,14 @@ export abstract class GenericCommand<ArgumentsType> extends Fragment {
         return false;
     }
 
-    public abstract executed(context: Context, args: ArgumentsType, api: any): any;
+    /**
+     * @return {boolean} Whether the command can be enabled
+     */
+    public async enabled(): Promise<boolean> {
+        return true;
+    }
+
+    public abstract executed(context: Context, args: ArgumentsType, api: any): CommandResult | any;
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts

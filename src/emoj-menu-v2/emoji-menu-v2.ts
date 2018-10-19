@@ -45,12 +45,12 @@ export default class EmojiMenuV2 extends EventEmitter {
     }
 
     private handleMessageReactionAdd(reaction: MessageReaction, user: User): void {
+        if (reaction.message.id !== this.messageId) {
+            return;
+        }
+
         for (let i: number = 0; i < this.buttons.length; i++) {
             if (this.buttons[i].emoji === reaction.emoji.id) {
-                if (!this.buttons[i].public && user.id !== this.ownerId) {
-                    continue;
-                }
-
                 if (this.buttons[i].added !== undefined && typeof this.buttons[i].added === "function") {
                     (this.buttons[i].added as EmojiButtonClickHandler)(reaction, user);
                 }
@@ -61,6 +61,10 @@ export default class EmojiMenuV2 extends EventEmitter {
     }
 
     private handleMessageReactionRemove(reaction: MessageReaction, user: User): void {
+        if (reaction.message.id !== this.messageId) {
+            return;
+        }
+        
         for (let i: number = 0; i < this.buttons.length; i++) {
             if (this.buttons[i].emoji === reaction.emoji.id) {
                 if (!this.buttons[i].public && user.id !== this.ownerId) {

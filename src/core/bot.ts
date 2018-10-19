@@ -857,7 +857,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         });
 
         // TODO: Debugging
-        Log.debug("raw args, ", rawArgs);
+        //Log.debug("raw args, ", rawArgs);
 
         await this.commandHandler.handle(
             this.createCommandContext(message),

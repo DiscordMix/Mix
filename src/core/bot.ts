@@ -61,11 +61,11 @@ const internalArgResolvers: ArgumentResolver[] = [
 
         resolve(arg: string, message: Message): GuildMember | null {
             const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg));
-    
+
             if (resolvedMember) {
                 return resolvedMember;
             }
-    
+
             return null;
         }
     },
@@ -109,7 +109,7 @@ const internalArgTypes: CustomArgType[] = [
     },
     {
         name: InternalArgType.Member,
-        
+
         check(arg: string, message: Message): boolean {
             return message.guild && message.guild.member(Utils.resolveId(arg)) !== undefined;
         }
@@ -191,7 +191,7 @@ const DefaultBotOptions: BotExtraOptions = {
 
 /**
  * Bot events:
- * 
+ *
  * - setupStart(ApiType?)
  * - loadInternalFragments()
  * - loadedInternalFragments(Fragment[]?)
@@ -210,11 +210,11 @@ const DefaultBotOptions: BotExtraOptions = {
  * - disconnected()
  * - clearingTemp()
  * - clearedTemp()
- * 
+ *
  * - handlingCommand(CommandContext, Command, Arguments Object)
  * - commandError(Error)
  * - commandExecuted(CommandExecutedEvent, command result (any))
- * - 
+ * -
  */
 
 /**
@@ -430,9 +430,10 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * Setup the bot
+     * @param {ApiType} api
      * @return {Promise<this>}
      */
-    public async setup(api?: ApiType): Promise<this> {
+    private async setup(api?: ApiType): Promise<this> {
         this.emit("setupStart", api);
 
         if (this.options.asciiTitle) {
@@ -581,7 +582,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
                     ...DefaultCommandRestrict,
                     ...fragment.restrict
                 };
-                
+
                 if (await fragment.enabled()) {
                     this.commandStore.register(fragment);
                     enabled++;
@@ -909,18 +910,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
     }
 
     /**
-     * @param {*} api
-     * @return {Promise<void>}
-     */
-    public async setupAndConnect(api?: ApiType): Promise<void> {
-        await (await this.setup(api)).connect();
-    }
-
-    /**
      * Connect the client
      * @return {Promise<this>}
      */
-    public async connect(): Promise<this> {
+    public async connect(api?: ApiType): Promise<this> {
+        await this.setup(api);
         Log.verbose("[Bot.connect] Starting");
         await this.client.login(this.settings.general.token);
 

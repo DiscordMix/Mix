@@ -476,7 +476,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             Log.warn("[Bot.setup] No internal fragments were loaded");
         }
         else {
-            const enabled: number = this.enableFragments(internalFragments, true);
+            const enabled: number = await this.enableFragments(internalFragments, true);
 
             if (enabled === 0) {
                 Log.warn("[Bot.setup] No internal fragments were enabled");
@@ -505,7 +505,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
             else {
                 Log.success(`[Bot.setup] Loaded ${servicesLoaded.length} service(s)`);
-                this.enableFragments(servicesLoaded);
+                await this.enableFragments(servicesLoaded);
             }
         }
 
@@ -530,7 +530,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 Log.warn("[Bot.setup] No commands were loaded");
             }
             else {
-                const enabled: number = this.enableFragments(commandsLoaded);
+                const enabled: number = await this.enableFragments(commandsLoaded);
 
                 if (enabled > 0) {
                     Log.success(`[Bot.setup] Loaded ${commandsLoaded.length}/${consumerCommandCandidates.length} command(s)`);
@@ -559,7 +559,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      * @param {boolean} internal Whether the fragments are internal
      * @return {number} The amount of enabled fragments
      */
-    private enableFragments(fragments: Fragment[], internal: boolean = false): number {
+    private async enableFragments(fragments: Fragment[], internal: boolean = false): Promise<number> {
         let enabled: number = 0;
 
         for (let i: number = 0; i < fragments.length; i++) {
@@ -581,9 +581,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
                     ...DefaultCommandRestrict,
                     ...fragment.restrict
                 };
-
-                this.commandStore.register(fragment);
-                enabled++;
+                
+                if (await fragment.enabled()) {
+                    this.commandStore.register(fragment);
+                    enabled++;
+                }
             }
             else if ((fragments[i] as any).prototype instanceof Service) {
                 const service: any = fragments[i];
@@ -657,6 +659,12 @@ export default class Bot<ApiType = any> extends EventEmitter {
         Log.success("[Bot.setupEvents] Discord events setup completed");
     }
 
+    /**
+     * @todo 'args' type on docs (here)
+     * @param {string} base
+     * @param {Message} referer
+     * @param {*} args
+     */
     public async triggerCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
         // Use any registered prefix, default to index 0
         const content: string = `${this.settings.general.prefixes[0]}${base} ${args.join(" ")}`.trim();
@@ -879,7 +887,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         const guilds: Guild[] = this.client.guilds.array();
 
-        let entries = 0;
+        let entries: number = 0;
 
         for (let i: number = 0; i < guilds.length; i++) {
             if (!this.authStore.contains(guilds[i].id)) {

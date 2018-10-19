@@ -13,7 +13,7 @@ import Temp from "./temp";
 import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel, Guild} from "discord.js";
 import JsonAuthStore from "../commands/auth-stores/json-auth-store";
 import ServiceManager from "../services/service-manager";
-import Command, {ArgumentResolver, ArgumentStyle, CustomArgType, RawArguments, UserGroup, DefaultCommandRestrict, InternalArgType, ArgumentType, ArgumentTypeChecker} from "../commands/command";
+import Command, {ArgumentResolver, ArgumentStyle, ICustomArgType, IRawArguments, IUserGroup, DefaultCommandRestrict, InternalArgType, IArgumentType, IArgumentTypeChecker} from "../commands/command";
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
 import EventEmitter from "events";
@@ -100,7 +100,7 @@ const internalArgResolvers: ArgumentResolver[] = [
 ];
 
 // TODO: Message type and resolver
-const internalArgTypes: CustomArgType[] = [
+const internalArgTypes: ICustomArgType[] = [
     {
         name: InternalArgType.Channel,
 
@@ -132,35 +132,35 @@ const internalArgTypes: CustomArgType[] = [
     }
 ];
 
-export type BotOptions = {
+export type IBotOptions = {
     readonly settings: Settings;
     readonly authStore: CommandAuthStore;
     readonly dataStore?: DataProvider;
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: string[];
-    readonly userGroups?: UserGroup[];
+    readonly userGroups?: IUserGroup[];
     readonly owner?: Snowflake;
-    readonly options?: Partial<BotExtraOptions>;
+    readonly options?: Partial<IBotExtraOptions>;
     readonly argumentResolvers?: ArgumentResolver[];
-    readonly argumentTypes?: CustomArgType[];
+    readonly argumentTypes?: ICustomArgType[];
 }
 
-export const DefaultBotEmojiOptions: DefiniteBotEmojiOptions = {
+export const DefaultBotEmojiOptions: IDefiniteBotEmojiOptions = {
     success: ":white_check_mark:",
     error: ":thinking:"
-}
+};
 
-export type BotEmojiOptions = {
+export type IBotEmojiOptions = {
     readonly success?: string;
     readonly error?: string;
 }
 
-export type DefiniteBotEmojiOptions = {
+export type IDefiniteBotEmojiOptions = {
     readonly success: string;
     readonly error: string;
 }
 
-export type BotExtraOptions = {
+export type IBotExtraOptions = {
     readonly asciiTitle: boolean;
     readonly consoleInterface: boolean;
     readonly allowCommandChain: boolean;
@@ -172,10 +172,10 @@ export type BotExtraOptions = {
     readonly autoResetAuthStore: boolean;
     readonly logMessages: boolean;
     readonly dmHelp: boolean;
-    readonly emojis: DefiniteBotEmojiOptions;
+    readonly emojis: IDefiniteBotEmojiOptions;
 }
 
-const DefaultBotOptions: BotExtraOptions = {
+const DefaultBotOptions: IBotExtraOptions = {
     allowCommandChain: true,
     commandArgumentStyle: ArgumentStyle.Explicit,
     autoDeleteCommands: false,
@@ -235,12 +235,12 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly menus: EmojiMenuManager;
     public readonly prefixCommand: boolean;
     public readonly primitiveCommands: string[];
-    public readonly userGroups: UserGroup[];
+    public readonly userGroups: IUserGroup[];
     public readonly owner?: Snowflake;
-    public readonly options: BotExtraOptions;
+    public readonly options: IBotExtraOptions;
     public readonly language?: Language;
     public readonly argumentResolvers: ArgumentResolver[];
-    public readonly argumentTypes: CustomArgType[];
+    public readonly argumentTypes: ICustomArgType[];
     public readonly detachables: IDetachable[];
 
     public suspended: boolean;
@@ -253,9 +253,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * Setup the bot from an object
-     * @param {Partial<BotOptions>} botOptions
+     * @param {Partial<IBotOptions>} botOptions
      */
-    public constructor(botOptions: Partial<BotOptions>) {
+    public constructor(botOptions: Partial<IBotOptions>) {
         super();
 
         if (!botOptions.settings) {
@@ -325,7 +325,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         /**
-         * @type {CustomArgType[]}
+         * @type {ICustomArgType[]}
          * @readonly
          */
         this.argumentTypes = internalArgTypes;
@@ -382,7 +382,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         ];
 
         /**
-         * @type {BotExtraOptions}
+         * @type {IBotExtraOptions}
          * @readonly
          */
         this.options = {
@@ -392,7 +392,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         // TODO: Make use of the userGroups property
         /**
-         * @type {UserGroup[]}
+         * @type {IUserGroup[]}
          * @readonly
          */
         this.userGroups = botOptions.userGroups || [];
@@ -699,7 +699,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         command = command as Command;
 
-        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
+        const rawArgs: IRawArguments = CommandParser.resolveDefaultArgs({
             arguments: CommandParser.getArguments(content),
             schema: command.arguments,
 
@@ -865,7 +865,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         command = command as Command;
 
-        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
+        const rawArgs: IRawArguments = CommandParser.resolveDefaultArgs({
             arguments: CommandParser.getArguments(content),
             schema: command.arguments,
 

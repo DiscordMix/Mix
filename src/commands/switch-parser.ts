@@ -1,14 +1,14 @@
 import Patterns from "../core/patterns";
 
-export type CommandSwitch = {
+export type ICommandSwitch = {
     readonly key: string;
     readonly value: string | null;
     readonly short: boolean;
 }
 
 export default abstract class SwitchParser {
-    public static getSwitches(commandString: string): CommandSwitch[] {
-        const result: CommandSwitch[] = [];
+    public static getSwitches(commandString: string): ICommandSwitch[] {
+        const result: ICommandSwitch[] = [];
 
         let match: RegExpExecArray | null;
 

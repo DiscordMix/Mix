@@ -4,10 +4,10 @@ import CommandContext from "./commands/command-context";
 import CommandStore, {CommandManagerEvent} from "./commands/command-store";
 
 import Command, {
-    ArgumentTypeChecker,
+    IArgumentTypeChecker,
     Argument,
     PrimitiveArgType,
-    CustomArgType,
+    ICustomArgType,
     ArgumentResolver,
     RestrictGroup,
     InternalArgType
@@ -52,7 +52,7 @@ import KnexTable from "./data-providers/knex-table";
 import {on, WeakCommand, DecoratorCommand, SimpleCommand, DiscordEvent} from "./decorators/decorators";
 import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
-import EmojiMenuV2, {EmojiButtonV2} from "./emoj-menu-v2/emoji-menu-v2";
+import EmojiMenuV2, {IEmojiButtonV2} from "./emoj-menu-v2/emoji-menu-v2";
 import Pagination from "./pagination/pagination";
 import {IDetachable} from "./core/snap";
 
@@ -64,8 +64,8 @@ export {
     CommandManagerEvent,
     CommandParser,
     Argument,
-    CustomArgType,
-    ArgumentTypeChecker,
+    ICustomArgType,
+    IArgumentTypeChecker,
     Command,
     PrimitiveArgType,
     ArgumentResolver,
@@ -138,7 +138,7 @@ export {
     // Misc
     KnexTable,
     EmojiMenuV2,
-    EmojiButtonV2,
+    IEmojiButtonV2,
     Pagination,
 
     // Snap

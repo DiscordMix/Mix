@@ -1,4 +1,4 @@
-import {CommandExecuted, CommandRestrict} from "../commands/command";
+import {ICommandExecuted, CommandRestrict} from "../commands/command";
 import {Argument} from "..";
 import {IFragmentMeta} from "../fragments/fragment";
 import Log from "../core/log";
@@ -51,13 +51,13 @@ export enum DiscordEvent {
     Warn = "warn"
 }
 
-export type BotEvent = {
+export type IBotEvent = {
     readonly name: string;
     readonly handler: any;
 }
 
-export const BotEvents: BotEvent[] = [];
-export const ChannelMessageEvents: BotEvent[] = [];
+export const BotEvents: IBotEvent[] = [];
+export const ChannelMessageEvents: IBotEvent[] = [];
 
 export const DecoratorCommands: DecoratorCommand[] = [];
 
@@ -106,7 +106,7 @@ export interface DecoratorCommand {
 }
 
 export interface WeakCommand extends PartialWeakCommand {
-    readonly executed: CommandExecuted;
+    readonly executed: ICommandExecuted;
 }
 
 export interface PartialWeakCommand extends DecoratorCommand {
@@ -116,7 +116,7 @@ export interface PartialWeakCommand extends DecoratorCommand {
 }
 
 export interface SimpleCommand extends DecoratorCommand {
-    readonly executed: CommandExecuted;
+    readonly executed: ICommandExecuted;
 }
 
 // options: command name | WeakCommand

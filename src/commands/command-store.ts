@@ -32,9 +32,9 @@ export interface CommandCooldown {
 
 const validCommandNamePattern: RegExp = /^[a-z_0-9-]{1,40}$/mi;
 
-export type CommandMap = Map<string, Command | DecoratorCommand>;
+export type ICommandMap = Map<string, Command | DecoratorCommand>;
 
-export type ReadonlyCommandMap = ReadonlyMap<string, Command | DecoratorCommand>;
+export type IReadonlyCommandMap = ReadonlyMap<string, Command | DecoratorCommand>;
 
 export default class CommandStore /* extends Collection */ {
     public readonly bot: Bot;
@@ -43,7 +43,7 @@ export default class CommandStore /* extends Collection */ {
 
     public simpleCommands: Map<string, any>;
 
-    private readonly commands: CommandMap;
+    private readonly commands: ICommandMap;
 
     /**
      * @param {Bot} bot
@@ -65,7 +65,7 @@ export default class CommandStore /* extends Collection */ {
         this.authStore = authStore;
 
         /**
-         * @type {CommandMap}
+         * @type {ICommandMap}
          * @private
          */
         this.commands = new Map();
@@ -182,10 +182,10 @@ export default class CommandStore /* extends Collection */ {
 
     /**
      * Get all the registered commands
-     * @return {ReadonlyCommandMap}
+     * @return {IReadonlyCommandMap}
      */
-    public getAll(): ReadonlyCommandMap {
-        return this.commands as ReadonlyCommandMap;
+    public getAll(): IReadonlyCommandMap {
+        return this.commands as IReadonlyCommandMap;
     }
 
     /**

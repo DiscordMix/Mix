@@ -5,10 +5,6 @@ export type IFragmentMeta = {
     readonly version?: string;
 }
 
-export interface IFragment {
+export type IFragment = {
     readonly meta: IFragmentMeta;
-}
-
-export default abstract class Fragment {
-    public abstract readonly meta: IFragmentMeta;
 }

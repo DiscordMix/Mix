@@ -8,28 +8,28 @@ export enum DefaultAuthLevel {
     Owner = -1,
 }
 
-export type AuthLevel = DefaultAuthLevel | number;
+export type IAuthLevel = DefaultAuthLevel | number;
 
-export type AuthSchemaEntry = {
+export type IAuthSchemaEntry = {
     readonly name: string;
-    readonly auth: AuthLevel;
+    readonly auth: IAuthLevel;
 }
 
-export type AuthSchema = AuthSchemaEntry[];
+export type IAuthSchema = IAuthSchemaEntry[];
 
 export default class AuthService {
     private readonly path: string;
-    private readonly authMap: Map<AuthLevel, string>; // Auth Level -> Entry Name
+    private readonly authMap: Map<IAuthLevel, string>; // Auth Level -> Entry Name
 
     private authMapUpdated: boolean = false;
-    private schema?: AuthSchema;
+    private schema?: IAuthSchema;
 
     // TODO
     private store: any;
 
     constructor(path: string) {
         this.path = path;
-        this.authMap = new Map<AuthLevel, string>();
+        this.authMap = new Map<IAuthLevel, string>();
     }
 
     /**
@@ -51,7 +51,7 @@ export default class AuthService {
     }
 
     public async reloadSchema(updateAuthMap: boolean = true): Promise<boolean> {
-        const data: AuthSchema | null = await Utils.readJson<AuthSchema>(this.path);
+        const data: IAuthSchema | null = await Utils.readJson<IAuthSchema>(this.path);
 
         if (data) {
             this.schema = data;
@@ -72,7 +72,7 @@ export default class AuthService {
     }
 
     public reloadSchemaSync(updateAuthMap: boolean = true): boolean {
-        const data: AuthSchema | null = Utils.readJsonSync(this.path);
+        const data: IAuthSchema | null = Utils.readJsonSync(this.path);
 
         if (data !== null) {
             this.schema = data;
@@ -92,7 +92,7 @@ export default class AuthService {
         return false;
     }
 
-    public getAuth(user: Snowflake, guild: Snowflake): AuthLevel {
+    public getAuth(user: Snowflake, guild: Snowflake): IAuthLevel {
         /* if (this.authMapUpdated && this.authMap.size > 0 && this.authMap.has()) {
             // TODO
         } */
@@ -100,7 +100,7 @@ export default class AuthService {
         return DefaultAuthLevel.Default;
     }
 
-    public authorize(user: Snowflake, guild: Snowflake, auth: AuthLevel): boolean {
+    public authorize(user: Snowflake, guild: Snowflake, auth: IAuthLevel): boolean {
         return this.getAuth(user, guild) >= auth;
     }
 }

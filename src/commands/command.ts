@@ -5,9 +5,9 @@ import {Message, RichEmbed} from "discord.js";
 import CommandContext from "./command-context";
 import {Bot} from "..";
 
-export type UserGroup = string[];
+export type IUserGroup = string[];
 
-export type CommandExecuted = (context: Context, args: any, api: any) => any;
+export type ICommandExecuted = (context: Context, args: any, api: any) => any;
 
 export enum RestrictGroup {
     ServerOwner,
@@ -25,23 +25,23 @@ export enum ArgumentStyle {
     Descriptive
 }
 
-export type DefaultValueResolver = (message: Message) => string;
+export type IDefaultValueResolver = (message: Message) => string;
 
-export type ArgumentTypeChecker = (argument: string, message: Message) => boolean;
+export type IArgumentTypeChecker = (argument: string, message: Message) => boolean;
 
 /**
  * PrimitiveArgType      : Internal check
  * RegExp                : Inline check
- * ArgumentTypeChecker   : Provided type check by method
+ * IArgumentTypeChecker   : Provided type check by method
  */
-export type ArgumentType = PrimitiveArgType | ArgumentTypeChecker | RegExp | string;
+export type IArgumentType = PrimitiveArgType | IArgumentTypeChecker | RegExp | string;
 
-export interface CustomArgType {
+export type ICustomArgType = {
     readonly name: string;
-    readonly check: ArgumentTypeChecker | RegExp;
+    readonly check: IArgumentTypeChecker | RegExp;
 }
 
-export type RawArguments = string[];
+export type IRawArguments = string[];
 
 export enum PrimitiveArgType {
     String,
@@ -67,9 +67,9 @@ export interface ArgumentResolver {
 // TODO: Make use of this
 export interface Argument {
     readonly name: string;
-    readonly type: ArgumentType;
+    readonly type: IArgumentType;
     readonly description?: string;
-    readonly defaultValue?: string | number | DefaultValueResolver;
+    readonly defaultValue?: string | number | IDefaultValueResolver;
     readonly required?: boolean;
 }
 
@@ -89,9 +89,9 @@ export const DefaultCommandRestrict: CommandRestrict = {
     issuerPermissions: [],
     selfPermissions: [],
     specific: []
-}
+};
 
-export type CommandSwitchInfo = {
+export type ICommandSwitchInfo = {
     readonly name: string;
     readonly shorthand: string | null;
 }
@@ -101,7 +101,7 @@ export enum GenericCommandStatus {
     Failed = 1
 }
 
-export type CommandResult = {
+export type ICommandResult = {
     readonly responses: Array<string | RichEmbed>;
     readonly status: GenericCommandStatus | number;
 }
@@ -111,7 +111,7 @@ export abstract class GenericCommand<ArgumentsType> implements IFragment {
     public readonly aliases: string[] = [];
     public readonly arguments: Argument[] = [];
     public readonly restrict: CommandRestrict = Object.assign({}, DefaultCommandRestrict);
-    public readonly switches: CommandSwitchInfo[] = [];
+    public readonly switches: ICommandSwitchInfo[] = [];
     public readonly exclude: string[] = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
@@ -143,7 +143,7 @@ export abstract class GenericCommand<ArgumentsType> implements IFragment {
         return true;
     }
 
-    public abstract executed(context: Context, args: ArgumentsType, api: any): CommandResult | any;
+    public abstract executed(context: Context, args: ArgumentsType, api: any): ICommandResult | any;
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts

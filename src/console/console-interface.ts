@@ -4,8 +4,8 @@ import Bot from "../core/bot";
 import readline from "readline";
 import {performance} from "perf_hooks";
 import {Guild, GuildMember} from "discord.js";
-import {ReadonlyCommandMap} from "../commands/command-store";
-import {ReadonlyServiceMap} from "../services/service-manager";
+import {IReadonlyCommandMap} from "../commands/command-store";
+import {IReadonlyServiceMap} from "../services/service-manager";
 
 type ConsoleCommandHandler = (args: string[]) => void;
 
@@ -45,14 +45,14 @@ export default class ConsoleInterface {
         if (process.env.FORGE_DEBUG_MODE === "true") {
             this.commands.set("bug", (args: string[]) => {
                 if (args[0] === "commands") {
-                    const commands: ReadonlyCommandMap = bot.commandStore.getAll();
+                    const commands: IReadonlyCommandMap = bot.commandStore.getAll();
 
                     for (const [base, command] of commands) {
                         console.log(`\n\nCommand: ${base}\n\n`, command);
                     }
                 }
                 else if (args[0] === "services") {
-                    const services: ReadonlyServiceMap = bot.services.getAll();
+                    const services: IReadonlyServiceMap = bot.services.getAll();
 
                     for (const [name, service] of services) {
                         console.log(`\n\nService: ${name}\n\n`, service);

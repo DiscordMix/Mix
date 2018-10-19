@@ -1,6 +1,6 @@
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import Command, {RestrictGroup, RawArguments} from "./command";
+import Command, {RestrictGroup, IRawArguments} from "./command";
 import CommandStore, {CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
@@ -16,9 +16,9 @@ export interface CommandHandlerOptions {
     readonly argumentTypes: any;
 }
 
-export type CommandErrorHandler = (context: CommandContext, command: Command) => boolean;
+export type ICommandErrorHandler = (context: CommandContext, command: Command) => boolean;
 
-export type UndoAction = {
+export type IUndoAction = {
     readonly command: Command;
     readonly context: CommandContext;
     readonly args?: any;
@@ -30,7 +30,7 @@ export default class CommandHandler {
     public readonly errorHandlers: Function[];
     public readonly _errorHandlers: Map<CommandManagerEvent, any>;
     public readonly argumentTypes: any;
-    public readonly undoMemory: Map<Snowflake, UndoAction>;
+    public readonly undoMemory: Map<Snowflake, IUndoAction>;
 
     /**
      * @todo Replace 'errorHandlers' with '_errorHandlers'
@@ -66,9 +66,9 @@ export default class CommandHandler {
          * @readonly
          */
         this._errorHandlers = new Map();
-        
+
         /**
-         * @type {Map<Snowflake, UndoAction>}
+         * @type {Map<Snowflake, IUndoAction>}
          * @readonly
          */
         this.undoMemory = new Map();
@@ -188,7 +188,7 @@ export default class CommandHandler {
 
     public async undoAction(user: Snowflake, message: Message): Promise<boolean> {
         if (this.undoMemory.has(user)) {
-            const action: UndoAction = this.undoMemory.get(user) as UndoAction;
+            const action: IUndoAction = this.undoMemory.get(user) as IUndoAction;
 
             return await action.command.undo(action.context, message, action.args);
         }
@@ -201,10 +201,10 @@ export default class CommandHandler {
      * @todo Since it's returning a Promise, review
      * @param {CommandContext} context
      * @param {Command} command The command to handle
-     * @param {RawArguments} rawArgs
+     * @param {IRawArguments} rawArgs
      * @return {Promise<boolean>} Whether the command was successfully executed
      */
-    public async handle(context: CommandContext, command: Command, rawArgs: RawArguments): Promise<boolean> {
+    public async handle(context: CommandContext, command: Command, rawArgs: IRawArguments): Promise<boolean> {
         if (!this.meetsRequirements(context, command, rawArgs)) {
             return false;
         }

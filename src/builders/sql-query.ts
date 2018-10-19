@@ -1,9 +1,9 @@
-export type SqlQueryOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
+export type ISqlQueryOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
 
 export interface SqlQueryWhere {
     readonly property: string;
     readonly value: any;
-    readonly operator?: SqlQueryOperator;
+    readonly operator?: ISqlQueryOperator;
 }
 
 export default class SqlQuery {

@@ -4,14 +4,14 @@ import CommandContext from "../commands/command-context";
 import {EventEmitter} from "events";
 import {IDetachable} from "..";
 
-export type EmojiButtonClickHandler = (reaction: MessageReaction, user: User) => void;
+export type IEmojiButtonClickHandler = (reaction: MessageReaction, user: User) => void;
 
-export type EmojiButtonV2 = {
+export type IEmojiButtonV2 = {
     readonly emoji: Snowflake;
     readonly public?: boolean;
-    readonly added?: EmojiButtonClickHandler;
-    readonly removed?: EmojiButtonClickHandler;
-    readonly clicked?: EmojiButtonClickHandler;
+    readonly added?: IEmojiButtonClickHandler;
+    readonly removed?: IEmojiButtonClickHandler;
+    readonly clicked?: IEmojiButtonClickHandler;
 }
 
 export default class EmojiMenuV2 extends EventEmitter implements IDetachable {
@@ -19,11 +19,11 @@ export default class EmojiMenuV2 extends EventEmitter implements IDetachable {
     public readonly ownerId: Snowflake;
 
     // TODO: Should be more productive if using Map
-    public readonly buttons: EmojiButtonV2[];
+    public readonly buttons: IEmojiButtonV2[];
 
     private bot?: Bot;
 
-    public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: EmojiButtonV2[] = []) {
+    public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: IEmojiButtonV2[] = []) {
         super();
 
         this.messageId = messageId;
@@ -32,14 +32,14 @@ export default class EmojiMenuV2 extends EventEmitter implements IDetachable {
         this.buttons = buttons;
 
         // Global click
-        this.on("emojiClick", (reaction: MessageReaction, user: User, emoji: EmojiButtonV2) => {
+        this.on("emojiClick", (reaction: MessageReaction, user: User, emoji: IEmojiButtonV2) => {
             if (emoji.clicked !== undefined && typeof emoji.clicked === "function") {
                 emoji.clicked(reaction, user);
             }
         });
     }
 
-    public add(button: EmojiButtonV2): this {
+    public add(button: IEmojiButtonV2): this {
         this.buttons.push(button);
 
         return this;
@@ -53,7 +53,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDetachable {
         for (let i: number = 0; i < this.buttons.length; i++) {
             if (this.buttons[i].emoji === reaction.emoji.id) {
                 if (this.buttons[i].added !== undefined && typeof this.buttons[i].added === "function") {
-                    (this.buttons[i].added as EmojiButtonClickHandler)(reaction, user);
+                    (this.buttons[i].added as IEmojiButtonClickHandler)(reaction, user);
                 }
 
                 this.emit("emojiClick", reaction, user, this.buttons[i]);
@@ -73,7 +73,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDetachable {
                 }
 
                 if (this.buttons[i].removed !== undefined && typeof this.buttons[i].removed === "function") {
-                    (this.buttons[i].removed as EmojiButtonClickHandler)(reaction, user);
+                    (this.buttons[i].removed as IEmojiButtonClickHandler)(reaction, user);
                 }
 
                 this.emit("emojiClick", reaction, user, this.buttons[i]);

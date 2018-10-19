@@ -2,13 +2,13 @@ import Utils from "../core/utils";
 import CommandStore from "./command-store";
 
 import Command, {
-    ArgumentType,
-    ArgumentTypeChecker,
+    IArgumentType,
+    IArgumentTypeChecker,
     Argument,
-    ArgumentResolver, DefaultValueResolver,
+    ArgumentResolver, IDefaultValueResolver,
     PrimitiveArgType,
-    RawArguments,
-    CustomArgType
+    IRawArguments,
+    ICustomArgType
 } from "./command";
 
 import {Message} from "discord.js";
@@ -16,23 +16,23 @@ import Log from "../core/log";
 import {DecoratorCommand} from "../decorators/decorators";
 
 export interface ResolveArgumentsOptions {
-    readonly arguments: RawArguments;
+    readonly arguments: IRawArguments;
     readonly schema: Argument[];
     readonly resolvers: ArgumentResolver[];
     readonly message: Message;
 }
 
 export interface ResolveDefaultArgsOptions {
-    readonly arguments: RawArguments;
+    readonly arguments: IRawArguments;
     readonly schema: Argument[];
     readonly message: Message;
     readonly command: Command;
 }
 
 export interface CheckArgumentsOptions {
-    readonly arguments: RawArguments;
+    readonly arguments: IRawArguments;
     readonly schema: Argument[];
-    readonly types: CustomArgType[];
+    readonly types: ICustomArgType[];
     readonly message: Message;
     readonly command: Command;
 }
@@ -95,10 +95,10 @@ export default class CommandParser {
      * @param {string} commandString
      * @return {string[]}
      */
-    public static getArguments(commandString: string): RawArguments {
+    public static getArguments(commandString: string): IRawArguments {
         const expression: RegExp = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;
         const argCleanExpression: RegExp = /(```|`|'|"|)(.+)\1/;
-        const result: RawArguments = [];
+        const result: IRawArguments = [];
 
         let match: RegExpExecArray | null = expression.exec(commandString);
 
@@ -168,8 +168,8 @@ export default class CommandParser {
      * @param {ResolveDefaultArgsOptions} options
      * @return {*}
      */
-    public static resolveDefaultArgs(options: ResolveDefaultArgsOptions): RawArguments {
-        const result: RawArguments = [];
+    public static resolveDefaultArgs(options: ResolveDefaultArgsOptions): IRawArguments {
+        const result: IRawArguments = [];
 
         for (let i = 0; i < options.schema.length; i++) {
             let value: string = options.arguments[i];
@@ -182,7 +182,7 @@ export default class CommandParser {
                 const type: string = typeof options.schema[i].defaultValue;
 
                 if (type === "function") {
-                    value = (options.schema[i].defaultValue as DefaultValueResolver)(options.message);
+                    value = (options.schema[i].defaultValue as IDefaultValueResolver)(options.message);
                 }
                 else if (type === "string") {
                     value = options.schema[i].defaultValue as string;
@@ -283,7 +283,7 @@ export default class CommandParser {
                             return false;
                         }
                         else if (typeof(options.types[t].check) === "function") {
-                            if (!(options.types[t].check as ArgumentTypeChecker)(options.arguments[i], options.message)) {
+                            if (!(options.types[t].check as IArgumentTypeChecker)(options.arguments[i], options.message)) {
                                 return false;
                             }
                         }
@@ -304,7 +304,7 @@ export default class CommandParser {
             }
             // In-command method check
             else if (typeof(options.schema[i].type) === "function") {
-                if (!(options.schema[i].type as ArgumentTypeChecker)(options.arguments[i], options.message)) {
+                if (!(options.schema[i].type as IArgumentTypeChecker)(options.arguments[i], options.message)) {
                     return false;
                 }
             }
@@ -318,10 +318,10 @@ export default class CommandParser {
 
     /**
      * @param {Command} command
-     * @param {RawArguments} args
+     * @param {IRawArguments} args
      * @return {boolean} Whether the argument count is valid
      */
-    private static validateArgumentCount(command: Command, args: RawArguments): boolean {
+    private static validateArgumentCount(command: Command, args: IRawArguments): boolean {
         if (command.singleArg && (args.length < command.maxArguments || args.length > command.minArguments)) {
             return false;
         }
@@ -333,18 +333,18 @@ export default class CommandParser {
     }
 
     /**
-     * @param {ArgumentType} type
+     * @param {IArgumentType} type
      * @return {boolean}
      */
-    private static isTypePrimitive(type: ArgumentType): boolean {
+    private static isTypePrimitive(type: IArgumentType): boolean {
         return typeof(type) === "number" && PrimitiveArgType[type] !== undefined;
     }
 
     /**
-     * @param {ArgumentType} type
+     * @param {IArgumentType} type
      * @return {boolean} Whether the provided type is valid
      */
-    private static isTypeValid(type: ArgumentType): boolean {
+    private static isTypeValid(type: IArgumentType): boolean {
         return typeof type !== "string" && !CommandParser.isTypePrimitive(type);
     }
 

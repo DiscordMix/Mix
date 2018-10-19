@@ -2,11 +2,11 @@ import {Argument, default as Command, PrimitiveArgType} from "../../../commands/
 import CommandContext from "../../../commands/command-context";
 import {DecoratorCommand} from "../../../decorators/decorators";
 
-export type UsageArgs = {
+type IUsageArgs = {
     readonly command: string;
 }
 
-export default class Usage extends Command<UsageArgs> {
+export default class Usage extends Command<IUsageArgs> {
     readonly meta = {
         name: "usage",
         description: "View the usage of a command"
@@ -21,7 +21,7 @@ export default class Usage extends Command<UsageArgs> {
         }
     ];
 
-    public executed(context: CommandContext, args: UsageArgs): void {
+    public executed(context: CommandContext, args: IUsageArgs): void {
         const targetCommand: Command | DecoratorCommand | null = context.bot.commandStore.get(args.command);
 
         if (!targetCommand) {

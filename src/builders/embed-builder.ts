@@ -1,4 +1,5 @@
 import Discord, {RichEmbed} from "discord.js";
+import {Log} from "..";
 
 export default class EmbedBuilder {
     private readonly embed: RichEmbed;
@@ -61,8 +62,8 @@ export default class EmbedBuilder {
      * @param {string} icon
      * @return {EmbedBuilder}
      */
-    public footer(text: string, icon: string): EmbedBuilder {
-        this.embed.setFooter(text, icon);
+    public footer(text: string, icon?: string): EmbedBuilder {
+        this.embed.setFooter(text.substr(0, 2048), icon);
 
         return this;
     }
@@ -97,7 +98,7 @@ export default class EmbedBuilder {
      * @return {EmbedBuilder}
      */
     public field(title: string, value: any): EmbedBuilder {
-        this.embed.addField(title, value);
+        this.embed.addField(title.substr(0, 256), value.substr(0, 1024));
 
         return this;
     }

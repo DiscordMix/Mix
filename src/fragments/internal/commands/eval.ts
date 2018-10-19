@@ -1,10 +1,12 @@
 import CommandContext from "../../../commands/command-context";
-import {Command} from "../../..";
+import {Command, Utils} from "../../..";
 import FormattedMessage from "../../../builders/formatted-message";
 import {PrimitiveArgType, RestrictGroup, Argument} from "../../../commands/command";
+import EmbedBuilder from "../../../builders/embed-builder";
 
 type EvalArgs = {
     readonly code: string;
+    readonly silent: boolean;
 }
 
 export default class Eval extends Command<EvalArgs> {
@@ -19,6 +21,12 @@ export default class Eval extends Command<EvalArgs> {
             description: "The code to evaluate",
             type: PrimitiveArgType.String,
             required: true
+        },
+        {
+            name: "silent",
+            description: "Send result or not",
+            type: PrimitiveArgType.Boolean,
+            required: false
         }
     ];
 
@@ -27,10 +35,28 @@ export default class Eval extends Command<EvalArgs> {
     };
 
     public async executed(context: CommandContext, args: EvalArgs): Promise<void> {
-        const output: string = eval(args.code);
+        const code: string = args.code;
+        const started: number = Date.now();
 
-        await context.ok(new FormattedMessage()
-            .addLine("Output")
-            .codeBlock(output));
+        let result: string;
+        try {
+            result = await eval(code);
+        } catch (err) {
+            result = err.message;
+        }
+
+        if (args.silent) {
+            return;
+        }
+
+        const embed: EmbedBuilder = new EmbedBuilder();
+        embed.footer(`Evaluated in ${(Date.now() - started)}ms`);
+        embed.field(`Input`, new FormattedMessage().codeBlock(code, "js").build());
+        embed.field(`Output`,
+            new FormattedMessage().codeBlock(Utils.escapeText(result.toString().trim() === '' || !result ? 'No return value.' : result.toString(), context.bot.client.token), "js").build()
+        );
+        embed.color('#36393f');
+    
+        context.send(embed.build());
     }
 };

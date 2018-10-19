@@ -1,12 +1,13 @@
 import Bot from "../core/bot";
-import Fragment from "../fragments/fragment";
+import {IFragment, IFragmentMeta} from "../fragments/fragment";
 
 export interface ServiceOptions {
     readonly bot: Bot;
     readonly api?: any;
 }
 
-export default abstract class Service<ApiType = undefined | any> extends Fragment {
+export default abstract class Service<ApiType = undefined | any> implements IFragment {
+    public abstract meta: IFragmentMeta;
     public readonly stop?: () => void;
     public readonly canStart: (() => boolean) | boolean = true;
 
@@ -20,8 +21,6 @@ export default abstract class Service<ApiType = undefined | any> extends Fragmen
      * @param {ServiceOptions} options
      */
     protected constructor(options: ServiceOptions) {
-        super();
-
         /**
          * @type {Bot}
          * @readonly

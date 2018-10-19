@@ -1,6 +1,6 @@
 import ChatEnvironment from "../core/chat-environment";
 import Context from "./command-context";
-import Fragment from "../fragments/fragment";
+import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import CommandContext from "./command-context";
 import {Bot} from "..";
@@ -106,10 +106,8 @@ export type CommandResult = {
     readonly status: GenericCommandStatus | number;
 }
 
-/**
- * @extends Fragment
- */
-export abstract class GenericCommand<ArgumentsType> extends Fragment {
+export abstract class GenericCommand<ArgumentsType> implements IFragment {
+    public abstract meta: IFragmentMeta;
     public readonly aliases: string[] = [];
     public readonly arguments: Argument[] = [];
     public readonly restrict: CommandRestrict = Object.assign({}, DefaultCommandRestrict);
@@ -118,12 +116,11 @@ export abstract class GenericCommand<ArgumentsType> extends Fragment {
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
     public readonly undoable: boolean = false;
-    
+
+
     private readonly bot: Bot;
 
-    public constructor(bot: Bot) {
-        super();
-
+    protected constructor(bot: Bot) {
         /**
          * @type {Bot}
          * @private

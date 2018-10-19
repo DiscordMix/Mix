@@ -1,5 +1,5 @@
 import fs from "fs";
-import Fragment from "./fragment";
+import {IFragment} from "./fragment";
 import Log from "../core/log";
 import Utils from "../core/utils";
 import path from "path";
@@ -12,9 +12,9 @@ export default abstract class FragmentLoader {
      * @todo Make use of the 'isolate' parameter
      * @param {string} file The path to the fragment
      * @param {boolean} [isolate=false] Whether to isolate the fragment environment
-     * @return {Promise<Fragment | null>}
+     * @return {Promise<IFragment | null>}
      */
-    public static async load(file: string, isolate: boolean = false): Promise<Fragment | null> {
+    public static async load(file: string, isolate: boolean = false): Promise<IFragment | null> {
         if (!fs.existsSync(file)) {
             Log.warn(`[FragmentLoader.load] Fragment path does not exist: ${file}`);
 
@@ -44,7 +44,7 @@ export default abstract class FragmentLoader {
         }
     }
 
-    public static validate(fragment: any): boolean {
+    public static validate(fragment: IFragment): boolean {
         if (!fragment.meta) {
             return false;
         }
@@ -54,7 +54,8 @@ export default abstract class FragmentLoader {
         else if (!validFragmentNamePattern.test(fragment.meta.name) || !validFragmentDescPattern.test(fragment.meta.name) || fragment.meta.name.length > 100 || fragment.meta.description.length > 100) {
             return false;
         }
-        else if (typeof fragment.meta !== "object" || typeof fragment.meta.name !== "string" || typeof fragment.meta.description !== "string") {
+        // TODO: Implement fragment version & author validation
+        else if (typeof fragment.meta !== "object" || typeof fragment.meta.name !== "string" || typeof fragment.meta.description !== "string" || (fragment.meta.author !== undefined && typeof fragment.meta.author !== "string") || (fragment.meta.version !== undefined && typeof fragment.meta.version !== "string")) {
             return false;
         }
 
@@ -79,9 +80,9 @@ export default abstract class FragmentLoader {
             const scanQueue: string[] = [directory];
 
             for (let dir: number = 0; dir < scanQueue.length; dir++) {
-                const files = await Utils.getFiles(scanQueue[dir], true);
+                const files: string[] | null = await Utils.getFiles(scanQueue[dir], true);
 
-                if (!files) {
+                if (files === null) {
                     Log.warn(`[FragmentLoader.pickupCandidates] Failed to read files of the directory: ${scanQueue[dir]}`);
 
                     continue;
@@ -107,19 +108,19 @@ export default abstract class FragmentLoader {
     /**
      * @param {string[]} candidates
      * @param {boolean} isolate
-     * @return {Promise<Fragment[]> | null>}
+     * @return {Promise<IFragment[]> | null>}
      */
-    public static async loadMultiple(candidates: string[], isolate: boolean = false): Promise<Fragment[] | null> {
+    public static async loadMultiple(candidates: string[], isolate: boolean = false): Promise<IFragment[] | null> {
         if (candidates.length === 0) {
             Log.warn("[FragmentLoader.loadMultiple] Candidates array is empty");
 
             return null;
         }
 
-        const result: Fragment[] = [];
+        const result: IFragment[] = [];
 
         for (let i: number = 0; i < candidates.length; i++) {
-            const fragment: Fragment | null = await FragmentLoader.load(candidates[i], isolate);
+            const fragment: IFragment | null = await FragmentLoader.load(candidates[i], isolate);
 
             if (fragment !== null) {
                 result.push(fragment);

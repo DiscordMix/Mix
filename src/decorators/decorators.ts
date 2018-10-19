@@ -1,6 +1,6 @@
 import {CommandExecuted, CommandRestrict} from "../commands/command";
 import {Argument} from "..";
-import {FragmentMeta} from "../fragments/fragment";
+import {IFragmentMeta} from "../fragments/fragment";
 import Log from "../core/log";
 import {Snowflake} from "discord.js";
 
@@ -101,7 +101,7 @@ export enum DecoratorCommandType {
 }
 
 export interface DecoratorCommand {
-    readonly meta: FragmentMeta;
+    readonly meta: IFragmentMeta;
     readonly type: DecoratorCommandType;
 }
 

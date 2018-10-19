@@ -21,7 +21,7 @@ import fs from "fs";
 import {performance} from "perf_hooks";
 import path from "path";
 import FragmentLoader from "../fragments/fragment-loader";
-import Fragment from "../fragments/fragment";
+import {IFragment} from "../fragments/fragment";
 import Language from "../language/language";
 import Service from "../services/service";
 
@@ -480,7 +480,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             Log.warn("[Bot.setup] No internal fragments were detected");
         }
 
-        const internalFragments: Fragment[] | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
+        const internalFragments: IFragment[] | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
 
         if (!internalFragments || internalFragments.length === 0) {
             Log.warn("[Bot.setup] No internal fragments were loaded");
@@ -508,7 +508,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         else {
             Log.verbose(`[Bot.setup] Loading ${consumerServiceCandidates.length} service(s)`);
 
-            const servicesLoaded: Fragment[] | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
+            const servicesLoaded: IFragment[] | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
 
             if (!servicesLoaded || servicesLoaded.length === 0) {
                 Log.warn("[Bot.setup] No services were loaded");
@@ -534,7 +534,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         else {
             Log.verbose(`[Bot.setup] Loading ${consumerCommandCandidates.length} command(s)`);
 
-            const commandsLoaded: Fragment[] | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
+            const commandsLoaded: IFragment[] | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
 
             if (!commandsLoaded || commandsLoaded.length === 0) {
                 Log.warn("[Bot.setup] No commands were loaded");
@@ -565,11 +565,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
     }
 
     /**
-     * @param {Fragment[]} fragments
+     * @param {IFragment[]} fragments
      * @param {boolean} internal Whether the fragments are internal
      * @return {number} The amount of enabled fragments
      */
-    private async enableFragments(fragments: Fragment[], internal: boolean = false): Promise<number> {
+    private async enableFragments(fragments: IFragment[], internal: boolean = false): Promise<number> {
         let enabled: number = 0;
 
         for (let i: number = 0; i < fragments.length; i++) {

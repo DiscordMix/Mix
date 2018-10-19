@@ -84,17 +84,7 @@ describe("Utils.hasMentionPrefix()", () => {
         const result2: boolean = Utils.hasMentionPrefix(`hello world <@${subjects.ids[0]}>`, subjects.ids[0]);
 
         expect(result1).to.equal(true);
-        expect(result2).to.equal(true);
-    });
-});
-
-describe("Utils.hasStringsPrefix()", () => {
-    it ("should return whether the text provided start with a mention", () => {
-        const result1: boolean = Utils.hasMentionPrefix(`<@${subjects.ids[0]}> hello world`, subjects.ids[0]);
-        const result2: boolean = Utils.hasMentionPrefix(`hello world <@${subjects.ids[0]}>`, subjects.ids[0]);
-
-        expect(result1).to.equal(true);
-        expect(result2).to.equal(true);
+        expect(result2).to.equal(false);
     });
 });
 

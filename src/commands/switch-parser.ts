@@ -34,10 +34,6 @@ export default abstract class SwitchParser {
     }
 
     private static getSwitchValue(match: RegExpExecArray): string | null {
-        if (match[2] === undefined && match[3] === undefined) {
-            return null;
-        }
-
-        return match[2] || match[3];
+        return match[2] || match[3] || null;
     }
 }

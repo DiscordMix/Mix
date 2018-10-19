@@ -52,6 +52,8 @@ import KnexTable from "./data-providers/knex-table";
 import {on, WeakCommand, DecoratorCommand, SimpleCommand, DiscordEvent} from "./decorators/decorators";
 import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
+import EmojiMenuV2 from "./emoj-menu-v2/emoji-menu-v2";
+import Pagination from "./pagination/pagination";
 
 export {
     // Commands
@@ -134,6 +136,8 @@ export {
 
     // Misc
     KnexTable,
+    EmojiMenuV2,
+    Pagination,
 
     // Decorators
     on,

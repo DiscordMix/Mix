@@ -1,3 +1,3 @@
-export type IDetachable = {
-    detach(): any;
+export type IDisposable = {
+    dispose(): any;
 }

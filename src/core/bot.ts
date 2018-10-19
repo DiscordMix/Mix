@@ -36,7 +36,7 @@ import {
 
 import StatCounter from "./stat-counter";
 import Patterns from "./patterns";
-import {IDetachable} from "./snap";
+import {IDisposable} from "./snap";
 
 if (process.env.FORGE_DEBUG_MODE === "true") {
     Log.info("[Forge] Debug mode is enabled");
@@ -241,7 +241,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly language?: Language;
     public readonly argumentResolvers: ArgumentResolver[];
     public readonly argumentTypes: ICustomArgType[];
-    public readonly detachables: IDetachable[];
+    public readonly disposables: IDisposable[];
 
     public suspended: boolean;
 
@@ -421,11 +421,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.statCounter = new StatCounter();
 
         /**
-         * @type {IDetachable[]}
+         * @type {IDisposable[]}
          * @private
          * @readonly
          */
-        this.detachables = [];
+        this.disposables = [];
 
         return this;
     }
@@ -961,8 +961,8 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public async disconnect(): Promise<this> {
         this.emit("disconnecting");
 
-        for (let i: number = 0; i < this.detachables.length; i++) {
-            await this.detachables[i].detach();
+        for (let i: number = 0; i < this.disposables.length; i++) {
+            await this.disposables[i].dispose();
         }
 
         // Save auth store if it's a JsonAuthStore

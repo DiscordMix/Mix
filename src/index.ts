@@ -54,7 +54,7 @@ import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
 import EmojiMenuV2, {IEmojiButtonV2} from "./emoj-menu-v2/emoji-menu-v2";
 import Pagination from "./pagination/pagination";
-import {IDetachable} from "./core/snap";
+import {IDisposable} from "./core/snap";
 
 export {
     // Commands
@@ -142,7 +142,7 @@ export {
     Pagination,
 
     // Snap
-    IDetachable,
+    IDisposable,
 
     // Decorators
     on,

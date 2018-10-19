@@ -64,7 +64,7 @@ export default class EmojiMenuV2 extends EventEmitter {
         if (reaction.message.id !== this.messageId) {
             return;
         }
-        
+
         for (let i: number = 0; i < this.buttons.length; i++) {
             if (this.buttons[i].emoji === reaction.emoji.id) {
                 if (!this.buttons[i].public && user.id !== this.ownerId) {
@@ -91,6 +91,7 @@ export default class EmojiMenuV2 extends EventEmitter {
     public detach(): this {
         if (this.bot !== undefined) {
             this.bot.client.removeListener("messageReactionAdd", this.handleMessageReactionAdd);
+            this.bot.client.removeListener("messageReactionRemove", this.handleMessageReactionRemove);
         }
 
         return this;

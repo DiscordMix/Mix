@@ -47,7 +47,7 @@ import CommandAuthStore from "./commands/auth-stores/command-auth-store";
 import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
 import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 import SetupHelper, {SetupHelperResult} from "./core/setup-helper";
-import Service, {ServiceOptions} from "./services/service";
+import Service, {IServiceOptions} from "./services/service";
 import KnexTable from "./data-providers/knex-table";
 import {on, WeakCommand, DecoratorCommand, SimpleCommand, DiscordEvent} from "./decorators/decorators";
 import {command} from "./decorators/decorators";
@@ -133,7 +133,7 @@ export {
 
     // Services
     Service,
-    ServiceOptions,
+    IServiceOptions,
 
     // Misc
     KnexTable,

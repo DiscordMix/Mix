@@ -1,4 +1,4 @@
-export interface PluginMeta {
+export type PluginMeta = {
     readonly name: string;
     readonly desc: string;
     readonly version: string;

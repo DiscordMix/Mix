@@ -100,7 +100,7 @@ export enum DecoratorCommandType {
     Weak
 }
 
-export interface DecoratorCommand {
+export type DecoratorCommand = {
     readonly meta: IFragmentMeta;
     readonly type: DecoratorCommandType;
 }

@@ -1,7 +1,7 @@
 import Bot from "../core/bot";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 
-export interface ServiceOptions {
+export interface IServiceOptions {
     readonly bot: Bot;
     readonly api?: any;
 }
@@ -18,9 +18,9 @@ export default abstract class Service<ApiType = undefined | any> implements IFra
     protected readonly api: ApiType;
 
     /**
-     * @param {ServiceOptions} options
+     * @param {IServiceOptions} options
      */
-    protected constructor(options: ServiceOptions) {
+    protected constructor(options: IServiceOptions) {
         /**
          * @type {Bot}
          * @readonly

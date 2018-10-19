@@ -59,13 +59,13 @@ export enum InternalArgType {
     Role = "role"
 }
 
-export interface ArgumentResolver {
+export type ArgumentResolver = {
     readonly name: string;
     readonly resolve: (argument: string, message: Message) => any;
 }
 
 // TODO: Make use of this
-export interface Argument {
+export type Argument = {
     readonly name: string;
     readonly type: IArgumentType;
     readonly description?: string;
@@ -73,7 +73,7 @@ export interface Argument {
     readonly required?: boolean;
 }
 
-export interface CommandRestrict {
+export type CommandRestrict = {
     selfPermissions: any[];
     issuerPermissions: any[];
     environment: ChatEnvironment;

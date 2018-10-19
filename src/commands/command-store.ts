@@ -24,7 +24,7 @@ export enum CommandManagerEvent {
     UnderCooldown
 }
 
-export interface CommandCooldown {
+export type CommandCooldown = {
     readonly context: CommandContext;
     readonly command: Command;
     readonly end: number;

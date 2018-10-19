@@ -15,21 +15,21 @@ import {Message} from "discord.js";
 import Log from "../core/log";
 import {DecoratorCommand} from "../decorators/decorators";
 
-export interface ResolveArgumentsOptions {
+export type ResolveArgumentsOptions = {
     readonly arguments: IRawArguments;
     readonly schema: Argument[];
     readonly resolvers: ArgumentResolver[];
     readonly message: Message;
 }
 
-export interface ResolveDefaultArgsOptions {
+export type ResolveDefaultArgsOptions = {
     readonly arguments: IRawArguments;
     readonly schema: Argument[];
     readonly message: Message;
     readonly command: Command;
 }
 
-export interface CheckArgumentsOptions {
+export type CheckArgumentsOptions = {
     readonly arguments: IRawArguments;
     readonly schema: Argument[];
     readonly types: ICustomArgType[];

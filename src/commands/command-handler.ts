@@ -9,7 +9,7 @@ import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
 
-export interface CommandHandlerOptions {
+export type CommandHandlerOptions = {
     readonly commandStore: CommandStore;
     readonly authStore: CommandAuthStore;
     readonly errorHandlers: Function[];

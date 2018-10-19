@@ -1,3 +1,3 @@
-export interface IDetachable {
+export type IDetachable = {
     detach(): any;
 }

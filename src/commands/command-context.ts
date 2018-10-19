@@ -7,7 +7,7 @@ import FormattedMessage from "../builders/formatted-message";
 import Log from "../core/log";
 import {Utils} from "..";
 
-export interface CommandExecutionContextOptions {
+export type CommandExecutionContextOptions = {
     readonly message: Message;
     readonly bot: Bot;
     readonly auth: number;
@@ -197,7 +197,7 @@ export default class CommandContext<DataType = any> {
      */
     public async send(text: string | RichEmbed | Message): Promise<EditableMessage | null> {
         return new EditableMessage(await this.message.channel.send(text));
-    } 
+    }
 
     /**
      * @param {string} text

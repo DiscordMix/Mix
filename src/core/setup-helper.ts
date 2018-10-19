@@ -7,14 +7,14 @@ export enum SetupHelperActionType {
     Question
 }
 
-export interface FromContextOptions {
+export type FromContextOptions = {
     readonly context: CommandContext;
     readonly title?: string;
     readonly embed?: boolean;
     readonly timeout?: number
 }
 
-export interface SetupHelperOptions {
+export type SetupHelperOptions = {
     readonly client: Client;
     readonly channel: TextChannel;
     readonly userId: Snowflake;
@@ -23,12 +23,12 @@ export interface SetupHelperOptions {
     readonly embed?: boolean;
 }
 
-export interface SetupHelperAction {
+export type SetupHelperAction = {
     readonly type: SetupHelperActionType;
     readonly text: string;
 }
 
-export interface SetupHelperResult {
+export type SetupHelperResult = {
     readonly responses: string[];
     readonly expired: boolean;
 }

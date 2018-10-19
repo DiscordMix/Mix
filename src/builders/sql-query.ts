@@ -1,6 +1,6 @@
 export type ISqlQueryOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
 
-export interface SqlQueryWhere {
+export type SqlQueryWhere = {
     readonly property: string;
     readonly value: any;
     readonly operator?: ISqlQueryOperator;

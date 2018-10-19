@@ -2,6 +2,7 @@ import {Message, MessageReaction, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import CommandContext from "../commands/command-context";
 import {EventEmitter} from "events";
+import {IDetachable} from "..";
 
 export type EmojiButtonClickHandler = (reaction: MessageReaction, user: User) => void;
 
@@ -13,7 +14,7 @@ export type EmojiButtonV2 = {
     readonly clicked?: EmojiButtonClickHandler;
 }
 
-export default class EmojiMenuV2 extends EventEmitter {
+export default class EmojiMenuV2 extends EventEmitter implements IDetachable {
     public readonly messageId: Snowflake;
     public readonly ownerId: Snowflake;
 
@@ -84,6 +85,7 @@ export default class EmojiMenuV2 extends EventEmitter {
         this.bot = context instanceof Bot ? context : context.bot;
         this.bot.client.on("messageReactionAdd", this.handleMessageReactionAdd.bind(this));
         this.bot.client.on("messageReactionRemove", this.handleMessageReactionRemove.bind(this));
+        this.bot.detachables.push(this);
 
         return this;
     }

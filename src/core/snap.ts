@@ -1,3 +1,3 @@
 export interface IDetachable {
-    detach(): void | Promise<void>;
+    detach(): any;
 }

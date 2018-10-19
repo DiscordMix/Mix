@@ -195,6 +195,14 @@ export default class CommandContext<DataType = any> {
      * @param {string} text
      * @return {Promise<EditableMessage>}
      */
+    public async send(text: string | RichEmbed | Message): Promise<EditableMessage | null> {
+        return new EditableMessage(await this.message.channel.send(text));
+    } 
+
+    /**
+     * @param {string} text
+     * @return {Promise<EditableMessage>}
+     */
     public async loading(text: string): Promise<EditableMessage | null> {
         return await this.respond({
             // TODO: Isn't the emoji missing?

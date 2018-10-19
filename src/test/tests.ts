@@ -19,6 +19,8 @@ const subjects = {
         "285578743324606482"
     ],
 
+    token: "NDMzMzg0MzM1MjExNjI2NDk4.DqrIbQ.cC0MAvHKTwbOVrPEa-Xddz356vc",
+
     rgb: new Rgb(5, 10, 15),
 
     rgba: new Rgba({
@@ -55,11 +57,20 @@ const subjects = {
     }
 };
 
+describe("Utils.escapeText()", () => {
+    it ("should return the escaped text", () => {
+        const result: string = Utils.escapeText(`hello ${subjects.ids[0]} world ${subjects.ids[1]} ${subjects.ids[2]} supers3cr3t! ${subjects.token}`, "supers3cr3t");
+
+        expect(result).to.be.an("string");
+        expect(result).to.equal(`hello [Mention] world [Mention] ${subjects.ids[2]} [Token]! [Token]`);
+    });
+});
+
 describe("Utils.resolveId()", () => {
     it("should return the resolved ids", () => {
         // Review
         for (let i = 0; i < subjects.ids.length; i++) {
-            const result = Utils.resolveId(subjects.ids[i]);
+            const result: any = Utils.resolveId(subjects.ids[i]);
 
             expect(result).to.be.an("string");
             expect(result).to.have.lengthOf(18);

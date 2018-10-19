@@ -16,6 +16,7 @@ const subjects = {
     ids: [
         "<@285578743324606482>",
         "<#432269407654248459>",
+        "<&457741550970077195>",
         "285578743324606482"
     ],
 
@@ -57,12 +58,52 @@ const subjects = {
     }
 };
 
+describe("Utils.isEmpty()", () => {
+    it ("should return whether the input is empty", () => {
+        const result1: boolean = Utils.isEmpty("");
+        const result2: boolean = Utils.isEmpty(undefined);
+        const result3: boolean = Utils.isEmpty("     ");
+        const result4: boolean = Utils.isEmpty("   hello world   ");
+        const result5: boolean = Utils.isEmpty(null);
+        const result6: boolean = Utils.isEmpty(0);
+        const result7: boolean = Utils.isEmpty(false);
+
+        expect(result1).to.equal(true);
+        expect(result2).to.equal(true);
+        expect(result3).to.equal(true);
+        expect(result4).to.equal(false);
+        expect(result5).to.equal(true);
+        expect(result6).to.equal(false);
+        expect(result7).to.equal(false);
+    });
+});
+
+describe("Utils.hasMentionPrefix()", () => {
+    it ("should return whether the text provided start with a mention", () => {
+        const result1: boolean = Utils.hasMentionPrefix(`<@${subjects.ids[0]}> hello world`, subjects.ids[0]);
+        const result2: boolean = Utils.hasMentionPrefix(`hello world <@${subjects.ids[0]}>`, subjects.ids[0]);
+
+        expect(result1).to.equal(true);
+        expect(result2).to.equal(true);
+    });
+});
+
+describe("Utils.hasStringsPrefix()", () => {
+    it ("should return whether the text provided start with a mention", () => {
+        const result1: boolean = Utils.hasMentionPrefix(`<@${subjects.ids[0]}> hello world`, subjects.ids[0]);
+        const result2: boolean = Utils.hasMentionPrefix(`hello world <@${subjects.ids[0]}>`, subjects.ids[0]);
+
+        expect(result1).to.equal(true);
+        expect(result2).to.equal(true);
+    });
+});
+
 describe("Utils.escapeText()", () => {
     it ("should return the escaped text", () => {
-        const result: string = Utils.escapeText(`hello ${subjects.ids[0]} world ${subjects.ids[1]} ${subjects.ids[2]} supers3cr3t! ${subjects.token}`, "supers3cr3t");
+        const result: string = Utils.escapeText(`hello ${subjects.ids[0]} world ${subjects.ids[1]} john ${subjects.ids[2]} doe ${subjects.ids[3]} supers3cr3t! ${subjects.token}`, "supers3cr3t");
 
         expect(result).to.be.an("string");
-        expect(result).to.equal(`hello [Mention] world [Mention] ${subjects.ids[2]} [Token]! [Token]`);
+        expect(result).to.equal(`hello [Mention] world [Mention] john [Mention] doe ${subjects.ids[3]} [Token]! [Token]`);
     });
 });
 

@@ -7,9 +7,11 @@ export default abstract class Patterns {
 
     public static mention: RegExp = /<@!?[0-9]{18}>/gm;
 
-    public static snowflake: RegExp = /[0-9]{18}/;
+    public static snowflake: RegExp = /[0-9]{18}/gm;
 
-    public static mentionOrSnowflake: RegExp = /<@!?[0-9]{18}>|[0-9]{18}/;
+    public static mentionOrSnowflake: RegExp = /<@!?[0-9]{18}>|[0-9]{18}/gm;
+
+    public static anyMention: RegExp = /<(?:\@|\#|\&)[0-9]{18}>/gm;
 
     public static state: RegExp = /(1|true|on|y|yes)/i;
 

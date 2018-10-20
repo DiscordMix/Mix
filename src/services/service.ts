@@ -1,12 +1,13 @@
 import Bot from "../core/bot";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
+import {IDisposable} from "..";
 
 export interface IServiceOptions {
     readonly bot: Bot;
     readonly api?: any;
 }
 
-export default abstract class Service<ApiType = undefined | any> implements IFragment {
+export default abstract class Service<ApiType = undefined | any> implements IFragment, IDisposable {
     public abstract meta: IFragmentMeta;
     public readonly stop?: () => void;
     public readonly canStart: (() => boolean) | boolean = true;
@@ -32,6 +33,10 @@ export default abstract class Service<ApiType = undefined | any> implements IFra
          * @readonly
          */
         this.api = options.api;
+    }
+
+    public dispose(): void {
+        //
     }
 
     public abstract start(): void;

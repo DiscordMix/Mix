@@ -195,8 +195,8 @@ export default class CommandContext<DataType = any> {
      * @param {string} text
      * @return {Promise<EditableMessage>}
      */
-    public async send(text: string | RichEmbed | Message): Promise<EditableMessage | null> {
-        return new EditableMessage(await this.message.channel.send(text));
+    public async send(text: string | RichEmbed | Message): Promise<Message | Message[]> {
+        return await this.message.channel.send(text);
     } 
 
     /**

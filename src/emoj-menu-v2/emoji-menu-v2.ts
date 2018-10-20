@@ -28,7 +28,6 @@ export default class EmojiMenuV2 extends EventEmitter {
         this.messageId = messageId;
         this.ownerId = ownerId;
         this.buttons = buttons;
-        this.buttons = buttons;
 
         // Global click
         this.on("emojiClick", (reaction: MessageReaction, user: User, emoji: EmojiButtonV2) => {

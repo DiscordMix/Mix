@@ -44,7 +44,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
         return this;
     }
 
-    private handleMessageReactionAdd(reaction: MessageReaction, user: User): void {
+    private async handleMessageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.message.id !== this.messageId) {
             return;
         }
@@ -52,7 +52,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
         for (let i: number = 0; i < this.buttons.length; i++) {
             if (this.buttons[i].emoji === reaction.emoji.id) {
                 if (this.buttons[i].added !== undefined && typeof this.buttons[i].added === "function") {
-                    (this.buttons[i].added as IEmojiButtonClickHandler)(reaction, user);
+                    await (this.buttons[i].added as IEmojiButtonClickHandler)(reaction, user);
                 }
 
                 this.emit("emojiClick", reaction, user, this.buttons[i]);
@@ -60,7 +60,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
         }
     }
 
-    private handleMessageReactionRemove(reaction: MessageReaction, user: User): void {
+    private async handleMessageReactionRemove(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.message.id !== this.messageId) {
             return;
         }
@@ -72,7 +72,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
                 }
 
                 if (this.buttons[i].removed !== undefined && typeof this.buttons[i].removed === "function") {
-                    (this.buttons[i].removed as IEmojiButtonClickHandler)(reaction, user);
+                    await (this.buttons[i].removed as IEmojiButtonClickHandler)(reaction, user);
                 }
 
                 this.emit("emojiClick", reaction, user, this.buttons[i]);

@@ -51,6 +51,10 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
 
         for (let i: number = 0; i < this.buttons.length; i++) {
             if (this.buttons[i].emoji === reaction.emoji.id) {
+                if (!this.buttons[i].public && user.id !== this.ownerId) {
+                    continue;
+                }
+                
                 if (this.buttons[i].added !== undefined && typeof this.buttons[i].added === "function") {
                     await (this.buttons[i].added as IEmojiButtonClickHandler)(reaction, user);
                 }

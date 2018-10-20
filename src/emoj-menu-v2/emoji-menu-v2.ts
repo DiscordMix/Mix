@@ -11,6 +11,7 @@ export type EmojiButtonV2 = {
     readonly added?: EmojiButtonClickHandler;
     readonly removed?: EmojiButtonClickHandler;
     readonly clicked?: EmojiButtonClickHandler;
+    readonly add?: boolean;
 }
 
 export default class EmojiMenuV2 extends EventEmitter {
@@ -21,6 +22,7 @@ export default class EmojiMenuV2 extends EventEmitter {
     public readonly buttons: EmojiButtonV2[];
 
     private bot?: Bot;
+    private context?: CommandContext;
 
     public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: EmojiButtonV2[] = []) {
         super();
@@ -34,6 +36,7 @@ export default class EmojiMenuV2 extends EventEmitter {
             if (emoji.clicked !== undefined && typeof emoji.clicked === "function") {
                 emoji.clicked(reaction, user);
             }
+            
         });
     }
 
@@ -44,12 +47,16 @@ export default class EmojiMenuV2 extends EventEmitter {
     }
 
     private handleMessageReactionAdd(reaction: MessageReaction, user: User): void {
-        if (reaction.message.id !== this.messageId) {
+        if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
             return;
         }
 
         for (let i: number = 0; i < this.buttons.length; i++) {
             if (this.buttons[i].emoji === reaction.emoji.id) {
+                if (!this.buttons[i].public && user.id !== this.ownerId) {
+                    continue;
+                }
+
                 if (this.buttons[i].added !== undefined && typeof this.buttons[i].added === "function") {
                     (this.buttons[i].added as EmojiButtonClickHandler)(reaction, user);
                 }
@@ -60,7 +67,7 @@ export default class EmojiMenuV2 extends EventEmitter {
     }
 
     private handleMessageReactionRemove(reaction: MessageReaction, user: User): void {
-        if (reaction.message.id !== this.messageId) {
+        if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
             return;
         }
 
@@ -79,12 +86,26 @@ export default class EmojiMenuV2 extends EventEmitter {
         }
     }
 
-    public attach(context: Bot | CommandContext): this {
-        this.bot = context instanceof Bot ? context : context.bot;
+    public async attach(context: CommandContext): Promise<this> {
+        this.bot = context.bot;
+        this.context = context;
         this.bot.client.on("messageReactionAdd", this.handleMessageReactionAdd.bind(this));
         this.bot.client.on("messageReactionRemove", this.handleMessageReactionRemove.bind(this));
+        await this.react();
 
         return this;
+    }
+
+    private async react(): Promise<void> {
+        if (!this.context) return;
+        let message = await this.context.message.channel.fetchMessage(this.messageId);
+        for (let button of this.buttons) {
+            if (button.add === false) {
+                continue
+            }
+
+            await message.react(button.emoji);
+        }
     }
 
     public detach(): this {

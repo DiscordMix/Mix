@@ -3,15 +3,17 @@ export default abstract class Patterns {
 
     public static url: RegExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
 
-    public static token: RegExp = /^[a-zA-Z0-9]{24}\.[a-zA-Z0-9]{3}\-[a-z]{2}\.[_a-zA-Z0-9-]{27}$/gm;
+    public static token: RegExp = /ND[a-z0-9]{22}\.Dqr[a-z0-9-]{3}\.[-a-z0-9_]{27}/gmi;
 
     public static mention: RegExp = /<@!?[0-9]{18}>/gm;
 
-    public static snowflake: RegExp = /[0-9]{18}/;
+    public static snowflake: RegExp = /[0-9]{18}/gm;
 
-    public static mentionOrSnowflake: RegExp = /<@!?[0-9]{18}>|[0-9]{18}/;
+    public static mentionOrSnowflake: RegExp = /<@!?[0-9]{18}>|[0-9]{18}/gm;
 
-    public static state: RegExp = /^(1|true|on|y|yes)$/i;
+    public static anyMention: RegExp = /<(?:\@|\#|\&)[0-9]{18}>/gm;
+
+    public static state: RegExp = /(1|true|on|y|yes)/i;
 
     /**
      * 1st Group => Long base

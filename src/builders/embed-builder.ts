@@ -153,7 +153,7 @@ export default class EmbedBuilder {
     }
 
     /**
-     * @param {Object} sections
+     * @param {*} sections
      * @param {string} color
      * @return {EmbedBuilder}
      */

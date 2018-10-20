@@ -12,6 +12,7 @@ export type IEmojiButtonV2 = {
     readonly added?: IEmojiButtonClickHandler;
     readonly removed?: IEmojiButtonClickHandler;
     readonly clicked?: IEmojiButtonClickHandler;
+    readonly add?: boolean;
 }
 
 export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
@@ -22,6 +23,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
     public readonly buttons: IEmojiButtonV2[];
 
     private bot?: Bot;
+    private messageAttached?: Message;
 
     public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: IEmojiButtonV2[] = []) {
         super();
@@ -45,7 +47,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
     }
 
     private async handleMessageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
-        if (reaction.message.id !== this.messageId) {
+        if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
             return;
         }
 
@@ -71,7 +73,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
 
         for (let i: number = 0; i < this.buttons.length; i++) {
             if (this.buttons[i].emoji === reaction.emoji.id) {
-                if (!this.buttons[i].public && user.id !== this.ownerId) {
+                if (!this.buttons[i].public && user.id !== this.ownerId  || (this.bot && this.bot.client.user.id === user.id)) {
                     continue;
                 }
 
@@ -84,13 +86,31 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
         }
     }
 
-    public attach(context: Bot | CommandContext): this {
-        this.bot = context instanceof Bot ? context : context.bot;
+    public async attach(context: CommandContext): Promise<this> {
+        this.bot = context.bot;
         this.bot.client.on(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd.bind(this));
         this.bot.client.on(DiscordEvent.MessageReactionRemoved, this.handleMessageReactionRemove.bind(this));
         this.bot.disposables.push(this);
+        this.messageAttached = context.message;
+        await this.react();
 
         return this;
+    }
+
+    private async react(): Promise<void> {
+        if (!this.messageAttached) {
+            return;
+        }
+
+        const message: Message = await this.messageAttached.channel.fetchMessage(this.messageId) as Message;
+
+        for (let i: number = 0; i < this.buttons.length; i++) {
+            if (this.buttons[i].add === false) {
+                continue
+            }
+
+            await message.react(this.buttons[i].emoji);
+        }
     }
 
     public dispose(): this {

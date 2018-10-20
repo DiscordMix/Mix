@@ -124,6 +124,15 @@ export default class ServiceManager {
     }
 
     /**
+     * Dispose all services
+     */
+    public async disposeAll(): Promise<void> {
+        for (let [name, service] of this.services) {
+            await service.dispose();
+        }
+    }
+
+    /**
      * @return {IReadonlyServiceMap}
      */
     public getAll(): IReadonlyServiceMap {

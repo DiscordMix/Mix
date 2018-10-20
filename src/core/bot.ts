@@ -228,7 +228,7 @@ const DefaultBotOptions: IBotExtraOptions = {
 /**
  * @extends EventEmitter
  */
-export default class Bot<ApiType = any> extends EventEmitter {
+export default class Bot<ApiType = any> extends EventEmitter implements IDisposable {
     public readonly settings: Settings;
     public readonly temp: Temp;
     public readonly dataStore?: DataProvider;
@@ -904,6 +904,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.emit("restartStart", reloadModules);
         Log.verbose("[Bot.restart] Restarting");
 
+        // Dispose resources
+        await this.dispose();
+
         if (reloadModules) {
             // TODO: Actually reload all the features and commandStore
             // this.features.reloadAll(this);
@@ -964,5 +967,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         this.emit("clearedTemp");
+    }
+
+    public async dispose(): Promise<void> {
+        await this.commandStore.disposeAll();
+        await this.services.disposeAll();
+        this.clearTemp();
     }
 }

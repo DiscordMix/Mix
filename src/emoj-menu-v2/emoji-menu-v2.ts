@@ -47,7 +47,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
         return this;
     }
 
-    private handleMessageReactionAdd(reaction: MessageReaction, user: User): void {
+    private async handleMessageReactionAdd(reaction: MessageReaction, user: User): void {
         if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
             return;
         }
@@ -59,7 +59,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
                 }
 
                 if (this.buttons[i].added !== undefined && typeof this.buttons[i].added === "function") {
-                    (this.buttons[i].added as IEmojiButtonClickHandler)(reaction, user);
+                    await (this.buttons[i].added as IEmojiButtonClickHandler)(reaction, user);
                 }
 
                 this.emit("emojiClick", reaction, user, this.buttons[i]);
@@ -67,7 +67,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
         }
     }
 
-    private handleMessageReactionRemove(reaction: MessageReaction, user: User): void {
+    private async handleMessageReactionRemove(reaction: MessageReaction, user: User): void {
         if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
             return;
         }
@@ -79,14 +79,13 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
                 }
 
                 if (this.buttons[i].removed !== undefined && typeof this.buttons[i].removed === "function") {
-                    (this.buttons[i].removed as IEmojiButtonClickHandler)(reaction, user);
+                    await (this.buttons[i].removed as IEmojiButtonClickHandler)(reaction, user);
                 }
 
                 this.emit("emojiClick", reaction, user, this.buttons[i]);
             }
         }
     }
-
 
     public async attach(context: CommandContext): Promise<this> {
         this.bot = context.bot;
@@ -110,7 +109,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
             await message.react(button.emoji);
         }
     }
-
+   
     public dispose(): this {
         if (this.bot !== undefined) {
             this.bot.client.removeListener(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd);

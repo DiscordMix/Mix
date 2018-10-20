@@ -54,13 +54,13 @@ export enum InternalArgType {
     Role = "role"
 }
 
-export type ArgumentResolver = {
+export type IArgumentResolver = {
     readonly name: string;
     readonly resolve: (argument: string, message: Message) => any;
 }
 
 // TODO: Make use of this
-export type Argument = {
+export type IArgument = {
     readonly name: string;
     readonly type: IArgumentType;
     readonly description?: string;
@@ -68,7 +68,7 @@ export type Argument = {
     readonly required?: boolean;
 }
 
-export type CommandRestrict = {
+export type ICommandRestrict = {
     selfPermissions: any[];
     issuerPermissions: any[];
     environment: ChatEnvironment;
@@ -77,7 +77,7 @@ export type CommandRestrict = {
     cooldown: number;
 }
 
-export const DefaultCommandRestrict: CommandRestrict = {
+export const DefaultCommandRestrict: ICommandRestrict = {
     auth: 0,
     cooldown: 0,
     environment: ChatEnvironment.Anywhere,
@@ -104,8 +104,8 @@ export type ICommandResult = {
 export abstract class GenericCommand<ArgumentsType> implements IFragment, IDisposable {
     public abstract meta: IFragmentMeta;
     public readonly aliases: string[] = [];
-    public readonly arguments: Argument[] = [];
-    public readonly restrict: CommandRestrict = Object.assign({}, DefaultCommandRestrict);
+    public readonly arguments: IArgument[] = [];
+    public readonly restrict: ICommandRestrict = Object.assign({}, DefaultCommandRestrict);
     public readonly switches: ICommandSwitchInfo[] = [];
     public readonly exclude: string[] = [];
     public readonly singleArg: boolean = false;
@@ -147,7 +147,7 @@ export abstract class GenericCommand<ArgumentsType> implements IFragment, IDispo
      * @return {number} The minimum amount of required arguments that this command accepts
      */
     public get minArguments(): number {
-        return this.arguments.filter((arg: Argument) => arg.required).length;
+        return this.arguments.filter((arg: IArgument) => arg.required).length;
     }
 
     /**

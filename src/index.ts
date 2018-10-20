@@ -5,10 +5,10 @@ import CommandStore, {CommandManagerEvent} from "./commands/command-store";
 
 import Command, {
     IArgumentTypeChecker,
-    Argument,
+    IArgument,
     PrimitiveArgType,
     ICustomArgType,
-    ArgumentResolver,
+    IArgumentResolver,
     RestrictGroup,
     InternalArgType
 } from "./commands/command";
@@ -60,12 +60,12 @@ export {
     CommandStore,
     CommandManagerEvent,
     CommandParser,
-    Argument,
+    IArgument,
     ICustomArgType,
     IArgumentTypeChecker,
     Command,
     PrimitiveArgType,
-    ArgumentResolver,
+    IArgumentResolver,
     RestrictGroup,
     InternalArgType,
 

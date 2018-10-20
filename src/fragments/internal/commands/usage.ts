@@ -1,4 +1,4 @@
-import {Argument, default as Command, PrimitiveArgType} from "../../../commands/command";
+import {IArgument, default as Command, PrimitiveArgType} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 import {DecoratorCommand} from "../../../decorators/decorators";
 
@@ -12,7 +12,7 @@ export default class Usage extends Command<IUsageArgs> {
         description: "View the usage of a command"
     };
 
-    readonly arguments: Argument[] = [
+    readonly arguments: IArgument[] = [
         {
             name: "command",
             type: PrimitiveArgType.String,

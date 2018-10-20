@@ -1,6 +1,6 @@
 import {ChatEnvironment, Command, CommandContext, Permission} from "../..";
 import {GuildMember} from "discord.js";
-import {Argument, PrimitiveArgType} from "../../commands/command";
+import {IArgument, PrimitiveArgType} from "../../commands/command";
 
 type IKickArgs = {
     readonly member: GuildMember;
@@ -13,7 +13,7 @@ export default abstract class KickCommand extends Command<IKickArgs> {
         description: "Kick a member from the server"
     };
 
-    readonly arguments: Argument[] = [
+    readonly arguments: IArgument[] = [
         {
             name: "member",
             description: "The guild member to kick",

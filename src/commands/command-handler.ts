@@ -76,7 +76,7 @@ export default class CommandHandler {
     /**
      * @param {CommandContext} context
      * @param {Command} command
-     * @param {Argument[]} rawArgs
+     * @param {IArgument[]} rawArgs
      * @return {boolean}
      */
     private meetsRequirements(context: CommandContext, command: Command, rawArgs: string[]): boolean {

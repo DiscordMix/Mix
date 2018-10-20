@@ -4,8 +4,8 @@ import CommandStore from "./command-store";
 import Command, {
     IArgumentType,
     IArgumentTypeChecker,
-    Argument,
-    ArgumentResolver, IDefaultValueResolver,
+    IArgument,
+    IArgumentResolver, IDefaultValueResolver,
     PrimitiveArgType,
     IRawArguments,
     ICustomArgType
@@ -17,21 +17,21 @@ import {DecoratorCommand} from "../decorators/decorators";
 
 export type ResolveArgumentsOptions = {
     readonly arguments: IRawArguments;
-    readonly schema: Argument[];
-    readonly resolvers: ArgumentResolver[];
+    readonly schema: IArgument[];
+    readonly resolvers: IArgumentResolver[];
     readonly message: Message;
 }
 
 export type ResolveDefaultArgsOptions = {
     readonly arguments: IRawArguments;
-    readonly schema: Argument[];
+    readonly schema: IArgument[];
     readonly message: Message;
     readonly command: Command;
 }
 
 export type CheckArgumentsOptions = {
     readonly arguments: IRawArguments;
-    readonly schema: Argument[];
+    readonly schema: IArgument[];
     readonly types: ICustomArgType[];
     readonly message: Message;
     readonly command: Command;

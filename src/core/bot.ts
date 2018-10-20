@@ -13,7 +13,7 @@ import Discord, {Client, Guild, GuildMember, Message, RichEmbed, Role, Snowflake
 import ServiceManager from "../services/service-manager";
 
 import Command, {
-    ArgumentResolver,
+    IArgumentResolver,
     ArgumentStyle,
     DefaultCommandRestrict,
     ICustomArgType,
@@ -64,7 +64,7 @@ const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../frag
 // TODO: Should be a property/option on Bot, not hardcoded
 // TODO: Merge this resolvers with the (if provided) provided
 // ones by the user.
-const internalArgResolvers: ArgumentResolver[] = [
+const internalArgResolvers: IArgumentResolver[] = [
     {
         name: InternalArgType.Member,
 
@@ -148,7 +148,7 @@ export type IBotOptions = {
     readonly userGroups?: IUserGroup[];
     readonly owner?: Snowflake;
     readonly options?: Partial<IBotExtraOptions>;
-    readonly argumentResolvers?: ArgumentResolver[];
+    readonly argumentResolvers?: IArgumentResolver[];
     readonly argumentTypes?: ICustomArgType[];
 }
 
@@ -245,7 +245,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly owner?: Snowflake;
     public readonly options: IBotExtraOptions;
     public readonly language?: Language;
-    public readonly argumentResolvers: ArgumentResolver[];
+    public readonly argumentResolvers: IArgumentResolver[];
     public readonly argumentTypes: ICustomArgType[];
     public readonly disposables: IDisposable[];
 
@@ -312,7 +312,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         this.commandStore = new CommandStore(this);
 
         /**
-         * @type {ArgumentResolver[]}
+         * @type {IArgumentResolver[]}
          * @readonly
          */
         this.argumentResolvers = internalArgResolvers;

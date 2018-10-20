@@ -1,5 +1,5 @@
-import {ICommandExecuted, CommandRestrict} from "../commands/command";
-import {Argument} from "..";
+import {ICommandExecuted, ICommandRestrict} from "../commands/command";
+import {IArgument} from "..";
 import {IFragmentMeta} from "../fragments/fragment";
 import Log from "../core/log";
 import {Snowflake} from "discord.js";
@@ -111,8 +111,8 @@ export interface WeakCommand extends PartialWeakCommand {
 
 export interface PartialWeakCommand extends DecoratorCommand {
     readonly aliases?: string[];
-    readonly restrict?: CommandRestrict;
-    readonly arguments?: Argument[];
+    readonly restrict?: ICommandRestrict;
+    readonly arguments?: IArgument[];
 }
 
 export interface SimpleCommand extends DecoratorCommand {

@@ -47,7 +47,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
         return this;
     }
 
-    private async handleMessageReactionAdd(reaction: MessageReaction, user: User): void {
+    private async handleMessageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
             return;
         }
@@ -67,7 +67,7 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
         }
     }
 
-    private async handleMessageReactionRemove(reaction: MessageReaction, user: User): void {
+    private async handleMessageReactionRemove(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
             return;
         }

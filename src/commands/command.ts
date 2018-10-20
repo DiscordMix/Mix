@@ -15,11 +15,6 @@ export enum RestrictGroup {
     BotOwner
 }
 
-export enum CommandAuth {
-    Default = 0,
-    Owner = -1
-}
-
 export enum ArgumentStyle {
     Explicit,
     Descriptive

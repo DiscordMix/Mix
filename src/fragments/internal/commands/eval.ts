@@ -9,7 +9,7 @@ type EvalArgs = {
     readonly silent: boolean;
 }
 
-export default class Eval extends Command<EvalArgs> {
+export default class EvalCommand extends Command<EvalArgs> {
     readonly meta = {
         name: "eval",
         description: "Evaluate code"

@@ -1,6 +1,6 @@
 import {Command, CommandContext} from "../../..";
 
-export default class Ping extends Command {
+export default class PingCommand extends Command {
     readonly meta = {
         name: "ping",
         description: "View the latency and heartbeat of the bot"

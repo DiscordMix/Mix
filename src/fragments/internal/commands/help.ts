@@ -3,7 +3,7 @@ import {Command} from "../../..";
 import {RichEmbed} from "discord.js";
 import {IReadonlyCommandMap} from "../../../commands/command-store";
 
-export default class Help extends Command {
+export default class HelpCommand extends Command {
     readonly meta = {
         name: "help",
         description: "View available commands and their descriptions"

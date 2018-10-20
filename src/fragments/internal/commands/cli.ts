@@ -9,7 +9,7 @@ type CliArgs = {
     readonly command: string;
 }
 
-export default class Cli extends Command<CliArgs> {
+export default class CliCommand extends Command<CliArgs> {
     readonly meta = {
         name: "cli",
         description: "Access the local machine's CLI"

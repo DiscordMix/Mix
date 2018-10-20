@@ -6,7 +6,7 @@ type IUsageArgs = {
     readonly command: string;
 }
 
-export default class Usage extends Command<IUsageArgs> {
+export default class UsageCommand extends Command<IUsageArgs> {
     readonly meta = {
         name: "usage",
         description: "View the usage of a command"

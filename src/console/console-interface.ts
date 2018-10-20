@@ -181,6 +181,10 @@ export default class ConsoleInterface {
             ci.prompt();
         });
 
+        ci.on("error", (error: Error) => {
+            Log.error(error.message);
+        });
+
         ci.on("close", () => {
             // TODO: Temp. disabled due to interferring and going straight disconnection on vps/linux
             /* bot.disconnect();

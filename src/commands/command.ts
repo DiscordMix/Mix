@@ -1,9 +1,9 @@
 import ChatEnvironment from "../core/chat-environment";
 import Context from "./command-context";
+import CommandContext from "./command-context";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
-import CommandContext from "./command-context";
-import {Bot} from "..";
+import {Bot, IDisposable} from "..";
 
 export type IUserGroup = string[];
 
@@ -106,7 +106,7 @@ export type ICommandResult = {
     readonly status: GenericCommandStatus | number;
 }
 
-export abstract class GenericCommand<ArgumentsType> implements IFragment {
+export abstract class GenericCommand<ArgumentsType> implements IFragment, IDisposable {
     public abstract meta: IFragmentMeta;
     public readonly aliases: string[] = [];
     public readonly arguments: Argument[] = [];
@@ -116,7 +116,6 @@ export abstract class GenericCommand<ArgumentsType> implements IFragment {
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
     public readonly undoable: boolean = false;
-
 
     private readonly bot: Bot;
 
@@ -134,6 +133,10 @@ export abstract class GenericCommand<ArgumentsType> implements IFragment {
         await message.reply("That action cannot be undone");
 
         return false;
+    }
+
+    public dispose(): void {
+        //
     }
 
     /**

@@ -1,6 +1,6 @@
 import Log from "../core/log";
 import Bot from "../core/bot";
-import Command from "./command";
+import Command, {GenericCommand} from "./command";
 import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
@@ -172,6 +172,9 @@ export default class CommandStore /* extends Collection */ {
         return this;
     }
 
+    /**
+     * @param {DecoratorCommand[]} commands
+     */
     public registerMultipleDecorator(commands: DecoratorCommand[]): this {
         for (let i = 0; i < commands.length; i++) {
             this.registerDecorator(commands[i]);
@@ -214,6 +217,11 @@ export default class CommandStore /* extends Collection */ {
         return (cooldown !== null && Date.now() > cooldown) || cooldown === null;
     }
 
+    /**
+     * @param {Snowflake} userId
+     * @param {string} commandName
+     * @return {boolean}
+     */
     public clearCooldown(userId: Snowflake, commandName: string): boolean {
         const issuerCooldowns: Map<string, number> | null = this.cooldowns.get(userId) || null;
 
@@ -226,6 +234,11 @@ export default class CommandStore /* extends Collection */ {
         return false;
     }
 
+    /**
+     * @param {Snowflake} userId
+     * @param {number} cooldown
+     * @param {string} commandName
+     */
     public setCooldown(userId: Snowflake, cooldown: number, commandName: string): void {
         const currentCooldown: number | null = this.getCooldown(userId, commandName);
 
@@ -241,6 +254,17 @@ export default class CommandStore /* extends Collection */ {
         newCooldowns.set(commandName, cooldown);
 
         this.cooldowns.set(userId, newCooldowns);
+    }
+
+    /**
+     * @return {Promise<void>}
+     */
+    public async disposeAll(): Promise<void> {
+        for (let [base, command] of this.commands) {
+            if (command instanceof GenericCommand) {
+                await command.dispose();
+            }
+        }
     }
 
     /**

@@ -1,7 +1,6 @@
 import Log from "../core/log";
 import Bot from "../core/bot";
-import Command from "./command";
-import CommandAuthStore from "./auth-stores/command-auth-store";
+import Command, {GenericCommand} from "./command";
 import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
 import {WeakCommand} from "..";
@@ -24,7 +23,7 @@ export enum CommandManagerEvent {
     UnderCooldown
 }
 
-export interface CommandCooldown {
+export type CommandCooldown = {
     readonly context: CommandContext;
     readonly command: Command;
     readonly end: number;
@@ -32,24 +31,22 @@ export interface CommandCooldown {
 
 const validCommandNamePattern: RegExp = /^[a-z_0-9-]{1,40}$/mi;
 
-export type CommandMap = Map<string, Command | DecoratorCommand>;
+export type ICommandMap = Map<string, Command | DecoratorCommand>;
 
-export type ReadonlyCommandMap = ReadonlyMap<string, Command | DecoratorCommand>;
+export type IReadonlyCommandMap = ReadonlyMap<string, Command | DecoratorCommand>;
 
 export default class CommandStore /* extends Collection */ {
     public readonly bot: Bot;
-    public readonly authStore: CommandAuthStore;
     public readonly cooldowns: Map<Snowflake, Map<string, number>>;
 
     public simpleCommands: Map<string, any>;
 
-    private readonly commands: CommandMap;
+    private readonly commands: ICommandMap;
 
     /**
      * @param {Bot} bot
-     * @param {CommandAuthStore} authStore
      */
-    constructor(bot: Bot, authStore: CommandAuthStore) {
+    constructor(bot: Bot) {
         /**
          * @type {Bot}
          * @private
@@ -58,14 +55,7 @@ export default class CommandStore /* extends Collection */ {
         this.bot = bot;
 
         /**
-         * @type {CommandAuthStore}
-         * @private
-         * @readonly
-         */
-        this.authStore = authStore;
-
-        /**
-         * @type {CommandMap}
+         * @type {ICommandMap}
          * @private
          */
         this.commands = new Map();
@@ -172,6 +162,9 @@ export default class CommandStore /* extends Collection */ {
         return this;
     }
 
+    /**
+     * @param {DecoratorCommand[]} commands
+     */
     public registerMultipleDecorator(commands: DecoratorCommand[]): this {
         for (let i = 0; i < commands.length; i++) {
             this.registerDecorator(commands[i]);
@@ -182,10 +175,10 @@ export default class CommandStore /* extends Collection */ {
 
     /**
      * Get all the registered commands
-     * @return {ReadonlyCommandMap}
+     * @return {IReadonlyCommandMap}
      */
-    public getAll(): ReadonlyCommandMap {
-        return this.commands as ReadonlyCommandMap;
+    public getAll(): IReadonlyCommandMap {
+        return this.commands as IReadonlyCommandMap;
     }
 
     /**
@@ -214,6 +207,11 @@ export default class CommandStore /* extends Collection */ {
         return (cooldown !== null && Date.now() > cooldown) || cooldown === null;
     }
 
+    /**
+     * @param {Snowflake} userId
+     * @param {string} commandName
+     * @return {boolean}
+     */
     public clearCooldown(userId: Snowflake, commandName: string): boolean {
         const issuerCooldowns: Map<string, number> | null = this.cooldowns.get(userId) || null;
 
@@ -226,6 +224,11 @@ export default class CommandStore /* extends Collection */ {
         return false;
     }
 
+    /**
+     * @param {Snowflake} userId
+     * @param {number} cooldown
+     * @param {string} commandName
+     */
     public setCooldown(userId: Snowflake, cooldown: number, commandName: string): void {
         const currentCooldown: number | null = this.getCooldown(userId, commandName);
 
@@ -241,6 +244,17 @@ export default class CommandStore /* extends Collection */ {
         newCooldowns.set(commandName, cooldown);
 
         this.cooldowns.set(userId, newCooldowns);
+    }
+
+    /**
+     * @return {Promise<void>}
+     */
+    public async disposeAll(): Promise<void> {
+        for (let [base, command] of this.commands) {
+            if (command instanceof GenericCommand) {
+                await command.dispose();
+            }
+        }
     }
 
     /**

@@ -1,6 +1,6 @@
 import Rgb from "./rgb";
 
-export type RgbaOptions = {
+export type IRgbaOptions = {
     readonly red: number,
     readonly green: number,
     readonly blue: number,
@@ -14,9 +14,9 @@ export default class Rgba extends Rgb {
     public readonly alpha: number;
 
     /**
-     * @param {RgbaOptions} options
+     * @param {IRgbaOptions} options
      */
-    constructor(options: RgbaOptions) {
+    constructor(options: IRgbaOptions) {
         super(options.red, options.green, options.blue);
 
         /**
@@ -57,7 +57,7 @@ export default class Rgba extends Rgb {
             return null;
         }
 
-        const options: RgbaOptions = {
+        const options: IRgbaOptions = {
             red: parseInt(result[1], 16),
             blue: parseInt(result[2], 16),
             green: parseInt(result[3], 16),

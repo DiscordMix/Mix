@@ -2,29 +2,30 @@ import {Message, MessageReaction, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import CommandContext from "../commands/command-context";
 import {EventEmitter} from "events";
+import {DiscordEvent, IDisposable} from "..";
 
-export type EmojiButtonClickHandler = (reaction: MessageReaction, user: User) => void;
+export type IEmojiButtonClickHandler = (reaction: MessageReaction, user: User) => void;
 
-export type EmojiButtonV2 = {
+export type IEmojiButtonV2 = {
     readonly emoji: Snowflake;
     readonly public?: boolean;
-    readonly added?: EmojiButtonClickHandler;
-    readonly removed?: EmojiButtonClickHandler;
-    readonly clicked?: EmojiButtonClickHandler;
     readonly add?: boolean;
+    readonly added?: IEmojiButtonClickHandler;
+    readonly removed?: IEmojiButtonClickHandler;
+    readonly clicked?: IEmojiButtonClickHandler;
 }
 
-export default class EmojiMenuV2 extends EventEmitter {
+export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
     public readonly messageId: Snowflake;
     public readonly ownerId: Snowflake;
 
     // TODO: Should be more productive if using Map
-    public readonly buttons: EmojiButtonV2[];
+    public readonly buttons: IEmojiButtonV2[];
 
     private bot?: Bot;
     private context?: CommandContext;
 
-    public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: EmojiButtonV2[] = []) {
+    public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: IEmojiButtonV2[] = []) {
         super();
 
         this.messageId = messageId;
@@ -32,7 +33,7 @@ export default class EmojiMenuV2 extends EventEmitter {
         this.buttons = buttons;
 
         // Global click
-        this.on("emojiClick", (reaction: MessageReaction, user: User, emoji: EmojiButtonV2) => {
+        this.on("emojiClick", (reaction: MessageReaction, user: User, emoji: IEmojiButtonV2) => {
             if (emoji.clicked !== undefined && typeof emoji.clicked === "function") {
                 emoji.clicked(reaction, user);
             }
@@ -40,7 +41,7 @@ export default class EmojiMenuV2 extends EventEmitter {
         });
     }
 
-    public add(button: EmojiButtonV2): this {
+    public add(button: IEmojiButtonV2): this {
         this.buttons.push(button);
 
         return this;
@@ -58,7 +59,7 @@ export default class EmojiMenuV2 extends EventEmitter {
                 }
 
                 if (this.buttons[i].added !== undefined && typeof this.buttons[i].added === "function") {
-                    (this.buttons[i].added as EmojiButtonClickHandler)(reaction, user);
+                    (this.buttons[i].added as IEmojiButtonClickHandler)(reaction, user);
                 }
 
                 this.emit("emojiClick", reaction, user, this.buttons[i]);
@@ -78,7 +79,7 @@ export default class EmojiMenuV2 extends EventEmitter {
                 }
 
                 if (this.buttons[i].removed !== undefined && typeof this.buttons[i].removed === "function") {
-                    (this.buttons[i].removed as EmojiButtonClickHandler)(reaction, user);
+                    (this.buttons[i].removed as IEmojiButtonClickHandler)(reaction, user);
                 }
 
                 this.emit("emojiClick", reaction, user, this.buttons[i]);
@@ -86,11 +87,13 @@ export default class EmojiMenuV2 extends EventEmitter {
         }
     }
 
+
     public async attach(context: CommandContext): Promise<this> {
         this.bot = context.bot;
         this.context = context;
-        this.bot.client.on("messageReactionAdd", this.handleMessageReactionAdd.bind(this));
-        this.bot.client.on("messageReactionRemove", this.handleMessageReactionRemove.bind(this));
+        this.bot.client.on(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd.bind(this));
+        this.bot.client.on(DiscordEvent.MessageReactionRemoved, this.handleMessageReactionRemove.bind(this));
+        this.bot.disposables.push(this);
         await this.react();
 
         return this;
@@ -108,10 +111,10 @@ export default class EmojiMenuV2 extends EventEmitter {
         }
     }
 
-    public detach(): this {
+    public dispose(): this {
         if (this.bot !== undefined) {
-            this.bot.client.removeListener("messageReactionAdd", this.handleMessageReactionAdd);
-            this.bot.client.removeListener("messageReactionRemove", this.handleMessageReactionRemove);
+            this.bot.client.removeListener(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd);
+            this.bot.client.removeListener(DiscordEvent.MessageReactionRemoved, this.handleMessageReactionRemove);
         }
 
         return this;

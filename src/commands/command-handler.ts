@@ -1,24 +1,22 @@
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import Command, {RestrictGroup, RawArguments} from "./command";
+import Command, {RestrictGroup, IRawArguments} from "./command";
 import CommandStore, {CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
 import {GuildMember, Snowflake, TextChannel, Message} from "discord.js";
-import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
 
-export interface CommandHandlerOptions {
+export type CommandHandlerOptions = {
     readonly commandStore: CommandStore;
-    readonly authStore: CommandAuthStore;
     readonly errorHandlers: Function[];
     readonly argumentTypes: any;
 }
 
-export type CommandErrorHandler = (context: CommandContext, command: Command) => boolean;
+export type ICommandErrorHandler = (context: CommandContext, command: Command) => boolean;
 
-export type UndoAction = {
+export type IUndoAction = {
     readonly command: Command;
     readonly context: CommandContext;
     readonly args?: any;
@@ -26,11 +24,10 @@ export type UndoAction = {
 
 export default class CommandHandler {
     public readonly commandStore: CommandStore;
-    public readonly authStore: CommandAuthStore;
     public readonly errorHandlers: Function[];
     public readonly _errorHandlers: Map<CommandManagerEvent, any>;
     public readonly argumentTypes: any;
-    public readonly undoMemory: Map<Snowflake, UndoAction>;
+    public readonly undoMemory: Map<Snowflake, IUndoAction>;
 
     /**
      * @todo Replace 'errorHandlers' with '_errorHandlers'
@@ -42,12 +39,6 @@ export default class CommandHandler {
          * @readonly
          */
         this.commandStore = options.commandStore;
-
-        /**
-         * @type {CommandAuthStore}
-         * @readonly
-         */
-        this.authStore = options.authStore;
 
         /**
          * @type {Function[]}
@@ -66,9 +57,9 @@ export default class CommandHandler {
          * @readonly
          */
         this._errorHandlers = new Map();
-        
+
         /**
-         * @type {Map<Snowflake, UndoAction>}
+         * @type {Map<Snowflake, IUndoAction>}
          * @readonly
          */
         this.undoMemory = new Map();
@@ -85,7 +76,7 @@ export default class CommandHandler {
     /**
      * @param {CommandContext} context
      * @param {Command} command
-     * @param {Argument[]} rawArgs
+     * @param {IArgument[]} rawArgs
      * @return {boolean}
      */
     private meetsRequirements(context: CommandContext, command: Command, rawArgs: string[]): boolean {
@@ -104,19 +95,6 @@ export default class CommandHandler {
         }
         else if (command.restrict.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
             context.fail("You're not allowed to use that command");
-        }
-        else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.restrict.auth, context.bot.owner)) {
-            if (!this.handleError(CommandManagerEvent.NoAuthority, context, command)) {
-                const minAuthority: string | null = this.authStore.getSchemaRankName(command.restrict.auth);
-
-                let rankName: string = "Unknown"; // TODO: Unknown should be a reserved auth level name (schema)
-
-                if (minAuthority !== null) {
-                    rankName = minAuthority.charAt(0).toUpperCase() + minAuthority.slice(1);
-                }
-
-                context.fail(`You don't have the authority to use that command. You must be at least a(n) **${rankName}**.`);
-            }
         }
         else if (!CommandParser.checkArguments({
             schema: command.arguments,
@@ -188,7 +166,7 @@ export default class CommandHandler {
 
     public async undoAction(user: Snowflake, message: Message): Promise<boolean> {
         if (this.undoMemory.has(user)) {
-            const action: UndoAction = this.undoMemory.get(user) as UndoAction;
+            const action: IUndoAction = this.undoMemory.get(user) as IUndoAction;
 
             return await action.command.undo(action.context, message, action.args);
         }
@@ -201,10 +179,10 @@ export default class CommandHandler {
      * @todo Since it's returning a Promise, review
      * @param {CommandContext} context
      * @param {Command} command The command to handle
-     * @param {RawArguments} rawArgs
+     * @param {IRawArguments} rawArgs
      * @return {Promise<boolean>} Whether the command was successfully executed
      */
-    public async handle(context: CommandContext, command: Command, rawArgs: RawArguments): Promise<boolean> {
+    public async handle(context: CommandContext, command: Command, rawArgs: IRawArguments): Promise<boolean> {
         if (!this.meetsRequirements(context, command, rawArgs)) {
             return false;
         }

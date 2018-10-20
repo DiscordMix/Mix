@@ -2,14 +2,14 @@ import CommandContext from "../../../commands/command-context";
 import {Command, Utils} from "../../..";
 import {exec} from "child_process";
 import FormattedMessage from "../../../builders/formatted-message";
-import {PrimitiveArgType, RestrictGroup, Argument} from "../../../commands/command";
+import {PrimitiveArgType, RestrictGroup, IArgument} from "../../../commands/command";
 import EmbedBuilder from "../../../builders/embed-builder";
 
 type CliArgs = {
     readonly command: string;
 }
 
-export default class Cli extends Command<CliArgs> {
+export default class CliCommand extends Command<CliArgs> {
     readonly meta = {
         name: "cli",
         description: "Access the local machine's CLI"
@@ -17,7 +17,7 @@ export default class Cli extends Command<CliArgs> {
 
     readonly aliases = ["exec", "exe"];
 
-    readonly arguments: Argument[] = [
+    readonly arguments: IArgument[] = [
         {
             name: "command",
             description: "The command to execute",
@@ -43,7 +43,7 @@ export default class Cli extends Command<CliArgs> {
                 new FormattedMessage().codeBlock(Utils.escapeText(result, context.bot.client.token), "js").build()
             );
             embed.color('#36393f');
-        
+
             context.send(embed.build());
         });
     }

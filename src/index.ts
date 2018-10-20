@@ -4,11 +4,11 @@ import CommandContext from "./commands/command-context";
 import CommandStore, {CommandManagerEvent} from "./commands/command-store";
 
 import Command, {
-    ArgumentTypeChecker,
-    Argument,
+    IArgumentTypeChecker,
+    IArgument,
     PrimitiveArgType,
-    CustomArgType,
-    ArgumentResolver,
+    ICustomArgType,
+    IArgumentResolver,
     RestrictGroup,
     InternalArgType
 } from "./commands/command";
@@ -43,17 +43,15 @@ import ObjectProvider from "./data-providers/object-provider";
 import JsonProvider from "./data-providers/json-provider";
 import SqliteProvider from "./data-providers/sqlite-provider";
 import MysqlProvider from "./data-providers/mysql-provider";
-import CommandAuthStore from "./commands/auth-stores/command-auth-store";
-import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
-import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 import SetupHelper, {SetupHelperResult} from "./core/setup-helper";
-import Service, {ServiceOptions} from "./services/service";
+import Service, {IServiceOptions} from "./services/service";
 import KnexTable from "./data-providers/knex-table";
 import {on, WeakCommand, DecoratorCommand, SimpleCommand, DiscordEvent} from "./decorators/decorators";
 import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
-import EmojiMenuV2, {EmojiButtonV2} from "./emoj-menu-v2/emoji-menu-v2";
+import EmojiMenuV2, {IEmojiButtonV2} from "./emoj-menu-v2/emoji-menu-v2";
 import Pagination from "./pagination/pagination";
+import {IDisposable} from "./core/snap";
 
 export {
     // Commands
@@ -62,12 +60,12 @@ export {
     CommandStore,
     CommandManagerEvent,
     CommandParser,
-    Argument,
-    CustomArgType,
-    ArgumentTypeChecker,
+    IArgument,
+    ICustomArgType,
+    IArgumentTypeChecker,
     Command,
     PrimitiveArgType,
-    ArgumentResolver,
+    IArgumentResolver,
     RestrictGroup,
     InternalArgType,
 
@@ -121,24 +119,22 @@ export {
     SqliteProvider,
     MysqlProvider,
 
-    // Auth Stores
-    CommandAuthStore,
-    ObjectAuthStore,
-    JsonAuthStore,
-
     // Setup Helper
     SetupHelper,
     SetupHelperResult,
 
     // Services
     Service,
-    ServiceOptions,
+    IServiceOptions,
 
     // Misc
     KnexTable,
     EmojiMenuV2,
-    EmojiButtonV2,
+    IEmojiButtonV2,
     Pagination,
+
+    // Snap
+    IDisposable,
 
     // Decorators
     on,

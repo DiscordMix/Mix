@@ -233,7 +233,6 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly temp: Temp;
     public readonly dataStore?: DataProvider;
     public readonly emojis?: EmojiCollection;
-    public readonly client: Client; // TODO
     public readonly services: ServiceManager;
     public readonly commandStore: CommandStore;
     public readonly commandHandler: CommandHandler;
@@ -250,6 +249,9 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly disposables: IDisposable[];
 
     public suspended: boolean;
+
+    // TODO: Shouldn't be able to be edited/not read-only
+    public client: Client;
 
     private api?: ApiType;
     private setupStart: number = 0;
@@ -927,10 +929,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      */
     public async disconnect(): Promise<this> {
         this.emit("disconnecting");
-
-        for (let i: number = 0; i < this.disposables.length; i++) {
-            await this.disposables[i].dispose();
-        }
+        await this.dispose();
 
         // Save data before exiting
         if (this.dataStore && this.dataStore instanceof JsonProvider) {
@@ -938,12 +937,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             await this.dataStore.save();
         }
 
-        // Reset the temp folder before shutdown
-        await this.temp.reset();
-
         // TODO
         //this.settings.save();
         await this.client.destroy();
+        this.client = new Client();
         Log.info("[Bot.disconnect] Disconnected");
         this.emit("disconnected");
 
@@ -970,6 +967,13 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     public async dispose(): Promise<void> {
+        for (let i: number = 0; i < this.disposables.length; i++) {
+            await this.disposables[i].dispose();
+        }
+
+        // Reset the temp folder before shutdown
+        await this.temp.reset();
+
         await this.commandStore.disposeAll();
         await this.services.disposeAll();
         this.clearTemp();

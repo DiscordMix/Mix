@@ -437,6 +437,14 @@ export default class Utils {
             finalText = finalText.replace(token, "[Token]");
         }
 
+        while (Patterns.ipv4.test(finalText)) {
+            finalText = finalText.replace(Patterns.ipv4, "[IPv4]");
+        }
+
+        while (Patterns.ipv6.test(finalText)) {
+            finalText = finalText.replace(Patterns.ipv6, "[IPv6]");
+        }
+
         return finalText;
     }
 

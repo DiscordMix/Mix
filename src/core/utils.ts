@@ -80,7 +80,7 @@ export default class Utils {
      * @return {boolean}
      */
     public static isEmpty(input: any): boolean {
-        return input === undefined || input === null || input.toString().trim() === "";
+        return input === undefined || input === null || input.toString().trim() === "" || (Array.isArray(input) && input.length === 0);
     }
 
     /**
@@ -296,6 +296,10 @@ export default class Utils {
      * @return {boolean}
      */
     public static hasMentionPrefix(text: string, userId: Snowflake): boolean {
+        if (!text || !userId || typeof text !== "string" || typeof userId !== "string") {
+            throw new Error("Invalid data provided, expecting strings");
+        }
+
         return text.startsWith(`<@${userId}>`) || text.startsWith(`<@!${userId}>`);
     }
 
@@ -423,6 +427,10 @@ export default class Utils {
      * @param {string} token
      */
     public static escapeText(text: string, token: string): string {
+        if (!text || !token || typeof text !== "string" || typeof token !== "string") {
+            throw new Error("Invalid input provided; Expecting strings");
+        }
+
         let finalText: string = text;
 
         while (Patterns.anyMention.test(finalText)) {

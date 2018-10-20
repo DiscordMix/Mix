@@ -7,6 +7,7 @@ import Settings from "../core/settings";
 import path from "path";
 import {expect} from "chai";
 import SwitchParser from "../commands/switch-parser";
+import * as assert from "assert";
 
 const globalAny: any = global;
 const describe: any = globalAny.describe;
@@ -67,6 +68,8 @@ describe("Utils.isEmpty()", () => {
         const result5: boolean = Utils.isEmpty(null);
         const result6: boolean = Utils.isEmpty(0);
         const result7: boolean = Utils.isEmpty(false);
+        const result8: boolean = Utils.isEmpty([]);
+        const result9: boolean = Utils.isEmpty(["hello"]);
 
         expect(result1).to.equal(true);
         expect(result2).to.equal(true);
@@ -75,6 +78,8 @@ describe("Utils.isEmpty()", () => {
         expect(result5).to.equal(true);
         expect(result6).to.equal(false);
         expect(result7).to.equal(false);
+        expect(result8).to.equal(true);
+        expect(result9).to.equal(false);
     });
 });
 
@@ -86,14 +91,69 @@ describe("Utils.hasMentionPrefix()", () => {
         expect(result1).to.equal(true);
         expect(result2).to.equal(false);
     });
+
+    it("should throw an error when provided invalid input", () => {
+        assert.throws(() => Utils.hasMentionPrefix(undefined as any, undefined as any));
+        assert.throws(() => Utils.hasMentionPrefix(null as any, null as any));
+        assert.throws(() => Utils.hasMentionPrefix(4 as any, 543 as any));
+        assert.throws(() => Utils.hasMentionPrefix({} as any, "hello world"));
+    });
 });
 
 describe("Utils.escapeText()", () => {
-    it ("should return the escaped text", () => {
-        const result: string = Utils.escapeText(`hello ${subjects.ids[0]} world ${subjects.ids[1]} john ${subjects.ids[2]} doe ${subjects.ids[3]} supers3cr3t! ${subjects.token}`, "supers3cr3t");
+    it("should escape tokens", () => {
+        const result1: string = Utils.escapeText(subjects.token, subjects.token);
+        const result2: string = Utils.escapeText("hi world, hello world, john doe", "hello world");
+        const result3: string = Utils.escapeText(`hi world, ${subjects.token}, john doe`, "hello world");
+        const result4: string = Utils.escapeText(`hi world, ${subjects.token}, john doe, hello world, hi`, "hello world");
 
-        expect(result).to.be.an("string");
-        expect(result).to.equal(`hello [Mention] world [Mention] john [Mention] doe ${subjects.ids[3]} [Token]! [Token]`);
+        expect(result1).to.equal("[Token]");
+        expect(result2).to.equal("hi world, [Token], john doe");
+        expect(result3).to.equal("hi world, [Token], john doe");
+        expect(result4).to.equal("hi world, [Token], john doe, [Token], hi");
+    });
+
+    it("should escape IPv4s", () => {
+        const result1: string = Utils.escapeText("192.168.0.1", "empty");
+        const result2: string = Utils.escapeText("53.32.53.252", "empty");
+        const result3: string = Utils.escapeText("hello 192.168.0.1 world", "empty");
+
+        expect(result1).to.equal("[IPv4]");
+        expect(result2).to.equal("[IPv4]");
+        expect(result3).to.equal("hello [IPv4] world");
+    });
+
+    it("should escape mentions", () => {
+        const result1: string = Utils.escapeText("@everyone hello world", "empty");
+        const result2: string = Utils.escapeText("hello @everyone world", "empty");
+        const result3: string = Utils.escapeText("@here hello world", "empty");
+        const result4: string = Utils.escapeText("hello @here world", "empty");
+        const result5: string = Utils.escapeText("hello @here world @everyone john", "empty");
+        const result6: string = Utils.escapeText("@herehello @here world@everyonejohn", "empty");
+        const result7: string = Utils.escapeText(`hello ${subjects.ids[0]} world`, "empty");
+        const result8: string = Utils.escapeText(`hello ${subjects.ids[1]} world`, "empty");
+        const result9: string = Utils.escapeText(`hello ${subjects.ids[2]} world`, "empty");
+        const result10: string = Utils.escapeText(`hello ${subjects.ids[3]} world`, "empty");
+
+        expect(result1).to.equal("[Mention] hello world");
+        expect(result2).to.equal("hello [Mention] world");
+        expect(result3).to.equal("[Mention] hello world");
+        expect(result4).to.equal("hello [Mention] world");
+        expect(result5).to.equal("hello [Mention] world [Mention] john");
+        expect(result6).to.equal("[Mention]hello [Mention] world[Mention]john");
+        expect(result7).to.equal("hello [Mention] world");
+        expect(result8).to.equal("hello [Mention] world");
+        expect(result9).to.equal("hello [Mention] world");
+        expect(result10).to.equal(`hello ${subjects.ids[3]} world`);
+    });
+
+    it("should throw when provided invalid input", () => {
+        assert.throws(() => Utils.escapeText(undefined as any, undefined as any));
+        assert.throws(() => Utils.escapeText(null as any, null as any));
+        assert.throws(() => Utils.escapeText(undefined as any, null as any));
+        assert.throws(() => Utils.escapeText(null as any, undefined as any));
+        assert.throws(() => Utils.escapeText({} as any, 465 as any));
+        assert.throws(() => Utils.escapeText(52 as any, {} as any));
     });
 });
 
@@ -340,7 +400,7 @@ describe("SwitchParser.getSwitches()", () => {
         for (let i = 0; i < result1.length; i++) {
             expect(result1[0]).to.be.an("object");
         }
-        
+
         // Short
         expect(result1[0].key).to.equal("h");
         expect(result1[0].short).to.equal(true);

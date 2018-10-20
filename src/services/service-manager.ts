@@ -2,12 +2,12 @@ import Bot from "../core/bot";
 import Service from "./service";
 import {Log} from "..";
 
-export type ServiceMap = Map<string, Service>;
-export type ReadonlyServiceMap = ReadonlyMap<string, Service>;
+export type IServiceMap = Map<string, Service>;
+export type IReadonlyServiceMap = ReadonlyMap<string, Service>;
 
 export default class ServiceManager {
     private readonly bot: Bot;
-    private readonly services: ServiceMap;
+    private readonly services: IServiceMap;
 
     /**
      * @param {Bot} bot
@@ -21,7 +21,7 @@ export default class ServiceManager {
         this.bot = bot;
 
         /**
-         * @type {ServiceMap}
+         * @type {IServiceMap}
          * @private
          * @readonly
          */
@@ -124,9 +124,18 @@ export default class ServiceManager {
     }
 
     /**
-     * @return {ReadonlyServiceMap}
+     * Dispose all services
      */
-    public getAll(): ReadonlyServiceMap {
-        return this.services as ReadonlyServiceMap;
+    public async disposeAll(): Promise<void> {
+        for (let [name, service] of this.services) {
+            await service.dispose();
+        }
+    }
+
+    /**
+     * @return {IReadonlyServiceMap}
+     */
+    public getAll(): IReadonlyServiceMap {
+        return this.services as IReadonlyServiceMap;
     }
 }

@@ -7,17 +7,17 @@ import fs from "fs";
 // in code. OR maybe use the react-redux and vscode style
 // of doing things, and make a copy of the current settings
 // and upon disconnect save/rewrite them!
-export type SettingsGeneral = {
+export type ISettingsGeneral = {
     readonly token: string;
     readonly prefixes: string[];
 }
 
-export type SettingsKeys = {
+export type ISettingsKeys = {
     readonly dbl?: string;
     readonly bfd?: string;
 }
 
-export type DefiniteSettingsPaths = {
+export type IDefiniteSettingsPaths = {
     readonly commands: string;
     readonly plugins: string;
     readonly emojis: string;
@@ -25,7 +25,7 @@ export type DefiniteSettingsPaths = {
     readonly languages?: string;
 }
 
-export type SettingsPaths = {
+export type ISettingsPaths = {
     readonly commands?: string;
     readonly plugins?: string;
     readonly emojis?: string;
@@ -33,29 +33,29 @@ export type SettingsPaths = {
     readonly languages?: string;
 }
 
-export type SettingsOptions = {
-    readonly general: SettingsGeneral;
-    readonly paths?: SettingsPaths;
-    readonly keys?: SettingsKeys;
+export type ISettingsOptions = {
+    readonly general: ISettingsGeneral;
+    readonly paths?: ISettingsPaths;
+    readonly keys?: ISettingsKeys;
 }
 
 export default class Settings {
-    public general: SettingsGeneral;
-    public paths: DefiniteSettingsPaths;
-    public keys: SettingsKeys;
+    public general: ISettingsGeneral;
+    public paths: IDefiniteSettingsPaths;
+    public keys: ISettingsKeys;
 
     /**
-     * @param {SettingsOptions} options
+     * @param {ISettingsOptions} options
      */
-    constructor(options: SettingsOptions) {
+    constructor(options: ISettingsOptions) {
         /**
-         * @type {SettingsGeneral}
+         * @type {ISettingsGeneral}
          * @readonly
          */
         this.general = options.general;
 
         /**
-         * @type {SettingsPaths}
+         * @type {ISettingsPaths}
          * @readonly
          */
         this.paths = {
@@ -69,7 +69,7 @@ export default class Settings {
 
         /**
          * @todo Hotfix default value, it should be OK like this, review anyway
-         * @type {SettingsKeys}
+         * @type {ISettingsKeys}
          * @readonly
          */
         this.keys = options.keys || {};

@@ -1,4 +1,3 @@
-import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Bot from "../core/bot";
 import Settings from "../core/settings";
 
@@ -39,16 +38,6 @@ export default class BotBuilder {
      */
     public setPrimitiveCommands(primitiveCommands: string[]): BotBuilder {
         this.bot.primitiveCommands = primitiveCommands;
-
-        return this;
-    }
-
-    /**
-     * @param {CommandAuthStore} authStore
-     * @return {BotBuilder}
-     */
-    public setAuthStore(authStore: CommandAuthStore): BotBuilder {
-        this.bot.authStore = authStore;
 
         return this;
     }

@@ -8,12 +8,20 @@ import EmojiCollection from "../collections/emoji-collection";
 import Settings from "./settings";
 import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
-import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel, Guild} from "discord.js";
-import JsonAuthStore from "../commands/auth-stores/json-auth-store";
+import Discord, {Client, Guild, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import ServiceManager from "../services/service-manager";
-import Command, {ArgumentResolver, ArgumentStyle, CustomArgType, RawArguments, UserGroup, DefaultCommandRestrict, InternalArgType, ArgumentType, ArgumentTypeChecker} from "../commands/command";
+
+import Command, {
+    IArgumentResolver,
+    ArgumentStyle,
+    DefaultCommandRestrict,
+    ICustomArgType,
+    InternalArgType,
+    IRawArguments,
+    IUserGroup
+} from "../commands/command";
+
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
 import EventEmitter from "events";
@@ -21,21 +29,22 @@ import fs from "fs";
 import {performance} from "perf_hooks";
 import path from "path";
 import FragmentLoader from "../fragments/fragment-loader";
-import Fragment from "../fragments/fragment";
+import {IFragment} from "../fragments/fragment";
 import Language from "../language/language";
 import Service from "../services/service";
 
 import {
     BotEvents,
+    ChannelMessageEvents,
     DecoratorCommand,
     DecoratorCommands,
     DecoratorCommandType,
-    SimpleCommand,
-    ChannelMessageEvents
+    SimpleCommand
 } from "../decorators/decorators";
 
 import StatCounter from "./stat-counter";
 import Patterns from "./patterns";
+import {IDisposable} from "./snap";
 
 if (process.env.FORGE_DEBUG_MODE === "true") {
     Log.info("[Forge] Debug mode is enabled");
@@ -43,19 +52,19 @@ if (process.env.FORGE_DEBUG_MODE === "true") {
 
 const title: string =
 
-"███████╗ ██████╗ ██████╗  ██████╗ ███████╗\n" +
-"██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝\n" +
-"█████╗  ██║   ██║██████╔╝██║  ███╗█████╗  \n" +
-"██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝  \n" +
-"██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗\n" +
-"╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝ {version}";
+    "███████╗ ██████╗ ██████╗  ██████╗ ███████╗\n" +
+    "██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝\n" +
+    "█████╗  ██║   ██║██████╔╝██║  ███╗█████╗  \n" +
+    "██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝  \n" +
+    "██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗\n" +
+    "╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝ {version}";
 
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
 // TODO: Should be a property/option on Bot, not hardcoded
 // TODO: Merge this resolvers with the (if provided) provided
 // ones by the user.
-const internalArgResolvers: ArgumentResolver[] = [
+const internalArgResolvers: IArgumentResolver[] = [
     {
         name: InternalArgType.Member,
 
@@ -99,7 +108,7 @@ const internalArgResolvers: ArgumentResolver[] = [
 ];
 
 // TODO: Message type and resolver
-const internalArgTypes: CustomArgType[] = [
+const internalArgTypes: ICustomArgType[] = [
     {
         name: InternalArgType.Channel,
 
@@ -131,35 +140,34 @@ const internalArgTypes: CustomArgType[] = [
     }
 ];
 
-export type BotOptions = {
+export type IBotOptions = {
     readonly settings: Settings;
-    readonly authStore: CommandAuthStore;
     readonly dataStore?: DataProvider;
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: string[];
-    readonly userGroups?: UserGroup[];
+    readonly userGroups?: IUserGroup[];
     readonly owner?: Snowflake;
-    readonly options?: Partial<BotExtraOptions>;
-    readonly argumentResolvers?: ArgumentResolver[];
-    readonly argumentTypes?: CustomArgType[];
+    readonly options?: Partial<IBotExtraOptions>;
+    readonly argumentResolvers?: IArgumentResolver[];
+    readonly argumentTypes?: ICustomArgType[];
 }
 
-export const DefaultBotEmojiOptions: DefiniteBotEmojiOptions = {
+export const DefaultBotEmojiOptions: IDefiniteBotEmojiOptions = {
     success: ":white_check_mark:",
     error: ":thinking:"
-}
+};
 
-export type BotEmojiOptions = {
+export type IBotEmojiOptions = {
     readonly success?: string;
     readonly error?: string;
 }
 
-export type DefiniteBotEmojiOptions = {
+export type IDefiniteBotEmojiOptions = {
     readonly success: string;
     readonly error: string;
 }
 
-export type BotExtraOptions = {
+export type IBotExtraOptions = {
     readonly asciiTitle: boolean;
     readonly consoleInterface: boolean;
     readonly allowCommandChain: boolean;
@@ -171,10 +179,10 @@ export type BotExtraOptions = {
     readonly autoResetAuthStore: boolean;
     readonly logMessages: boolean;
     readonly dmHelp: boolean;
-    readonly emojis: DefiniteBotEmojiOptions;
+    readonly emojis: IDefiniteBotEmojiOptions;
 }
 
-const DefaultBotOptions: BotExtraOptions = {
+const DefaultBotOptions: IBotExtraOptions = {
     allowCommandChain: true,
     commandArgumentStyle: ArgumentStyle.Explicit,
     autoDeleteCommands: false,
@@ -220,13 +228,11 @@ const DefaultBotOptions: BotExtraOptions = {
 /**
  * @extends EventEmitter
  */
-export default class Bot<ApiType = any> extends EventEmitter {
+export default class Bot<ApiType = any> extends EventEmitter implements IDisposable {
     public readonly settings: Settings;
     public readonly temp: Temp;
     public readonly dataStore?: DataProvider;
-    public readonly authStore: CommandAuthStore;
     public readonly emojis?: EmojiCollection;
-    public readonly client: Client; // TODO
     public readonly services: ServiceManager;
     public readonly commandStore: CommandStore;
     public readonly commandHandler: CommandHandler;
@@ -234,14 +240,18 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly menus: EmojiMenuManager;
     public readonly prefixCommand: boolean;
     public readonly primitiveCommands: string[];
-    public readonly userGroups: UserGroup[];
+    public readonly userGroups: IUserGroup[];
     public readonly owner?: Snowflake;
-    public readonly options: BotExtraOptions;
+    public readonly options: IBotExtraOptions;
     public readonly language?: Language;
-    public readonly argumentResolvers: ArgumentResolver[];
-    public readonly argumentTypes: CustomArgType[];
+    public readonly argumentResolvers: IArgumentResolver[];
+    public readonly argumentTypes: ICustomArgType[];
+    public readonly disposables: IDisposable[];
 
     public suspended: boolean;
+
+    // TODO: Shouldn't be able to be edited/not read-only
+    public client: Client;
 
     private api?: ApiType;
     private setupStart: number = 0;
@@ -251,9 +261,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
     /**
      * Setup the bot from an object
-     * @param {Partial<BotOptions>} botOptions
+     * @param {Partial<IBotOptions>} botOptions
      */
-    public constructor(botOptions: Partial<BotOptions>) {
+    public constructor(botOptions: Partial<IBotOptions>) {
         super();
 
         if (!botOptions.settings) {
@@ -280,12 +290,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.dataStore = botOptions.dataStore;
 
         /**
-         * @type {CommandAuthStore}
-         * @readonly
-         */
-        this.authStore = botOptions.authStore || new JsonAuthStore("auth/schema.json", "auth/store.json");
-
-        /**
          * @type {EmojiCollection | undefined}
          * @readonly
          */
@@ -307,10 +311,10 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @type {CommandStore}
          * @readonly
          */
-        this.commandStore = new CommandStore(this, this.authStore);
+        this.commandStore = new CommandStore(this);
 
         /**
-         * @type {ArgumentResolver[]}
+         * @type {IArgumentResolver[]}
          * @readonly
          */
         this.argumentResolvers = internalArgResolvers;
@@ -323,7 +327,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         /**
-         * @type {CustomArgType[]}
+         * @type {ICustomArgType[]}
          * @readonly
          */
         this.argumentTypes = internalArgTypes;
@@ -342,7 +346,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.commandHandler = new CommandHandler({
             commandStore: this.commandStore,
             errorHandlers: [], // TODO: Is this like it was? Is it ok?
-            authStore: this.authStore,
             argumentTypes: this.argumentTypes
         });
 
@@ -380,7 +383,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         ];
 
         /**
-         * @type {BotExtraOptions}
+         * @type {IBotExtraOptions}
          * @readonly
          */
         this.options = {
@@ -390,7 +393,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         // TODO: Make use of the userGroups property
         /**
-         * @type {UserGroup[]}
+         * @type {IUserGroup[]}
          * @readonly
          */
         this.userGroups = botOptions.userGroups || [];
@@ -417,6 +420,13 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @type {StatCounter}
          */
         this.statCounter = new StatCounter();
+
+        /**
+         * @type {IDisposable[]}
+         * @private
+         * @readonly
+         */
+        this.disposables = [];
 
         return this;
     }
@@ -471,7 +481,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             Log.warn("[Bot.setup] No internal fragments were detected");
         }
 
-        const internalFragments: Fragment[] | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
+        const internalFragments: IFragment[] | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
 
         if (!internalFragments || internalFragments.length === 0) {
             Log.warn("[Bot.setup] No internal fragments were loaded");
@@ -499,7 +509,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         else {
             Log.verbose(`[Bot.setup] Loading ${consumerServiceCandidates.length} service(s)`);
 
-            const servicesLoaded: Fragment[] | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
+            const servicesLoaded: IFragment[] | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
 
             if (!servicesLoaded || servicesLoaded.length === 0) {
                 Log.warn("[Bot.setup] No services were loaded");
@@ -525,7 +535,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         else {
             Log.verbose(`[Bot.setup] Loading ${consumerCommandCandidates.length} command(s)`);
 
-            const commandsLoaded: Fragment[] | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
+            const commandsLoaded: IFragment[] | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
 
             if (!commandsLoaded || commandsLoaded.length === 0) {
                 Log.warn("[Bot.setup] No commands were loaded");
@@ -556,11 +566,11 @@ export default class Bot<ApiType = any> extends EventEmitter {
     }
 
     /**
-     * @param {Fragment[]} fragments
+     * @param {IFragment[]} fragments
      * @param {boolean} internal Whether the fragments are internal
      * @return {number} The amount of enabled fragments
      */
-    private async enableFragments(fragments: Fragment[], internal: boolean = false): Promise<number> {
+    private async enableFragments(fragments: IFragment[], internal: boolean = false): Promise<number> {
         let enabled: number = 0;
 
         for (let i: number = 0; i < fragments.length; i++) {
@@ -626,8 +636,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 this.console.setup(this);
             }
 
-            // Setup the command auth store
-            await this.setupAuthStore();
             Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag} | ${this.client.guilds.size} guild(s)`);
 
             const took: number = Math.round(performance.now() - this.setupStart);
@@ -691,7 +699,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         command = command as Command;
 
-        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
+        const rawArgs: IRawArguments = CommandParser.resolveDefaultArgs({
             arguments: CommandParser.getArguments(content),
             schema: command.arguments,
 
@@ -770,7 +778,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
             }
         }
         // TODO: ?prefix should also be chain-able
-        else if (message.author.bot && message.content === "?prefix" && this.prefixCommand) {
+        else if (!message.author.bot && message.content === "?prefix" && this.prefixCommand) {
             message.channel.send(new RichEmbed()
                 .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
                 .setColor("GREEN"));
@@ -778,7 +786,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         // TODO: There should be an option to disable this
         // TODO: Use embeds
         // TODO: Verify that it was done in the same environment and that the user still has perms
-        else if (message.author.bot && message.content === "?undo") {
+        else if (!message.author.bot && message.content === "?undo") {
             if (!this.commandHandler.undoMemory.has(message.author.id)) {
                 message.reply("You haven't performed any undoable action");
             }
@@ -806,7 +814,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
             // TODO: CRITICAL: Default access level set to 0
-            auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
             emojis: this.emojis,
             label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
         });
@@ -857,7 +864,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         command = command as Command;
 
-        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
+        const rawArgs: IRawArguments = CommandParser.resolveDefaultArgs({
             arguments: CommandParser.getArguments(content),
             schema: command.arguments,
 
@@ -876,38 +883,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
         );
 
         this.emit("handleCommandMessageEnd", message, content);
-    }
-
-    /**
-     * Setup the bot's auth store
-     */
-    public async setupAuthStore(): Promise<void> {
-        // Initially load data if it is a JsonAuthStore
-        if (this.authStore instanceof JsonAuthStore) {
-            await this.authStore.reload();
-        }
-
-        const guilds: Guild[] = this.client.guilds.array();
-
-        let entries: number = 0;
-
-        for (let i: number = 0; i < guilds.length; i++) {
-            if (!this.authStore.contains(guilds[i].id)) {
-                this.authStore.create(guilds[i].id);
-                entries++;
-            }
-        }
-
-        // Save the auth store if it is a JsonAuthStore
-        if (this.authStore instanceof JsonAuthStore) {
-            await this.authStore.save();
-        }
-
-        if (entries > 0) {
-            Log.info(`[Bot.setupAuthStore] Added a total of ${entries} new auth store entries`);
-        }
-
-        Log.success("[Bot.setupAuthStore] Auth store setup completed");
     }
 
     /**
@@ -932,6 +907,9 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.emit("restartStart", reloadModules);
         Log.verbose("[Bot.restart] Restarting");
 
+        // Dispose resources
+        await this.dispose();
+
         if (reloadModules) {
             // TODO: Actually reload all the features and commandStore
             // this.features.reloadAll(this);
@@ -952,12 +930,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
      */
     public async disconnect(): Promise<this> {
         this.emit("disconnecting");
-
-        // Save auth store if it's a JsonAuthStore
-        if (this.authStore instanceof JsonAuthStore) {
-            Log.verbose("[Bot.disconnect] Saving auth store");
-            await this.authStore.save();
-        }
+        await this.dispose();
 
         // Save data before exiting
         if (this.dataStore && this.dataStore instanceof JsonProvider) {
@@ -965,12 +938,10 @@ export default class Bot<ApiType = any> extends EventEmitter {
             await this.dataStore.save();
         }
 
-        // Reset the temp folder before shutdown
-        await this.temp.reset();
-
         // TODO
         //this.settings.save();
         await this.client.destroy();
+        this.client = new Client();
         Log.info("[Bot.disconnect] Disconnected");
         this.emit("disconnected");
 
@@ -994,5 +965,18 @@ export default class Bot<ApiType = any> extends EventEmitter {
         }
 
         this.emit("clearedTemp");
+    }
+
+    public async dispose(): Promise<void> {
+        for (let i: number = 0; i < this.disposables.length; i++) {
+            await this.disposables[i].dispose();
+        }
+
+        // Reset the temp folder before shutdown
+        await this.temp.reset();
+
+        await this.commandStore.disposeAll();
+        await this.services.disposeAll();
+        this.clearTemp();
     }
 }

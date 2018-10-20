@@ -11,7 +11,7 @@ export enum LogLevel {
     Debug
 }
 
-export interface ComposeOptions {
+export type ComposeOptions = {
     readonly message: any;
     readonly params: any[];
     readonly type: LogLevel;

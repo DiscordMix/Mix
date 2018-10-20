@@ -3,12 +3,12 @@ import path from "path";
 import fs from "fs";
 import {default as main} from "require-main-filename";
 
-export type LanguageSource = any;
+export type ILanguageSource = any;
 
 export default class Language {
-    private readonly languages: Map<string, LanguageSource>;
+    private readonly languages: Map<string, ILanguageSource>;
 
-    private default?: LanguageSource;
+    private default?: ILanguageSource;
 
     public readonly directory?: string;
 
@@ -21,9 +21,9 @@ export default class Language {
     }
 
     /**
-     * @return {ReadonlyMap<string, LanguageSource>}
+     * @return {ReadonlyMap<string, ILanguageSource>}
      */
-    public getLanguages(): ReadonlyMap<string, LanguageSource> {
+    public getLanguages(): ReadonlyMap<string, ILanguageSource> {
         return this.languages as ReadonlyMap<string, any>;
     }
 
@@ -68,7 +68,7 @@ export default class Language {
             throw new Error(`[Language.load] Language file does not exist: ${filePath}`);
         }
 
-        const data: LanguageSource = await Utils.readJson(filePath);
+        const data: ILanguageSource = await Utils.readJson(filePath);
 
         if (!(data instanceof Object) || Object.keys(data).length === 0) {
             throw new Error(`[Language.load] Language file is either not an object or empty: ${name}`);

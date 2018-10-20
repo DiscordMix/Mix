@@ -31,7 +31,7 @@ TimeAgo.locale(en);
 
 const timeAgo: any = new TimeAgo("en-US");
 
-export type SendOptions = {
+export type ISendOptions = {
     readonly user: User;
     readonly channel: any
     /* TextChannel | GroupDMChannel | DMChannel | GuildChannel */
@@ -142,10 +142,10 @@ export default class Utils {
 
     /**
      * @todo Return type
-     * @param {SendOptions} options
+     * @param {ISendOptions} options
      * @return {Promise<Message>} The message sent
      */
-    public static async send(options: SendOptions): Promise<any> {
+    public static async send(options: ISendOptions): Promise<any> {
         return await options.channel.send(new RichEmbed()
             .setColor(options.color ? options.color : "GREEN")
             .setTitle(options.title ? options.title : "")
@@ -424,7 +424,7 @@ export default class Utils {
      */
     public static escapeText(text: string, token: string): string {
         let finalText: string = text;
-        
+
         while (Patterns.anyMention.test(finalText)) {
             finalText = finalText.replace(Patterns.anyMention, "[Mention]");
         }

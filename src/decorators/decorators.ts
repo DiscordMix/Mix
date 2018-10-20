@@ -1,6 +1,6 @@
-import {CommandExecuted, CommandRestrict} from "../commands/command";
-import {Argument} from "..";
-import {FragmentMeta} from "../fragments/fragment";
+import {ICommandExecuted, ICommandRestrict} from "../commands/command";
+import {IArgument} from "..";
+import {IFragmentMeta} from "../fragments/fragment";
 import Log from "../core/log";
 import {Snowflake} from "discord.js";
 
@@ -51,13 +51,13 @@ export enum DiscordEvent {
     Warn = "warn"
 }
 
-export type BotEvent = {
+export type IBotEvent = {
     readonly name: string;
     readonly handler: any;
 }
 
-export const BotEvents: BotEvent[] = [];
-export const ChannelMessageEvents: BotEvent[] = [];
+export const BotEvents: IBotEvent[] = [];
+export const ChannelMessageEvents: IBotEvent[] = [];
 
 export const DecoratorCommands: DecoratorCommand[] = [];
 
@@ -100,23 +100,23 @@ export enum DecoratorCommandType {
     Weak
 }
 
-export interface DecoratorCommand {
-    readonly meta: FragmentMeta;
+export type DecoratorCommand = {
+    readonly meta: IFragmentMeta;
     readonly type: DecoratorCommandType;
 }
 
 export interface WeakCommand extends PartialWeakCommand {
-    readonly executed: CommandExecuted;
+    readonly executed: ICommandExecuted;
 }
 
 export interface PartialWeakCommand extends DecoratorCommand {
     readonly aliases?: string[];
-    readonly restrict?: CommandRestrict;
-    readonly arguments?: Argument[];
+    readonly restrict?: ICommandRestrict;
+    readonly arguments?: IArgument[];
 }
 
 export interface SimpleCommand extends DecoratorCommand {
-    readonly executed: CommandExecuted;
+    readonly executed: ICommandExecuted;
 }
 
 // options: command name | WeakCommand

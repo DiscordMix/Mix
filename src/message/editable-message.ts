@@ -1,7 +1,7 @@
 import Log from "../core/log";
 import Discord, {Message} from "discord.js";
 
-export type MessageEditOptions = {
+export type IMessageEditOptions = {
     readonly message: string;
     readonly title?: string;
     readonly color?: string;
@@ -36,10 +36,10 @@ export default class EditableMessage {
 
     /**
      * Edit an already sent message
-     * @param {MessageEditOptions} options
+     * @param {IMessageEditOptions} options
      * @return {Promise<Message>}
      */
-    public async edit(options: MessageEditOptions): Promise<Message> {
+    public async edit(options: IMessageEditOptions): Promise<Message> {
         // TODO: Default values?
         return this.message.edit("", new Discord.RichEmbed()
             .setColor(options.color ? options.color : "")

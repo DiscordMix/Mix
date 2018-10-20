@@ -1,7 +1,7 @@
 import CommandContext from "../../../commands/command-context";
 import {Command, Utils} from "../../..";
 import FormattedMessage from "../../../builders/formatted-message";
-import {PrimitiveArgType, RestrictGroup, Argument} from "../../../commands/command";
+import {PrimitiveArgType, RestrictGroup, IArgument} from "../../../commands/command";
 import EmbedBuilder from "../../../builders/embed-builder";
 
 type EvalArgs = {
@@ -9,13 +9,13 @@ type EvalArgs = {
     readonly silent: boolean;
 }
 
-export default class Eval extends Command<EvalArgs> {
+export default class EvalCommand extends Command<EvalArgs> {
     readonly meta = {
         name: "eval",
         description: "Evaluate code"
     };
 
-    readonly arguments: Argument[] = [
+    readonly arguments: IArgument[] = [
         {
             name: "code",
             description: "The code to evaluate",
@@ -56,7 +56,7 @@ export default class Eval extends Command<EvalArgs> {
             new FormattedMessage().codeBlock(Utils.escapeText(result.toString().trim() === '' || !result ? 'No return value.' : result.toString(), context.bot.client.token), "js").build()
         );
         embed.color('#36393f');
-    
+
         context.send(embed.build());
     }
 };

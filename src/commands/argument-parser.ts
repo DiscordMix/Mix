@@ -1,5 +1,5 @@
 import Log from "../core/log";
-import {Argument} from "./command";
+import {IArgument} from "./command";
 
 export default class ArgumentParser {
     /**
@@ -21,10 +21,10 @@ export default class ArgumentParser {
     }
 
     /**
-     * @param {Argument[]} schema
-     * @return {Argument[]}
+     * @param {IArgument[]} schema
+     * @return {IArgument[]}
      */
-    public static getRequiredArguments(schema: Argument[]): Argument[] {
-        return schema.filter((arg: Argument) => arg.required);
+    public static getRequiredArguments(schema: IArgument[]): IArgument[] {
+        return schema.filter((arg: IArgument) => arg.required);
     }
 }

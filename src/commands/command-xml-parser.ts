@@ -1,13 +1,13 @@
 import {parseString} from "xml2js";
 import fs from "fs";
 
-export type CommandInfo = {
+export type ICommandInfo = {
     readonly name: string;
     readonly aliases: string[];
 }
 
 export default abstract class CommandXmlParser {
-    public static parse(xmlString: string): Promise<CommandInfo | null> {
+    public static parse(xmlString: string): Promise<ICommandInfo | null> {
         return new Promise((resolve, reject) => {
             parseString(xmlString, {
                 trim: true
@@ -23,8 +23,8 @@ export default abstract class CommandXmlParser {
         });
     }
 
-    public static async parseFromFile(filePath: string): Promise<CommandInfo | null> {
-        return new Promise<CommandInfo | null>((resolve, reject) => {
+    public static async parseFromFile(filePath: string): Promise<ICommandInfo | null> {
+        return new Promise<ICommandInfo | null>((resolve, reject) => {
             fs.readFile(filePath, (error: Error, data: Buffer) => {
                 if (error) {
                     reject(error);

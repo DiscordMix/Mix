@@ -7,14 +7,14 @@ export enum SetupHelperActionType {
     Question
 }
 
-export interface FromContextOptions {
+export type FromContextOptions = {
     readonly context: CommandContext;
     readonly title?: string;
     readonly embed?: boolean;
     readonly timeout?: number
 }
 
-export interface SetupHelperOptions {
+export type SetupHelperOptions = {
     readonly client: Client;
     readonly channel: TextChannel;
     readonly userId: Snowflake;
@@ -23,17 +23,17 @@ export interface SetupHelperOptions {
     readonly embed?: boolean;
 }
 
-export interface SetupHelperAction {
+export type SetupHelperAction = {
     readonly type: SetupHelperActionType;
     readonly text: string;
 }
 
-export interface SetupHelperResult {
+export type SetupHelperResult = {
     readonly responses: string[];
     readonly expired: boolean;
 }
 
-export type ResponseHandler = (response: string, index: number) => string;
+export type IResponseHandler = (response: string, index: number) => string;
 
 export default class SetupHelper {
     private readonly client: any;
@@ -125,10 +125,10 @@ export default class SetupHelper {
     }
 
     /**
-     * @param {ResponseHandler} responseHandler
+     * @param {IResponseHandler} responseHandler
      * @return {Promise<SetupHelperResult>}
      */
-    public async finish(responseHandler?: ResponseHandler): Promise<SetupHelperResult> {
+    public async finish(responseHandler?: IResponseHandler): Promise<SetupHelperResult> {
         const responses: string[] = [];
 
         for (let i = 0; i < this.actionMap.length; i++) {
@@ -208,7 +208,7 @@ export default class SetupHelper {
                 timeout: options.timeout
             });
         }
-        
+
         Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${options.context.message.channel.type}'`);
 
         return null;

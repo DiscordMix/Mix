@@ -1,25 +1,25 @@
 import CommandContext from "../commands/command-context";
 
-export interface InhibitorMeta {
+export interface IInhibitorMeta {
     readonly name: string;
     readonly description: string;
 }
 
-export interface InhibitorOptions {
-    readonly meta: InhibitorMeta;
+export type IInhibitorOptions = {
+    readonly meta: IInhibitorMeta;
     readonly inspector: (context: CommandContext) => void;
 }
 
 export default class Inhibitor {
-    public readonly meta: InhibitorMeta;
+    public readonly meta: IInhibitorMeta;
     public readonly inspector: (context: CommandContext) => void;
 
     /**
-     * @param {InhibitorOptions} options
+     * @param {IInhibitorOptions} options
      */
-    constructor(options: InhibitorOptions) {
+    constructor(options: IInhibitorOptions) {
         /**
-         * @type {InhibitorMeta}
+         * @type {IInhibitorMeta}
          * @readonly
          */
         this.meta = options.meta;

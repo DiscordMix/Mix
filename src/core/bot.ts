@@ -633,6 +633,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
         });
 
         this.client.on("message", this.handleMessage.bind(this));
+        this.client.on("error", (error: Error) => Log.error(error.message));
 
         // If enabled, handle message edits (if valid) as commands
         if (this.options.updateOnMessageEdit) {

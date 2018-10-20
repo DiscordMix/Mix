@@ -2,7 +2,7 @@ import {Message, MessageReaction, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import CommandContext from "../commands/command-context";
 import {EventEmitter} from "events";
-import {IDisposable} from "..";
+import {DiscordEvent, IDisposable} from "..";
 
 export type IEmojiButtonClickHandler = (reaction: MessageReaction, user: User) => void;
 
@@ -83,8 +83,8 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
 
     public attach(context: Bot | CommandContext): this {
         this.bot = context instanceof Bot ? context : context.bot;
-        this.bot.client.on("messageReactionAdd", this.handleMessageReactionAdd.bind(this));
-        this.bot.client.on("messageReactionRemove", this.handleMessageReactionRemove.bind(this));
+        this.bot.client.on(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd.bind(this));
+        this.bot.client.on(DiscordEvent.MessageReactionRemoved, this.handleMessageReactionRemove.bind(this));
         this.bot.disposables.push(this);
 
         return this;
@@ -92,8 +92,8 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
 
     public dispose(): this {
         if (this.bot !== undefined) {
-            this.bot.client.removeListener("messageReactionAdd", this.handleMessageReactionAdd);
-            this.bot.client.removeListener("messageReactionRemove", this.handleMessageReactionRemove);
+            this.bot.client.removeListener(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd);
+            this.bot.client.removeListener(DiscordEvent.MessageReactionRemoved, this.handleMessageReactionRemove);
         }
 
         return this;

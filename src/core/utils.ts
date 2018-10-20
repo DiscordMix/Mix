@@ -457,6 +457,10 @@ export default class Utils {
     }
 
     public static getUserIdentifier(user: User): string {
+        if (!user || typeof user !== "object" || !user.id || !user.tag || typeof user.id !== "string" || typeof user.tag !== "string") {
+            throw new Error("Invalid input; Expecting User object");
+        }
+
         return `<@${user.id}> (${user.tag}:${user.id})`;
     }
 

@@ -221,6 +221,24 @@ describe("Utils.shuffle()", () => {
     });
 });
 
+describe("Utils.getUserIdentifier()", () => {
+    it("should return a valid user identifier", () => {
+        const result1: string = Utils.getUserIdentifier({
+            id: subjects.ids[3],
+            tag: "JohnDoe#1234"
+        } as any);
+
+        expect(result1).to.equal(`<@${subjects.ids[3]}> (JohnDoe#1234:${subjects.ids[3]})`);
+    });
+
+    it("should throw when provided invalid input", () => {
+        assert.throws(() => Utils.getUserIdentifier("" as any));
+        assert.throws(() => Utils.getUserIdentifier("hello world" as any));
+        assert.throws(() => Utils.getUserIdentifier(123 as any));
+        assert.throws(() => Utils.getUserIdentifier({} as any));
+    });
+});
+
 describe("Rgb.toString()", () => {
     it("should return the Rgb in string format", () => {
         const result = subjects.rgb.toString();

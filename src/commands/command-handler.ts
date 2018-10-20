@@ -5,13 +5,11 @@ import CommandStore, {CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import CommandExecutedEvent from "../events/command-executed-event";
 import {GuildMember, Snowflake, TextChannel, Message} from "discord.js";
-import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
 
 export type CommandHandlerOptions = {
     readonly commandStore: CommandStore;
-    readonly authStore: CommandAuthStore;
     readonly errorHandlers: Function[];
     readonly argumentTypes: any;
 }
@@ -26,7 +24,6 @@ export type IUndoAction = {
 
 export default class CommandHandler {
     public readonly commandStore: CommandStore;
-    public readonly authStore: CommandAuthStore;
     public readonly errorHandlers: Function[];
     public readonly _errorHandlers: Map<CommandManagerEvent, any>;
     public readonly argumentTypes: any;
@@ -42,12 +39,6 @@ export default class CommandHandler {
          * @readonly
          */
         this.commandStore = options.commandStore;
-
-        /**
-         * @type {CommandAuthStore}
-         * @readonly
-         */
-        this.authStore = options.authStore;
 
         /**
          * @type {Function[]}
@@ -104,19 +95,6 @@ export default class CommandHandler {
         }
         else if (command.restrict.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
             context.fail("You're not allowed to use that command");
-        }
-        else if (!this.authStore.hasAuthority(context.message.guild.id, context.message, command.restrict.auth, context.bot.owner)) {
-            if (!this.handleError(CommandManagerEvent.NoAuthority, context, command)) {
-                const minAuthority: string | null = this.authStore.getSchemaRankName(command.restrict.auth);
-
-                let rankName: string = "Unknown"; // TODO: Unknown should be a reserved auth level name (schema)
-
-                if (minAuthority !== null) {
-                    rankName = minAuthority.charAt(0).toUpperCase() + minAuthority.slice(1);
-                }
-
-                context.fail(`You don't have the authority to use that command. You must be at least a(n) **${rankName}**.`);
-            }
         }
         else if (!CommandParser.checkArguments({
             schema: command.arguments,

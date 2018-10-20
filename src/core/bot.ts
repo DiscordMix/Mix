@@ -8,12 +8,20 @@ import EmojiCollection from "../collections/emoji-collection";
 import Settings from "./settings";
 import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
-import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import Temp from "./temp";
-import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel, Guild} from "discord.js";
-import JsonAuthStore from "../commands/auth-stores/json-auth-store";
+import Discord, {Client, Guild, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import ServiceManager from "../services/service-manager";
-import Command, {ArgumentResolver, ArgumentStyle, ICustomArgType, IRawArguments, IUserGroup, DefaultCommandRestrict, InternalArgType, IArgumentType, IArgumentTypeChecker} from "../commands/command";
+
+import Command, {
+    ArgumentResolver,
+    ArgumentStyle,
+    DefaultCommandRestrict,
+    ICustomArgType,
+    InternalArgType,
+    IRawArguments,
+    IUserGroup
+} from "../commands/command";
+
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
 import EventEmitter from "events";
@@ -27,11 +35,11 @@ import Service from "../services/service";
 
 import {
     BotEvents,
+    ChannelMessageEvents,
     DecoratorCommand,
     DecoratorCommands,
     DecoratorCommandType,
-    SimpleCommand,
-    ChannelMessageEvents
+    SimpleCommand
 } from "../decorators/decorators";
 
 import StatCounter from "./stat-counter";
@@ -44,12 +52,12 @@ if (process.env.FORGE_DEBUG_MODE === "true") {
 
 const title: string =
 
-"███████╗ ██████╗ ██████╗  ██████╗ ███████╗\n" +
-"██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝\n" +
-"█████╗  ██║   ██║██████╔╝██║  ███╗█████╗  \n" +
-"██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝  \n" +
-"██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗\n" +
-"╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝ {version}";
+    "███████╗ ██████╗ ██████╗  ██████╗ ███████╗\n" +
+    "██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝\n" +
+    "█████╗  ██║   ██║██████╔╝██║  ███╗█████╗  \n" +
+    "██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝  \n" +
+    "██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗\n" +
+    "╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝ {version}";
 
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
@@ -134,7 +142,6 @@ const internalArgTypes: ICustomArgType[] = [
 
 export type IBotOptions = {
     readonly settings: Settings;
-    readonly authStore: CommandAuthStore;
     readonly dataStore?: DataProvider;
     readonly prefixCommand?: boolean;
     readonly primitiveCommands?: string[];
@@ -225,7 +232,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
     public readonly settings: Settings;
     public readonly temp: Temp;
     public readonly dataStore?: DataProvider;
-    public readonly authStore: CommandAuthStore;
     public readonly emojis?: EmojiCollection;
     public readonly client: Client; // TODO
     public readonly services: ServiceManager;
@@ -282,12 +288,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.dataStore = botOptions.dataStore;
 
         /**
-         * @type {CommandAuthStore}
-         * @readonly
-         */
-        this.authStore = botOptions.authStore || new JsonAuthStore("auth/schema.json", "auth/store.json");
-
-        /**
          * @type {EmojiCollection | undefined}
          * @readonly
          */
@@ -309,7 +309,7 @@ export default class Bot<ApiType = any> extends EventEmitter {
          * @type {CommandStore}
          * @readonly
          */
-        this.commandStore = new CommandStore(this, this.authStore);
+        this.commandStore = new CommandStore(this);
 
         /**
          * @type {ArgumentResolver[]}
@@ -344,7 +344,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
         this.commandHandler = new CommandHandler({
             commandStore: this.commandStore,
             errorHandlers: [], // TODO: Is this like it was? Is it ok?
-            authStore: this.authStore,
             argumentTypes: this.argumentTypes
         });
 
@@ -635,8 +634,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
                 this.console.setup(this);
             }
 
-            // Setup the command auth store
-            await this.setupAuthStore();
             Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag} | ${this.client.guilds.size} guild(s)`);
 
             const took: number = Math.round(performance.now() - this.setupStart);
@@ -814,7 +811,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
             // TODO: CRITICAL: Default access level set to 0
-            auth: message.guild ? this.authStore.getAuthority(message.guild.id, message.author.id, message.member.roles.map((role: Role) => role.name)) : 0,
             emojis: this.emojis,
             label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
         });
@@ -887,38 +883,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
     }
 
     /**
-     * Setup the bot's auth store
-     */
-    public async setupAuthStore(): Promise<void> {
-        // Initially load data if it is a JsonAuthStore
-        if (this.authStore instanceof JsonAuthStore) {
-            await this.authStore.reload();
-        }
-
-        const guilds: Guild[] = this.client.guilds.array();
-
-        let entries: number = 0;
-
-        for (let i: number = 0; i < guilds.length; i++) {
-            if (!this.authStore.contains(guilds[i].id)) {
-                this.authStore.create(guilds[i].id);
-                entries++;
-            }
-        }
-
-        // Save the auth store if it is a JsonAuthStore
-        if (this.authStore instanceof JsonAuthStore) {
-            await this.authStore.save();
-        }
-
-        if (entries > 0) {
-            Log.info(`[Bot.setupAuthStore] Added a total of ${entries} new auth store entries`);
-        }
-
-        Log.success("[Bot.setupAuthStore] Auth store setup completed");
-    }
-
-    /**
      * Connect the client
      * @return {Promise<this>}
      */
@@ -963,12 +927,6 @@ export default class Bot<ApiType = any> extends EventEmitter {
 
         for (let i: number = 0; i < this.disposables.length; i++) {
             await this.disposables[i].dispose();
-        }
-
-        // Save auth store if it's a JsonAuthStore
-        if (this.authStore instanceof JsonAuthStore) {
-            Log.verbose("[Bot.disconnect] Saving auth store");
-            await this.authStore.save();
         }
 
         // Save data before exiting

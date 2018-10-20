@@ -43,9 +43,6 @@ import ObjectProvider from "./data-providers/object-provider";
 import JsonProvider from "./data-providers/json-provider";
 import SqliteProvider from "./data-providers/sqlite-provider";
 import MysqlProvider from "./data-providers/mysql-provider";
-import CommandAuthStore from "./commands/auth-stores/command-auth-store";
-import ObjectAuthStore from "./commands/auth-stores/object-auth-store";
-import JsonAuthStore from "./commands/auth-stores/json-auth-store";
 import SetupHelper, {SetupHelperResult} from "./core/setup-helper";
 import Service, {IServiceOptions} from "./services/service";
 import KnexTable from "./data-providers/knex-table";
@@ -121,11 +118,6 @@ export {
     JsonProvider,
     SqliteProvider,
     MysqlProvider,
-
-    // Auth Stores
-    CommandAuthStore,
-    ObjectAuthStore,
-    JsonAuthStore,
 
     // Setup Helper
     SetupHelper,

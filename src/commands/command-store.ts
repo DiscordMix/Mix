@@ -1,7 +1,6 @@
 import Log from "../core/log";
 import Bot from "../core/bot";
 import Command, {GenericCommand} from "./command";
-import CommandAuthStore from "./auth-stores/command-auth-store";
 import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
 import {WeakCommand} from "..";
@@ -38,7 +37,6 @@ export type IReadonlyCommandMap = ReadonlyMap<string, Command | DecoratorCommand
 
 export default class CommandStore /* extends Collection */ {
     public readonly bot: Bot;
-    public readonly authStore: CommandAuthStore;
     public readonly cooldowns: Map<Snowflake, Map<string, number>>;
 
     public simpleCommands: Map<string, any>;
@@ -47,22 +45,14 @@ export default class CommandStore /* extends Collection */ {
 
     /**
      * @param {Bot} bot
-     * @param {CommandAuthStore} authStore
      */
-    constructor(bot: Bot, authStore: CommandAuthStore) {
+    constructor(bot: Bot) {
         /**
          * @type {Bot}
          * @private
          * @readonly
          */
         this.bot = bot;
-
-        /**
-         * @type {CommandAuthStore}
-         * @private
-         * @readonly
-         */
-        this.authStore = authStore;
 
         /**
          * @type {ICommandMap}

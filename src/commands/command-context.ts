@@ -10,7 +10,6 @@ import {Utils} from "..";
 export type CommandExecutionContextOptions = {
     readonly message: Message;
     readonly bot: Bot;
-    readonly auth: number;
     readonly emojis?: EmojiCollection;
     readonly label: string | null;
 }
@@ -18,7 +17,6 @@ export type CommandExecutionContextOptions = {
 export default class CommandContext<DataType = any> {
     public readonly message: Message;
     public readonly bot: Bot;
-    public readonly auth: number;
     public readonly emojis?: EmojiCollection;
     public readonly label: string | null;
 
@@ -41,12 +39,6 @@ export default class CommandContext<DataType = any> {
         this.bot = options.bot;
 
         /**
-         * @type {number}
-         * @readonly
-         */
-        this.auth = options.auth;
-
-        /**
          * @type {EmojiCollection}
          * @readonly
          */
@@ -57,14 +49,6 @@ export default class CommandContext<DataType = any> {
          * @readonly
          */
         this.label = options.label;
-    }
-
-    /**
-     * @param {Snowflake} userId
-     * @return {number}
-     */
-    public getAuth(userId: Snowflake): number {
-        return this.bot.authStore.getAuthority(this.message.guild.id, userId, this.message.guild.member(userId).roles.array().map((role: Role) => role.name));
     }
 
     /**
@@ -182,6 +166,7 @@ export default class CommandContext<DataType = any> {
     /**
      * @param {string} text
      * @param {string} [title=""]
+     * @param {boolean} [clean=true] Whether to filter the message
      * @return {Promise<EditableMessage>}
      */
     public async ok(text: string | FormattedMessage, title: string = "", clean: boolean = true): Promise<EditableMessage | null> {
@@ -240,13 +225,6 @@ export default class CommandContext<DataType = any> {
      */
     public async privateReply(message: string): Promise<Message | Message[]> {
         return await this.message.author.send(Utils.escapeText(message, this.bot.client.token));
-    }
-
-    /**
-     * @return {number}
-     */
-    public get senderAuth(): number {
-        return this.getAuth(this.sender.id);
     }
 
     /**

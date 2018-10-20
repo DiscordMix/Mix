@@ -1,4 +1,3 @@
-import CommandAuthStore from "../commands/auth-stores/command-auth-store";
 import DataProvider from "../data-providers/data-provider";
 
 export default class ConfigBuilder {
@@ -19,16 +18,6 @@ export default class ConfigBuilder {
      */
     public setCommandsPath(path: string): ConfigBuilder {
         this.properties.paths.commandStore = path;
-
-        return this;
-    }
-
-    /**
-     * @param {CommandAuthStore} authStore
-     * @return {ConfigBuilder}
-     */
-    public setAuthStore(authStore: CommandAuthStore): ConfigBuilder {
-        this.properties.authStore = authStore;
 
         return this;
     }

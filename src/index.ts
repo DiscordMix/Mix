@@ -33,11 +33,6 @@ import ChatEnvironment from "./core/chat-environment";
 import PluginManager from "./core/plugin-manager";
 import Collection from "./collections/collection";
 import EmojiCollection from "./collections/emoji-collection";
-import EmojiButton from "./emoji-ui/emoji-button";
-import EmojiMenuManager from "./emoji-ui/emoji-menu-manager";
-import EmojiMenu from "./emoji-ui/emoji-menu";
-import CommandWillExecuteEvent from "./events/command-will-execute-event";
-import CommandExecutedEvent from "./events/command-executed-event";
 import DataProvider from "./data-providers/data-provider";
 import ObjectProvider from "./data-providers/object-provider";
 import JsonProvider from "./data-providers/json-provider";
@@ -52,6 +47,8 @@ import Patterns from "./core/patterns";
 import EmojiMenu, {IEmojiButton} from "./emoji-menu/emoji-menu";
 import Pagination from "./pagination/pagination";
 import {IDisposable} from "./core/snap";
+import {ICommandExecutedEvent} from "./events/command-executed-event";
+import {ICommandWillExecuteEvent} from "./events/command-will-execute-event";
 
 export {
     // Commands
@@ -103,14 +100,13 @@ export {
     Collection,
     EmojiCollection,
 
-    // Emoji UI
-    EmojiButton,
-    EmojiMenuManager,
+    // Emoji Menu
+    IEmojiButton,
     EmojiMenu,
 
     // Events
-    CommandWillExecuteEvent,
-    CommandExecutedEvent,
+    ICommandWillExecuteEvent,
+    ICommandExecutedEvent,
 
     // Data Stores
     DataProvider,
@@ -129,8 +125,6 @@ export {
 
     // Misc
     KnexTable,
-    EmojiMenu,
-    IEmojiButton,
     Pagination,
 
     // Snap

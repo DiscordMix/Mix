@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import {default as main} from "require-main-filename";
 
-export type ILanguageSource = any;
+export type ILanguageSource = Map<string, string>;
 
 export default class Language {
     private readonly languages: Map<string, ILanguageSource>;
@@ -17,7 +17,7 @@ export default class Language {
      */
     constructor(directory?: string) {
         this.directory = directory;
-        this.languages = new Map<string, any>();
+        this.languages = new Map();
     }
 
     /**
@@ -43,14 +43,14 @@ export default class Language {
 
     /**
      * @param {string} key
-     * @return {any}
+     * @return {string | null}
      */
-    public get(key: string): any {
+    public get(key: string): string | null {
         if (!this.default) {
             throw new Error("[Language.get] No language source has been set as default");
         }
 
-        return this.default[key];
+        return this.default.get(key) || null;
     }
 
     /**

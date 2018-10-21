@@ -1,24 +1,6 @@
-import CommandEvent from "./command-event";
-import CommandContext from "../commands/command-context";
+import {ICommandEvent} from "./command-event";
 import Command from "../commands/command";
 
-/**
- * @extends CommandEvent
- */
-export default class CommandExecutedEvent extends CommandEvent {
-    public readonly command: Command;
-
-    /**
-     * @param {CommandContext} context
-     * @param {Command} command
-     */
-    constructor(context: CommandContext, command: Command) {
-        super(context);
-
-        /**
-         * @type {Command}
-         * @readonly
-         */
-        this.command = command;
-    }
+export interface ICommandExecutedEvent extends ICommandEvent {
+    readonly command: Command;
 }

@@ -1,17 +1,13 @@
 import CommandContext from "../commands/command-context";
-
-export interface IInhibitorMeta {
-    readonly name: string;
-    readonly description: string;
-}
+import {IFragment, IFragmentMeta} from "../fragments/fragment";
 
 export type IInhibitorOptions = {
-    readonly meta: IInhibitorMeta;
+    readonly meta: IFragmentMeta;
     readonly inspector: (context: CommandContext) => void;
 }
 
-export default class Inhibitor {
-    public readonly meta: IInhibitorMeta;
+export default class Inhibitor implements IFragment {
+    public readonly meta: IFragmentMeta;
     public readonly inspector: (context: CommandContext) => void;
 
     /**

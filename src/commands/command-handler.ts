@@ -3,7 +3,7 @@ import ChatEnvironment from "../core/chat-environment";
 import Command, {RestrictGroup, IRawArguments} from "./command";
 import CommandStore, {CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
-import CommandExecutedEvent from "../events/command-executed-event";
+import {ICommandExecutedEvent} from "../events/command-executed-event";
 import {GuildMember, Snowflake, TextChannel, Message} from "discord.js";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
@@ -219,7 +219,10 @@ export default class CommandHandler {
             }
 
             this.commandStore.setCooldown(context.sender.id, commandCooldown, command.meta.name);
-            context.bot.emit("commandExecuted", new CommandExecutedEvent(context, command), result);
+            context.bot.emit("commandExecuted", {
+                context,
+                command
+            }, result);
 
             if (context.bot.options.autoDeleteCommands && context.message.deletable) {
                 await context.message.delete();

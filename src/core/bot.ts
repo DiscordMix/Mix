@@ -1,7 +1,6 @@
 import CommandParser from "../commands/command-parser";
 import CommandContext from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
-import EmojiMenuManager from "../emoji-ui/emoji-menu-manager";
 import CommandStore from "../commands/command-store";
 import Utils from "./utils";
 import EmojiCollection from "../collections/emoji-collection";
@@ -237,7 +236,6 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly commandStore: CommandStore;
     public readonly commandHandler: CommandHandler;
     public readonly console: ConsoleInterface;
-    public readonly menus: EmojiMenuManager;
     public readonly prefixCommand: boolean;
     public readonly primitiveCommands: string[];
     public readonly userGroups: IUserGroup[];
@@ -354,12 +352,6 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @readonly
          */
         this.console = new ConsoleInterface();
-
-        /**
-         * @type {EmojiMenuManager}
-         * @readonly
-         */
-        this.menus = new EmojiMenuManager(this.client);
 
         /**
          * @type {boolean}

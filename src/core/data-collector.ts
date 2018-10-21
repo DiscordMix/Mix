@@ -18,8 +18,8 @@ export enum MemberType {
 
 export default class DataCollector {
     private readonly guild: Guild;
+    private readonly collectionType: MemberDataType;
 
-    private collectType: MemberDataType;
     private fromType: MemberType;
     private whereCondition?: (member: GuildMember) => boolean;
 
@@ -38,7 +38,7 @@ export default class DataCollector {
          * @type {MemberDataType}
          * @private
          */
-        this.collectType = MemberDataType.Everything;
+        this.collectionType = MemberDataType.Everything;
 
         /**
          * @type {MemberType}
@@ -85,7 +85,7 @@ export default class DataCollector {
 
         let result: GuildMember[] = [];
 
-        for (let i = 0; i < members.length; i++) {
+        for (let i: number = 0; i < members.length; i++) {
             if (this.fromType === MemberType.User && members[i].user.bot) {
                 continue;
             }
@@ -100,10 +100,10 @@ export default class DataCollector {
             result.filter(this.whereCondition);
         }
 
-        if (this.collectType !== MemberDataType.Everything) {
+        if (this.collectionType !== MemberDataType.Everything) {
             result.map((member) => {
                 // TODO: Checks should be outside for better performance
-                switch (this.collectType) {
+                switch (this.collectionType) {
                     case MemberDataType.Avatar: {
                         return member.user.avatarURL;
                     }
@@ -122,6 +122,10 @@ export default class DataCollector {
 
                     case MemberDataType.Status: {
                         return member.user.presence.game;
+                    }
+
+                    default: {
+                        throw new Error(`[DataCollector.finish] Invalid collection type: ${this.collectionType}`);
                     }
                 }
             });

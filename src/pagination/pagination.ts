@@ -2,8 +2,9 @@ import {EventEmitter} from "events";
 import {Message} from "discord.js";
 import Bot from "../core/bot";
 import Log from "../core/log";
+import {IDisposable} from "..";
 
-export default class Pagination extends EventEmitter {
+export default class Pagination extends EventEmitter implements IDisposable {
     public readonly content: string;
     public readonly maxLength: number;
 
@@ -17,6 +18,7 @@ export default class Pagination extends EventEmitter {
         this.current = currentPage;
     }
 
+    // TODO: Should perform a range check to prevent overflow
     public next(pages: number = 1): this {
         if (this.current + pages > 0) {
             this.current += pages;
@@ -46,8 +48,8 @@ export default class Pagination extends EventEmitter {
         return this;
     }
 
-    public dettach(): this {
-        Log.warn("[Pagination.dettach] Not yet implemented");
+    public dispose(): this {
+        Log.warn("[Pagination.detach] Not yet implemented");
 
         return this;
     }
@@ -57,7 +59,7 @@ export default class Pagination extends EventEmitter {
     }
 
     public get currentPage(): number {
-        return this.current;
+        return this.current + 1;
     }
 
     public getPage(): string {

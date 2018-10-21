@@ -33,9 +33,7 @@ const timeAgo: any = new TimeAgo("en-US");
 
 export type ISendOptions = {
     readonly user: User;
-    readonly channel: any
-    /* TextChannel | GroupDMChannel | DMChannel | GuildChannel */
-    ; // TODO: Type
+    readonly channel: TextChannel;
     readonly message: string;
     readonly color?: string;
     readonly footer?: string;
@@ -323,7 +321,7 @@ export default class Utils {
      * @return {boolean}
      */
     public static hasModerationPowers(member: GuildMember): boolean {
-        for (let i = 0; i < moderationPermissions.length; i++) {
+        for (let i: number = 0; i < moderationPermissions.length; i++) {
             if (member.hasPermission(moderationPermissions[i])) {
                 return true;
             }
@@ -456,6 +454,10 @@ export default class Utils {
         return finalText;
     }
 
+    /**
+     * @param {User} user
+     * @return {string}
+     */
     public static getUserIdentifier(user: User): string {
         if (!user || typeof user !== "object" || !user.id || !user.tag || typeof user.id !== "string" || typeof user.tag !== "string") {
             throw new Error("Invalid input; Expecting User object");
@@ -464,6 +466,10 @@ export default class Utils {
         return `<@${user.id}> (${user.tag}:${user.id})`;
     }
 
+    /**
+     * @param {GuildMember} member
+     * @return {string}
+     */
     public static getMemberIdentifier(member: GuildMember): string {
         return Utils.getUserIdentifier(member.user);
     }

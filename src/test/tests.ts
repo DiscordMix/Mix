@@ -8,6 +8,7 @@ import path from "path";
 import {expect} from "chai";
 import SwitchParser from "../commands/switch-parser";
 import * as assert from "assert";
+import Pagination from "../pagination/pagination";
 
 const globalAny: any = global;
 const describe: any = globalAny.describe;
@@ -498,5 +499,30 @@ describe("SwitchParser.getSwitches()", () => {
         expect(result7[3].key).to.equal("world");
         expect(result7[3].short).to.equal(false);
         expect(result7[3].value).to.equal("hello world");
+    });
+});
+
+describe("Pagination.next()", () => {
+    it("should return the valid next page", () => {
+        const pagination: Pagination = new Pagination("hello world", 1);
+
+        expect(pagination.getPage()).to.equal("h");
+        expect(pagination.next().getPage()).to.equal("e");
+        expect(pagination.next().getPage()).to.equal("l");
+        expect(pagination.next(-1).getPage()).to.equal("e");
+        expect(pagination.next(2).getPage()).to.equal("l");
+        expect(pagination.currentPage).to.equal(4);
+    });
+});
+
+describe("Pagination.previous()", () => {
+    it("should return the valid previous page", () => {
+        const pagination: Pagination = new Pagination("hello world", 1);
+
+        expect(pagination.next(3).previous(2).getPage()).to.equal("e");
+        expect(pagination.next(3).previous(1).getPage()).to.equal("l");
+        expect(pagination.previous(2).getPage()).to.equal("e");
+        expect(pagination.previous(-1).getPage()).to.equal("l");
+        expect(pagination.currentPage).to.equal(3);
     });
 });

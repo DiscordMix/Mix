@@ -6,7 +6,7 @@ import {DiscordEvent, IDisposable} from "..";
 
 export type IEmojiButtonClickHandler = (reaction: MessageReaction, user: User) => void;
 
-export type IEmojiButtonV2 = {
+export type IEmojiButton = {
     readonly emoji: Snowflake;
     readonly public?: boolean;
     readonly added?: IEmojiButtonClickHandler;
@@ -15,17 +15,17 @@ export type IEmojiButtonV2 = {
     readonly add?: boolean;
 }
 
-export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
+export default class EmojiMenu extends EventEmitter implements IDisposable {
     public readonly messageId: Snowflake;
     public readonly ownerId: Snowflake;
 
     // TODO: Should be more productive if using Map
-    public readonly buttons: IEmojiButtonV2[];
+    public readonly buttons: IEmojiButton[];
 
     private bot?: Bot;
     private messageAttached?: Message;
 
-    public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: IEmojiButtonV2[] = []) {
+    public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: IEmojiButton[] = []) {
         super();
 
         this.messageId = messageId;
@@ -33,14 +33,14 @@ export default class EmojiMenuV2 extends EventEmitter implements IDisposable {
         this.buttons = buttons;
 
         // Global click
-        this.on("emojiClick", (reaction: MessageReaction, user: User, emoji: IEmojiButtonV2) => {
+        this.on("emojiClick", (reaction: MessageReaction, user: User, emoji: IEmojiButton) => {
             if (emoji.clicked !== undefined && typeof emoji.clicked === "function") {
                 emoji.clicked(reaction, user);
             }
         });
     }
 
-    public add(button: IEmojiButtonV2): this {
+    public add(button: IEmojiButton): this {
         this.buttons.push(button);
 
         return this;

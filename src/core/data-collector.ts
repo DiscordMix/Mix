@@ -16,6 +16,7 @@ export enum MemberType {
     Everyone
 }
 
+// TODO: Should also be able to call a callback function every X iterations
 export default class DataCollector {
     private readonly guild: Guild;
     private readonly collectionType: MemberDataType;

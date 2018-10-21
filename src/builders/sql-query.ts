@@ -1,6 +1,6 @@
 export type ISqlQueryOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
 
-export type SqlQueryWhere = {
+export type ISqlQueryWhere = {
     readonly property: string;
     readonly value: any;
     readonly operator?: ISqlQueryOperator;
@@ -11,7 +11,7 @@ export default class SqlQuery {
 
     private prefix: string;
     private suffix?: string;
-    private wheres: SqlQueryWhere[];
+    private wheres: ISqlQueryWhere[];
     private limitAmount?: number;
 
     /**

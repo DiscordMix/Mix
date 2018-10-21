@@ -4,7 +4,7 @@ import Command, {GenericCommand} from "./command";
 import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
 import {WeakCommand} from "..";
-import {DecoratorCommand} from "../decorators/decorators";
+import {IDecoratorCommand} from "../decorators/decorators";
 // import Collection from "../core/collection";
 
 /**
@@ -23,7 +23,7 @@ export enum CommandManagerEvent {
     UnderCooldown
 }
 
-export type CommandCooldown = {
+export type ICommandCooldown = {
     readonly context: CommandContext;
     readonly command: Command;
     readonly end: number;
@@ -31,9 +31,9 @@ export type CommandCooldown = {
 
 const validCommandNamePattern: RegExp = /^[a-z_0-9-]{1,40}$/mi;
 
-export type ICommandMap = Map<string, Command | DecoratorCommand>;
+export type ICommandMap = Map<string, Command | IDecoratorCommand>;
 
-export type IReadonlyCommandMap = ReadonlyMap<string, Command | DecoratorCommand>;
+export type IReadonlyCommandMap = ReadonlyMap<string, Command | IDecoratorCommand>;
 
 export default class CommandStore /* extends Collection */ {
     public readonly bot: Bot;
@@ -61,7 +61,7 @@ export default class CommandStore /* extends Collection */ {
         this.commands = new Map();
 
         /**
-         * @type {CommandCooldown[]}
+         * @type {ICommandCooldown[]}
          * @private
          * @readonly
          */
@@ -115,7 +115,7 @@ export default class CommandStore /* extends Collection */ {
     /**
      * @param {SimpleCommand} command The command to register
      */
-    public registerDecorator(command: DecoratorCommand): void {
+    public registerDecorator(command: IDecoratorCommand): void {
         if (validCommandNamePattern.test(command.meta.name) === false) {
             Log.error(`[CommandStore.registerSimple] Failed to register simple command '${command.meta.name}' (Invalid name)`);
 
@@ -146,7 +146,7 @@ export default class CommandStore /* extends Collection */ {
         return this.commands.has(commandBase);
     }
 
-    public get(commandBase: string): Command | DecoratorCommand | null {
+    public get(commandBase: string): Command | IDecoratorCommand | null {
         return this.commands.get(commandBase) || null;
     }
 
@@ -163,9 +163,9 @@ export default class CommandStore /* extends Collection */ {
     }
 
     /**
-     * @param {DecoratorCommand[]} commands
+     * @param {IDecoratorCommand[]} commands
      */
-    public registerMultipleDecorator(commands: DecoratorCommand[]): this {
+    public registerMultipleDecorator(commands: IDecoratorCommand[]): this {
         for (let i = 0; i < commands.length; i++) {
             this.registerDecorator(commands[i]);
         }

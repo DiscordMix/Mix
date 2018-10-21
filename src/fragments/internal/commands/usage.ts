@@ -1,6 +1,6 @@
 import {IArgument, default as Command, PrimitiveArgType} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
-import {DecoratorCommand} from "../../../decorators/decorators";
+import {IDecoratorCommand} from "../../../decorators/decorators";
 
 type IUsageArgs = {
     readonly command: string;
@@ -22,7 +22,7 @@ export default class UsageCommand extends Command<IUsageArgs> {
     ];
 
     public executed(context: CommandContext, args: IUsageArgs): void {
-        const targetCommand: Command | DecoratorCommand | null = context.bot.commandStore.get(args.command);
+        const targetCommand: Command | IDecoratorCommand | null = context.bot.commandStore.get(args.command);
 
         if (!targetCommand) {
             context.fail("That command doesn't exist.");

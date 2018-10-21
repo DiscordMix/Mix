@@ -3,12 +3,11 @@ import ChatEnvironment from "../core/chat-environment";
 import Command, {RestrictGroup, IRawArguments} from "./command";
 import CommandStore, {CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
-import {ICommandExecutedEvent} from "../events/command-executed-event";
 import {GuildMember, Snowflake, TextChannel, Message} from "discord.js";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
 
-export type CommandHandlerOptions = {
+export type ICommandHandlerOptions = {
     readonly commandStore: CommandStore;
     readonly errorHandlers: Function[];
     readonly argumentTypes: any;
@@ -31,9 +30,9 @@ export default class CommandHandler {
 
     /**
      * @todo Replace 'errorHandlers' with '_errorHandlers'
-     * @param {CommandHandlerOptions} options
+     * @param {ICommandHandlerOptions} options
      */
-    constructor(options: CommandHandlerOptions) {
+    constructor(options: ICommandHandlerOptions) {
         /**
          * @type {CommandStore}
          * @readonly

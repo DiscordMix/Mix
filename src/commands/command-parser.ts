@@ -13,23 +13,23 @@ import Command, {
 
 import {Message} from "discord.js";
 import Log from "../core/log";
-import {DecoratorCommand} from "../decorators/decorators";
+import {IDecoratorCommand} from "../decorators/decorators";
 
-export type ResolveArgumentsOptions = {
+export type IResolveArgumentsOptions = {
     readonly arguments: IRawArguments;
     readonly schema: IArgument[];
     readonly resolvers: IArgumentResolver[];
     readonly message: Message;
 }
 
-export type ResolveDefaultArgsOptions = {
+export type IResolveDefaultArgsOptions = {
     readonly arguments: IRawArguments;
     readonly schema: IArgument[];
     readonly message: Message;
     readonly command: Command;
 }
 
-export type CheckArgumentsOptions = {
+export type ICheckArgumentsOptions = {
     readonly arguments: IRawArguments;
     readonly schema: IArgument[];
     readonly types: ICustomArgType[];
@@ -44,7 +44,7 @@ export default class CommandParser {
      * @param {string[]} prefixes
      * @return {Command | null}
      */
-    public static parse(commandString: string, manager: CommandStore, prefixes: string[]): Command | DecoratorCommand | null {
+    public static parse(commandString: string, manager: CommandStore, prefixes: string[]): Command | IDecoratorCommand | null {
         const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
@@ -118,10 +118,10 @@ export default class CommandParser {
 
     /**
      * Resolve the command arguments' values
-     * @param {ResolveArgumentsOptions} options
+     * @param {IResolveArgumentsOptions} options
      * @return {Array<*> | null} The resolved arguments
      */
-    public static resolveArguments(options: ResolveArgumentsOptions): any | null {
+    public static resolveArguments(options: IResolveArgumentsOptions): any | null {
         const result: any = {};
 
         // If the command accept no arguments, return an empty object
@@ -165,10 +165,10 @@ export default class CommandParser {
     }
 
     /**
-     * @param {ResolveDefaultArgsOptions} options
+     * @param {IResolveDefaultArgsOptions} options
      * @return {*}
      */
-    public static resolveDefaultArgs(options: ResolveDefaultArgsOptions): IRawArguments {
+    public static resolveDefaultArgs(options: IResolveDefaultArgsOptions): IRawArguments {
         const result: IRawArguments = [];
 
         for (let i = 0; i < options.schema.length; i++) {
@@ -206,10 +206,10 @@ export default class CommandParser {
     }
 
     /**
-     * @param {CheckArgumentsOptions} options
+     * @param {ICheckArgumentsOptions} options
      * @return {boolean}
      */
-    public static checkArguments(options: CheckArgumentsOptions): boolean {
+    public static checkArguments(options: ICheckArgumentsOptions): boolean {
         // Invalid amount of arguments
         if (!CommandParser.validateArgumentCount(options.command, options.arguments)) {
             return false;

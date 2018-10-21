@@ -7,7 +7,7 @@ import FormattedMessage from "../builders/formatted-message";
 import Log from "../core/log";
 import {Utils} from "..";
 
-export type CommandExecutionContextOptions = {
+export type ICommandExecutionContextOptions = {
     readonly message: Message;
     readonly bot: Bot;
     readonly emojis?: EmojiCollection;
@@ -23,9 +23,9 @@ export default class CommandContext<DataType = any> {
     public data?: DataType;
 
     /**
-     * @param {CommandExecutionContextOptions} options
+     * @param {ICommandExecutionContextOptions} options
      */
-    constructor(options: CommandExecutionContextOptions) {
+    constructor(options: ICommandExecutionContextOptions) {
         /**
          * @type {Message}
          * @readonly

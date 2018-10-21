@@ -38,10 +38,10 @@ import ObjectProvider from "./data-providers/object-provider";
 import JsonProvider from "./data-providers/json-provider";
 import SqliteProvider from "./data-providers/sqlite-provider";
 import MysqlProvider from "./data-providers/mysql-provider";
-import SetupHelper, {SetupHelperResult} from "./core/setup-helper";
+import SetupHelper, {ISetupHelperResult} from "./core/setup-helper";
 import Service, {IServiceOptions} from "./services/service";
 import KnexTable from "./data-providers/knex-table";
-import {on, WeakCommand, DecoratorCommand, SimpleCommand, DiscordEvent} from "./decorators/decorators";
+import {on, WeakCommand, IDecoratorCommand, SimpleCommand, DiscordEvent} from "./decorators/decorators";
 import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
 import EmojiMenu, {IEmojiButton} from "./emoji-menu/emoji-menu";
@@ -117,7 +117,7 @@ export {
 
     // Setup Helper
     SetupHelper,
-    SetupHelperResult,
+    ISetupHelperResult,
 
     // Services
     Service,
@@ -134,6 +134,6 @@ export {
     on,
     command,
     WeakCommand,
-    DecoratorCommand,
+    IDecoratorCommand,
     SimpleCommand
 };

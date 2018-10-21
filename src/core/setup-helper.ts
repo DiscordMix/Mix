@@ -7,14 +7,14 @@ export enum SetupHelperActionType {
     Question
 }
 
-export type FromContextOptions = {
+export type IFromContextOptions = {
     readonly context: CommandContext;
     readonly title?: string;
     readonly embed?: boolean;
     readonly timeout?: number
 }
 
-export type SetupHelperOptions = {
+export type ISetupHelperOptions = {
     readonly client: Client;
     readonly channel: TextChannel;
     readonly userId: Snowflake;
@@ -23,12 +23,12 @@ export type SetupHelperOptions = {
     readonly embed?: boolean;
 }
 
-export type SetupHelperAction = {
+export type ISetupHelperAction = {
     readonly type: SetupHelperActionType;
     readonly text: string;
 }
 
-export type SetupHelperResult = {
+export type ISetupHelperResult = {
     readonly responses: string[];
     readonly expired: boolean;
 }
@@ -42,12 +42,12 @@ export default class SetupHelper {
     private readonly title?: string;
     private readonly timeout: number;
     private readonly embed: boolean;
-    private readonly actionMap: SetupHelperAction[];
+    private readonly actionMap: ISetupHelperAction[];
 
     /**
-     * @param {SetupHelperOptions} options
+     * @param {ISetupHelperOptions} options
      */
-    constructor(options: SetupHelperOptions) {
+    constructor(options: ISetupHelperOptions) {
         /**
          * @type {*}
          * @private
@@ -91,7 +91,7 @@ export default class SetupHelper {
         this.embed = options.embed !== undefined ? options.embed : true;
 
         /**
-         * @type {SetupHelperAction[]}
+         * @type {ISetupHelperAction[]}
          * @private
          * @readonly
          */
@@ -126,9 +126,9 @@ export default class SetupHelper {
 
     /**
      * @param {IResponseHandler} responseHandler
-     * @return {Promise<SetupHelperResult>}
+     * @return {Promise<ISetupHelperResult>}
      */
-    public async finish(responseHandler?: IResponseHandler): Promise<SetupHelperResult> {
+    public async finish(responseHandler?: IResponseHandler): Promise<ISetupHelperResult> {
         const responses: string[] = [];
 
         for (let i = 0; i < this.actionMap.length; i++) {
@@ -193,10 +193,10 @@ export default class SetupHelper {
     }
 
     /**
-     * @param {FromContextOptions} options
+     * @param {IFromContextOptions} options
      * @return {SetupHelper | null}
      */
-    public static fromContext(options: FromContextOptions): SetupHelper | null {
+    public static fromContext(options: IFromContextOptions): SetupHelper | null {
         if (options.context.message.channel instanceof TextChannel) {
             //context.bot.client, context.message.channel, context.sender.id, title, timeout, embed
             return new SetupHelper({

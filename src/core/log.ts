@@ -11,7 +11,7 @@ export enum LogLevel {
     Debug
 }
 
-export type ComposeOptions = {
+export type IComposeOptions = {
     readonly message: any;
     readonly params: any[];
     readonly type: LogLevel;
@@ -23,10 +23,10 @@ export default class Log {
     public static level: LogLevel = LogLevel.Success;
 
     /**
-     * @param {ComposeOptions} options
+     * @param {IComposeOptions} options
      * @return {Promise<void>}
      */
-    public static async compose(options: ComposeOptions): Promise<any> {
+    public static async compose(options: IComposeOptions): Promise<any> {
         const finalColor = options.color ? options.color : "white";
         const finalPrefix = options.prefix ? options.prefix : null;
 
@@ -74,7 +74,7 @@ export default class Log {
      * @return {Promise<*>}
      */
     public static info(message: any, ...params: any[]): Promise<any> {
-        const options: ComposeOptions = {
+        const options: IComposeOptions = {
             message: message,
             params: params,
             type: LogLevel.Info,
@@ -91,7 +91,7 @@ export default class Log {
      * @return {Promise<*>}
      */
     public static success(message: any, ...params: any[]): Promise<any> {
-        const options: ComposeOptions = {
+        const options: IComposeOptions = {
             message: message,
             params: params,
             type: LogLevel.Success,
@@ -108,7 +108,7 @@ export default class Log {
      * @return {Promise<*>}
      */
     public static warn(message: any, ...params: any[]): Promise<any> {
-        const options: ComposeOptions = {
+        const options: IComposeOptions = {
             message: message,
             params: params,
             type: LogLevel.Warn,
@@ -125,7 +125,7 @@ export default class Log {
      * @return {Promise<*>}
      */
     public static error(message: any, ...params: any[]): Promise<any> {
-        const options: ComposeOptions = {
+        const options: IComposeOptions = {
             message: message,
             params: params,
             type: LogLevel.Error,
@@ -142,7 +142,7 @@ export default class Log {
      * @return {Promise<*>}
      */
     public static throw(message: any, ...params: any[]): Promise<any> {
-        const options: ComposeOptions = {
+        const options: IComposeOptions = {
             message: message,
             params: params,
             type: LogLevel.Fatal,
@@ -163,7 +163,7 @@ export default class Log {
      * @return {Promise<*>}
      */
     public static verbose(message: any, ...params: any[]): Promise<any> {
-        const options: ComposeOptions = {
+        const options: IComposeOptions = {
             message: message,
             params: params,
             type: LogLevel.Verbose,
@@ -180,7 +180,7 @@ export default class Log {
      * @return {Promise<*>}
      */
     public static debug(message: any, ...params: any[]): Promise<any> {
-        const options: ComposeOptions = {
+        const options: IComposeOptions = {
             message: message,
             params: params,
             type: LogLevel.Debug,

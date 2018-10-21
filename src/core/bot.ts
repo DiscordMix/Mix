@@ -35,7 +35,7 @@ import Service from "../services/service";
 import {
     BotEvents,
     ChannelMessageEvents,
-    DecoratorCommand,
+    IDecoratorCommand,
     DecoratorCommands,
     DecoratorCommandType,
     SimpleCommand
@@ -693,7 +693,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         // Use any registered prefix, default to index 0
         const content: string = `${this.settings.general.prefixes[0]}${base} ${args.join(" ")}`.trim();
 
-        let command: Command | DecoratorCommand | null = CommandParser.parse(
+        let command: Command | IDecoratorCommand | null = CommandParser.parse(
             content,
             this.commandStore,
             this.settings.general.prefixes
@@ -842,7 +842,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
         this.emit("handleCommandMessageStart", message, content);
 
-        let command: Command | DecoratorCommand | null = CommandParser.parse(
+        let command: Command | IDecoratorCommand | null = CommandParser.parse(
             content,
             this.commandStore,
             this.settings.general.prefixes
@@ -855,7 +855,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         }
 
         if ((command as any).type !== undefined && typeof (command as any).type === "number" && DecoratorCommandType[(command as any).type] !== undefined) {
-            command = command as DecoratorCommand;
+            command = command as IDecoratorCommand;
 
             if (command.type === DecoratorCommandType.Simple) {
                 // TODO: Simple commands have an empty array of arguments, which doesn't look good

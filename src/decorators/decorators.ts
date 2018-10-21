@@ -1,6 +1,6 @@
 import {ICommandExecuted, ICommandRestrict} from "../commands/command";
 import {IArgument} from "..";
-import {IFragmentMeta} from "../fragments/fragment";
+import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import Log from "../core/log";
 import {Snowflake} from "discord.js";
 
@@ -59,7 +59,7 @@ export type IBotEvent = {
 export const BotEvents: IBotEvent[] = [];
 export const ChannelMessageEvents: IBotEvent[] = [];
 
-export const DecoratorCommands: DecoratorCommand[] = [];
+export const DecoratorCommands: IDecoratorCommand[] = [];
 
 // Maybe keep this for global static listeners?
 // TODO: Find a better way, like use the start method instead to define listeners, since decorators are called on class definition NOT instanciation
@@ -100,8 +100,7 @@ export enum DecoratorCommandType {
     Weak
 }
 
-export type DecoratorCommand = {
-    readonly meta: IFragmentMeta;
+export interface IDecoratorCommand extends IFragment {
     readonly type: DecoratorCommandType;
 }
 
@@ -109,13 +108,13 @@ export interface WeakCommand extends PartialWeakCommand {
     readonly executed: ICommandExecuted;
 }
 
-export interface PartialWeakCommand extends DecoratorCommand {
+export interface PartialWeakCommand extends IDecoratorCommand {
     readonly aliases?: string[];
     readonly restrict?: ICommandRestrict;
     readonly arguments?: IArgument[];
 }
 
-export interface SimpleCommand extends DecoratorCommand {
+export interface SimpleCommand extends IDecoratorCommand {
     readonly executed: ICommandExecuted;
 }
 

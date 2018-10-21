@@ -19,6 +19,7 @@ export default abstract class Service<ApiType = undefined | any> implements IFra
     protected readonly api: ApiType;
 
     /**
+     * @todo Just accept bot and api, no need for Options obj
      * @param {IServiceOptions} options
      */
     protected constructor(options: IServiceOptions) {

@@ -140,16 +140,14 @@ export default class ConsoleInterface {
         this.commands.set("reload", async () => {
             const startTime: number = performance.now();
 
-            await bot.disconnect();
+            await bot.restart(true);
 
             // TODO: New fragment system
             // await bot.commandLoader.reloadAll();
 
-            await bot.connect();
-
             const endTime = performance.now();
 
-            console.log(`Reload complete | Took ${Math.round(endTime - startTime) / 1000}s`);
+            console.log(`Reload complete | Took ${Math.round(endTime - startTime)}ms`);
         });
 
         this.commands.set("clear", console.clear);

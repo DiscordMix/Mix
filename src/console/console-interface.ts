@@ -159,7 +159,7 @@ export default class ConsoleInterface {
         // Prompt setup
         ci.on("line", async (input: string) => {
             const args: string[] = input.trim().split(" ");
-            const base: string = args[0];
+            const base: string = args[0].trim();
 
             args.splice(0, 1);
 

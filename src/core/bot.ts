@@ -196,6 +196,28 @@ const DefaultBotOptions: IBotExtraOptions = {
     consoleInterface: true
 };
 
+export enum EBotEvents {
+    SetupStart = "setupStart",
+    LoadingInternalFragments = "loadInternalFragments",
+    LoadedInternalFragments = "loadedInternalFragments",
+    LoadingServices = "loadServices",
+    LoadedServices = "loadedServices",
+    Ready = "ready",
+    HandleMessageStart = "handleMessageStart",
+    HandleMessageEnd = "handleMessageEnd",
+    HandleCommandMessageStart = "handleCommandMessageStart",
+    HandleCommandMessageEnd = "handleCommandMessageEnd",
+    Restarting = "restartStart",
+    Restarted = "restartCompleted",
+    Disconnecting = "disconnecting",
+    Disconnected = "disconnected",
+    ClearingTemp = "clearingTemp",
+    ClearedTemp = "clearedTemp",
+    HandlingCommand = "handlingCommand",
+    CommandError = "commandError",
+    CommandExecuted = "commandExecuted"
+}
+
 /**
  * Bot events:
  *

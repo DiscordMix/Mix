@@ -94,9 +94,6 @@ export default class CommandStore /* extends Collection */ {
         // TODO: Verify that it returns only type Command?
         const commandPath: string = (this.get(base) as any).meta.forgeCommandPath;
 
-        console.log(this.get(base));
-        console.log(`Reloading (( ${commandPath} ))`);
-
         const commandPackage: IPackage | null = await FragmentLoader.reload(commandPath);
 
         if (commandPackage === null) {

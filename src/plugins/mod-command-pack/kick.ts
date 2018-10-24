@@ -1,6 +1,6 @@
 import {ChatEnvironment, Command, CommandContext, Permission} from "../..";
 import {GuildMember} from "discord.js";
-import {IArgument, PrimitiveArgType} from "../../commands/command";
+import {IArgument, TrivialArgType} from "../../commands/command";
 
 type IKickArgs = {
     readonly member: GuildMember;
@@ -23,7 +23,7 @@ export default abstract class KickCommand extends Command<IKickArgs> {
         {
             name: "reason",
             description: "The reason for performing this action",
-            type: PrimitiveArgType.String
+            type: TrivialArgType.String
         }
     ];
 

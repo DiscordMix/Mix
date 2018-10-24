@@ -23,7 +23,7 @@ export default class ConsoleCommand {
         this.args = args;
     }
 
-    // TODO
+    // TODO:
     /**
      * @param {string} consoleCommandString
      * @return {ConsoleCommand}

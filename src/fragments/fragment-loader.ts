@@ -10,19 +10,19 @@ const validFragmentDescPattern: RegExp = /^(?:[a-z]{0,}[^\n\r\t\0]+){1,100}$/i;
 export default abstract class FragmentLoader {
     /**
      * @todo Make use of the 'isolate' parameter
-     * @param {string} file The path to the fragment
+     * @param {string} filePath The path to the fragment
      * @param {boolean} [isolate=false] Whether to isolate the fragment environment
      * @return {Promise<IFragment | null>}
      */
-    public static async load(file: string, isolate: boolean = false): Promise<IFragment | null> {
-        if (!fs.existsSync(file)) {
-            Log.warn(`[FragmentLoader.load] Fragment path does not exist: ${file}`);
+    public static async load(filePath: string, isolate: boolean = false): Promise<IFragment | null> {
+        if (!fs.existsSync(filePath)) {
+            Log.warn(`[FragmentLoader.load] Fragment path does not exist: ${filePath}`);
 
             return null;
         }
 
         try {
-            let module: any = require(file);
+            let module: any = require(filePath);
 
             // TODO: Make use of function exports as "simple commands"?
             const validEs6DefaultTypes = ["object", "function"];
@@ -31,6 +31,8 @@ export default abstract class FragmentLoader {
             if (module.default !== undefined && validEs6DefaultTypes.includes(typeof module.default)) {
                 module = module.default;
             }
+
+            console.log(`(( ${module.meta.forgeCommandPath} ))`);
 
             return module;
         }
@@ -44,6 +46,21 @@ export default abstract class FragmentLoader {
         }
     }
 
+    /**
+     * @todo Test and make sure it works
+     * @param {string} file
+     * @param {boolean} isolate
+     */
+    public static async reload(file: string, isolate: boolean = false): Promise<IFragment | null> {
+        delete require.cache[require.resolve(file)];
+
+        return FragmentLoader.load(file, isolate);
+    }
+
+    /**
+     * Determine whether a fragment is valid
+     * @param {IFragment} fragment
+     */
     public static validate(fragment: IFragment): boolean {
         if (!fragment.meta) {
             return false;

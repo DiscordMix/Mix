@@ -1,7 +1,7 @@
 import CommandContext from "../../../commands/command-context";
 import {Command, Utils} from "../../..";
 import FormattedMessage from "../../../builders/formatted-message";
-import {PrimitiveArgType, RestrictGroup, IArgument} from "../../../commands/command";
+import {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
 import EmbedBuilder from "../../../builders/embed-builder";
 
 type EvalArgs = {
@@ -19,13 +19,13 @@ export default class EvalCommand extends Command<EvalArgs> {
         {
             name: "code",
             description: "The code to evaluate",
-            type: PrimitiveArgType.String,
+            type: TrivialArgType.String,
             required: true
         },
         {
             name: "silent",
             description: "Send result or not",
-            type: PrimitiveArgType.Boolean,
+            type: TrivialArgType.Boolean,
             required: false
         }
     ];

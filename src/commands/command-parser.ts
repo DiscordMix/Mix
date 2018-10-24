@@ -6,7 +6,7 @@ import Command, {
     IArgumentTypeChecker,
     IArgument,
     IArgumentResolver, IDefaultValueResolver,
-    PrimitiveArgType,
+    TrivialArgType,
     IRawArguments,
     ICustomArgType
 } from "./command";
@@ -136,7 +136,7 @@ export default class CommandParser {
 
             // Ignore the type if it's not a string
             if (CommandParser.isTypeValid(schemaEntry.type)) {
-                Log.error(`[CommandParser.resolveArguments] Expecting type of schema entry '${schemaEntry.name}' to be either a string or a primitive type`);
+                Log.error(`[CommandParser.resolveArguments] Expecting type of schema entry '${schemaEntry.name}' to be either a string or a trivial type`);
 
                 return null;
             }
@@ -217,14 +217,14 @@ export default class CommandParser {
 
         // TODO: Will this work with optional args?
         for (let i: number = 0; i < options.arguments.length; i++) {
-            // In-command primitive type
-            if (CommandParser.isTypePrimitive(options.schema[i].type)) {
-                if (options.schema[i].type === PrimitiveArgType.String) {
+            // In-command trivial type
+            if (CommandParser.isTypeTrivial(options.schema[i].type)) {
+                if (options.schema[i].type === TrivialArgType.String) {
                     if (typeof(options.arguments[i]) !== "string") {
                         return false;
                     }
                 }
-                else if (options.schema[i].type === PrimitiveArgType.Boolean) {
+                else if (options.schema[i].type === TrivialArgType.Boolean) {
                     if (CommandParser.parseBoolean(options.arguments[i]) === null) {
                         return false;
                     }
@@ -238,13 +238,13 @@ export default class CommandParser {
                     }
 
                     switch (options.schema[i].type) {
-                        case PrimitiveArgType.Integer: {
+                        case TrivialArgType.Integer: {
                             // Integer covers all numbers
 
                             break;
                         }
 
-                        case PrimitiveArgType.UnsignedInteger: {
+                        case TrivialArgType.UnsignedInteger: {
                             // Value must be higher or equal to zero
                             if (value < 0) {
                                 return false;
@@ -253,7 +253,7 @@ export default class CommandParser {
                             break;
                         }
 
-                        case PrimitiveArgType.NonZeroInteger: {
+                        case TrivialArgType.NonZeroInteger: {
                             // Value must be one or higher
                             if (value < 1) {
                                 return false;
@@ -336,8 +336,8 @@ export default class CommandParser {
      * @param {IArgumentType} type
      * @return {boolean}
      */
-    private static isTypePrimitive(type: IArgumentType): boolean {
-        return typeof(type) === "number" && PrimitiveArgType[type] !== undefined;
+    private static isTypeTrivial(type: IArgumentType): boolean {
+        return typeof(type) === "number" && TrivialArgType[type] !== undefined;
     }
 
     /**
@@ -345,7 +345,7 @@ export default class CommandParser {
      * @return {boolean} Whether the provided type is valid
      */
     private static isTypeValid(type: IArgumentType): boolean {
-        return typeof type !== "string" && !CommandParser.isTypePrimitive(type);
+        return typeof type !== "string" && !CommandParser.isTypeTrivial(type);
     }
 
     /**

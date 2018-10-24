@@ -20,6 +20,6 @@ export default class PluginManager {
      * @return {void}
      */
     public load(name: string): /* Plugin */ void {
-        // TODO
+        // TODO:
     }
 }

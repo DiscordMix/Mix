@@ -174,7 +174,7 @@ export default class CommandHandler {
     }
 
     /**
-     * @todo Split this method into a class
+     * @todo Split this method into a class?
      * @todo Since it's returning a Promise, review
      * @param {CommandContext} context
      * @param {Command} command The command to handle

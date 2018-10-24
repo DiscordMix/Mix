@@ -2,7 +2,7 @@ import CommandContext from "../../../commands/command-context";
 import {Command, Utils} from "../../..";
 import {exec} from "child_process";
 import FormattedMessage from "../../../builders/formatted-message";
-import {PrimitiveArgType, RestrictGroup, IArgument} from "../../../commands/command";
+import {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
 import EmbedBuilder from "../../../builders/embed-builder";
 
 type CliArgs = {
@@ -21,7 +21,7 @@ export default class CliCommand extends Command<CliArgs> {
         {
             name: "command",
             description: "The command to execute",
-            type: PrimitiveArgType.String,
+            type: TrivialArgType.String,
             required: true
         }
     ];

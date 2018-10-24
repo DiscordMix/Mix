@@ -12,9 +12,9 @@
         time investing.
 
 * Check command's schema types when loading, as when executed the resolve function will throw error if a command has
-    a type that is not either a string nor a primitive type.
+    a type that is not either a string nor a trivial type.
 
-* When primitive commands are removed from the consumer list, it will say "... enabled 5/6 commands" make it say
+* When internal commands are removed from the consumer list, it will say "... enabled 5/6 commands" make it say
     "... enabled 5/6 commands (1 undesired)" instead.
 
 * DM commands don't work, they throw 'name' error of undefined.

@@ -723,7 +723,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         });
 
         // TODO: Debugging
-        Log.debug("raw args, ", rawArgs);
+        // Log.debug("raw args, ", rawArgs);
 
         return this.commandHandler.handle(
             this.createCommandContext(referer),
@@ -738,6 +738,8 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @return {Promise<void>}
      */
     public async handleMessage(message: Message, edited: boolean = false): Promise<void> {
+        this.statCounter.stats.messagesSeen++;
+
         if (this.suspended) {
             return;
         }
@@ -912,6 +914,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     /**
+     * @todo "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached)
      * @todo Use the reload modules param
      * Restart the client
      * @param {boolean} reloadModules Whether to reload all modules

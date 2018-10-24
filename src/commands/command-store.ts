@@ -6,9 +6,6 @@ import {Snowflake} from "discord.js";
 import {WeakCommand} from "..";
 import {IDecoratorCommand} from "../decorators/decorators";
 import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
-import path from "path";
-import {IFragment} from "../fragments/fragment";
-// import Collection from "../core/collection";
 
 /**
  * @enum {number}

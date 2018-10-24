@@ -7,22 +7,27 @@ import path from "path";
 const validFragmentNamePattern: RegExp = /^(?:[a-z]{0,}[a-z0-9-_\S]+){2,50}$/i;
 const validFragmentDescPattern: RegExp = /^(?:[a-z]{0,}[^\n\r\t\0]+){1,100}$/i;
 
+export type IPackage = {
+    readonly module: IFragment;
+    readonly path: string;
+}
+
 export default abstract class FragmentLoader {
     /**
      * @todo Make use of the 'isolate' parameter
-     * @param {string} file The path to the fragment
+     * @param {string} filePath The path to the fragment
      * @param {boolean} [isolate=false] Whether to isolate the fragment environment
      * @return {Promise<IFragment | null>}
      */
-    public static async load(file: string, isolate: boolean = false): Promise<IFragment | null> {
-        if (!fs.existsSync(file)) {
-            Log.warn(`[FragmentLoader.load] Fragment path does not exist: ${file}`);
+    public static async load(filePath: string, isolate: boolean = false): Promise<IPackage | null> {
+        if (!fs.existsSync(filePath)) {
+            Log.warn(`[FragmentLoader.load] Fragment path does not exist: ${filePath}`);
 
             return null;
         }
 
         try {
-            let module: any = require(file);
+            let module: any = require(filePath);
 
             // TODO: Make use of function exports as "simple commands"?
             const validEs6DefaultTypes = ["object", "function"];
@@ -32,7 +37,12 @@ export default abstract class FragmentLoader {
                 module = module.default;
             }
 
-            return module;
+            console.log(module);
+
+            return {
+                module,
+                path: filePath
+            };
         }
         catch (exception) {
             // TODO: Was debugging I guess?
@@ -44,6 +54,21 @@ export default abstract class FragmentLoader {
         }
     }
 
+    /**
+     * @todo Test and make sure it works
+     * @param {string} file
+     * @param {boolean} isolate
+     */
+    public static async reload(file: string, isolate: boolean = false): Promise<IPackage | null> {
+        delete require.cache[require.resolve(file)];
+
+        return FragmentLoader.load(file, isolate);
+    }
+
+    /**
+     * Determine whether a fragment is valid
+     * @param {IFragment} fragment
+     */
     public static validate(fragment: IFragment): boolean {
         if (!fragment.meta) {
             return false;
@@ -108,7 +133,7 @@ export default abstract class FragmentLoader {
     /**
      * @param {string[]} candidates
      * @param {boolean} isolate
-     * @return {Promise<IFragment[]> | null>}
+     * @return {Promise<IFragment[] | null>}
      */
     public static async loadMultiple(candidates: string[], isolate: boolean = false): Promise<IFragment[] | null> {
         if (candidates.length === 0) {
@@ -120,10 +145,10 @@ export default abstract class FragmentLoader {
         const result: IFragment[] = [];
 
         for (let i: number = 0; i < candidates.length; i++) {
-            const fragment: IFragment | null = await FragmentLoader.load(candidates[i], isolate);
+            const packg: IPackage | null = await FragmentLoader.load(candidates[i], isolate);
 
-            if (fragment !== null) {
-                result.push(fragment);
+            if (packg !== null) {
+                result.push(packg.module);
             }
         }
 

@@ -33,11 +33,11 @@ export default class BotBuilder {
     }
 
     /**
-     * @param {string[]} primitiveCommands
+     * @param {string[]} internalCommands
      * @return {BotBuilder}
      */
-    public setPrimitiveCommands(primitiveCommands: string[]): BotBuilder {
-        this.bot.primitiveCommands = primitiveCommands;
+    public setInternalCommands(internalCommands: string[]): BotBuilder {
+        this.bot.internalCommands = internalCommands;
 
         return this;
     }
@@ -76,7 +76,7 @@ export default class BotBuilder {
      * @return {Bot}
      */
     public build(): Bot {
-        // TODO
+        // TODO:
         return new Bot(this.bot);
     }
 }

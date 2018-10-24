@@ -25,11 +25,11 @@ export type IDefaultValueResolver = (message: Message) => string;
 export type IArgumentTypeChecker = (argument: string, message: Message) => boolean;
 
 /**
- * PrimitiveArgType      : Internal check
- * RegExp                : Inline check
- * IArgumentTypeChecker   : Provided type check by method
+ * TrivialArgType       : Internal check
+ * RegExp               : Inline check
+ * IArgumentTypeChecker : Provided type check by method
  */
-export type IArgumentType = PrimitiveArgType | IArgumentTypeChecker | RegExp | string;
+export type IArgumentType = TrivialArgType | IArgumentTypeChecker | RegExp | string;
 
 export type ICustomArgType = {
     readonly name: string;
@@ -38,7 +38,7 @@ export type ICustomArgType = {
 
 export type IRawArguments = string[];
 
-export enum PrimitiveArgType {
+export enum TrivialArgType {
     String,
     Integer,
     UnsignedInteger,

@@ -147,7 +147,7 @@ export default class ConsoleInterface {
 
             const endTime = performance.now();
 
-            console.log(`Reload complete | Took ${Math.round(endTime - startTime)}ms`);
+            Log.success(`[CLI.reload] Reload complete | Took ${Math.round(endTime - startTime)}ms`);
         });
 
         this.commands.set("clear", console.clear);
@@ -179,9 +179,10 @@ export default class ConsoleInterface {
             ci.prompt();
         });
 
-        ci.on("error", (error: Error) => {
+        // TODO:
+        /* ci.on("error", (error: Error) => {
             Log.error(error.message);
-        });
+        }); */
 
         ci.on("close", () => {
             // TODO: Temp. disabled due to interferring and going straight disconnection on vps/linux

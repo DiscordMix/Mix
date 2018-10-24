@@ -281,7 +281,7 @@ export default class Utils {
      * @return {Promise<string>}
      */
     public static async getForgeVersion(): Promise<string> {
-        // TODO
+        // TODO:
         // return (await this.readJson("package.json")).version;
 
         // TODO: Hard coded

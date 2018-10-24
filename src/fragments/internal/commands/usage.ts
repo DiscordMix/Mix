@@ -1,4 +1,4 @@
-import {IArgument, default as Command, PrimitiveArgType} from "../../../commands/command";
+import {IArgument, default as Command, TrivialArgType} from "../../../commands/command";
 import CommandContext from "../../../commands/command-context";
 import {IDecoratorCommand} from "../../../decorators/decorators";
 
@@ -15,7 +15,7 @@ export default class UsageCommand extends Command<IUsageArgs> {
     readonly arguments: IArgument[] = [
         {
             name: "command",
-            type: PrimitiveArgType.String,
+            type: TrivialArgType.String,
             required: true,
             description: "The command to inspect"
         }

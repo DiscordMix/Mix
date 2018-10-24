@@ -48,8 +48,8 @@ export default class Temp {
             }
 
             if (!fs.existsSync(this.resolvedPath)) {
-                if (!fs.existsSync("tmp")) {
-                    fs.mkdirSync("tmp");
+                if (!fs.existsSync(Temp.resolveRootPath())) {
+                    fs.mkdirSync(Temp.resolveRootPath());
                 }
 
                 fs.mkdir(this.resolvedPath, (error: Error) => {
@@ -112,6 +112,10 @@ export default class Temp {
      * @return {string}
      */
     public static resolvePath(id: string): string {
-        return path.join(path.dirname(main()), "tmp", `u${id}`);
+        return path.join(Temp.resolveRootPath(), `u${id}`);
+    }
+
+    public static resolveRootPath(): string {
+        return path.join(path.dirname(main()), "tmp");
     }
 }

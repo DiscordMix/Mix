@@ -6,7 +6,7 @@ import CommandStore, {CommandManagerEvent} from "./commands/command-store";
 import Command, {
     IArgumentTypeChecker,
     IArgument,
-    PrimitiveArgType,
+    TrivialArgType,
     ICustomArgType,
     IArgumentResolver,
     RestrictGroup,
@@ -61,7 +61,7 @@ export {
     ICustomArgType,
     IArgumentTypeChecker,
     Command,
-    PrimitiveArgType,
+    TrivialArgType,
     IArgumentResolver,
     RestrictGroup,
     InternalArgType,

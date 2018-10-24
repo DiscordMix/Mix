@@ -143,7 +143,7 @@ export type IBotOptions = {
     readonly settings: Settings;
     readonly dataStore?: DataProvider;
     readonly prefixCommand?: boolean;
-    readonly primitiveCommands?: string[];
+    readonly internalCommands?: string[];
     readonly userGroups?: IUserGroup[];
     readonly owner?: Snowflake;
     readonly options?: Partial<IBotExtraOptions>;
@@ -259,7 +259,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly commandHandler: CommandHandler;
     public readonly console: ConsoleInterface;
     public readonly prefixCommand: boolean;
-    public readonly primitiveCommands: string[];
+    public readonly internalCommands: string[];
     public readonly userGroups: IUserGroup[];
     public readonly owner?: Snowflake;
     public readonly options: IBotExtraOptions;
@@ -382,11 +382,11 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         this.prefixCommand = botOptions.prefixCommand || true;
 
         /**
-         * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific primitives can be loaded.
+         * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded.
          * @type {string[]}
          * @readonly
          */
-        this.primitiveCommands = botOptions.primitiveCommands || [
+        this.internalCommands = botOptions.internalCommands || [
             "help",
             "usage",
             "ping",
@@ -478,7 +478,6 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         this.setupStart = performance.now();
 
         Log.verbose("[Bot.setup] Attempting to load internal fragments");
-
         this.emit("loadInternalFragments");
 
         // Load & enable internal fragments
@@ -591,8 +590,8 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             if ((fragments[i] as any).prototype instanceof Command) {
                 const fragment: any = new (fragments[i] as any)();
 
-                // Command is not registered in primitive commands
-                if (internal && !this.primitiveCommands.includes(fragment.meta.name)) {
+                // Command is not registered in internal commands
+                if (internal && !this.internalCommands.includes(fragment.meta.name)) {
                     continue;
                 }
 
@@ -927,14 +926,18 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         // Dispose resources
         await this.dispose();
 
+        await this.disconnect();
+
         if (reloadModules) {
-            // TODO: Actually reload all the features and commandStore
-            // this.features.reloadAll(this);
-            // TODO: New fragments system
-            // await this.commandLoader.reloadAll();
+            const commands: number = this.commandStore.getAll().size;
+
+            Log.verbose(`[Bot.restart] Reloading ${commands} command(s)`);
+
+            const reloaded: number = await this.commandStore.reloadAll();
+
+            Log.success(`[Bot.restart] Reloaded ${reloaded}/${commands} command(s)`);
         }
 
-        await this.disconnect();
         await this.connect();
         this.emit("restartCompleted", reloadModules);
 
@@ -955,7 +958,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             await this.dataStore.save();
         }
 
-        // TODO
+        // TODO:
         //this.settings.save();
         await this.client.destroy();
         this.client = new Client();

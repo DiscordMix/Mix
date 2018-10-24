@@ -53,7 +53,7 @@ export default class DataCollector {
      * @return {this}
      */
     public collect(dataType: MemberDataType): this {
-        // TODO
+        // TODO:
 
         return this;
     }

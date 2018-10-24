@@ -37,8 +37,6 @@ export default abstract class FragmentLoader {
                 module = module.default;
             }
 
-            console.log(module);
-
             return {
                 module,
                 path: filePath

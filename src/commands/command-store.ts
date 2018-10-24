@@ -5,7 +5,7 @@ import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
 import {WeakCommand} from "..";
 import {IDecoratorCommand} from "../decorators/decorators";
-import FragmentLoader from "../fragments/fragment-loader";
+import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
 import path from "path";
 import {IFragment} from "../fragments/fragment";
 // import Collection from "../core/collection";
@@ -97,16 +97,16 @@ export default class CommandStore /* extends Collection */ {
         console.log(this.get(base));
         console.log(`Reloading (( ${commandPath} ))`);
 
-        const commandFragment: IFragment | null = await FragmentLoader.reload(commandPath);
+        const commandPackage: IPackage | null = await FragmentLoader.reload(commandPath);
 
-        if (commandFragment === null) {
+        if (commandPackage === null) {
             throw new Error(`[CommandStore.reload] Failed to reload command '${base}': FragmentLoader returned null`);
         }
 
         this.commands.delete(base);
 
         // TODO: Should validate that the command fragment is only either a Command or WeakCommand
-        this.register(commandFragment as Command);
+        this.register(commandPackage.module as Command);
 
         return true;
     }

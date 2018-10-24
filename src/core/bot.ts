@@ -202,6 +202,8 @@ export enum EBotEvents {
     LoadedInternalFragments = "loadedInternalFragments",
     LoadingServices = "loadServices",
     LoadedServices = "loadedServices",
+    LoadingCommands = "loadCommands",
+    LoadedCommands = "loadedCommands",
     Ready = "ready",
     HandleMessageStart = "handleMessageStart",
     HandleMessageEnd = "handleMessageEnd",
@@ -458,7 +460,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @return {Promise<this>}
      */
     private async setup(api?: ApiType): Promise<this> {
-        this.emit("setupStart", api);
+        this.emit(EBotEvents.SetupStart, api);
 
         if (this.options.asciiTitle) {
             console.log("\n" + title.replace("{version}", "beta") + "\n");
@@ -478,7 +480,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         this.setupStart = performance.now();
 
         Log.verbose("[Bot.setup] Attempting to load internal fragments");
-        this.emit("loadInternalFragments");
+        this.emit(EBotEvents.LoadingInternalFragments);
 
         // Load & enable internal fragments
         const internalFragmentCandidates: string[] | null = await FragmentLoader.pickupCandidates(internalFragmentsPath);
@@ -510,8 +512,8 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             }
         }
 
-        this.emit("loadedInternalFragments", internalFragments || []);
-        this.emit("loadServices");
+        this.emit(EBotEvents.LoadedInternalFragments, internalFragments || []);
+        this.emit(EBotEvents.LoadingServices);
 
         // Load & enable services
         const consumerServiceCandidates: string[] | null = await FragmentLoader.pickupCandidates(this.settings.paths.services);
@@ -536,8 +538,8 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         // After loading services, enable all of them
         this.services.enableAll();
 
-        this.emit("loadedServices");
-        this.emit("loadCommands");
+        this.emit(EBotEvents.LoadedServices);
+        this.emit(EBotEvents.LoadingCommands);
 
         // Load & enable consumer command fragments
         const consumerCommandCandidates: string[] | null = await FragmentLoader.pickupCandidates(this.settings.paths.commands);
@@ -568,7 +570,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         // Load decorator commands
         this.commandStore.registerMultipleDecorator(DecoratorCommands);
 
-        this.emit("loadedCommands");
+        this.emit(EBotEvents.LoadedCommands);
 
         // Setup the Discord client's events
         this.setupEvents();
@@ -743,7 +745,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             return;
         }
 
-        this.emit("handleMessageStart");
+        this.emit(EBotEvents.HandleMessageStart);
 
         if (this.options.logMessages) {
             const names: any = {};
@@ -814,7 +816,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             }
         }
 
-        this.emit("handleMessageEnd");
+        this.emit(EBotEvents.HandleMessageEnd);
     }
 
     /**
@@ -841,7 +843,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @return {Promise<void>}
      */
     public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
-        this.emit("handleCommandMessageStart", message, content);
+        this.emit(EBotEvents.HandleCommandMessageStart, message, content);
 
         let command: Command | IDecoratorCommand | null = CommandParser.parse(
             content,
@@ -888,16 +890,13 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             command: command
         });
 
-        // TODO: Debugging
-        //Log.debug("raw args, ", rawArgs);
-
         await this.commandHandler.handle(
             this.createCommandContext(message),
             command,
             rawArgs
         );
 
-        this.emit("handleCommandMessageEnd", message, content);
+        this.emit(EBotEvents.HandleCommandMessageEnd, message, content);
     }
 
     /**
@@ -920,7 +919,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @return {Promise<this>}
      */
     public async restart(reloadModules: boolean = true): Promise<this> {
-        this.emit("restartStart", reloadModules);
+        this.emit(EBotEvents.Restarting, reloadModules);
         Log.verbose("[Bot.restart] Restarting");
 
         // Dispose resources
@@ -939,7 +938,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         }
 
         await this.connect();
-        this.emit("restartCompleted", reloadModules);
+        this.emit(EBotEvents.Restarted, reloadModules);
 
         return this;
     }
@@ -949,7 +948,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @return {Promise<this>}
      */
     public async disconnect(): Promise<this> {
-        this.emit("disconnecting");
+        this.emit(EBotEvents.Disconnecting);
         await this.dispose();
 
         // Save data before exiting
@@ -963,7 +962,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         await this.client.destroy();
         this.client = new Client();
         Log.info("[Bot.disconnect] Disconnected");
-        this.emit("disconnected");
+        this.emit(EBotEvents.Disconnected);
 
         return this;
     }
@@ -972,8 +971,9 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * Clear all the files inside the temp folder
      */
     public clearTemp(): void {
-        this.emit("clearingTemp");
+        this.emit(EBotEvents.ClearingTemp);
 
+        // TODO: Path may need to be resolved/maybe it wont be relative...
         if (fs.existsSync("./temp")) {
             fs.readdir("./temp", (error: any, files: any) => {
                 for (let i = 0; i < files.length; i++) {
@@ -984,7 +984,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             });
         }
 
-        this.emit("clearedTemp");
+        this.emit(EBotEvents.ClearedTemp);
     }
 
     public async dispose(): Promise<void> {

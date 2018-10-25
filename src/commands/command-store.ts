@@ -5,7 +5,7 @@ import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
 import {WeakCommand} from "..";
 import {IDecoratorCommand} from "../decorators/decorators";
-import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
+import FragmentLoader, {IPackage, ICommandPackage} from "../fragments/fragment-loader";
 
 /**
  * @enum {number}
@@ -31,9 +31,9 @@ export type ICommandCooldown = {
 
 const validCommandNamePattern: RegExp = /^[a-z_0-9-]{1,40}$/mi;
 
-export type ICommandMap = Map<string, Command | IDecoratorCommand>;
+export type ICommandMap = Map<string, ICommandPackage>;
 
-export type IReadonlyCommandMap = ReadonlyMap<string, Command | IDecoratorCommand>;
+export type IReadonlyCommandMap = ReadonlyMap<string, ICommandPackage>;
 
 export default class CommandStore /* extends Collection */ {
     public readonly bot: Bot;
@@ -66,7 +66,6 @@ export default class CommandStore /* extends Collection */ {
          * @private
          */
         this.aliases = new Map();
-
         /**
          * @type {ICommandCooldown[]}
          * @private
@@ -80,27 +79,23 @@ export default class CommandStore /* extends Collection */ {
         this.simpleCommands = new Map();
     }
 
-    public async reload(base: string): Promise<boolean> {
-        if (!this.commands.has(base)) {
-            // TODO: Should we throw error?
-            throw new Error(`[CommandStore.reload] Command '${base}' is not registered`);
-
+    public async reload(commandName: string): Promise<boolean> {
+        if (!this.commands.has(commandName)) {
             return false;
         }
 
-        // TODO: Verify that it returns only type Command?
-        const commandPath: string = (this.get(base) as any).meta.forgeCommandPath;
+        const packg: ICommandPackage = this.commands.get(commandName) as ICommandPackage;
+        const reloadedPackage: ICommandPackage | null = await FragmentLoader.reload(packg.path) as ICommandPackage | null;
 
-        const commandPackage: IPackage | null = await FragmentLoader.reload(commandPath);
-
-        if (commandPackage === null) {
-            throw new Error(`[CommandStore.reload] Failed to reload command '${base}': FragmentLoader returned null`);
+        if (reloadedPackage === null) {
+            return false;
         }
 
-        this.commands.delete(base);
+        // Delete both command and package
+        this.commands.delete(commandName);
 
         // TODO: Should validate that the command fragment is only either a Command or WeakCommand
-        this.register(commandPackage.module as Command);
+        this.register(reloadedPackage);
 
         return true;
     }
@@ -122,60 +117,57 @@ export default class CommandStore /* extends Collection */ {
     }
 
     /**
-     * @param {Command} command
+     * @param {Command} commandPackage
      */
-    public register(command: Command | WeakCommand): void {
-        const commandName: string = command.meta.name.trim();
+    public register(commandPackage: ICommandPackage): this {
+        const commandName: string = commandPackage.module.meta.name.trim();
 
         if (validCommandNamePattern.test(commandName) === false) {
             Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Invalid name)`);
 
-            return;
+            return this;
         }
         else if (this.get(commandName) !== null) {
             Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Already exists)`);
 
-            return;
+            return this;
         }
 
         // Also register aliases
-        if (command.aliases && command.aliases.length > 0) {
-            for (let i: number = 0; i < command.aliases.length; i++) {
-                if (this.aliases.get(command.aliases[i]) !== undefined) {
+        if (commandPackage.module.aliases && commandPackage.module.aliases.length > 0) {
+            for (let i: number = 0; i < commandPackage.module.aliases.length; i++) {
+                if (this.aliases.get(commandPackage.module.aliases[i]) !== undefined) {
                     // TODO: Is undoIdx < i correct? or should it be undoIdx <= i
                     // Undo
                     for (let undoIdx = 0; undoIdx < i; undoIdx++) {
-                        this.aliases.delete(command.aliases[undoIdx]);
+                        this.aliases.delete(commandPackage.module.aliases[undoIdx]);
                     }
 
                     Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (A command with the same alias already exists)`);
 
-                    return;
+                    return this;
                 }
 
-                this.aliases.set(command.aliases[i], commandName);
+                this.aliases.set(commandPackage.module.aliases[i], commandName);
             }
         }
 
-        this.commands.set(commandName, command);
+        this.commands.set(commandName, commandPackage);
+
+        return this;
     }
 
     /**
-     * @param {SimpleCommand} command The command to register
+     * @param {ICommandPackage} commandPackage
      */
-    public registerDecorator(command: IDecoratorCommand): void {
-        if (validCommandNamePattern.test(command.meta.name) === false) {
-            Log.error(`[CommandStore.registerSimple] Failed to register simple command '${command.meta.name}' (Invalid name)`);
+    public registerPackage(commandPackage: ICommandPackage): this {
+        if (!this.contains(commandPackage.module.meta.name)) {
+            Log.error(`[CommandStore.registerPackage] Unable to register command package: '${commandPackage.module.meta.name}' is not registered`);
 
-            return;
-        }
-        else if (this.get(command.meta.name) !== null) {
-            Log.error(`[CommandStore.registerSimple] Failed to register simple command '${command.meta.name}' (Already exists)`);
-
-            return;
+            return this;
         }
 
-        this.commands.set(command.meta.name, command);
+        return this;
     }
 
     /**
@@ -204,32 +196,26 @@ export default class CommandStore /* extends Collection */ {
         return this.commands.has(commandBase) || this.aliases.has(commandBase);
     }
 
-    public get(commandBase: string): Command | IDecoratorCommand | null {
+    /**
+     * @param {string} commandBase
+     * @return {Command | null}
+     */
+    public get(commandBase: string): Command | null {
+        // TODO: CRITICAL: Will probably error since property may be undefined (Trying to access .module of undefined)
         if (this.aliases.get(commandBase) !== undefined) {
-            return this.commands.get(this.aliases.get(commandBase) as string) as Command | IDecoratorCommand || null;
+            return (this.commands.get(this.aliases.get(commandBase) as string) as ICommandPackage).module || null;
         }
 
-        return this.commands.get(commandBase) || null;
+        return (this.commands.get(commandBase) as ICommandPackage).module || null;
     }
 
     /**
      * @param {Command[]} commands
      * @return {CommandStore}
      */
-    public registerMultiple(commands: Command[]): this {
+    public registerMultiple(commands: ICommandPackage[]): this {
         for (let i = 0; i < commands.length; i++) {
             this.register(commands[i]);
-        }
-
-        return this;
-    }
-
-    /**
-     * @param {IDecoratorCommand[]} commands
-     */
-    public registerMultipleDecorator(commands: IDecoratorCommand[]): this {
-        for (let i = 0; i < commands.length; i++) {
-            this.registerDecorator(commands[i]);
         }
 
         return this;

@@ -27,7 +27,7 @@ import EventEmitter from "events";
 import fs from "fs";
 import {performance} from "perf_hooks";
 import path from "path";
-import FragmentLoader from "../fragments/fragment-loader";
+import FragmentLoader, {ICommandPackage, IPackage} from "../fragments/fragment-loader";
 import {IFragment} from "../fragments/fragment";
 import Language from "../language/language";
 import Service from "../services/service";
@@ -496,7 +496,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             Log.warn("[Bot.setup] No internal fragments were detected");
         }
 
-        const internalFragments: IFragment[] | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
+        const internalFragments: IPackage[] | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
 
         if (!internalFragments || internalFragments.length === 0) {
             Log.warn("[Bot.setup] No internal fragments were loaded");
@@ -524,7 +524,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         else {
             Log.verbose(`[Bot.setup] Loading ${consumerServiceCandidates.length} service(s)`);
 
-            const servicesLoaded: IFragment[] | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
+            const servicesLoaded: IPackage[] | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
 
             if (!servicesLoaded || servicesLoaded.length === 0) {
                 Log.warn("[Bot.setup] No services were loaded");
@@ -550,7 +550,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         else {
             Log.verbose(`[Bot.setup] Loading ${consumerCommandCandidates.length} command(s)`);
 
-            const commandsLoaded: IFragment[] | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
+            const commandsLoaded: IPackage[] | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
 
             if (!commandsLoaded || commandsLoaded.length === 0) {
                 Log.warn("[Bot.setup] No commands were loaded");
@@ -567,9 +567,6 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             }
         }
 
-        // Load decorator commands
-        this.commandStore.registerMultipleDecorator(DecoratorCommands);
-
         this.emit(EBotEvents.LoadedCommands);
 
         // Setup the Discord client's events
@@ -581,40 +578,44 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     /**
-     * @param {IFragment[]} fragments
+     * @param {IFragment[]} packages
      * @param {boolean} internal Whether the fragments are internal
      * @return {number} The amount of enabled fragments
      */
-    private async enableFragments(fragments: IFragment[], internal: boolean = false): Promise<number> {
+    private async enableFragments(packages: IPackage[], internal: boolean = false): Promise<number> {
         let enabled: number = 0;
 
-        for (let i: number = 0; i < fragments.length; i++) {
-            if ((fragments[i] as any).prototype instanceof Command) {
-                const fragment: any = new (fragments[i] as any)();
+        for (let i: number = 0; i < packages.length; i++) {
+            if ((packages[i] as any).prototype instanceof Command) {
+                const command: any = new (packages[i].module as any)();
 
                 // Command is not registered in internal commands
-                if (internal && !this.internalCommands.includes(fragment.meta.name)) {
+                if (internal && !this.internalCommands.includes(command.meta.name)) {
                     continue;
                 }
 
                 // TODO: Add a way to disable the warning
-                if (!internal && fragment.meta.name === "eval") {
+                if (!internal && command.meta.name === "eval") {
                     Log.warn("Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Forge.");
                 }
 
                 // Overwrite command restrict with default values
-                fragment.restrict = {
+                command.restrict = {
                     ...DefaultCommandRestrict,
-                    ...fragment.restrict
+                    ...command.restrict
                 };
 
-                if (await fragment.enabled()) {
-                    this.commandStore.register(fragment);
+                if (await command.enabled()) {
+                    this.commandStore.register({
+                        module: command,
+                        path: packages[i].path
+                    });
+
                     enabled++;
                 }
             }
-            else if ((fragments[i] as any).prototype instanceof Service) {
-                const service: any = fragments[i];
+            else if ((packages[i] as any).prototype instanceof Service) {
+                const service: any = packages[i];
 
                 this.services.register(new service({
                     bot: this,

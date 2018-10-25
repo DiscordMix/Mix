@@ -3,12 +3,18 @@ import {IFragment} from "./fragment";
 import Log from "../core/log";
 import Utils from "../core/utils";
 import path from "path";
+import {Command} from "..";
 
 const validFragmentNamePattern: RegExp = /^(?:[a-z]{0,}[a-z0-9-_\S]+){2,50}$/i;
 const validFragmentDescPattern: RegExp = /^(?:[a-z]{0,}[^\n\r\t\0]+){1,100}$/i;
 
 export type IPackage = {
     readonly module: IFragment;
+    readonly path: string;
+}
+
+export interface ICommandPackage extends IPackage {
+    readonly module: Command
     readonly path: string;
 }
 
@@ -131,22 +137,22 @@ export default abstract class FragmentLoader {
     /**
      * @param {string[]} candidates
      * @param {boolean} isolate
-     * @return {Promise<IFragment[] | null>}
+     * @return {Promise<IPackage[] | null>}
      */
-    public static async loadMultiple(candidates: string[], isolate: boolean = false): Promise<IFragment[] | null> {
+    public static async loadMultiple(candidates: string[], isolate: boolean = false): Promise<IPackage[] | null> {
         if (candidates.length === 0) {
             Log.warn("[FragmentLoader.loadMultiple] Candidates array is empty");
 
             return null;
         }
 
-        const result: IFragment[] = [];
+        const result: IPackage[] = [];
 
         for (let i: number = 0; i < candidates.length; i++) {
             const packg: IPackage | null = await FragmentLoader.load(candidates[i], isolate);
 
             if (packg !== null) {
-                result.push(packg.module);
+                result.push(packg);
             }
         }
 

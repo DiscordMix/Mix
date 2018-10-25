@@ -586,7 +586,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         let enabled: number = 0;
 
         for (let i: number = 0; i < packages.length; i++) {
-            if ((packages[i] as any).prototype instanceof Command) {
+            if ((packages[i].module as any).prototype instanceof Command) {
                 const command: any = new (packages[i].module as any)();
 
                 // Command is not registered in internal commands
@@ -614,8 +614,8 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
                     enabled++;
                 }
             }
-            else if ((packages[i] as any).prototype instanceof Service) {
-                const service: any = packages[i];
+            else if ((packages[i].module as any).prototype instanceof Service) {
+                const service: any = packages[i].module;
 
                 this.services.register(new service({
                     bot: this,

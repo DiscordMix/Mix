@@ -203,10 +203,14 @@ export default class CommandStore /* extends Collection */ {
     public get(commandBase: string): Command | null {
         // TODO: CRITICAL: Will probably error since property may be undefined (Trying to access .module of undefined)
         if (this.aliases.get(commandBase) !== undefined) {
-            return (this.commands.get(this.aliases.get(commandBase) as string) as ICommandPackage).module || null;
+            const command: ICommandPackage | null = (this.commands.get(this.aliases.get(commandBase) as string) as ICommandPackage) || null;
+
+            return command === null ? null : command.module;
         }
 
-        return (this.commands.get(commandBase) as ICommandPackage).module || null;
+        const command: ICommandPackage | null = (this.commands.get(commandBase) as ICommandPackage) || null;
+
+        return command === null ? null : command.module;
     }
 
     /**
@@ -220,6 +224,7 @@ export default class CommandStore /* extends Collection */ {
 
         return this;
     }
+
 
     /**
      * Get all the registered commands

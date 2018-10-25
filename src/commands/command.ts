@@ -112,12 +112,12 @@ export abstract class GenericCommand<ArgumentsType> implements IFragment, IDispo
     public readonly isEnabled: boolean = true;
     public readonly undoable: boolean = false;
 
-    private readonly bot: Bot;
+    protected readonly bot: Bot;
 
     protected constructor(bot: Bot) {
         /**
          * @type {Bot}
-         * @private
+         * @protected
          * @readonly
          */
         this.bot = bot;

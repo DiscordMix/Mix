@@ -37,7 +37,7 @@ export default class ConsoleInterface {
             output: process.stdout
         });
 
-        ci.setPrompt(`${bot.client.user.tag} > `);
+        ci.setPrompt(`${chalk.cyan.bold(bot.client.user.tag)} > `);
         ci.prompt(true);
 
         let using: Guild | null = null;
@@ -154,7 +154,14 @@ export default class ConsoleInterface {
         this.commands.set("clear", console.clear);
 
         this.commands.set("help", () => {
-            console.log("CLI Commands: stop, help, restart, ping, uptime, reload, clear");
+            console.log("\nAvailable Commands\n");
+
+            // TODO: Also show command description
+            for (let [base, command] of this.commands) {
+                console.log(chalk.white(`\t${base}`));
+            }
+
+            console.log("");
         });
 
         // Prompt setup

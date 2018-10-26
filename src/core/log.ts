@@ -167,7 +167,7 @@ export default class Log {
             message: message,
             params: params,
             type: LogLevel.Verbose,
-            color: "grey",
+            color: "white",
             prefix: "verb"
         };
 

@@ -6,6 +6,7 @@ import {performance} from "perf_hooks";
 import {Guild, GuildMember} from "discord.js";
 import {IReadonlyCommandMap} from "../commands/command-store";
 import {IReadonlyServiceMap} from "../services/service-manager";
+import chalk from "chalk";
 
 type ConsoleCommandHandler = (args: string[]) => void;
 
@@ -173,7 +174,7 @@ export default class ConsoleInterface {
                 (this.commands.get(base) as ConsoleCommandHandler)(args);
             }
             else {
-                console.log(`Unknown command: ${input}`);
+                console.log(chalk.white(`\nUnknown command: ${input}\n`));
             }
 
             ci.prompt();

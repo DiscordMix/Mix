@@ -13,7 +13,6 @@ import ServiceManager from "../services/service-manager";
 
 import Command, {
     IArgumentResolver,
-    ArgumentStyle,
     DefaultCommandRestrict,
     ICustomArgType,
     InternalArgType,
@@ -179,7 +178,6 @@ export type IBotExtraOptions = {
 
 const DefaultBotOptions: IBotExtraOptions = {
     allowCommandChain: true,
-    commandArgumentStyle: ArgumentStyle.Normal,
     autoDeleteCommands: false,
     checkCommands: true,
     ignoreBots: true,
@@ -713,7 +711,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         command = command as Command;
 
         const rawArgs: IRawArguments = CommandParser.resolveDefaultArgs({
-            arguments: CommandParser.getArguments(content, command.arguments, this.options.commandArgumentStyle),
+            arguments: CommandParser.getArguments(content, command.arguments),
             schema: command.arguments,
 
             // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
@@ -856,7 +854,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         }
 
         const rawArgs: IRawArguments = CommandParser.resolveDefaultArgs({
-            arguments: CommandParser.getArguments(content, command.arguments, this.options.commandArgumentStyle),
+            arguments: CommandParser.getArguments(content, command.arguments),
             schema: command.arguments,
 
             // TODO: Should pass context instead of just message for more flexibility from defaultValue fun

@@ -8,8 +8,7 @@ import Command, {
     IArgumentResolver, IDefaultValueResolver,
     TrivialArgType,
     IRawArguments,
-    ICustomArgType,
-    ArgumentStyle
+    ICustomArgType
 } from "./command";
 
 import {Message} from "discord.js";
@@ -96,7 +95,7 @@ export default class CommandParser {
      * @param {string} commandString
      * @return {string[]}
      */
-    public static getArguments(commandString: string, schema: IArgument[], style: ArgumentStyle): IRawArguments {
+    public static getArguments(commandString: string, schema: IArgument[]): IRawArguments {
         const result: IRawArguments = [];
         const expression: RegExp = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;
         const argCleanExpression: RegExp = /(```|`|'|"|)(.+)\1/;
@@ -114,27 +113,23 @@ export default class CommandParser {
             match = expression.exec(commandString);
         }
 
-        if (style === ArgumentStyle.Flags) {
-            const switches: ICommandSwitch[] = SwitchParser.getSwitches(commandString);
+        const switches: ICommandSwitch[] = SwitchParser.getSwitches(commandString);
 
-            console.log("switches", switches);
+        for (let sw: number = 0; sw < switches.length; sw++) {
+            for (let i: number = 0; i < schema.length; i++) {
+                if (!switches[sw].short && switches[sw].key === schema[i].name) {
+                    console.log(switches[sw].value);
 
-            for (let sw: number = 0; sw < switches.length; sw++) {
-                for (let i: number = 0; i < schema.length; i++) {
-                    if (!switches[sw].short && switches[sw].key === schema[i].name) {
-                        console.log(switches[sw].value);
+                    result[i] = switches[sw].value || "true";
 
-                        result[i] = switches[sw].value || "true";
+                    break;
+                }
+                else if (schema[i].switchShortName && switches[sw].short && switches[sw].key === schema[i].switchShortName) {
+                    console.log(switches[sw].value);
 
-                        break;
-                    }
-                    else if (schema[i].switchShortName && switches[sw].short && switches[sw].key === schema[i].switchShortName) {
-                        console.log(switches[sw].value);
+                    result[i] = switches[sw].value || "true";
 
-                        result[i] = switches[sw].value || "true";
-
-                        break;
-                    }
+                    break;
                 }
             }
         }
@@ -246,7 +241,7 @@ export default class CommandParser {
             // In-command trivial type
             if (CommandParser.isTypeTrivial(options.schema[i].type)) {
                 if (options.schema[i].type === TrivialArgType.String) {
-                    if (typeof(options.arguments[i]) !== "string") {
+                    if (typeof (options.arguments[i]) !== "string") {
                         return false;
                     }
                 }
@@ -298,7 +293,7 @@ export default class CommandParser {
                 }
             }
             // User-defined type (argumentTypes)
-            else if (typeof(options.schema[i].type) === "string") {
+            else if (typeof (options.schema[i].type) === "string") {
                 let found = false;
 
                 for (let t: number = 0; t < options.types.length; t++) {
@@ -308,7 +303,7 @@ export default class CommandParser {
                         if (options.types[t].check instanceof RegExp && !(options.types[t].check as RegExp).test(options.arguments[i])) {
                             return false;
                         }
-                        else if (typeof(options.types[t].check) === "function") {
+                        else if (typeof (options.types[t].check) === "function") {
                             if (!(options.types[t].check as IArgumentTypeChecker)(options.arguments[i], options.message)) {
                                 return false;
                             }
@@ -329,7 +324,7 @@ export default class CommandParser {
                 }
             }
             // In-command method check
-            else if (typeof(options.schema[i].type) === "function") {
+            else if (typeof (options.schema[i].type) === "function") {
                 if (!(options.schema[i].type as IArgumentTypeChecker)(options.arguments[i], options.message)) {
                     return false;
                 }
@@ -363,7 +358,7 @@ export default class CommandParser {
      * @return {boolean}
      */
     private static isTypeTrivial(type: IArgumentType): boolean {
-        return typeof(type) === "number" && TrivialArgType[type] !== undefined;
+        return typeof (type) === "number" && TrivialArgType[type] !== undefined;
     }
 
     /**

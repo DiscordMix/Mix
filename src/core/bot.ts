@@ -988,6 +988,9 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         this.emit(EBotEvents.ClearedTemp);
     }
 
+    /**
+     * Dispose the bot's resources
+     */
     public async dispose(): Promise<void> {
         for (let i: number = 0; i < this.disposables.length; i++) {
             await this.disposables[i].dispose();

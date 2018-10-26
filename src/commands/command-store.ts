@@ -33,7 +33,7 @@ export type ICommandMap = Map<string, ICommandPackage>;
 
 export type IReadonlyCommandMap = ReadonlyMap<string, ICommandPackage>;
 
-export default class CommandStore /* extends Collection */ {
+export default class CommandStore {
     public readonly bot: Bot;
     public readonly cooldowns: Map<Snowflake, Map<string, number>>;
 
@@ -64,6 +64,7 @@ export default class CommandStore /* extends Collection */ {
          * @private
          */
         this.aliases = new Map();
+
         /**
          * @type {ICommandCooldown[]}
          * @private
@@ -77,6 +78,10 @@ export default class CommandStore /* extends Collection */ {
         this.simpleCommands = new Map();
     }
 
+    /**
+     * @param {string} commandName
+     * @return {Promise<boolean>}
+     */
     public async reload(commandName: string): Promise<boolean> {
         if (!this.commands.has(commandName)) {
             return false;
@@ -89,9 +94,10 @@ export default class CommandStore /* extends Collection */ {
             return false;
         }
 
-        // Delete both command and package
+        // Delete current command
         this.commands.delete(commandName);
 
+        // Register new one
         this.register({
             // TODO: CRITICAL: We shouldn't have to re-instianciate the module, it should be already instanciated at this point
             module: new (reloadedPackage.module as any)(),
@@ -103,12 +109,12 @@ export default class CommandStore /* extends Collection */ {
     }
 
     /**
+     * Reload all commands
      * @return {Promise<number>} The amount of commands that were reloaded
      */
     public async reloadAll(): Promise<number> {
         let reloaded: number = 0;
 
-        // TODO: CRITICAL: Will not work BECAUSE aliases are also set in the command map
         for (let [base, command] of this.commands) {
             if (await this.reload(base)) {
                 reloaded++;
@@ -119,7 +125,8 @@ export default class CommandStore /* extends Collection */ {
     }
 
     /**
-     * @param {Command} commandPackage
+     * Register a command
+     * @param {ICommandPackage} commandPackage
      */
     public register(commandPackage: ICommandPackage): this {
         const commandName: string = commandPackage.module.meta.name.trim();
@@ -155,19 +162,6 @@ export default class CommandStore /* extends Collection */ {
         }
 
         this.commands.set(commandName, commandPackage);
-
-        return this;
-    }
-
-    /**
-     * @param {ICommandPackage} commandPackage
-     */
-    public registerPackage(commandPackage: ICommandPackage): this {
-        if (!this.contains(commandPackage.module.meta.name)) {
-            Log.error(`[CommandStore.registerPackage] Unable to register command package: '${commandPackage.module.meta.name}' is not registered`);
-
-            return this;
-        }
 
         return this;
     }
@@ -216,7 +210,7 @@ export default class CommandStore /* extends Collection */ {
     }
 
     /**
-     * @param {Command[]} commands
+     * @param {ICommandPackage[]} commands
      * @return {CommandStore}
      */
     public registerMultiple(commands: ICommandPackage[]): this {
@@ -226,7 +220,6 @@ export default class CommandStore /* extends Collection */ {
 
         return this;
     }
-
 
     /**
      * Get all the registered commands

@@ -13,7 +13,7 @@ export default class Temp {
     /**
      * @todo Temp base path should be optionally determined from settings
      */
-    constructor() {
+    public constructor() {
         //
     }
 

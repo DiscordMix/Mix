@@ -3,7 +3,7 @@ import Discord, {RichEmbed} from "discord.js";
 export default class EmbedBuilder {
     private readonly embed: RichEmbed;
 
-    constructor() {
+    public constructor() {
         /**
          * @type {Discord.RichEmbed}
          * @private

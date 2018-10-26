@@ -15,13 +15,18 @@ export default class ConsoleInterface {
 
     private readonly commands: Map<string, ConsoleCommandHandler>;
 
-    constructor() {
+    public constructor() {
         /**
          * Whether the console interface has been successfully setup
          * @type {boolean}
          */
         this.ready = false;
 
+        /**
+         * @type {Map<string, ConsoleCommandHandler}
+         * @private
+         * @readonly
+         */
         this.commands = new Map();
     }
 

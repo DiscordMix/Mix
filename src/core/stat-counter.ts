@@ -15,7 +15,7 @@ const DefaultBotStats: IBotStats = {
 export default class StatCounter {
     public stats: IBotStats;
 
-    constructor() {
+    public constructor() {
         this.stats = DefaultBotStats;
     }
 

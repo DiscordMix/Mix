@@ -3,7 +3,7 @@ import DataProvider from "../data-providers/data-provider";
 export default class ConfigBuilder {
     private readonly properties: any;
 
-    constructor() {
+    public constructor() {
         /**
          * @type {Object}
          * @private

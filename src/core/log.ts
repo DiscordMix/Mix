@@ -27,10 +27,12 @@ export default class Log {
      * @return {Promise<void>}
      */
     public static async compose(options: IComposeOptions): Promise<any> {
-        const finalColor = options.color ? options.color : "white";
-        const finalPrefix = options.prefix ? options.prefix : null;
+        const finalColor: string = options.color || "white";
 
-        let message = options.message;
+        // TODO:
+        const finalPrefix: string | null = options.prefix ? options.prefix : null;
+
+        let message: any = options.message;
 
         return new Promise((resolve) => {
             // TODO: Make sure check is working as intended, seems a bit suspicious
@@ -40,7 +42,9 @@ export default class Log {
                 return;
             }
 
-            const date = new Date().toISOString().replace(/T/, " ").replace(/\..+/, "");
+            const date = new Date().toISOString()
+                .replace(/T/, " ")
+                .replace(/\..+/, "");
 
             // TODO: Make this next line work on the vps
             // process.stdout.write(`\x1B[2D[${date}] ${colors[color](message)}\n> `);

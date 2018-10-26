@@ -27,8 +27,7 @@ import EventEmitter from "events";
 import fs from "fs";
 import {performance} from "perf_hooks";
 import path from "path";
-import FragmentLoader, {ICommandPackage, IPackage} from "../fragments/fragment-loader";
-import {IFragment} from "../fragments/fragment";
+import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
 import Language from "../language/language";
 import Service from "../services/service";
 
@@ -36,7 +35,6 @@ import {
     BotEvents,
     ChannelMessageEvents,
     IDecoratorCommand,
-    DecoratorCommands,
     DecoratorCommandType,
     SimpleCommand
 } from "../decorators/decorators";
@@ -578,6 +576,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     /**
+     * Enable and register fragments
      * @param {IFragment[]} packages
      * @param {boolean} internal Whether the fragments are internal
      * @return {number} The amount of enabled fragments
@@ -926,6 +925,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         // Dispose resources
         await this.dispose();
 
+        // Disconnect the bot
         await this.disconnect();
 
         if (reloadModules) {

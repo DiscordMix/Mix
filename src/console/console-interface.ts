@@ -145,7 +145,7 @@ export default class ConsoleInterface {
             // TODO: New fragment system
             // await bot.commandLoader.reloadAll();
 
-            const endTime = performance.now();
+            const endTime: number = performance.now();
 
             Log.success(`[CLI.reload] Reload complete | Took ${Math.round(endTime - startTime)}ms`);
         });

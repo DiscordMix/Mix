@@ -1,5 +1,4 @@
 import Discord, {RichEmbed} from "discord.js";
-import {Log} from "..";
 
 export default class EmbedBuilder {
     private readonly embed: RichEmbed;

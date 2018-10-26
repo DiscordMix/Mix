@@ -1,4 +1,3 @@
-import CommandContext from "../../../commands/command-context";
 import {Command} from "../../..";
 import {RestrictGroup} from "../../../commands/command";
 

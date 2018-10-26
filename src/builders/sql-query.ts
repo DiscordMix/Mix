@@ -1,3 +1,4 @@
+// TODO: Move this into it's own thing
 export type ISqlQueryOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
 
 export type ISqlQueryWhere = {

@@ -1,6 +1,6 @@
 import EditableMessage from "../message/editable-message";
 import EmbedBuilder from "../builders/embed-builder";
-import Discord, {Message, Role, Snowflake, User, RichEmbed} from "discord.js";
+import Discord, {Message, User, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
 import EmojiCollection from "../collections/emoji-collection";
 import FormattedMessage from "../builders/formatted-message";

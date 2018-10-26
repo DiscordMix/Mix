@@ -8,7 +8,7 @@ import Settings from "./settings";
 import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import Temp from "./temp";
-import Discord, {Client, Guild, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
+import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import ServiceManager from "../services/service-manager";
 
 import Command, {

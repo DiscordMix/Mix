@@ -1,6 +1,5 @@
 import {TextChannel, Client, Message, Channel, Collection, MessageReaction, User} from "discord.js";
 import {EventEmitter} from "events";
-import {message} from "../decorators/decorators";
 
 export default class ChannelObserver extends EventEmitter {
     private readonly client: Client;

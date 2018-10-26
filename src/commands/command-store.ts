@@ -3,9 +3,7 @@ import Bot from "../core/bot";
 import Command, {GenericCommand} from "./command";
 import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
-import {WeakCommand} from "..";
-import {IDecoratorCommand} from "../decorators/decorators";
-import FragmentLoader, {IPackage, ICommandPackage} from "../fragments/fragment-loader";
+import FragmentLoader, {ICommandPackage} from "../fragments/fragment-loader";
 
 /**
  * @enum {number}
@@ -94,8 +92,12 @@ export default class CommandStore /* extends Collection */ {
         // Delete both command and package
         this.commands.delete(commandName);
 
-        // TODO: Should validate that the command fragment is only either a Command or WeakCommand
-        this.register(reloadedPackage);
+        this.register({
+            // TODO: CRITICAL: We shouldn't have to re-instianciate the module, it should be already instanciated at this point
+            module: new (reloadedPackage.module as any)(),
+            
+            path: reloadedPackage.path
+        });
 
         return true;
     }

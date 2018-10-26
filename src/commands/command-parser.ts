@@ -107,7 +107,7 @@ export default class CommandParser {
             const match1: RegExpExecArray | null = argCleanExpression.exec(match[1]);
 
             if (match1) {
-                result.push(match1[2]);
+                result.push(match1[2] as any);
             }
 
             match = expression.exec(commandString);
@@ -120,14 +120,14 @@ export default class CommandParser {
                 if (!switches[sw].short && switches[sw].key === schema[i].name) {
                     console.log(switches[sw].value);
 
-                    result[i] = switches[sw].value || "true";
+                    result[i] = (switches[sw].value || "true") as any;
 
                     break;
                 }
                 else if (schema[i].switchShortName && switches[sw].short && switches[sw].key === schema[i].switchShortName) {
                     console.log(switches[sw].value);
 
-                    result[i] = switches[sw].value || "true";
+                    result[i] = (switches[sw].value || "true") as any;
 
                     break;
                 }
@@ -166,7 +166,7 @@ export default class CommandParser {
                 // If a resolver exists for this schema type, resolve the value
                 if (options.resolvers[r].name === schemaEntry.type) {
                     typeFound = true;
-                    result[options.schema[a].name] = options.resolvers[r].resolve(options.arguments[a], options.message);
+                    result[options.schema[a].name] = options.resolvers[r].resolve(options.arguments[a] as any, options.message);
 
                     break;
                 }
@@ -193,7 +193,7 @@ export default class CommandParser {
         const result: IRawArguments = [];
 
         for (let i = 0; i < options.schema.length; i++) {
-            let value: string = options.arguments[i];
+            let value: any = options.arguments[i];
 
             if (!options.schema[i].required && options.arguments[i] === undefined && options.schema[i].defaultValue !== undefined) {
                 if (options.schema[i].defaultValue === undefined) {
@@ -205,11 +205,8 @@ export default class CommandParser {
                 if (type === "function") {
                     value = (options.schema[i].defaultValue as IDefaultValueResolver)(options.message);
                 }
-                else if (type === "string") {
-                    value = options.schema[i].defaultValue as string;
-                }
-                else if (type === "number") {
-                    value = (options.schema[i].defaultValue as number).toString();
+                else if (type === "string" || type === "number" || type === "boolean") {
+                    value = options.schema[i].defaultValue as any;
                 }
                 else {
                     throw new Error(`[CommandParser.resolveDefaultArgs] Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
@@ -246,12 +243,12 @@ export default class CommandParser {
                     }
                 }
                 else if (options.schema[i].type === TrivialArgType.Boolean) {
-                    if (CommandParser.parseBoolean(options.arguments[i]) === null) {
+                    if (CommandParser.parseBoolean(options.arguments[i] as any) === null) {
                         return false;
                     }
                 }
                 else {
-                    const value: number = parseInt(options.arguments[i]);
+                    const value: number = parseInt(options.arguments[i] as any);
 
                     // Value must be a number at this point
                     if (isNaN(value)) {
@@ -300,11 +297,11 @@ export default class CommandParser {
                     if (options.types[t].name === options.schema[i].type) {
                         found = true;
 
-                        if (options.types[t].check instanceof RegExp && !(options.types[t].check as RegExp).test(options.arguments[i])) {
+                        if (options.types[t].check instanceof RegExp && !(options.types[t].check as RegExp).test(options.arguments[i] as any)) {
                             return false;
                         }
                         else if (typeof (options.types[t].check) === "function") {
-                            if (!(options.types[t].check as IArgumentTypeChecker)(options.arguments[i], options.message)) {
+                            if (!(options.types[t].check as IArgumentTypeChecker)(options.arguments[i] as any, options.message)) {
                                 return false;
                             }
                         }
@@ -319,13 +316,13 @@ export default class CommandParser {
             }
             // In-command regex expression
             else if (options.schema[i].type instanceof RegExp) {
-                if (!(options.schema[i].type as RegExp).test(options.arguments[i])) {
+                if (!(options.schema[i].type as RegExp).test(options.arguments[i] as any)) {
                     return false;
                 }
             }
             // In-command method check
             else if (typeof (options.schema[i].type) === "function") {
-                if (!(options.schema[i].type as IArgumentTypeChecker)(options.arguments[i], options.message)) {
+                if (!(options.schema[i].type as IArgumentTypeChecker)(options.arguments[i] as any, options.message)) {
                     return false;
                 }
             }

@@ -78,7 +78,7 @@ export default class CommandHandler {
      * @param {IArgument[]} rawArgs
      * @return {boolean}
      */
-    private meetsRequirements(context: CommandContext, command: Command, rawArgs: string[]): boolean {
+    private meetsRequirements(context: CommandContext, command: Command, rawArgs: IRawArguments): boolean {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 
@@ -218,6 +218,7 @@ export default class CommandHandler {
             }
 
             this.commandStore.setCooldown(context.sender.id, commandCooldown, command.meta.name);
+            
             context.bot.emit("commandExecuted", {
                 context,
                 command

@@ -5,7 +5,7 @@ export default class BotBuilder {
     private readonly settings: any;
     private readonly bot: any;
 
-    constructor() {
+    public constructor() {
         /**
          * @type {*}
          */

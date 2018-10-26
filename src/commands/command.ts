@@ -31,7 +31,9 @@ export type ICustomArgType = {
     readonly check: IArgumentTypeChecker | RegExp;
 }
 
-export type IRawArguments = string[];
+export type IRawArguments = Array<string | number | boolean>;
+
+export type DefiniteArgument = string | number | boolean;
 
 export enum TrivialArgType {
     String,
@@ -51,7 +53,7 @@ export enum InternalArgType {
 
 export type IArgumentResolver = {
     readonly name: string;
-    readonly resolve: (argument: string, message: Message) => any;
+    readonly resolve: (argument: DefiniteArgument, message: Message) => any;
 }
 
 // TODO: Make use of this
@@ -59,7 +61,7 @@ export type IArgument = {
     readonly name: string;
     readonly type: IArgumentType;
     readonly description?: string;
-    readonly defaultValue?: string | number | IDefaultValueResolver;
+    readonly defaultValue?: DefiniteArgument | IDefaultValueResolver;
     readonly required?: boolean;
 
     // TODO: CRTICAL: X2 : Must verify that the same short switch isn't already being used by another argument of the same command.

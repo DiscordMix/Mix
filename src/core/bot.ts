@@ -17,7 +17,8 @@ import Command, {
     ICustomArgType,
     InternalArgType,
     IRawArguments,
-    IUserGroup
+    IUserGroup,
+    DefiniteArgument
 } from "../commands/command";
 
 import JsonProvider from "../data-providers/json-provider";
@@ -34,7 +35,8 @@ import {
     BotEvents,
     ChannelMessageEvents,
     IDecoratorCommand,
-    DecoratorCommandType
+    DecoratorCommandType,
+    DiscordEvent
 } from "../decorators/decorators";
 
 import StatCounter from "./stat-counter";
@@ -63,8 +65,8 @@ const internalArgResolvers: IArgumentResolver[] = [
     {
         name: InternalArgType.Member,
 
-        resolve(arg: string, message: Message): GuildMember | null {
-            const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg));
+        resolve(arg: DefiniteArgument, message: Message): GuildMember | null {
+            const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg.toString()));
 
             if (resolvedMember) {
                 return resolvedMember;
@@ -76,8 +78,8 @@ const internalArgResolvers: IArgumentResolver[] = [
     {
         name: InternalArgType.Role,
 
-        resolve(arg: string, message: Message): Role | null {
-            const resolvedRole: Role | undefined = message.guild.roles.get(Utils.resolveId(arg));
+        resolve(arg: DefiniteArgument, message: Message): Role | null {
+            const resolvedRole: Role | undefined = message.guild.roles.get(Utils.resolveId(arg.toString()));
 
             if (resolvedRole) {
                 return resolvedRole;
@@ -89,15 +91,15 @@ const internalArgResolvers: IArgumentResolver[] = [
     {
         name: InternalArgType.State,
 
-        resolve(arg: string): boolean {
-            return Utils.translateState(arg);
+        resolve(arg: DefiniteArgument): boolean {
+            return Utils.translateState(arg.toString());
         }
     },
     {
         name: InternalArgType.Snowflake,
 
-        resolve(arg: string): Snowflake {
-            return Utils.resolveId(arg);
+        resolve(arg: DefiniteArgument): Snowflake {
+            return Utils.resolveId(arg.toString());
         }
     }
 ];
@@ -654,12 +656,12 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             Log.success(`[Bot.setupEvents] Ready | Took ${took}ms`);
         });
 
-        this.client.on("message", this.handleMessage.bind(this));
-        this.client.on("error", (error: Error) => Log.error(error.message));
+        this.client.on(DiscordEvent.Message, this.handleMessage.bind(this));
+        this.client.on(DiscordEvent.Error, (error: Error) => Log.error(error.message));
 
         // If enabled, handle message edits (if valid) as commands
         if (this.options.updateOnMessageEdit) {
-            this.client.on("messageUpdate", async (oldMessage: Message, newMessage: Message) => {
+            this.client.on(DiscordEvent.MessageUpdated, async (oldMessage: Message, newMessage: Message) => {
                 await this.handleMessage(newMessage, true);
             });
         }
@@ -670,7 +672,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         }
 
         for (let i: number = 0; i < ChannelMessageEvents.length; i++) {
-            this.client.on("message", (message: Message) => {
+            this.client.on(DiscordEvent.Message, (message: Message) => {
                 if (message.channel.id === ChannelMessageEvents[i].name) {
                     ChannelMessageEvents[i].handler();
                 }

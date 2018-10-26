@@ -8,12 +8,13 @@ import Command, {
     IArgumentResolver, IDefaultValueResolver,
     TrivialArgType,
     IRawArguments,
-    ICustomArgType
+    ICustomArgType,
+    ArgumentStyle
 } from "./command";
 
 import {Message} from "discord.js";
 import Log from "../core/log";
-import {IDecoratorCommand} from "../decorators/decorators";
+import SwitchParser, {ICommandSwitch} from "./switch-parser";
 
 export type IResolveArgumentsOptions = {
     readonly arguments: IRawArguments;
@@ -44,7 +45,7 @@ export default class CommandParser {
      * @param {string[]} prefixes
      * @return {Command | null}
      */
-    public static parse(commandString: string, manager: CommandStore, prefixes: string[]): Command | IDecoratorCommand | null {
+    public static parse(commandString: string, manager: CommandStore, prefixes: string[]): Command | null {
         const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
@@ -95,10 +96,10 @@ export default class CommandParser {
      * @param {string} commandString
      * @return {string[]}
      */
-    public static getArguments(commandString: string): IRawArguments {
+    public static getArguments(commandString: string, schema: IArgument[], style: ArgumentStyle): IRawArguments {
+        const result: IRawArguments = [];
         const expression: RegExp = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;
         const argCleanExpression: RegExp = /(```|`|'|"|)(.+)\1/;
-        const result: IRawArguments = [];
 
         let match: RegExpExecArray | null = expression.exec(commandString);
 
@@ -111,6 +112,31 @@ export default class CommandParser {
             }
 
             match = expression.exec(commandString);
+        }
+
+        if (style === ArgumentStyle.Flags) {
+            const switches: ICommandSwitch[] = SwitchParser.getSwitches(commandString);
+
+            console.log("switches", switches);
+
+            for (let sw: number = 0; sw < switches.length; sw++) {
+                for (let i: number = 0; i < schema.length; i++) {
+                    if (!switches[sw].short && switches[sw].key === schema[i].name) {
+                        console.log(switches[sw].value);
+
+                        result[i] = switches[sw].value || "true";
+
+                        break;
+                    }
+                    else if (schema[i].switchShortName && switches[sw].short && switches[sw].key === schema[i].switchShortName) {
+                        console.log(switches[sw].value);
+
+                        result[i] = switches[sw].value || "true";
+
+                        break;
+                    }
+                }
+            }
         }
 
         return result;
@@ -166,7 +192,7 @@ export default class CommandParser {
 
     /**
      * @param {IResolveDefaultArgsOptions} options
-     * @return {*}
+     * @return {IRawArguments}
      */
     public static resolveDefaultArgs(options: IResolveDefaultArgsOptions): IRawArguments {
         const result: IRawArguments = [];

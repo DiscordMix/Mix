@@ -15,11 +15,6 @@ export enum RestrictGroup {
     BotOwner
 }
 
-export enum ArgumentStyle {
-    Explicit,
-    Descriptive
-}
-
 export type IDefaultValueResolver = (message: Message) => string;
 
 export type IArgumentTypeChecker = (argument: string, message: Message) => boolean;
@@ -66,6 +61,9 @@ export type IArgument = {
     readonly description?: string;
     readonly defaultValue?: string | number | IDefaultValueResolver;
     readonly required?: boolean;
+
+    // TODO: CRTICAL: X2 : Must verify that the same short switch isn't already being used by another argument of the same command.
+    readonly switchShortName?: string;
 }
 
 export type ICommandRestrict = {

@@ -35,8 +35,7 @@ import {
     BotEvents,
     ChannelMessageEvents,
     IDecoratorCommand,
-    DecoratorCommandType,
-    SimpleCommand
+    DecoratorCommandType
 } from "../decorators/decorators";
 
 import StatCounter from "./stat-counter";
@@ -171,7 +170,6 @@ export type IBotExtraOptions = {
     readonly updateOnMessageEdit: boolean;
     readonly checkCommands: boolean;
     readonly autoDeleteCommands: boolean;
-    readonly commandArgumentStyle: ArgumentStyle;
     readonly ignoreBots: boolean;
     readonly autoResetAuthStore: boolean;
     readonly logMessages: boolean;
@@ -181,7 +179,7 @@ export type IBotExtraOptions = {
 
 const DefaultBotOptions: IBotExtraOptions = {
     allowCommandChain: true,
-    commandArgumentStyle: ArgumentStyle.Explicit,
+    commandArgumentStyle: ArgumentStyle.Normal,
     autoDeleteCommands: false,
     checkCommands: true,
     ignoreBots: true,
@@ -715,7 +713,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         command = command as Command;
 
         const rawArgs: IRawArguments = CommandParser.resolveDefaultArgs({
-            arguments: CommandParser.getArguments(content),
+            arguments: CommandParser.getArguments(content, command.arguments, this.options.commandArgumentStyle),
             schema: command.arguments,
 
             // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
@@ -845,7 +843,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
         this.emit(EBotEvents.HandleCommandMessageStart, message, content);
 
-        let command: Command | IDecoratorCommand | null = CommandParser.parse(
+        let command: Command | null = CommandParser.parse(
             content,
             this.commandStore,
             this.settings.general.prefixes
@@ -857,38 +855,17 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             return;
         }
 
-        if ((command as any).type !== undefined && typeof (command as any).type === "number" && DecoratorCommandType[(command as any).type] !== undefined) {
-            command = command as IDecoratorCommand;
-
-            if (command.type === DecoratorCommandType.Simple) {
-                // TODO: Simple commands have an empty array of arguments, which doesn't look good
-                (command as SimpleCommand).executed(this.createCommandContext(message), [], this.api);
-
-                return;
-            }
-            else if (command.type === DecoratorCommandType.Weak) {
-                //
-                Log.warn(`[Bot.handleCommandMessage] Weak commands are not yet implemented, ignoring execution for '${command.meta.name}'`);
-
-                return;
-            }
-            else {
-                Log.error(`[Bot.handleCommandMessage] Unexpected decorator command type: '${command.type}' for command '${command.meta.name}'`);
-
-                return;
-            }
-        }
-
-        command = command as Command;
-
         const rawArgs: IRawArguments = CommandParser.resolveDefaultArgs({
-            arguments: CommandParser.getArguments(content),
+            arguments: CommandParser.getArguments(content, command.arguments, this.options.commandArgumentStyle),
             schema: command.arguments,
 
             // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
-            message: message,
-            command: command
+            message,
+            command
         });
+
+        // Debugging
+        Log.debug("Raw arguments are", rawArgs);
 
         await this.commandHandler.handle(
             this.createCommandContext(message),

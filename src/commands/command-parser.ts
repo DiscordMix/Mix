@@ -116,34 +116,42 @@ export default class CommandParser {
         const switches: ICommandSwitch[] = SwitchParser.getSwitches(commandString);
 
         for (let sw: number = 0; sw < switches.length; sw++) {
+            const switchString: string = `${switches[sw].key}${switches[sw].value ? "=" : ""}${switches[sw].value || ""}`;
+
             for (let i: number = 0; i < schema.length; i++) {
                 if (!switches[sw].short && switches[sw].key === schema[i].name) {
-                    result[i] = (switches[sw].value || "true") as any;
+                    result[i] = switches[sw].value || true;
 
                     if (result[i].toString().indexOf(" ") !== -1) {
                         const spaces: number = result[i].toString().split(" ").length - 1;
 
-                        for (let counter = 0; counter < spaces; counter++) {
+                        for (let counter = 0; counter <= spaces; counter++) {
                             result.pop();
                         }
                     }
+
+                    //result.splice(result.indexOf(switchString), 1);
 
                     break;
                 }
                 else if (schema[i].switchShortName && switches[sw].short && switches[sw].key === schema[i].switchShortName) {
-                    result[i] = (switches[sw].value || "true") as any;
+                    result[i] = switches[sw].value || true;
 
                     if (result[i].toString().indexOf(" ") !== -1) {
                         const spaces: number = result[i].toString().split(" ").length - 1;
 
-                        for (let counter = 0; counter < spaces; counter++) {
+                        for (let counter = 0; counter <= spaces; counter++) {
                             result.pop();
                         }
                     }
 
+                    //result.splice(result.indexOf(switchString), 1);
+
                     break;
                 }
             }
+
+            console.log("SWITCH STR", switchString);
         }
 
         return result;

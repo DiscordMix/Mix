@@ -637,7 +637,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         Log.verbose("[Bot.setupEvents] Setting up Discord events");
 
         // Discord client events
-        this.client.on("ready", async () => {
+        this.client.on(DiscordEvent.Ready, async () => {
             // Setup temp
             this.temp.setup(this.client.user.id);
 
@@ -767,6 +767,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         // TODO: Cannot do .startsWith with a prefix array
         if ((!message.author.bot || (message.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(message.content, this.commandStore, this.settings.general.prefixes)) {
             if (this.options.allowCommandChain) {
+                // TODO: Might split values too
                 const rawChain: string[] = message.content.split("&");
 
                 // TODO: Should be bot option
@@ -794,7 +795,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         }
         // TODO: ?prefix should also be chain-able
         else if (!message.author.bot && message.content === "?prefix" && this.prefixCommand) {
-            message.channel.send(new RichEmbed()
+            await message.channel.send(new RichEmbed()
                 .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
                 .setColor("GREEN"));
         }
@@ -803,7 +804,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         // TODO: Verify that it was done in the same environment and that the user still has perms
         else if (!message.author.bot && message.content === "?undo") {
             if (!this.commandHandler.undoMemory.has(message.author.id)) {
-                message.reply("You haven't performed any undoable action");
+                await message.reply("You haven't performed any undoable action");
             }
             else if (this.commandHandler.undoAction(message.author.id, message)) {
                 await message.reply("The action was successfully undone");
@@ -835,6 +836,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     /**
+     * @todo Investigate the resolvers parameter usage (is it even used or required?)
      * @param {Message} message
      * @param {string} content
      * @param {*} resolvers

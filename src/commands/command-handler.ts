@@ -163,6 +163,10 @@ export default class CommandHandler {
         return false;
     }
 
+    /**
+     * @param {Snowflake} user
+     * @param {Message} message
+     */
     public async undoAction(user: Snowflake, message: Message): Promise<boolean> {
         if (this.undoMemory.has(user)) {
             const action: IUndoAction = this.undoMemory.get(user) as IUndoAction;
@@ -218,7 +222,7 @@ export default class CommandHandler {
             }
 
             this.commandStore.setCooldown(context.sender.id, commandCooldown, command.meta.name);
-            
+
             context.bot.emit("commandExecuted", {
                 context,
                 command

@@ -229,9 +229,9 @@ export default class CommandParser {
      */
     public static checkArguments(options: ICheckArgumentsOptions): boolean {
         // Invalid amount of arguments
-        if (!CommandParser.validateArgumentCount(options.command, options.arguments)) {
+        /* if (!CommandParser.validateArgumentCount(options.command, options.arguments)) {
             return false;
-        }
+        } */
 
         // TODO: Will this work with optional args?
         for (let i: number = 0; i < options.arguments.length; i++) {
@@ -371,7 +371,7 @@ export default class CommandParser {
      * @return {boolean | null}
      */
     private static parseBoolean(value: string): boolean | null {
-        const lowerCaseValue: string = value.toLowerCase();
+        const lowerCaseValue: string = value.toString().toLowerCase();
 
         if (lowerCaseValue == "true" || lowerCaseValue == "1" || lowerCaseValue == "yes") {
             return true;

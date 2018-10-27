@@ -197,11 +197,11 @@ export default class ConsoleInterface {
             Log.error(error.message);
         }); */
 
-        ci.on("close", () => {
-            // TODO: Temp. disabled due to interferring and going straight disconnection on vps/linux
-            /* bot.disconnect();
-            process.exit(0); */
-        });
+        // TODO: Disabled due to directly exiting on vps/linux
+        /* ci.on("close", async () => {
+            await bot.disconnect();
+            process.exit(0);
+        }); */
 
         // TODO: Should log before setting the prompt
         this.ready = true;

@@ -150,8 +150,6 @@ export default class CommandParser {
                     break;
                 }
             }
-
-            console.log("SWITCH STR", switchString);
         }
 
         return result;

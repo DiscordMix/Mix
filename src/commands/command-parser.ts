@@ -14,6 +14,7 @@ import Command, {
 import {Message} from "discord.js";
 import Log from "../core/log";
 import SwitchParser, {ICommandSwitch} from "./switch-parser";
+import {Patterns} from "..";
 
 export type IResolveArgumentsOptions = {
     readonly arguments: IRawArguments;
@@ -97,10 +98,9 @@ export default class CommandParser {
      */
     public static getArguments(commandString: string, schema: IArgument[]): IRawArguments {
         const result: IRawArguments = [];
-        const expression: RegExp = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;
         const argCleanExpression: RegExp = /(```|`|'|"|)(.+)\1/;
 
-        let match: RegExpExecArray | null = expression.exec(commandString);
+        let match: RegExpExecArray | null = Patterns.args.exec(commandString);
 
         while (match != null) {
             // TODO: Hotfix/review
@@ -110,7 +110,7 @@ export default class CommandParser {
                 result.push(match1[2] as any);
             }
 
-            match = expression.exec(commandString);
+            match = Patterns.args.exec(commandString);
         }
 
         const switches: ICommandSwitch[] = SwitchParser.getSwitches(commandString);
@@ -118,16 +118,28 @@ export default class CommandParser {
         for (let sw: number = 0; sw < switches.length; sw++) {
             for (let i: number = 0; i < schema.length; i++) {
                 if (!switches[sw].short && switches[sw].key === schema[i].name) {
-                    console.log(switches[sw].value);
-
                     result[i] = (switches[sw].value || "true") as any;
+
+                    if (result[i].toString().indexOf(" ") !== -1) {
+                        const spaces: number = result[i].toString().split(" ").length - 1;
+
+                        for (let counter = 0; counter < spaces; counter++) {
+                            result.pop();
+                        }
+                    }
 
                     break;
                 }
                 else if (schema[i].switchShortName && switches[sw].short && switches[sw].key === schema[i].switchShortName) {
-                    console.log(switches[sw].value);
-
                     result[i] = (switches[sw].value || "true") as any;
+
+                    if (result[i].toString().indexOf(" ") !== -1) {
+                        const spaces: number = result[i].toString().split(" ").length - 1;
+
+                        for (let counter = 0; counter < spaces; counter++) {
+                            result.pop();
+                        }
+                    }
 
                     break;
                 }
@@ -229,9 +241,9 @@ export default class CommandParser {
      */
     public static checkArguments(options: ICheckArgumentsOptions): boolean {
         // Invalid amount of arguments
-        /* if (!CommandParser.validateArgumentCount(options.command, options.arguments)) {
+        if (!CommandParser.validateArgumentCount(options.command, options.arguments)) {
             return false;
-        } */
+        }
 
         // TODO: Will this work with optional args?
         for (let i: number = 0; i < options.arguments.length; i++) {

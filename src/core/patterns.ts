@@ -13,6 +13,8 @@ export default abstract class Patterns {
 
     public static anyMention: RegExp = /<(?:\@|\#|\&)[0-9]{18}>|@(?:everyone|here)/gm;
 
+    public static args: RegExp = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;
+
     public static state: RegExp = /(1|true|on|y|yes)/i;
 
     /**

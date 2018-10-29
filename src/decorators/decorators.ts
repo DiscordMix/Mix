@@ -166,3 +166,18 @@ export function command(options: string | PartialWeakCommand, description?: stri
         DecoratorCommands.push(finalCommand as WeakCommand | SimpleCommand);
     }
 }
+
+export function deprecated(use?: string): any {
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
+        const functionName: string = Object.keys(target)[0];
+        const className: string = target.constructor.name;
+
+        let message: string = `[Deprecated] Function '${className}.${functionName}' is deprecated and may be removed in the future.`;
+
+        if (use !== undefined) {
+            message += ` Use ${use} instead.`;
+        }
+
+        Log.warn(message);
+    }
+}

@@ -86,11 +86,6 @@ export const DefaultCommandRestrict: ICommandRestrict = {
     specific: []
 };
 
-export type ICommandSwitchInfo = {
-    readonly name: string;
-    readonly shorthand: string | null;
-}
-
 export enum GenericCommandStatus {
     OK = 0,
     Failed = 1
@@ -106,7 +101,6 @@ export abstract class GenericCommand<ArgumentsType> implements IFragment, IDispo
     public readonly aliases: string[] = [];
     public readonly arguments: IArgument[] = [];
     public readonly restrict: ICommandRestrict = Object.assign({}, DefaultCommandRestrict);
-    public readonly switches: ICommandSwitchInfo[] = [];
     public readonly exclude: string[] = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;

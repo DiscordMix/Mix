@@ -4,7 +4,7 @@ import Bot from "../core/bot";
 import Log from "../core/log";
 import {IDisposable} from "..";
 
-export default class Pagination extends EventEmitter implements IDisposable {
+export default class PaginatedMessage extends EventEmitter implements IDisposable {
     public readonly content: string;
     public readonly maxLength: number;
 
@@ -49,7 +49,7 @@ export default class Pagination extends EventEmitter implements IDisposable {
     }
 
     public dispose(): this {
-        Log.warn("[Pagination.detach] Not yet implemented");
+        Log.warn("[Pagination.dispose] Not yet implemented");
 
         return this;
     }

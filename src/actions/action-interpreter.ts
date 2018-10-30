@@ -1,6 +1,6 @@
 import Bot from "../core/bot";
 import {IAction, ActionType} from "./action";
-import {Snowflake, Channel, TextChannel, Guild, User} from "discord.js";
+import {Snowflake, Channel, TextChannel, Guild, User, RichEmbed} from "discord.js";
 import {Log, Utils} from "..";
 
 // Arg types
@@ -21,6 +21,10 @@ export type IPrivateMessageActionArgs = {
 export interface IRequestActionArgs extends IMessageActionArgs {
     readonly requester: string;
     readonly avatarUrl: string;
+}
+
+export type IEmbedActionArgs = {
+    readonly embed: RichEmbed;
 }
 
 export enum ChannelType {

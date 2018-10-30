@@ -45,7 +45,7 @@ import {on, WeakCommand, IDecoratorCommand, SimpleCommand, DiscordEvent} from ".
 import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
 import EmojiMenu, {IEmojiButton} from "./emoji-menu/emoji-menu";
-import Pagination from "./pagination/pagination";
+import PaginatedMessage from "./pagination/paginated-message";
 import {IDisposable} from "./core/snap";
 import {ICommandExecutedEvent} from "./events/command-executed-event";
 import {ICommandWillExecuteEvent} from "./events/command-will-execute-event";
@@ -125,7 +125,7 @@ export {
 
     // Misc
     KnexTable,
-    Pagination,
+    PaginatedMessage,
 
     // Snap
     IDisposable,

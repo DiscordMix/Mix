@@ -18,6 +18,8 @@ export enum ActionType {
     PrivateReply,
     PrivateMessage,
     PrivateRichEmbed,
+    OkEmbed,
+    FailEmbed,
 
     // Reactions
     ReactionAdd,

@@ -32,7 +32,7 @@ TimeAgo.locale(en);
 const timeAgo: any = new TimeAgo("en-US");
 
 export type ISendOptions = {
-    readonly user: User;
+    readonly avatarUrl: string;
     readonly channel: TextChannel;
     readonly message: string;
     readonly color?: string;
@@ -147,7 +147,7 @@ export default class Utils {
         return await options.channel.send(new RichEmbed()
             .setColor(options.color ? options.color : "GREEN")
             .setTitle(options.title ? options.title : "")
-            .setFooter(options.footer, options.user.avatarURL)
+            .setFooter(options.footer, options.avatarUrl)
             .setDescription(options.message));
     }
 

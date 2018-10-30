@@ -1,7 +1,7 @@
 import Bot from "../core/bot";
 import {IAction, ActionType} from "./action";
-import {Snowflake, Channel, TextChannel, Guild, User, ChannelResolvable} from "discord.js";
-import { Log } from "..";
+import {Snowflake, Channel, TextChannel, Guild, User} from "discord.js";
+import {Log, Utils} from "..";
 
 // Arg types
 export type IMessageActionArgs = {
@@ -16,6 +16,11 @@ export type IGuildLeaveActionArgs = {
 export type IPrivateMessageActionArgs = {
     readonly userId: Snowflake;
     readonly message: string;
+}
+
+export interface IRequestActionArgs extends IMessageActionArgs {
+    readonly requester: string;
+    readonly avatarUrl: string;
 }
 
 export enum ChannelType {
@@ -85,6 +90,44 @@ export default class InstructionInterpreter {
                 }
 
                 await (channel as TextChannel).send(act.args.message);
+
+                break;
+            }
+
+            case ActionType.OkEmbed: {
+                const act: IAction<IRequestActionArgs> = action;
+                const channel: TextChannel | null = this.ensureChannel(act.args.channelId, act.type);
+
+                if (channel === null) {
+                    return;
+                }
+
+                await Utils.send({
+                    channel,
+                    color: "GREEN",
+                    footer: `Requested by ${act.args.requester}`,
+                    message: act.args.message,
+                    avatarUrl: act.args.avatarUrl
+                });
+
+                break;
+            }
+            
+            case ActionType.FailEmbed: {
+                const act: IAction<IRequestActionArgs> = action;
+                const channel: TextChannel | null = this.ensureChannel(act.args.channelId, act.type);
+
+                if (channel === null) {
+                    return;
+                }
+
+                await Utils.send({
+                    channel,
+                    color: "RED",
+                    footer: `Requested by ${act.args.requester}`,
+                    message: act.args.message,
+                    avatarUrl: act.args.avatarUrl
+                });
 
                 break;
             }

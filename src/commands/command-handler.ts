@@ -6,6 +6,7 @@ import CommandContext from "./command-context";
 import {GuildMember, Snowflake, TextChannel, Message} from "discord.js";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
+import {IAction} from "../actions/action";
 
 export type ICommandHandlerOptions = {
     readonly commandStore: CommandStore;
@@ -209,8 +210,21 @@ export default class CommandHandler {
         try {
             // TODO: Only check if result is true, make sure commandStore return booleans
             // TODO: Bot should be accessed protected (from this class)
-            const actualResult: any = command.executed(context, resolvedArgs, context.bot.getAPI());
-            const result: any = actualResult instanceof Promise ? await actualResult : actualResult;
+            const rawResult: any = command.executed(context, resolvedArgs, context.bot.getAPI());
+            const result: any = rawResult instanceof Promise ? await rawResult : rawResult;
+
+            // Actions
+            if (typeof result === "object") {
+                const actions: IAction<any> = result;
+
+                if (Array.isArray(actions)) {
+                    await context.bot.actionInterpreter.interpretMany(actions);
+                }
+                else {
+                    await context.bot.actionInterpreter.interpret(actions);
+                }
+            }
+
             const commandCooldown: number = Date.now() + (command.restrict.cooldown * 1000);
             const lastCooldown: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 

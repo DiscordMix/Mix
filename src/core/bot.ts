@@ -42,6 +42,7 @@ import {
 import StatCounter from "./stat-counter";
 import Patterns from "./patterns";
 import {IDisposable} from "./snap";
+import ActionInterpreter from "../actions/action-interpreter";
 
 if (process.env.FORGE_DEBUG_MODE === "true") {
     Log.info("[Forge] Debug mode is enabled");
@@ -265,6 +266,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly argumentResolvers: IArgumentResolver[];
     public readonly argumentTypes: ICustomArgType[];
     public readonly disposables: IDisposable[];
+    public readonly actionInterpreter: ActionInterpreter;
 
     public suspended: boolean;
 
@@ -439,6 +441,12 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @readonly
          */
         this.disposables = [];
+
+        /**
+         * @type {ActionInterpreter}
+         * @readonly
+         */
+        this.actionInterpreter = new ActionInterpreter(this);
 
         return this;
     }

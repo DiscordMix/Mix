@@ -285,7 +285,7 @@ export default class Utils {
         // return (await this.readJson("package.json")).version;
 
         // TODO: Hard coded
-        return "1.1.22";
+        return "2.0.0";
     }
 
     /**

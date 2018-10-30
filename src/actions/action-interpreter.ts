@@ -77,8 +77,14 @@ export default class InstructionInterpreter {
             }
 
             case ActionType.Reply: {
-                const act: IAction<IPrivateMessageActionArgs> = action;
-                const channel: TextChannel | null = this.ensureChannel(act.args.)
+                const act: IAction<IMessageActionArgs> = action;
+                const channel: TextChannel | null = this.ensureChannel(act.args.channelId, act.type);
+
+                if (channel === null) {
+                    return;
+                }
+
+                await (channel as TextChannel).send(act.args.message);
 
                 break;
             }

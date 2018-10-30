@@ -1,7 +1,7 @@
 import Bot from "../core/bot";
 import {IAction, ActionType} from "./action";
-import {Snowflake, Channel, TextChannel, Guild, User, RichEmbed} from "discord.js";
-import {Log, Utils} from "..";
+import {Snowflake, Channel, TextChannel, Guild, User, RichEmbed, Message} from "discord.js";
+import {Log, Utils, PaginatedMessage, EmojiMenu, CommandContext} from "..";
 
 // Arg types
 export type IMessageActionArgs = {
@@ -25,6 +25,13 @@ export interface IRequestActionArgs extends IMessageActionArgs {
 
 export type IEmbedActionArgs = {
     readonly embed: RichEmbed;
+}
+
+export type IPaginatedActionArgs = {
+    readonly message: string;
+    readonly inputMessage: Message;
+    readonly bot: Bot;
+    readonly context: CommandContext;
 }
 
 export enum ChannelType {
@@ -113,6 +120,48 @@ export default class InstructionInterpreter {
                     message: act.args.message,
                     avatarUrl: act.args.avatarUrl
                 });
+
+                break;
+            }
+
+            case ActionType.PaginatedOkEmbed: {
+                const act: IAction<IPaginatedActionArgs> = action;
+                const channel: TextChannel | null = this.ensureChannel(act.args.inputMessage.channel.id, act.type);
+
+                if (channel === null) {
+                    return;
+                }
+
+                const paginatedMessage: PaginatedMessage = new PaginatedMessage(act.args.message);
+
+                const message: Message = await channel.send(new RichEmbed()
+                    .setColor("GREEN")
+                    .setDescription(paginatedMessage.getPage())) as Message;
+
+                new EmojiMenu(message.id, act.args.inputMessage.author.id)
+                    .add({
+                        emoji: "495380506372734980",
+
+                        async clicked(): Promise<void> {
+                            paginatedMessage.previous();
+
+                            await message.edit(new RichEmbed()
+                                .setColor("GREEN")
+                                .setDescription(paginatedMessage.getPage()));
+                        }
+                    })
+                    .add({
+                        emoji: "490721272607670272",
+
+                        async clicked(): Promise<void> {
+                            paginatedMessage.next();
+
+                            await message.edit(new RichEmbed()
+                                .setColor("GREEN")
+                                .setDescription(paginatedMessage.getPage()));
+                        }
+                    })
+                    .attach(act.args.context);
 
                 break;
             }

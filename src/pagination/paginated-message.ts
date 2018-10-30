@@ -4,13 +4,17 @@ import Bot from "../core/bot";
 import Log from "../core/log";
 import {IDisposable} from "..";
 
+export enum PaginationEvent {
+    PageChanged = "pageChanged"
+}
+
 export default class PaginatedMessage extends EventEmitter implements IDisposable {
     public readonly content: string;
     public readonly maxLength: number;
 
     private current: number;
 
-    public constructor(content: string, maxLength: number = 2048, currentPage: number = 0) {
+    public constructor(content: string, maxLength: number = 2000, currentPage: number = 0) {
         super();
 
         this.content = content;
@@ -18,14 +22,21 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
         this.current = currentPage;
     }
 
-    // TODO: Should perform a range check to prevent overflow
     public next(pages: number = 1): this {
-        if (this.current + pages > 0) {
+        if (this.current + pages >= 0 && this.current + pages <= this.maxPages) {
             this.current += pages;
-            this.emit("pageChanged", this.current);
+            this.emit(PaginationEvent.PageChanged, this.current);
         }
 
         return this;
+    }
+
+    public get maxPages(): number {
+        if (this.content.length > this.maxLength) {
+            return 1;
+        }
+
+        return this.content.length / this.maxLength;
     }
 
     public attach(bot: Bot, message: Message, placeholder: string = "*"): this {
@@ -35,7 +46,7 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
             return this;
         }
 
-        this.on("pageChanged", async () => {
+        this.on(PaginationEvent.PageChanged, async () => {
             if (!message.editable) {
                 Log.warn("[Pagination.attach] Message is un-editable");
 

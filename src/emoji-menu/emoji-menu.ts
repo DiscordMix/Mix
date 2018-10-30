@@ -52,7 +52,7 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
         }
 
         for (let i: number = 0; i < this.buttons.length; i++) {
-            if (this.buttons[i].emoji === reaction.emoji.id) {
+            if (this.buttons[i].emoji === reaction.emoji.id || this.buttons[i].emoji === reaction.emoji.name) {
                 if (!this.buttons[i].public && user.id !== this.ownerId) {
                     continue;
                 }
@@ -72,7 +72,7 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
         }
 
         for (let i: number = 0; i < this.buttons.length; i++) {
-            if (this.buttons[i].emoji === reaction.emoji.id) {
+            if (this.buttons[i].emoji === reaction.emoji.id || this.buttons[i].emoji === reaction.emoji.name) {
                 if (!this.buttons[i].public && user.id !== this.ownerId  || (this.bot && this.bot.client.user.id === user.id)) {
                     continue;
                 }

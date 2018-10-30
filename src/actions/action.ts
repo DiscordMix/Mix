@@ -21,6 +21,9 @@ export enum ActionType {
     OkEmbed,
     FailEmbed,
 
+    // Paginated Messages
+    PaginatedOkEmbed,
+
     // Reactions
     ReactionAdd,
     ReactionRemove,

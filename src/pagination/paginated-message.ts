@@ -8,17 +8,20 @@ export enum PaginationEvent {
     PageChanged = "pageChanged"
 }
 
+// TODO: Implement break lines code
 export default class PaginatedMessage extends EventEmitter implements IDisposable {
     public readonly content: string;
     public readonly maxLength: number;
+    public readonly breakLines: boolean;
 
     private current: number;
 
-    public constructor(content: string, maxLength: number = 2000, currentPage: number = 0) {
+    public constructor(content: string, maxLength: number = 2000, breakLines: boolean = true, currentPage: number = 0) {
         super();
 
         this.content = content;
         this.maxLength = maxLength;
+        this.breakLines = breakLines;
         this.current = currentPage;
     }
 

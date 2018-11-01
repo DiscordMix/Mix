@@ -3,7 +3,7 @@ export default abstract class Patterns {
 
     public static url: RegExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
 
-    public static token: RegExp = /ND[a-z0-9]{22}\.Dqr[a-z0-9-]{3}\.[-a-z0-9_]{27}/gmi;
+    public static token: RegExp = /ND[a-z0-9]{22}\.D[a-z]{2}[a-z0-9-]{3}\.[-a-z0-9_]{27}/gmi;
 
     public static mention: RegExp = /<@!?[0-9]{18}>/gm;
 

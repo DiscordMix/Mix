@@ -2,6 +2,7 @@ import Bot from "../core/bot";
 import {IAction, ActionType} from "./action";
 import {Snowflake, Channel, TextChannel, Guild, User, RichEmbed, Message} from "discord.js";
 import {Log, Utils, PaginatedMessage, EmojiMenu, CommandContext} from "..";
+import {EventEmitter} from "events";
 
 // Arg types
 export type IMessageActionArgs = {
@@ -40,10 +41,12 @@ export enum ChannelType {
     Group = "group"
 }
 
-export default class InstructionInterpreter {
+export default class InstructionInterpreter extends EventEmitter {
     private readonly bot: Bot;
 
     public constructor(bot: Bot) {
+        super();
+
         this.bot = bot;
     }
 
@@ -186,8 +189,13 @@ export default class InstructionInterpreter {
             }
 
             default: {
-                // TODO: Support for custom actions
-                Log.warn(`Unable to interpret unknown action type: ${action.type}`);
+                if (action.type >= 1000) {
+                    // TODO: Override on() from EventEmitter because emitting converted number
+                    this.emit(action.type.toString());
+                }
+                else {
+                    Log.warn(`Unable to interpret unknown action type: ${action.type}`);
+                }
             }
         }
     }

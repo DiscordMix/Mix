@@ -97,7 +97,7 @@ export type ICommandResult = {
 }
 
 export abstract class GenericCommand<ArgumentsType> implements IFragment, IDisposable {
-    public abstract meta: IFragmentMeta;
+    public readonly abstract meta: IFragmentMeta;
     public readonly aliases: string[] = [];
     public readonly arguments: IArgument[] = [];
     public readonly restrict: ICommandRestrict = Object.assign({}, DefaultCommandRestrict);

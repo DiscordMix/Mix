@@ -581,8 +581,25 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
         // Load & enable tasks
         this.tasks.unregisterAll();
-        await this.tasks.loadAll(this.settings.paths.tasks);
+        Log.verbose("[Bot.setup] Loading tasks");
 
+        const loaded: number = await this.tasks.loadAll(this.settings.paths.tasks);
+
+        if (loaded > 0) {
+            Log.success(`[Bot.setup] Loaded ${loaded} task(s)`);
+
+            const enabled: number = this.tasks.enableAll();
+
+            if (enabled > 0) {
+                Log.success(`[Bot.setup] Enabled ${enabled}/${loaded} task(s)`);
+            }
+            else if (enabled === 0 && loaded > 0) {
+                Log.warn("[Bot.setup] No tasks were enabled");
+            }
+        }
+        else {
+            Log.verbose("[Bot.setup] No tasks found");
+        }
 
         this.emit(EBotEvents.LoadedCommands);
 

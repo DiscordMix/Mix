@@ -28,7 +28,7 @@ export type ISettingsPaths = {
 
 export type ISettingsOptions = {
     readonly general: ISettingsGeneral;
-    readonly paths?: ISettingsPaths;
+    readonly paths?: Partial<ISettingsPaths>;
     readonly keys?: ISettingsKeys;
 }
 

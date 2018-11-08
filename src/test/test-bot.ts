@@ -99,11 +99,10 @@ export default class TestBot extends Bot {
         return this.getLastMessage();
     }
 
-    // TODO:
-    public $longMessages(): string {
-        //this.getResponseHelper().ok("Hello world");
+    public async $longMessages(msg: string): Promise<Message> {
+        await this.getResponseHelper().ok(msg);
 
-        return "test";
+        return this.getLastMessage();
     }
 }
 
@@ -152,6 +151,25 @@ async function init(): Promise<void> {
         TestBot.testGuild = testGuild;
         TestBot.testChannel = testChannel;
     });
+}
+
+// Utility methods
+function randomString(): string {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
+function randomStringX(length: number): string {
+    if (length < 1) {
+        throw new Error("[randomStringX] Expecting length to be a number higher than 0");
+    }
+
+    let finalString: string = "";
+
+    for (let i: number = 0; i < length; i++) {
+        finalString += randomString();
+    }
+
+    return finalString;
 }
 
 // Tests
@@ -203,11 +221,19 @@ describe("send messages", () => {
 });
 
 describe("longMessages", () => {
-    it("should trim long messages", () => {
-        const result: string = testBot.$longMessages();
+    it("should trim long messages", async () => {
+        const randomStr: string = randomStringX(50);
+        const message: Message = await testBot.$longMessages(randomStr);
 
-        // TODO:
-        expect(result).to.equal("test");
+        expect(message).to.be.an("object");
+        expect(message.embeds).to.be.an("array");
+        expect(message.embeds.length).to.be.a("number");
+        expect(message.embeds.length).to.equal(1);
+        expect(message.embeds[0]).to.be.an("object");
+        expect(message.embeds[0].color).to.be.a("number");
+        expect(message.embeds[0].color).to.equal(3066993); // Green
+        expect(message.embeds[0].description).to.be.a("string");
+        expect(message.embeds[0].description).to.equal(":white_check_mark: " + randomStr.substring(0, 1024 - 19));
     });
 });
 

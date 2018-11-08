@@ -84,7 +84,7 @@ export default class TaskManager {
      * @return {boolean}
      */
     public trigger(name: string): boolean {
-        if (!Utils.isEmpty(name) || typeof name !== "string") {
+        if (Utils.isEmpty(name) || typeof name !== "string") {
             return false;
         }
 

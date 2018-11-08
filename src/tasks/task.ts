@@ -1,6 +1,6 @@
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import Bot from "../core/bot";
-import {IDisposable} from "../core/snap";
+import {IDisposable} from "../core/structures";
 
 export abstract class Task implements IFragment, IDisposable {
     public readonly abstract meta: IFragmentMeta;

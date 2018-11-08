@@ -2,6 +2,7 @@ import fs from "fs";
 import colors from "colors";
 
 export enum LogLevel {
+    None = -1,
     Fatal,
     Error,
     Warn,
@@ -27,6 +28,10 @@ export default class Log {
      * @return {Promise<void>}
      */
     public static async compose(options: IComposeOptions): Promise<any> {
+        if (Log.level === LogLevel.None) {
+            return;
+        }
+
         const finalColor: string = options.color || "white";
 
         // TODO:

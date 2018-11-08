@@ -41,7 +41,7 @@ import {
 
 import StatCounter from "./stat-counter";
 import Patterns from "./patterns";
-import {IDisposable} from "./snap";
+import {IDisposable} from "./structures";
 import ActionInterpreter from "../actions/action-interpreter";
 import TaskManager from "../tasks/task-manager";
 
@@ -228,7 +228,7 @@ export enum EBotEvents {
  * - loadedServices()
  * - loadCommands()
  * - loadedCommands()
- * - ready() --> TODO: Seems like it's missing
+ * - ready()
  * - handleMessageStart()
  * - handleMessageEnd()
  * - handleCommandMessageStart(Discord.Message, string)
@@ -692,6 +692,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             const took: number = Math.round(performance.now() - this.setupStart);
 
             Log.success(`[Bot.setupEvents] Ready | Took ${took}ms`);
+            this.emit(EBotEvents.Ready);
         });
 
         this.client.on(DiscordEvent.Message, this.handleMessage.bind(this));

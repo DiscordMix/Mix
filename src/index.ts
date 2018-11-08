@@ -46,7 +46,7 @@ import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
 import EmojiMenu, {IEmojiButton} from "./emoji-menu/emoji-menu";
 import PaginatedMessage from "./pagination/paginated-message";
-import {IDisposable} from "./core/snap";
+import {IDisposable} from "./core/structures";
 import {ICommandExecutedEvent} from "./events/command-executed-event";
 import {ICommandWillExecuteEvent} from "./events/command-will-execute-event";
 import {Task} from "./tasks/task";

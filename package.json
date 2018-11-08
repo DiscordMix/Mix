@@ -28,6 +28,7 @@
         "build": "tsc",
         "type-check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js",
+        "test:bot": "npm run build && mocha dist/test/test-bot.js --timeout 5s",
         "manualtest": "npm run build && node dist/test/manual-tests.js",
         "prepublish": "npm run build",
         "prepare": "npm run build"
@@ -68,11 +69,12 @@
         "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.44",
         "@babel/preset-env": "^7.0.0-beta.44",
         "@babel/preset-typescript": "^7.0.0-beta.44",
-        "chai": "^4.1.2",
+        "chai": "^4.2.0",
+        "dotenv": "^6.1.0",
         "eslint": "^4.19.1",
         "eslint-config-airbnb-base": "^12.1.0",
         "eslint-plugin-import": "^2.10.0",
-        "mocha": "^5.1.1",
+        "mocha": "^5.2.0",
         "typedoc": "^0.13.0",
         "typescript": "^2.8.1"
     },

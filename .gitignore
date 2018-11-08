@@ -12,3 +12,4 @@ desktop.ini
 *.sh
 yarn-error.log
 docs/
+.env

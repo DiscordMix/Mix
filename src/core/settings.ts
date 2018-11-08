@@ -38,9 +38,13 @@ export default class Settings {
     public keys: ISettingsKeys;
 
     /**
-     * @param {ISettingsOptions} options
+     * @param {Partial<ISettingsOptions>} options
      */
-    constructor(options: ISettingsOptions) {
+    constructor(options: Partial<ISettingsOptions>) {
+        if (!options.general) {
+            throw new Error("[Settings] Expecting general settings");
+        }
+
         /**
          * @type {ISettingsGeneral}
          * @readonly

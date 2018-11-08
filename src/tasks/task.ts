@@ -1,7 +1,8 @@
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import Bot from "../core/bot";
+import {IDisposable} from "../core/snap";
 
-export abstract class Task implements IFragment {
+export abstract class Task implements IFragment, IDisposable {
     public readonly abstract meta: IFragmentMeta;
     public readonly abstract interval: number;
 
@@ -24,6 +25,10 @@ export abstract class Task implements IFragment {
     }
 
     public disable(bot: Bot): void {
+        //
+    }
+
+    public dispose(): void {
         //
     }
 };

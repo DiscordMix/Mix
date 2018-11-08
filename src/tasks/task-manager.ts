@@ -8,12 +8,37 @@ export default class TaskManager {
     private readonly tasks: Map<string, Task>;
     private readonly scheduler: Map<string, NodeJS.Timeout>;
 
+    /**
+     * @param {Bot} bot
+     */
     public constructor(bot: Bot) {
+        /**
+         * @type {Bot}
+         * @private
+         * @readonly
+         */
         this.bot = bot;
+
+        /**
+         * @type {Map<string, Task>}
+         * @private
+         * @readonly
+         */
         this.tasks = new Map();
+
+        /**
+         * @type {Map<string, NodeJS.Timeout}
+         * @private
+         * @readonly
+         */
         this.scheduler = new Map();
     }
 
+    /**
+     * Register a task
+     * @param {Task} task
+     * @return {boolean}
+     */
     public registerTask(task: Task): boolean {
         if (this.tasks.has(task.meta.name)) {
             return false;
@@ -24,6 +49,11 @@ export default class TaskManager {
         return true;
     }
 
+    /**
+     * Unschedule a task
+     * @param {string} name
+     * @return {boolean}
+     */
     public unschedule(name: string): boolean {
         if (!this.tasks.has(name)) {
             return false;
@@ -40,6 +70,11 @@ export default class TaskManager {
         return false;
     }
 
+    /**
+     * Trigger a task
+     * @param {string} name
+     * @return {boolean}
+     */
     public trigger(name: string): boolean {
         if (this.tasks.has(name)) {
             const task: Task = this.tasks.get(name) as Task;
@@ -73,6 +108,10 @@ export default class TaskManager {
         return false;
     }
 
+    /**
+     * Run a task
+     * @param {string} name
+     */
     private run(name: string): boolean {
         if (!this.tasks.has(name)) {
             return false;
@@ -87,6 +126,9 @@ export default class TaskManager {
         return true;
     }
 
+    /**
+     * Disable all registered tasks
+     */
     public unregisterAll(): this {
         for (let [name, task] of this.tasks) {
             this.disable(name);
@@ -95,6 +137,11 @@ export default class TaskManager {
         return this;
     }
 
+    /**
+     * Disable a task
+     * @param {string} name
+     * @return {boolean} Whether the task was disabled
+     */
     public disable(name: string): boolean {
         if (!this.tasks.has(name)) {
             return false;
@@ -109,6 +156,10 @@ export default class TaskManager {
         return true;
     }
 
+    /**
+     * Enable all tasks
+     * @return {number}
+     */
     public enableAll(): number {
         let enabled: number = 0;
 
@@ -121,10 +172,20 @@ export default class TaskManager {
         return enabled;
     }
 
+    /**
+     * Determine if a task is registered
+     * @param {string} name
+     * @return {boolean}
+     */
     public isRegistered(name: string): boolean {
         return this.tasks.has(name);
     }
 
+    /**
+     * Load tasks from a directory
+     * @param {string} path
+     * @return {Promise<number>} The amount of tasks loaded
+     */
     public async loadAll(path: string): Promise<number> {
         const candidates: string[] | null = await FragmentLoader.pickupCandidates(path, true);
 

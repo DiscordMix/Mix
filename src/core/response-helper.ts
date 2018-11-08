@@ -37,15 +37,15 @@ export default class ResponseHelper {
             if (finalContent.text.trim() === "" || finalContent.text === undefined || finalContent.text === null) {
                 finalContent.text = ":thinking: *Empty response*";
             }
-            else if (finalContent.text.length > 2048) {
+            else if (finalContent.text.length > 1024) {
                 if (finalContent.text.endsWith("```")) {
-                    finalContent.text = finalContent.text.substring(0, 2045) + "```";
+                    finalContent.text = finalContent.text.substring(0, 1021) + "```";
                 }
 
                 // TODO: ... not being added at the end
-                finalContent.text = finalContent.text.substring(0, 2044) + " ...";
+                finalContent.text = finalContent.text.substring(0, 1020) + " ...";
 
-                Log.warn("[Context.respond] Attempted to send a message with more than 2048 characters (Discord limit); The message was automatically trimmed");
+                Log.warn("[Context.respond] Attempted to send a message with more than 1024 characters (Discord limit); The message was automatically trimmed");
             }
 
             finalContent.text = Utils.escapeText(finalContent.text, this.bot.client.token);

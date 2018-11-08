@@ -4,7 +4,7 @@ require("dotenv").config();
 import {Bot, Log} from "..";
 import Settings from "../core/settings";
 import path from "path";
-import {Snowflake, Guild, TextChannel, Message, MessageEmbed} from "discord.js";
+import {Snowflake, Guild, TextChannel, Message} from "discord.js";
 import CommandContext from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect} from "chai";
@@ -184,7 +184,7 @@ describe("init", () => {
 });
 
 describe("send messages", () => {
-    it("should should send an embed message using ok()", async () => {
+    it("should send an embed message using ok()", async () => {
         const message: Message = await testBot.$sendEmbedMessageOk();
 
         expect(message).to.be.an("object");
@@ -233,7 +233,7 @@ describe("longMessages", () => {
         expect(message.embeds[0].color).to.be.a("number");
         expect(message.embeds[0].color).to.equal(3066993); // Green
         expect(message.embeds[0].description).to.be.a("string");
-        expect(message.embeds[0].description).to.equal(":white_check_mark: " + randomStr.substring(0, 1024 - 19));
+        expect(message.embeds[0].description).to.equal(":white_check_mark: " + randomStr.substring(0, 1024 - 19 - 4) + " ...");
     });
 });
 

@@ -1,7 +1,7 @@
 // Environment variables
 require("dotenv").config();
 
-import {Bot, Log} from "..";
+import {Bot, Log, Task} from "..";
 import Settings from "../core/settings";
 import path from "path";
 import {Snowflake, Guild, TextChannel, Message} from "discord.js";
@@ -9,7 +9,7 @@ import CommandContext from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect} from "chai";
 import {LogLevel} from "../core/log";
-import {EBotEvents} from "../core/bot";
+import {EBotEvents, InternalArgTypes, InternalArgResolvers} from "../core/bot";
 
 // Test globals
 const globalAny: any = global;
@@ -177,9 +177,142 @@ beforeEach(async () => {
     await testBot.deleteLastMessage();
 });
 
-describe("init", () => {
-    it("should init and login", () => {
-        return init();
+describe("setup", () => {
+    it("should init and login", async () => {
+        await init();
+
+        expect(testBot.client.user).to.be.an("object");
+    });
+
+    it("should have no owner", () => {
+        expect(testBot.owner).to.be.a("undefined");
+    });
+
+    it("should have default argument types", () => {
+        expect(testBot.argumentTypes).to.be.an("array");
+        expect(testBot.argumentTypes).to.equal(InternalArgTypes);
+    });
+
+    it("should have default argument resolvers", () => {
+        expect(testBot.argumentResolvers).to.be.an("array");
+        expect(testBot.argumentResolvers).to.equal(InternalArgResolvers);
+    });
+});
+
+describe("commands", () => {
+    it("should have registered commands", () => {
+        const actualCmds: string[] = ["hi"];
+        const fakeCmds: string[] = ["john", "doe"]
+
+        // Actual commands
+        for (let i: number = 0; i < actualCmds.length; i++) {
+            const check: boolean = testBot.commandStore.contains(actualCmds[i]);
+            
+            expect(check).to.be.a("boolean");
+            expect(check).to.equal(true);
+        }
+
+        // Fake commands
+        for (let i: number = 0; i < fakeCmds.length; i++) {
+            const check: boolean = testBot.commandStore.contains(fakeCmds[i]);
+
+            expect(check).to.be.a("boolean");
+            expect(check).to.equal(false);
+        }
+
+        // Other tests
+        expect(testBot.commandStore.contains(undefined as any)).to.be.a("boolean");
+        expect(testBot.commandStore.contains(undefined as any)).to.equal(false);
+
+        expect(testBot.commandStore.contains(null as any)).to.be.a("boolean");
+        expect(testBot.commandStore.contains(null as any)).to.equal(false);
+
+        expect(testBot.commandStore.contains("" as any)).to.be.a("boolean");
+        expect(testBot.commandStore.contains("" as any)).to.equal(false);
+    });
+});
+
+describe("tasks", () => {
+    it("should register tasks", () => {
+        const actualTasks: string[] = ["do-some-math"];
+        const fakeTasks: string[] = ["doe", "john"]
+
+        // Actual tasks
+        for (let i: number = 0; i < actualTasks.length; i++) {
+            const check: boolean = testBot.tasks.contains(actualTasks[i]);
+
+            expect(check).to.be.a("boolean");
+            expect(check).to.equal(true);
+        }
+
+        // Fake tasks
+        for (let i: number = 0; i < fakeTasks.length; i++) {
+            const check: boolean = testBot.tasks.contains(fakeTasks[i]);
+
+            expect(check).to.be.a("boolean");
+            expect(check).to.equal(false);
+        }
+
+        // Task properties
+        const task: Task = testBot.tasks.get("do-some-math") as Task;
+
+        expect(task.meta).to.be.an("object");
+        expect(task.meta.name).to.be.a("string");
+        expect(task.meta.name).to.equal("do-some-math");
+        expect(task.meta.description).to.be.a("string");
+        expect(task.meta.description).to.equal("Do some math!");
+        expect(task.maxIterations).to.be.a("number");
+        expect(task.maxIterations).to.equal(-1);
+        expect(task.lastIteration).to.be.a("number");
+        expect(task.lastIteration).to.not.equal(-1);
+        expect(task.iterations).to.be.a("number");
+        expect(task.iterations).to.equal(1);
+
+        // Other tests
+        expect(testBot.tasks.contains(undefined as any)).to.be.a("boolean");
+        expect(testBot.tasks.contains(undefined as any)).to.equal(false);
+
+        expect(testBot.tasks.contains(null as any)).to.be.a("boolean");
+        expect(testBot.tasks.contains(null as any)).to.equal(false);
+
+        expect(testBot.tasks.contains("" as any)).to.be.a("boolean");
+        expect(testBot.tasks.contains("" as any)).to.equal(false);
+    });
+
+    it("should trigger tasks", () => {
+        const triggerResult: boolean = testBot.tasks.trigger("do-some-math");
+
+        expect(triggerResult).to.be.a("boolean");
+        expect(triggerResult).to.equal(true);
+
+        // Other tests
+        expect(testBot.tasks.trigger("")).to.be.a("boolean");
+        expect(testBot.tasks.trigger("")).to.equal(false);
+
+        expect(testBot.tasks.trigger(undefined as any)).to.be.a("boolean");
+        expect(testBot.tasks.trigger(undefined as any)).to.equal(false);
+
+        expect(testBot.tasks.trigger(null as any)).to.be.a("boolean");
+        expect(testBot.tasks.trigger(null as any)).to.equal(false);
+
+        expect(testBot.tasks.trigger(1 as any)).to.be.a("boolean");
+        expect(testBot.tasks.trigger(1 as any)).to.equal(false);
+
+        expect(testBot.tasks.trigger({} as any)).to.be.a("boolean");
+        expect(testBot.tasks.trigger({} as any)).to.equal(false);
+
+        expect(testBot.tasks.trigger([] as any)).to.be.a("boolean");
+        expect(testBot.tasks.trigger([] as any)).to.equal(false);
+    });
+
+    it("should update tasks after triggering", () => {
+        const task: Task = testBot.tasks.get("do-some-math") as Task;
+
+        expect(task).to.be.an("object");
+        expect(task.lastIteration).to.be.a("number");
+        expect(task.lastIteration).to.not.equal(-1);
+        expect(task.iterations).to.be.a("number");
+        expect(task.iterations).to.equal(2);
     });
 });
 
@@ -220,7 +353,7 @@ describe("send messages", () => {
     });
 });
 
-describe("longMessages", () => {
+describe("long messages", () => {
     it("should trim long messages", async () => {
         const randomStr: string = randomStringX(50);
         const message: Message = await testBot.$longMessages(randomStr);

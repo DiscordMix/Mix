@@ -49,6 +49,14 @@ export default class TaskManager {
         return true;
     }
 
+    public get(name: string): Task | null {
+        if (!name || typeof name !== "string") {
+            return null;
+        }
+
+        return this.tasks.get(name) || null;
+    }
+
     /**
      * Unschedule a task
      * @param {string} name
@@ -76,6 +84,10 @@ export default class TaskManager {
      * @return {boolean}
      */
     public trigger(name: string): boolean {
+        if (!name || typeof name !== "string") {
+            return false;
+        }
+
         if (this.tasks.has(name)) {
             const task: Task = this.tasks.get(name) as Task;
 
@@ -177,7 +189,11 @@ export default class TaskManager {
      * @param {string} name
      * @return {boolean}
      */
-    public isRegistered(name: string): boolean {
+    public contains(name: string): boolean {
+        if (!name) {
+            return false;
+        }
+
         return this.tasks.has(name);
     }
 

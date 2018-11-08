@@ -189,6 +189,10 @@ export default class CommandStore {
      * @return {boolean}
      */
     public contains(commandBase: string): boolean {
+        if (!commandBase) {
+            return false;
+        }
+
         return this.commands.has(commandBase) || this.aliases.has(commandBase);
     }
 

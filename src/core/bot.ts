@@ -63,7 +63,7 @@ const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../frag
 // TODO: Should be a property/option on Bot, not hardcoded
 // TODO: Merge this resolvers with the (if provided) provided
 // ones by the user.
-const internalArgResolvers: IArgumentResolver[] = [
+export const InternalArgResolvers: IArgumentResolver[] = [
     {
         name: InternalArgType.Member,
 
@@ -107,7 +107,7 @@ const internalArgResolvers: IArgumentResolver[] = [
 ];
 
 // TODO: Message type and resolver
-const internalArgTypes: ICustomArgType[] = [
+export const InternalArgTypes: ICustomArgType[] = [
     {
         name: InternalArgType.Channel,
 
@@ -339,7 +339,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @type {IArgumentResolver[]}
          * @readonly
          */
-        this.argumentResolvers = internalArgResolvers;
+        this.argumentResolvers = InternalArgResolvers;
 
         if (botOptions.argumentResolvers) {
             this.argumentResolvers = [
@@ -352,7 +352,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @type {ICustomArgType[]}
          * @readonly
          */
-        this.argumentTypes = internalArgTypes;
+        this.argumentTypes = InternalArgTypes;
 
         if (botOptions.argumentTypes) {
             this.argumentTypes = [

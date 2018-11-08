@@ -13,3 +13,4 @@ desktop.ini
 yarn-error.log
 docs/
 .env
+yarn.lock

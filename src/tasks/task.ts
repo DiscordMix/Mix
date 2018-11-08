@@ -19,4 +19,8 @@ export abstract class Task implements IFragment, IDisposable {
     public dispose(): void {
         //
     }
+
+    public get lastIterationDifference(): number {
+        return Date.now() - this.lastIteration;
+    }
 };

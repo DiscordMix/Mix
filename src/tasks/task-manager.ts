@@ -1,4 +1,4 @@
-import {Bot} from "..";
+import {Bot, Utils} from "..";
 import {Task} from "./task";
 import Log from "../core/log";
 import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
@@ -50,7 +50,7 @@ export default class TaskManager {
     }
 
     public get(name: string): Task | null {
-        if (!name || typeof name !== "string") {
+        if (Utils.isEmpty(name) || typeof name !== "string") {
             return null;
         }
 
@@ -84,7 +84,7 @@ export default class TaskManager {
      * @return {boolean}
      */
     public trigger(name: string): boolean {
-        if (!name || typeof name !== "string") {
+        if (!Utils.isEmpty(name) || typeof name !== "string") {
             return false;
         }
 

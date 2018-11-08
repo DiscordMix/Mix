@@ -22,6 +22,7 @@ const subjects = {
         "285578743324606482"
     ],
 
+    // Note: This is a regenerated token just for pattern matching!
     token: "NDMzMzg0MzM1MjExNjI2NDk4.DqrIbQ.cC0MAvHKTwbOVrPEa-Xddz356vc",
 
     rgb: new Rgb(5, 10, 15),

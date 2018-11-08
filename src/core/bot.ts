@@ -591,10 +591,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             const enabled: number = this.tasks.enableAll();
 
             if (enabled > 0) {
-                Log.success(`[Bot.setup] Enabled ${enabled}/${loaded} task(s)`);
+                Log.success(`[Bot.setup] Triggered ${enabled}/${loaded} task(s)`);
             }
             else if (enabled === 0 && loaded > 0) {
-                Log.warn("[Bot.setup] No tasks were enabled");
+                Log.warn("[Bot.setup] No tasks were triggered");
             }
         }
         else {

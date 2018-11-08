@@ -24,27 +24,45 @@ export default class TaskManager {
         return true;
     }
 
-    public enable(name: string): boolean {
+    public unschedule(name: string): boolean {
+        if (!this.tasks.has(name)) {
+            return false;
+        }
+
+        const task: Task = this.tasks.get(name) as Task;
+
+        if (this.scheduler.has(task.meta.name)) {
+            this.scheduler.delete(task.meta.name);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public trigger(name: string): boolean {
         if (this.tasks.has(name)) {
             const task: Task = this.tasks.get(name) as Task;
 
+            this.unschedule(task.meta.name);
+
             if (task.interval < 100) {
-                Log.warn(`[TaskManager.enable] Refusing to enable task '${name}'; Interval must be 100ms or higher`);
+                Log.warn(`[TaskManager.enable] Refusing to run task '${name}'; Interval must be 100ms or higher`);
 
                 return false;
             }
-            else if (task.canEnable(this.bot)) {
-                task.enable(this.bot);
+            else if (task.interval === -1) {
+                this.run(name);
 
+                return true;
+            }
+            else {
                 this.scheduler.set(task.meta.name, setInterval(() => {
                     if (task.iterations >= task.maxIterations) {
                         this.disable(task.meta.name);
                     }
                     else if (task.canRun(this.bot)) {
-                        task.run(this.bot);
-
-                        (task as any).iterations++;
-                        (task as any).lastIteration = Date.now();
+                        this.run(name);
                     }
                 }, task.interval));
 
@@ -53,6 +71,20 @@ export default class TaskManager {
         }
 
         return false;
+    }
+
+    private run(name: string): boolean {
+        if (!this.tasks.has(name)) {
+            return false;
+        }
+
+        const task: Task = this.tasks.get(name) as Task;
+
+        task.run(this.bot);
+        (task as any).iterations++;
+        (task as any).lastIteration = Date.now();
+
+        return true;
     }
 
     public unregisterAll(): this {
@@ -70,7 +102,6 @@ export default class TaskManager {
 
         const task: Task = this.tasks.get(name) as Task;
 
-        task.disable(this.bot);
         task.dispose();
         clearInterval(this.scheduler.get(task.meta.name) as NodeJS.Timeout);
         this.scheduler.delete(task.meta.name);
@@ -82,7 +113,7 @@ export default class TaskManager {
         let enabled: number = 0;
 
         for (let [name, task] of this.tasks) {
-            if (this.enable(name)) {
+            if (this.trigger(name)) {
                 enabled++;
             }
         }

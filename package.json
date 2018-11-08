@@ -27,7 +27,7 @@
         "watch": "tsc --watch",
         "build": "tsc",
         "type-check": "tsc --noEmit",
-        "test": "npm run build && mocha dist/test/tests.js",
+        "test": "npm run test:static && npm run test:bot",
         "test:static": "npm run build && mocha dist/test/tests.js",
         "test:bot": "npm run build && mocha dist/test/test-bot.js --timeout 5s --slow 1.5s",
         "manualtest": "npm run build && node dist/test/manual-tests.js",

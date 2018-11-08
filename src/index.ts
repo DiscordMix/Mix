@@ -49,6 +49,8 @@ import PaginatedMessage from "./pagination/paginated-message";
 import {IDisposable} from "./core/snap";
 import {ICommandExecutedEvent} from "./events/command-executed-event";
 import {ICommandWillExecuteEvent} from "./events/command-will-execute-event";
+import {Task} from "./tasks/task";
+import TaskManager from "./tasks/task-manager";
 
 export {
     // Commands
@@ -135,5 +137,9 @@ export {
     command,
     WeakCommand,
     IDecoratorCommand,
-    SimpleCommand
+    SimpleCommand,
+
+    // Tasks
+    Task,
+    TaskManager
 };

@@ -46,15 +46,15 @@ export default class TaskManager {
 
             this.unschedule(task.meta.name);
 
-            if (task.interval < 100) {
-                Log.warn(`[TaskManager.enable] Refusing to run task '${name}'; Interval must be 100ms or higher`);
-
-                return false;
-            }
-            else if (task.interval === -1) {
+            if (task.interval === -1) {
                 this.run(name);
 
                 return true;
+            }
+            else if (task.interval < 100) {
+                Log.warn(`[TaskManager.enable] Refusing to run task '${name}'; Interval must be 100ms or higher`);
+
+                return false;
             }
             else {
                 this.scheduler.set(task.meta.name, setInterval(() => {

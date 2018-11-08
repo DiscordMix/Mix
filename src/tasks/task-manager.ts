@@ -51,14 +51,14 @@ export default class TaskManager {
 
                 return true;
             }
-            else if (task.interval < 100) {
-                Log.warn(`[TaskManager.enable] Refusing to run task '${name}'; Interval must be 100ms or higher`);
+            else if (task.interval < 1000) {
+                Log.warn(`[TaskManager.enable] Refusing to run task '${name}'; Interval must be 1 second (1000ms) or higher`);
 
                 return false;
             }
             else {
                 this.scheduler.set(task.meta.name, setInterval(() => {
-                    if (task.iterations >= task.maxIterations) {
+                    if (task.maxIterations !== -1 && task.iterations >= task.maxIterations) {
                         this.disable(task.meta.name);
                     }
                     else if (task.canRun(this.bot)) {

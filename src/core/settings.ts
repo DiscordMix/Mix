@@ -17,20 +17,13 @@ export type ISettingsKeys = {
     readonly bfd?: string;
 }
 
-export type IDefiniteSettingsPaths = {
+export type ISettingsPaths = {
     readonly commands: string;
     readonly plugins: string;
     readonly emojis: string;
     readonly services: string;
     readonly languages?: string;
-}
-
-export type ISettingsPaths = {
-    readonly commands?: string;
-    readonly plugins?: string;
-    readonly emojis?: string;
-    readonly services?: string;
-    readonly languages?: string;
+    readonly tasks: string;
 }
 
 export type ISettingsOptions = {
@@ -41,7 +34,7 @@ export type ISettingsOptions = {
 
 export default class Settings {
     public general: ISettingsGeneral;
-    public paths: IDefiniteSettingsPaths;
+    public paths: ISettingsPaths;
     public keys: ISettingsKeys;
 
     /**
@@ -64,7 +57,8 @@ export default class Settings {
             plugins: options.paths && options.paths.plugins ? options.paths.plugins : "./plugins",
             emojis: options.paths && options.paths.emojis ? options.paths.emojis : "./emojis",
             services: options.paths && options.paths.services ? options.paths.services : "./services",
-            languages: options.paths && options.paths.languages ? options.paths.languages : undefined
+            languages: options.paths && options.paths.languages ? options.paths.languages : undefined,
+            tasks: options.paths && options.paths.tasks ? options.paths.tasks : "./tasks"
         };
 
         /**

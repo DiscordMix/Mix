@@ -141,6 +141,7 @@ export default class InstructionInterpreter extends EventEmitter {
                     .setColor("GREEN")
                     .setDescription(paginatedMessage.getPage())) as Message;
 
+                // TODO: Debugging?
                 new EmojiMenu(message.id, act.args.inputMessage.author.id)
                     .add({
                         emoji: "495380506372734980",

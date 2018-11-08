@@ -43,6 +43,7 @@ import StatCounter from "./stat-counter";
 import Patterns from "./patterns";
 import {IDisposable} from "./snap";
 import ActionInterpreter from "../actions/action-interpreter";
+import TaskManager from "../tasks/task-manager";
 
 if (process.env.FORGE_DEBUG_MODE === "true") {
     Log.info("[Forge] Debug mode is enabled");
@@ -267,6 +268,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly argumentTypes: ICustomArgType[];
     public readonly disposables: IDisposable[];
     public readonly actionInterpreter: ActionInterpreter;
+    public readonly tasks: TaskManager;
 
     public suspended: boolean;
 
@@ -448,6 +450,12 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          */
         this.actionInterpreter = new ActionInterpreter(this);
 
+        /**
+         * @type {TaskManager}
+         * @readonly
+         */
+        this.tasks = new TaskManager(this);
+
         return this;
     }
 
@@ -570,6 +578,11 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
                 }
             }
         }
+
+        // Load & enable tasks
+        this.tasks.unregisterAll();
+        await this.tasks.loadAll(this.settings.paths.tasks);
+
 
         this.emit(EBotEvents.LoadedCommands);
 

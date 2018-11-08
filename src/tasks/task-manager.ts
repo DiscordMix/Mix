@@ -1,6 +1,7 @@
 import {Bot} from "..";
 import {Task} from "./task";
 import Log from "../core/log";
+import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
 
 export default class TaskManager {
     private readonly bot: Bot;
@@ -54,6 +55,14 @@ export default class TaskManager {
         return false;
     }
 
+    public unregisterAll(): this {
+        for (let [name, task] of this.tasks) {
+            this.disable(name);
+        }
+
+        return this;
+    }
+
     public disable(name: string): boolean {
         if (!this.tasks.has(name)) {
             return false;
@@ -83,5 +92,25 @@ export default class TaskManager {
 
     public isRegistered(name: string): boolean {
         return this.tasks.has(name);
+    }
+
+    public async loadAll(path: string): Promise<number> {
+        const candidates: string[] | null = await FragmentLoader.pickupCandidates(path, true);
+
+        if (candidates === null) {
+            return 0;
+        }
+
+        const loaded: IPackage[] | null = await FragmentLoader.loadMultiple(candidates);
+
+        if (loaded !== null) {
+            for (let i: number = 0; i < loaded.length; i++) {
+                this.registerTask(new (loaded[i].module as any)());
+            }
+
+            return loaded.length;
+        }
+
+        return 0;
     }
 }

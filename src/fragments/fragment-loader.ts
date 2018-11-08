@@ -22,10 +22,9 @@ export default abstract class FragmentLoader {
     /**
      * @todo Make use of the 'isolate' parameter
      * @param {string} filePath The path to the fragment
-     * @param {boolean} [isolate=false] Whether to isolate the fragment environment
      * @return {Promise<IFragment | null>}
      */
-    public static async load(filePath: string, isolate: boolean = false): Promise<IPackage | null> {
+    public static async load(filePath: string): Promise<IPackage | null> {
         if (!fs.existsSync(filePath)) {
             Log.warn(`[FragmentLoader.load] Fragment path does not exist: ${filePath}`);
 
@@ -61,12 +60,11 @@ export default abstract class FragmentLoader {
     /**
      * @todo Test and make sure it works
      * @param {string} file
-     * @param {boolean} isolate
      */
-    public static async reload(file: string, isolate: boolean = false): Promise<IPackage | null> {
+    public static async reload(file: string): Promise<IPackage | null> {
         delete require.cache[require.resolve(file)];
 
-        return FragmentLoader.load(file, isolate);
+        return FragmentLoader.load(file);
     }
 
     /**
@@ -136,10 +134,9 @@ export default abstract class FragmentLoader {
 
     /**
      * @param {string[]} candidates
-     * @param {boolean} isolate
      * @return {Promise<IPackage[] | null>}
      */
-    public static async loadMultiple(candidates: string[], isolate: boolean = false): Promise<IPackage[] | null> {
+    public static async loadMultiple(candidates: string[]): Promise<IPackage[] | null> {
         if (candidates.length === 0) {
             Log.warn("[FragmentLoader.loadMultiple] Candidates array is empty");
 
@@ -149,7 +146,7 @@ export default abstract class FragmentLoader {
         const result: IPackage[] = [];
 
         for (let i: number = 0; i < candidates.length; i++) {
-            const packg: IPackage | null = await FragmentLoader.load(candidates[i], isolate);
+            const packg: IPackage | null = await FragmentLoader.load(candidates[i]);
 
             if (packg !== null) {
                 result.push(packg);

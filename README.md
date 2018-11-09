@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/discord-forge/forge.svg?branch=dev-2.0)](https://travis-ci.com/discord-forge/forge)
+
 Forge is a powerful, fully-modular and self-contained framework for serious bot development.
 
 **Note**: Forge is a library to create bot systems and not a Discord API library.

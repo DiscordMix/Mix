@@ -140,6 +140,7 @@ export const InternalArgTypes: ICustomArgType[] = [
     }
 ];
 
+// TODO: Already made optional by Partial?
 export type IBotOptions = {
     readonly settings: Settings;
     readonly dataStore?: DataProvider;
@@ -150,6 +151,7 @@ export type IBotOptions = {
     readonly options?: Partial<IBotExtraOptions>;
     readonly argumentResolvers?: IArgumentResolver[];
     readonly argumentTypes?: ICustomArgType[];
+    readonly languages?: string[];
 }
 
 export const DefaultBotEmojiOptions: IDefiniteBotEmojiOptions = {
@@ -271,6 +273,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly actionInterpreter: ActionInterpreter;
     public readonly tasks: TaskManager;
     public readonly timeouts: NodeJS.Timeout[];
+    public readonly languages?: string[];
 
     public suspended: boolean;
 
@@ -430,6 +433,12 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
 
         /**
+         * @type {string[] | undefined}
+         * @readonly
+         */
+        this.languages = botOptions.languages;
+
+        /**
          * @type {boolean}
          */
         this.suspended = false;
@@ -536,6 +545,13 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @private
          */
         this.setupStart = performance.now();
+
+        // Load languages
+        if (this.language && this.languages) {
+            for (let i: number = 0; i < this.languages.length; i++) {
+                await this.language.load(this.languages[i]);
+            }
+        }
 
         Log.verbose("[Bot.setup] Attempting to load internal fragments");
         this.emit(EBotEvents.LoadingInternalFragments);
@@ -821,11 +837,15 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @param {boolean} [edited=false] Whether the message was edited
      * @return {Promise<void>}
      */
-    public async handleMessage(message: Message, edited: boolean = false): Promise<void> {
+    public async handleMessage(message: Message, edited: boolean = false): Promise<boolean> {
+        if (Utils.isEmpty(message) || typeof message !== "object" || !(message instanceof Message) || Array.isArray(message)) {
+            return false;
+        }
+
         this.statCounter.stats.messagesSeen++;
 
         if (this.suspended) {
-            return;
+            return false;
         }
 
         this.emit(EBotEvents.HandleMessageStart);
@@ -901,6 +921,8 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         }
 
         this.emit(EBotEvents.HandleMessageEnd);
+        
+        return true;
     }
 
     /**

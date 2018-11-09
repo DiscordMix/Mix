@@ -1,9 +1,8 @@
 import Utils from "../core/utils";
 import path from "path";
 import fs from "fs";
-import {default as main} from "require-main-filename";
 
-export type ILanguageSource = Map<string, string>;
+export type ILanguageSource = Map<string, any>;
 
 export default class Language {
     private readonly languages: Map<string, ILanguageSource>;
@@ -15,7 +14,11 @@ export default class Language {
     /**
      * @param {string} directory
      */
-    constructor(directory?: string) {
+    constructor(directory: string) {
+        if (!fs.existsSync(directory)) {
+            throw new Error("[Language] Specified base languages directory does not exist");
+        }
+
         this.directory = directory;
         this.languages = new Map();
     }
@@ -30,15 +33,17 @@ export default class Language {
     /**
      * @param {string} name
      */
-    public setDefault(name: string): void {
-        if (this.languages.size === 0) {
-            throw new Error("[Language.setDefault] No language sources have been loaded");
+    public setDefault(name: string): boolean {
+        if (typeof name !== "string" || Utils.isEmpty(name)) {
+            return false;
         }
-        else if (!this.languages.has(name)) {
-            throw new Error(`[Language.setDefault] Language source is not loaded: ${name}`);
+        else if (this.languages.size === 0 || !this.languages.has(name)) {
+            return false;
         }
 
         this.default = this.languages.get(name);
+
+        return true;
     }
 
     /**
@@ -46,11 +51,14 @@ export default class Language {
      * @return {string | null}
      */
     public get(key: string): string | null {
-        if (!this.default) {
+        if (typeof key !== "string" || Utils.isEmpty(key)) {
+            return null;
+        }
+        else if (!this.default) {
             throw new Error("[Language.get] No language source has been set as default");
         }
 
-        return this.default.get(key) || null;
+        return this.default[key] || null;
     }
 
     /**
@@ -61,8 +69,11 @@ export default class Language {
         if (!this.directory) {
             throw new Error("[Language.load] No base directory has been specified");
         }
+        else if (!fs.existsSync(this.directory)) {
+            throw new Error("[Language.load] Base directory no longer exists");
+        }
 
-        const filePath: string = path.resolve(path.join(main(), this.directory, `${name}.json`));
+        const filePath: string = path.resolve(path.join(this.directory, `${name}.json`));
 
         if (!fs.existsSync(filePath)) {
             throw new Error(`[Language.load] Language file does not exist: ${filePath}`);
@@ -70,7 +81,7 @@ export default class Language {
 
         const data: ILanguageSource = await Utils.readJson(filePath);
 
-        if (!(data instanceof Object) || Object.keys(data).length === 0) {
+        if (typeof data != "object" || Object.keys(data).length === 0) {
             throw new Error(`[Language.load] Language file is either not an object or empty: ${name}`);
         }
 

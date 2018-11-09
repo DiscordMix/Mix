@@ -10,6 +10,7 @@ import ResponseHelper from "../core/response-helper";
 import {expect, assert} from "chai";
 import {LogLevel} from "../core/log";
 import {EBotEvents, InternalArgTypes, InternalArgResolvers} from "../core/bot";
+import Language, {ILanguageSource} from "../language/language";
 
 // Test globals
 const globalAny: any = global;
@@ -39,6 +40,9 @@ export default class TestBot extends Bot {
     public constructor(settings: Settings) {
         super({
             settings,
+
+            internalCommands: ["help", "usage", "ping"],
+            languages: ["en"],
 
             options: {
                 asciiTitle: false,
@@ -115,7 +119,7 @@ const testBot: TestBot = new TestBot(new Settings({
     paths: {
         commands: path.resolve(path.join(__dirname, "test-commands")),
         emojis: path.resolve(path.join(__dirname, "test-emojis")),
-        languages: path.resolve(path.join(__dirname, "test-languages")),
+        languages: path.resolve(path.join("src", "test", "test-languages")),
         plugins: path.resolve(path.join(__dirname, "test-plugins")),
         services: path.resolve(path.join(__dirname, "test-services")),
         tasks: path.resolve(path.join(__dirname, "test-tasks")),
@@ -177,7 +181,7 @@ beforeEach(async () => {
     await testBot.deleteLastMessage();
 });
 
-describe("setup", () => {
+describe("bot", () => {
     it("should init and login", async () => {
         await init();
 
@@ -202,6 +206,22 @@ describe("setup", () => {
     it("should have default argument resolvers", () => {
         expect(testBot.argumentResolvers).to.be.an("array");
         expect(testBot.argumentResolvers).to.equal(InternalArgResolvers);
+    });
+
+    it("should not handle invalid messages", async () => {
+        expect(await testBot.handleMessage(undefined as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.handleMessage(null as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.handleMessage("" as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.handleMessage("hello" as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.handleMessage([] as any)).to.be.a("boolean").and.to.equal(false);
+    });
+
+    it("should have correct internal commands", () => {
+        expect(testBot.internalCommands).to.be.an("array");
+        expect(testBot.internalCommands.length).to.be.a("number").and.to.equal(3);
+        expect(testBot.internalCommands[0]).to.be.a("string").and.to.equal("help");
+        expect(testBot.internalCommands[1]).to.be.a("string").and.to.equal("usage");
+        expect(testBot.internalCommands[2]).to.be.a("string").and.to.equal("ping");
     });
 });
 
@@ -330,6 +350,50 @@ describe("tasks", () => {
         expect(task.lastIteration).to.not.equal(-1);
         expect(task.iterations).to.be.a("number");
         expect(task.iterations).to.equal(2);
+    });
+});
+
+describe("languages", () => {
+    it("should register languages", () => {
+        expect(testBot.language).to.be.an("object");
+
+        const language: Language = testBot.language as Language;
+        const languages: ReadonlyMap<string, ILanguageSource> = language.getLanguages();
+
+        expect(languages.size).to.be.a("number").and.to.equal(1);
+        expect(language.setDefault("en")).to.be.a("boolean").and.to.equal(true);
+        expect((language as any).default).to.be.an("object");
+    });
+
+    it("should return language values", () => {
+        const language: Language = testBot.language as Language;
+
+        expect(language.get("name")).to.be.a("string").and.to.equal("john doe");
+        expect(language.get("occupation")).to.be.a("string").and.to.equal("tester");
+    });
+
+    it("should not return invalid language keys", () => {
+        const language: Language = testBot.language as Language;
+
+        expect(language.get("fake")).to.be.a("null");
+        expect(language.get("")).to.be.a("null");
+        expect(language.get(null as any)).to.be.a("null");
+        expect(language.get(undefined as any)).to.be.a("null");
+        expect(language.get({} as any)).to.be.a("null");
+        expect(language.get([] as any)).to.be.a("null");
+        expect(language.get(3 as any)).to.be.a("null");
+    });
+
+    it("should not set invalid default languages", () => {
+        const language: Language = testBot.language as Language;
+
+        expect(language.setDefault("f")).to.be.a("boolean").and.to.equal(false);
+        expect(language.setDefault("")).to.be.a("boolean").and.to.equal(false);
+        expect(language.setDefault(undefined as any)).to.be.a("boolean").and.to.equal(false);
+        expect(language.setDefault(null as any)).to.be.a("boolean").and.to.equal(false);
+        expect(language.setDefault(3 as any)).to.be.a("boolean").and.to.equal(false);
+        expect(language.setDefault({} as any)).to.be.a("boolean").and.to.equal(false);
+        expect(language.setDefault([] as any)).to.be.a("boolean").and.to.equal(false);
     });
 });
 

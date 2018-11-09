@@ -1,6 +1,6 @@
 import Bot from "../core/bot";
 import Service from "./service";
-import {Log} from "..";
+import {Log, Utils} from "..";
 
 export type IServiceMap = Map<string, Service>;
 export type IReadonlyServiceMap = ReadonlyMap<string, Service>;
@@ -33,7 +33,10 @@ export default class ServiceManager {
      * @return {boolean}
      */
     public register(service: Service): boolean {
-        if (!this.services.has(service.meta.name)) {
+        if (!service || typeof service !== "object" || Array.isArray(service)) {
+            return false;
+        }
+        else if (!this.services.has(service.meta.name)) {
             this.services.set(service.meta.name, service);
 
             return true;
@@ -63,6 +66,10 @@ export default class ServiceManager {
      * @return {boolean} Whether the service was started
      */
     public enable(name: string): boolean {
+        if (typeof name !== "string" || Utils.isEmpty(name) || Array.isArray(name)) {
+            return false;
+        }
+
         const service: Service | null = this.services.get(name) || null;
 
         if (typeof service !== "object") {
@@ -120,6 +127,10 @@ export default class ServiceManager {
      * @return {Service | null}
      */
     public getService(name: string): Readonly<Service> | null {
+        if (typeof name !== "string" || Utils.isEmpty(name) || Array.isArray(name)) {
+            return null;
+        }
+
         return this.services.get(name) || null;
     }
 
@@ -137,5 +148,13 @@ export default class ServiceManager {
      */
     public getAll(): IReadonlyServiceMap {
         return this.services as IReadonlyServiceMap;
+    }
+
+    public contains(name: string): boolean {
+        if (typeof name !== "string" || Utils.isEmpty(name)) {
+            return false;
+        }
+
+        return this.services.has(name);
     }
 }

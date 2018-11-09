@@ -226,7 +226,7 @@ describe("bot", () => {
 });
 
 describe("commands", () => {
-    it("should have registered commands", () => {
+    it("should register commands", () => {
         const actualCmds: string[] = ["hi"];
         const fakeCmds: string[] = ["john", "doe"]
 
@@ -266,6 +266,50 @@ describe("commands", () => {
             expect(result).to.be.a("boolean");
             expect(result).to.equal(false);
         }
+    });
+});
+
+describe("services", () => {
+    it("should register services", () => {
+        expect(testBot.services.contains("test")).to.be.a("boolean").and.to.equal(true);
+        expect(testBot.services.contains("fake")).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.getAll().size).to.be.a("number").and.to.equal(1);
+    });
+
+    it("should not register invalid services", () => {
+        expect(testBot.services.register([] as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.register(["hello"] as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.register(undefined as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.register(null as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.register("" as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.register("hello" as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.register(3 as any)).to.be.a("boolean").and.to.equal(false);
+    });
+
+    it("should not enable invalid services", () => {
+        expect(testBot.services.enable("fake")).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.enable("")).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.enable(3 as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.enable({} as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.enable(undefined as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.enable(null as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.enable([] as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.services.enable(["hello"] as any)).to.be.a("boolean").and.to.equal(false);
+    });
+
+    it("should be able to retrieve services", () => {
+        expect(testBot.services.getService("test")).to.be.an("object");
+    });
+
+    it("should not be able to retrieve invalid services", () => {
+        expect(testBot.services.getService("fake")).to.be.a("null");
+        expect(testBot.services.getService("")).to.be.a("null");
+        expect(testBot.services.getService({} as any)).to.be.a("null");
+        expect(testBot.services.getService([] as any)).to.be.a("null");
+        expect(testBot.services.getService(undefined as any)).to.be.a("null");
+        expect(testBot.services.getService(null as any)).to.be.a("null");
+        expect(testBot.services.getService(["hello"] as any)).to.be.a("null");
+        expect(testBot.services.getService(3 as any)).to.be.a("null");
     });
 });
 

@@ -4,6 +4,7 @@ import Command, {GenericCommand} from "./command";
 import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
 import FragmentLoader, {ICommandPackage} from "../fragments/fragment-loader";
+import Utils from "../core/utils";
 
 /**
  * @enum {number}
@@ -128,18 +129,22 @@ export default class CommandStore {
      * Register a command
      * @param {ICommandPackage} commandPackage
      */
-    public register(commandPackage: ICommandPackage): this {
+    public register(commandPackage: ICommandPackage): boolean {
+        if (Utils.isEmpty(commandPackage) || typeof commandPackage !== "object") {
+            return false;
+        }
+
         const commandName: string = commandPackage.module.meta.name.trim();
 
         if (validCommandNamePattern.test(commandName) === false) {
             Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Invalid name)`);
 
-            return this;
+            return false;
         }
         else if (this.get(commandName) !== null) {
             Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Already exists)`);
 
-            return this;
+            return false;
         }
 
         // Also register aliases
@@ -154,7 +159,7 @@ export default class CommandStore {
 
                     Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (A command with the same alias already exists)`);
 
-                    return this;
+                    return false;
                 }
 
                 this.aliases.set(commandPackage.module.aliases[i], commandName);
@@ -163,7 +168,7 @@ export default class CommandStore {
 
         this.commands.set(commandName, commandPackage);
 
-        return this;
+        return true;
     }
 
     /**

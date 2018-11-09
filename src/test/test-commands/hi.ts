@@ -3,14 +3,15 @@ import {Command, RestrictGroup, CommandContext} from "../..";
 export default class EvalCommand extends Command {
     readonly meta = {
         name: "hi",
-        description: "Say hi"
+        description: "Don't say hi"
     };
 
     readonly restrict: any = {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public async executed(context: CommandContext): Promise<void> {
-        context.ok("hello world!");
+    public executed(context: CommandContext): string {
+        // Don't say hi!
+        return "don't say hi!";
     }
 };

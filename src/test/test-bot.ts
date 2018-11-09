@@ -7,7 +7,7 @@ import path from "path";
 import {Snowflake, Guild, TextChannel, Message} from "discord.js";
 import CommandContext from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
-import {expect} from "chai";
+import {expect, assert} from "chai";
 import {LogLevel} from "../core/log";
 import {EBotEvents, InternalArgTypes, InternalArgResolvers} from "../core/bot";
 
@@ -188,6 +188,12 @@ describe("setup", () => {
         expect(testBot.owner).to.be.a("undefined");
     });
 
+    it("should have no user groups", () => {
+        expect(testBot.userGroups).to.be.an("array");
+        expect(testBot.userGroups.length).to.be.a("number");
+        expect(testBot.userGroups.length).to.equal(0);
+    });
+
     it("should have default argument types", () => {
         expect(testBot.argumentTypes).to.be.an("array");
         expect(testBot.argumentTypes).to.equal(InternalArgTypes);
@@ -229,6 +235,17 @@ describe("commands", () => {
 
         expect(testBot.commandStore.contains("" as any)).to.be.a("boolean");
         expect(testBot.commandStore.contains("" as any)).to.equal(false);
+    });
+
+    it("should not register invalid commands", () => {
+        const subjects: any[] = [true, false, null, undefined, "hello", "", "    ", 1, 0, -1, []];
+
+        for (let i: number = 0; i < subjects.length; i++) {
+            const result: boolean = testBot.commandStore.register(subjects[i]);
+
+            expect(result).to.be.a("boolean");
+            expect(result).to.equal(false);
+        }
     });
 });
 

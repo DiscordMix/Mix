@@ -23,4 +23,12 @@ export abstract class Task implements IFragment, IDisposable {
     public get lastIterationDifference(): number {
         return Date.now() - this.lastIteration;
     }
+
+    public get nextIteration(): number {
+        if (this.interval === -1) {
+            return -1;
+        }
+
+        return this.lastIteration + this.interval;
+    }
 };

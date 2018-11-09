@@ -221,6 +221,14 @@ export enum EBotEvents {
     CommandExecuted = "commandExecuted"
 }
 
+export enum BotState {
+    Disconnected,
+    Connecting,
+    Restarting,
+    Suspended,
+    Connected
+}
+
 /**
  * Bot events:
  *
@@ -274,8 +282,8 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly tasks: TaskManager;
     public readonly timeouts: NodeJS.Timeout[];
     public readonly languages?: string[];
-
-    public suspended: boolean;
+    public readonly state: BotState;
+    public readonly suspended: boolean;
 
     // TODO: Shouldn't be able to be edited/not read-only
     public client: Client;
@@ -296,6 +304,12 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         if (!botOptions.settings) {
             throw new Error("[Bot] Missing settings options");
         }
+
+        /**
+         * @type {BotState}
+         * @readonly
+         */
+        this.state = BotState.Disconnected;
 
         /**
          * @type {Settings}
@@ -477,6 +491,15 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      */
     public getAPI(): ApiType | null {
         return this.api || null;
+    }
+
+    /**
+     * @param {ApiType} api
+     */
+    public setAPI(api: ApiType): this {
+        this.api = api;
+
+        return this;
     }
 
     /**
@@ -730,6 +753,18 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         return enabled;
     }
 
+    public suspend(suspend: boolean): this {
+        if (this.state !== BotState.Connected) {
+            return this;
+        }
+        else if (this.suspended !== suspend) {
+            (this.suspended as any) = suspend;
+            (this.state as any) = this.suspended ? BotState.Suspended : BotState.Connected;
+        }
+
+        return this;
+    }
+
     /**
      * Setup the client's events
      */
@@ -754,6 +789,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             const took: number = Math.round(performance.now() - this.setupStart);
 
             Log.success(`[Bot.setupEvents] Ready | Took ${took}ms`);
+            (this.state as any) = BotState.Connected;
             this.emit(EBotEvents.Ready);
         });
 
@@ -990,6 +1026,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @return {Promise<this>}
      */
     public async connect(api?: ApiType): Promise<this> {
+        (this.state as any) = BotState.Connecting;
         await this.setup(api);
         Log.verbose("[Bot.connect] Starting");
         await this.client.login(this.settings.general.token);

@@ -8,7 +8,7 @@ import {Snowflake, Guild, TextChannel, Message} from "discord.js";
 import CommandContext from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect, assert} from "chai";
-import {LogLevel} from "../core/log";
+import {LogLevel} from "..";
 import {EBotEvents, InternalArgTypes, InternalArgResolvers} from "../core/bot";
 import Language, {ILanguageSource} from "../language/language";
 
@@ -42,7 +42,7 @@ export default class TestBot extends Bot {
             settings,
 
             internalCommands: ["help", "usage", "ping"],
-            languages: ["en"],
+            languages: ["test-language"],
 
             options: {
                 asciiTitle: false,
@@ -190,6 +190,24 @@ describe("bot", () => {
 
     it("should not be suspended", () => {
         expect(testBot.suspended).to.be.a("boolean").and.to.equal(false);
+    });
+
+    it("should have no api set", () => {
+        expect(testBot.getAPI()).to.be.a("null");
+        expect((testBot as any).api).to.be.a("undefined");
+    });
+
+    it("should set api", () => {
+        expect(testBot.setAPI({
+            name: "john doe",
+            age: 100
+        })).to.be.an("object");
+
+        const api: any = testBot.getAPI();
+
+        expect(api).to.be.an("object");
+        expect(api.name).to.be.a("string").and.to.equal("john doe");
+        expect(api.age).to.be.a("number").and.to.equal(100);
     });
 
     it("should have no owner", () => {
@@ -392,7 +410,7 @@ describe("languages", () => {
         const languages: ReadonlyMap<string, ILanguageSource> = language.getLanguages();
 
         expect(languages.size).to.be.a("number").and.to.equal(1);
-        expect(language.setDefault("en")).to.be.a("boolean").and.to.equal(true);
+        expect(language.setDefault("test-language")).to.be.a("boolean").and.to.equal(true);
         expect((language as any).default).to.be.an("object");
     });
 
@@ -469,6 +487,18 @@ describe("long messages", () => {
         expect(message.embeds[0]).to.be.an("object");
         expect(message.embeds[0].color).to.be.a("number").and.to.equal(3066993); // Green
         expect(message.embeds[0].description).to.be.a("string").and.to.equal(":white_check_mark: " + randomStr.substring(0, 1024 - 19 - 4) + " ...");
+    });
+});
+
+describe("restart", () => {
+    it("should restart without throwing", () => {
+        return new Promise((resolve) => {
+            assert.doesNotThrow(async () => {
+                await testBot.restart(false);
+
+                resolve();
+            });
+        });
     });
 });
 

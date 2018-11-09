@@ -1,4 +1,4 @@
-import {Task} from "../../tasks/task";
+import {Task} from "../..";
 import {IFragmentMeta} from "../../fragments/fragment";
 
 export default class DoSomeMathTask extends Task {

@@ -250,7 +250,6 @@ export enum BotState {
  * - disconnected()
  * - clearingTemp()
  * - clearedTemp()
- *
  * - handlingCommand(CommandContext, Command, Arguments Object)
  * - commandError(Error)
  * - commandExecuted(CommandExecutedEvent, command result (any))
@@ -510,7 +509,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             return;
         }
 
-        const server_count: number = this.client.guilds.size
+        const server_count: number = this.client.guilds.size;
 
         // Discord Bot List.org
         if (this.settings.keys.dbl) {

@@ -1,9 +1,9 @@
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import Command, {RestrictGroup, IRawArguments} from "./command";
+import Command, {IRawArguments, RestrictGroup} from "./command";
 import CommandStore, {CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
-import {GuildMember, Snowflake, TextChannel, Message} from "discord.js";
+import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
 import {IAction} from "../actions/action";
@@ -89,7 +89,11 @@ export default class CommandHandler {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 
-        if (!CommandHandler.validateEnvironment(command.restrict.environment, context.message.channel.type)) {
+        if (!CommandHandler.validateEnvironment(
+            command.restrict.environment,
+            context.message.channel.type,
+            (context.message.channel as any).nsfw || false)
+        ) {
             if (!this.handleError(CommandManagerEvent.DisallowedEnvironment, context, command)) {
                 context.message.channel.send("That command may not be used here.");
             }
@@ -380,16 +384,19 @@ export default class CommandHandler {
     }
 
     /**
-     * @private
      * @param {ChatEnvironment} environment
      * @param {string} type
+     * @param {boolean} nsfw
      * @return {boolean}
      */
-    public static validateChannelTypeEnv(environment: ChatEnvironment, type: string): boolean {
+    public static validateChannelTypeEnv(environment: ChatEnvironment, type: string, nsfw: boolean): boolean {
         if (environment === ChatEnvironment.Anywhere) {
             return true;
         }
         else if (environment === ChatEnvironment.Private && type === "dm") {
+            return true;
+        }
+        else if (environment === ChatEnvironment.NSFW && type === "text") {
             return true;
         }
         else if (environment === ChatEnvironment.Guild && type === "text") {
@@ -404,16 +411,16 @@ export default class CommandHandler {
      * @param {string} channelType
      * @return {boolean}
      */
-    public static validateEnvironment(environment: ChatEnvironment, channelType: string): boolean {
+    public static validateEnvironment(environment: ChatEnvironment, channelType: string, nsfw: boolean): boolean {
         if (Array.isArray(environment)) {
             for (let i = 0; i < environment.length; i++) {
-                if (CommandHandler.validateChannelTypeEnv(environment, channelType)) {
+                if (CommandHandler.validateChannelTypeEnv(environment, channelType, nsfw)) {
                     return true;
                 }
             }
         }
         else {
-            return CommandHandler.validateChannelTypeEnv(environment, channelType);
+            return CommandHandler.validateChannelTypeEnv(environment, channelType, nsfw);
         }
 
         return false;

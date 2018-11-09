@@ -1,7 +1,8 @@
 enum ChatEnvironment {
     Private,
     Guild,
-    Anywhere
+    Anywhere,
+    NSFW
 }
 
 export default ChatEnvironment;

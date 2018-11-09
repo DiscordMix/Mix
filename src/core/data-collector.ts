@@ -27,7 +27,7 @@ export default class DataCollector {
     /**
      * @param {Guild} guild
      */
-    constructor(guild: Guild) {
+    public constructor(guild: Guild) {
         /**
          * @type {Guild}
          * @private

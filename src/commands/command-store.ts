@@ -46,7 +46,7 @@ export default class CommandStore {
     /**
      * @param {Bot} bot
      */
-    constructor(bot: Bot) {
+    public constructor(bot: Bot) {
         /**
          * @type {Bot}
          * @private
@@ -102,7 +102,7 @@ export default class CommandStore {
         this.register({
             // TODO: CRITICAL: We shouldn't have to re-instianciate the module, it should be already instanciated at this point
             module: new (reloadedPackage.module as any)(),
-            
+
             path: reloadedPackage.path
         });
 

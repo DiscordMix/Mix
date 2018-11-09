@@ -8,7 +8,7 @@ export default class Rgb {
      * @param {number} green
      * @param {number} blue
      */
-    constructor(red: number, green: number, blue: number) {
+    public constructor(red: number, green: number, blue: number) {
         /**
          * @type {number}
          * @readonly

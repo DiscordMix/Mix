@@ -8,7 +8,7 @@ export default class EmojiCollection extends Collection {
     /**
      * @param {Array<*>} emojis
      */
-    constructor(emojis: any[] = []) {
+    public constructor(emojis: any[] = []) {
         super(emojis);
     }
 

@@ -33,7 +33,7 @@ export default class CommandHandler {
      * @todo Replace 'errorHandlers' with '_errorHandlers'
      * @param {ICommandHandlerOptions} options
      */
-    constructor(options: ICommandHandlerOptions) {
+    public constructor(options: ICommandHandlerOptions) {
         /**
          * @type {CommandStore}
          * @readonly
@@ -65,6 +65,12 @@ export default class CommandHandler {
         this.undoMemory = new Map();
     }
 
+    /**
+     * @param {CommandManagerEvent} event
+     * @param {CommandContext} context
+     * @param {Command} command
+     * @return {boolean}
+     */
     private handleError(event: CommandManagerEvent, context: CommandContext, command: Command): boolean {
         if (this._errorHandlers.get(event) !== undefined) {
             return this._errorHandlers.get(event)(context, command);

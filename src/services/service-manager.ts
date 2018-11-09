@@ -12,7 +12,7 @@ export default class ServiceManager {
     /**
      * @param {Bot} bot
      */
-    constructor(bot: Bot) {
+    public constructor(bot: Bot) {
         /**
          * @type {Bot}
          * @private

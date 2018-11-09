@@ -16,13 +16,13 @@ export default class MysqlProvider extends DataProvider {
     public connected: boolean;
 
     /**
-     * @param {Object} data
+     * @param {object} data
      */
-    constructor(data: any) {
+    public constructor(data: any) {
         super();
 
         /**
-         * @type {Object}
+         * @type {object}
          * @private
          */
         this.data = data;

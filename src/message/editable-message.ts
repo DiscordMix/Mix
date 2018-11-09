@@ -16,7 +16,7 @@ export default class EditableMessage {
      * @todo Verify param "message"'s type
      * @param {Message | Message[]} message
      */
-    constructor(message: Message | Message[]) {
+    public constructor(message: Message | Message[]) {
         // TODO: Hotfix
         if (Array.isArray(message)) {
             message = message[0];

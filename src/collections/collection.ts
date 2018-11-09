@@ -10,7 +10,7 @@ export default class Collection extends EventEmitter {
     /**
      * @param {Array} items
      */
-    constructor(items: any[] = []) {
+    public constructor(items: any[] = []) {
         super();
 
         /**

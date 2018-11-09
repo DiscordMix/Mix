@@ -10,7 +10,7 @@ export default class Plugin implements IFragment {
     /**
      * @param {IPluginMeta} meta
      */
-    constructor(meta: IPluginMeta) {
+    public constructor(meta: IPluginMeta) {
         /**
          * @type {IPluginMeta}
          * @readonly

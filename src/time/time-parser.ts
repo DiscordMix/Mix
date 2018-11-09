@@ -7,7 +7,7 @@ export default class TimeParser {
     /**
      * @param {string} timeString
      */
-    constructor(timeString: string) {
+    public constructor(timeString: string) {
         /**
          * @type {string}
          * @private

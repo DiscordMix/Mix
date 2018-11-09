@@ -47,7 +47,7 @@ export default class SetupHelper {
     /**
      * @param {ISetupHelperOptions} options
      */
-    constructor(options: ISetupHelperOptions) {
+    public constructor(options: ISetupHelperOptions) {
         /**
          * @type {*}
          * @private

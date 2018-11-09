@@ -10,7 +10,7 @@ export default class ObjectProvider extends DataProvider {
     /**
      * @param {object} data
      */
-    constructor(data: any) {
+    public constructor(data: any) {
         super();
 
         /**

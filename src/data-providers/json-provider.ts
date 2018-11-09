@@ -13,7 +13,7 @@ export default class JsonProvider extends ObjectProvider {
     /**
      * @param {string} path
      */
-    constructor(path: string) {
+    public constructor(path: string) {
         super(null);
 
         /**

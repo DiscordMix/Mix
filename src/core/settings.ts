@@ -40,7 +40,7 @@ export default class Settings {
     /**
      * @param {Partial<ISettingsOptions>} options
      */
-    constructor(options: Partial<ISettingsOptions>) {
+    public constructor(options: Partial<ISettingsOptions>) {
         if (!options.general) {
             throw new Error("[Settings] Expecting general settings");
         }

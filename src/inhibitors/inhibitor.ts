@@ -13,7 +13,7 @@ export default class Inhibitor implements IFragment {
     /**
      * @param {IInhibitorOptions} options
      */
-    constructor(options: IInhibitorOptions) {
+    public constructor(options: IInhibitorOptions) {
         /**
          * @type {IInhibitorMeta}
          * @readonly

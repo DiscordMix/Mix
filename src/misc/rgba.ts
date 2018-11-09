@@ -16,7 +16,7 @@ export default class Rgba extends Rgb {
     /**
      * @param {IRgbaOptions} options
      */
-    constructor(options: IRgbaOptions) {
+    public constructor(options: IRgbaOptions) {
         super(options.red, options.green, options.blue);
 
         /**

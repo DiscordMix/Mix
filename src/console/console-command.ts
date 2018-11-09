@@ -9,7 +9,7 @@ export default class ConsoleCommand {
      * @param {string} base
      * @param {*} args
      */
-    constructor(base: string, args: any) {
+    public constructor(base: string, args: any) {
         /**
          * @type {string}
          * @readonly

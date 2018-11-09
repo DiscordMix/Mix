@@ -9,7 +9,7 @@ export default class EmojiTableBuilder {
      * @param {number} width
      * @param {number} height
      */
-    constructor(width: number, height: number) {
+    public constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
         this.table = [];

@@ -22,7 +22,7 @@ export default class CommandContext<DataType = any> extends ResponseHelper {
     /**
      * @param {ICommandExecutionContextOptions} options
      */
-    constructor(options: ICommandExecutionContextOptions) {
+    public constructor(options: ICommandExecutionContextOptions) {
         if (options.message.channel.type !== "text") {
             throw new Error("[CommandContext] Expecting message's channel to be a text channel");
         }

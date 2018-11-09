@@ -9,7 +9,7 @@ export default class KnexTable<Model> {
      * @param {Table} connection
      * @param {string} name
      */
-    constructor(connection: any, name: string) {
+    public constructor(connection: any, name: string) {
         /**
          * @private
          * @readonly

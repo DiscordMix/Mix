@@ -15,7 +15,7 @@ export default class MongodbProvider extends DataProvider {
     /**
      * @param {string} url
      */
-    constructor(url: string) {
+    public constructor(url: string) {
         super();
 
         /**
@@ -92,7 +92,7 @@ export class MongoDbProviderV2 {
     // TODO: Type
     private database: any;
 
-    constructor(url: string, database: string) {
+    public constructor(url: string, database: string) {
         this.url = url;
         this.databaseName = database;
     }

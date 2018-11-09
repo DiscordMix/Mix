@@ -12,7 +12,7 @@ export default class PreventableCommandEvent implements ICommandEvent {
     /**
      * @param {CommandContext} context
      */
-    constructor(context: CommandContext) {
+    public constructor(context: CommandContext) {
         this.context = context;
     }
 

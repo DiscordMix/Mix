@@ -18,7 +18,7 @@ export default class SqlQuery {
     /**
      * @param {string} table
      */
-    constructor(table: string) {
+    public constructor(table: string) {
         this.table = table;
         this.prefix = "SELECT * FROM ";
         this.wheres = [];

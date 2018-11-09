@@ -4,7 +4,7 @@ export default class FormattedMessage {
     /**
      * @param {string} [startingString=""]
      */
-    constructor(startingString = "") {
+    public constructor(startingString = "") {
         /**
          * @type {string}
          * @private

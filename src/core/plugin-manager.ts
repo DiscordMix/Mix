@@ -6,7 +6,7 @@ export default class PluginManager {
     /**
      * @param {Bot} bot
      */
-    constructor(bot: Bot) {
+    public constructor(bot: Bot) {
         /**
          * @type {Bot}
          * @private

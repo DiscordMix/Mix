@@ -188,24 +188,25 @@ describe("bot", () => {
         expect(testBot.client.user).to.be.an("object");
     });
 
+    it("should not be suspended", () => {
+        expect(testBot.suspended).to.be.a("boolean").and.to.equal(false);
+    });
+
     it("should have no owner", () => {
         expect(testBot.owner).to.be.a("undefined");
     });
 
     it("should have no user groups", () => {
         expect(testBot.userGroups).to.be.an("array");
-        expect(testBot.userGroups.length).to.be.a("number");
-        expect(testBot.userGroups.length).to.equal(0);
+        expect(testBot.userGroups.length).to.be.a("number").and.to.equal(0);
     });
 
     it("should have default argument types", () => {
-        expect(testBot.argumentTypes).to.be.an("array");
-        expect(testBot.argumentTypes).to.equal(InternalArgTypes);
+        expect(testBot.argumentTypes).to.be.an("array").and.to.equal(InternalArgTypes);;
     });
 
     it("should have default argument resolvers", () => {
-        expect(testBot.argumentResolvers).to.be.an("array");
-        expect(testBot.argumentResolvers).to.equal(InternalArgResolvers);
+        expect(testBot.argumentResolvers).to.be.an("array").and.to.equal(InternalArgResolvers);
     });
 
     it("should not handle invalid messages", async () => {
@@ -232,39 +233,25 @@ describe("commands", () => {
 
         // Actual commands
         for (let i: number = 0; i < actualCmds.length; i++) {
-            const check: boolean = testBot.commandStore.contains(actualCmds[i]);
-            
-            expect(check).to.be.a("boolean");
-            expect(check).to.equal(true);
+            expect(testBot.commandStore.contains(actualCmds[i])).to.be.a("boolean").and.to.equal(true);
         }
 
         // Fake commands
         for (let i: number = 0; i < fakeCmds.length; i++) {
-            const check: boolean = testBot.commandStore.contains(fakeCmds[i]);
-
-            expect(check).to.be.a("boolean");
-            expect(check).to.equal(false);
+            expect(testBot.commandStore.contains(fakeCmds[i])).to.be.a("boolean").and.to.equal(false);
         }
 
         // Other tests
-        expect(testBot.commandStore.contains(undefined as any)).to.be.a("boolean");
-        expect(testBot.commandStore.contains(undefined as any)).to.equal(false);
-
-        expect(testBot.commandStore.contains(null as any)).to.be.a("boolean");
-        expect(testBot.commandStore.contains(null as any)).to.equal(false);
-
-        expect(testBot.commandStore.contains("" as any)).to.be.a("boolean");
-        expect(testBot.commandStore.contains("" as any)).to.equal(false);
+        expect(testBot.commandStore.contains(undefined as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.commandStore.contains(null as any)).to.be.a("boolean").and.to.equal(false);
+        expect(testBot.commandStore.contains("" as any)).to.be.a("boolean").and.to.equal(false);
     });
 
     it("should not register invalid commands", () => {
         const subjects: any[] = [true, false, null, undefined, "hello", "", "    ", 1, 0, -1, []];
 
         for (let i: number = 0; i < subjects.length; i++) {
-            const result: boolean = testBot.commandStore.register(subjects[i]);
-
-            expect(result).to.be.a("boolean");
-            expect(result).to.equal(false);
+            expect(testBot.commandStore.register(subjects[i])).to.be.a("boolean").and.to.equal(false);
         }
     });
 });
@@ -447,12 +434,9 @@ describe("send messages", () => {
 
         expect(message).to.be.an("object");
         expect(message.embeds).to.be.an("array");
-        expect(message.embeds.length).to.be.a("number");
-        expect(message.embeds.length).to.equal(1);
-        expect(message.embeds[0].color).to.be.a("number");
-        expect(message.embeds[0].color).to.equal(3066993); // Green
-        expect(message.embeds[0].description).to.be.a("string");
-        expect(message.embeds[0].description).to.equal(":white_check_mark: hello world");
+        expect(message.embeds.length).to.be.a("number").and.to.equal(1);
+        expect(message.embeds[0].color).to.be.a("number").and.to.equal(3066993); // Green
+        expect(message.embeds[0].description).to.be.a("string").and.to.equal(":white_check_mark: hello world");
     });
 
     it("should send an embed message using fail()", async () => {
@@ -460,12 +444,9 @@ describe("send messages", () => {
 
         expect(message).to.be.an("object");
         expect(message.embeds).to.be.an("array");
-        expect(message.embeds.length).to.be.a("number");
-        expect(message.embeds.length).to.equal(1);
-        expect(message.embeds[0].color).to.be.a("number");
-        expect(message.embeds[0].color).to.equal(15158332); // Red
-        expect(message.embeds[0].description).to.be.a("string");
-        expect(message.embeds[0].description).to.equal(":thinking: failed message");
+        expect(message.embeds.length).to.be.a("number").and.to.equal(1);
+        expect(message.embeds[0].color).to.be.a("number").and.to.equal(15158332); // Red
+        expect(message.embeds[0].description).to.be.a("string").and.to.equal(":thinking: failed message");
     });
 
     it("should send an embed message using send()", async () => {
@@ -473,8 +454,7 @@ describe("send messages", () => {
 
         expect(message).to.be.an("object");
         expect(message.embeds).to.be.an("array");
-        expect(message.embeds.length).to.be.a("number");
-        expect(message.embeds.length).to.equal(0);
+        expect(message.embeds.length).to.be.a("number").and.to.equal(0);
     });
 });
 
@@ -485,13 +465,10 @@ describe("long messages", () => {
 
         expect(message).to.be.an("object");
         expect(message.embeds).to.be.an("array");
-        expect(message.embeds.length).to.be.a("number");
-        expect(message.embeds.length).to.equal(1);
+        expect(message.embeds.length).to.be.a("number").and.to.equal(1);
         expect(message.embeds[0]).to.be.an("object");
-        expect(message.embeds[0].color).to.be.a("number");
-        expect(message.embeds[0].color).to.equal(3066993); // Green
-        expect(message.embeds[0].description).to.be.a("string");
-        expect(message.embeds[0].description).to.equal(":white_check_mark: " + randomStr.substring(0, 1024 - 19 - 4) + " ...");
+        expect(message.embeds[0].color).to.be.a("number").and.to.equal(3066993); // Green
+        expect(message.embeds[0].description).to.be.a("string").and.to.equal(":white_check_mark: " + randomStr.substring(0, 1024 - 19 - 4) + " ...");
     });
 });
 

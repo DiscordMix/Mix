@@ -470,6 +470,9 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         return this.api || null;
     }
 
+    /**
+     * Post stats to various bot lists
+     */
     public async postStats(): Promise<void> {
         if (!this.client.user || Object.keys(this.settings.keys).length === 0) {
             return;

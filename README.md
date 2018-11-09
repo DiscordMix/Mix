@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/discord-forge/forge.svg?branch=dev-2.0)](https://travis-ci.com/discord-forge/forge)
+[![Build Status](https://travis-ci.com/discord-forge/forge.svg?branch=dev-2.0)](https://travis-ci.com/discord-forge/forge?branch=dev-2.0)
 [![NPM Package](https://badge.fury.io/js/%40cloudrex%2Fforge.svg)](https://www.npmjs.com/package/@cloudrex/forge)
 
 Forge is a powerful, fully-modular and self-contained framework for serious bot development.

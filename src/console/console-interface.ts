@@ -116,6 +116,29 @@ export default class ConsoleInterface {
             }
         });
 
+        this.commands.set("poststats", async () => {
+            // TODO: Some way to check if NO key is set
+            if (Object.keys(bot.settings.keys).length === 0) {
+                console.log("You haven't set any keys!");
+
+                return;
+            }
+
+            console.log("Posting stats ...");
+            await bot.postStats();
+            console.log("Posted stats");
+        });
+
+        this.commands.set("id", () => {
+            if (!bot.client.user) {
+                console.log("Not logged in!");
+
+                return;
+            }
+            
+            console.log(`My ID is => ${bot.client.user.id}`);
+        });
+
         this.commands.set("membercount", () => {
             if (using !== null) {
                 console.log(`\n${using.name} has ${using.memberCount} member(s)\n`);
@@ -183,7 +206,7 @@ export default class ConsoleInterface {
             }
 
             if (this.commands.has(base)) {
-                (this.commands.get(base) as ConsoleCommandHandler)(args);
+                await (this.commands.get(base) as ConsoleCommandHandler)(args);
             }
             else {
                 console.log(chalk.white(`\nUnknown command: ${input}\n`));

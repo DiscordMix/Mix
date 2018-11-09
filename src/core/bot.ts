@@ -10,6 +10,7 @@ import DataProvider from "../data-providers/data-provider";
 import Temp from "./temp";
 import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import ServiceManager from "../services/service-manager";
+import axios, {AxiosResponse} from "axios";
 
 import Command, {
     IArgumentResolver,
@@ -269,6 +270,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly disposables: IDisposable[];
     public readonly actionInterpreter: ActionInterpreter;
     public readonly tasks: TaskManager;
+    public readonly timeouts: NodeJS.Timeout[];
 
     public suspended: boolean;
 
@@ -456,6 +458,8 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          */
         this.tasks = new TaskManager(this);
 
+        this.timeouts = [];
+
         return this;
     }
 
@@ -464,6 +468,45 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      */
     public getAPI(): ApiType | null {
         return this.api || null;
+    }
+
+    public async postStats(): Promise<void> {
+        if (!this.client.user || Object.keys(this.settings.keys).length === 0) {
+            return;
+        }
+
+        const server_count: number = this.client.guilds.size
+
+        // Discord Bot List.org
+        if (this.settings.keys.dbl) {
+            const dblUrl: string = "https://discordbots.org/api/bots/{botId}/stats";
+
+            await axios.post(dblUrl.replace("{botId}", this.client.user.id), {
+                server_count
+            }, {
+                headers: {
+                    Authorization: this.settings.keys.dbl
+                }
+            }).catch((error: Error) => {
+                Log.warn(`[Bot.postStats] Could not post stats to discordbots.org (${error.message})`);
+            });
+        }
+
+        // Bots for Discord.com
+        if (this.settings.keys.bfd) {
+            const bfdUrl: string = "https://botsfordiscord.com/api/bot/{botId}";
+
+            await axios.post(bfdUrl.replace("{botId}", this.client.user.id), {
+                server_count
+            }, {
+                headers: {
+                    Authorization: this.settings.keys.bfd,
+                    "Content-Type": "application/json"
+                }
+            }).catch((error: Error) => {
+                Log.warn(`[Bot.postStats] Could not post stats to botsfordiscord.com (${error.message})`);
+            });
+        }
     }
 
     /**

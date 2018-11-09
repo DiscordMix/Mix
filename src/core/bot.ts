@@ -869,6 +869,54 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     /**
+     * Set a timeout
+     * @param {*} action
+     * @param {number} time
+     * @return {NodeJS.Timeout}
+     */
+    public setTimeout(action: any, time: number): NodeJS.Timeout {
+        const timeout: NodeJS.Timeout = setTimeout(() => {
+            action();
+            this.clearTimeout(timeout);
+        }, time);
+
+        this.timeouts.push(timeout);
+
+        return timeout;
+    }
+
+    /**
+     * Clear a timeout
+     * @param {NodeJS.Timeout} timeout
+     * @return {boolean} Whether the timeout was cleared
+     */
+    public clearTimeout(timeout: NodeJS.Timeout): boolean {
+        if (this.timeouts.includes(timeout)) {
+            clearTimeout(this.timeouts[this.timeouts.indexOf(timeout)]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Clear all timeouts
+     * @return {number} The amount of timeouts cleared
+     */
+    public clearAllTimeouts(): number {
+        let cleared: number = 0;
+
+        for (let i: number = 0; i < this.timeouts.length; i++) {
+            if (this.clearTimeout(this.timeouts[i])) {
+                cleared++;
+            }
+        }
+
+        return cleared;
+    }
+
+    /**
      * @param {Message} message
      * @param {boolean} [edited=false] Whether the message was edited
      * @return {Promise<void>}
@@ -957,7 +1005,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         }
 
         this.emit(EBotEvents.HandleMessageEnd);
-        
+
         return true;
     }
 
@@ -1122,6 +1170,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         // Reset the temp folder before shutdown
         await this.temp.reset();
 
+        this.clearAllTimeouts();
         await this.commandStore.disposeAll();
         await this.services.disposeAll();
         this.clearTemp();

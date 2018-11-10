@@ -171,7 +171,7 @@ describe("bot", () => {
         const result: Bot = await testBot.disconnect();
 
         expect(result).to.be.an("object");
-        console.log(result.client.user);
+        expect(result.client.user).to.be.a("null");
     });
 
     it("should init and login using only token", async () => {
@@ -236,6 +236,27 @@ describe("bot", () => {
         expect(testBot.internalCommands[0]).to.be.a("string").and.to.equal("help");
         expect(testBot.internalCommands[1]).to.be.a("string").and.to.equal("usage");
         expect(testBot.internalCommands[2]).to.be.a("string").and.to.equal("ping");
+    });
+});
+
+describe("bot timeouts", () => {
+    it("should have no timeouts set", () => {
+        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
+    });
+
+    it("should set a timeout", () => {
+        return new Promise((resolve) => {
+            testBot.setTimeout(() => {
+                // Tests
+                expect(testBot.timeouts.length).to.be.a("number").and.to.equal(1);
+
+                resolve();
+            }, 100);
+        });
+    });
+
+    it("should clear timeouts after executing", () => {
+        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
     });
 });
 

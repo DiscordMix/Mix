@@ -918,8 +918,11 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
      * @return {boolean} Whether the timeout was cleared
      */
     public clearTimeout(timeout: NodeJS.Timeout): boolean {
-        if (this.timeouts.includes(timeout)) {
-            clearTimeout(this.timeouts[this.timeouts.indexOf(timeout)]);
+        const index: number = this.timeouts.indexOf(timeout);
+
+        if (index !== -1) {
+            clearTimeout(this.timeouts[index]);
+            this.timeouts.splice(index, 1);
 
             return true;
         }

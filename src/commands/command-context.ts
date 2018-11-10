@@ -1,20 +1,17 @@
 import {Message, TextChannel, User} from "discord.js";
 import Bot from "../core/bot";
-import EmojiCollection from "../collections/emoji-collection";
 import ResponseHelper from "../core/response-helper";
 import Utils from "../core/utils";
 
 export type ICommandExecutionContextOptions = {
     readonly message: Message;
     readonly bot: Bot;
-    readonly emojis?: EmojiCollection;
     readonly label: string | null;
 }
 
 export default class CommandContext<DataType = any> extends ResponseHelper {
     public readonly bot: Bot;
     public readonly message: Message;
-    public readonly emojis?: EmojiCollection;
     public readonly label: string | null;
 
     public data?: DataType;
@@ -40,12 +37,6 @@ export default class CommandContext<DataType = any> extends ResponseHelper {
          * @readonly
          */
         this.bot = options.bot;
-
-        /**
-         * @type {EmojiCollection}
-         * @readonly
-         */
-        this.emojis = options.emojis;
 
         /**
          * @type {string}

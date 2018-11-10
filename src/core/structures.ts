@@ -6,6 +6,6 @@ export type IVolatile = {
     save(): Promise<any> | any;
 }
 
-export type IReloadable = {
-    reload(): Promise<any> | any;
+export type ISyncable = {
+    sync(): Promise<any> | any;
 }

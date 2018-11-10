@@ -3,11 +3,12 @@ import Log from "../core/log";
 import Utils from "../core/utils";
 import fs from "fs";
 import {default as _} from "lodash";
+import {IVolatile, ISyncable} from "../core/structures";
 
 /**
  * @extends ObjectProvider
  */
-export default class JsonProvider extends ObjectProvider {
+export default class JsonProvider extends ObjectProvider implements IVolatile, ISyncable {
     private readonly path: string;
 
     /**
@@ -28,7 +29,7 @@ export default class JsonProvider extends ObjectProvider {
      * Reload the data from the source file
      * @return {Promise<*>}
      */
-    public async reload(): Promise<any> {
+    public async sync(): Promise<any> {
         await this.validate();
 
         return new Promise((resolve) => {

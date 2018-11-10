@@ -32,7 +32,6 @@ import Permission from "./core/permission";
 import ChatEnvironment from "./core/chat-environment";
 import PluginManager from "./core/plugin-manager";
 import Collection from "./collections/collection";
-import EmojiCollection from "./collections/emoji-collection";
 import DataProvider from "./data-providers/data-provider";
 import ObjectProvider from "./data-providers/object-provider";
 import JsonProvider from "./data-providers/json-provider";
@@ -100,7 +99,6 @@ export {
 
     // Collections
     Collection,
-    EmojiCollection,
 
     // Emoji Menu
     IEmojiButton,

@@ -3,13 +3,12 @@ require("dotenv").config();
 
 import {Bot, Log, Task} from "..";
 import Settings from "../core/settings";
-import path from "path";
 import {Snowflake, Guild, TextChannel, Message} from "discord.js";
 import CommandContext from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect, assert} from "chai";
 import {LogLevel} from "..";
-import {EBotEvents, InternalArgTypes, InternalArgResolvers} from "../core/bot";
+import {EBotEvents, InternalArgTypes, InternalArgResolvers, IBotOptions} from "../core/bot";
 import Language, {ILanguageSource} from "../language/language";
 
 // Test globals
@@ -36,20 +35,6 @@ Log.level = LogLevel.None;
 export default class TestBot extends Bot {
     public static testGuild: Guild;
     public static testChannel: TextChannel;
-
-    public constructor(settings: Settings) {
-        super({
-            settings,
-
-            internalCommands: ["help", "usage", "ping"],
-            languages: ["test-language"],
-
-            options: {
-                asciiTitle: false,
-                consoleInterface: false
-            }
-        });
-    }
 
     public async deleteLastMessage(): Promise<void> {
         if (!this.client.user) {
@@ -110,21 +95,14 @@ export default class TestBot extends Bot {
     }
 }
 
-const testBot: TestBot = new TestBot(new Settings({
-    general: {
-        token: token,
-        prefixes: ["!"]
-    },
-
-    paths: {
-        commands: path.resolve(path.join(__dirname, "test-commands")),
-        emojis: path.resolve(path.join(__dirname, "test-emojis")),
-        languages: path.resolve(path.join("src", "test", "test-languages")),
-        plugins: path.resolve(path.join(__dirname, "test-plugins")),
-        services: path.resolve(path.join(__dirname, "test-services")),
-        tasks: path.resolve(path.join(__dirname, "test-tasks")),
-    }
-}));
+let testBot: TestBot = new TestBot({
+    settings: new Settings({
+        general: {
+            token: token,
+            prefixes: ["!"]
+        }
+    })
+}, true);
 
 async function init(): Promise<void> {
     return new Promise<void>(async (resolve) => {
@@ -187,6 +165,23 @@ describe("bot", () => {
 
         expect(testBot.client.user).to.be.an("object");
     });
+
+    // TODO:
+    /* it("should disconnect", async () => {
+        const result: Bot = await testBot.disconnect();
+
+        expect(result).to.be.an("object");
+        console.log(result.client.user);
+    });
+
+    it("should init and login using only token", async () => {
+        testBot = new TestBot(token, true);
+
+        await init();
+
+        // Tests
+        expect(testBot.client.user).to.be.an("object");
+    }); */
 
     it("should not be suspended", () => {
         expect(testBot.suspended).to.be.a("boolean").and.to.equal(false);
@@ -507,5 +502,6 @@ describe("disconnect", () => {
         const result: Bot = await testBot.disconnect();
 
         expect(result).to.be.an("object");
+        expect(result.client.user).to.be.a("null");
     });
 });

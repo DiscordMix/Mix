@@ -1,16 +1,18 @@
+export const DebugMode: boolean = process.env.FORGE_DEBUG_MODE == "true";
+
 import CommandParser from "../commands/command-parser";
 import CommandContext from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
 import CommandStore from "../commands/command-store";
 import Utils from "./utils";
-import EmojiCollection from "../collections/emoji-collection";
 import Settings from "./settings";
 import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import Temp from "./temp";
-import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
+import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel, ClientOptions} from "discord.js";
 import ServiceManager from "../services/service-manager";
-import axios, {AxiosResponse} from "axios";
+import axios from "axios";
+import EventListener from "events";
 
 import Command, {
     IArgumentResolver,
@@ -24,7 +26,6 @@ import Command, {
 
 import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
-import EventEmitter from "events";
 import fs from "fs";
 import {performance} from "perf_hooks";
 import path from "path";
@@ -45,10 +46,6 @@ import Patterns from "./patterns";
 import {IDisposable} from "./structures";
 import ActionInterpreter from "../actions/action-interpreter";
 import TaskManager from "../tasks/task-manager";
-
-if (process.env.FORGE_DEBUG_MODE === "true") {
-    Log.info("[Forge] Debug mode is enabled");
-}
 
 const title: string =
 
@@ -229,6 +226,8 @@ export enum BotState {
     Connected
 }
 
+export type BotToken = string;
+
 /**
  * Bot events:
  *
@@ -259,11 +258,10 @@ export enum BotState {
 /**
  * @extends EventEmitter
  */
-export default class Bot<ApiType = any> extends EventEmitter implements IDisposable {
+export default class Bot<ApiType = any> extends EventListener implements IDisposable {
     public readonly settings: Settings;
     public readonly temp: Temp;
     public readonly dataStore?: DataProvider;
-    public readonly emojis?: EmojiCollection;
     public readonly services: ServiceManager;
     public readonly commandStore: CommandStore;
     public readonly commandHandler: CommandHandler;
@@ -295,13 +293,45 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
     /**
      * Setup the bot from an object
-     * @param {Partial<IBotOptions>} botOptions
+     * @param {Partial<IBotOptions>} botOptionsOrToken
      */
-    public constructor(botOptions: Partial<IBotOptions>) {
+    public constructor(botOptionsOrToken: Partial<IBotOptions> | BotToken, testMode: boolean = false) {
         super();
 
-        if (!botOptions.settings) {
-            throw new Error("[Bot] Missing settings options");
+        let options: Partial<IBotOptions> = typeof botOptionsOrToken === "object" && !Array.isArray(botOptionsOrToken) ? Object.assign({}, botOptionsOrToken) : (typeof botOptionsOrToken === "string" ? {
+            settings: new Settings({
+                general: {
+                    prefixes: ["!"],
+                    token: botOptionsOrToken
+                }
+            })
+        } : undefined as any);
+
+        if (testMode) {
+            (options.options as any) = {
+                ...options.options,
+                asciiTitle: false,
+                consoleInterface: false
+            };
+
+            (options.settings as any).paths = {
+                commands: path.resolve(path.join(__dirname, "../", "test", "test-commands")),
+                emojis: path.resolve(path.join(__dirname, "../", "test", "test-emojis")),
+                languages: path.resolve(path.join("src", "test", "test-languages")),
+                plugins: path.resolve(path.join(__dirname, "../", "test", "test-plugins")),
+                services: path.resolve(path.join(__dirname, "../", "test", "test-services")),
+                tasks: path.resolve(path.join(__dirname, "../", "test", "test-tasks")),
+            };
+
+            options = {
+                ...options,
+                internalCommands: ["help", "usage", "ping"],
+                languages: ["test-language"]
+            };
+        }
+
+        if (!options || !options.settings || typeof options.settings !== "object") {
+            throw new Error("[Bot] Missing or invalid settings options");
         }
 
         /**
@@ -314,7 +344,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @type {Settings}
          * @readonly
          */
-        this.settings = botOptions.settings;
+        this.settings = options.settings;
 
         /**
          * @todo Temporary hard-coded user id
@@ -327,13 +357,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @type {DataProvider | undefined}
          * @readonly
          */
-        this.dataStore = botOptions.dataStore;
-
-        /**
-         * @type {EmojiCollection | undefined}
-         * @readonly
-         */
-        this.emojis = fs.existsSync(this.settings.paths.emojis) ? EmojiCollection.fromFile(this.settings.paths.emojis) : undefined;
+        this.dataStore = options.dataStore;
 
         /**
          * @type {Discord.Client}
@@ -359,10 +383,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          */
         this.argumentResolvers = InternalArgResolvers;
 
-        if (botOptions.argumentResolvers) {
+        if (options.argumentResolvers) {
             this.argumentResolvers = [
                 ...this.argumentResolvers,
-                ...botOptions.argumentResolvers
+                ...options.argumentResolvers
             ];
         }
 
@@ -372,10 +396,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          */
         this.argumentTypes = InternalArgTypes;
 
-        if (botOptions.argumentTypes) {
+        if (options.argumentTypes) {
             this.argumentTypes = [
                 ...this.argumentTypes,
-                ...botOptions.argumentTypes
+                ...options.argumentTypes
             ];
         }
 
@@ -399,14 +423,14 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @type {boolean}
          * @readonly
          */
-        this.prefixCommand = botOptions.prefixCommand || true;
+        this.prefixCommand = options.prefixCommand || true;
 
         /**
          * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded.
          * @type {string[]}
          * @readonly
          */
-        this.internalCommands = botOptions.internalCommands || [
+        this.internalCommands = options.internalCommands || [
             "help",
             "usage",
             "ping",
@@ -422,7 +446,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          */
         this.options = {
             ...DefaultBotOptions,
-            ...botOptions.options,
+            ...options.options,
         };
 
         // TODO: Make use of the userGroups property
@@ -430,13 +454,13 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @type {IUserGroup[]}
          * @readonly
          */
-        this.userGroups = botOptions.userGroups || [];
+        this.userGroups = options.userGroups || [];
 
         /**
          * @type {Snowflake | undefined}
          * @readonly
          */
-        this.owner = botOptions.owner;
+        this.owner = options.owner;
 
         /**
          * Localization
@@ -449,7 +473,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @type {string[] | undefined}
          * @readonly
          */
-        this.languages = botOptions.languages;
+        this.languages = options.languages;
 
         /**
          * @type {boolean}
@@ -518,12 +542,12 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             await axios.post(dblUrl.replace("{botId}", this.client.user.id), {
                 server_count
             }, {
-                headers: {
-                    Authorization: this.settings.keys.dbl
-                }
-            }).catch((error: Error) => {
-                Log.warn(`[Bot.postStats] Could not post stats to discordbots.org (${error.message})`);
-            });
+                    headers: {
+                        Authorization: this.settings.keys.dbl
+                    }
+                }).catch((error: Error) => {
+                    Log.warn(`[Bot.postStats] Could not post stats to discordbots.org (${error.message})`);
+                });
         }
 
         // Bots for Discord.com
@@ -533,13 +557,13 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             await axios.post(bfdUrl.replace("{botId}", this.client.user.id), {
                 server_count
             }, {
-                headers: {
-                    Authorization: this.settings.keys.bfd,
-                    "Content-Type": "application/json"
-                }
-            }).catch((error: Error) => {
-                Log.warn(`[Bot.postStats] Could not post stats to botsfordiscord.com (${error.message})`);
-            });
+                    headers: {
+                        Authorization: this.settings.keys.bfd,
+                        "Content-Type": "application/json"
+                    }
+                }).catch((error: Error) => {
+                    Log.warn(`[Bot.postStats] Could not post stats to botsfordiscord.com (${error.message})`);
+                });
         }
     }
 
@@ -553,6 +577,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
         if (this.options.asciiTitle) {
             console.log("\n" + title.replace("{version}", "beta") + "\n");
+        }
+
+        if (DebugMode) {
+            Log.info("[Forge] Debug mode is enabled");
         }
 
         /**
@@ -1020,7 +1048,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
             // TODO: CRITICAL: Default access level set to 0
-            emojis: this.emojis,
+
             label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
         });
     }

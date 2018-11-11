@@ -43,14 +43,21 @@ import {on, WeakCommand, IDecoratorCommand, SimpleCommand, DiscordEvent} from ".
 import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
 import EmojiMenu, {IEmojiButton} from "./emoji-menu/emoji-menu";
-import PaginatedMessage from "./pagination/paginated-message";
 import {IDisposable} from "./core/structures";
 import {ICommandExecutedEvent} from "./events/command-executed-event";
 import {ICommandWillExecuteEvent} from "./events/command-will-execute-event";
-import {Task} from "./tasks/task";
+import PaginatedMessage from "./pagination/paginated-message";
+import Task from "./tasks/task";
 import TaskManager from "./tasks/task-manager";
+import {IAction, ActionType} from "./actions/action";
+import ActionInterpreter from "./actions/action-interpreter";
+import {IFragment, IFragmentMeta} from "./fragments/fragment";
 
 export {
+    // Fragments
+    IFragment,
+    IFragmentMeta,
+
     // Commands
     ArgumentParser,
     CommandContext,
@@ -122,7 +129,7 @@ export {
     KnexTable,
     PaginatedMessage,
 
-    // Snap
+    // Structures
     IDisposable,
 
     // Decorators
@@ -134,5 +141,10 @@ export {
 
     // Tasks
     Task,
-    TaskManager
+    TaskManager,
+
+    // Actions
+    IAction,
+    ActionType,
+    ActionInterpreter
 };

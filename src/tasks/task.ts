@@ -2,7 +2,7 @@ import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/structures";
 
-export abstract class Task implements IFragment, IDisposable {
+export default abstract class Task implements IFragment, IDisposable {
     public readonly abstract meta: IFragmentMeta;
     
     public readonly interval: number = -1;

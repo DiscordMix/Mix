@@ -41,7 +41,7 @@ export enum ChannelType {
     Group = "group"
 }
 
-export default class InstructionInterpreter extends EventEmitter {
+export default class ActionInterpreter extends EventEmitter {
     private readonly bot: Bot;
 
     public constructor(bot: Bot) {

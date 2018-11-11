@@ -58,7 +58,6 @@ const title: string =
 
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
-// TODO: Should be a property/option on Bot, not hardcoded
 // TODO: Merge this resolvers with the (if provided) provided
 // ones by the user.
 export const InternalArgResolvers: IArgumentResolver[] = [
@@ -281,9 +280,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
     public readonly languages?: string[];
     public readonly state: BotState;
     public readonly suspended: boolean;
-
-    // TODO: Shouldn't be able to be edited/not read-only
-    public client: Client;
+    public readonly client: Client;
 
     private api?: ApiType;
     private setupStart: number = 0;
@@ -1050,7 +1047,6 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
             bot: this,
 
             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
-            // TODO: CRITICAL: Default access level set to 0
 
             label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
         });
@@ -1158,11 +1154,9 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
             Log.verbose("[Bot.disconnect] Saving JsonProvider");
             await this.dataStore.save();
         }
-
-        // TODO:
-        //this.settings.save();
+        
         await this.client.destroy();
-        this.client = new Client();
+        (this.client as any) = new Client();
         Log.info("[Bot.disconnect] Disconnected");
         this.emit(EBotEvents.Disconnected);
 

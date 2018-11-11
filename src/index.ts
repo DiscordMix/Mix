@@ -30,7 +30,6 @@ import TimeSuffixType from "./time/time-suffix-type";
 import Utils from "./core/utils";
 import Permission from "./core/permission";
 import ChatEnvironment from "./core/chat-environment";
-import PluginManager from "./core/plugin-manager";
 import Collection from "./collections/collection";
 import DataProvider from "./data-providers/data-provider";
 import ObjectProvider from "./data-providers/object-provider";
@@ -92,10 +91,6 @@ export {
     ChatEnvironment,
     Patterns,
     DiscordEvent,
-
-    // Plugins
-    // Plugin, // Why error?
-    PluginManager,
 
     // Collections
     Collection,

@@ -10,9 +10,15 @@ export abstract class Task implements IFragment, IDisposable {
     public readonly iterations: number = 0;
     public readonly lastIteration: number = -1;
 
-    public abstract run(bot: Bot): void;
+    protected readonly bot: Bot;
 
-    public canRun(bot: Bot): boolean {
+    protected constructor(bot: Bot) {
+        this.bot = bot;
+    }
+
+    public abstract run(): void;
+
+    public canRun(): boolean {
         return true;
     }
 

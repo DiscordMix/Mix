@@ -689,7 +689,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
         }
 
         // Load & enable tasks
-        this.tasks.unregisterAll();
+        await this.tasks.unregisterAll();
         Log.verbose("[Bot.setup] Loading tasks");
 
         const loaded: number = await this.tasks.loadAll(this.settings.paths.tasks);

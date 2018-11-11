@@ -378,6 +378,30 @@ export default class Utils {
         return channel;
     }
 
+    public static findDefaultChannelOrAny(guild: Guild): TextChannel | null {
+        const defaultChannel: TextChannel | null = Utils.findDefaultChannel(guild);
+
+        if (defaultChannel !== null) {
+            return defaultChannel;
+        }
+
+        for (let [id, channel] of guild.channels) {
+            if (channel.type === "text") {
+                return channel as TextChannel;
+            }
+        }
+
+        return null;
+    }
+
+    public static trim(text: string, maxLength: number = 30, suffix: string = " ..."): string {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength - suffix.length) + suffix;
+        }
+
+        return text;
+    }
+
     /**
      * Determine the guild owners by searching for members with the MANAGE_GUILD permission
      * @param {Guild} guild

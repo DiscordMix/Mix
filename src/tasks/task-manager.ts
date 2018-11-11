@@ -104,12 +104,12 @@ export default class TaskManager {
                 return false;
             }
             else {
-                this.scheduler.set(task.meta.name, setInterval(() => {
+                this.scheduler.set(task.meta.name, setInterval(async () => {
                     if (task.maxIterations !== -1 && task.iterations >= task.maxIterations) {
-                        this.disable(task.meta.name);
+                        await this.disable(task.meta.name);
                     }
-                    else if (task.canRun(this.bot)) {
-                        this.run(name);
+                    else if (await task.canRun()) {
+                        await this.run(name);
                     }
                 }, task.interval));
 
@@ -131,7 +131,7 @@ export default class TaskManager {
 
         const task: Task = this.tasks.get(name) as Task;
 
-        task.run(this.bot);
+        task.run();
         (task as any).iterations++;
         (task as any).lastIteration = Date.now();
 
@@ -141,9 +141,9 @@ export default class TaskManager {
     /**
      * Disable all registered tasks
      */
-    public unregisterAll(): this {
+    public async unregisterAll(): Promise<this> {
         for (let [name, task] of this.tasks) {
-            this.disable(name);
+            await this.disable(name);
         }
 
         return this;
@@ -154,14 +154,14 @@ export default class TaskManager {
      * @param {string} name
      * @return {boolean} Whether the task was disabled
      */
-    public disable(name: string): boolean {
+    public async disable(name: string): Promise<boolean> {
         if (!this.tasks.has(name)) {
             return false;
         }
 
         const task: Task = this.tasks.get(name) as Task;
 
-        task.dispose();
+        await task.dispose();
         clearInterval(this.scheduler.get(task.meta.name) as NodeJS.Timeout);
         this.scheduler.delete(task.meta.name);
 
@@ -213,7 +213,7 @@ export default class TaskManager {
 
         if (loaded !== null) {
             for (let i: number = 0; i < loaded.length; i++) {
-                this.registerTask(new (loaded[i].module as any)());
+                this.registerTask(new (loaded[i].module as any)(this.bot));
             }
 
             return loaded.length;

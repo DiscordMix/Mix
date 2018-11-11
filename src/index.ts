@@ -50,7 +50,7 @@ import PaginatedMessage from "./pagination/paginated-message";
 import Task from "./tasks/task";
 import TaskManager from "./tasks/task-manager";
 import {IAction, ActionType} from "./actions/action";
-import ActionInterpreter from "./actions/action-interpreter";
+import ActionInterpreter, {IPaginatedActionArgs, IRequestActionArgs} from "./actions/action-interpreter";
 import {IFragment, IFragmentMeta} from "./fragments/fragment";
 
 export {
@@ -146,5 +146,9 @@ export {
     // Actions
     IAction,
     ActionType,
-    ActionInterpreter
+    ActionInterpreter,
+    IPaginatedActionArgs,
+    IRequestActionArgs,
+    IPrivateMessageActionArgs,
+    IEmbedActionArgs
 };

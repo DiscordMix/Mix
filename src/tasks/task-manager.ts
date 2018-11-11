@@ -1,5 +1,5 @@
 import {Bot, Utils} from "..";
-import {Task} from "./task";
+import Task from "./task";
 import Log from "../core/log";
 import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
 
@@ -111,7 +111,7 @@ export default class TaskManager {
                     else if (await task.canRun()) {
                         await this.run(name);
                     }
-                }, task.interval));
+                }, task.interval) as NodeJS.Timeout);
 
                 return true;
             }

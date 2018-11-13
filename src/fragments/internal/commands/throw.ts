@@ -1,6 +1,9 @@
 import {Command} from "../../..";
 import {RestrictGroup} from "../../../commands/command";
 
+/**
+ * @extends Command
+ */
 export default class ThrowCommand extends Command {
     readonly meta = {
         name: "throw",

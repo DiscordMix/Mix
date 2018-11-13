@@ -34,7 +34,6 @@ export default class Rgba extends Rgb {
     }
 
     /**
-     * @return {object}
      * @return {*}
      */
     public toObject(): any {

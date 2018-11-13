@@ -27,7 +27,7 @@ export default class Log {
      * @param {IComposeOptions} options
      * @return {Promise<void>}
      */
-    public static async compose(options: IComposeOptions): Promise<any> {
+    public static async compose(options: IComposeOptions): Promise<void> {
         if (Log.level === LogLevel.None) {
             return;
         }
@@ -39,7 +39,7 @@ export default class Log {
 
         let message: any = options.message;
 
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
             // TODO: Make sure check is working as intended, seems a bit suspicious
             if (Log.level < options.type) {
                 resolve();
@@ -80,9 +80,9 @@ export default class Log {
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<*>}
+     * @return {Promise<void>}
      */
-    public static info(message: any, ...params: any[]): Promise<any> {
+    public static info(message: any, ...params: any[]): Promise<void> {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -97,9 +97,9 @@ export default class Log {
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<*>}
+     * @return {Promise<void>}
      */
-    public static success(message: any, ...params: any[]): Promise<any> {
+    public static success(message: any, ...params: any[]): Promise<void> {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -114,9 +114,9 @@ export default class Log {
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<*>}
+     * @return {Promise<void>}
      */
-    public static warn(message: any, ...params: any[]): Promise<any> {
+    public static warn(message: any, ...params: any[]): Promise<void> {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -131,9 +131,9 @@ export default class Log {
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<*>}
+     * @return {Promise<void>}
      */
-    public static error(message: any, ...params: any[]): Promise<any> {
+    public static error(message: any, ...params: any[]): Promise<void> {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -148,9 +148,9 @@ export default class Log {
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<*>}
+     * @return {Promise<void>}
      */
-    public static throw(message: any, ...params: any[]): Promise<any> {
+    public static throw(message: any, ...params: any[]): Promise<void> {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -169,9 +169,9 @@ export default class Log {
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<*>}
+     * @return {Promise<void>}
      */
-    public static verbose(message: any, ...params: any[]): Promise<any> {
+    public static verbose(message: any, ...params: any[]): Promise<void> {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -186,9 +186,9 @@ export default class Log {
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<*>}
+     * @return {Promise<void>}
      */
-    public static debug(message: any, ...params: any[]): Promise<any> {
+    public static debug(message: any, ...params: any[]): Promise<void> {
         const options: IComposeOptions = {
             message: message,
             params: params,

@@ -60,6 +60,7 @@ export default abstract class FragmentLoader {
     /**
      * @todo Test and make sure it works
      * @param {string} file
+     * @return {Promise<IPackage | null>}
      */
     public static async reload(file: string): Promise<IPackage | null> {
         delete require.cache[require.resolve(file)];
@@ -70,6 +71,7 @@ export default abstract class FragmentLoader {
     /**
      * Determine whether a fragment is valid
      * @param {IFragment} fragment
+     * @return {boolean}
      */
     public static validate(fragment: IFragment): boolean {
         if (!fragment.meta) {

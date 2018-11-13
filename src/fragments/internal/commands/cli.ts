@@ -9,6 +9,9 @@ type CliArgs = {
     readonly command: string;
 }
 
+/**
+ * @extends Command
+ */
 export default class CliCommand extends Command<CliArgs> {
     readonly meta = {
         name: "cli",
@@ -32,17 +35,21 @@ export default class CliCommand extends Command<CliArgs> {
 
     public async executed(context: CommandContext, args: CliArgs): Promise<void> {
         const started: number = Date.now();
+
         exec(args.command, (error, stdout: string, stderror: string) => {
             let result: string = stdout || stderror;
+
             result = stdout.toString().trim() === '' || !result ? stderror.toString().trim() === '' || !stderror ? 'No return value.' : stderror : result.toString();
 
             const embed: EmbedBuilder = new EmbedBuilder();
+
             embed.footer(`Evaluated in ${(Date.now() - started)}ms`);
             embed.field(`Input`, new FormattedMessage().codeBlock(args.command, "js").build());
-            embed.field(`Output`,
+
+            embed.field("Output",
                 new FormattedMessage().codeBlock(Utils.escapeText(result, context.bot.client.token), "js").build()
-            );
-            embed.color('#36393f');
+            )
+            .color("#36393f");;
 
             context.send(embed.build());
         });

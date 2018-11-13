@@ -56,6 +56,8 @@ const title: string =
     "██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗\n" +
     "╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝ {version}";
 
+export const BasePath: string = path.resolve(path.join(".."));
+
 const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
 // TODO: Merge this resolvers with the (if provided) provided
@@ -251,7 +253,6 @@ export type BotToken = string;
  * - handlingCommand(CommandContext, Command, Arguments Object)
  * - commandError(Error)
  * - commandExecuted(CommandExecutedEvent, command result (any))
- * -
  */
 
 /**
@@ -423,7 +424,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
         this.prefixCommand = options.prefixCommand || true;
 
         /**
-         * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded.
+         * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded?
          * @type {string[]}
          * @readonly
          */
@@ -501,6 +502,10 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
          */
         this.tasks = new TaskManager(this);
 
+        /**
+         * @type {NodeJS.Timeout[]}
+         * @readonly
+         */
         this.timeouts = [];
 
         return this;
@@ -515,6 +520,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
 
     /**
      * @param {ApiType} api
+     * @return {this}
      */
     public setAPI(api: ApiType): this {
         this.api = api;
@@ -724,7 +730,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
      * Enable and register fragments
      * @param {IFragment[]} packages
      * @param {boolean} internal Whether the fragments are internal
-     * @return {number} The amount of enabled fragments
+     * @return {Promise<number>} The amount of enabled fragments
      */
     private async enableFragments(packages: IPackage[], internal: boolean = false): Promise<number> {
         let enabled: number = 0;
@@ -777,6 +783,10 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
         return enabled;
     }
 
+    /**
+     * @param {boolean} suspend
+     * @return {this}
+     */
     public suspend(suspend: boolean): this {
         if (this.state !== BotState.Connected) {
             return this;
@@ -847,7 +857,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
      * @todo 'args' type on docs (here)
      * @param {string} base
      * @param {Message} referer
-     * @param {*} args
+     * @param {string[]} args
      */
     public async triggerCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
         // Use any registered prefix, default to index 0

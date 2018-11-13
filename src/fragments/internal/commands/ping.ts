@@ -1,5 +1,8 @@
 import {Command, CommandContext} from "../../..";
 
+/**
+ * @extends Command
+ */
 export default class PingCommand extends Command {
     readonly meta = {
         name: "ping",

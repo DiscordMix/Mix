@@ -5,10 +5,25 @@ export default class GuildObserver extends EventEmitter {
     private readonly client: Client;
     private readonly guild: Guild;
 
+    /**
+     * @param {Client} client
+     * @param {Guild} guild
+     */
     public constructor(client: Client, guild: Guild) {
         super();
 
+        /**
+         * @type {Client}
+         * @private
+         * @readonly
+         */
         this.client = client;
+
+        /**
+         * @type {Guild}
+         * @private
+         * @readonly
+         */
         this.guild = guild;
     }
 

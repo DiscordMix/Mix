@@ -5,11 +5,27 @@ export default class UserObserver extends EventEmitter {
     private readonly client: Client;
     private readonly user: User;
 
+    /**
+     * @param {Client} client
+     * @param {User} user
+     */
     public constructor(client: Client, user: User) {
         super();
 
+        /**
+         * @type {Client}
+         * @private
+         * @readonly
+         */
         this.client = client;
+
+        /**
+         * @type {User}
+         * @private
+         * @readonly
+         */
         this.user = user;
+        
         this.setupEvents();
     }
 

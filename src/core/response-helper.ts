@@ -9,8 +9,22 @@ export default class ResponseHelper {
     public readonly sender: User;
 
     public constructor(channel: TextChannel, bot: Bot, sender: User) {
+        /**
+         * @type {TextChannel}
+         * @readonly
+         */
         this.channel = channel;
+
+        /**
+         * @type {Bot}
+         * @readonly
+         */
         this.bot = bot;
+
+        /**
+         * @type {User}
+         * @readonly
+         */
         this.sender = sender;
     }
 
@@ -118,7 +132,7 @@ export default class ResponseHelper {
      * @param {string} text
      * @param {string} [title=""]
      * @param {boolean} [clean=true] Whether to filter the message
-     * @return {Promise<EditableMessage>}
+     * @return {Promise<EditableMessage | null>}
      */
     public async ok(text: string | FormattedMessage, title: string = "", clean: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
@@ -129,7 +143,7 @@ export default class ResponseHelper {
 
     /**
      * @param {string} text
-     * @return {Promise<EditableMessage>}
+     * @return {Promise<EditableMessage | null>}
      */
     public async send(text: string | RichEmbed | Message): Promise<EditableMessage | null> {
         return new EditableMessage(await this.channel.send(text));
@@ -137,7 +151,7 @@ export default class ResponseHelper {
 
     /**
      * @param {string} text
-     * @return {Promise<EditableMessage>}
+     * @return {Promise<EditableMessage | null>}
      */
     public async loading(text: string): Promise<EditableMessage | null> {
         return await this.respond({
@@ -155,10 +169,7 @@ export default class ResponseHelper {
     public async fail(text: string, autoDelete: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
             text: `${this.bot.options.emojis.error} ${text}`,
-            color: "RED",
-
-            // TODO: Returns static image, and won't change to random
-            //thumbnail: "https://cataas.com/cat"
+            color: "RED"
         }, autoDelete);
     }
 }

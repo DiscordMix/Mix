@@ -16,6 +16,9 @@ export default class StatCounter {
     public stats: IBotStats;
 
     public constructor() {
+        /**
+         * @type {IBotStats}
+         */
         this.stats = DefaultBotStats;
     }
 

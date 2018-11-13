@@ -2,11 +2,6 @@ import Log from "./log";
 import Utils from "./utils";
 import fs from "fs";
 
-// TODO: All these interfaces probably shouldn't be
-// read-only since it should be allowed to change them
-// in code. OR maybe use the react-redux and vscode style
-// of doing things, and make a copy of the current settings
-// and upon disconnect save/rewrite them!
 export type ISettingsGeneral = {
     readonly token: string;
     readonly prefixes: string[];
@@ -83,7 +78,7 @@ export default class Settings {
             Log.throw("[Settings.fromFile] Could not load settings: File does not exist");
         }
 
-        const fileSettings: any = await Utils.readJson(path);
+        const fileSettings: ISettingsOptions = await Utils.readJson(path);
 
         // TODO: Make sure pure objects work
         return new Settings(fileSettings);

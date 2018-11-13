@@ -84,6 +84,7 @@ export default class Utils {
     /**
      * @param {string} directory The directory to scan
      * @param {boolean} [absolutePath=false] Whether to return the absolute path of the files
+     * @return {Promise<string[] | null>}
      */
     public static getFiles(directory: string, absolutePath: boolean = false): Promise<string[] | null> {
         return new Promise((resolve) => {
@@ -101,7 +102,7 @@ export default class Utils {
                 let result: string[] = files;
 
                 if (absolutePath) {
-                    for (let i = 0; i < result.length; i++) {
+                    for (let i: number = 0; i < result.length; i++) {
                         result[i] = path.resolve(path.join(directory, result[i]));
                     }
                 }
@@ -118,7 +119,7 @@ export default class Utils {
      * @return {Array<*>} The shuffled array
      */
     public static shuffle(array: any[]): any[] {
-        let counter = array.length;
+        let counter: number = array.length;
 
         // While there are elements in the array
         while (counter > 0) {
@@ -129,7 +130,7 @@ export default class Utils {
             counter--;
 
             // And swap the last element with it
-            const temp = array[counter];
+            const temp: any = array[counter];
 
             array[counter] = array[index];
             array[index] = temp;
@@ -143,12 +144,12 @@ export default class Utils {
      * @param {ISendOptions} options
      * @return {Promise<Message>} The message sent
      */
-    public static async send(options: ISendOptions): Promise<any> {
+    public static async send(options: ISendOptions): Promise<Message> {
         return await options.channel.send(new RichEmbed()
             .setColor(options.color ? options.color : "GREEN")
             .setTitle(options.title ? options.title : "")
             .setFooter(options.footer, options.avatarUrl)
-            .setDescription(options.message));
+            .setDescription(options.message)) as Message;
     }
 
     /**
@@ -169,7 +170,7 @@ export default class Utils {
 
     /**
      * @param {number} timestamp
-     * @param {boolean} capitalize Whether to capitalize the time
+     * @param {boolean} [capitalize=true] Whether to capitalize the time
      * @return {string}
      */
     public static timeAgo(timestamp: number, capitalize: boolean = true): string {
@@ -200,11 +201,11 @@ export default class Utils {
 
     /**
      * @param {string} path
-     * @param {Object} data
-     * @return {Promise<*>}
+     * @param {*} data
+     * @return {Promise<void>}
      */
-    public static async writeJson(path: string, data: any): Promise<any> {
-        return new Promise((resolve) => {
+    public static async writeJson(path: string, data: any): Promise<void> {
+        return new Promise<void>((resolve) => {
             fs.writeFile(path, JSON.stringify(data), (error: Error) => {
                 if (error) {
                     throw error;
@@ -217,7 +218,7 @@ export default class Utils {
 
     /**
      * @param {string} path
-     * @return {Promise<Object>} The data from the specified path
+     * @return {Promise<ReturnType>} The data from the specified path
      */
     public static async readJson<ReturnType = any>(path: string): Promise<ReturnType> {
         return new Promise<ReturnType>((resolve, reject) => {
@@ -247,7 +248,7 @@ export default class Utils {
 
     /**
      * @param {string} path
-     * @param data
+     * @param {*} data
      * @return {boolean}
      */
     public static writeJsonSync(path: string, data: any): boolean {
@@ -333,8 +334,8 @@ export default class Utils {
     /**
      * @param {Guild} guild
      * @param {string} name
-     * @param {boolean} textChannel
-     * @param {boolean} caseSensitive
+     * @param {boolean} [textChannel=true]
+     * @param {boolean} [caseSensitive=false]
      * @returns {GuildChannel | null}
      */
     public static findChannelByName(guild: Guild, name: string, textChannel: boolean = true, caseSensitive: boolean = false): GuildChannel | null {
@@ -378,6 +379,10 @@ export default class Utils {
         return channel;
     }
 
+    /**
+     * @param {Guild} guild
+     * @return {TextChannel | null}
+     */
     public static findDefaultChannelOrAny(guild: Guild): TextChannel | null {
         const defaultChannel: TextChannel | null = Utils.findDefaultChannel(guild);
 
@@ -394,6 +399,12 @@ export default class Utils {
         return null;
     }
 
+    /**
+     * @param {string} text
+     * @param {number} [maxLength=30]
+     * @param {string} [suffix=" ..."]
+     * @return {string} The trimmed message
+     */
     public static trim(text: string, maxLength: number = 30, suffix: string = " ..."): string {
         if (text.length > maxLength) {
             return text.substring(0, maxLength - suffix.length) + suffix;
@@ -447,6 +458,7 @@ export default class Utils {
      * Clean a string from mentions and token
      * @param {string} text
      * @param {string} token
+     * @return {string} The escaped text
      */
     public static escapeText(text: string, token: string): string {
         if (!text || !token || typeof text !== "string" || typeof token !== "string") {

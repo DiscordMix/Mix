@@ -11,12 +11,14 @@ export default class KnexTable<Model> {
      */
     public constructor(connection: any, name: string) {
         /**
+         * @type {Table}
          * @private
          * @readonly
          */
         this.connection = connection;
 
         /**
+         * @type {string}
          * @readonly
          */
         this.name = name;

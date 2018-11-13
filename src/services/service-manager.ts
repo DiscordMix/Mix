@@ -124,7 +124,7 @@ export default class ServiceManager {
 
     /**
      * @param {string} name
-     * @return {Service | null}
+     * @return {Readonly<Service> | null}
      */
     public getService(name: string): Readonly<Service> | null {
         if (typeof name !== "string" || Utils.isEmpty(name) || Array.isArray(name)) {

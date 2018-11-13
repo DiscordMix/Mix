@@ -70,7 +70,7 @@ export default class Temp {
 
     /**
      * @todo: Return type
-     * @return {Promise<*>}
+     * @return {Promise<this>}
      */
     public async reset(): Promise<this> {
         return new Promise<this>((resolve) => {
@@ -97,9 +97,9 @@ export default class Temp {
      * Write data in JSON into a file in the temp folder for the bot
      * @param {*} data
      * @param {string} file The file in which to store the data
-     * @return {Promise<boolean>}
+     * @return {Promise<void>}
      */
-    public store(data: any, file: string): Promise<boolean> {
+    public store(data: any, file: string): Promise<void> {
         if (!this.resolvedPath) {
             throw new Error("[Temp.store] Trying to store when the resolved path is undefined");
         }
@@ -115,6 +115,9 @@ export default class Temp {
         return path.join(Temp.resolveRootPath(), `u${id}`);
     }
 
+    /**
+     * @return {string}
+     */
     public static resolveRootPath(): string {
         return path.join(path.dirname(main()), "tmp");
     }

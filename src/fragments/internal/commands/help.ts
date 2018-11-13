@@ -3,6 +3,9 @@ import {Command} from "../../..";
 import {RichEmbed} from "discord.js";
 import {IReadonlyCommandMap} from "../../../commands/command-store";
 
+/**
+ * @extends Command
+ */
 export default class HelpCommand extends Command {
     readonly meta = {
         name: "help",
@@ -29,6 +32,7 @@ export default class HelpCommand extends Command {
             await (await context.sender.createDM()).send(new RichEmbed()
                 .setColor("GREEN")
                 .setDescription(commandsString)).catch(async (error: Error) => {
+                    
                 if (error.message === "Cannot send messages to this user") {
                     await context.fail("You're not accepting direct messages.");
                 }

@@ -40,6 +40,12 @@ export default abstract class Service<ApiType = undefined | any> implements IFra
         this.listeners = new Map();
     }
 
+    /**
+     * 
+     * @param {DiscordEvent} event
+     * @param {*} handler
+     * @return {this}
+     */
     protected on(event: DiscordEvent, handler: any): this {
         this.bot.client.on(event, handler);
         this.listeners.set(event, handler);

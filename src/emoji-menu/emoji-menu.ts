@@ -25,11 +25,30 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
     private bot?: Bot;
     private messageAttached?: Message;
 
+    /**
+     * @param {Snowflake} messageId
+     * @param {Snowflake} ownerId
+     * @param {IEmojiButton[]} [buttons=[]]
+     */
     public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: IEmojiButton[] = []) {
         super();
 
+        /**
+         * @type {Snowflake}
+         * @readonly
+         */
         this.messageId = messageId;
+        
+        /**
+         * @type {Snowflake}
+         * @readonly
+         */
         this.ownerId = ownerId;
+
+        /**
+         * @type {IEmojiButton[]}
+         * @readonly
+         */
         this.buttons = buttons;
 
         // Global click
@@ -40,6 +59,10 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
         });
     }
 
+    /**
+     * @param {IEmojiButton} button
+     * @return {this}
+     */
     public add(button: IEmojiButton): this {
         this.buttons.push(button);
 
@@ -86,6 +109,9 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
         }
     }
 
+    /**
+     * @return {Promise<this>}
+     */
     public async attach(context: CommandContext): Promise<this> {
         this.bot = context.bot;
         this.bot.client.on(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd.bind(this));
@@ -113,6 +139,9 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
         }
     }
 
+    /**
+     * @return {this}
+     */
     public dispose(): this {
         if (this.bot !== undefined) {
             this.bot.client.removeListener(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd);

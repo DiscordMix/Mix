@@ -1,6 +1,9 @@
 import CommandContext from "../../../commands/command-context";
 import {Command} from "../../..";
 
+/**
+ * @extends Command
+ */
 export default class PrefixCommand extends Command {
     readonly meta = {
         name: "prefix",

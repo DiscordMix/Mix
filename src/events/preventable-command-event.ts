@@ -13,11 +13,15 @@ export default class PreventableCommandEvent implements ICommandEvent {
      * @param {CommandContext} context
      */
     public constructor(context: CommandContext) {
+        /**
+         * @type {CommandContext}
+         * @readonly
+         */
         this.context = context;
     }
 
     /**
-     * @param {boolean} [prevent
+     * @param {boolean} [prevent=true]
      */
     public prevent(prevent = true): void {
         /**

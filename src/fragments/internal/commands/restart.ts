@@ -1,5 +1,8 @@
 import {Command, CommandContext, RestrictGroup} from "../../..";
 
+/**
+ * @extends Command
+ */
 export default class RestartCommand extends Command {
     readonly meta = {
         name: "restart",

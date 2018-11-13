@@ -19,7 +19,17 @@ export default class Language {
             throw new Error("[Language] Specified base languages directory does not exist");
         }
 
+        /**
+         * @type {ILanguageSource | undefined}
+         * @private
+         */
         this.directory = directory;
+
+        /**
+         * @type {Map<string, ILanguageSource>}
+         * @private
+         * @readonly
+         */
         this.languages = new Map();
     }
 
@@ -32,6 +42,7 @@ export default class Language {
 
     /**
      * @param {string} name
+     * @return {boolean}
      */
     public setDefault(name: string): boolean {
         if (typeof name !== "string" || Utils.isEmpty(name)) {

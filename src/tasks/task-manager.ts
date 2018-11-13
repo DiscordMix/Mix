@@ -123,6 +123,7 @@ export default class TaskManager {
     /**
      * Run a task
      * @param {string} name
+     * @return {boolean}
      */
     private run(name: string): boolean {
         if (!this.tasks.has(name)) {
@@ -140,6 +141,7 @@ export default class TaskManager {
 
     /**
      * Disable all registered tasks
+     * @return {Promise<this>}
      */
     public async unregisterAll(): Promise<this> {
         for (let [name, task] of this.tasks) {
@@ -152,7 +154,7 @@ export default class TaskManager {
     /**
      * Disable a task
      * @param {string} name
-     * @return {boolean} Whether the task was disabled
+     * @return {Promise<boolean>} Whether the task was disabled
      */
     public async disable(name: string): Promise<boolean> {
         if (!this.tasks.has(name)) {

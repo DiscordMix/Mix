@@ -57,6 +57,7 @@ export default class JsonProvider extends ObjectProvider implements IVolatile, I
 
     /**
      * Ensure that the source file exists
+     * @return {Promise<void>}
      */
     public async validate(): Promise<void> {
         if (!fs.existsSync(this.path)) {

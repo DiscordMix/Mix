@@ -182,7 +182,7 @@ describe("Utils.getRandomInt()", () => {
         const result = Utils.getRandomInt(0, 2);
 
         expect(result).to.be.an("number");
-        // TODO: Check to be the number either 0 or 1
+        expect([0, 1]).to.include(result);
     });
 });
 

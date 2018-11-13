@@ -159,7 +159,7 @@ export default class Log {
             prefix: "fata"
         };
 
-        const result = Log.compose(options);
+        const result: any = Log.compose(options);
 
         process.exit(1);
 

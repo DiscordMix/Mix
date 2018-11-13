@@ -292,6 +292,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
     /**
      * Setup the bot from an object
      * @param {Partial<IBotOptions>} botOptionsOrToken
+     * @param {boolean} [testMode=false]
      */
     public constructor(botOptionsOrToken: Partial<IBotOptions> | BotToken, testMode: boolean = false) {
         super();
@@ -572,7 +573,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
 
     /**
      * Setup the bot
-     * @param {ApiType} api
+     * @param {ApiType | undefined} api
      * @return {Promise<this>}
      */
     private async setup(api?: ApiType): Promise<this> {
@@ -587,7 +588,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
         }
 
         /**
-         * @type {*}
+         * @type {ApiType}
          * @private
          * @readonly
          */
@@ -729,7 +730,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
     /**
      * Enable and register fragments
      * @param {IFragment[]} packages
-     * @param {boolean} internal Whether the fragments are internal
+     * @param {boolean} [internal=false] Whether the fragments are internal
      * @return {Promise<number>} The amount of enabled fragments
      */
     private async enableFragments(packages: IPackage[], internal: boolean = false): Promise<number> {
@@ -858,6 +859,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
      * @param {string} base
      * @param {Message} referer
      * @param {string[]} args
+     * @return {Promise<*>}
      */
     public async triggerCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
         // Use any registered prefix, default to index 0
@@ -956,7 +958,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
     /**
      * @param {Message} message
      * @param {boolean} [edited=false] Whether the message was edited
-     * @return {Promise<void>}
+     * @return {Promise<boolean>}
      */
     public async handleMessage(message: Message, edited: boolean = false): Promise<boolean> {
         if (Utils.isEmpty(message) || typeof message !== "object" || !(message instanceof Message) || Array.isArray(message)) {
@@ -1107,6 +1109,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
 
     /**
      * Connect the client
+     * @param {ApiType | undefined} api
      * @return {Promise<this>}
      */
     public async connect(api?: ApiType): Promise<this> {
@@ -1122,7 +1125,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
      * @todo "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached)
      * @todo Use the reload modules param
      * Restart the client
-     * @param {boolean} reloadModules Whether to reload all modules
+     * @param {boolean} [reloadModules=true] Whether to reload all modules
      * @return {Promise<this>}
      */
     public async restart(reloadModules: boolean = true): Promise<this> {

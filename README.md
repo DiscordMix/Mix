@@ -5,6 +5,7 @@ Forge is a powerful, fully-modular and self-contained Discord bot framework for 
 
 **Note**: Forge is a library to create bots and not a Discord API library.
 
+#### Useful Links
 => [View the NPM package](https://www.npmjs.com/package/@cloudrex/forge)
 
 => [View the documentation](https://cloudrex.gitbook.io/forge/) (**Still being written**)

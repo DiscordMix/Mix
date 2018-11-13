@@ -1,6 +1,9 @@
 import Bot from "../core/bot";
 import Service from "./service";
 import {Log, Utils} from "..";
+import {spawn} from "child_process";
+import fs from "fs";
+import path from "path";
 
 export type IServiceMap = Map<string, Service>;
 export type IReadonlyServiceMap = ReadonlyMap<string, Service>;
@@ -63,9 +66,9 @@ export default class ServiceManager {
 
     /**
      * @param {string} name
-     * @return {boolean} Whether the service was started
+     * @return {Promise<boolean>} Whether the service was started
      */
-    public enable(name: string): boolean {
+    public async enable(name: string): Promise<boolean> {
         if (typeof name !== "string" || Utils.isEmpty(name) || Array.isArray(name)) {
             return false;
         }
@@ -92,7 +95,13 @@ export default class ServiceManager {
                 return false;
             }
 
-            service.start();
+            if (!service.detached) {
+                await service.start();
+            }
+            else {
+                Log.info("!!! Igniting detached service...");
+                this.ignite(service.meta.name);
+            }
 
             return true;
         }
@@ -108,18 +117,40 @@ export default class ServiceManager {
 
     /**
      * Enable all services
-     * @return {number} The amount of successfully enabled services
+     * @return {Promise<number>} The amount of successfully enabled services
      */
-    public enableAll(): number {
+    public async enableAll(): Promise<number> {
         let enabled: number = 0;
 
         for (let [name, service] of this.services) {
-            if (this.enable(name)) {
+            if (await this.enable(name)) {
                 enabled++;
             }
         }
 
         return enabled;
+    }
+
+    public ignite(name: string): boolean {
+        const absPath: string = path.resolve(path.join(this.bot.settings.paths.services, `${name}.js`));
+
+        if (!fs.existsSync(absPath)) {
+            console.log(absPath);
+
+            return false;
+        }
+        
+        console.log(path.join(__dirname, "service-igniter.js"));
+
+        const child = spawn("node", [path.join(__dirname, "service-igniter.js"), absPath]);
+
+        // For error visibility purposes
+        child.stdout.pipe(process.stdout);
+        child.stderr.pipe(process.stderr);
+
+        Log.debug(`[ServiceManager.ignite] Spawned service '${name}' @ ${child.pid}`);
+
+        return true;
     }
 
     /**

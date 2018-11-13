@@ -2,6 +2,7 @@ import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/structures";
 
+// TODO: Add DetachedTask class
 export default abstract class Task implements IFragment, IDisposable {
     public readonly abstract meta: IFragmentMeta;
     
@@ -55,4 +56,4 @@ export default abstract class Task implements IFragment, IDisposable {
 
         return this.lastIteration + this.interval;
     }
-};
+}

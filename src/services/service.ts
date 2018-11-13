@@ -2,15 +2,40 @@ import Bot from "../core/bot";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {IDisposable, DiscordEvent} from "..";
 
+// TODO: Move both enum and types elsewhere
+export enum ProcessMsgType {
+    Heartbeat
+}
+
+export type IProcessMsg = {
+    readonly type: ProcessMsgType;
+    readonly data: any;
+};
+
+export type IRawProcessMsg = {
+    readonly _d: any;
+    readonly _t: ProcessMsgType;
+}
+
 export interface IServiceOptions {
     readonly bot: Bot;
     readonly api?: any;
 }
 
-export default abstract class Service<ApiType = undefined | any> implements IFragment, IDisposable {
+export abstract class GenericService implements IFragment, IDisposable {
     public abstract meta: IFragmentMeta;
-    public readonly stop?: () => void;
+    public readonly detached: boolean = false;
     public readonly canStart: (() => boolean) | boolean = true;
+    public readonly stop?: () => void;
+
+    public dispose(): void {
+        //
+    }
+
+    public abstract start(): void;
+}
+
+export default abstract class Service<ApiType = undefined | any> extends GenericService {
     public readonly listeners: Map<DiscordEvent, any>;
 
     protected readonly bot: Bot;
@@ -21,6 +46,8 @@ export default abstract class Service<ApiType = undefined | any> implements IFra
      * @param {IServiceOptions} options
      */
     protected constructor(options: IServiceOptions) {
+        super();
+
         /**
          * @type {Bot}
          * @readonly
@@ -58,6 +85,10 @@ export default abstract class Service<ApiType = undefined | any> implements IFra
             this.bot.client.removeListener(event, handler);
         }
     }
+}
 
-    public abstract start(): void;
+export abstract class DetachedService extends GenericService {
+    public onMessage(msg: IProcessMsg, sender: any): IProcessMsg[] | IProcessMsg | void {
+        //
+    }
 }

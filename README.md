@@ -11,6 +11,8 @@ Forge is a powerful, fully-modular and self-contained Discord bot framework for 
 
 => [View CLI tool on NPM](https://www.npmjs.com/package/@cloudrex/forge-cli)
 
+=> [Example bot](https://github.com/discord-forge/example-forge-bot)
+
 #### Quick Start with the CLI tool (recommended)
 
 Get started quickly with your next Discord bot project by using our CLI tool!

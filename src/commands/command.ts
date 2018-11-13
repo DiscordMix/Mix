@@ -56,7 +56,6 @@ export type IArgumentResolver = {
     readonly resolve: (argument: DefiniteArgument, message: Message) => any;
 }
 
-// TODO: Make use of this
 export type IArgument = {
     readonly name: string;
     readonly type: IArgumentType;

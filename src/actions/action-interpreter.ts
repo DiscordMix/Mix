@@ -25,6 +25,7 @@ export interface IRequestActionArgs extends IMessageActionArgs {
 }
 
 export type IEmbedActionArgs = {
+    readonly channelId: Snowflake;
     readonly embed: RichEmbed;
 }
 
@@ -47,6 +48,11 @@ export default class ActionInterpreter extends EventEmitter {
     public constructor(bot: Bot) {
         super();
 
+        /**
+         * @type {Bot}
+         * @private
+         * @readonly
+         */
         this.bot = bot;
     }
 
@@ -61,6 +67,19 @@ export default class ActionInterpreter extends EventEmitter {
                 }
 
                 await (channel as TextChannel).send(act.args.message);
+
+                break;
+            }
+
+            case ActionType.RichEmbed: {
+                const act: IAction<IEmbedActionArgs> = action;
+                const channel: TextChannel | null = this.ensureChannel(act.args.channelId, act.type);
+
+                if (channel === null) {
+                    return;
+                }
+
+                await (channel as TextChannel).send(act.args.embed);
 
                 break;
             }

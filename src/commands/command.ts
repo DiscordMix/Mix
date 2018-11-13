@@ -96,7 +96,7 @@ export type ICommandResult = {
     readonly status: GenericCommandStatus | number;
 }
 
-export abstract class GenericCommand<ArgumentsType> implements IFragment, IDisposable {
+export abstract class GenericCommand<ArgumentsType = any> implements IFragment, IDisposable {
     public readonly abstract meta: IFragmentMeta;
     public readonly aliases: string[] = [];
     public readonly arguments: IArgument[] = [];
@@ -163,7 +163,7 @@ export abstract class GenericCommand<ArgumentsType> implements IFragment, IDispo
 /**
  * @extends GenericCommand
  */
-export abstract class Subcommand<ArgumentsType> extends GenericCommand<ArgumentsType> {
+export abstract class Subcommand<ArgumentsType = any> extends GenericCommand<ArgumentsType> {
     //
 }
 

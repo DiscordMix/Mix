@@ -30,7 +30,7 @@ import TimeSuffixType from "./time/time-suffix-type";
 import Utils from "./core/utils";
 import Permission from "./core/permission";
 import ChatEnvironment from "./core/chat-environment";
-import Collection from "./collections/collection";
+import ArrayCollection from "./collections/collection";
 import DataProvider from "./data-providers/data-provider";
 import ObjectProvider from "./data-providers/object-provider";
 import JsonProvider from "./data-providers/json-provider";
@@ -100,7 +100,7 @@ export {
     DiscordEvent,
 
     // Collections
-    Collection,
+    ArrayCollection,
 
     // Emoji Menu
     IEmojiButton,

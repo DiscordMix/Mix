@@ -1,7 +1,7 @@
 import Utils from "../core/utils";
 import Rgb from "../misc/rgb";
 import Rgba from "../misc/rgba";
-import Collection from "../collections/collection";
+import ArrayCollection from "../collections/collection";
 import ObjectProvider from "../data-providers/object-provider";
 import Settings from "../core/settings";
 import path from "path";
@@ -34,7 +34,7 @@ const subjects = {
         alpha: 1
     }),
 
-    collection: new Collection(["hello", "it's me", {
+    collection: new ArrayCollection(["hello", "it's me", {
         name: "John Doe"
     }]),
 

@@ -996,7 +996,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
         if ((!message.author.bot || (message.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(message.content, this.commandStore, this.settings.general.prefixes)) {
             if (this.options.allowCommandChain) {
                 // TODO: Might split values too
-                const rawChain: string[] = message.content.split("&");
+                const rawChain: string[] = message.content.split("~");
 
                 // TODO: Should be bot option
                 const maxChainLength: number = 5;

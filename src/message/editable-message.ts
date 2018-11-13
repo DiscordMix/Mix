@@ -42,9 +42,9 @@ export default class EditableMessage {
     public async edit(options: IMessageEditOptions): Promise<Message> {
         // TODO: Default values?
         return this.message.edit("", new Discord.RichEmbed()
-            .setColor(options.color ? options.color : "")
+            .setColor(options.color || "")
             .setDescription(options.message)
             .setAuthor(options.title, options.thumbnailUrl)
-            .setImage(options.imageUrl ? options.imageUrl : ""));
+            .setImage(options.imageUrl || ""));
     }
 }

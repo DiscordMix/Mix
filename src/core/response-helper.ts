@@ -31,9 +31,9 @@ export default class ResponseHelper {
     /**
      * @param {*} stream
      * @param {string} name
-     * @return {Promise<EditableMessage> | null}
+     * @return {Promise<EditableMessage | null>}
      */
-    public async fileStream(stream: any, name: string): Promise<EditableMessage> {
+    public async fileStream(stream: any, name: string): Promise<EditableMessage | null> {
         return new EditableMessage(await this.channel.send(new Discord.Attachment(stream, name)));
     }
 
@@ -84,8 +84,10 @@ export default class ResponseHelper {
         }
 
         let messageResult = await this.channel.send(embed.build()).catch((error: Error) => {
-            // TODO: Temporarily disabled due to spamming on unwanted servers.
-            // this.privateReply(`Oh no! For some reason, I was unable to reply to you in that channel. (${error.message})`);
+            if (!Utils.botLists.includes(this.channel.guild.id)) {
+                // TODO: Commented out, this.privateReply method was moved
+                //this.privateReply(`Oh no! For some reason, I was unable to reply to you in that channel. (${error.message})`);
+            }
         });
 
         // TODO: Hotfix
@@ -122,7 +124,7 @@ export default class ResponseHelper {
      * @todo For some reason not having 'Requested by' footer
      * @param {*} sections
      * @param {string} color
-     * @return {Promise<EditableMessage>}
+     * @return {Promise<EditableMessage | null>}
      */
     public async sections(sections: any, color: string = "GREEN"): Promise<EditableMessage | null> {
         return await this.respond(EmbedBuilder.sections(sections, color));

@@ -103,7 +103,7 @@ export default class DataCollector {
 
         if (this.collectionType !== MemberDataType.Everything) {
             result.map((member) => {
-                // TODO: Checks should be outside for better performance
+                // TODO: Checks should be outside for better performance?
                 switch (this.collectionType) {
                     case MemberDataType.Avatar: {
                         return member.user.avatarURL;

@@ -37,7 +37,7 @@ import JsonProvider from "./data-providers/json-provider";
 import SqliteProvider from "./data-providers/sqlite-provider";
 import MysqlProvider from "./data-providers/mysql-provider";
 import SetupHelper, {ISetupHelperResult} from "./core/setup-helper";
-import Service, {IServiceOptions} from "./services/service";
+import Service, {IServiceOptions, ForkedService, GenericService, ProcessMsgType, IProcessMsg} from "./services/service";
 import KnexTable from "./data-providers/knex-table";
 import {on, WeakCommand, IDecoratorCommand, SimpleCommand, DiscordEvent} from "./decorators/decorators";
 import {command} from "./decorators/decorators";
@@ -124,10 +124,14 @@ export {
     // Services
     Service,
     IServiceOptions,
+    ForkedService,
+    GenericService,
 
     // Misc
     KnexTable,
     PaginatedMessage,
+    ProcessMsgType,
+    IProcessMsg,
 
     // Structures
     IDisposable,

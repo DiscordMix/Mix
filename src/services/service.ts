@@ -4,7 +4,8 @@ import {IDisposable, DiscordEvent} from "..";
 
 // TODO: Move both enum and types elsewhere
 export enum ProcessMsgType {
-    Heartbeat
+    Heartbeat,
+    Stop
 }
 
 export type IProcessMsg = {
@@ -24,9 +25,12 @@ export interface IServiceOptions {
 
 export abstract class GenericService implements IFragment, IDisposable {
     public abstract meta: IFragmentMeta;
-    public readonly detached: boolean = false;
+    public readonly fork: boolean = false;
     public readonly canStart: (() => boolean) | boolean = true;
-    public readonly stop?: () => void;
+
+    public stop(): void {
+        //
+    }
 
     public dispose(): void {
         //
@@ -87,8 +91,21 @@ export default abstract class Service<ApiType = undefined | any> extends Generic
     }
 }
 
-export abstract class DetachedService extends GenericService {
+export abstract class ForkedService extends GenericService {
     public onMessage(msg: IProcessMsg, sender: any): IProcessMsg[] | IProcessMsg | void {
         //
+    }
+
+    public send(type: ProcessMsgType, data?: any): boolean {
+        if (!process.send) {
+            return false;
+        }
+
+        process.send({
+            _t: type,
+            _d: data
+        });
+
+        return true;
     }
 }

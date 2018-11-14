@@ -31,7 +31,7 @@ import {performance} from "perf_hooks";
 import path from "path";
 import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
 import Language from "../language/language";
-import Service from "../services/service";
+import Service, {ForkedService} from "../services/service";
 
 import {
     BotEvents,
@@ -737,7 +737,9 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
         let enabled: number = 0;
 
         for (let i: number = 0; i < packages.length; i++) {
-            if ((packages[i].module as any).prototype instanceof Command) {
+            const mod: any = (packages[i].module as any).prototype;
+
+            if (mod instanceof Command) {
                 const command: any = new (packages[i].module as any)();
 
                 // Command is not registered in internal commands
@@ -765,7 +767,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
                     enabled++;
                 }
             }
-            else if ((packages[i].module as any).prototype instanceof Service) {
+            else if (mod instanceof Service || mod instanceof ForkedService) {
                 const service: any = packages[i].module;
 
                 this.services.register(new service({
@@ -1210,6 +1212,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
         this.clearAllTimeouts();
         await this.commandStore.disposeAll();
         await this.services.disposeAll();
+        await this.services.stopAllForks();
         this.clearTemp();
     }
 }

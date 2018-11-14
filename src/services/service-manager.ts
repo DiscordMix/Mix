@@ -1,16 +1,21 @@
 import Bot from "../core/bot";
-import Service from "./service";
+import Service, {IRawProcessMsg, ProcessMsgType, IProcessMsg, ForkedService} from "./service";
 import {Log, Utils} from "..";
-import {spawn} from "child_process";
+import {spawn, fork, ChildProcess} from "child_process";
 import fs from "fs";
 import path from "path";
+import {resolve} from "bluebird";
 
 export type IServiceMap = Map<string, Service>;
 export type IReadonlyServiceMap = ReadonlyMap<string, Service>;
 
 export default class ServiceManager {
+    public static heartbeatTimeout: number = 6000;
+
     private readonly bot: Bot;
     private readonly services: IServiceMap;
+    private readonly forkedServices: Map<string, ChildProcess>;
+    private readonly forkHeartbeats: Map<string, NodeJS.Timeout>;
 
     /**
      * @param {Bot} bot
@@ -29,6 +34,28 @@ export default class ServiceManager {
          * @readonly
          */
         this.services = new Map();
+
+        /**
+         * @type {Map<string, Service>}
+         * @private
+         * @readonly
+         */
+        this.forkedServices = new Map();
+
+        /**
+         * @type {Map<string, NodeJS.Timeout>}
+         * @private
+         * @readonly
+         */
+        this.forkHeartbeats = new Map();
+    }
+
+    public isForked(name: string): boolean {
+        return this.forkedServices.has(name);
+    }
+
+    public getFork(name: string): ChildProcess | null {
+        return this.forkedServices.get(name) || null;
     }
 
     /**
@@ -85,7 +112,7 @@ export default class ServiceManager {
                 }
             }
             else if (typeof service.canStart === "function") {
-                if (!service.canStart()) {
+                if (!(await service.canStart())) {
                     return false;
                 }
             }
@@ -95,12 +122,13 @@ export default class ServiceManager {
                 return false;
             }
 
-            if (!service.detached) {
+            if (!service.fork) {
                 await service.start();
             }
             else {
-                Log.info("!!! Igniting detached service...");
-                this.ignite(service.meta.name);
+                if (!this.ignite(service.meta.name)) {
+                    Log.warn(`[ServiceManager.enable] Failed to ignite forked service '${name}'`);
+                }
             }
 
             return true;
@@ -131,26 +159,100 @@ export default class ServiceManager {
         return enabled;
     }
 
+    private heartbeatFork(name: string): boolean {
+        if (!this.forkedServices.has(name)) {
+            return false;
+        }
+
+        const child: ChildProcess = this.forkedServices.get(name) as ChildProcess;
+        
+        if (this.forkHeartbeats.has(name)) {
+            clearTimeout(this.forkHeartbeats.get(name) as NodeJS.Timeout);
+        }
+
+        // TODO: Auto-restart on timeout
+        this.forkHeartbeats.set(name, setTimeout(() => {
+            if (!child.killed) {
+                child.kill("timeout");
+            }
+
+            this.forkHeartbeats.delete(name);
+            this.forkHeartbeats.delete(name);
+            Log.warn(`[ServiceManager.heartbeatFork] Forked service '${name}' timed out`);
+        }, ServiceManager.heartbeatTimeout));
+
+        return true;
+    }
+
     public ignite(name: string): boolean {
         const absPath: string = path.resolve(path.join(this.bot.settings.paths.services, `${name}.js`));
 
         if (!fs.existsSync(absPath)) {
-            console.log(absPath);
-
             return false;
         }
-        
-        console.log(path.join(__dirname, "service-igniter.js"));
 
-        const child = spawn("node", [path.join(__dirname, "service-igniter.js"), absPath]);
+        const child: ChildProcess = fork(path.join(__dirname, "service-igniter.js"), [absPath]);
 
-        // For error visibility purposes
-        child.stdout.pipe(process.stdout);
-        child.stderr.pipe(process.stderr);
+        child.on("message", (rawMsg: IRawProcessMsg, sender: any) => {
+            const msg: IProcessMsg = {
+                type: rawMsg._t,
+                data: rawMsg._d
+            };
 
+            switch (msg.type) {
+                case ProcessMsgType.Heartbeat: {
+                    this.heartbeatFork(name);
+
+                    break;
+                }
+
+                default: {
+                    Log.warn(`[ServiceManager.ignite:message] Ignoring invalid message type ${msg.type} from '${name}'`);
+                }
+            }
+        });
+
+        /* child.send({
+            _d: undefined,
+            _t: ProcessMsgType.Heartbeat
+        } as IRawProcessMsg); */
+
+        this.heartbeatFork(name);
         Log.debug(`[ServiceManager.ignite] Spawned service '${name}' @ ${child.pid}`);
 
         return true;
+    }
+
+    public async stopFork(name: string): Promise<boolean> {
+        if (!this.forkedServices.has(name)) {
+            return false;
+        }
+
+        const child: ChildProcess = this.forkedServices.get(name) as ChildProcess;
+
+        return new Promise<boolean>((resolve) => {
+            child.send({
+                _t: ProcessMsgType.Stop
+            }, (error: Error) => {
+                if (error) {
+                    throw error;
+                }
+
+                resolve(true);
+            });
+        });
+    }
+
+    public async stopAllForks(): Promise<number> {
+        let stopped: number = 0;
+
+        for (let [name, child] of this.forkedServices) {
+            if (await this.stopFork(name)) {
+                stopped++;
+            }
+        }
+
+        return stopped;
     }
 
     /**

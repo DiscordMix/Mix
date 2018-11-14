@@ -1,6 +1,12 @@
+// Only start if process was spawned
+if (!process.send || !process.connected) {
+    process.exit(0);
+}
+
 import fs from "fs";
 import {Log} from "..";
-import {DetachedService, IRawProcessMsg} from "./service";
+import {ForkedService, IRawProcessMsg, IProcessMsg, ProcessMsgType} from "./service";
+import ServiceManager from "./service-manager";
 
 const args: string[] = process.argv.splice(2);
 
@@ -14,36 +20,65 @@ if (!fs.existsSync(target)) {
     throw new Error("Such path does not exist");
 }
 
-// Start dogarino
-const service: DetachedService = new (require(target).default)();
-
+// Start service
+const service: ForkedService = new (require(target).default)();
 const logPrefix: string = `[ServiceIgniter.${service.meta.name}@${process.pid.toString()}]`;
 
 // Setup process message handler
-process.on("message", async (msg: any, sender: any) => {
-    const msgString: string = msg.toString();
-
-    if (!msgString.startsWith("{")) {
-        Log.warn(`${logPrefix} Ignoring message containing non-JSON object (${msg.length} bytes)`);
+process.on("message", async (msg: IRawProcessMsg, sender: any) => {
+    if (typeof msg !== "object") {
+        Log.warn(`${logPrefix} Ignoring message containing non-object as data`);
 
         return;
     }
 
-    try {
-        const parsedMsg: IRawProcessMsg = JSON.parse(msgString);
+    if (typeof msg._t !== "number") {
+        Log.warn(`${logPrefix} Ignoring malformed JSON object`);
 
-        if (typeof parsedMsg._t !== "number") {
-            Log.warn(`${logPrefix} Ignoring malformed JSON object (${msg.length} bytes)`);
+        return;
+    }
 
-            return;
+    switch(msg._t) {
+        case ProcessMsgType.Stop: {
+            await stop();
+
+            break;
         }
 
-        await service.onMessage({
-            data: parsedMsg._d,
-            type: parsedMsg._t
-        }, sender);
-    }
-    catch (e) {
-        Log.warn(`${logPrefix} Ignoring invalid JSON object (${msg.length} bytes)`);
+        default: {
+            await service.onMessage({
+                data: msg._d,
+                type: msg._t
+            }, sender);
+        }
     }
 });
+
+process.on("disconnect", async () => {
+    await stop();
+});
+
+// Heartbeat loop
+let interval: number = ServiceManager.heartbeatTimeout - 1000;
+
+// TODO: Limit in ServiceManager too
+if (interval < 1000) {
+    interval = 1000;
+}
+
+const heartbeatInterval: NodeJS.Timeout = setInterval(() => {
+    if (process.send) {
+        process.send({
+            _t: ProcessMsgType.Heartbeat
+        });
+    }
+    else {
+        throw new Error("Process.send is no longer defined or accessible");
+    }
+}, interval);
+
+async function stop(): Promise<void> {
+    clearTimeout(heartbeatInterval);
+    await service.stop();
+    process.exit(0);
+}

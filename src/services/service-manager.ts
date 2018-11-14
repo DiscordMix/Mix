@@ -150,6 +150,10 @@ export default class ServiceManager {
         return this.services as IReadonlyServiceMap;
     }
 
+    /**
+     * @param {string} name The unique identifier of the service
+     * @return {boolean}
+     */
     public contains(name: string): boolean {
         if (typeof name !== "string" || Utils.isEmpty(name)) {
             return false;

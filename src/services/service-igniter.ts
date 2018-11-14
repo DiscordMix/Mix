@@ -5,7 +5,7 @@ if (!process.send || !process.connected) {
 
 import fs from "fs";
 import {Log} from "..";
-import {ForkedService, IRawProcessMsg, IProcessMsg, ProcessMsgType} from "./service";
+import {ForkedService, IRawProcessMsg, ProcessMsgType} from "./service";
 import ServiceManager from "./service-manager";
 
 const args: string[] = process.argv.splice(2);
@@ -17,7 +17,7 @@ if (args.length !== 1) {
 const target: string = args[0];
 
 if (!fs.existsSync(target)) {
-    throw new Error("Such path does not exist");
+    throw new Error("Target file path does not exist");
 }
 
 // Start service

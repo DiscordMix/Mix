@@ -46,6 +46,7 @@ import Patterns from "./patterns";
 import {IDisposable} from "./structures";
 import ActionInterpreter from "../actions/action-interpreter";
 import TaskManager from "../tasks/task-manager";
+import {resolve} from "bluebird";
 
 const title: string =
 
@@ -1118,7 +1119,17 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
         (this.state as any) = BotState.Connecting;
         await this.setup(api);
         Log.verbose("[Bot.connect] Starting");
-        await this.client.login(this.settings.general.token);
+
+        await this.client.login(this.settings.general.token).catch(async (error: Error) => {
+            if (error.message === "Incorrect login details were provided.") {
+                Log.error("[Bot.connect] The provided token is invalid or has been regenerated");
+                await this.disconnect();
+                process.exit(0);
+            }
+            else {
+                throw error;
+            }
+        });
 
         return this;
     }

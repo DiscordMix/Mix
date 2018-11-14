@@ -75,7 +75,9 @@ export default class Temp {
     public async reset(): Promise<this> {
         return new Promise<this>((resolve) => {
             if (!this.resolvedPath) {
-                throw new Error("[Temp.reset] Trying to reset when the resolved path is undefined");
+                resolve(this);
+
+                return;
             }
 
             if (fs.existsSync(this.resolvedPath)) {

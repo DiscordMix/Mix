@@ -665,7 +665,8 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
         }
 
         // After loading services, enable all of them
-        this.services.enableAll();
+        // TODO: Returns amount of enabled services
+        await this.services.enableAll();
 
         this.emit(EBotEvents.LoadedServices);
         this.emit(EBotEvents.LoadingCommands);

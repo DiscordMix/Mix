@@ -117,7 +117,7 @@ export default class ResponseHelper {
             messageResult.delete(timeToLive);
         }
 
-        return (messageResult !== undefined ? new EditableMessage(messageResult) : null);
+        return (!!messageResult ? new EditableMessage(messageResult) : null);
     }
 
     /**

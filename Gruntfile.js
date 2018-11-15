@@ -6,6 +6,6 @@ module.exports = (grunt) => {
 
     // Default task(s).
     grunt.registerTask("default", () => {
-        // TODO: Build
+        console.log("No tasks have been created yet!");
     });
 };

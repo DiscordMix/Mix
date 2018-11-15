@@ -5,7 +5,10 @@ import {IDisposable, DiscordEvent} from "..";
 // TODO: Move both enum and types elsewhere
 export enum ProcessMsgType {
     Heartbeat,
-    Stop
+    Stop,
+    SmisProtocolHandshake,
+    SmisProtocolRefuse,
+    SmisProtocolAccept
 }
 
 export type IProcessMsg = {

@@ -7,6 +7,7 @@ import fs from "fs";
 import {Log} from "..";
 import {ForkedService, IRawProcessMsg, ProcessMsgType} from "./service";
 import ServiceManager from "./service-manager";
+import SMIS from "./smis";
 
 const args: string[] = process.argv.splice(2);
 
@@ -24,6 +25,8 @@ if (!fs.existsSync(target)) {
 const service: ForkedService = new (require(target).default)();
 const logPrefix: string = `[ServiceIgniter.${service.meta.name}@${process.pid.toString()}]`;
 
+let smisProtocol: boolean = false;
+
 // Setup process message handler
 process.on("message", async (msg: IRawProcessMsg, sender: any) => {
     if (typeof msg !== "object") {
@@ -39,6 +42,18 @@ process.on("message", async (msg: IRawProcessMsg, sender: any) => {
     }
 
     switch(msg._t) {
+        case ProcessMsgType.SmisProtocolHandshake: {
+            if (!smisProtocol) {
+                smisProtocol = true;
+                send(ProcessMsgType.SmisProtocolAccept);
+            }
+            else {
+                send(ProcessMsgType.SmisProtocolRefuse);
+            }
+
+            break;
+        }
+
         case ProcessMsgType.Stop: {
             await stop();
 
@@ -67,15 +82,20 @@ if (interval < 1000) {
 }
 
 const heartbeatInterval: NodeJS.Timeout = setInterval(() => {
-    if (process.send) {
+    send(ProcessMsgType.Heartbeat);
+}, interval);
+
+function send(type: ProcessMsgType, data?: any): void {
+    if (process.send && process.connected) {
         process.send({
-            _t: ProcessMsgType.Heartbeat
+            _t: type,
+            _d: data
         });
     }
     else {
         throw new Error("Process.send is no longer defined or accessible");
     }
-}, interval);
+}
 
 async function stop(): Promise<void> {
     clearTimeout(heartbeatInterval);

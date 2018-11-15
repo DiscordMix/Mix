@@ -1,8 +1,11 @@
 import {ChildProcess} from "child_process";
 import {EventEmitter} from "events";
-import { ProcessMsgType } from "..";
+import {ProcessMsgType, IProcessMsg, Log} from "..";
 
 // Service Messages Interchange System
+/**
+ * @extends EventEmitter
+ */
 export default class SMIS extends EventEmitter {
     private readonly child: ChildProcess;
     private readonly timeout: number;
@@ -16,9 +19,34 @@ export default class SMIS extends EventEmitter {
         this.timeout = timeout;
 
         // Setup listeners
+        if (!this.child.connected || !this.child.send) {
+            throw new Error("[SMIS] Expecting child to be connected");
+        }
+
         this.child.on("message", (msg: any, sender: any) => {
             this.emit("message", msg, sender);
         });
+    }
+
+    public async handshake(): Promise<boolean> {
+        // Send the SMIS handshake to start the connection
+        const response: IProcessMsg = await this.request(ProcessMsgType.SmisProtocolHandshake);
+
+        switch (response.type) {
+            case ProcessMsgType.SmisProtocolAccept: {
+                return true;
+            }
+
+            case ProcessMsgType.SmisProtocolRefuse: {
+                return false;
+            }
+
+            default: {
+                Log.warn(`[SMIS.handshake] Unexpected handshake response with type '${response.type}'`);
+
+                return false;
+            }
+        }
     }
 
     public send(type: ProcessMsgType, msg?: any): Promise<boolean> {

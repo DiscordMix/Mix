@@ -7,7 +7,6 @@ import fs from "fs";
 import {Log} from "..";
 import {ForkedService, IRawProcessMsg, ProcessMsgType} from "./service";
 import ServiceManager from "./service-manager";
-import SMIS from "./smis";
 
 const args: string[] = process.argv.splice(2);
 
@@ -41,7 +40,7 @@ process.on("message", async (msg: IRawProcessMsg, sender: any) => {
         return;
     }
 
-    switch(msg._t) {
+    switch (msg._t) {
         case ProcessMsgType.SmisProtocolHandshake: {
             if (!smisProtocol) {
                 smisProtocol = true;
@@ -69,9 +68,8 @@ process.on("message", async (msg: IRawProcessMsg, sender: any) => {
     }
 });
 
-process.on("disconnect", async () => {
-    await stop();
-});
+process.on("disconnect", stop);
+process.on("beforeExit", stop);
 
 // Heartbeat loop
 let interval: number = ServiceManager.heartbeatTimeout - 1000;

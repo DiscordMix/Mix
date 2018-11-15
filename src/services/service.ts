@@ -1,6 +1,6 @@
 import Bot from "../core/bot";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
-import {IDisposable, DiscordEvent} from "..";
+import {IDisposable, DiscordEvent, SMIS} from "..";
 
 // TODO: Move both enum and types elsewhere
 export enum ProcessMsgType {
@@ -8,7 +8,8 @@ export enum ProcessMsgType {
     Stop,
     SmisProtocolHandshake,
     SmisProtocolRefuse,
-    SmisProtocolAccept
+    SmisProtocolAccept,
+    StdOutPipe
 }
 
 export type IProcessMsg = {
@@ -95,11 +96,15 @@ export default abstract class Service<ApiType = undefined | any> extends Generic
 }
 
 export abstract class ForkedService extends GenericService {
+    public readonly useSMIS: boolean = false;
+
+    protected readonly smis?: SMIS;
+
     public onMessage(msg: IProcessMsg, sender: any): IProcessMsg[] | IProcessMsg | void {
         //
     }
 
-    public send(type: ProcessMsgType, data?: any): boolean {
+    protected send(type: ProcessMsgType, data?: any): boolean {
         if (!process.send) {
             return false;
         }

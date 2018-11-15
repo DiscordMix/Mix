@@ -1,6 +1,6 @@
 import Bot from "../core/bot";
 import Service, {IRawProcessMsg, ProcessMsgType, IProcessMsg, ForkedService} from "./service";
-import {Log, Utils} from "..";
+import {Log, Utils, SMIS} from "..";
 import {spawn, fork, ChildProcess} from "child_process";
 import fs from "fs";
 import path from "path";
@@ -129,6 +129,18 @@ export default class ServiceManager {
                 if (!this.ignite(service.meta.name)) {
                     Log.warn(`[ServiceManager.enable] Failed to ignite forked service '${name}'`);
                 }
+                // TODO: CRITICAL: Below will ONLY work LOCALLY! Remember forked services are ignited
+                // TODO: as ForkedService gives syntax error highlight
+                else if ((service as any).useSMIS) {
+                    const child: ChildProcess | null = this.getFork(service.meta.name);
+
+                    if (child !== null) {
+                        (service as any).smis = new SMIS(child);
+                    }
+                    else {
+                        Log.warn("[ServiceManager.enable] Expecting forked service's process to exist");
+                    }
+                }
             }
 
             return true;
@@ -177,7 +189,7 @@ export default class ServiceManager {
             }
 
             this.forkHeartbeats.delete(name);
-            this.forkHeartbeats.delete(name);
+            this.forkedServices.delete(name);
             Log.warn(`[ServiceManager.heartbeatFork] Forked service '${name}' timed out`);
         }, ServiceManager.heartbeatTimeout));
 
@@ -206,19 +218,37 @@ export default class ServiceManager {
                     break;
                 }
 
+                case ProcessMsgType.StdOutPipe: {
+                    if (typeof msg.data !== "string") {
+                        Log.warn(`[ServiceManager.ignite:message] Refusing to log non-string output piped message from service '${name}'`);
+
+                        break;
+                    }
+
+                    // TODO: Add a way to restrict this (whitelistEnabled + whitelist?)
+                    console.log(msg.data);
+
+                    break;
+                }
+
                 default: {
-                    Log.warn(`[ServiceManager.ignite:message] Ignoring invalid message type ${msg.type} from '${name}'`);
+                    if (msg.type < 1000) {
+                        Log.warn(`[ServiceManager.ignite:message] Ignoring invalid message type ${msg.type} from '${name}'`);
+                    }
                 }
             }
         });
 
-        /* child.send({
-            _d: undefined,
-            _t: ProcessMsgType.Heartbeat
-        } as IRawProcessMsg); */
+        child.on("disconnect", () => {
+            Log.verbose(`[ServiceManager.ignite:disconnect] Forked service '${name}' disconnected`);
+        });
+
+        child.on("close", () => {
+            Log.verbose(`[ServiceManager.ignite:close] Forked service '${name}' closed`);
+        });
 
         this.heartbeatFork(name);
-        Log.debug(`[ServiceManager.ignite] Spawned service '${name}' @ ${child.pid}`);
+        Log.debug(`[ServiceManager.ignite] Spawned forked service '${name}' @ ${child.pid}`);
 
         return true;
     }

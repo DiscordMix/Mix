@@ -91,11 +91,11 @@ export default class CommandHandler {
 
         if (!CommandHandler.validateEnvironment(
             command.restrict.environment,
-            context.message.channel.type,
-            (context.message.channel as any).nsfw || false)
+            context.msg.channel.type,
+            (context.msg.channel as any).nsfw || false)
         ) {
             if (!this.handleError(CommandManagerEvent.DisallowedEnvironment, context, command)) {
-                context.message.channel.send("That command may not be used here.");
+                context.msg.channel.send("That command may not be used here.");
             }
         }
         else if (!command.isEnabled) {
@@ -109,7 +109,7 @@ export default class CommandHandler {
         else if (!CommandParser.checkArguments({
             schema: command.arguments,
             arguments: rawArgs,
-            message: context.message,
+            message: context.msg,
             types: context.bot.argumentTypes,
             command: command
         })) {
@@ -140,14 +140,14 @@ export default class CommandHandler {
                 context.fail("Invalid argument usage. Please use the `usage` command.");
             }
         }
-        else if (command.restrict.selfPermissions.length > 0 && !context.message.guild.me.hasPermission(command.restrict.selfPermissions.map((permissionObj) => permissionObj.permission))) {
+        else if (command.restrict.selfPermissions.length > 0 && !context.msg.guild.me.hasPermission(command.restrict.selfPermissions.map((permissionObj) => permissionObj.permission))) {
             if (!this.handleError(CommandManagerEvent.MissingSelfPermissions, context, command)) {
                 const permissions = command.restrict.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`I require the following permission(s) to execute that command: ${permissions}`);
             }
         }
-        else if (command.restrict.issuerPermissions.length > 0 && !context.message.member.hasPermission(command.restrict.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
+        else if (command.restrict.issuerPermissions.length > 0 && !context.msg.member.hasPermission(command.restrict.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
             if (!this.handleError(CommandManagerEvent.MissingIssuerPermissions, context, command)) {
                 const permissions = command.restrict.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
@@ -203,7 +203,7 @@ export default class CommandHandler {
 
         const resolvedArgs: any | null = CommandParser.resolveArguments({
             arguments: rawArgs,
-            message: context.message,
+            message: context.msg,
             resolvers: context.bot.argumentResolvers,
             schema: command.arguments
         });
@@ -252,16 +252,16 @@ export default class CommandHandler {
                 command
             }, result);
 
-            if (context.bot.options.autoDeleteCommands && context.message.deletable) {
-                await context.message.delete();
+            if (context.bot.options.autoDeleteCommands && context.msg.deletable) {
+                await context.msg.delete();
             }
-            else if (context.bot.options.checkCommands && context.message.channel instanceof TextChannel) {
+            else if (context.bot.options.checkCommands && context.msg.channel instanceof TextChannel) {
                 // TODO: Check if can add reaction
                 /* if (context.message.channel.permissionsFor(context.message.guild.me).has(Permissions.FLAGS.ADD_REACTIONS)) {
 
                 } */
 
-                context.message.react("✅");
+                context.msg.react("✅");
             }
 
             if (command.undoable) {
@@ -314,7 +314,7 @@ export default class CommandHandler {
                     }
 
                     case "&": {
-                        if (context.message.member.roles.find("id", specific.substr(1, specific.length))) {
+                        if (context.msg.member.roles.find("id", specific.substr(1, specific.length))) {
                             met = true;
                         }
 
@@ -336,7 +336,7 @@ export default class CommandHandler {
 
                 switch (specific) {
                     case RestrictGroup.ServerOwner: {
-                        const owners: Snowflake[] = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
+                        const owners: Snowflake[] = context.msg.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
 
                         if (owners.includes(context.sender.id)) {
                             met = true;
@@ -346,7 +346,7 @@ export default class CommandHandler {
                     }
 
                     case RestrictGroup.ServerModerator: {
-                        const moderators: Snowflake[] = context.message.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
+                        const moderators: Snowflake[] = context.msg.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
 
                         if (moderators.includes(context.sender.id)) {
                             met = true;

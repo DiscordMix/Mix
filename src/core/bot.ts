@@ -1058,7 +1058,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
      */
     private createCommandContext(message: Message): CommandContext {
         return new CommandContext({
-            message: message,
+            msg: message,
             // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
             bot: this,
 

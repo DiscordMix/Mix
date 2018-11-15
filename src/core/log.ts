@@ -47,7 +47,7 @@ export default class Log {
                 return;
             }
 
-            const date = new Date().toISOString()
+            const date: string = new Date().toISOString()
                 .replace(/T/, " ")
                 .replace(/\..+/, "");
 

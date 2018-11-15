@@ -197,11 +197,11 @@ export default class SetupHelper {
      * @return {SetupHelper | null}
      */
     public static fromContext(options: IFromContextOptions): SetupHelper | null {
-        if (options.context.message.channel instanceof TextChannel) {
+        if (options.context.msg.channel instanceof TextChannel) {
             //context.bot.client, context.message.channel, context.sender.id, title, timeout, embed
             return new SetupHelper({
                 client: options.context.bot.client,
-                channel: options.context.message.channel,
+                channel: options.context.msg.channel,
                 userId: options.context.sender.id,
                 title: options.title,
                 embed: options.embed,
@@ -209,7 +209,7 @@ export default class SetupHelper {
             });
         }
 
-        Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${options.context.message.channel.type}'`);
+        Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${options.context.msg.channel.type}'`);
 
         return null;
     }

@@ -61,7 +61,7 @@ export default class TestBot extends Bot {
             label: "?",
 
             // TODO: Should we check for a message?
-            message: this.getLastMessage() as Message
+            msg: this.getLastMessage() as Message
         });
     }
 

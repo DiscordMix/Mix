@@ -117,7 +117,7 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
         this.bot.client.on(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd.bind(this));
         this.bot.client.on(DiscordEvent.MessageReactionRemoved, this.handleMessageReactionRemove.bind(this));
         this.bot.disposables.push(this);
-        this.messageAttached = context.message;
+        this.messageAttached = context.msg;
         await this.react();
 
         return this;

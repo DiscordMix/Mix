@@ -109,6 +109,10 @@ export default class CommandStore {
         return true;
     }
 
+    public get size(): number {
+        return this.commands.size;
+    }
+
     /**
      * Reload all commands
      * @return {Promise<number>} The amount of commands that were reloaded

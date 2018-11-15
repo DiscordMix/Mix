@@ -12,7 +12,6 @@ import Temp from "./temp";
 import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel, ClientOptions} from "discord.js";
 import ServiceManager from "../services/service-manager";
 import axios from "axios";
-import EventListener from "events";
 
 import Command, {
     IArgumentResolver,
@@ -46,7 +45,9 @@ import Patterns from "./patterns";
 import {IDisposable} from "./structures";
 import ActionInterpreter from "../actions/action-interpreter";
 import TaskManager from "../tasks/task-manager";
-import {resolve} from "bluebird";
+import {EventEmitter} from "events";
+import TempoEngine from "../tempo-engine/tempo-engine";
+import FragmentManager from "../fragments/fragment-manager";
 
 const title: string =
 
@@ -180,6 +181,7 @@ export type IBotExtraOptions = {
     readonly logMessages: boolean;
     readonly dmHelp: boolean;
     readonly emojis: IDefiniteBotEmojiOptions;
+    readonly tempoEngine: boolean;
 }
 
 const DefaultBotOptions: IBotExtraOptions = {
@@ -193,7 +195,8 @@ const DefaultBotOptions: IBotExtraOptions = {
     dmHelp: true,
     logMessages: false,
     emojis: DefaultBotEmojiOptions,
-    consoleInterface: true
+    consoleInterface: true,
+    tempoEngine: true
 };
 
 export enum EBotEvents {
@@ -259,7 +262,7 @@ export type BotToken = string;
 /**
  * @extends EventEmitter
  */
-export default class Bot<ApiType = any> extends EventListener implements IDisposable {
+export default class Bot<ApiType = any> extends EventEmitter implements IDisposable {
     public readonly settings: Settings;
     public readonly temp: Temp;
     public readonly dataStore?: DataProvider;
@@ -279,10 +282,13 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
     public readonly actionInterpreter: ActionInterpreter;
     public readonly tasks: TaskManager;
     public readonly timeouts: NodeJS.Timeout[];
+    public readonly intervals: NodeJS.Timeout[];
     public readonly languages?: string[];
     public readonly state: BotState;
     public readonly suspended: boolean;
     public readonly client: Client;
+    public readonly tempoEngine: TempoEngine;
+    public readonly fragments: FragmentManager;
 
     private api?: ApiType;
     private setupStart: number = 0;
@@ -510,6 +516,24 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
          */
         this.timeouts = [];
 
+        /**
+         * @type {NodeJS.Timeout[]}
+         * @readonly
+         */
+        this.intervals = [];
+
+        /**
+         * @type {TempoEngine}
+         * @readonly
+         */
+        this.tempoEngine = new TempoEngine(this);
+
+        /**
+         * @type {FragmentManager}
+         * @readonly
+         */
+        this.fragments = new FragmentManager(this);
+
         return this;
     }
 
@@ -631,7 +655,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
             Log.warn("[Bot.setup] No internal fragments were loaded");
         }
         else {
-            const enabled: number = await this.enableFragments(internalFragments, true);
+            const enabled: number = await this.fragments.enableMultiple(internalFragments, true);
 
             if (enabled === 0) {
                 Log.warn("[Bot.setup] No internal fragments were enabled");
@@ -660,7 +684,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
             }
             else {
                 Log.success(`[Bot.setup] Loaded ${servicesLoaded.length} service(s)`);
-                await this.enableFragments(servicesLoaded);
+                await this.fragments.enableMultiple(servicesLoaded);
             }
         }
 
@@ -686,7 +710,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
                 Log.warn("[Bot.setup] No commands were loaded");
             }
             else {
-                const enabled: number = await this.enableFragments(commandsLoaded);
+                const enabled: number = await this.fragments.enableMultiple(commandsLoaded);
 
                 if (enabled > 0) {
                     Log.success(`[Bot.setup] Loaded ${commandsLoaded.length}/${consumerCommandCandidates.length} command(s)`);
@@ -721,71 +745,21 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
 
         this.emit(EBotEvents.LoadedCommands);
 
+        if (this.options.tempoEngine) {
+            Log.verbose("[Bot.setup] Starting the Tempo Engine");
+
+            // Start tempo engine
+            this.tempoEngine.start();
+
+            Log.success("[Bot.setup] Started the Tempo Engine");
+        }
+
         // Setup the Discord client's events
         this.setupEvents();
 
         Log.success("[Bot.setup] Bot setup completed");
 
         return this;
-    }
-
-    /**
-     * Enable and register fragments
-     * @param {IFragment[]} packages
-     * @param {boolean} [internal=false] Whether the fragments are internal
-     * @return {Promise<number>} The amount of enabled fragments
-     */
-    private async enableFragments(packages: IPackage[], internal: boolean = false): Promise<number> {
-        let enabled: number = 0;
-
-        for (let i: number = 0; i < packages.length; i++) {
-            const mod: any = (packages[i].module as any).prototype;
-
-            if (mod instanceof Command) {
-                const command: any = new (packages[i].module as any)();
-
-                // Command is not registered in internal commands
-                if (internal && !this.internalCommands.includes(command.meta.name)) {
-                    continue;
-                }
-
-                // TODO: Add a way to disable the warning
-                if (!internal && command.meta.name === "eval") {
-                    Log.warn("Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Forge.");
-                }
-
-                // Overwrite command restrict with default values
-                command.restrict = {
-                    ...DefaultCommandRestrict,
-                    ...command.restrict
-                };
-
-                if (await command.enabled()) {
-                    this.commandStore.register({
-                        module: command,
-                        path: packages[i].path
-                    });
-
-                    enabled++;
-                }
-            }
-            else if (mod instanceof Service || mod instanceof ForkedService) {
-                const service: any = packages[i].module;
-
-                this.services.register(new service({
-                    bot: this,
-                    api: this.getAPI()
-                }));
-
-                enabled++;
-            }
-            else {
-                // TODO: Also add someway to identify the fragment
-                Log.warn("[Bot.enableFragments] Unknown fragment instance, ignoring");
-            }
-        }
-
-        return enabled;
     }
 
     /**
@@ -952,6 +926,39 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
 
         for (let i: number = 0; i < this.timeouts.length; i++) {
             if (this.clearTimeout(this.timeouts[i])) {
+                cleared++;
+            }
+        }
+
+        return cleared;
+    }
+
+    public setInterval(action: any, time: number): NodeJS.Timeout {
+        const interval: NodeJS.Timeout = setInterval(action, time);
+
+        this.intervals.push(interval);
+
+        return interval;
+    }
+
+    public clearInterval(interval: NodeJS.Timeout): boolean {
+        const index: number = this.timeouts.indexOf(interval);
+
+        if (index !== -1) {
+            clearTimeout(this.intervals[index]);
+            this.intervals.splice(index, 1);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public clearAllIntervals(): number {
+        let cleared: number = 0;
+
+        for (let i: number = 0; i < this.intervals.length; i++) {
+            if (this.clearInterval(this.intervals[i])) {
                 cleared++;
             }
         }
@@ -1186,7 +1193,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
             Log.verbose("[Bot.disconnect] Saving JsonProvider");
             await this.dataStore.save();
         }
-        
+
         await this.client.destroy();
         (this.client as any) = new Client();
         Log.info("[Bot.disconnect] Disconnected");
@@ -1227,6 +1234,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
         await this.temp.reset();
 
         this.clearAllTimeouts();
+        this.clearAllIntervals();
         await this.commandStore.disposeAll();
         await this.services.disposeAll();
         await this.services.stopAllForks();

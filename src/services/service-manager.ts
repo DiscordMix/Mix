@@ -1,15 +1,16 @@
 import Bot from "../core/bot";
 import Service, {IRawProcessMsg, ProcessMsgType, IProcessMsg, ForkedService} from "./service";
 import {Log, Utils, SMIS} from "..";
-import {spawn, fork, ChildProcess} from "child_process";
+import {fork, ChildProcess} from "child_process";
 import fs from "fs";
 import path from "path";
-import {resolve} from "bluebird";
+import {EventEmitter} from "events";
 
 export type IServiceMap = Map<string, Service>;
 export type IReadonlyServiceMap = ReadonlyMap<string, Service>;
 
-export default class ServiceManager {
+// TODO: Emit events through bot instead
+export default class ServiceManager extends EventEmitter {
     public static heartbeatTimeout: number = 6000;
 
     private readonly bot: Bot;
@@ -21,6 +22,8 @@ export default class ServiceManager {
      * @param {Bot} bot
      */
     public constructor(bot: Bot) {
+        super();
+
         /**
          * @type {Bot}
          * @private
@@ -68,6 +71,7 @@ export default class ServiceManager {
         }
         else if (!this.services.has(service.meta.name)) {
             this.services.set(service.meta.name, service);
+            this.emit("register", service.meta.name);
 
             return true;
         }
@@ -143,6 +147,8 @@ export default class ServiceManager {
                 }
             }
 
+            this.emit("start", service.meta.name);
+
             return true;
         }
         else if (service === null) {
@@ -192,6 +198,8 @@ export default class ServiceManager {
             this.forkedServices.delete(name);
             Log.warn(`[ServiceManager.heartbeatFork] Forked service '${name}' timed out`);
         }, ServiceManager.heartbeatTimeout));
+
+        this.emit("heartbeat", name);
 
         return true;
     }
@@ -247,6 +255,7 @@ export default class ServiceManager {
             Log.verbose(`[ServiceManager.ignite:close] Forked service '${name}' closed`);
         });
 
+        this.emit("ignite", name);
         this.heartbeatFork(name);
         Log.debug(`[ServiceManager.ignite] Spawned forked service '${name}' @ ${child.pid}`);
 
@@ -268,6 +277,7 @@ export default class ServiceManager {
                     throw error;
                 }
 
+                this.emit("stopFork", name);
                 resolve(true);
             });
         });

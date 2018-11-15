@@ -7,6 +7,7 @@ import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
 import {IAction} from "../actions/action";
+import {EBotEvents} from "../core/bot";
 
 export type ICommandHandlerOptions = {
     readonly commandStore: CommandStore;
@@ -247,7 +248,7 @@ export default class CommandHandler {
 
             this.commandStore.setCooldown(context.sender.id, commandCooldown, command.meta.name);
 
-            context.bot.emit("commandExecuted", {
+            context.bot.emit(EBotEvents.CommandExecuted, {
                 context,
                 command
             }, result);

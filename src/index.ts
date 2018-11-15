@@ -52,6 +52,7 @@ import TaskManager from "./tasks/task-manager";
 import {IAction, ActionType} from "./actions/action";
 import ActionInterpreter, {IPaginatedActionArgs, IRequestActionArgs, IEmbedActionArgs, IPrivateMessageActionArgs, IMessageActionArgs} from "./actions/action-interpreter";
 import {IFragment, IFragmentMeta} from "./fragments/fragment";
+import SMIS from "./services/smis";
 
 export {
     // Fragments
@@ -132,6 +133,7 @@ export {
     PaginatedMessage,
     ProcessMsgType,
     IProcessMsg,
+    SMIS,
 
     // Structures
     IDisposable,

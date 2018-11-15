@@ -666,7 +666,7 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
 
         // After loading services, enable all of them
         // TODO: Returns amount of enabled services
-        await this.services.enableAll();
+        await this.services.startAll();
 
         this.emit(EBotEvents.LoadedServices);
         this.emit(EBotEvents.LoadingCommands);
@@ -1174,6 +1174,11 @@ export default class Bot<ApiType = any> extends EventListener implements IDispos
      */
     public async disconnect(): Promise<this> {
         this.emit(EBotEvents.Disconnecting);
+
+        const servicesStopped: number = await this.services.stopAll();
+
+        Log.verbose(`[Bot.disconnect] Stopped ${servicesStopped} service(s)`);
+
         await this.dispose();
 
         // Save data before exiting

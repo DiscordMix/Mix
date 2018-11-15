@@ -95,7 +95,7 @@ export default class ServiceManager {
      * @param {string} name
      * @return {Promise<boolean>} Whether the service was started
      */
-    public async enable(name: string): Promise<boolean> {
+    public async start(name: string): Promise<boolean> {
         if (typeof name !== "string" || Utils.isEmpty(name) || Array.isArray(name)) {
             return false;
         }
@@ -159,11 +159,11 @@ export default class ServiceManager {
      * Enable all services
      * @return {Promise<number>} The amount of successfully enabled services
      */
-    public async enableAll(): Promise<number> {
+    public async startAll(): Promise<number> {
         let enabled: number = 0;
 
         for (let [name, service] of this.services) {
-            if (await this.enable(name)) {
+            if (await this.start(name)) {
                 enabled++;
             }
         }
@@ -311,6 +311,16 @@ export default class ServiceManager {
      */
     public getAll(): IReadonlyServiceMap {
         return this.services as IReadonlyServiceMap;
+    }
+
+    public async stopAll(): Promise<number> {
+        let stopped: number = this.services.size;
+
+        for (let [name, service] of this.services) {
+            await service.stop();
+        }
+
+        return stopped;
     }
 
     /**

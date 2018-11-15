@@ -308,14 +308,14 @@ describe("services", () => {
     });
 
     it("should not enable invalid services", async () => {
-        expect(await testBot.services.enable("fake")).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.services.enable("")).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.services.enable(3 as any)).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.services.enable({} as any)).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.services.enable(undefined as any)).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.services.enable(null as any)).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.services.enable([] as any)).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.services.enable(["hello"] as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.services.start("fake")).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.services.start("")).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.services.start(3 as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.services.start({} as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.services.start(undefined as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.services.start(null as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.services.start([] as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.services.start(["hello"] as any)).to.be.a("boolean").and.to.equal(false);
     });
 
     it("should be able to retrieve services", () => {

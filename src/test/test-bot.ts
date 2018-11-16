@@ -240,15 +240,15 @@ describe("bot", () => {
 });
 
 describe("bot timeouts", () => {
-    it("should have no timeouts set", () => {
-        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
+    it("should have one timeout set", () => {
+        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(1); // TempoEngine timeout
     });
 
     it("should set a timeout", () => {
         return new Promise((resolve) => {
             testBot.setTimeout(() => {
                 // Tests
-                expect(testBot.timeouts.length).to.be.a("number").and.to.equal(1);
+                expect(testBot.timeouts.length).to.be.a("number").and.to.equal(2);
 
                 resolve();
             }, 100);
@@ -256,7 +256,7 @@ describe("bot timeouts", () => {
     });
 
     it("should clear timeouts after executing", () => {
-        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
+        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(1);
     });
 });
 

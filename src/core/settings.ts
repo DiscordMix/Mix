@@ -15,9 +15,8 @@ export type ISettingsKeys = {
 export type ISettingsPaths = {
     readonly commands: string;
     readonly plugins: string;
-    readonly emojis: string;
     readonly services: string;
-    readonly languages?: string;
+    readonly languages: string;
     readonly tasks: string;
 }
 
@@ -54,9 +53,8 @@ export default class Settings {
             // TODO: Find a way to simplify this process
             commands: options.paths && options.paths.commands ? options.paths.commands : "./commandStore",
             plugins: options.paths && options.paths.plugins ? options.paths.plugins : "./plugins",
-            emojis: options.paths && options.paths.emojis ? options.paths.emojis : "./emojis",
             services: options.paths && options.paths.services ? options.paths.services : "./services",
-            languages: options.paths && options.paths.languages ? options.paths.languages : undefined,
+            languages: options.paths && options.paths.languages ? options.paths.languages : "./languages",
             tasks: options.paths && options.paths.tasks ? options.paths.tasks : "./tasks"
         };
 

@@ -3,7 +3,7 @@ import Bot from "../core/bot";
 import Command, {GenericCommand} from "./command";
 import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
-import FragmentLoader, {ICommandPackage} from "../fragments/fragment-loader";
+import FragmentLoader, {IPackage, ILivePackage} from "../fragments/fragment-loader";
 import Utils from "../core/utils";
 
 /**
@@ -28,6 +28,8 @@ export type ICommandCooldown = {
     readonly end: number;
 }
 
+export type ICommandPackage = ILivePackage<Command>;
+
 const validCommandNamePattern: RegExp = /^[a-z_0-9-]{1,40}$/mi;
 
 export type ICommandMap = Map<string, ICommandPackage>;
@@ -41,6 +43,7 @@ export default class CommandStore {
     public simpleCommands: Map<string, any>;
 
     private readonly commands: ICommandMap;
+    private readonly released: string[];
     private readonly aliases: Map<string, string>;
 
     /**
@@ -59,6 +62,12 @@ export default class CommandStore {
          * @private
          */
         this.commands = new Map();
+
+        /**
+         * @type {string[]}
+         * @readonly
+         */
+        this.released = [];
 
         /**
          * @type {Map<string, string>}
@@ -89,7 +98,7 @@ export default class CommandStore {
         }
 
         const packg: ICommandPackage = this.commands.get(commandName) as ICommandPackage;
-        const reloadedPackage: ICommandPackage | null = await FragmentLoader.reload(packg.path) as ICommandPackage | null;
+        const reloadedPackage: IPackage | null = await FragmentLoader.reload(packg.path) as IPackage | null;
 
         if (reloadedPackage === null) {
             return false;
@@ -98,11 +107,15 @@ export default class CommandStore {
         // Delete current command
         this.commands.delete(commandName);
 
+        const cmdPackg: ICommandPackage | null = await this.bot.fragments.prepare<Command>(reloadedPackage);
+
+        if (cmdPackg === null) {
+            return false;
+        }
+
         // Register new one
         this.register({
-            // TODO: CRITICAL: We shouldn't have to re-instianciate the module, it should be already instanciated at this point
-            module: new (reloadedPackage.module as any)(),
-
+            instance: cmdPackg.instance,
             path: reloadedPackage.path
         });
 
@@ -111,6 +124,28 @@ export default class CommandStore {
 
     public get size(): number {
         return this.commands.size;
+    }
+
+    public async release(name: string): Promise<boolean> {
+        if (this.commands.has(name) && !this.released.includes(name)) {
+            const command: Command = this.commands.get(name) as any;
+
+            await command.dispose();
+            this.commands.delete(name);
+            this.released.push(name);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public isReleased(name: string): boolean {
+        return this.released.includes(name);
+    }
+
+    public getReleased(): ReadonlyArray<string> {
+        return this.released;
     }
 
     /**
@@ -138,7 +173,7 @@ export default class CommandStore {
             return false;
         }
 
-        const commandName: string = commandPackage.module.meta.name.trim();
+        const commandName: string = commandPackage.instance.meta.name.trim();
 
         if (validCommandNamePattern.test(commandName) === false) {
             Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Invalid name)`);
@@ -152,13 +187,13 @@ export default class CommandStore {
         }
 
         // Also register aliases
-        if (commandPackage.module.aliases && commandPackage.module.aliases.length > 0) {
-            for (let i: number = 0; i < commandPackage.module.aliases.length; i++) {
-                if (this.aliases.get(commandPackage.module.aliases[i]) !== undefined) {
+        if (commandPackage.instance.aliases && commandPackage.instance.aliases.length > 0) {
+            for (let i: number = 0; i < commandPackage.instance.aliases.length; i++) {
+                if (this.aliases.get(commandPackage.instance.aliases[i]) !== undefined) {
                     // TODO: Is undoIdx < i correct? or should it be undoIdx <= i
                     // Undo
                     for (let undoIdx = 0; undoIdx < i; undoIdx++) {
-                        this.aliases.delete(commandPackage.module.aliases[undoIdx]);
+                        this.aliases.delete(commandPackage.instance.aliases[undoIdx]);
                     }
 
                     Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (A command with the same alias already exists)`);
@@ -166,7 +201,7 @@ export default class CommandStore {
                     return false;
                 }
 
-                this.aliases.set(commandPackage.module.aliases[i], commandName);
+                this.aliases.set(commandPackage.instance.aliases[i], commandName);
             }
         }
 
@@ -177,11 +212,11 @@ export default class CommandStore {
 
     /**
      * @param {string} commandBase
-     * @return {boolean} Whether the command was removed
+     * @return {Promise<boolean>} Whether the command was removed
      */
-    public remove(commandBase: string): boolean {
+    public async remove(commandBase: string): Promise<boolean> {
         // TODO: Verify that command is only Command and not WeakCommand etc.
-        const command: Command = this.get(commandBase) as Command;
+        const command: Command = await this.get(commandBase) as Command;
 
         // Remove any command aliases that might exist
         if (command.aliases && command.aliases.length > 0) {
@@ -194,32 +229,50 @@ export default class CommandStore {
     }
 
     /**
-     * @param {string} commandBase
+     * @param {string} name
      * @return {boolean}
      */
-    public contains(commandBase: string): boolean {
-        if (!commandBase) {
+    public contains(name: string): boolean {
+        if (!name) {
             return false;
         }
 
-        return this.commands.has(commandBase) || this.aliases.has(commandBase);
+        return this.commands.has(name) || this.aliases.has(name) || this.released.includes(name);
     }
 
     /**
-     * @param {string} commandBase
+     * @param {string} name
      * @return {Command | null}
      */
-    public get(commandBase: string): Command | null {
+    public async get(name: string): Promise<Command | null> {
         // TODO: CRITICAL: Will probably error since property may be undefined (Trying to access .module of undefined)
-        if (this.aliases.get(commandBase) !== undefined) {
-            const command: ICommandPackage | null = (this.commands.get(this.aliases.get(commandBase) as string) as ICommandPackage) || null;
+        if (this.aliases.get(name) !== undefined) {
+            const command: ICommandPackage | null = (this.commands.get(this.aliases.get(name) as string) as ICommandPackage) || null;
 
-            return command === null ? null : command.module;
+            return command === null ? null : command.instance;
+        }
+        else if (this.released.includes(name)) {
+            // TODO: Re-load command here
+
+            const packg: IPackage | null = await FragmentLoader.load(this.bot.paths.command(name));
+
+            if (packg !== null && (packg.module as any).prototype instanceof Command) {
+                if (!await this.bot.fragments.enable(packg)) {
+                    Log.warn(`[CommandStore.get] Failed to re-load released command '${name}'`);
+                }
+            }
+            else {
+                Log.warn(`[CommandStore.get] Expecting released command '${name}' to exist for re-load and to be a command`);
+
+                return null;
+            }
+
+            return {} as Command;
         }
 
-        const command: ICommandPackage | null = (this.commands.get(commandBase) as ICommandPackage) || null;
+        const command: ICommandPackage | null = (this.commands.get(name) as ICommandPackage) || null;
 
-        return command === null ? null : command.module;
+        return command === null ? null : command.instance;
     }
 
     /**
@@ -323,7 +376,7 @@ export default class CommandStore {
      */
     public unloadAll(): void {
         if (this.commands.size > 0) {
-            const count = this.commands.size;
+            const count: number = this.commands.size;
 
             this.commands.clear();
             Log.success(`[CommandManager.unloadAll] Unloaded ${count} command(s)`);

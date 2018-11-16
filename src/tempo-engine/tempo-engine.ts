@@ -41,8 +41,9 @@ export default class TempoEngine implements IDisposable {
 
         for (let [name, command] of commands) {
             if (!this.commandsUsed.includes(name)) {
+                Log.verbose(`[TempoEngine] Releasing command '${name}'`);
                 // TODO:
-                //command
+                this.bot.commandStore.unloadAll
             }
         }
 

@@ -1,7 +1,8 @@
 import {EventEmitter} from "events";
-import {Bot, Command, Log, Service, ForkedService} from "..";
-import {IPackage} from "./fragment-loader";
+import {Bot, Command, Log, Service, ForkedService, IFragment} from "..";
+import {IPackage, ILivePackage} from "./fragment-loader";
 import {DefaultCommandRestrict} from "../commands/command";
+import {ICommandPackage} from "../commands/command-store";
 
 export default class FragmentManager extends EventEmitter {
     private readonly bot: Bot;
@@ -30,6 +31,39 @@ export default class FragmentManager extends EventEmitter {
         return enabled;
     }
 
+    public prepare<InstanceType extends IFragment>(packg: IPackage): ILivePackage<InstanceType> | null {
+        const mod: any = (packg.module as any).prototype;
+
+        if (mod instanceof Command) {
+            const command: any = new (packg.module as any)();
+
+            // Overwrite command restrict with default values
+            command.restrict = {
+                ...DefaultCommandRestrict,
+                ...command.restrict
+            };
+
+            return {
+                instance: command,
+                path: packg.path
+            };
+        }
+        else if (mod instanceof Service || mod instanceof ForkedService) {
+            const service: any = packg.module;
+
+            return {
+                path: packg.path,
+
+                instance: new service({
+                    bot: this,
+                    api: this.bot.getAPI()
+                })
+            };
+        }
+
+        return null;
+    }
+
     public async enable(packg: IPackage, internal: boolean = false): Promise<boolean> {
         const mod: any = (packg.module as any).prototype;
 
@@ -54,7 +88,7 @@ export default class FragmentManager extends EventEmitter {
 
             if (await command.enabled()) {
                 this.bot.commandStore.register({
-                    module: command,
+                    instance: command,
                     path: packg.path
                 });
 

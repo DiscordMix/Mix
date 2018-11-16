@@ -48,6 +48,7 @@ import TaskManager from "../tasks/task-manager";
 import {EventEmitter} from "events";
 import TempoEngine from "../tempo-engine/tempo-engine";
 import FragmentManager from "../fragments/fragment-manager";
+import PathResolver from "./path-resolver";
 
 const title: string =
 
@@ -289,6 +290,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly client: Client;
     public readonly tempoEngine: TempoEngine;
     public readonly fragments: FragmentManager;
+    public readonly paths: PathResolver;
 
     private api?: ApiType;
     private setupStart: number = 0;
@@ -351,6 +353,12 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @readonly
          */
         this.settings = options.settings;
+
+        /**
+         * @type {PathResolver}
+         * @readonly
+         */
+        this.paths = new PathResolver(this.settings.paths);
 
         /**
          * @todo Temporary hard-coded user id
@@ -843,7 +851,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         // Use any registered prefix, default to index 0
         const content: string = `${this.settings.general.prefixes[0]}${base} ${args.join(" ")}`.trim();
 
-        let command: Command | IDecoratorCommand | null = CommandParser.parse(
+        let command: Command | IDecoratorCommand | null = await CommandParser.parse(
             content,
             this.commandStore,
             this.settings.general.prefixes
@@ -1085,7 +1093,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
         this.emit(EBotEvents.HandleCommandMessageStart, message, content);
 
-        let command: Command | null = CommandParser.parse(
+        let command: Command | null = await CommandParser.parse(
             content,
             this.commandStore,
             this.settings.general.prefixes

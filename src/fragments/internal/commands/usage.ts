@@ -24,8 +24,8 @@ export default class UsageCommand extends Command<IUsageArgs> {
         }
     ];
 
-    public executed(context: CommandContext, args: IUsageArgs): void {
-        const targetCommand: Command | IDecoratorCommand | null = context.bot.commandStore.get(args.command);
+    public async executed(context: CommandContext, args: IUsageArgs): Promise<void> {
+        const targetCommand: Command | IDecoratorCommand | null = await context.bot.commandStore.get(args.command);
 
         if (!targetCommand) {
             context.fail("That command doesn't exist.");

@@ -45,11 +45,11 @@ export default class CommandParser {
      * @param {string[]} prefixes
      * @return {Command | null}
      */
-    public static parse(commandString: string, manager: CommandStore, prefixes: string[]): Command | null {
+    public static async parse(commandString: string, manager: CommandStore, prefixes: string[]): Promise<Command | null> {
         const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
-            return manager.get(commandBase);
+            return await manager.get(commandBase);
         }
 
         return null;

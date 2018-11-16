@@ -13,8 +13,8 @@ export type IPackage = {
     readonly path: string;
 }
 
-export interface ICommandPackage extends IPackage {
-    readonly module: Command
+export type ILivePackage<InstanceType extends IFragment> = {
+    readonly instance: InstanceType;
     readonly path: string;
 }
 

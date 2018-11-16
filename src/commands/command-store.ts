@@ -140,9 +140,6 @@ export default class CommandStore {
             await this.remove(name, (this.commands.get(name) as ICommandPackage).instance.aliases);
             this.released.set(name, cmdPackg.path);
 
-            console.log("release", name);
-            console.log(this.aliases);
-
             return true;
         }
 
@@ -206,11 +203,6 @@ export default class CommandStore {
                     }
 
                     Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (A command with the same alias already exists)`);
-
-                    console.log("stored aliases", this.aliases.get(commandPackage.instance.aliases[i]));
-                    console.log("command aliases", commandPackage.instance.aliases);
-
-                    throw new Exception("stop here!");
 
                     return false;
                 }

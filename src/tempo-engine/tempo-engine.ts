@@ -24,9 +24,6 @@ export default class TempoEngine implements IDisposable {
             Log.warn("[TempoEngine] Interval lower than 30 seconds may be inefficient; Using 30 seconds as interval instead");
         }
 
-        // TODO: Debugging
-        this.interval = 5000;
-
         this.processInterval = null;
     }
 

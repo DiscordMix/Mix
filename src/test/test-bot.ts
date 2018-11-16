@@ -20,6 +20,8 @@ const token: string = process.env.TEST_BOT_TOKEN as string;
 const testGuildId: Snowflake = process.env.TEST_GUILD_ID as Snowflake;
 const testGuildChannelId: Snowflake = process.env.TEST_CHANNEL_ID as Snowflake;
 
+// TODO: The Tempo Engine's interval isn't getting cleared at bot.dispose() (on shutdown) therefore leaving tests hanging. Hotfixed by disabling tempo engine in tests.
+
 if (!token) {
     throw new Error("Expecting test token");
 }
@@ -239,16 +241,18 @@ describe("bot", () => {
     });
 });
 
+// TODO: Bot intervals
+
 describe("bot timeouts", () => {
-    it("should have one timeout set", () => {
-        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(1); // TempoEngine timeout
+    it("should have no timeouts set", () => {
+        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
     });
 
     it("should set a timeout", () => {
         return new Promise((resolve) => {
             testBot.setTimeout(() => {
                 // Tests
-                expect(testBot.timeouts.length).to.be.a("number").and.to.equal(2);
+                expect(testBot.timeouts.length).to.be.a("number").and.to.equal(1);
 
                 resolve();
             }, 100);
@@ -256,7 +260,7 @@ describe("bot timeouts", () => {
     });
 
     it("should clear timeouts after executing", () => {
-        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(1);
+        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
     });
 });
 

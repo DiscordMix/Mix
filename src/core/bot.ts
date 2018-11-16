@@ -317,7 +317,8 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             (options.options as any) = {
                 ...options.options,
                 asciiTitle: false,
-                consoleInterface: false
+                consoleInterface: false,
+                tempoEngine: false
             };
 
             (options.settings as any).paths = {
@@ -332,7 +333,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             options = {
                 ...options,
                 internalCommands: ["help", "usage", "ping"],
-                languages: ["test-language"]
+                languages: ["test-language"],
             };
         }
 

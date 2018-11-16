@@ -281,11 +281,11 @@ describe("commands", () => {
         expect(testBot.commandStore.contains("" as any)).to.be.a("boolean").and.to.equal(false);
     });
 
-    it("should not register invalid commands", () => {
+    it("should not register invalid commands", async () => {
         const subjects: any[] = [true, false, null, undefined, "hello", "", "    ", 1, 0, -1, []];
 
         for (let i: number = 0; i < subjects.length; i++) {
-            expect(testBot.commandStore.register(subjects[i])).to.be.a("boolean").and.to.equal(false);
+            expect(await testBot.commandStore.register(subjects[i])).to.be.a("boolean").and.to.equal(false);
         }
     });
 });

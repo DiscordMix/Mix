@@ -6,6 +6,7 @@ import {Snowflake} from "discord.js";
 import FragmentLoader, {IPackage, ILivePackage} from "../fragments/fragment-loader";
 import Utils from "../core/utils";
 import path from "path";
+import {Exception} from "handlebars";
 
 /**
  * @enum {number}
@@ -115,7 +116,7 @@ export default class CommandStore {
         }
 
         // Register new one
-        this.register({
+        await this.register({
             instance: cmdPackg.instance,
             path: reloadedPackage.path
         });
@@ -132,12 +133,15 @@ export default class CommandStore {
         if (this.bot.internalCommands.includes(name)) {
             return false;
         }
-        else if (this.commands.has(name) && !this.released.has(name)) {
+        else if (this.contains(name) && !this.isReleased(name)) {
             const cmdPackg: ICommandPackage = this.commands.get(name) as ICommandPackage;
 
             await cmdPackg.instance.dispose();
-            await this.remove(name);
+            await this.remove(name, (this.commands.get(name) as ICommandPackage).instance.aliases);
             this.released.set(name, cmdPackg.path);
+
+            console.log("release", name);
+            console.log(this.aliases);
 
             return true;
         }
@@ -185,7 +189,7 @@ export default class CommandStore {
 
             return false;
         }
-        else if (this.contains(commandName)) {
+        else if (this.contains(commandName) && !this.isReleased(commandName)) {
             Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Already registered)`);
 
             return false;
@@ -203,6 +207,11 @@ export default class CommandStore {
 
                     Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (A command with the same alias already exists)`);
 
+                    console.log("stored aliases", this.aliases.get(commandPackage.instance.aliases[i]));
+                    console.log("command aliases", commandPackage.instance.aliases);
+
+                    throw new Exception("stop here!");
+
                     return false;
                 }
 
@@ -215,19 +224,25 @@ export default class CommandStore {
         return true;
     }
 
+    // TODO: Accepting aliases as an argument for a hot-fix of an infinite loop (looks like this.get(commandBase) calls back .remove() somehow or something similar)
     /**
      * @param {string} commandBase
-     * @return {Promise<boolean>} Whether the command was removed
+     * @return {boolean} Whether the command was removed
      */
-    public async remove(commandBase: string): Promise<boolean> {
-        // TODO: Verify that command is only Command and not WeakCommand etc.
-        const command: Command = await this.get(commandBase) as Command;
-
+    public async remove(commandBase: string, aliases: string[]): Promise<boolean> {
         // Remove any command aliases that might exist
-        if (command.aliases && command.aliases.length > 0) {
-            for (let i: number = 0; i < command.aliases.length; i++) {
-                this.aliases.delete(command.aliases[i]);
+        if (aliases.length > 0) {
+            for (let i: number = 0; i < aliases.length; i++) {
+                if (!this.aliases.delete(aliases[i])) {
+                    Log.warn(`[CommandStore.remove] Failed to remove alias '${aliases[i]}' of command '${commandBase}'`);
+                }
             }
+        }
+
+        // TODO: Remove cooldown if was set for command?
+
+        if (this.isReleased(commandBase) && !this.released.delete(commandBase)) {
+            return false;
         }
 
         return this.commands.delete(commandBase);
@@ -238,11 +253,11 @@ export default class CommandStore {
      * @return {boolean}
      */
     public contains(name: string): boolean {
-        if (!name) {
+        if (!name || typeof name !== "string") {
             return false;
         }
 
-        return this.commands.has(name) || this.aliases.has(name) || this.released.has(name);
+        return this.commands.has(name) || this.aliases.has(name) || this.isReleased(name);
     }
 
     /**
@@ -257,7 +272,7 @@ export default class CommandStore {
 
             return command === null ? null : command.instance;
         }
-        else if (this.released.has(name)) {
+        else if (this.isReleased(name)) {
             // TODO: Re-load command here
 
             const packg: IPackage | null = await FragmentLoader.load(this.released.get(name) as string);
@@ -283,13 +298,14 @@ export default class CommandStore {
         return command === null ? null : command.instance;
     }
 
+    // TODO: Return amount registered instead
     /**
      * @param {ICommandPackage[]} commands
-     * @return {CommandStore}
+     * @return {Promise<CommandStore>}
      */
-    public registerMultiple(commands: ICommandPackage[]): this {
+    public async registerMultiple(commands: ICommandPackage[]): Promise<this> {
         for (let i = 0; i < commands.length; i++) {
-            this.register(commands[i]);
+            await this.register(commands[i]);
         }
 
         return this;

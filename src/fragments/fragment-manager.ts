@@ -63,11 +63,12 @@ export default class FragmentManager extends EventEmitter {
         return null;
     }
 
-    public async enable(packg: IPackage, internal: boolean = false): Promise<boolean> {
+    // TODO: Use .prepare instead of repeating-preparation step here
+    public async enable(packg: IPackage, internal: boolean = false, overwrite: boolean = true): Promise<boolean> {
         const mod: any = (packg.module as any).prototype;
 
         if (mod instanceof Command) {
-            const command: any = new (packg.module as any)();
+            const command: Command = new (packg.module as any)();
 
             // Command is not registered in internal commands
             if (internal && !this.bot.internalCommands.includes(command.meta.name)) {
@@ -80,13 +81,17 @@ export default class FragmentManager extends EventEmitter {
             }
 
             // Overwrite command restrict with default values
-            command.restrict = {
+            (command.restrict as any) = {
                 ...DefaultCommandRestrict,
                 ...command.restrict
             };
 
             if (await command.enabled()) {
-                this.bot.commandStore.register({
+                if (this.bot.commandStore.contains(command.meta.name) && overwrite) {
+                    await this.bot.commandStore.remove(command.meta.name, command.aliases);
+                }
+
+                await this.bot.commandStore.register({
                     instance: command,
                     path: packg.path
                 });
@@ -95,10 +100,9 @@ export default class FragmentManager extends EventEmitter {
             }
         }
         else if (mod instanceof Service || mod instanceof ForkedService) {
-            // TODO: Use .prepare
             const service: any = packg.module;
 
-            this.bot.services.register(new service({
+            await this.bot.services.register(new service({
                 bot: this.bot,
                 api: this.bot.getAPI()
             }));

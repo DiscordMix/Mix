@@ -41,6 +41,7 @@ export default class TempoEngine implements IDisposable {
 
         for (let [name, command] of commands) {
             if (!this.commandsUsed.includes(name)) {
+                // TODO:
                 //command
             }
         }

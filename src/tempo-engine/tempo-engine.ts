@@ -1,11 +1,12 @@
-import {IDisposable, Bot, Command, Log} from "..";
+import {IDisposable, Bot, Command, Log, CommandContext} from "..";
 import {EBotEvents} from "../core/bot";
 import {IReadonlyCommandMap} from "../commands/command-store";
 
 export default class TempoEngine implements IDisposable {
     private readonly bot: Bot;
-    private readonly commandsUsed: string[];
     private readonly interval: number;
+
+    private commandsUsed: string[];
 
     private processInterval: NodeJS.Timeout | null;
     
@@ -31,23 +32,33 @@ export default class TempoEngine implements IDisposable {
             this.commandsUsed.push(command.meta.name);
         });
 
-        this.processInterval = this.bot.setTimeout(this.processTempo, this.interval);
+        this.processInterval = this.bot.setInterval(this.processTempo.bind(this), this.interval);
 
         return this;
     }
 
-    private processTempo(): this {
+    private async processTempo(): Promise<number> {
         const commands: IReadonlyCommandMap = this.bot.commandStore.getAll();
 
+        let released: number = 0;
+
         for (let [name, command] of commands) {
-            if (!this.commandsUsed.includes(name)) {
-                Log.verbose(`[TempoEngine] Releasing command '${name}'`);
-                // TODO:
-                this.bot.commandStore.unloadAll
+            // TODO: .isReleased accepts fileName as identifier, therefore unsafe
+            if (!this.bot.internalCommands.includes(name) && !this.commandsUsed.includes(name) && !this.bot.commandStore.isReleased(name)) {
+                if (await this.bot.commandStore.release(name)) {
+                    released++;
+                }
             }
         }
 
-        return this;
+        // TODO: Just commented for debugging
+        if (released > 0) {
+            Log.verbose(`[TempoEngine] Released ${released} unused command(s)`);
+        }
+
+        this.commandsUsed = [];
+
+        return released;
     }
 
     public stop(): this {

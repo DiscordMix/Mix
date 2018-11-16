@@ -248,10 +248,7 @@ export default class CommandHandler {
 
             this.commandStore.setCooldown(context.sender.id, commandCooldown, command.meta.name);
 
-            context.bot.emit(EBotEvents.CommandExecuted, {
-                context,
-                command
-            }, result);
+            context.bot.emit(EBotEvents.CommandExecuted, command, context, result);
 
             if (context.bot.options.autoDeleteCommands && context.msg.deletable) {
                 await context.msg.delete();

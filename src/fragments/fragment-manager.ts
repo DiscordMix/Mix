@@ -2,7 +2,6 @@ import {EventEmitter} from "events";
 import {Bot, Command, Log, Service, ForkedService, IFragment} from "..";
 import {IPackage, ILivePackage} from "./fragment-loader";
 import {DefaultCommandRestrict} from "../commands/command";
-import {ICommandPackage} from "../commands/command-store";
 
 export default class FragmentManager extends EventEmitter {
     private readonly bot: Bot;
@@ -55,7 +54,7 @@ export default class FragmentManager extends EventEmitter {
                 path: packg.path,
 
                 instance: new service({
-                    bot: this,
+                    bot: this.bot,
                     api: this.bot.getAPI()
                 })
             };
@@ -77,7 +76,7 @@ export default class FragmentManager extends EventEmitter {
 
             // TODO: Add a way to disable the warning
             if (!internal && command.meta.name === "eval") {
-                Log.warn("Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Forge.");
+                Log.warn("[FragmentManager.enable] Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Forge.");
             }
 
             // Overwrite command restrict with default values
@@ -96,10 +95,11 @@ export default class FragmentManager extends EventEmitter {
             }
         }
         else if (mod instanceof Service || mod instanceof ForkedService) {
+            // TODO: Use .prepare
             const service: any = packg.module;
 
             this.bot.services.register(new service({
-                bot: this,
+                bot: this.bot,
                 api: this.bot.getAPI()
             }));
 
@@ -107,7 +107,7 @@ export default class FragmentManager extends EventEmitter {
         }
         else {
             // TODO: Also add someway to identify the fragment
-            Log.warn("[Bot.enableFragments] Unknown fragment instance, ignoring");
+            Log.warn("[FragmentManager.enable] Unknown fragment instance, ignoring");
         }
 
         return false;

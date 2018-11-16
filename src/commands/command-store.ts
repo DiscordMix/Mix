@@ -5,6 +5,7 @@ import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
 import FragmentLoader, {IPackage, ILivePackage} from "../fragments/fragment-loader";
 import Utils from "../core/utils";
+import path from "path";
 
 /**
  * @enum {number}
@@ -43,7 +44,7 @@ export default class CommandStore {
     public simpleCommands: Map<string, any>;
 
     private readonly commands: ICommandMap;
-    private readonly released: string[];
+    private readonly released: Map<string, string>;
     private readonly aliases: Map<string, string>;
 
     /**
@@ -67,7 +68,7 @@ export default class CommandStore {
          * @type {string[]}
          * @readonly
          */
-        this.released = [];
+        this.released = new Map();
 
         /**
          * @type {Map<string, string>}
@@ -127,12 +128,16 @@ export default class CommandStore {
     }
 
     public async release(name: string): Promise<boolean> {
-        if (this.commands.has(name) && !this.released.includes(name)) {
-            const command: Command = this.commands.get(name) as any;
+        // Internal commands should not be released
+        if (this.bot.internalCommands.includes(name)) {
+            return false;
+        }
+        else if (this.commands.has(name) && !this.released.has(name)) {
+            const cmdPackg: ICommandPackage = this.commands.get(name) as ICommandPackage;
 
-            await command.dispose();
-            this.commands.delete(name);
-            this.released.push(name);
+            await cmdPackg.instance.dispose();
+            await this.remove(name);
+            this.released.set(name, cmdPackg.path);
 
             return true;
         }
@@ -141,10 +146,10 @@ export default class CommandStore {
     }
 
     public isReleased(name: string): boolean {
-        return this.released.includes(name);
+        return this.released.has(path.basename(name).split(".")[0]);
     }
 
-    public getReleased(): ReadonlyArray<string> {
+    public getReleased(): ReadonlyMap<string, string> {
         return this.released;
     }
 
@@ -168,7 +173,7 @@ export default class CommandStore {
      * Register a command
      * @param {ICommandPackage} commandPackage
      */
-    public register(commandPackage: ICommandPackage): boolean {
+    public async register(commandPackage: ICommandPackage): Promise<boolean> {
         if (Utils.isEmpty(commandPackage) || typeof commandPackage !== "object") {
             return false;
         }
@@ -180,8 +185,8 @@ export default class CommandStore {
 
             return false;
         }
-        else if (this.get(commandName) !== null) {
-            Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Already exists)`);
+        else if (this.contains(commandName)) {
+            Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Already registered)`);
 
             return false;
         }
@@ -237,10 +242,11 @@ export default class CommandStore {
             return false;
         }
 
-        return this.commands.has(name) || this.aliases.has(name) || this.released.includes(name);
+        return this.commands.has(name) || this.aliases.has(name) || this.released.has(name);
     }
 
     /**
+     * @todo Should release/reload not when accessing, but when actually executing
      * @param {string} name
      * @return {Command | null}
      */
@@ -251,23 +257,25 @@ export default class CommandStore {
 
             return command === null ? null : command.instance;
         }
-        else if (this.released.includes(name)) {
+        else if (this.released.has(name)) {
             // TODO: Re-load command here
 
-            const packg: IPackage | null = await FragmentLoader.load(this.bot.paths.command(name));
+            const packg: IPackage | null = await FragmentLoader.load(this.released.get(name) as string);
 
             if (packg !== null && (packg.module as any).prototype instanceof Command) {
                 if (!await this.bot.fragments.enable(packg)) {
                     Log.warn(`[CommandStore.get] Failed to re-load released command '${name}'`);
+
+                    return null;
                 }
+
+                return await this.get(name);
             }
             else {
                 Log.warn(`[CommandStore.get] Expecting released command '${name}' to exist for re-load and to be a command`);
 
                 return null;
             }
-
-            return {} as Command;
         }
 
         const command: ICommandPackage | null = (this.commands.get(name) as ICommandPackage) || null;

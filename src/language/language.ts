@@ -15,10 +15,6 @@ export default class Language {
      * @param {string} directory
      */
     public constructor(directory: string) {
-        if (!fs.existsSync(directory)) {
-            throw new Error("[Language] Specified base languages directory does not exist");
-        }
-
         /**
          * @type {ILanguageSource | undefined}
          * @private

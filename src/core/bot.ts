@@ -9,13 +9,12 @@ import Settings from "./settings";
 import Log from "./log";
 import DataProvider from "../data-providers/data-provider";
 import Temp from "./temp";
-import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel, ClientOptions} from "discord.js";
+import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import ServiceManager from "../services/service-manager";
 import axios from "axios";
 
 import Command, {
     IArgumentResolver,
-    DefaultCommandRestrict,
     ICustomArgType,
     InternalArgType,
     IRawArguments,
@@ -30,7 +29,6 @@ import {performance} from "perf_hooks";
 import path from "path";
 import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
 import Language from "../language/language";
-import Service, {ForkedService} from "../services/service";
 
 import {
     BotEvents,

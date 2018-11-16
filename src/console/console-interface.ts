@@ -1,6 +1,6 @@
 import Log from "../core/log";
 import Utils from "../core/utils";
-import Bot from "../core/bot";
+import Bot, {DebugMode} from "../core/bot";
 import readline from "readline";
 import {performance} from "perf_hooks";
 import {Guild, GuildMember} from "discord.js";
@@ -48,7 +48,7 @@ export default class ConsoleInterface {
         let using: Guild | null = null;
 
         // Setup Commands
-        if (process.env.FORGE_DEBUG_MODE === "true") {
+        if (DebugMode) {
             this.commands.set("bug", (args: string[]) => {
                 if (args[0] === "commands") {
                     const commands: IReadonlyCommandMap = bot.commandStore.getAll();

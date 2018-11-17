@@ -4,13 +4,13 @@ import {default as _} from "lodash";
 /**
  * @extends EventEmitter
  */
-export default class ArrayCollection extends EventEmitter {
-    private readonly items: any[];
+export default class List<DataType> extends EventEmitter {
+    private readonly items: DataType[];
 
     /**
      * @param {Array} items
      */
-    public constructor(items: any[] = []) {
+    public constructor(items: DataType[] = []) {
         super();
 
         /**
@@ -25,8 +25,8 @@ export default class ArrayCollection extends EventEmitter {
      * @param {number} index
      * @return {*}
      */
-    public at(index: number): any {
-        return this.items[index];
+    public at(index: number): DataType | null {
+        return this.items[index] || null;
     }
 
     /**
@@ -47,19 +47,21 @@ export default class ArrayCollection extends EventEmitter {
 
     /**
      * Add an item to this collection
-     * @param {*} item
+     * @param {DataType} item
      */
-    public add(item: any): void {
+    public add(item: DataType): this {
         this.items.push(item);
         this.emit("itemAdded", item);
+
+        return this;
     }
 
     /**
      * Add an item to this collection only if it doesn't already exist
-     * @param {*} item
+     * @param {DataType} item
      * @return {boolean} Whether the item was added
      */
-    public addUnique(item: any): boolean {
+    public addUnique(item: DataType): boolean {
         if (!this.contains(item)) {
             this.add(item);
 
@@ -71,11 +73,11 @@ export default class ArrayCollection extends EventEmitter {
 
     /**
      * Determine whether this collection contains an item
-     * @param {*} item
+     * @param {DataType} item
      * @return {boolean}
      */
-    public contains(item: any): boolean {
-        for (let i = 0; i < this.items.length; i++) {
+    public contains(item: DataType): boolean {
+        for (let i: number = 0; i < this.items.length; i++) {
             if (this.items[i] === item) {
                 return true;
             }
@@ -88,9 +90,10 @@ export default class ArrayCollection extends EventEmitter {
      * Find an item in this collection
      * @param {string} path
      * @param {*} value
+     * @return {DataType | null}
      */
-    public find(path: string, value: any): any {
-        for (let i = 0; i < this.items.length; i++) {
+    public find(path: string, value: any): DataType | null {
+        for (let i: number = 0; i < this.items.length; i++) {
             if (_.get(this.items[i], path) === value) {
                 return this.items[i];
             }

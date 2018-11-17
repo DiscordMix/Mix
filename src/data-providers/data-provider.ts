@@ -1,4 +1,4 @@
-export default abstract class DataProvider<ItemType = any> {
+export default abstract class DataProvider<ItemType> {
     /**
      * Retrieve guild data
      * @abstract

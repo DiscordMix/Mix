@@ -30,12 +30,9 @@ import TimeSuffixType from "./time/time-suffix-type";
 import Utils from "./core/utils";
 import Permission from "./core/permission";
 import ChatEnvironment from "./core/chat-environment";
-import ArrayCollection from "./collections/collection";
+import List from "./collections/collection";
 import DataProvider from "./data-providers/data-provider";
-import ObjectProvider from "./data-providers/object-provider";
 import JsonProvider from "./data-providers/json-provider";
-import SqliteProvider from "./data-providers/sqlite-provider";
-import MysqlProvider from "./data-providers/mysql-provider";
 import SetupHelper, {ISetupHelperResult} from "./core/setup-helper";
 import Service, {IServiceOptions, ForkedService, GenericService, ProcessMsgType, IProcessMsg} from "./services/service";
 import KnexTable from "./data-providers/knex-table";
@@ -101,7 +98,7 @@ export {
     DiscordEvent,
 
     // Collections
-    ArrayCollection,
+    List,
 
     // Emoji Menu
     IEmojiButton,
@@ -113,10 +110,7 @@ export {
 
     // Data Stores
     DataProvider,
-    ObjectProvider,
     JsonProvider,
-    SqliteProvider,
-    MysqlProvider,
 
     // Setup Helper
     SetupHelper,

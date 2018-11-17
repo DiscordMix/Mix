@@ -146,7 +146,7 @@ export const InternalArgTypes: ICustomArgType[] = [
 // TODO: Already made optional by Partial?
 export type IBotOptions = {
     readonly settings: Settings;
-    readonly dataStore?: DataProvider;
+    readonly dataStore?: DataProvider<any>;
     readonly prefixCommand?: boolean;
     readonly internalCommands?: string[];
     readonly userGroups?: IUserGroup[];
@@ -268,7 +268,7 @@ export type BotToken = string;
 export default class Bot<ApiType = any> extends EventEmitter implements IDisposable {
     public readonly settings: Settings;
     public readonly temp: Temp;
-    public readonly dataStore?: DataProvider;
+    public readonly dataStore?: DataProvider<any>;
     public readonly services: ServiceManager;
     public readonly commandStore: CommandStore;
     public readonly commandHandler: CommandHandler;

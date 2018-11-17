@@ -56,7 +56,7 @@ export default class ConfigBuilder {
      * @param {DataProvider} dataStore
      * @return {ConfigBuilder}
      */
-    public setDataStore(dataStore: DataProvider): ConfigBuilder {
+    public setDataStore(dataStore: DataProvider<any>): ConfigBuilder {
         this.properties.dataStore = dataStore;
 
         return this;

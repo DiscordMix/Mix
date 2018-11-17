@@ -1,4 +1,3 @@
-import ObjectProvider from "./object-provider";
 import Log from "../core/log";
 import Utils from "../core/utils";
 import fs from "fs";
@@ -8,15 +7,15 @@ import {IVolatile, ISyncable} from "../core/structures";
 /**
  * @extends ObjectProvider
  */
-export default class JsonProvider extends ObjectProvider implements IVolatile, ISyncable {
+export default class JsonProvider implements IVolatile, ISyncable {
     private readonly path: string;
+    
+    private data: any;
 
     /**
      * @param {string} path
      */
     public constructor(path: string) {
-        super(null);
-
         /**
          * @type {string}
          * @private

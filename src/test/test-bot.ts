@@ -1,7 +1,7 @@
 // Environment variables
 require("dotenv").config();
 
-import {Bot, Log, Task, Rgb, Rgba, ArrayCollection, ObjectProvider, Utils} from "..";
+import {Bot, Log, Task, Rgb, Rgba, List, Utils} from "..";
 import Settings from "../core/settings";
 import {Snowflake, Guild, TextChannel, Message} from "discord.js";
 import CommandContext from "../commands/command-context";
@@ -41,17 +41,9 @@ const subjects = {
         alpha: 1
     }),
 
-    collection: new ArrayCollection(["hello", "it's me", {
+    collection: new List<any>(["hello", "it's me", {
         name: "John Doe"
     }]),
-
-    objAdapter: new ObjectProvider({
-        person: {
-            doe: {
-                name: "John Doe"
-            }
-        }
-    }),
 
     settingsPath: path.resolve(path.join(__dirname, "./../../src/test/test-settings.json")),
 
@@ -203,11 +195,8 @@ describe("Utils.translateState()", () => {
             "on"
         ];
 
-        for (let i = 0; i < subjects.length; i++) {
-            const result = Utils.translateState(subjects[i].toString());
-
-            expect(result).to.be.an("boolean");
-            expect(result).to.be.equal(true);
+        for (let i: number = 0; i < subjects.length; i++) {
+            expect(Utils.translateState(subjects[i].toString())).to.be.an("boolean").and.to.equal(true);
         }
     });
 });
@@ -223,10 +212,7 @@ describe("Utils.timeFromNow()", () => {
 
 describe("Utils.shuffle()", () => {
     it("should shuffle an array", () => {
-        const result = Utils.shuffle(["hello", "my", "name", "is", "john doe"]);
-
-        expect(result).to.be.an("array");
-        expect(result.join(" ")).to.not.equal("hello my name is john doe");
+        expect(Utils.shuffle(["hello", "my", "name", "is", "john doe"])).to.be.an("array").and.to.have.length(5);
     });
 });
 
@@ -250,34 +236,20 @@ describe("Utils.getUserIdentifier()", () => {
 
 describe("Rgb.toString()", () => {
     it("should return the Rgb in string format", () => {
-        const result = subjects.rgb.toString();
-
-        expect(result).to.be.an("string");
-        expect(result).to.equal("5, 10, 15");
+        expect(subjects.rgb.toString()).to.be.an("string").and.to.equal("5, 10, 15");
     });
 });
 
 describe("Rgba.toString()", () => {
     it("should return the Rgba in string format", () => {
-        const result = subjects.rgba.toString();
-
-        expect(result).to.be.an("string");
-        expect(result).to.equal("5, 10, 15, 1");
+        expect(subjects.rgba.toString()).to.be.an("string").and.to.equal("5, 10, 15, 1");
     });
 });
 
 describe("Collection.at()", () => {
     it("should return the item located in the specified index", () => {
-        const result1 = subjects.collection.at(0);
-        const result2 = subjects.collection.at(1);
-
-        // Result 1
-        expect(result1).to.be.an("string");
-        expect(result1).to.equal("hello");
-
-        // Result 2
-        expect(result2).to.be.an("string");
-        expect(result2).to.equal("it's me");
+        expect(subjects.collection.at(0)).to.be.an("string").and.to.equal("hello");
+        expect(subjects.collection.at(1)).to.be.an("string").and.to.equal("it's me");
     });
 });
 
@@ -301,24 +273,15 @@ describe("Collection.removeAt()", () => {
 describe("Collection.add()", () => {
     it("should add an item to the collection", () => {
         subjects.collection.add("john doe");
-        expect(subjects.collection.at(0)).to.be.an("string");
-        expect(subjects.collection.at(0)).to.equal("it's me");
+        expect(subjects.collection.at(0)).to.be.an("string").and.to.equal("it's me");
         expect(subjects.collection.at(1)).to.be.an("object");
     });
 });
 
 describe("Collection.addUnique()", () => {
     it("should add an unique item", () => {
-        const result1 = subjects.collection.addUnique("doe");
-        const result2 = subjects.collection.addUnique("doe");
-
-        // Result 1
-        expect(result1).to.be.an("boolean");
-        expect(result1).to.equal(true);
-
-        // Result 2
-        expect(result2).to.be.an("boolean");
-        expect(result2).to.equal(false);
+        expect(subjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(true);;
+        expect(subjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(false);;
     });
 });
 
@@ -339,32 +302,10 @@ describe("Collection.contains()", () => {
 
 describe("Collection.find()", () => {
     it("should find an item by its property", () => {
-        const result = subjects.collection.find("name", "John Doe");
+        const result: any = subjects.collection.find("name", "John Doe") as any;
 
         expect(result).to.be.an("object");
-        expect(result.name).to.be.an("string");
-        expect(result.name).to.equal("John Doe");
-    });
-});
-
-describe("ObjectProvider.get()", () => {
-    it("should return the item in the specified path", () => {
-        const result = subjects.objAdapter.get("person.doe");
-
-        expect(result).to.be.an("object");
-        expect(result.name).to.be.an("string");
-        expect(result.name).to.equal("John Doe");
-    });
-});
-
-describe("ObjectProvider.set()", () => {
-    it("should set data in the item at the specified path", () => {
-        subjects.objAdapter.set("person.doe.name", "Doe John");
-
-        const result = subjects.objAdapter.get("person.doe.name");
-
-        expect(result).to.be.an("string");
-        expect(result).to.equal("Doe John");
+        expect(result.name).to.be.an("string").and.to.equal("John Doe");;
     });
 });
 

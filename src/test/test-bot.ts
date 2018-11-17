@@ -304,7 +304,7 @@ describe("services", () => {
     it("should register services", () => {
         expect(testBot.services.contains("test")).to.be.a("boolean").and.to.equal(true);
         expect(testBot.services.contains("fake")).to.be.a("boolean").and.to.equal(false);
-        expect(testBot.services.getAll().size).to.be.a("number").and.to.equal(2);
+        expect(testBot.services.getAll().size).to.be.a("number").and.to.equal(3);
     });
 
     it("should not register invalid services", () => {

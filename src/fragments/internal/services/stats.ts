@@ -1,4 +1,4 @@
-import {IFragmentMeta, Service, Log} from "../../..";
+import {IFragmentMeta, Service} from "../../..";
 
 export default class WatchdogService extends Service {
     readonly meta: IFragmentMeta = {
@@ -7,6 +7,6 @@ export default class WatchdogService extends Service {
     };
 
     public start(): void {
-        Log.info("Stats collection service started!");
+        //Log.info("Stats collection service started!");
     }
 }

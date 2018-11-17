@@ -38,11 +38,11 @@ export default class ReflectCommand extends Command {
 
                 for (let [name, service] of x.bot.services.getAll()) {
                     if (service instanceof Service) {
-                        services += `${service.running ? "✓" : "x"} - ${service.meta.name} # ${service.meta.description}\n`;
+                        services += `${service.running ? "+" : "-"} ${service.meta.name}\n\t${service.meta.description}\n`;
                     }
                 }
 
-                const result: string = new FormattedMessage().codeBlock(services, "makefile").build();
+                const result: string = new FormattedMessage().codeBlock(services, "diff").build();
 
                 return {
                     type: ActionType.Message,

@@ -116,6 +116,7 @@ export default class CommandParser {
         const switches: ICommandSwitch[] = SwitchParser.getSwitches(commandString);
 
         for (let sw: number = 0; sw < switches.length; sw++) {
+            // TODO: Was just left here without being used..
             const switchString: string = `${switches[sw].key}${switches[sw].value ? "=" : ""}${switches[sw].value || ""}`;
 
             for (let i: number = 0; i < schema.length; i++) {
@@ -125,7 +126,7 @@ export default class CommandParser {
                     if (result[i].toString().indexOf(" ") !== -1) {
                         const spaces: number = result[i].toString().split(" ").length - 1;
 
-                        for (let counter = 0; counter <= spaces; counter++) {
+                        for (let counter = 0; counter < spaces; counter++) {
                             result.pop();
                         }
                     }
@@ -140,7 +141,7 @@ export default class CommandParser {
                     if (result[i].toString().indexOf(" ") !== -1) {
                         const spaces: number = result[i].toString().split(" ").length - 1;
 
-                        for (let counter = 0; counter <= spaces; counter++) {
+                        for (let counter = 0; counter < spaces; counter++) {
                             result.pop();
                         }
                     }

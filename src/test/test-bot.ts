@@ -241,8 +241,6 @@ describe("bot", () => {
     });
 });
 
-// TODO: Bot intervals
-
 describe("bot timeouts", () => {
     it("should have no timeouts set", () => {
         expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
@@ -262,6 +260,14 @@ describe("bot timeouts", () => {
     it("should clear timeouts after executing", () => {
         expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
     });
+});
+
+describe("bot intervals", () => {
+    it("should have no intervals set", () => {
+        expect(testBot.intervals.length).to.be.a("number").and.to.equal(0);
+    });
+
+    // TODO: More tests
 });
 
 describe("commands", () => {

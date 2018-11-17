@@ -258,6 +258,8 @@ export default class ServiceManager extends EventEmitter {
 
         this.emit("ignite", name);
         this.heartbeatFork(name);
+
+        // TODO: Debugging
         Log.debug(`[ServiceManager.ignite] Spawned forked service '${name}' @ ${child.pid}`);
 
         return true;

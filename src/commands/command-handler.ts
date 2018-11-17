@@ -369,7 +369,6 @@ export default class CommandHandler {
             }
 
             if (!valid) {
-                Log.debug(RestrictGroup, RestrictGroup[specific]);
                 Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`)
             }
 

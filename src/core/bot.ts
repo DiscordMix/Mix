@@ -1113,7 +1113,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         });
 
         // TODO: Debugging
-        //Log.debug("Raw arguments are", rawArgs);
+        Log.debug("Raw arguments are", rawArgs);
 
         await this.commandHandler.handle(
             this.createCommandContext(message),

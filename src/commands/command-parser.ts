@@ -92,6 +92,7 @@ export default class CommandParser {
         return null;
     }
 
+    // TODO: CRITICAL: %say -s=true -> would receive arguments as [ '-s=true', 'true' ]
     /**
      * @param {string} commandString
      * @return {string[]}

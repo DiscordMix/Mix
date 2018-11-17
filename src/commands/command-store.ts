@@ -138,6 +138,7 @@ export default class CommandStore {
 
             await cmdPackg.instance.dispose();
             await this.remove(name, (this.commands.get(name) as ICommandPackage).instance.aliases);
+            delete require.cache[cmdPackg.path];
             this.released.set(name, cmdPackg.path);
 
             return true;
@@ -222,12 +223,11 @@ export default class CommandStore {
      * @return {boolean} Whether the command was removed
      */
     public async remove(commandBase: string, aliases: string[]): Promise<boolean> {
+        // TODO: Release resources when removing too (delete require.cache)
         // Remove any command aliases that might exist
         if (aliases.length > 0) {
             for (let i: number = 0; i < aliases.length; i++) {
-                if (!this.aliases.delete(aliases[i])) {
-                    Log.warn(`[CommandStore.remove] Failed to remove alias '${aliases[i]}' of command '${commandBase}'`);
-                }
+                this.aliases.delete(aliases[i]);
             }
         }
 

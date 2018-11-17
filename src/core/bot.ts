@@ -195,7 +195,7 @@ const DefaultBotOptions: IBotExtraOptions = {
     logMessages: false,
     emojis: DefaultBotEmojiOptions,
     consoleInterface: true,
-    tempoEngine: true
+    tempoEngine: false
 };
 
 export enum EBotEvents {
@@ -317,8 +317,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             (options.options as any) = {
                 ...options.options,
                 asciiTitle: false,
-                consoleInterface: false,
-                tempoEngine: false
+                consoleInterface: false
             };
 
             (options.settings as any).paths = {

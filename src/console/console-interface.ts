@@ -98,6 +98,10 @@ export default class ConsoleInterface {
             console.log("\n" + bot.client.guilds.map((guild: Guild) => `${guild.name} ${guild.id}\n`));
         });
 
+        this.commands.set("pid", () => {
+            console.log(`\nCurrent process running @ ${process.pid.toString()}\n`);
+        });
+
         this.commands.set("use", (args: string[]) => {
             const guild: string = args[0];
 

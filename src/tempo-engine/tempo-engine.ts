@@ -13,7 +13,7 @@ export default class TempoEngine implements IDisposable {
     private processInterval: NodeJS.Timeout | null;
     
     // TODO: Interval should be calculated based on amount of commands
-    public constructor(bot: Bot, interval: number = 10*60*1, sizeThreshold: number = 102400) {
+    public constructor(bot: Bot, interval: number = 10*60*1000, sizeThreshold: number = 102400) {
         this.bot = bot;
         this.commandsUsed = [];
         this.interval = interval;

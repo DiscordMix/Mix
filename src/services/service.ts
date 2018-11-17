@@ -93,6 +93,12 @@ export default abstract class Service<ApiType = undefined | any> extends Generic
             this.bot.client.removeListener(event, handler);
         }
     }
+
+    public get running(): boolean {
+        // TODO: This is just template-future-code (does NOT work!)
+        // ... Need someway to check if the service is actually running (not just saved + stopped)
+        return this.bot.services.contains(this.meta.name);
+    }
 }
 
 export abstract class ForkedService extends GenericService {

@@ -42,6 +42,7 @@ export enum ChannelType {
     Group = "group"
 }
 
+// TODO: Possibly consider attaching ActionInterpreter into commands' "this" so it's easier to return and ActionInterpreter can auto-determine some stuff...
 export default class ActionInterpreter extends EventEmitter {
     private readonly bot: Bot;
 

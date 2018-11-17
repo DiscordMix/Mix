@@ -1,6 +1,6 @@
 import {EventEmitter} from "events";
 import {Bot, Command, Log, Service, ForkedService, IFragment} from "..";
-import {IPackage, ILivePackage} from "./fragment-loader";
+import FragmentLoader, {IPackage, ILivePackage} from "./fragment-loader";
 import {DefaultCommandRestrict} from "../commands/command";
 
 export default class FragmentManager extends EventEmitter {
@@ -65,10 +65,17 @@ export default class FragmentManager extends EventEmitter {
 
     // TODO: Use .prepare instead of repeating-preparation step here
     public async enable(packg: IPackage, internal: boolean = false, overwrite: boolean = true): Promise<boolean> {
-        const mod: any = (packg.module as any).prototype;
+        const mod: IFragment = (packg.module as any).prototype;
 
         if (mod instanceof Command) {
             const command: Command = new (packg.module as any)();
+
+            // TODO: Repeated below, somehow merge for efficiency.
+            if (!FragmentLoader.validate(command)) {
+                Log.warn(`[FragmentManager.enable] Refusing to enable fragment with invalid name '${command.meta.name}'; Please note fragment names cannot contain spaces`);
+    
+                return false;
+            }
 
             // Command is not registered in internal commands
             if (internal && !this.bot.internalCommands.includes(command.meta.name)) {
@@ -100,12 +107,28 @@ export default class FragmentManager extends EventEmitter {
             }
         }
         else if (mod instanceof Service || mod instanceof ForkedService) {
-            const service: any = packg.module;
+            let service: Service | ForkedService | null = null;
 
-            await this.bot.services.register(new service({
-                bot: this.bot,
-                api: this.bot.getAPI()
-            }));
+            if (mod instanceof Service) {
+                service = new (packg.module as any)({
+                    bot: this.bot,
+                    api: this.bot.getAPI()
+                });
+            }
+            else {
+                service = new (packg.module as any);
+            }
+
+            service = service as Service | ForkedService;
+
+            // TODO: Repeated below, somehow merge for efficiency.
+            if (!FragmentLoader.validate(service)) {
+                Log.warn(`[FragmentManager.enable] Refusing to enable fragment with invalid name '${service.meta.name}'; Please note fragment names cannot contain spaces`);
+    
+                return false;
+            }
+
+            await this.bot.services.register(service);
 
             return true;
         }

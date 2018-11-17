@@ -1,13 +1,13 @@
 import Bot from "../core/bot";
 import Service, {IRawProcessMsg, ProcessMsgType, IProcessMsg, ForkedService} from "./service";
-import {Log, Utils, SMIS} from "..";
+import {Log, Utils, SMIS, GenericService} from "..";
 import {fork, ChildProcess} from "child_process";
 import fs from "fs";
 import path from "path";
 import {EventEmitter} from "events";
 
-export type IServiceMap = Map<string, Service>;
-export type IReadonlyServiceMap = ReadonlyMap<string, Service>;
+export type IServiceMap = Map<string, GenericService>;
+export type IReadonlyServiceMap = ReadonlyMap<string, GenericService>;
 
 // TODO: Emit events through bot instead
 export default class ServiceManager extends EventEmitter {
@@ -62,10 +62,10 @@ export default class ServiceManager extends EventEmitter {
     }
 
     /**
-     * @param {Service} service
+     * @param {GenericService} service
      * @return {boolean}
      */
-    public register(service: Service): boolean {
+    public register(service: GenericService): boolean {
         if (!service || typeof service !== "object" || Array.isArray(service)) {
             return false;
         }
@@ -80,10 +80,10 @@ export default class ServiceManager extends EventEmitter {
     }
 
     /**
-     * @param {Service[]} multipleServices
+     * @param {GenericService[]} multipleServices
      * @return {number}
      */
-    public registerMultiple(multipleServices: Service[]): number {
+    public registerMultiple(multipleServices: GenericService[]): number {
         let registered: number = 0;
 
         for (let i: number = 0; i < multipleServices.length; i++) {
@@ -104,7 +104,7 @@ export default class ServiceManager extends EventEmitter {
             return false;
         }
 
-        const service: Service | null = this.services.get(name) || null;
+        const service: GenericService | null = this.services.get(name) || null;
 
         if (typeof service !== "object") {
             Log.warn(`[ServiceManager.enable] Failed to enable service '${name}' because it is not an object`);
@@ -130,6 +130,7 @@ export default class ServiceManager extends EventEmitter {
                 await service.start();
             }
             else {
+                // TODO: CRITICAL: Should ignite by the service's ABS PATH! not the name, use similar technique as CommandStore (store packages).
                 if (!this.ignite(service.meta.name)) {
                     Log.warn(`[ServiceManager.enable] Failed to ignite forked service '${name}'`);
                 }
@@ -297,9 +298,9 @@ export default class ServiceManager extends EventEmitter {
 
     /**
      * @param {string} name
-     * @return {Readonly<Service> | null}
+     * @return {Readonly<GenericService> | null}
      */
-    public getService(name: string): Readonly<Service> | null {
+    public getService(name: string): Readonly<GenericService> | null {
         if (typeof name !== "string" || Utils.isEmpty(name) || Array.isArray(name)) {
             return null;
         }
@@ -322,6 +323,8 @@ export default class ServiceManager extends EventEmitter {
     public getAll(): IReadonlyServiceMap {
         return this.services as IReadonlyServiceMap;
     }
+
+    // TODO: .stop()
 
     public async stopAll(): Promise<number> {
         let stopped: number = this.services.size;

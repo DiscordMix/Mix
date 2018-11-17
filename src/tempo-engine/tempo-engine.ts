@@ -1,6 +1,6 @@
-import {IDisposable, Bot, Command, Log, CommandContext} from "..";
+import {IDisposable, Bot, Command, Log} from "..";
 import {EBotEvents} from "../core/bot";
-import {IReadonlyCommandMap, ICommandPackage} from "../commands/command-store";
+import {IReadonlyCommandMap} from "../commands/command-store";
 import fs from "fs";
 
 export default class TempoEngine implements IDisposable {
@@ -13,17 +13,17 @@ export default class TempoEngine implements IDisposable {
     private processInterval: NodeJS.Timeout | null;
     
     // TODO: Interval should be calculated based on amount of commands
-    public constructor(bot: Bot, interval: number = 30000, sizeThreshold: number = 102400) {
+    public constructor(bot: Bot, interval: number = 10*60*1, sizeThreshold: number = 102400) {
         this.bot = bot;
         this.commandsUsed = [];
         this.interval = interval;
         this.sizeThreshold = sizeThreshold;
 
-        if (this.interval < 60000) {
+        if (this.interval < 60*1000) {
             Log.warn("[TempoEngine] Interval lower than 1 minute is not suggested");
         }
-        else if (this.interval < 30000) {
-            this.interval = 30000;
+        else if (this.interval < 30*1000) {
+            this.interval = 30*1000;
             Log.warn("[TempoEngine] Interval lower than 30 seconds may be inefficient; Using 30 seconds as interval instead");
         }
 

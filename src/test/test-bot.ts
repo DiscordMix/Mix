@@ -12,6 +12,7 @@ import {EBotEvents, InternalArgTypes, InternalArgResolvers} from "../core/bot";
 import Language, {ILanguageSource} from "../language/language";
 import SwitchParser from "../commands/switch-parser";
 import path from "path";
+import {LogSerializer, ILogMsg} from "../serializers/serializer";
 
 // Test globals
 const globalAny: any = global;
@@ -534,6 +535,56 @@ describe("Pagination.previous()", () => {
         expect(pagination.currentPage).to.equal(3);
     });
 }); */
+
+describe("LogSerializer.serialize()", () => {
+    const serializer: LogSerializer = new LogSerializer();
+
+    it("should serialize log messages", () => {
+        expect(serializer.serialize({
+            message: "Hello world",
+
+            source: {
+                main: "World",
+                extra: "doe"
+            },
+
+            time: "Today"
+        })).to.be.a("string").and.to.equal("{Today} [World.doe] Hello world");
+
+        expect(serializer.serialize({
+            message: "{[Hello world]}",
+
+            source: {
+                main: "It's a",
+                extra: "[Doe's world]"
+            },
+
+            time: "{Tomorrow}"
+        })).to.be.a("string").and.to.equal("{{Tomorrow}} [It's a.[Doe's world]] {[Hello world]}");
+    });
+
+    it("should deserialize serialized log messages", () => {
+        const result: ILogMsg = serializer.deserialize("{Today} [Some.where] Hello world") as ILogMsg;
+
+        expect(result).to.be.an("object");
+        expect(result.message).to.be.a("string").and.to.equal("Hello world");
+        expect(result.source).to.be.an("object");
+        expect(result.source.main).to.be.an("string").and.to.equal("Some");
+        expect(result.source.extra).to.be.an("string").and.to.equal("where");
+        expect(result.time).to.be.a("string").and.to.equal("Today");
+    });
+
+    it("should deserialize serialized log messages with one source", () => {
+        const result: ILogMsg = serializer.deserialize("{Today} [Some] Hello world") as ILogMsg;
+
+        expect(result).to.be.an("object");
+        expect(result.message).to.be.a("string").and.to.equal("Hello world");
+        expect(result.source).to.be.an("object");
+        expect(result.source.main).to.be.an("string").and.to.equal("Some");
+        expect(result.source.extra).to.be.a("undefined");
+        expect(result.time).to.be.a("string").and.to.equal("Today");
+    });
+});
 
 // --------- BOT TESTS
 

@@ -1,3 +1,7 @@
+// Setup environment variables
+require("dotenv").config();
+
+// TODO: Not working
 export const DebugMode: boolean = process.env.FORGE_DEBUG_MODE == "true";
 
 import CommandParser from "../commands/command-parser";

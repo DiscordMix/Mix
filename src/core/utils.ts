@@ -68,7 +68,11 @@ export default class Utils {
      * @param {number} max The maximum amount
      * @return {number} The random number
      */
-    public static getRandomInt(min: number, max: number): number {
+    public static getRandomInt(min: number, max: number): number | null {
+        if (typeof min !== "number" || typeof max !== "number" || min > max || min === max) {
+            return null;
+        }
+
         return Math.floor(Math.random() * max) + min;
     }
 
@@ -119,6 +123,10 @@ export default class Utils {
      * @return {Array<*>} The shuffled array
      */
     public static shuffle(array: any[]): any[] {
+        if (!Array.isArray(array) || array.length === 0) {
+            return [];
+        }
+
         let counter: number = array.length;
 
         // While there are elements in the array

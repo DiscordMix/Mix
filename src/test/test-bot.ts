@@ -178,10 +178,26 @@ describe("Utils.timeAgo()", () => {
 
 describe("Utils.getRandomInt()", () => {
     it("should return a random number", () => {
-        const result = Utils.getRandomInt(0, 2);
+        const result: number | null = Utils.getRandomInt(0, 2);
 
         expect(result).to.be.an("number");
-        expect([0, 1]).to.include(result);
+        expect([0, 1]).to.include(result as number);
+    });
+
+    it("should return null when provided invalid arguments", () => {
+        expect(Utils.getRandomInt(0, 0)).to.be.a("null");
+        expect(Utils.getRandomInt(0, -1)).to.be.a("null");
+        expect(Utils.getRandomInt(50, 10)).to.be.a("null");
+        expect(Utils.getRandomInt("hello" as any, 3)).to.be.a("null");
+        expect(Utils.getRandomInt("" as any, 3)).to.be.a("null");
+        expect(Utils.getRandomInt(3, "hello" as any)).to.be.a("null");
+        expect(Utils.getRandomInt(3, "" as any)).to.be.a("null");
+        expect(Utils.getRandomInt(undefined as any, 3)).to.be.a("null");
+        expect(Utils.getRandomInt(3 as any, undefined as any)).to.be.a("null");
+        expect(Utils.getRandomInt(null as any, 3)).to.be.a("null");
+        expect(Utils.getRandomInt(3, null as any)).to.be.a("null");
+        expect(Utils.getRandomInt({} as any, 3)).to.be.a("null");
+        expect(Utils.getRandomInt(3, {} as any)).to.be.a("null");
     });
 });
 
@@ -213,6 +229,15 @@ describe("Utils.timeFromNow()", () => {
 describe("Utils.shuffle()", () => {
     it("should shuffle an array", () => {
         expect(Utils.shuffle(["hello", "my", "name", "is", "john doe"])).to.be.an("array").and.to.have.length(5);
+    });
+
+    it("should return an empty array when provided invalid arguments", () => {
+        expect(Utils.shuffle([])).to.be.an("array").and.to.have.length(0);
+        expect(Utils.shuffle(undefined as any)).to.be.an("array").and.to.have.length(0);
+        expect(Utils.shuffle(null as any)).to.be.an("array").and.to.have.length(0);
+        expect(Utils.shuffle("" as any)).to.be.an("array").and.to.have.length(0);
+        expect(Utils.shuffle("hello world" as any)).to.be.an("array").and.to.have.length(0);
+        expect(Utils.shuffle(3 as any)).to.be.an("array").and.to.have.length(0);
     });
 });
 

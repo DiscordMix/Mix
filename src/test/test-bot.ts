@@ -529,6 +529,18 @@ describe("LogSerializer.serialize()", () => {
         })).to.be.a("string").and.to.equal("{{Tomorrow}} [It's a.[Doe's world]] {[Hello world]}");
     });
 
+    it("should not serialize when provided invalid arguments", () => {
+        expect(serializer.serialize(null as any)).to.be.a("null");
+        expect(serializer.serialize(undefined as any)).to.be.a("null");
+        expect(serializer.serialize("" as any)).to.be.a("null");
+        expect(serializer.serialize("hello world" as any)).to.be.a("null");
+        expect(serializer.serialize(3 as any)).to.be.a("null");
+    });
+});
+
+describe("LogSerializer.deserialize()", () => {
+    const serializer: LogSerializer = new LogSerializer();
+    
     it("should deserialize serialized log messages", () => {
         const result: ILogMsg = serializer.deserialize("{Today} [Some.where] Hello world") as ILogMsg;
 
@@ -549,14 +561,6 @@ describe("LogSerializer.serialize()", () => {
         expect(result.source.main).to.be.an("string").and.to.equal("Some");
         expect(result.source.extra).to.be.a("undefined");
         expect(result.time).to.be.a("string").and.to.equal("Today");
-    });
-
-    it("should not serialize when provided invalid arguments", () => {
-        expect(serializer.serialize(null as any)).to.be.a("null");
-        expect(serializer.serialize(undefined as any)).to.be.a("null");
-        expect(serializer.serialize("" as any)).to.be.a("null");
-        expect(serializer.serialize("hello world" as any)).to.be.a("null");
-        expect(serializer.serialize(3 as any)).to.be.a("null");
     });
 });
 

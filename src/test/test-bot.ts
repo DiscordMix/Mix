@@ -12,7 +12,8 @@ import {EBotEvents, InternalArgTypes, InternalArgResolvers} from "../core/bot";
 import Language, {ILanguageSource} from "../language/language";
 import SwitchParser from "../commands/switch-parser";
 import path from "path";
-import {LogSerializer, ILogMsg} from "../serializers/serializer";
+import {ILogMsg} from "../serializers/serializer";
+import LogSerializer from "../serializers/log-serializer";
 
 // Test globals
 const globalAny: any = global;
@@ -549,6 +550,14 @@ describe("LogSerializer.serialize()", () => {
         expect(result.source.main).to.be.an("string").and.to.equal("Some");
         expect(result.source.extra).to.be.a("undefined");
         expect(result.time).to.be.a("string").and.to.equal("Today");
+    });
+
+    it("should not serialize when provided invalid arguments", () => {
+        expect(serializer.serialize(null as any)).to.be.a("null");
+        expect(serializer.serialize(undefined as any)).to.be.a("null");
+        expect(serializer.serialize("" as any)).to.be.a("null");
+        expect(serializer.serialize("hello world" as any)).to.be.a("null");
+        expect(serializer.serialize(3 as any)).to.be.a("null");
     });
 });
 

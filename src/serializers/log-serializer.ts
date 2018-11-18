@@ -1,6 +1,17 @@
-import {ISerializer, ILogMsg} from "./serializer";
+import {ISerializer} from "./serializer";
 
 const logMsgPattern: RegExp = /{([^}]+)} (?:\[([^\]]+)\.([^\]]+)\]|\[([^\]]+)\]) ([\S\s]+)$/gmi;
+
+export type ILogMsg = {
+    readonly source: ILogSource;
+    readonly message: string;
+    readonly time: string;
+}
+
+export type ILogSource = {
+    readonly main: string;
+    readonly extra?: string;
+}
 
 // TODO: Add support for custom patterns
 export default class LogSerializer implements ISerializer<ILogMsg> {

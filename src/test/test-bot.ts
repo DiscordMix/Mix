@@ -12,8 +12,7 @@ import {EBotEvents, InternalArgTypes, InternalArgResolvers} from "../core/bot";
 import Language, {ILanguageSource} from "../language/language";
 import SwitchParser from "../commands/switch-parser";
 import path from "path";
-import {ILogMsg} from "../serializers/serializer";
-import LogSerializer from "../serializers/log-serializer";
+import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
 
 // Test globals
 const globalAny: any = global;

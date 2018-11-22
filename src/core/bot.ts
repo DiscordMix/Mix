@@ -286,7 +286,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly commandHandler: CommandHandler;
     public readonly console: ConsoleInterface;
     public readonly prefixCommand: boolean;
-    public readonly internalCommands: string[];
+    public readonly internalCommands: InternalCommand[];
     public readonly userGroups: IUserGroup[];
     public readonly owner?: Snowflake;
     public readonly options: IBotExtraOptions;

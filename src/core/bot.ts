@@ -148,7 +148,7 @@ export type IBotOptions = {
     readonly settings: Settings;
     readonly dataStore?: DataProvider<any>;
     readonly prefixCommand?: boolean;
-    readonly internalCommands?: string[];
+    readonly internalCommands?: InternalCommand[];
     readonly userGroups?: IUserGroup[];
     readonly owner?: Snowflake;
     readonly options?: Partial<IBotExtraOptions>;
@@ -347,7 +347,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
             options = {
                 ...options,
-                internalCommands: ["help", "usage", "ping"],
+                internalCommands: [InternalCommand.Help, InternalCommand.Usage, InternalCommand.Ping],
                 languages: ["test-language"],
             };
         }

@@ -79,6 +79,36 @@ export default class MyCommand extends Command {
 }
 ```
 
+Command with arguments
+
+```ts
+import {Command, CommandContext, IFragmentMeta, IArgument, TrivialArgType} from "@cloudrex/forge"
+
+type IMyCommandArgs = {
+    readonly message: string;
+}
+
+export default class MyCommand extends Command<IMyCommandArgs> {
+    readonly meta: IFragmentMeta = {
+        name: "mycommand",
+        description: "Responds with hello world"
+    };
+
+    readonly arguments: IArgument[] = [
+        {
+            name: "message",
+            description: "The message to say",
+            required: true,
+            type: TrivialArgType.String
+        }
+    ];
+
+    public run(x: CommandContext, args: IMyCommandArgs): Promise<void> {
+        await x.ok(args.message);
+    }
+}
+```
+
 Service
 
 ```ts
@@ -172,6 +202,27 @@ export default class MyService extends Service {
 }
 ```
 
+Forked service
+
+```ts
+import {ForkedService, Log, IFragmentMeta} from "@cloudrex/forge"
+
+export default class MyService extends ForkedService {
+    readonly meta: IFragmentMeta = {
+        name: "myforkedservice",
+        description: "A template forked service"
+    };
+
+    public start(): void {
+        // Code here
+    }
+
+    public onMessage(msg: IProcessMsg, sender: any): IProcessMsg[] | IProcessMsg | void {
+        // Code on message from parent here
+    }
+}
+```
+
 Task
 
 ```ts
@@ -189,7 +240,7 @@ export default class MyTask extends Task {
 }
 ```
 
-Recurring Task
+Recurring task
 
 ```ts
 import {Task, Log} from "@cloudrex/forge"

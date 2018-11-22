@@ -234,6 +234,18 @@ export enum BotState {
     Connected
 }
 
+export enum InternalCommand {
+    CLI = "cli",
+    Eval = "eval",
+    Help = "help",
+    Ping = "ping",
+    Prefix = "prefix",
+    Reflect = "reflect",
+    Restart = "restart",
+    Throw = "throw",
+    Usage = "usage"
+}
+
 export type BotToken = string;
 
 /**
@@ -302,7 +314,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
     /**
      * Setup the bot from an object
-     * @param {Partial<IBotOptions>} botOptionsOrToken
+     * @param {Partial<IBotOptions> | BotToken} botOptionsOrToken
      * @param {boolean} [testMode=false]
      */
     public constructor(botOptionsOrToken: Partial<IBotOptions> | BotToken, testMode: boolean = false) {
@@ -443,17 +455,19 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
         /**
          * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded?
-         * @type {string[]}
+         * @type {InternalCommand[]}
          * @readonly
          */
         this.internalCommands = options.internalCommands || [
-            "help",
-            "usage",
-            "ping",
-            "prefix",
-            "cli",
-            "throw",
-            "eval"
+            InternalCommand.CLI,
+            InternalCommand.Eval,
+            InternalCommand.Help,
+            InternalCommand.Ping,
+            InternalCommand.Prefix,
+            InternalCommand.Reflect,
+            InternalCommand.Restart,
+            InternalCommand.Throw,
+            InternalCommand.Usage
         ];
 
         /**

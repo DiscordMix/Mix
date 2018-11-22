@@ -2,8 +2,8 @@ import {ChildProcess} from "child_process";
 import {EventEmitter} from "events";
 import {ProcessMsgType, IProcessMsg, Log} from "..";
 
-// Service Messages Interchange System
 /**
+ * Service Messages Interchange System
  * @extends EventEmitter
  */
 export default class SMIS extends EventEmitter {
@@ -12,6 +12,11 @@ export default class SMIS extends EventEmitter {
 
     private timeoutSource?: NodeJS.Timeout;
 
+    /**
+     * 
+     * @param {ChildProcess} child
+     * @param {number} [timeout=5000]
+     */
     public constructor(child: ChildProcess, timeout: number = 5000) {
         super();
 
@@ -28,6 +33,9 @@ export default class SMIS extends EventEmitter {
         });
     }
 
+    /**
+     * @return {Promise<boolean>}
+     */
     public async handshake(): Promise<boolean> {
         // Send the SMIS handshake to start the connection
         const response: IProcessMsg = await this.request(ProcessMsgType.SmisProtocolHandshake);
@@ -49,6 +57,11 @@ export default class SMIS extends EventEmitter {
         }
     }
 
+    /**
+     * @param {ProcessMsgType} type
+     * @param {undefined | *} msg
+     * @return {Promise<boolean>}
+     */
     public send(type: ProcessMsgType, msg?: any): Promise<boolean> {
         return new Promise((resolve) => {
             if (!this.child.connected) {
@@ -70,6 +83,11 @@ export default class SMIS extends EventEmitter {
         });
     }
 
+    /**
+     * @param {ProcessMsgType} type
+     * @param {undefined | *} data
+     * @return {Promise<ResponseDataType | null>}
+     */
     public request<ResponseDataType = any>(type: ProcessMsgType, data?: any): Promise<ResponseDataType | null> {
         return new Promise((resolve, reject) => {
             if (!this.send(type, data)) {

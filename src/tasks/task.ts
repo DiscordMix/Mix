@@ -1,8 +1,8 @@
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import Bot from "../core/bot";
-import {IDisposable} from "../core/structures";
+import {IDisposable, IVolatile, ISyncable} from "../core/structures";
 
-// TODO: Add DetachedTask class
+// TODO: Add ForkedTask class
 export default abstract class Task implements IFragment, IDisposable {
     public readonly abstract meta: IFragmentMeta;
     
@@ -39,6 +39,10 @@ export default abstract class Task implements IFragment, IDisposable {
         //
     }
 
+    public get persistent(): boolean {
+        return this instanceof PeristentTask;
+    }
+
     /**
      * @return {number}
      */
@@ -56,4 +60,10 @@ export default abstract class Task implements IFragment, IDisposable {
 
         return this.lastIteration + this.interval;
     }
+}
+
+// TODO: Implement mechanism to handle persistent tasks
+export abstract class PeristentTask extends Task implements IVolatile, ISyncable {
+    public abstract save(): void;
+    public abstract sync(): void;
 }

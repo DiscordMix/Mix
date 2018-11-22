@@ -268,9 +268,15 @@ type IHelloObject = {
     readonly message: string;
 }
 
+/**
+ * Would serialize:
+ * 
+ * hello world => { message: "world" }
+ * { message: "world" } => "hello world"
+ */
 export default class HelloSerializer extends ISerializer<IHelloObject> {
     public serialize(data: IHelloObject): string | null {
-        return data.message;
+        return `hello ${data.message}`;
     }
 
     public deserialize(serializedData: string): IHelloObject | null {

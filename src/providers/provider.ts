@@ -5,18 +5,18 @@ export type IProvider<ItemType> = {
      * Retrieve guild data
      * @abstract
      * @param {string} key
-     * @return {ItemType | null}
+     * @return {PromiseOr<ItemType | null>}
      */
-    get(key: string): ItemType | null;
+    get(key: string): PromiseOr<ItemType | null>;
 
     /**
      * Set guild data
      * @abstract
      * @param {string} key
      * @param {ItemType} value
-     * @return {boolean}
+     * @return {PromiseOr<boolean>}
      */
-    set(key: string, value: ItemType): boolean;
+    set(key: string, value: ItemType): PromiseOr<boolean>;
 
     /**
      * @param {string} key

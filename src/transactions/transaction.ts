@@ -12,7 +12,9 @@ export abstract class AutomatedTransaction<ItemType> implements ITransaction<Ite
 
     public abstract commit(): PromiseOr<boolean>;
     
-    public abstract get(key: string): ItemType | null;
+    public abstract get(key: string): PromiseOr<ItemType | null>;
 
-    public abstract set(key: string, value: ItemType): boolean;
+    public abstract set(key: string, value: ItemType): PromiseOr<boolean>;
+
+    public abstract has(key: string): PromiseOr<boolean>;
 }

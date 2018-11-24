@@ -13,6 +13,10 @@ export class GuildConfigMongoProvider implements IQueriableProvider<GuildConfig>
         this.x = collection;
     }
 
+    public has(key: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
     public find(query: Partial<GuildConfig>): Promise<GuildConfig[] | null> {
         return this.x.find(query).toArray();
     }

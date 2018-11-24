@@ -1,6 +1,6 @@
-type PromiseOr<Type> = Promise<Type> | Type;
+export type PromiseOr<Type> = Promise<Type> | Type;
 
-export type Provider<ItemType> = {
+export type IProvider<ItemType> = {
     /**
      * Retrieve guild data
      * @abstract
@@ -19,7 +19,7 @@ export type Provider<ItemType> = {
     set(key: string, value: ItemType): boolean;
 }
 
-export interface DuplexProvider<ItemType> extends Provider<ItemType> {
+export interface IDuplexProvider<ItemType> extends IProvider<ItemType> {
     /**
      * @param {string} key
      * @param {ItemType} value
@@ -33,7 +33,7 @@ export interface DuplexProvider<ItemType> extends Provider<ItemType> {
     delete(key: string): boolean;
 }
 
-export interface QueriableProvider<ItemType> extends Provider<ItemType> {
+export interface IQueriableProvider<ItemType> extends IProvider<ItemType> {
     /**
      * @param {Partial<ItemType>} query
      * @return {ItemType[] | null}

@@ -1,12 +1,11 @@
 import Log from "../core/log";
-import Bot from "../core/bot";
+import Bot, {InternalCommand} from "../core/bot";
 import Command, {GenericCommand} from "./command";
 import CommandContext from "./command-context";
 import {Snowflake} from "discord.js";
 import FragmentLoader, {IPackage, ILivePackage} from "../fragments/fragment-loader";
 import Utils from "../core/utils";
 import path from "path";
-import {Exception} from "handlebars";
 
 /**
  * @enum {number}
@@ -130,7 +129,7 @@ export default class CommandStore {
 
     public async release(name: string): Promise<boolean> {
         // Internal commands should not be released
-        if (this.bot.internalCommands.includes(name)) {
+        if (this.bot.internalCommands.includes(name as InternalCommand)) {
             return false;
         }
         else if (this.contains(name) && !this.isReleased(name)) {

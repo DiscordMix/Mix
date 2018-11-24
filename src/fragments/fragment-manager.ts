@@ -2,6 +2,7 @@ import {EventEmitter} from "events";
 import {Bot, Command, Log, Service, ForkedService, IFragment} from "..";
 import FragmentLoader, {IPackage, ILivePackage} from "./fragment-loader";
 import {DefaultCommandRestrict} from "../commands/command";
+import {InternalCommand} from "../core/bot";
 
 export default class FragmentManager extends EventEmitter {
     private readonly bot: Bot;
@@ -78,7 +79,7 @@ export default class FragmentManager extends EventEmitter {
             }
 
             // Command is not registered in internal commands
-            if (internal && !this.bot.internalCommands.includes(command.meta.name)) {
+            if (internal && !this.bot.internalCommands.includes(command.meta.name as InternalCommand)) {
                 return false;
             }
 

@@ -11,7 +11,6 @@ import CommandStore from "../commands/command-store";
 import Utils from "./utils";
 import Settings from "./settings";
 import Log from "./log";
-import DataProvider from "../data-providers/data-provider";
 import Temp from "./temp";
 import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
 import ServiceManager from "../services/service-manager";
@@ -26,7 +25,6 @@ import Command, {
     DefiniteArgument
 } from "../commands/command";
 
-import JsonProvider from "../data-providers/json-provider";
 import CommandHandler from "../commands/command-handler";
 import fs from "fs";
 import {performance} from "perf_hooks";
@@ -44,7 +42,7 @@ import {
 
 import StatCounter from "./stat-counter";
 import Patterns from "./patterns";
-import {IDisposable} from "./structures";
+import {IDisposable, ITimeoutAttachable} from "./structures";
 import ActionInterpreter from "../actions/action-interpreter";
 import TaskManager from "../tasks/task-manager";
 import {EventEmitter} from "events";
@@ -146,7 +144,6 @@ export const InternalArgTypes: ICustomArgType[] = [
 // TODO: Already made optional by Partial?
 export type IBotOptions = {
     readonly settings: Settings;
-    readonly dataStore?: DataProvider<any>;
     readonly prefixCommand?: boolean;
     readonly internalCommands?: InternalCommand[];
     readonly userGroups?: IUserGroup[];
@@ -277,10 +274,9 @@ export type BotToken = string;
 /**
  * @extends EventEmitter
  */
-export default class Bot<ApiType = any> extends EventEmitter implements IDisposable {
+export default class Bot<ApiType = any> extends EventEmitter implements IDisposable, ITimeoutAttachable {
     public readonly settings: Settings;
     public readonly temp: Temp;
-    public readonly dataStore?: DataProvider<any>;
     public readonly services: ServiceManager;
     public readonly commandStore: CommandStore;
     public readonly commandHandler: CommandHandler;
@@ -380,12 +376,6 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @readonly
          */
         this.temp = new Temp();
-
-        /**
-         * @type {DataProvider | undefined}
-         * @readonly
-         */
-        this.dataStore = options.dataStore;
 
         /**
          * @type {Discord.Client}
@@ -958,7 +948,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     public setInterval(action: any, time: number): NodeJS.Timeout {
-        const interval: NodeJS.Timeout = setInterval(action, time);
+        const interval: any = setInterval(action, time);
 
         this.intervals.push(interval);
 
@@ -1211,13 +1201,6 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         Log.verbose(`[Bot.disconnect] Stopped ${servicesStopped} service(s)`);
 
         await this.dispose();
-
-        // Save data before exiting
-        if (this.dataStore && this.dataStore instanceof JsonProvider) {
-            Log.verbose("[Bot.disconnect] Saving JsonProvider");
-            await this.dataStore.save();
-        }
-
         await this.client.destroy();
         (this.client as any) = new Client();
         Log.info("[Bot.disconnect] Disconnected");

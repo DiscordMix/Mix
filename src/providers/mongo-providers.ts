@@ -1,4 +1,4 @@
-import {QueriableProvider} from "./provider";
+import {IQueriableProvider} from "./provider";
 import {Snowflake} from "discord.js";
 import {Collection} from "mongodb";
 
@@ -6,7 +6,7 @@ export type GuildConfig = {
     readonly guildId: Snowflake;
 }
 
-export class GuildConfigMongoProvider implements QueriableProvider<GuildConfig> {
+export class GuildConfigMongoProvider implements IQueriableProvider<GuildConfig> {
     private readonly x: Collection;
 
     public constructor(collection: Collection) {

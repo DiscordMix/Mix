@@ -1,5 +1,3 @@
-import DataProvider from "../data-providers/data-provider";
-
 export default class ConfigBuilder {
     private readonly properties: any;
 
@@ -48,16 +46,6 @@ export default class ConfigBuilder {
      */
     public setArgumentTypes(argumentTypes: any): ConfigBuilder {
         this.properties.argumentTypes = argumentTypes;
-
-        return this;
-    }
-
-    /**
-     * @param {DataProvider} dataStore
-     * @return {ConfigBuilder}
-     */
-    public setDataStore(dataStore: DataProvider<any>): ConfigBuilder {
-        this.properties.dataStore = dataStore;
 
         return this;
     }

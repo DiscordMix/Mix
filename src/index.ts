@@ -31,11 +31,8 @@ import Utils from "./core/utils";
 import Permission from "./core/permission";
 import ChatEnvironment from "./core/chat-environment";
 import List from "./collections/collection";
-import DataProvider from "./data-providers/data-provider";
-import JsonProvider from "./data-providers/json-provider";
 import SetupHelper, {ISetupHelperResult} from "./core/setup-helper";
 import Service, {IServiceOptions, ForkedService, GenericService, ProcessMsgType, IProcessMsg} from "./services/service";
-import KnexTable from "./data-providers/knex-table";
 import {on, WeakCommand, IDecoratorCommand, SimpleCommand, DiscordEvent} from "./decorators/decorators";
 import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
@@ -108,10 +105,6 @@ export {
     ICommandWillExecuteEvent,
     ICommandExecutedEvent,
 
-    // Data Stores
-    DataProvider,
-    JsonProvider,
-
     // Setup Helper
     SetupHelper,
     ISetupHelperResult,
@@ -123,7 +116,6 @@ export {
     GenericService,
 
     // Misc
-    KnexTable,
     PaginatedMessage,
     ProcessMsgType,
     IProcessMsg,

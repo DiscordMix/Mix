@@ -103,11 +103,11 @@ export default class List<DataType> extends EventEmitter {
     }
 }
 
-export class GenericCollection<KeyType, ValueType> extends Map<KeyType, ValueType> {
+export class Collection<KeyType, ValueType> extends Map<KeyType, ValueType> {
     private cachedValueArray: ValueType[] | null;
     private cachedKeyArray: KeyType[] | null;
 
-    public constructor(iterable: any) {
+    public constructor(iterable?: any) {
         super(iterable);
 
         this.cachedValueArray = null;

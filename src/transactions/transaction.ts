@@ -1,16 +1,18 @@
 import {PromiseOr, IProvider} from "../providers/provider";
 import {ITimeoutAttachable} from "../core/structures";
 
-export interface ITransaction<ItemType> extends IProvider<ItemType> {
-    commit(): PromiseOr<boolean>;
+export interface ITransaction<ItemType, ReturnType = boolean> extends IProvider<ItemType> {
+    commit(): PromiseOr<ReturnType>;
 }
 
-export abstract class AutomatedTransaction<ItemType> implements ITransaction<ItemType> {
+export abstract class AutoTransaction<ItemType, CacheType = ItemType[], ReturnType = boolean> implements ITransaction<ItemType, ReturnType> {
+    protected abstract readonly cache: CacheType;
+
     protected constructor(attachable: ITimeoutAttachable, time: number) {
-        attachable.setInterval(this.commit, time);
+        attachable.setInterval(this.commit.bind(this), time);
     }
 
-    public abstract commit(): PromiseOr<boolean>;
+    public abstract commit(): PromiseOr<ReturnType>;
     
     public abstract get(key: string): PromiseOr<ItemType | null>;
 

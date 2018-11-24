@@ -29,15 +29,15 @@ export interface IDuplexProvider<ItemType> extends IProvider<ItemType> {
     /**
      * @param {string} key
      * @param {ItemType} value
-     * @return {boolean}
+     * @return {PromiseOr<boolean>}
      */
-    update(key: string, value: ItemType): boolean;
+    update(key: string, value: ItemType): PromiseOr<boolean>;
 
     /**
      * @param {string} key
-     * @return {boolean}
+     * @return {PromiseOr<boolean>}
      */
-    delete(key: string): boolean;
+    delete(key: string): PromiseOr<boolean>;
 }
 
 export interface IQueriableProvider<ItemType> extends IProvider<ItemType> {

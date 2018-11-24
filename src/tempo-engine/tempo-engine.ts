@@ -68,7 +68,7 @@ export default class TempoEngine implements IDisposable {
         let released: number = 0;
 
         for (let [name, command] of commands) {
-            if (!this.bot.internalCommands.includes(name) && !this.commandsUsed.includes(name) && !this.bot.commandStore.isReleased(name)) {
+            if (!this.bot.internalCommands.includes(name as any) && !this.commandsUsed.includes(name) && !this.bot.commandStore.isReleased(name)) {
                 if (await this.bot.commandStore.release(name)) {
                     released++;
                 }

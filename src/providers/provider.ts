@@ -1,3 +1,5 @@
+type PromiseOr<Type> = Promise<Type> | Type;
+
 export type Provider<ItemType> = {
     /**
      * Retrieve guild data
@@ -36,36 +38,36 @@ export interface QueriableProvider<ItemType> extends Provider<ItemType> {
      * @param {*} query
      * @return {ItemType[] | null}
      */
-    find(query: any): ItemType[] | null;
+    find(query: any): PromiseOr<ItemType[] | null>;
 
     /**
      * @param {*} query
      * @return {ItemType | null}
      */
-    findOne(query: any): ItemType | null;
+    findOne(query: any): PromiseOr<ItemType | null>;
 
     /**
      * @param {*} query
      * @param {number} value
      */
-    update(query: any, value: ItemType): number;
+    update(query: any, value: ItemType): PromiseOr<number>;
 
     /**
      * @param {*} query
      * @param {ItemType} value
      * @return {boolean}
      */
-    updateOne(query: any, value: ItemType): boolean;
+    updateOne(query: any, value: ItemType): PromiseOr<boolean>;
 
     /**
      * @param {*} query
      * @return {number}
      */
-    delete(query: any): number;
+    delete(query: any): PromiseOr<number>;
 
     /**
      * @param {*} query
      * @return {boolean}
      */
-    deleteOne(query: any): boolean;
+    deleteOne(query: any): PromiseOr<boolean>;
 }

@@ -35,39 +35,39 @@ export interface DuplexProvider<ItemType> extends Provider<ItemType> {
 
 export interface QueriableProvider<ItemType> extends Provider<ItemType> {
     /**
-     * @param {*} query
+     * @param {Partial<ItemType>} query
      * @return {ItemType[] | null}
      */
-    find(query: any): PromiseOr<ItemType[] | null>;
+    find(query: Partial<ItemType>): PromiseOr<ItemType[] | null>;
 
     /**
-     * @param {*} query
+     * @param {Partial<ItemType>} query
      * @return {ItemType | null}
      */
-    findOne(query: any): PromiseOr<ItemType | null>;
+    findOne(query: Partial<ItemType>): PromiseOr<ItemType | null>;
 
     /**
-     * @param {*} query
+     * @param {Partial<ItemType>} query
      * @param {number} value
      */
-    update(query: any, value: ItemType): PromiseOr<number>;
+    update(query: Partial<ItemType>, value: ItemType): PromiseOr<number>;
 
     /**
-     * @param {*} query
+     * @param {Partial<ItemType>} query
      * @param {ItemType} value
      * @return {boolean}
      */
-    updateOne(query: any, value: ItemType): PromiseOr<boolean>;
+    updateOne(query: Partial<ItemType>, value: ItemType): PromiseOr<boolean>;
 
     /**
-     * @param {*} query
+     * @param {Partial<ItemType>} query
      * @return {number}
      */
-    delete(query: any): PromiseOr<number>;
+    delete(query: Partial<ItemType>): PromiseOr<number>;
 
     /**
-     * @param {*} query
+     * @param {Partial<ItemType>} query
      * @return {boolean}
      */
-    deleteOne(query: any): PromiseOr<boolean>;
+    deleteOne(query: Partial<ItemType>): PromiseOr<boolean>;
 }

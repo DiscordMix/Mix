@@ -9,7 +9,7 @@ export default class UserSerializer<UserType = User> implements ISerializer<User
         this.source = source;
     }
 
-    public serialize(data: UserType): string | null {
+    public serialize(data: UserType): string {
         return data.toString();
     }
     

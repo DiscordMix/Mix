@@ -30,7 +30,8 @@ export type IUrl<ParametersType = any> = {
 }
 
 export default class UrlSerializer<ParametersType = any, UrlType extends IUrl = IUrl<ParametersType>> implements ISerializer<UrlType> {
-    public serialize(data: IUrl): string | null {
+    // TODO: Validate data object
+    public serialize(data: IUrl): string {
         let result: string = `${data.protocol}://${data.domain.subdomain ? data.domain.subdomain + "." : ""}${data.domain.name}${data.domain.extension}`;
 
         if (data.port !== undefined) {

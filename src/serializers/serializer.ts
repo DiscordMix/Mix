@@ -1,5 +1,5 @@
-export type ISerializer<DataType> = {
-    serialize(data: DataType): string | null;
+export type ISerializer<DataType, OutputType = string> = {
+    serialize(data: DataType): OutputType | null;
     
-    deserialize(serializedData: string): DataType | null;
+    deserialize(serializedData: OutputType): DataType | null;
 }

@@ -1,6 +1,6 @@
 import {IQueriableProvider} from "./provider";
 import {Snowflake} from "discord.js";
-import {Collection as MongoCollection, InsertWriteOpResult} from "mongodb";
+import {Collection as MongoCollection, DeleteWriteOpResultObject} from "mongodb";
 import {AutoTransaction} from "../transactions/transaction";
 import {Bot} from "..";
 import {Collection} from "../collections/collection";
@@ -10,13 +10,15 @@ export type GuildConfig = {
 }
 
 export class GuildConfigMongoProvider extends AutoTransaction<GuildConfig, Collection<Snowflake, GuildConfig>, number> implements IQueriableProvider<GuildConfig> {
+    public readonly cache: Collection<Snowflake, GuildConfig>;
+
     private readonly x: MongoCollection;
+    private readonly key: string;
 
-    protected readonly cache: Collection<Snowflake, GuildConfig>;
-
-    public constructor(bot: Bot, collection: MongoCollection) {
+    public constructor(bot: Bot, key: string, collection: MongoCollection) {
         super(bot, 10 * 1000);
 
+        this.key = key;
         this.cache = new Collection<Snowflake, GuildConfig>();
         this.x = collection;
     }
@@ -25,8 +27,14 @@ export class GuildConfigMongoProvider extends AutoTransaction<GuildConfig, Colle
         return (await this.x.insertMany(this.cache.array())).insertedCount;
     }
 
-    public has(key: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    public async has(key: string): Promise<boolean> {
+        if (this.cache.has(key)) {
+            return true;
+        }
+
+        return await this.x.count({
+            guildId: key
+        }) > 0;
     }
 
     public find(query: Partial<GuildConfig>): Promise<GuildConfig[] | null> {
@@ -37,27 +45,39 @@ export class GuildConfigMongoProvider extends AutoTransaction<GuildConfig, Colle
         return this.x.findOne(query);
     }
 
-    public update(query: Partial<GuildConfig>, value: GuildConfig): Promise<number> {
-        throw new Error("Method not implemented.");
+    public async update(query: Partial<GuildConfig>, value: GuildConfig): Promise<number> {
+        // TODO: Inspect result
+        return (await this.x.update(query, value)).result;
     }
     
-    public updateOne(query: Partial<GuildConfig>, value: GuildConfig): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    public async updateOne(query: Partial<GuildConfig>, value: GuildConfig): Promise<boolean> {
+        return (await this.x.updateOne(query, value)).upsertedCount > 0;
     }
 
-    public delete(query: Partial<GuildConfig>): Promise<number> {
-        throw new Error("Method not implemented.");
+    public async delete(query: Partial<GuildConfig>): Promise<number> {
+        return (await this.x.deleteMany(query)).deletedCount || 0;
     }
 
-    public deleteOne(query: Partial<GuildConfig>): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    public async deleteOne(query: Partial<GuildConfig>): Promise<boolean> {
+        const result: DeleteWriteOpResultObject = await this.x.deleteOne(query);
+
+        return result.deletedCount ? result.deletedCount > 0 : false;
     }
 
-    public get(key: string): GuildConfig | null {
-        throw new Error("Method not implemented.");
+    public async get(key: string): Promise<GuildConfig | null> {
+        if (this.cache.has(key)) {
+            return this.cache.get(key) || null;
+        }
+
+        // TODO: Add to cache
+        return (await this.x.findOne({
+            [this.key]: key
+        })).toArray();
     }
 
     public set(key: string, value: GuildConfig): boolean {
-        throw new Error("Method not implemented.");
+        this.cache.set(key, value);
+
+        return true;
     }
 }

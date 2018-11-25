@@ -5,8 +5,12 @@ export interface ITransaction<ItemType, ReturnType = boolean> extends IProvider<
     commit(): PromiseOr<ReturnType>;
 }
 
-export abstract class AutoTransaction<ItemType, CacheType = ItemType[], ReturnType = boolean> implements ITransaction<ItemType, ReturnType> {
-    protected abstract readonly cache: CacheType;
+export type ICachedTransaction<CacheType = any[]> = {
+    readonly cache: CacheType;
+}
+
+export abstract class AutoTransaction<ItemType, CacheType = ItemType[], ReturnType = boolean> implements ITransaction<ItemType, ReturnType>, ICachedTransaction<CacheType> {
+    public abstract readonly cache: CacheType;
 
     protected constructor(attachable: ITimeoutAttachable, time: number) {
         attachable.setInterval(this.commit.bind(this), time);

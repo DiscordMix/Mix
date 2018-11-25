@@ -47,6 +47,13 @@ import {IAction, ActionType} from "./actions/action";
 import ActionInterpreter, {IPaginatedActionArgs, IRequestActionArgs, IEmbedActionArgs, IPrivateMessageActionArgs, IMessageActionArgs} from "./actions/action-interpreter";
 import {IFragment, IFragmentMeta} from "./fragments/fragment";
 import SMIS from "./services/smis";
+import {ISerializer} from "./serializers/serializer";
+import LogSerializer, {ILogSource, ILogMsg} from "./serializers/log-serializer";
+import StateSerializer from "./serializers/state-serializer";
+import UrlSerializer from "./serializers/url-serializer";
+import UserSerializer from "./serializers/user-serializer";
+import {IProvider, PromiseOr, IDuplexProvider, IQueriableProvider} from "./providers/provider";
+import {GuildConfig, GuildConfigMongoProvider} from "./providers/mongo-providers";
 
 export {
     // Fragments
@@ -120,6 +127,9 @@ export {
     ProcessMsgType,
     IProcessMsg,
     SMIS,
+    ILogMsg,
+    ILogSource,
+    PromiseOr,
 
     // Structures
     IDisposable,
@@ -143,5 +153,21 @@ export {
     IRequestActionArgs,
     IPrivateMessageActionArgs,
     IEmbedActionArgs,
-    IMessageActionArgs
+    IMessageActionArgs,
+
+    // Serializers
+    ISerializer,
+    LogSerializer,
+    StateSerializer,
+    UrlSerializer,
+    UserSerializer,
+
+    // Providers
+    IProvider,
+    IDuplexProvider,
+    IQueriableProvider,
+
+    // Providers -> MongoDB
+    GuildConfig,
+    GuildConfigMongoProvider
 };

@@ -1,6 +1,8 @@
 import {IDbMessage} from "./generic-providers";
 import {Snowflake} from "discord.js";
 
+// TODO: Delete as new providers implemented
+
 export type IReadonlyProvider<ValueType, KeyType = string> = {
     get(key: KeyType): ValueType;
 }

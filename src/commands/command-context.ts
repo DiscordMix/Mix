@@ -2,6 +2,7 @@ import {Message, TextChannel, User, Snowflake, Guild, DMChannel, GroupDMChannel}
 import Bot from "../core/bot";
 import ResponseHelper from "../core/response-helper";
 import Utils from "../core/utils";
+import {ChannelType, ChannelType} from "../actions/action-interpreter";
 
 export type ICommandExecutionContextOptions = {
     readonly msg: Message;
@@ -95,7 +96,11 @@ export default class CommandContext<DataType = any, ChannelType = TextChannel | 
      * @param {number} [timeout=7500] The time to wait until automatic cancellation
      * @return {Promise<string | null>}
      */
-    public async request(message: string, from: Snowflake, timeout: number = 7500): Promise<string | null> {
+    public async createRequest(channel: TextChannel | DMChannel, message: string, from: Snowflake, timeout: number = 7500): Promise<string | null> {
+        if (channel.type !== ChannelType.DM && channel.type !== ChannelType.Text) {
+            throw new Error(`[CommandContext.createRequest] Epxecting channel '${channel.id}' to be either DMs or text-based`);
+        }
+
         return new Promise<string | null>(async (resolve) => {
             const responseTimeout: NodeJS.Timeout = this.bot.setTimeout(() => {
                 this.bot.client.removeListener("message", listener);
@@ -103,7 +108,7 @@ export default class CommandContext<DataType = any, ChannelType = TextChannel | 
             }, timeout);
     
             const listener: any = (msg: Message) => {
-                if (msg.author.id !== from || !msg.content || typeof msg.content !== "string" || msg.content.startsWith("|")) {
+                if (msg.author.id !== from || msg.channel.id !== channel.id || !msg.content || typeof msg.content !== "string" || msg.content.startsWith("|")) {
                     return;
                 }
     
@@ -112,7 +117,24 @@ export default class CommandContext<DataType = any, ChannelType = TextChannel | 
             };
     
             this.bot.client.on("message", listener);
-            await this.msg.channel.send(message);
+            await channel.send(message);
         });
+    }
+
+    /**
+     * @param {string} message
+     * @param {Promise<number | undefined>} timeout
+     */
+    public async request(message: string, timeout?: number): Promise<string | null> {
+        return this.createRequest(this.msg.channel as TextChannel | DMChannel, message, this.msg.author.id, timeout);
+    }
+
+    /**
+     * @param {string} message
+     * @param {number | undefined} timeout
+     * @return {Promise<string | null>}
+     */
+    public async requestDM(message: string, timeout?: number): Promise<string | null> {
+        return this.createRequest(await this.msg.author.createDM(), message, this.msg.author.id, timeout);
     }
 }

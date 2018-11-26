@@ -1,5 +1,11 @@
+/**
+ * Either a promise of the specified type or the specified type
+ */
 export type PromiseOr<Type> = Promise<Type> | Type;
 
+/**
+ * Provides functionality to interact with different data sources
+ */
 export type IProvider<ItemType> = {
     /**
      * Retrieve guild data
@@ -25,6 +31,9 @@ export type IProvider<ItemType> = {
     has(key: string): PromiseOr<boolean>;
 }
 
+/**
+ * Provides advanced data provider functionality
+ */
 export interface IDuplexProvider<ItemType> extends IProvider<ItemType> {
     /**
      * @param {string} key
@@ -40,6 +49,9 @@ export interface IDuplexProvider<ItemType> extends IProvider<ItemType> {
     delete(key: string): PromiseOr<boolean>;
 }
 
+/**
+ * Interface for queriable data providers
+ */
 export interface IQueriableProvider<ItemType> extends IProvider<ItemType> {
     /**
      * @param {Partial<ItemType>} query

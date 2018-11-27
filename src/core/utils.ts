@@ -13,6 +13,7 @@ import {
 import fs from "fs";
 import path from "path";
 import Patterns from "./patterns";
+import {Bot} from "..";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
@@ -61,6 +62,25 @@ export default class Utils {
             .replace("!", "")
             .replace("&", "")
             .replace("#", "");
+    }
+
+    // TODO: Needs testing
+    public static createTimedAction<ReturnType = any>(bot: Bot, action: () => ReturnType, timeout: number, timeoutResult: ReturnType | any): Promise<ReturnType> {
+        return new Promise(async (resolve) => {
+            // TODO: Is this required?
+            let stopFlag: boolean = false;
+
+            const timer: NodeJS.Timeout = bot.setTimeout(() => {
+                stopFlag = true;
+                resolve(timeoutResult);
+            }, timeout);
+
+            if (!stopFlag) {
+                bot.clearTimeout(timer);
+
+                return await action;
+            }
+        });
     }
 
     /**

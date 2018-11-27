@@ -10,19 +10,19 @@ export type IMessageEditOptions = {
 }
 
 export default class EditableMessage {
-    private readonly message: Message;
+    public readonly msg: Message;
 
     /**
      * @todo Verify param "message"'s type
-     * @param {Message | Message[]} message
+     * @param {Message | Message[]} msg
      */
-    public constructor(message: Message | Message[]) {
+    public constructor(msg: Message | Message[]) {
         // TODO: Hotfix
-        if (Array.isArray(message)) {
-            message = message[0];
+        if (Array.isArray(msg)) {
+            msg = msg[0];
         }
 
-        if (message.embeds.length === 0) {
+        if (msg.embeds.length === 0) {
             Log.error("[EditableMessage] Message parameter must contain embeds");
         }
 
@@ -31,7 +31,7 @@ export default class EditableMessage {
          * @private
          * @readonly
          */
-        this.message = message;
+        this.msg = msg;
     }
 
     /**
@@ -41,7 +41,7 @@ export default class EditableMessage {
      */
     public async edit(options: IMessageEditOptions): Promise<Message> {
         // TODO: Default values?
-        return this.message.edit("", new Discord.RichEmbed()
+        return this.msg.edit("", new Discord.RichEmbed()
             .setColor(options.color || "")
             .setDescription(options.message)
             .setAuthor(options.title, options.thumbnailUrl)

@@ -3,6 +3,7 @@ import Bot from "../core/bot";
 import ResponseHelper from "../core/response-helper";
 import Utils from "../core/utils";
 import {ChannelType} from "../actions/action-interpreter";
+import {EmojiMenu, Log, EditableMessage} from "..";
 
 export type ICommandExecutionContextOptions = {
     readonly msg: Message;
@@ -136,5 +137,40 @@ export default class CommandContext<DataType = any, ChannelType = TextChannel | 
      */
     public async requestDM(message: string, timeout?: number): Promise<string | null> {
         return this.createRequest(await this.msg.author.createDM(), message, this.msg.author.id, timeout);
+    }
+
+    /**
+     * @param message
+     * @param timeout
+     */
+    public async promptDM(message: string, timeout: number = 7500): Promise<boolean | null> {
+        const response: EditableMessage | null = await this.send(message);
+
+        if (!response) {
+            return false;
+        }
+
+        return await Utils.createTimedAction<Promise<boolean>>(this.bot, (): Promise<boolean> => {
+            return new Promise<boolean>((resolve) => {
+                new EmojiMenu(response.msg.id, this.msg.author.id, [
+                    {
+                        emoji: "white_check_mark",
+        
+                        clicked: () => {
+                            Log.debug("Check clicked!")
+                            resolve(true);
+                        }
+                    },
+                    {
+                        emoji: "regional_indicator_x",
+
+                        clicked: () => {
+                            Log.debug("X clicked!");
+                            resolve(false);
+                        }
+                    }
+                ]);
+            });
+        }, timeout, null);
     }
 }

@@ -15,6 +15,9 @@ export type IEmojiButton = {
     readonly add?: boolean;
 }
 
+/**
+ * @extends EventEmitter
+ */
 export default class EmojiMenu extends EventEmitter implements IDisposable {
     public readonly messageId: Snowflake;
     public readonly ownerId: Snowflake;
@@ -69,6 +72,10 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
         return this;
     }
 
+    /**
+     * @param {MessageReaction} reaction
+     * @param {User} user
+     */
     private async handleMessageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
             return;
@@ -89,6 +96,10 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
         }
     }
 
+    /**
+     * @param {MessageReaction} reaction
+     * @param {User} user
+     */
     private async handleMessageReactionRemove(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.message.id !== this.messageId) {
             return;
@@ -110,6 +121,7 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
     }
 
     /**
+     * @param {CommandContext} context
      * @return {Promise<this>}
      */
     public async attach(context: CommandContext): Promise<this> {

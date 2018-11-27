@@ -649,11 +649,11 @@ function randomStringX(length: number): string {
     return finalString;
 }
 
-// Tests
 beforeEach(async () => {
     await testBot.deleteLastMessage();
 });
 
+// Tests
 describe("bot", () => {
     it("should init and login", async () => {
         await init();

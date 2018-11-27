@@ -3,6 +3,9 @@ import {EBotEvents} from "../core/bot";
 import {IReadonlyCommandMap} from "../commands/command-store";
 import fs from "fs";
 
+/**
+ * Used in large bots for memory optimization
+ */
 export default class TempoEngine implements IDisposable {
     private readonly bot: Bot;
     private readonly interval: number;
@@ -30,10 +33,17 @@ export default class TempoEngine implements IDisposable {
         this.processInterval = null;
     }
 
+    /**
+     * @return {boolean}
+     */
     public get running(): boolean {
         return this.processInterval !== null;
     }
 
+    /**
+     * Start the engine
+     * @return {this}
+     */
     public start(): this {
         this.bot.on(EBotEvents.CommandExecuted, (command: Command) => {
             this.commandsUsed.push(command.meta.name);
@@ -62,6 +72,10 @@ export default class TempoEngine implements IDisposable {
         return this;
     }
 
+    /**
+     * Handle performance optimization iteration
+     * @return {Promise<number>}
+     */
     private async processTempo(): Promise<number> {
         const commands: IReadonlyCommandMap = this.bot.commandStore.getAll();
 
@@ -84,12 +98,19 @@ export default class TempoEngine implements IDisposable {
         return released;
     }
 
+    /**
+     * Stop the engine
+     * @return {this}
+     */
     public stop(): this {
         this.dispose();
 
         return this;
     }
 
+    /**
+     * Dispose allocated resources
+     */
     public dispose(): void {
         this.bot.removeListener(EBotEvents.CommandExecuted, this.start);
 

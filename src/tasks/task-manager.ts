@@ -3,6 +3,9 @@ import Task from "./task";
 import Log from "../core/log";
 import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
 
+/**
+ * Manages, triggers, and executes tasks
+ */
 export default class TaskManager {
     private readonly bot: Bot;
     private readonly tasks: Map<string, Task>;
@@ -49,6 +52,10 @@ export default class TaskManager {
         return true;
     }
 
+    /**
+     * @param {string} name
+     * @return {Task | null}
+     */
     public get(name: string): Task | null {
         if (Utils.isEmpty(name) || typeof name !== "string") {
             return null;

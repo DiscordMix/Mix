@@ -14,6 +14,9 @@ export type ILogSource = {
 }
 
 // TODO: Add support for custom patterns
+/**
+ * Serializes log messages from strings into objects and vise versa
+ */
 export default class LogSerializer implements ISerializer<ILogMsg> {
     public serialize(msg: ILogMsg): string | null {
         if (!msg || typeof msg !== "object" || Array.isArray(msg)) {

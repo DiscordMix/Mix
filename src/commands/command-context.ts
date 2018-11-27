@@ -1,8 +1,8 @@
-import {Message, TextChannel, User, Snowflake, Guild, DMChannel, GroupDMChannel} from "discord.js";
+import {Message, TextChannel, Snowflake, Guild, DMChannel, GroupDMChannel} from "discord.js";
 import Bot from "../core/bot";
 import ResponseHelper from "../core/response-helper";
 import Utils from "../core/utils";
-import {ChannelType, ChannelType} from "../actions/action-interpreter";
+import {ChannelType} from "../actions/action-interpreter";
 
 export type ICommandExecutionContextOptions = {
     readonly msg: Message;

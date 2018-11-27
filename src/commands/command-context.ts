@@ -84,7 +84,7 @@ export default class CommandContext<DataType = any, ChannelType = TextChannel | 
 
     /**
      * @param {string} message
-     * @return {Promise<Message | Message>}
+     * @return {Promise<Message | Message[]>}
      */
     public async privateReply(message: string): Promise<Message | Message[]> {
         return await this.msg.author.send(Utils.escapeText(message, this.bot.client.token));
@@ -125,6 +125,7 @@ export default class CommandContext<DataType = any, ChannelType = TextChannel | 
     /**
      * @param {string} message
      * @param {Promise<number | undefined>} timeout
+     * @return {Promise<string | null>}
      */
     public async request(message: string, timeout?: number): Promise<string | null> {
         return this.createRequest(this.msg.channel as TextChannel | DMChannel, message, this.msg.author.id, timeout);
@@ -140,8 +141,9 @@ export default class CommandContext<DataType = any, ChannelType = TextChannel | 
     }
 
     /**
-     * @param message
-     * @param timeout
+     * @param {string} message
+     * @param {number} [timeout=7500]
+     * @return {Promise<boolean | null>}
      */
     public async promptDM(message: string, timeout: number = 7500): Promise<boolean | null> {
         const response: EditableMessage | null = await this.send(message);

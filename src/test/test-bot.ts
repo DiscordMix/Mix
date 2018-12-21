@@ -62,35 +62,22 @@ const subjects = {
 
 describe("Utils.isEmpty()", () => {
     it ("should return whether the input is empty", () => {
-        const result1: boolean = Utils.isEmpty("");
-        const result2: boolean = Utils.isEmpty(undefined);
-        const result3: boolean = Utils.isEmpty("     ");
-        const result4: boolean = Utils.isEmpty("   hello world   ");
-        const result5: boolean = Utils.isEmpty(null);
-        const result6: boolean = Utils.isEmpty(0);
-        const result7: boolean = Utils.isEmpty(false);
-        const result8: boolean = Utils.isEmpty([]);
-        const result9: boolean = Utils.isEmpty(["hello"]);
-
-        expect(result1).to.equal(true);
-        expect(result2).to.equal(true);
-        expect(result3).to.equal(true);
-        expect(result4).to.equal(false);
-        expect(result5).to.equal(true);
-        expect(result6).to.equal(false);
-        expect(result7).to.equal(false);
-        expect(result8).to.equal(true);
-        expect(result9).to.equal(false);
+        expect(Utils.isEmpty("")).to.equal(true);
+        expect(Utils.isEmpty(undefined)).to.equal(true);
+        expect(Utils.isEmpty("     ")).to.equal(true);
+        expect(Utils.isEmpty("   hello world   ")).to.equal(false);
+        expect(Utils.isEmpty(null)).to.equal(true);
+        expect(Utils.isEmpty(0)).to.equal(false);
+        expect(Utils.isEmpty(false)).to.equal(false);
+        expect(Utils.isEmpty([])).to.equal(true);
+        expect(Utils.isEmpty(["hello"])).to.equal(false);
     });
 });
 
 describe("Utils.hasMentionPrefix()", () => {
     it ("should return whether the text provided start with a mention", () => {
-        const result1: boolean = Utils.hasMentionPrefix(`<@${subjects.ids[0]}> hello world`, subjects.ids[0]);
-        const result2: boolean = Utils.hasMentionPrefix(`hello world <@${subjects.ids[0]}>`, subjects.ids[0]);
-
-        expect(result1).to.equal(true);
-        expect(result2).to.equal(false);
+        expect(Utils.hasMentionPrefix(`<@${subjects.ids[0]}> hello world`, subjects.ids[0])).to.equal(true);
+        expect(Utils.hasMentionPrefix(`hello world <@${subjects.ids[0]}>`, subjects.ids[0])).to.equal(false);
     });
 
     it("should throw an error when provided invalid input", () => {
@@ -103,49 +90,29 @@ describe("Utils.hasMentionPrefix()", () => {
 
 describe("Utils.escapeText()", () => {
     it("should escape tokens", () => {
-        const result1: string = Utils.escapeText(subjects.token, subjects.token);
-        const result2: string = Utils.escapeText("hi world, hello world, john doe", "hello world");
-        const result3: string = Utils.escapeText(`hi world, ${subjects.token}, john doe`, "hello world");
-        const result4: string = Utils.escapeText(`hi world, ${subjects.token}, john doe, hello world, hi`, "hello world");
-
-        expect(result1).to.equal("[Token]");
-        expect(result2).to.equal("hi world, [Token], john doe");
-        expect(result3).to.equal("hi world, [Token], john doe");
-        expect(result4).to.equal("hi world, [Token], john doe, [Token], hi");
+        expect(Utils.escapeText(subjects.token, subjects.token)).to.equal("[Token]");
+        expect(Utils.escapeText("hi world, hello world, john doe", "hello world")).to.equal("hi world, [Token], john doe");
+        expect(Utils.escapeText(`hi world, ${subjects.token}, john doe`, "hello world")).to.equal("hi world, [Token], john doe");
+        expect(Utils.escapeText(`hi world, ${subjects.token}, john doe, hello world, hi`, "hello world")).to.equal("hi world, [Token], john doe, [Token], hi");
     });
 
     it("should escape IPv4s", () => {
-        const result1: string = Utils.escapeText("192.168.0.1", "empty");
-        const result2: string = Utils.escapeText("53.32.53.252", "empty");
-        const result3: string = Utils.escapeText("hello 192.168.0.1 world", "empty");
-
-        expect(result1).to.equal("[IPv4]");
-        expect(result2).to.equal("[IPv4]");
-        expect(result3).to.equal("hello [IPv4] world");
+        expect(Utils.escapeText("192.168.0.1", "empty")).to.equal("[IPv4]");
+        expect(Utils.escapeText("53.32.53.252", "empty")).to.equal("[IPv4]");
+        expect(Utils.escapeText("hello 192.168.0.1 world", "empty")).to.equal("hello [IPv4] world");
     });
 
     it("should escape mentions", () => {
-        const result1: string = Utils.escapeText("@everyone hello world", "empty");
-        const result2: string = Utils.escapeText("hello @everyone world", "empty");
-        const result3: string = Utils.escapeText("@here hello world", "empty");
-        const result4: string = Utils.escapeText("hello @here world", "empty");
-        const result5: string = Utils.escapeText("hello @here world @everyone john", "empty");
-        const result6: string = Utils.escapeText("@herehello @here world@everyonejohn", "empty");
-        const result7: string = Utils.escapeText(`hello ${subjects.ids[0]} world`, "empty");
-        const result8: string = Utils.escapeText(`hello ${subjects.ids[1]} world`, "empty");
-        const result9: string = Utils.escapeText(`hello ${subjects.ids[2]} world`, "empty");
-        const result10: string = Utils.escapeText(`hello ${subjects.ids[3]} world`, "empty");
-
-        expect(result1).to.equal("[Mention] hello world");
-        expect(result2).to.equal("hello [Mention] world");
-        expect(result3).to.equal("[Mention] hello world");
-        expect(result4).to.equal("hello [Mention] world");
-        expect(result5).to.equal("hello [Mention] world [Mention] john");
-        expect(result6).to.equal("[Mention]hello [Mention] world[Mention]john");
-        expect(result7).to.equal("hello [Mention] world");
-        expect(result8).to.equal("hello [Mention] world");
-        expect(result9).to.equal("hello [Mention] world");
-        expect(result10).to.equal(`hello ${subjects.ids[3]} world`);
+        expect(Utils.escapeText("@everyone hello world", "empty")).to.equal("[Mention] hello world");
+        expect(Utils.escapeText("hello @everyone world", "empty")).to.equal("hello [Mention] world");
+        expect(Utils.escapeText("@here hello world", "empty")).to.equal("[Mention] hello world");
+        expect(Utils.escapeText("hello @here world", "empty")).to.equal("hello [Mention] world");
+        expect(Utils.escapeText("hello @here world @everyone john", "empty")).to.equal("hello [Mention] world [Mention] john");
+        expect(Utils.escapeText("@herehello @here world@everyonejohn", "empty")).to.equal("[Mention]hello [Mention] world[Mention]john");
+        expect(Utils.escapeText(`hello ${subjects.ids[0]} world`, "empty")).to.equal("hello [Mention] world");
+        expect(Utils.escapeText(`hello ${subjects.ids[1]} world`, "empty")).to.equal("hello [Mention] world");
+        expect(Utils.escapeText(`hello ${subjects.ids[2]} world`, "empty")).to.equal("hello [Mention] world");
+        expect(Utils.escapeText(`hello ${subjects.ids[3]} world`, "empty")).to.equal(`hello ${subjects.ids[3]} world`);
     });
 
     it("should throw when provided invalid input", () => {
@@ -312,16 +279,8 @@ describe("Collection.addUnique()", () => {
 
 describe("Collection.contains()", () => {
     it("should determine whether the collection contains an item", () => {
-        const result1 = subjects.collection.contains("john doe");
-        const result2 = subjects.collection.contains("nope");
-
-        // Result 1
-        expect(result1).to.be.an("boolean");
-        expect(result1).to.equal(true);
-
-        // Result 2
-        expect(result2).to.be.an("boolean");
-        expect(result2).to.equal(false);
+        expect(subjects.collection.contains("john doe")).to.be.an("boolean").and.to.equal(true);
+        expect(subjects.collection.contains("nope")).to.be.an("boolean").and.to.equal(false);
     });
 });
 
@@ -347,35 +306,19 @@ describe("Settings.fromFile()", () => {
         settingsPromise.then((result: Settings) => {
             expect(result.general.prefixes).to.be.an("array");
             expect(result.general.prefixes[0]).to.equal("!");
-
-            expect(result.general.token).to.be.an("string");
-            expect(result.general.token).to.equal("my_secret_token");
-
-            expect(result.paths.commands).to.be.an("string");
-            expect(result.paths.commands).to.equal("./my_commands");
-
-            expect(result.paths.plugins).to.be.an("string");
-            expect(result.paths.plugins).to.equal("./my_plugins");
-
-            expect(result.keys.dbl).to.be.an("string");
-            expect(result.keys.dbl).to.equal("my_dbl_key");
-
-            expect(result.keys.bfd).to.be.an("string");
-            expect(result.keys.bfd).to.equal("my_bfd_key");
+            expect(result.general.token).to.be.an("string").and.to.equal("my_secret_token");
+            expect(result.paths.commands).to.be.an("string").and.to.equal("./my_commands");
+            expect(result.paths.plugins).to.be.an("string").and.to.equal("./my_plugins");
+            expect(result.keys.dbl).to.be.an("string").and.to.equal("my_dbl_key");
+            expect(result.keys.bfd).to.be.an("string").and.to.equal("my_bfd_key");
         });
 
         return settingsSecondPromise.then((result: Settings) => {
             expect(result.general.prefixes).to.be.an("array");
             expect(result.general.prefixes[0]).to.equal(".");
-
-            expect(result.general.token).to.be.an("string");
-            expect(result.general.token).to.equal("another_secret_token");
-
-            expect(result.paths.commands).to.be.an("string");
-            expect(result.paths.commands).to.equal("./commandStore");
-
-            expect(result.paths.plugins).to.be.an("string");
-            expect(result.paths.plugins).to.equal("./plugins");
+            expect(result.general.token).to.be.an("string").and.to.equal("another_secret_token");
+            expect(result.paths.commands).to.be.an("string").and.to.equal("./commandStore");
+            expect(result.paths.plugins).to.be.an("string").and.to.equal("./plugins");
         });
     });
 });
@@ -706,11 +649,11 @@ function randomStringX(length: number): string {
     return finalString;
 }
 
-// Tests
 beforeEach(async () => {
     await testBot.deleteLastMessage();
 });
 
+// Tests
 describe("bot", () => {
     it("should init and login", async () => {
         await init();

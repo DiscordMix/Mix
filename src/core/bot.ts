@@ -154,6 +154,8 @@ export type IBotOptions = {
     readonly languages?: string[];
 }
 
+export type Action<ReturnType = void> = () => ReturnType;
+
 export const DefaultBotEmojiOptions: IDefiniteBotEmojiOptions = {
     success: ":white_check_mark:",
     error: ":thinking:"
@@ -169,6 +171,9 @@ export type IDefiniteBotEmojiOptions = {
     readonly error: string;
 }
 
+/**
+ * Extra options used by the bot
+ */
 export type IBotExtraOptions = {
     readonly asciiTitle: boolean;
     readonly consoleInterface: boolean;
@@ -199,6 +204,9 @@ const DefaultBotOptions: IBotExtraOptions = {
     tempoEngine: false
 };
 
+/**
+ * Events fired by the bot
+ */
 export enum EBotEvents {
     SetupStart = "setupStart",
     LoadingInternalFragments = "loadInternalFragments",
@@ -223,6 +231,9 @@ export enum EBotEvents {
     CommandExecuted = "commandExecuted"
 }
 
+/**
+ * Possible states of the bot
+ */
 export enum BotState {
     Disconnected,
     Connecting,
@@ -271,6 +282,7 @@ export type BotToken = string;
  * - commandExecuted(CommandExecutedEvent, command result (any))
  */
 
+// TODO: Should emit an event when state changes
 /**
  * @extends EventEmitter
  */
@@ -496,16 +508,19 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         this.languages = options.languages;
 
         /**
+         * Whether the bot is suspended
          * @type {boolean}
          */
         this.suspended = false;
 
         /**
+         * Used for measuring interaction with the bot
          * @type {StatCounter}
          */
         this.statCounter = new StatCounter();
 
         /**
+         * A list of disposable objects
          * @type {IDisposable[]}
          * @private
          * @readonly
@@ -519,30 +534,35 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         this.actionInterpreter = new ActionInterpreter(this);
 
         /**
+         * Task manager for managing tasks
          * @type {TaskManager}
          * @readonly
          */
         this.tasks = new TaskManager(this);
 
         /**
+         * A list of attached timeouts
          * @type {NodeJS.Timeout[]}
          * @readonly
          */
         this.timeouts = [];
 
         /**
+         * A list of attached intervals
          * @type {NodeJS.Timeout[]}
          * @readonly
          */
         this.intervals = [];
 
         /**
+         * Optimization engine for large bots
          * @type {TempoEngine}
          * @readonly
          */
         this.tempoEngine = new TempoEngine(this);
 
         /**
+         * Fragment manager
          * @type {FragmentManager}
          * @readonly
          */
@@ -786,7 +806,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         }
         else if (this.suspended !== suspend) {
             (this.suspended as any) = suspend;
-            (this.state as any) = this.suspended ? BotState.Suspended : BotState.Connected;
+            this.setState(this.suspended ? BotState.Suspended : BotState.Connected);
         }
 
         return this;
@@ -816,7 +836,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             const took: number = Math.round(performance.now() - this.setupStart);
 
             Log.success(`[Bot.setupEvents] Ready | Took ${took}ms`);
-            (this.state as any) = BotState.Connected;
+            this.setState(BotState.Connected);
             this.emit(EBotEvents.Ready);
         });
 
@@ -847,6 +867,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     /**
+     * Directly trigger a command
      * @todo 'args' type on docs (here)
      * @param {string} base
      * @param {Message} referer
@@ -898,11 +919,11 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
     /**
      * Set a timeout
-     * @param {*} action
+     * @param {Action} action
      * @param {number} time
      * @return {NodeJS.Timeout}
      */
-    public setTimeout(action: any, time: number): NodeJS.Timeout {
+    public setTimeout(action: Action, time: number): NodeJS.Timeout {
         const timeout: NodeJS.Timeout = setTimeout(() => {
             action();
             this.clearTimeout(timeout);
@@ -947,6 +968,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         return cleared;
     }
 
+    /**
+     * @param {Action} action
+     * @param {number} time
+     */
     public setInterval(action: any, time: number): NodeJS.Timeout {
         const interval: any = setInterval(action, time);
 
@@ -955,6 +980,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         return interval;
     }
 
+    /**
+     * @param {NodeJS.Timeout} interval
+     * @return {boolean} Whether the interval was cleared
+     */
     public clearInterval(interval: NodeJS.Timeout): boolean {
         const index: number = this.timeouts.indexOf(interval);
 
@@ -968,6 +997,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         return false;
     }
 
+    /**
+     * Clear all attached intervals
+     * @return {number} The amount of cleared intervals
+     */
     public clearAllIntervals(): number {
         let cleared: number = 0;
 
@@ -981,12 +1014,12 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     /**
-     * @param {Message} message
+     * @param {Message} msg
      * @param {boolean} [edited=false] Whether the message was edited
      * @return {Promise<boolean>}
      */
-    public async handleMessage(message: Message, edited: boolean = false): Promise<boolean> {
-        if (Utils.isEmpty(message) || typeof message !== "object" || !(message instanceof Message) || Array.isArray(message)) {
+    public async handleMessage(msg: Message, edited: boolean = false): Promise<boolean> {
+        if (Utils.isEmpty(msg) || typeof msg !== "object" || !(msg instanceof Message) || Array.isArray(msg)) {
             return false;
         }
 
@@ -1001,11 +1034,11 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         if (this.options.logMessages) {
             const names: any = {};
 
-            if (message.channel.type === "text" && message.guild !== undefined) {
-                names.guild = message.guild.name;
-                names.channel = ` # ${(message.channel as TextChannel).name}`;
+            if (msg.channel.type === "text" && msg.guild !== undefined) {
+                names.guild = msg.guild.name;
+                names.channel = ` # ${(msg.channel as TextChannel).name}`;
             }
-            else if (message.channel.type === "dm" && message.guild === undefined) {
+            else if (msg.channel.type === "dm" && msg.guild === undefined) {
                 names.guild = "";
                 names.channel = "Direct Messages";
             }
@@ -1014,14 +1047,14 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
                 names.channel = " # Unknown";
             }
 
-            Log.info(`[${message.author.tag} @ ${names.guild}${names.channel}] ${Utils.cleanMessage(message)}${edited ? " [Edited]" : ""}`);
+            Log.info(`[${msg.author.tag} @ ${names.guild}${names.channel}] ${Utils.cleanMessage(msg)}${edited ? " [Edited]" : ""}`);
         }
 
         // TODO: Cannot do .startsWith with a prefix array
-        if ((!message.author.bot || (message.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(message.content, this.commandStore, this.settings.general.prefixes)) {
+        if ((!msg.author.bot || (msg.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.commandStore, this.settings.general.prefixes)) {
             if (this.options.allowCommandChain) {
                 // TODO: Might split values too
-                const rawChain: string[] = message.content.split("~");
+                const rawChain: string[] = msg.content.split("~");
 
                 // TODO: Should be bot option
                 const maxChainLength: number = 5;
@@ -1030,7 +1063,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
                 if (rawChain.length > maxChainLength) {
                     allowed = false;
-                    message.reply(`Maximum allowed chain length is ${maxChainLength} commands. Your commands were not executed.`);
+                    msg.reply(`Maximum allowed chain length is ${maxChainLength} commands. Your commands were not executed.`);
                 }
 
                 if (allowed) {
@@ -1038,33 +1071,33 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
                     // TODO: What if commandChecks is start and the bot tries to react twice or more?
                     for (let i: number = 0; i < chain.length; i++) {
-                        await this.handleCommandMessage(message, chain[i].trim(), this.argumentResolvers);
+                        await this.handleCommandMessage(msg, chain[i].trim(), this.argumentResolvers);
                     }
                 }
             }
             else {
-                await this.handleCommandMessage(message, message.content, this.argumentResolvers);
+                await this.handleCommandMessage(msg, msg.content, this.argumentResolvers);
             }
         }
         // TODO: ?prefix should also be chain-able
-        else if (!message.author.bot && message.content === "?prefix" && this.prefixCommand) {
-            await message.channel.send(new RichEmbed()
+        else if (!msg.author.bot && msg.content === "?prefix" && this.prefixCommand) {
+            await msg.channel.send(new RichEmbed()
                 .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
                 .setColor("GREEN"));
         }
         // TODO: There should be an option to disable this
         // TODO: Use embeds
         // TODO: Verify that it was done in the same environment and that the user still has perms
-        else if (!message.author.bot && message.content === "?undo") {
-            if (!this.commandHandler.undoMemory.has(message.author.id)) {
-                await message.reply("You haven't performed any undoable action");
+        else if (!msg.author.bot && msg.content === "?undo") {
+            if (!this.commandHandler.undoMemory.has(msg.author.id)) {
+                await msg.reply("You haven't performed any undoable action");
             }
-            else if (this.commandHandler.undoAction(message.author.id, message)) {
-                await message.reply("The action was successfully undone");
-                this.commandHandler.undoMemory.delete(message.author.id);
+            else if (this.commandHandler.undoAction(msg.author.id, msg)) {
+                await msg.reply("The action was successfully undone");
+                this.commandHandler.undoMemory.delete(msg.author.id);
             }
             else {
-                await message.reply("The action failed to be undone");
+                await msg.reply("The action failed to be undone");
             }
         }
 
@@ -1074,18 +1107,18 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     /**
-     * @param {Message} message
+     * @param {Message} msg
      * @return {CommandContext}
      */
-    private createCommandContext(message: Message): CommandContext {
+    private createCommandContext(msg: Message): CommandContext {
         return new CommandContext({
-            msg: message,
+            msg,
             // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
             bot: this,
 
             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
 
-            label: CommandParser.getCommandBase(message.content, this.settings.general.prefixes)
+            label: CommandParser.getCommandBase(msg.content, this.settings.general.prefixes)
         });
     }
 
@@ -1138,7 +1171,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @return {Promise<this>}
      */
     public async connect(api?: ApiType): Promise<this> {
-        (this.state as any) = BotState.Connecting;
+        this.setState(BotState.Connecting);
         await this.setup(api);
         Log.verbose("[Bot.connect] Starting");
 
@@ -1152,6 +1185,12 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
                 throw error;
             }
         });
+
+        return this;
+    }
+
+    private setState(state: BotState): this {
+        (this.state as any) = state;
 
         return this;
     }

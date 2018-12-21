@@ -1,3 +1,6 @@
+/**
+ * Allows conversion between two different data types
+ */
 export type ISerializer<DataType, OutputType = string> = {
     serialize(data: DataType): OutputType | null;
     

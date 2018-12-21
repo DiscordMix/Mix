@@ -9,6 +9,9 @@ export type GuildConfig = {
     readonly guildId: Snowflake;
 }
 
+/**
+ * Provides interface to easily interact with per-guild configuration
+ */
 export class GuildConfigMongoProvider extends AutoTransaction<GuildConfig, Collection<Snowflake, GuildConfig>, number> implements IQueriableProvider<GuildConfig> {
     private static readonly key: string = "guildId";
 

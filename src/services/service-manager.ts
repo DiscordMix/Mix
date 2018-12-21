@@ -1,5 +1,5 @@
 import Bot from "../core/bot";
-import Service, {IRawProcessMsg, ProcessMsgType, IProcessMsg, ForkedService} from "./service";
+import {IRawProcessMsg, ProcessMsgType, IProcessMsg} from "./service";
 import {Log, Utils, SMIS, GenericService} from "..";
 import {fork, ChildProcess} from "child_process";
 import fs from "fs";
@@ -10,6 +10,9 @@ export type IServiceMap = Map<string, GenericService>;
 export type IReadonlyServiceMap = ReadonlyMap<string, GenericService>;
 
 // TODO: Emit events through bot instead
+/**
+ * Manages service states
+ */
 export default class ServiceManager extends EventEmitter {
     public static heartbeatTimeout: number = 6000;
 

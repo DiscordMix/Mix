@@ -1,0 +1,3 @@
+[submodule "src/stdlib.rx"]
+	path = src/stdlib.rx
+	url = https://github.com/cloudrex/stdlib.rx.git

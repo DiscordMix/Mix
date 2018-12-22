@@ -49,7 +49,7 @@ export default class CliCommand extends Command<CliArgs> {
             embed.field("Output",
                 new FormattedMessage().codeBlock(Utils.escapeText(result, context.bot.client.token), "js").build()
             )
-            .color("#36393f");;
+            .color("#36393f");
 
             context.send(embed.build());
         });

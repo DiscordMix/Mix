@@ -8,11 +8,12 @@ import CommandContext from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect, assert} from "chai";
 import {LogLevel} from "..";
-import {EBotEvents, InternalArgTypes, InternalArgResolvers} from "../core/bot";
+import {EBotEvents} from "../core/bot";
 import Language, {ILanguageSource} from "../language/language";
 import SwitchParser from "../commands/switch-parser";
 import path from "path";
 import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
+import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
 
 // Test globals
 const globalAny: any = global;
@@ -710,7 +711,7 @@ describe("bot", () => {
     });
 
     it("should have default argument types", () => {
-        expect(testBot.argumentTypes).to.be.an("array").and.to.equal(InternalArgTypes);;
+        expect(testBot.argumentTypes).to.be.an("array").and.to.equal(InternalArgTypes);
     });
 
     it("should have default argument resolvers", () => {

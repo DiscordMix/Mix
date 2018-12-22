@@ -1,6 +1,6 @@
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import Bot from "../core/bot";
-import {IDisposable, IVolatile, ISyncable} from "../core/structures";
+import {IDisposable, IVolatile, ISyncable} from "../core/helpers";
 
 // TODO: Add ForkedTask class
 export default abstract class Task implements IFragment, IDisposable {

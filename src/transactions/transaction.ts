@@ -1,5 +1,5 @@
 import {PromiseOr, IProvider} from "../providers/provider";
-import {ITimeoutAttachable} from "../core/structures";
+import {ITimeoutAttachable} from "../core/helpers";
 
 export interface ITransaction<ItemType, ReturnType = boolean> extends IProvider<ItemType> {
     commit(): PromiseOr<ReturnType>;

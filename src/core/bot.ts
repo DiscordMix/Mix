@@ -12,17 +12,15 @@ import Utils from "./utils";
 import Settings from "./settings";
 import Log from "./log";
 import Temp from "./temp";
-import Discord, {Client, GuildMember, Message, RichEmbed, Role, Snowflake, TextChannel} from "discord.js";
+import Discord, {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
 import ServiceManager from "../services/service-manager";
 import axios from "axios";
 
 import Command, {
     IArgumentResolver,
     ICustomArgType,
-    InternalArgType,
     IRawArguments,
-    IUserGroup,
-    DefiniteArgument
+    IUserGroup
 } from "../commands/command";
 
 import CommandHandler from "../commands/command-handler";
@@ -41,105 +39,14 @@ import {
 } from "../decorators/decorators";
 
 import StatCounter from "./stat-counter";
-import Patterns from "./patterns";
-import {IDisposable, ITimeoutAttachable} from "./structures";
+import {IDisposable, ITimeoutAttachable} from "./helpers";
 import ActionInterpreter from "../actions/action-interpreter";
 import TaskManager from "../tasks/task-manager";
 import {EventEmitter} from "events";
 import TempoEngine from "../tempo-engine/tempo-engine";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
-
-const title: string =
-
-    "███████╗ ██████╗ ██████╗  ██████╗ ███████╗\n" +
-    "██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝\n" +
-    "█████╗  ██║   ██║██████╔╝██║  ███╗█████╗  \n" +
-    "██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝  \n" +
-    "██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗\n" +
-    "╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝ {version}";
-
-export const BasePath: string = path.resolve(path.join(".."));
-
-const internalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
-
-// TODO: Merge this resolvers with the (if provided) provided
-// ones by the user.
-export const InternalArgResolvers: IArgumentResolver[] = [
-    {
-        name: InternalArgType.Member,
-
-        resolve(arg: DefiniteArgument, message: Message): GuildMember | null {
-            const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg.toString()));
-
-            if (resolvedMember) {
-                return resolvedMember;
-            }
-
-            return null;
-        }
-    },
-    {
-        name: InternalArgType.Role,
-
-        resolve(arg: DefiniteArgument, message: Message): Role | null {
-            const resolvedRole: Role | undefined = message.guild.roles.get(Utils.resolveId(arg.toString()));
-
-            if (resolvedRole) {
-                return resolvedRole;
-            }
-
-            return null;
-        }
-    },
-    {
-        name: InternalArgType.State,
-
-        resolve(arg: DefiniteArgument): boolean {
-            return Utils.translateState(arg.toString());
-        }
-    },
-    {
-        name: InternalArgType.Snowflake,
-
-        resolve(arg: DefiniteArgument): Snowflake {
-            return Utils.resolveId(arg.toString());
-        }
-    }
-];
-
-// TODO: Message type and resolver
-export const InternalArgTypes: ICustomArgType[] = [
-    {
-        name: InternalArgType.Channel,
-
-        check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.channels.has(Utils.resolveId(arg));
-        }
-    },
-    {
-        name: InternalArgType.Member,
-
-        check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.member(Utils.resolveId(arg)) !== undefined;
-        }
-    },
-    {
-        name: InternalArgType.Role,
-
-        check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.roles.has(Utils.resolveId(arg));
-        }
-    },
-    {
-        name: InternalArgType.Snowflake,
-        check: Patterns.mentionOrSnowflake
-    },
-    {
-        name: InternalArgType.State,
-        check: Patterns.state
-    }
-];
+import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath} from "./constants";
 
 // TODO: Already made optional by Partial?
 export type IBotOptions = {
@@ -639,7 +546,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         this.emit(EBotEvents.SetupStart, api);
 
         if (this.options.asciiTitle) {
-            console.log("\n" + title.replace("{version}", "beta") + "\n");
+            console.log("\n" + Title.replace("{version}", "beta") + "\n");
         }
 
         if (DebugMode) {
@@ -670,7 +577,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         this.emit(EBotEvents.LoadingInternalFragments);
 
         // Load & enable internal fragments
-        const internalFragmentCandidates: string[] | null = await FragmentLoader.pickupCandidates(internalFragmentsPath);
+        const internalFragmentCandidates: string[] | null = await FragmentLoader.pickupCandidates(InternalFragmentsPath);
 
         if (!internalFragmentCandidates) {
             throw new Error("[Bot.setup] Failed to load internal fragments");

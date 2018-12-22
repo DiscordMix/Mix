@@ -10,7 +10,6 @@ export type IVolatile = {
 
 export type ITimeoutAttachable = {
     setTimeout(action: any, time: number): PromiseOr<NodeJS.Timeout>;
-
     setInterval(action: any, time: number): PromiseOr<NodeJS.Timeout>;
 }
 

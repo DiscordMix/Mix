@@ -37,7 +37,7 @@ import {on, WeakCommand, IDecoratorCommand, SimpleCommand, DiscordEvent} from ".
 import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
 import EmojiMenu, {IEmojiButton} from "./emoji-menu/emoji-menu";
-import {IDisposable} from "./core/structures";
+import {IDisposable} from "./core/helpers";
 import {ICommandExecutedEvent} from "./events/command-executed-event";
 import {ICommandWillExecuteEvent} from "./events/command-will-execute-event";
 import PaginatedMessage from "./pagination/paginated-message";

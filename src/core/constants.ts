@@ -1,7 +1,8 @@
 import path from "path";
-import {IArgumentResolver, InternalArgType, ICustomArgType, Patterns, Utils} from "..";
-import {DefiniteArgument} from "../commands/command";
+import {DefiniteArgument, IArgumentResolver, InternalArgType, ICustomArgType} from "../commands/command";
 import {Message, GuildMember, Role, Snowflake} from "discord.js";
+import Patterns from "./patterns";
+import Utils from "./utils";
 
 export const Title: string =
 

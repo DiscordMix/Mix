@@ -76,7 +76,6 @@ export default abstract class Service<ApiType = undefined | any> extends Generic
     }
 
     /**
-     * 
      * @param {DiscordEvent} event
      * @param {*} handler
      * @return {this}
@@ -94,6 +93,10 @@ export default abstract class Service<ApiType = undefined | any> extends Generic
         }
     }
 
+    /**
+     * Whether the service is running
+     * @return {boolean}
+     */
     public get running(): boolean {
         // TODO: This is just template-future-code (does NOT work!)
         // ... Need someway to check if the service is actually running (not just saved + stopped)
@@ -101,6 +104,9 @@ export default abstract class Service<ApiType = undefined | any> extends Generic
     }
 }
 
+/**
+ * @extends GenericService
+ */
 export abstract class ForkedService extends GenericService {
     public readonly useSMIS: boolean = false;
 

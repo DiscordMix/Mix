@@ -221,11 +221,11 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly fragments: FragmentManager;
     public readonly paths: PathResolver;
 
-    private api?: ApiType;
-    private setupStart: number = 0;
+    protected api?: ApiType;
+    protected setupStart: number = 0;
 
     // TODO: Implement stat counter
-    private readonly statCounter: StatCounter;
+    protected readonly statCounter: StatCounter;
 
     /**
      * Setup the bot from an object
@@ -542,7 +542,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @param {ApiType | undefined} api
      * @return {Promise<this>}
      */
-    private async setup(api?: ApiType): Promise<this> {
+    protected async setup(api?: ApiType): Promise<this> {
         this.emit(EBotEvents.SetupStart, api);
 
         if (this.options.asciiTitle) {

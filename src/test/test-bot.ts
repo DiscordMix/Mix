@@ -273,8 +273,8 @@ describe("Collection.add()", () => {
 
 describe("Collection.addUnique()", () => {
     it("should add an unique item", () => {
-        expect(subjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(true);;
-        expect(subjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(false);;
+        expect(subjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(true);
+        expect(subjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(false);
     });
 });
 
@@ -290,7 +290,7 @@ describe("Collection.find()", () => {
         const result: any = subjects.collection.find("name", "John Doe") as any;
 
         expect(result).to.be.an("object");
-        expect(result.name).to.be.an("string").and.to.equal("John Doe");;
+        expect(result.name).to.be.an("string").and.to.equal("John Doe");
     });
 });
 

@@ -149,7 +149,7 @@ export function command(options: string | PartialWeakCommand, description?: stri
 
             return;
         }
-        else if (typeof options === "object" && description !== undefined) {
+        else if (typeof options === "object" && options !== null && description !== undefined) {
             // TODO: Log command name (if it's there)
             Log.warn("[Decorators.command] Redundant description value");
         }

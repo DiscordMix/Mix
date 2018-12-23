@@ -1028,6 +1028,22 @@ describe("store", () => {
         });
     });
 
+    it("state should not be updated without payloads", () => {
+        expect(testBot.store.getState()).to.be.a("undefined");
+    });
+
+    it("should throw on invalid subscribe parameters", () => {
+        assert.throws(() => testBot.store.subscribe(1 as any));
+        assert.throws(() => testBot.store.subscribe(0 as any));
+        assert.throws(() => testBot.store.subscribe(false as any));
+        assert.throws(() => testBot.store.subscribe(true as any));
+        assert.throws(() => testBot.store.subscribe(null as any));
+        assert.throws(() => testBot.store.subscribe(undefined as any));
+        assert.throws(() => testBot.store.subscribe("hello" as any));
+        assert.throws(() => testBot.store.subscribe({} as any));
+        assert.throws(() => testBot.store.subscribe([] as any));
+    });
+
     it("should throw on invalid dispatch parameters", () => {
         assert.throws(() => testBot.store.dispatch("test" as any));
         assert.throws(() => testBot.store.dispatch(undefined as any));

@@ -240,7 +240,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public constructor(botOptionsOrToken: Partial<IBotOptions> | BotToken, testMode: boolean = false) {
         super();
 
-        let options: Partial<IBotOptions> = typeof botOptionsOrToken === "object" && !Array.isArray(botOptionsOrToken) ? Object.assign({}, botOptionsOrToken) : (typeof botOptionsOrToken === "string" ? {
+        let options: Partial<IBotOptions> = typeof botOptionsOrToken === "object" && botOptionsOrToken !== null && !Array.isArray(botOptionsOrToken) ? Object.assign({}, botOptionsOrToken) : (typeof botOptionsOrToken === "string" ? {
             settings: new Settings({
                 general: {
                     prefixes: ["!"],

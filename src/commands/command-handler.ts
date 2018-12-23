@@ -225,7 +225,7 @@ export default class CommandHandler {
             const result: any = rawResult instanceof Promise ? await rawResult : rawResult;
 
             // Actions
-            if (typeof result === "object") {
+            if (typeof result === "object" && result !== null) {
                 const actions: IAction<any> = result;
 
                 if (Array.isArray(actions)) {

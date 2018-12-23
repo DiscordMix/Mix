@@ -1,3 +1,5 @@
+import BotMessages from "../core/messages";
+
 export interface IStoreAction<T = any> {
     readonly type: StoreActionType;
     readonly payload?: T;
@@ -81,11 +83,11 @@ export default class Store {
 
     public dispatch<T = any>(actionOrType: IStoreAction | StoreActionType, payload?: T): this {
         // TODO: Also validate whether type (only) is defined
-        if (typeof actionOrType === "object" && payload !== undefined) {
-            throw new Error("[Store] Unexpected payload parameter when already provided full action object");
+        if (typeof actionOrType === "object" && actionOrType !== null && payload !== undefined) {
+            throw new Error(BotMessages.STORE_UNEXPECTED_PAYLOAD);
         }
         else if (typeof actionOrType !== "number" && typeof actionOrType !== "object") {
-            throw new Error("[Store] Expecting action parameter to be either an action object or an action type");
+            throw new Error(BotMessages.STORE_INVALID_ACTION);
         }
 
         const previousState: IState | undefined = this.state;
@@ -121,7 +123,10 @@ export default class Store {
     }
 
     public subscribe(handler: StoreActionHandler): boolean {
-        if (!this.isSubscribed(handler)) {
+        if (typeof handler !== "function") {
+            throw new Error(BotMessages.STORE_EXPECT_FUNC);
+        }
+        else if (!this.isSubscribed(handler)) {
             this.handlers.push(handler);
 
             return true;

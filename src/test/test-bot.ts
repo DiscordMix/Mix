@@ -14,7 +14,7 @@ import SwitchParser from "../commands/switch-parser";
 import path from "path";
 import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
 import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
-import {IStoreAction, StoreActionType, IStateCapsule, IState} from "../state/store";
+import {IStoreAction, StoreActionType, IStateCapsule, IState, Reducer} from "../state/store";
 import BotMessages from "../core/messages";
 
 // Test globals
@@ -1070,6 +1070,39 @@ describe("store", () => {
         expect(testBot.store.getState()).to.be.a("undefined");
     });
 
+    describe("addReducer()", () => {
+        const testReducer: Reducer = (state: IState | undefined, action: IStoreAction): IState | null => {
+            if (action.type === StoreActionType.$$Test && action.payload !== undefined && typeof action.payload === "string") {
+                return {
+                    ...state,
+                    $$test: action.payload
+                }
+            }
+
+            return null;
+        };
+
+        it("should add a valid reducer", () => {
+            expect(testBot.store.addReducer(testReducer)).to.be.a("boolean").and.to.equal(true);
+        });
+
+        it("should not add existing reducers", () => {
+            expect(testBot.store.addReducer(testReducer)).to.be.a("boolean").and.to.equal(false);
+        });
+
+        it("should throw when passed invalid reducers", () => {
+            assert.throws(() => testBot.store.addReducer(null as any), BotMessages.STORE_EXPECT_REDUCER_FUNC);
+            assert.throws(() => testBot.store.addReducer(undefined as any), BotMessages.STORE_EXPECT_REDUCER_FUNC);
+            assert.throws(() => testBot.store.addReducer([] as any), BotMessages.STORE_EXPECT_REDUCER_FUNC);
+            assert.throws(() => testBot.store.addReducer({} as any), BotMessages.STORE_EXPECT_REDUCER_FUNC);
+            assert.throws(() => testBot.store.addReducer("hello" as any), BotMessages.STORE_EXPECT_REDUCER_FUNC);
+            assert.throws(() => testBot.store.addReducer(0 as any), BotMessages.STORE_EXPECT_REDUCER_FUNC);
+            assert.throws(() => testBot.store.addReducer(1 as any), BotMessages.STORE_EXPECT_REDUCER_FUNC);
+            assert.throws(() => testBot.store.addReducer(true as any), BotMessages.STORE_EXPECT_REDUCER_FUNC);
+            assert.throws(() => testBot.store.addReducer(false as any), BotMessages.STORE_EXPECT_REDUCER_FUNC);
+        });
+    });
+
     describe("dispatch()", () => {
         it("should throw on invalid parameters", () => {
             assert.throws(() => testBot.store.dispatch("test" as any));
@@ -1081,6 +1114,22 @@ describe("store", () => {
     });
 
     describe("subscribe()", () => {
+        it("should subscribe handlers", () => {
+            return new Promise((resolve, reject) => {
+                expect(testBot.store.subscribe((action: IStoreAction) => {
+                    if (action.type === StoreActionType.$$Test) {
+                        resolve();
+
+                        return;
+                    }
+
+                    reject();
+                })).to.be.a("boolean").and.to.equal(true);
+
+                testBot.store.dispatch(StoreActionType.$$Test);
+            });
+        });
+        
         it("should throw on invalid parameters", () => {
             assert.throws(() => testBot.store.subscribe(1 as any));
             assert.throws(() => testBot.store.subscribe(0 as any));
@@ -1093,6 +1142,22 @@ describe("store", () => {
             assert.throws(() => testBot.store.subscribe([] as any));
         });
     });
+
+    describe("isSubscribed()", () => {
+        it("should determine if a handler is subscribed", () => {
+            // TODO
+        });
+
+        it("should throw on invalid parameters", () => {
+            assert.throws(() => testBot.store.isSubscribed(true as any), BotMessages.STORE_EXPECT_HANDLER_FUNC);
+            assert.throws(() => testBot.store.isSubscribed(false as any), BotMessages.STORE_EXPECT_HANDLER_FUNC);
+            assert.throws(() => testBot.store.isSubscribed([] as any), BotMessages.STORE_EXPECT_HANDLER_FUNC);
+            assert.throws(() => testBot.store.isSubscribed({} as any), BotMessages.STORE_EXPECT_HANDLER_FUNC);
+            assert.throws(() => testBot.store.isSubscribed("hello" as any), BotMessages.STORE_EXPECT_HANDLER_FUNC);
+            assert.throws(() => testBot.store.isSubscribed(1 as any), BotMessages.STORE_EXPECT_HANDLER_FUNC);
+            assert.throws(() => testBot.store.isSubscribed(0 as any), BotMessages.STORE_EXPECT_HANDLER_FUNC);
+        });
+    });
 });
 
 describe("time machine", () => {
@@ -1101,17 +1166,6 @@ describe("time machine", () => {
     });
 
     it("should record state changes", () => {
-        testBot.store.addReducer((state: IState | undefined, action: IStoreAction): IState | null => {
-            if (action.type === StoreActionType.$$Test && action.payload !== undefined && typeof action.payload === "string") {
-                return {
-                    ...state,
-                    $$test: action.payload
-                }
-            }
-
-            return null;
-        });
-
         testBot.store.dispatch<string>(StoreActionType.$$Test, "hello");
 
         const capsule: IStateCapsule = testBot.store.timeMachine.present() as IStateCapsule;

@@ -24,32 +24,57 @@ export interface IStateCapsule {
 
 export class TimeMachine {
     protected store: Store;
-    protected states: IStateCapsule[];
+    protected capsules: IStateCapsule[];
 
     public constructor(store: Store) {
         this.store = store;
 
-        this.states = [];
+        this.capsules = [];
         this.setup();
     }
 
     public wayback(): IStateCapsule | null {
-        return this.states[0] || null;
+        return this.capsules[0] || null;
     }
 
     public present(): IStateCapsule | null {
-        if (this.states.length > 0) {
-            return this.states[this.states.length - 1] || null;
+        if (this.capsules.length > 0) {
+            return this.capsules[this.capsules.length - 1] || null;
         }
 
         return null;
+    }
+
+    // TODO: It is way more efficient to use binary searched, with the capsule array being sorted by time. (before(), after())
+    public before(time: number): IStateCapsule[] {
+        const result: IStateCapsule[] = [];
+
+        for (const capsule of this.capsules) {
+            if (capsule.time < time) {
+                result.push(capsule);
+            }
+        }
+
+        return result;
+    }
+
+    public after(time: number): IStateCapsule[] {
+        const result: IStateCapsule[] = [];
+
+        for (const capsule of this.capsules) {
+            if (capsule.time > time) {
+                result.push(capsule);
+            }
+        }
+
+        return result;
     }
 
     protected setup(): void {
         const currentState: IState | undefined = this.store.getState();
 
         if (currentState !== undefined) {
-            this.states.push({
+            this.capsules.push({
                 state: currentState,
                 time: Date.now()
             });
@@ -57,7 +82,7 @@ export class TimeMachine {
 
         this.store.subscribe((action: IStoreAction, previousState: IState | undefined, newState: IState | undefined, changed: boolean) => {
             if (changed && newState !== undefined) {
-                this.states.push({
+                this.capsules.push({
                     state: newState,
                     time: Date.now()
                 });
@@ -124,7 +149,7 @@ export default class Store {
 
     public subscribe(handler: StoreActionHandler): boolean {
         if (typeof handler !== "function") {
-            throw new Error(BotMessages.STORE_EXPECT_FUNC);
+            throw new Error(BotMessages.STORE_EXPECT_HANDLER_FUNC);
         }
         else if (!this.isSubscribed(handler)) {
             this.handlers.push(handler);
@@ -152,11 +177,18 @@ export default class Store {
     }
 
     public isSubscribed(handler: StoreActionHandler): boolean {
+        if (typeof handler !== "function") {
+            throw new Error(BotMessages.STORE_EXPECT_HANDLER_FUNC);
+        }
+
         return this.handlers.includes(handler);
     }
 
     public addReducer(reducer: Reducer): boolean {
-        if (!this.reducers.includes(reducer)) {
+        if (typeof reducer !== "function") {
+            throw new Error(BotMessages.STORE_EXPECT_REDUCER_FUNC);
+        }
+        else if (!this.reducers.includes(reducer)) {
             this.reducers.push(reducer);
 
             return true;

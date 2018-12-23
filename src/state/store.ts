@@ -4,14 +4,14 @@ export interface IStoreAction<T = any> {
 }
 
 export interface IState {
-    //
+    readonly $$test: string;
 }
 
 export enum StoreActionType {
-    Test = -1
+    $$Test = -1
 }
 
-export type Reducer = (action: IStoreAction) => IState | null;
+export type Reducer = (state: IState | undefined, action: IStoreAction) => IState | null;
 
 export type StoreActionHandler = (action: IStoreAction, previousState: IState | undefined, newState: IState | undefined, changed: boolean) => void;
 
@@ -79,7 +79,7 @@ export default class Store {
         this.timeMachine = new TimeMachine(this);
     }
 
-    public dispatch(actionOrType: IStoreAction | StoreActionType, payload?: any): this {
+    public dispatch<T = any>(actionOrType: IStoreAction | StoreActionType, payload?: T): this {
         // TODO: Also validate whether type (only) is defined
         if (typeof actionOrType === "object" && payload !== undefined) {
             throw new Error("[Store] Unexpected payload parameter when already provided full action object");
@@ -98,7 +98,7 @@ export default class Store {
         let changed: boolean = false;
 
         for (const reducer of this.reducers) {
-            const result: IState | null = reducer(action);
+            const result: IState | null = reducer(this.state, action);
 
             if (result === undefined) {
                 throw new Error("[Store] Reducer must return a state, otherwise return null to indicate no changes");
@@ -148,5 +148,15 @@ export default class Store {
 
     public isSubscribed(handler: StoreActionHandler): boolean {
         return this.handlers.includes(handler);
+    }
+
+    public addReducer(reducer: Reducer): boolean {
+        if (!this.reducers.includes(reducer)) {
+            this.reducers.push(reducer);
+
+            return true;
+        }
+
+        return false;
     }
 }

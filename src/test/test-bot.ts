@@ -1,7 +1,7 @@
 // Environment variables
 require("dotenv").config();
 
-import {Bot, Log, Task, Rgb, Rgba, List, Utils} from "..";
+import {Bot, Log, Task, Rgb, Rgba, List, Utils, ActionType} from "..";
 import Settings from "../core/settings";
 import {Snowflake, Guild, TextChannel, Message} from "discord.js";
 import CommandContext from "../commands/command-context";
@@ -14,7 +14,7 @@ import SwitchParser from "../commands/switch-parser";
 import path from "path";
 import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
 import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
-import {IStoreAction, StoreActionType} from "../state/store";
+import {IStoreAction, StoreActionType, IStateCapsule, IState} from "../state/store";
 import BotMessages from "../core/messages";
 
 // Test globals
@@ -1020,11 +1020,11 @@ describe("store", () => {
     it("should dispatch events", () => {
         return new Promise((resolve) => {
             testBot.store.subscribe((action: IStoreAction): void => {
-                expect(action.type).to.equal(StoreActionType.Test);
+                expect(action.type).to.equal(StoreActionType.$$Test);
                 resolve();
             });
 
-            testBot.store.dispatch(StoreActionType.Test);
+            testBot.store.dispatch(StoreActionType.$$Test);
         });
     });
 
@@ -1034,6 +1034,35 @@ describe("store", () => {
         assert.throws(() => testBot.store.dispatch(null as any));
         assert.throws(() => testBot.store.dispatch(false as any));
         assert.throws(() => testBot.store.dispatch(true as any));
+    });
+});
+
+describe("time machine", () => {
+    it("should have no initial state recorded", () => {
+        expect(testBot.store.timeMachine.present()).to.be.a("null");
+    });
+
+    it("should record state changes", () => {
+        testBot.store.addReducer((state: IState | undefined, action: IStoreAction): IState | null => {
+            if (action.type === StoreActionType.$$Test && action.payload !== undefined && typeof action.payload === "string") {
+                return {
+                    ...state,
+                    $$test: action.payload
+                }
+            }
+
+            return null;
+        });
+
+        testBot.store.dispatch<string>(StoreActionType.$$Test, "hello");
+
+        const capsule: IStateCapsule = testBot.store.timeMachine.present() as IStateCapsule;
+
+        expect(capsule).to.be.an("object");
+        expect(capsule.time).to.be.a("number");
+        expect(capsule.state).to.be.an("object");
+        expect(capsule.state.$$test).to.be.a("string");
+        expect(capsule.state.$$test).to.equal("hello");
     });
 });
 

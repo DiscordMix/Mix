@@ -1,5 +1,6 @@
 import {Command} from "../../..";
 import {RestrictGroup} from "../../../commands/command";
+import BotMessages from "../../../core/messages";
 
 /**
  * @extends Command
@@ -15,6 +16,6 @@ export default class ThrowCommand extends Command {
     };
 
     public async executed(): Promise<void> {
-        throw new Error("Intentionally thrown error");
+        throw new Error(BotMessages.INTENTIONAL_ERROR);
     }
 };

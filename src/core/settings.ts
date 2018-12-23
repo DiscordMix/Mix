@@ -1,6 +1,7 @@
 import Log from "./log";
 import Utils from "./utils";
 import fs from "fs";
+import BotMessages from "./messages";
 
 export type ISettingsGeneral = {
     readonly token: string;
@@ -36,7 +37,7 @@ export default class Settings {
      */
     public constructor(options: Partial<ISettingsOptions>) {
         if (!options.general) {
-            throw new Error("[Settings] Expecting general settings");
+            throw new Error(BotMessages.CFG_EXPECT_GENERAL);
         }
 
         /**
@@ -73,7 +74,7 @@ export default class Settings {
      */
     public static async fromFile(path: string): Promise<Settings> {
         if (!fs.existsSync(path)) {
-            Log.throw("[Settings.fromFile] Could not load settings: File does not exist");
+            Log.throw(BotMessages.CFG_FILE_NO_EXIST);
         }
 
         const fileSettings: ISettingsOptions = await Utils.readJson(path);

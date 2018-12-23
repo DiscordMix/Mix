@@ -14,6 +14,8 @@ import SwitchParser from "../commands/switch-parser";
 import path from "path";
 import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
 import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
+import {IStoreAction, StoreActionType} from "../state/store";
+import BotMessages from "../core/messages";
 
 // Test globals
 const globalAny: any = global;
@@ -517,13 +519,13 @@ const testGuildChannelId: Snowflake = process.env.TEST_CHANNEL_ID as Snowflake;
 // TODO: The Tempo Engine's interval isn't getting cleared at bot.dispose() (on shutdown) therefore leaving tests hanging. Hotfixed by disabling tempo engine in tests.
 
 if (!token) {
-    throw new Error("Expecting test token");
+    throw new Error(BotMessages.TEST_EXPECT_TOKEN);
 }
 else if (!testGuildId) {
-    throw new Error("Expecting test guild's id");
+    throw new Error(BotMessages.TEST_EXPECT_GUILD);
 }
 else if (!testGuildChannelId) {
-    throw new Error("Expecting test guild's channel");
+    throw new Error(BotMessages.TEST_EXPECT_CHANNEL);
 }
 
 Log.level = LogLevel.None;
@@ -610,19 +612,19 @@ async function init(): Promise<void> {
 
         // Retrieve test guild and channel
         if (!testBot.client.guilds.has(testGuildId)) {
-            throw new Error("Bot is not in the test guild");
+            throw new Error(BotMessages.TEST_NO_GUILD);
         }
 
         const testGuild: Guild = testBot.client.guilds.get(testGuildId) as Guild;
 
         if (!testGuild.channels.has(testGuildChannelId)) {
-            throw new Error("Test guild does not have test channel");
+            throw new Error(BotMessages.TEST_CHANNEL_NO_EXIST);
         }
 
         const testChannel: TextChannel = testGuild.channels.get(testGuildChannelId) as TextChannel;
 
         if (testChannel.type !== "text") {
-            throw new Error("Test channel is not a text channel");
+            throw new Error(BotMessages.TEST_CHANNEL_NOT_TEXT);
         }
 
         // Set channels
@@ -1007,6 +1009,31 @@ describe("long messages", () => {
         expect(message.embeds[0]).to.be.an("object");
         expect(message.embeds[0].color).to.be.a("number").and.to.equal(3066993); // Green
         expect(message.embeds[0].description).to.be.a("string").and.to.equal(":white_check_mark: " + randomStr.substring(0, 1024 - 19 - 4) + " ...");
+    });
+});
+
+describe("store", () => {
+    it("should have undefined initial state", () => {
+        expect(testBot.store.getState()).to.be.a("undefined");
+    });
+
+    it("should dispatch events", () => {
+        return new Promise((resolve) => {
+            testBot.store.subscribe((action: IStoreAction): void => {
+                expect(action.type).to.equal(StoreActionType.Test);
+                resolve();
+            });
+
+            testBot.store.dispatch(StoreActionType.Test);
+        });
+    });
+
+    it("should throw on invalid dispatch parameters", () => {
+        assert.throws(() => testBot.store.dispatch("test" as any));
+        assert.throws(() => testBot.store.dispatch(undefined as any));
+        assert.throws(() => testBot.store.dispatch(null as any));
+        assert.throws(() => testBot.store.dispatch(false as any));
+        assert.throws(() => testBot.store.dispatch(true as any));
     });
 });
 

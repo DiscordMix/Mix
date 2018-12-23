@@ -1,6 +1,7 @@
 import Utils from "../core/utils";
 import path from "path";
 import fs from "fs";
+import BotMessages from "../core/messages";
 
 export type ILanguageSource = Map<string, any>;
 
@@ -62,7 +63,7 @@ export default class Language {
             return null;
         }
         else if (!this.default) {
-            throw new Error("[Language.get] No language source has been set as default");
+            throw new Error(BotMessages.LANG_NO_DEFAULT);
         }
 
         return this.default[key] || null;
@@ -74,10 +75,10 @@ export default class Language {
      */
     public async load(name: string): Promise<this> {
         if (!this.directory) {
-            throw new Error("[Language.load] No base directory has been specified");
+            throw new Error(BotMessages.LANG_NO_BASE_DIR);
         }
         else if (!fs.existsSync(this.directory)) {
-            throw new Error("[Language.load] Base directory no longer exists");
+            throw new Error(BotMessages.LANG_BASE_DIR_NO_EXIST);
         }
 
         const filePath: string = path.resolve(path.join(this.directory, `${name}.json`));

@@ -4,6 +4,7 @@ import ResponseHelper from "../core/response-helper";
 import Utils from "../core/utils";
 import {ChannelType} from "../actions/action-interpreter";
 import {EmojiMenu, Log, EditableMessage} from "..";
+import BotMessages from "../core/messages";
 
 export type ICommandExecutionContextOptions = {
     readonly msg: Message;
@@ -23,7 +24,7 @@ export default class CommandContext<DataType = any, ChannelType = TextChannel | 
      */
     public constructor(options: ICommandExecutionContextOptions) {
         if (options.msg.channel.type !== "text") {
-            throw new Error("[CommandContext] Expecting message's channel to be a text channel");
+            throw new Error(BotMessages.CONTEXT_EXPECT_TEXT_CHANNEL);
         }
 
         super(options.msg.channel as TextChannel, options.bot, options.msg.author);

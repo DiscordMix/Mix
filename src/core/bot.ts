@@ -47,6 +47,8 @@ import TempoEngine from "../tempo-engine/tempo-engine";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
 import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath} from "./constants";
+import Store, {IState, Reducer} from "../state/store";
+import BotMessages from "./messages";
 
 // TODO: Already made optional by Partial?
 export type IBotOptions = {
@@ -59,6 +61,8 @@ export type IBotOptions = {
     readonly argumentResolvers?: IArgumentResolver[];
     readonly argumentTypes?: ICustomArgType[];
     readonly languages?: string[];
+    readonly initialState?: IState;
+    readonly reducers?: Reducer[];
 }
 
 export type Action<ReturnType = void> = () => ReturnType;
@@ -93,7 +97,7 @@ export type IBotExtraOptions = {
     readonly logMessages: boolean;
     readonly dmHelp: boolean;
     readonly emojis: IDefiniteBotEmojiOptions;
-    readonly tempoEngine: boolean;
+    readonly optimizer: boolean;
 }
 
 const DefaultBotOptions: IBotExtraOptions = {
@@ -108,7 +112,7 @@ const DefaultBotOptions: IBotExtraOptions = {
     logMessages: false,
     emojis: DefaultBotEmojiOptions,
     consoleInterface: true,
-    tempoEngine: false
+    optimizer: false
 };
 
 /**
@@ -220,6 +224,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly tempoEngine: TempoEngine;
     public readonly fragments: FragmentManager;
     public readonly paths: PathResolver;
+    public readonly store: Store;
 
     protected api?: ApiType;
     protected setupStart: number = 0;
@@ -268,8 +273,14 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         }
 
         if (!options || !options.settings || typeof options.settings !== "object") {
-            throw new Error("[Bot] Missing or invalid settings options");
+            throw new Error(BotMessages.SETUP_INVALID);
         }
+
+        /**
+         * @type {Store}
+         * @readonly
+         */
+        this.store = new Store(options.initialState, options.reducers);
 
         /**
          * @type {BotState}
@@ -580,26 +591,26 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         const internalFragmentCandidates: string[] | null = await FragmentLoader.pickupCandidates(InternalFragmentsPath);
 
         if (!internalFragmentCandidates) {
-            throw new Error("[Bot.setup] Failed to load internal fragments");
+            throw new Error(BotMessages.SETUP_FAIL_LOAD_FRAGMENTS);
         }
 
         if (internalFragmentCandidates.length > 0) {
             Log.verbose(`[Bot.setup] Loading ${internalFragmentCandidates.length} internal fragments`);
         }
         else {
-            Log.warn("[Bot.setup] No internal fragments were detected");
+            Log.warn(BotMessages.SETUP_NO_FRAGMENTS_DETECTED);
         }
 
         const internalFragments: IPackage[] | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
 
         if (!internalFragments || internalFragments.length === 0) {
-            Log.warn("[Bot.setup] No internal fragments were loaded");
+            Log.warn(BotMessages.SETUP_NO_FRAGMENTS_LOADED);
         }
         else {
             const enabled: number = await this.fragments.enableMultiple(internalFragments, true);
 
             if (enabled === 0) {
-                Log.warn("[Bot.setup] No internal fragments were enabled");
+                Log.warn(BotMessages.SETUP_NO_FRAGMENTS_ENABLED);
             }
             else {
                 Log.success(`[Bot.setup] Enabled ${enabled}/${internalFragments.length} internal fragments`);
@@ -621,7 +632,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             const servicesLoaded: IPackage[] | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
 
             if (!servicesLoaded || servicesLoaded.length === 0) {
-                Log.warn("[Bot.setup] No services were loaded");
+                Log.warn(BotMessages.SETUP_NO_SERVICES_LOADED);
             }
             else {
                 Log.success(`[Bot.setup] Loaded ${servicesLoaded.length} service(s)`);
@@ -648,23 +659,23 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
             const commandsLoaded: IPackage[] | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
 
             if (!commandsLoaded || commandsLoaded.length === 0) {
-                Log.warn("[Bot.setup] No commands were loaded");
+                Log.warn(BotMessages.SETUP_NO_COMMANDS_LOADED);
             }
             else {
                 const enabled: number = await this.fragments.enableMultiple(commandsLoaded);
 
                 if (enabled > 0) {
-                    Log.success(`[Bot.setup] Loaded ${commandsLoaded.length}/${consumerCommandCandidates.length} command(s)`);
+                    Log.success(`[Bot.setup] Enabled ${commandsLoaded.length}/${consumerCommandCandidates.length} command(s)`);
                 }
                 else {
-                    Log.warn("[Bot.setup] No commands were loaded");
+                    Log.warn(BotMessages.SETUP_NO_COMMANDS_ENABLED);
                 }
             }
         }
 
         // Load & enable tasks
         await this.tasks.unregisterAll();
-        Log.verbose("[Bot.setup] Loading tasks");
+        Log.verbose(BotMessages.SETUP_LOADING_TASKS);
 
         const loaded: number = await this.tasks.loadAll(this.settings.paths.tasks);
 
@@ -677,28 +688,28 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
                 Log.success(`[Bot.setup] Triggered ${enabled}/${loaded} task(s)`);
             }
             else if (enabled === 0 && loaded > 0) {
-                Log.warn("[Bot.setup] No tasks were triggered");
+                Log.warn(BotMessages.SETUP_NO_TASKS_TRIGGERED);
             }
         }
         else {
-            Log.verbose("[Bot.setup] No tasks found");
+            Log.verbose(BotMessages.SETUP_NO_TASKS_FOUND);
         }
 
         this.emit(EBotEvents.LoadedCommands);
 
-        if (this.options.tempoEngine) {
-            Log.verbose("[Bot.setup] Starting the Tempo Engine");
+        if (this.options.optimizer) {
+            Log.verbose(BotMessages.SETUP_START_OPTIMIZER);
 
             // Start tempo engine
             this.tempoEngine.start();
 
-            Log.success("[Bot.setup] Started the Tempo Engine");
+            Log.success(BotMessages.SETUP_STARTED_OPTIMIZER);
         }
 
         // Setup the Discord client's events
         this.setupEvents();
 
-        Log.success("[Bot.setup] Bot setup completed");
+        Log.success(BotMessages.SETUP_COMPLETED);
 
         return this;
     }
@@ -722,7 +733,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     /**
      * Setup the client's events
      */
-    private setupEvents(): void {
+    protected setupEvents(): void {
         Log.verbose("[Bot.setupEvents] Setting up Discord events");
 
         // Discord client events
@@ -1017,7 +1028,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @param {Message} msg
      * @return {CommandContext}
      */
-    private createCommandContext(msg: Message): CommandContext {
+    protected createCommandContext(msg: Message): CommandContext {
         return new CommandContext({
             msg,
             // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
@@ -1096,7 +1107,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         return this;
     }
 
-    private setState(state: BotState): this {
+    protected setState(state: BotState): this {
         (this.state as any) = state;
 
         return this;

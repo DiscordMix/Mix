@@ -14,7 +14,7 @@ import SwitchParser from "../commands/switch-parser";
 import path from "path";
 import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
 import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
-import {IStoreAction, StoreActionType, IStateCapsule, IState, Reducer} from "../state/store";
+import {IStoreAction, StoreActionType, IStateCapsule, IState, Reducer, Delta} from "../state/store";
 import BotMessages from "../core/messages";
 
 // Test globals
@@ -454,6 +454,25 @@ describe("SwitchParser", () => {
             expect(result7[3].key).to.equal("world");
             expect(result7[3].short).to.equal(false);
             expect(result7[3].value).to.equal("hello world");
+        });
+    });
+});
+
+describe("Delta", () => {
+    describe("compare()", () => {
+        it("should compare two objects", () => {
+            const obj1: object = {
+                first: "hello",
+                second: "world"
+            };
+
+            const obj2: object = {
+                third: "john",
+                first: "world",
+                second: "world"
+            };
+
+            expect(Delta.compare(obj1, obj2)).to.be.an("array").and.to.contain("first").and.to.contain("third");
         });
     });
 });

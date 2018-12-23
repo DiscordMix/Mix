@@ -63,271 +63,279 @@ const subjects = {
     }
 };
 
-describe("Utils.isEmpty()", () => {
-    it ("should return whether the input is empty", () => {
-        expect(Utils.isEmpty("")).to.equal(true);
-        expect(Utils.isEmpty(undefined)).to.equal(true);
-        expect(Utils.isEmpty("     ")).to.equal(true);
-        expect(Utils.isEmpty("   hello world   ")).to.equal(false);
-        expect(Utils.isEmpty(null)).to.equal(true);
-        expect(Utils.isEmpty(0)).to.equal(false);
-        expect(Utils.isEmpty(false)).to.equal(false);
-        expect(Utils.isEmpty([])).to.equal(true);
-        expect(Utils.isEmpty(["hello"])).to.equal(false);
-    });
-});
-
-describe("Utils.hasMentionPrefix()", () => {
-    it ("should return whether the text provided start with a mention", () => {
-        expect(Utils.hasMentionPrefix(`<@${subjects.ids[0]}> hello world`, subjects.ids[0])).to.equal(true);
-        expect(Utils.hasMentionPrefix(`hello world <@${subjects.ids[0]}>`, subjects.ids[0])).to.equal(false);
-    });
-
-    it("should throw an error when provided invalid input", () => {
-        assert.throws(() => Utils.hasMentionPrefix(undefined as any, undefined as any));
-        assert.throws(() => Utils.hasMentionPrefix(null as any, null as any));
-        assert.throws(() => Utils.hasMentionPrefix(4 as any, 543 as any));
-        assert.throws(() => Utils.hasMentionPrefix({} as any, "hello world"));
-    });
-});
-
-describe("Utils.escapeText()", () => {
-    it("should escape tokens", () => {
-        expect(Utils.escapeText(subjects.token, subjects.token)).to.equal("[Token]");
-        expect(Utils.escapeText("hi world, hello world, john doe", "hello world")).to.equal("hi world, [Token], john doe");
-        expect(Utils.escapeText(`hi world, ${subjects.token}, john doe`, "hello world")).to.equal("hi world, [Token], john doe");
-        expect(Utils.escapeText(`hi world, ${subjects.token}, john doe, hello world, hi`, "hello world")).to.equal("hi world, [Token], john doe, [Token], hi");
-    });
-
-    it("should escape IPv4s", () => {
-        expect(Utils.escapeText("192.168.0.1", "empty")).to.equal("[IPv4]");
-        expect(Utils.escapeText("53.32.53.252", "empty")).to.equal("[IPv4]");
-        expect(Utils.escapeText("hello 192.168.0.1 world", "empty")).to.equal("hello [IPv4] world");
-    });
-
-    it("should escape mentions", () => {
-        expect(Utils.escapeText("@everyone hello world", "empty")).to.equal("[Mention] hello world");
-        expect(Utils.escapeText("hello @everyone world", "empty")).to.equal("hello [Mention] world");
-        expect(Utils.escapeText("@here hello world", "empty")).to.equal("[Mention] hello world");
-        expect(Utils.escapeText("hello @here world", "empty")).to.equal("hello [Mention] world");
-        expect(Utils.escapeText("hello @here world @everyone john", "empty")).to.equal("hello [Mention] world [Mention] john");
-        expect(Utils.escapeText("@herehello @here world@everyonejohn", "empty")).to.equal("[Mention]hello [Mention] world[Mention]john");
-        expect(Utils.escapeText(`hello ${subjects.ids[0]} world`, "empty")).to.equal("hello [Mention] world");
-        expect(Utils.escapeText(`hello ${subjects.ids[1]} world`, "empty")).to.equal("hello [Mention] world");
-        expect(Utils.escapeText(`hello ${subjects.ids[2]} world`, "empty")).to.equal("hello [Mention] world");
-        expect(Utils.escapeText(`hello ${subjects.ids[3]} world`, "empty")).to.equal(`hello ${subjects.ids[3]} world`);
-    });
-
-    it("should throw when provided invalid input", () => {
-        assert.throws(() => Utils.escapeText(undefined as any, undefined as any));
-        assert.throws(() => Utils.escapeText(null as any, null as any));
-        assert.throws(() => Utils.escapeText(undefined as any, null as any));
-        assert.throws(() => Utils.escapeText(null as any, undefined as any));
-        assert.throws(() => Utils.escapeText({} as any, 465 as any));
-        assert.throws(() => Utils.escapeText(52 as any, {} as any));
-    });
-});
-
-describe("Utils.resolveId()", () => {
-    it("should return the resolved ids", () => {
-        // Review
-        for (let i = 0; i < subjects.ids.length; i++) {
-            const result: any = Utils.resolveId(subjects.ids[i]);
-
-            expect(result).to.be.an("string");
-            expect(result).to.have.lengthOf(18);
-        }
-    });
-});
-
-describe("Utils.timeAgo()", () => {
-    it("should return a string", () => {
-        expect(Utils.timeAgo(Date.now())).to.be.an("string");
-    });
-});
-
-describe("Utils.getRandomInt()", () => {
-    it("should return a random number", () => {
-        const result: number | null = Utils.getRandomInt(0, 2);
-
-        expect(result).to.be.an("number");
-        expect([0, 1]).to.include(result as number);
-    });
-
-    it("should return null when provided invalid arguments", () => {
-        expect(Utils.getRandomInt(0, 0)).to.be.a("null");
-        expect(Utils.getRandomInt(0, -1)).to.be.a("null");
-        expect(Utils.getRandomInt(50, 10)).to.be.a("null");
-        expect(Utils.getRandomInt("hello" as any, 3)).to.be.a("null");
-        expect(Utils.getRandomInt("" as any, 3)).to.be.a("null");
-        expect(Utils.getRandomInt(3, "hello" as any)).to.be.a("null");
-        expect(Utils.getRandomInt(3, "" as any)).to.be.a("null");
-        expect(Utils.getRandomInt(undefined as any, 3)).to.be.a("null");
-        expect(Utils.getRandomInt(3 as any, undefined as any)).to.be.a("null");
-        expect(Utils.getRandomInt(null as any, 3)).to.be.a("null");
-        expect(Utils.getRandomInt(3, null as any)).to.be.a("null");
-        expect(Utils.getRandomInt({} as any, 3)).to.be.a("null");
-        expect(Utils.getRandomInt(3, {} as any)).to.be.a("null");
-    });
-});
-
-describe("Utils.translateState()", () => {
-    it("should return the translated state", () => {
-        const subjects = [
-            true,
-            1,
-            "y",
-            "yes",
-            "on"
-        ];
-
-        for (let i: number = 0; i < subjects.length; i++) {
-            expect(Utils.translateState(subjects[i].toString())).to.be.an("boolean").and.to.equal(true);
-        }
-    });
-});
-
-describe("Utils.timeFromNow()", () => {
-    it("should return the time from now in milliseconds", () => {
-        const result = Utils.timeFromNow(0, 0, 50);
-
-        expect(result).to.be.an("number");
-        expect(result.toString()).to.have.lengthOf(13);
-    });
-});
-
-describe("Utils.shuffle()", () => {
-    it("should shuffle an array", () => {
-        expect(Utils.shuffle(["hello", "my", "name", "is", "john doe"])).to.be.an("array").and.to.have.length(5);
-    });
-
-    it("should return an empty array when provided invalid arguments", () => {
-        expect(Utils.shuffle([])).to.be.an("array").and.to.have.length(0);
-        expect(Utils.shuffle(undefined as any)).to.be.an("array").and.to.have.length(0);
-        expect(Utils.shuffle(null as any)).to.be.an("array").and.to.have.length(0);
-        expect(Utils.shuffle("" as any)).to.be.an("array").and.to.have.length(0);
-        expect(Utils.shuffle("hello world" as any)).to.be.an("array").and.to.have.length(0);
-        expect(Utils.shuffle(3 as any)).to.be.an("array").and.to.have.length(0);
-    });
-});
-
-describe("Utils.getUserIdentifier()", () => {
-    it("should return a valid user identifier", () => {
-        const result1: string = Utils.getUserIdentifier({
-            id: subjects.ids[3],
-            tag: "JohnDoe#1234"
-        } as any);
-
-        expect(result1).to.equal(`<@${subjects.ids[3]}> (JohnDoe#1234:${subjects.ids[3]})`);
-    });
-
-    it("should throw when provided invalid input", () => {
-        assert.throws(() => Utils.getUserIdentifier("" as any));
-        assert.throws(() => Utils.getUserIdentifier("hello world" as any));
-        assert.throws(() => Utils.getUserIdentifier(123 as any));
-        assert.throws(() => Utils.getUserIdentifier({} as any));
-    });
-});
-
-describe("Rgb.toString()", () => {
-    it("should return the Rgb in string format", () => {
-        expect(subjects.rgb.toString()).to.be.an("string").and.to.equal("5, 10, 15");
-    });
-});
-
-describe("Rgba.toString()", () => {
-    it("should return the Rgba in string format", () => {
-        expect(subjects.rgba.toString()).to.be.an("string").and.to.equal("5, 10, 15, 1");
-    });
-});
-
-describe("Collection.at()", () => {
-    it("should return the item located in the specified index", () => {
-        expect(subjects.collection.at(0)).to.be.an("string").and.to.equal("hello");
-        expect(subjects.collection.at(1)).to.be.an("string").and.to.equal("it's me");
-    });
-});
-
-describe("Collection.removeAt()", () => {
-    it("should remove the item located in the specified index", () => {
-        const result1 = subjects.collection.removeAt(0);
-        const result2 = subjects.collection.removeAt(5);
-
-        // Result 1
-        expect(result1).to.be.an("boolean");
-        expect(result1).to.equal(true);
-        expect(subjects.collection.at(0)).to.be.an("string");
-        expect(subjects.collection.at(0)).to.equal("it's me");
-
-        // Result 2
-        expect(result2).to.be.an("boolean");
-        expect(result2).to.equal(false);
-    });
-});
-
-describe("Collection.add()", () => {
-    it("should add an item to the collection", () => {
-        subjects.collection.add("john doe");
-        expect(subjects.collection.at(0)).to.be.an("string").and.to.equal("it's me");
-        expect(subjects.collection.at(1)).to.be.an("object");
-    });
-});
-
-describe("Collection.addUnique()", () => {
-    it("should add an unique item", () => {
-        expect(subjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(true);
-        expect(subjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(false);
-    });
-});
-
-describe("Collection.contains()", () => {
-    it("should determine whether the collection contains an item", () => {
-        expect(subjects.collection.contains("john doe")).to.be.an("boolean").and.to.equal(true);
-        expect(subjects.collection.contains("nope")).to.be.an("boolean").and.to.equal(false);
-    });
-});
-
-describe("Collection.find()", () => {
-    it("should find an item by its property", () => {
-        const result: any = subjects.collection.find("name", "John Doe") as any;
-
-        expect(result).to.be.an("object");
-        expect(result.name).to.be.an("string").and.to.equal("John Doe");
-    });
-});
-
-describe("Settings.fromFile()", () => {
-    it("should load settings from a file", () => {
-        const settingsPromise: Promise<Settings> = new Promise(async (resolve) => {
-            resolve(await Settings.fromFile(subjects.settingsPath));
+describe("Utils", () => {
+    describe("isEmpty()", () => {
+        it("should return whether the input is empty", () => {
+            expect(Utils.isEmpty("")).to.equal(true);
+            expect(Utils.isEmpty(undefined)).to.equal(true);
+            expect(Utils.isEmpty("     ")).to.equal(true);
+            expect(Utils.isEmpty("   hello world   ")).to.equal(false);
+            expect(Utils.isEmpty(null)).to.equal(true);
+            expect(Utils.isEmpty(0)).to.equal(false);
+            expect(Utils.isEmpty(false)).to.equal(false);
+            expect(Utils.isEmpty([])).to.equal(true);
+            expect(Utils.isEmpty(["hello"])).to.equal(false);
         });
+    });
 
-        const settingsSecondPromise: Promise<Settings> = new Promise(async (resolve) => {
-            resolve(await Settings.fromFile(subjects.settingsPathTwo));
+    describe("hasMentionPrefix()", () => {
+        it("should return whether the text provided start with a mention", () => {
+            expect(Utils.hasMentionPrefix(`<@${subjects.ids[0]}> hello world`, subjects.ids[0])).to.equal(true);
+            expect(Utils.hasMentionPrefix(`hello world <@${subjects.ids[0]}>`, subjects.ids[0])).to.equal(false);
         });
-
-        settingsPromise.then((result: Settings) => {
-            expect(result.general.prefixes).to.be.an("array");
-            expect(result.general.prefixes[0]).to.equal("!");
-            expect(result.general.token).to.be.an("string").and.to.equal("my_secret_token");
-            expect(result.paths.commands).to.be.an("string").and.to.equal("./my_commands");
-            expect(result.paths.plugins).to.be.an("string").and.to.equal("./my_plugins");
-            expect(result.keys.dbl).to.be.an("string").and.to.equal("my_dbl_key");
-            expect(result.keys.bfd).to.be.an("string").and.to.equal("my_bfd_key");
+    
+        it("should throw an error when provided invalid input", () => {
+            assert.throws(() => Utils.hasMentionPrefix(undefined as any, undefined as any));
+            assert.throws(() => Utils.hasMentionPrefix(null as any, null as any));
+            assert.throws(() => Utils.hasMentionPrefix(4 as any, 543 as any));
+            assert.throws(() => Utils.hasMentionPrefix({} as any, "hello world"));
         });
+    });
 
-        return settingsSecondPromise.then((result: Settings) => {
-            expect(result.general.prefixes).to.be.an("array");
-            expect(result.general.prefixes[0]).to.equal(".");
-            expect(result.general.token).to.be.an("string").and.to.equal("another_secret_token");
-            expect(result.paths.commands).to.be.an("string").and.to.equal("./commandStore");
-            expect(result.paths.plugins).to.be.an("string").and.to.equal("./plugins");
+    describe("escapeText()", () => {
+        it("should escape tokens", () => {
+            expect(Utils.escapeText(subjects.token, subjects.token)).to.equal("[Token]");
+            expect(Utils.escapeText("hi world, hello world, john doe", "hello world")).to.equal("hi world, [Token], john doe");
+            expect(Utils.escapeText(`hi world, ${subjects.token}, john doe`, "hello world")).to.equal("hi world, [Token], john doe");
+            expect(Utils.escapeText(`hi world, ${subjects.token}, john doe, hello world, hi`, "hello world")).to.equal("hi world, [Token], john doe, [Token], hi");
+        });
+    
+        it("should escape IPv4s", () => {
+            expect(Utils.escapeText("192.168.0.1", "empty")).to.equal("[IPv4]");
+            expect(Utils.escapeText("53.32.53.252", "empty")).to.equal("[IPv4]");
+            expect(Utils.escapeText("hello 192.168.0.1 world", "empty")).to.equal("hello [IPv4] world");
+        });
+    
+        it("should escape mentions", () => {
+            expect(Utils.escapeText("@everyone hello world", "empty")).to.equal("[Mention] hello world");
+            expect(Utils.escapeText("hello @everyone world", "empty")).to.equal("hello [Mention] world");
+            expect(Utils.escapeText("@here hello world", "empty")).to.equal("[Mention] hello world");
+            expect(Utils.escapeText("hello @here world", "empty")).to.equal("hello [Mention] world");
+            expect(Utils.escapeText("hello @here world @everyone john", "empty")).to.equal("hello [Mention] world [Mention] john");
+            expect(Utils.escapeText("@herehello @here world@everyonejohn", "empty")).to.equal("[Mention]hello [Mention] world[Mention]john");
+            expect(Utils.escapeText(`hello ${subjects.ids[0]} world`, "empty")).to.equal("hello [Mention] world");
+            expect(Utils.escapeText(`hello ${subjects.ids[1]} world`, "empty")).to.equal("hello [Mention] world");
+            expect(Utils.escapeText(`hello ${subjects.ids[2]} world`, "empty")).to.equal("hello [Mention] world");
+            expect(Utils.escapeText(`hello ${subjects.ids[3]} world`, "empty")).to.equal(`hello ${subjects.ids[3]} world`);
+        });
+    
+        it("should throw when provided invalid input", () => {
+            assert.throws(() => Utils.escapeText(undefined as any, undefined as any));
+            assert.throws(() => Utils.escapeText(null as any, null as any));
+            assert.throws(() => Utils.escapeText(undefined as any, null as any));
+            assert.throws(() => Utils.escapeText(null as any, undefined as any));
+            assert.throws(() => Utils.escapeText({} as any, 465 as any));
+            assert.throws(() => Utils.escapeText(52 as any, {} as any));
+        });
+    });
+
+    describe("resolveId()", () => {
+        it("should return the resolved ids", () => {
+            // TODO: Review?
+            for (let i = 0; i < subjects.ids.length; i++) {
+                const result: any = Utils.resolveId(subjects.ids[i]);
+    
+                expect(result).to.be.an("string");
+                expect(result).to.have.lengthOf(18);
+            }
+        });
+    });
+
+    describe("timeAgo()", () => {
+        it("should return a string", () => {
+            expect(Utils.timeAgo(Date.now())).to.be.an("string");
+        });
+    });
+
+    describe("getRandomInt()", () => {
+        it("should return a random number", () => {
+            const result: number | null = Utils.getRandomInt(0, 2);
+    
+            expect(result).to.be.an("number");
+            expect([0, 1]).to.include(result as number);
+        });
+    
+        it("should return null when provided invalid arguments", () => {
+            expect(Utils.getRandomInt(0, 0)).to.be.a("null");
+            expect(Utils.getRandomInt(0, -1)).to.be.a("null");
+            expect(Utils.getRandomInt(50, 10)).to.be.a("null");
+            expect(Utils.getRandomInt("hello" as any, 3)).to.be.a("null");
+            expect(Utils.getRandomInt("" as any, 3)).to.be.a("null");
+            expect(Utils.getRandomInt(3, "hello" as any)).to.be.a("null");
+            expect(Utils.getRandomInt(3, "" as any)).to.be.a("null");
+            expect(Utils.getRandomInt(undefined as any, 3)).to.be.a("null");
+            expect(Utils.getRandomInt(3 as any, undefined as any)).to.be.a("null");
+            expect(Utils.getRandomInt(null as any, 3)).to.be.a("null");
+            expect(Utils.getRandomInt(3, null as any)).to.be.a("null");
+            expect(Utils.getRandomInt({} as any, 3)).to.be.a("null");
+            expect(Utils.getRandomInt(3, {} as any)).to.be.a("null");
+        });
+    });
+
+    describe("translateState()", () => {
+        it("should return the translated state", () => {
+            const subjects = [
+                true,
+                1,
+                "y",
+                "yes",
+                "on"
+            ];
+    
+            for (let i: number = 0; i < subjects.length; i++) {
+                expect(Utils.translateState(subjects[i].toString())).to.be.an("boolean").and.to.equal(true);
+            }
+        });
+    });
+
+    describe("timeFromNow()", () => {
+        it("should return the time from now in milliseconds", () => {
+            const result = Utils.timeFromNow(0, 0, 50);
+    
+            expect(result).to.be.an("number");
+            expect(result.toString()).to.have.lengthOf(13);
+        });
+    });
+
+    describe("shuffle()", () => {
+        it("should shuffle an array", () => {
+            expect(Utils.shuffle(["hello", "my", "name", "is", "john doe"])).to.be.an("array").and.to.have.length(5);
+        });
+    
+        it("should return an empty array when provided invalid arguments", () => {
+            expect(Utils.shuffle([])).to.be.an("array").and.to.have.length(0);
+            expect(Utils.shuffle(undefined as any)).to.be.an("array").and.to.have.length(0);
+            expect(Utils.shuffle(null as any)).to.be.an("array").and.to.have.length(0);
+            expect(Utils.shuffle("" as any)).to.be.an("array").and.to.have.length(0);
+            expect(Utils.shuffle("hello world" as any)).to.be.an("array").and.to.have.length(0);
+            expect(Utils.shuffle(3 as any)).to.be.an("array").and.to.have.length(0);
+        });
+    });
+
+    describe("getUserIdentifier()", () => {
+        it("should return a valid user identifier", () => {
+            const result1: string = Utils.getUserIdentifier({
+                id: subjects.ids[3],
+                tag: "JohnDoe#1234"
+            } as any);
+    
+            expect(result1).to.equal(`<@${subjects.ids[3]}> (JohnDoe#1234:${subjects.ids[3]})`);
+        });
+    
+        it("should throw when provided invalid input", () => {
+            assert.throws(() => Utils.getUserIdentifier("" as any));
+            assert.throws(() => Utils.getUserIdentifier("hello world" as any));
+            assert.throws(() => Utils.getUserIdentifier(123 as any));
+            assert.throws(() => Utils.getUserIdentifier({} as any));
         });
     });
 });
 
-describe("SwitchParser.getSwitches()", () => {
-    it("parse command switches", () => {
+describe("Rgb", () => {
+    describe("toString()", () => {
+        it("should return the Rgb in string format", () => {
+            expect(subjects.rgb.toString()).to.be.an("string").and.to.equal("5, 10, 15");
+        });
+    });
+});
+
+describe("Rgba", () => {
+    describe("toString()", () => {
+        it("should return the Rgba in string format", () => {
+            expect(subjects.rgba.toString()).to.be.an("string").and.to.equal("5, 10, 15, 1");
+        });
+    });
+});
+
+describe("Collection", () => {
+    describe("at()", () => {
+        it("should return the item located in the specified index", () => {
+            expect(subjects.collection.at(0)).to.be.an("string").and.to.equal("hello");
+            expect(subjects.collection.at(1)).to.be.an("string").and.to.equal("it's me");
+        });
+    });
+
+    describe("removeAt()", () => {
+        it("should remove the item located in the specified index", () => {
+            const result1 = subjects.collection.removeAt(0);
+            const result2 = subjects.collection.removeAt(5);
+
+            // Result 1
+            expect(result1).to.be.an("boolean");
+            expect(result1).to.equal(true);
+            expect(subjects.collection.at(0)).to.be.an("string");
+            expect(subjects.collection.at(0)).to.equal("it's me");
+
+            // Result 2
+            expect(result2).to.be.an("boolean");
+            expect(result2).to.equal(false);
+        });
+    });
+
+    describe("add()", () => {
+        it("should add an item to the collection", () => {
+            subjects.collection.add("john doe");
+            expect(subjects.collection.at(0)).to.be.an("string").and.to.equal("it's me");
+            expect(subjects.collection.at(1)).to.be.an("object");
+        });
+    });
+
+    describe("addUnique()", () => {
+        it("should add an unique item", () => {
+            expect(subjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(true);
+            expect(subjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(false);
+        });
+    });
+
+    describe("contains()", () => {
+        it("should determine whether the collection contains an item", () => {
+            expect(subjects.collection.contains("john doe")).to.be.an("boolean").and.to.equal(true);
+            expect(subjects.collection.contains("nope")).to.be.an("boolean").and.to.equal(false);
+        });
+    });
+
+    describe("find()", () => {
+        it("should find an item by its property", () => {
+            const result: any = subjects.collection.find("name", "John Doe") as any;
+
+            expect(result).to.be.an("object");
+            expect(result.name).to.be.an("string").and.to.equal("John Doe");
+        });
+    });
+
+    describe("fromFile()", () => {
+        it("should load settings from a file", () => {
+            const settingsPromise: Promise<Settings> = new Promise(async (resolve) => {
+                resolve(await Settings.fromFile(subjects.settingsPath));
+            });
+    
+            const settingsSecondPromise: Promise<Settings> = new Promise(async (resolve) => {
+                resolve(await Settings.fromFile(subjects.settingsPathTwo));
+            });
+    
+            settingsPromise.then((result: Settings) => {
+                expect(result.general.prefixes).to.be.an("array");
+                expect(result.general.prefixes[0]).to.equal("!");
+                expect(result.general.token).to.be.an("string").and.to.equal("my_secret_token");
+                expect(result.paths.commands).to.be.an("string").and.to.equal("./my_commands");
+                expect(result.paths.plugins).to.be.an("string").and.to.equal("./my_plugins");
+                expect(result.keys.dbl).to.be.an("string").and.to.equal("my_dbl_key");
+                expect(result.keys.bfd).to.be.an("string").and.to.equal("my_bfd_key");
+            });
+    
+            return settingsSecondPromise.then((result: Settings) => {
+                expect(result.general.prefixes).to.be.an("array");
+                expect(result.general.prefixes[0]).to.equal(".");
+                expect(result.general.token).to.be.an("string").and.to.equal("another_secret_token");
+                expect(result.paths.commands).to.be.an("string").and.to.equal("./commandStore");
+                expect(result.paths.plugins).to.be.an("string").and.to.equal("./plugins");
+            });
+        });
+    });
+});
+
+describe("SwitchParser", () => {
+    describe("getSwitches()", () => {
         const result1 = SwitchParser.getSwitches(subjects.switches.short);
         const result2 = SwitchParser.getSwitches(subjects.switches.long);
         const result3 = SwitchParser.getSwitches(subjects.switches.longValue);
@@ -336,89 +344,117 @@ describe("SwitchParser.getSwitches()", () => {
         const result6 = SwitchParser.getSwitches(subjects.switches.multipleValues);
         const result7 = SwitchParser.getSwitches(subjects.switches.multipleQuotedValues);
 
-        for (let i = 0; i < result1.length; i++) {
-            expect(result1[0]).to.be.an("object");
-        }
+        it("parse command switches into objects", () => {
+            for (let i = 0; i < result1.length; i++) {
+                expect(result1[0]).to.be.an("object");
+            }
+        });
 
         // Short
-        expect(result1[0].key).to.equal("h");
-        expect(result1[0].short).to.equal(true);
-        expect(result1[0].value).to.equal(null);
+        it("should parse short switches", () => {
+            expect(result1[0].key).to.equal("h");
+            expect(result1[0].short).to.equal(true);
+            expect(result1[0].value).to.equal(null);
+        });
 
         // Long
-        expect(result2[0].key).to.equal("help");
-        expect(result2[0].short).to.equal(false);
-        expect(result2[0].value).to.equal(null);
+        it("should parse long switches", () => {
+            expect(result2[0].key).to.equal("help");
+            expect(result2[0].short).to.equal(false);
+            expect(result2[0].value).to.equal(null);
+        });
 
         // Long Value
-        expect(result3[0].key).to.equal("help");
-        expect(result3[0].short).to.equal(false);
-        expect(result3[0].value).to.equal("hello");
+        it("should parse long switch's values", () => {
+            expect(result3[0].key).to.equal("help");
+            expect(result3[0].short).to.equal(false);
+            expect(result3[0].value).to.equal("hello");
+        });
 
         // Long Quoted Value
-        expect(result4[0].key).to.equal("help");
-        expect(result4[0].short).to.equal(false);
-        expect(result4[0].value).to.equal("hello world");
+        it("should parse long switch's quoted values", () => {
+            expect(result4[0].key).to.equal("help");
+            expect(result4[0].short).to.equal(false);
+            expect(result4[0].value).to.equal("hello world");
+        });
 
-        // Multiple -> -h
-        expect(result5[0].key).to.equal("h");
-        expect(result5[0].short).to.equal(true);
-        expect(result5[0].value).to.equal(null);
+        // Multiple Switches Short
+        it("should parse multiple short switches", () => {
+            // Multiple -> -h
+            expect(result5[0].key).to.equal("h");
+            expect(result5[0].short).to.equal(true);
+            expect(result5[0].value).to.equal(null);
 
-        // Multiple -> -q
-        expect(result5[1].key).to.equal("q");
-        expect(result5[1].short).to.equal(true);
-        expect(result5[1].value).to.equal(null);
+            // Multiple -> -q
+            expect(result5[1].key).to.equal("q");
+            expect(result5[1].short).to.equal(true);
+            expect(result5[1].value).to.equal(null);
+        });
 
-        // Multiple -> --hello
-        expect(result5[2].key).to.equal("hello");
-        expect(result5[2].short).to.equal(false);
-        expect(result5[2].value).to.equal(null);
+        // Multiple Switches Long
+        it("should parse multiple long switches", () => {
+            // Multiple -> --hello
+            expect(result5[2].key).to.equal("hello");
+            expect(result5[2].short).to.equal(false);
+            expect(result5[2].value).to.equal(null);
 
-        // Multiple -> --world
-        expect(result5[3].key).to.equal("world");
-        expect(result5[3].short).to.equal(false);
-        expect(result5[3].value).to.equal(null);
+            // Multiple -> --world
+            expect(result5[3].key).to.equal("world");
+            expect(result5[3].short).to.equal(false);
+            expect(result5[3].value).to.equal(null);
+        });
 
-        // Multiple Values -> -h
-        expect(result6[0].key).to.equal("h");
-        expect(result6[0].short).to.equal(true);
-        expect(result6[0].value).to.equal(null);
+        // Multiple Values Short
+        it("should parse multiple short switches' values", () => {
+            // Multiple Values -> -h
+            expect(result6[0].key).to.equal("h");
+            expect(result6[0].short).to.equal(true);
+            expect(result6[0].value).to.equal(null);
 
-        // Multiple Values -> -q
-        expect(result6[1].key).to.equal("q");
-        expect(result6[1].short).to.equal(true);
-        expect(result6[1].value).to.equal(null);
+            // Multiple Values -> -q
+            expect(result6[1].key).to.equal("q");
+            expect(result6[1].short).to.equal(true);
+            expect(result6[1].value).to.equal(null);
+        });
 
-        // Multiple Values -> --hello
-        expect(result6[2].key).to.equal("hello");
-        expect(result6[2].short).to.equal(false);
-        expect(result6[2].value).to.equal("world");
+        // Multiple Values Long
+        it("should parse multiple long switches' values", () => {
+            // Multiple Values -> --hello
+            expect(result6[2].key).to.equal("hello");
+            expect(result6[2].short).to.equal(false);
+            expect(result6[2].value).to.equal("world");
 
-        // Multiple Values -> --world
-        expect(result6[3].key).to.equal("world");
-        expect(result6[3].short).to.equal(false);
-        expect(result6[3].value).to.equal("hello");
+            // Multiple Values -> --world
+            expect(result6[3].key).to.equal("world");
+            expect(result6[3].short).to.equal(false);
+            expect(result6[3].value).to.equal("hello");
+        });
 
-        // Multiple Quoted Values -> -h
-        expect(result7[0].key).to.equal("h");
-        expect(result7[0].short).to.equal(true);
-        expect(result7[0].value).to.equal(null);
+        // Multiple Quoted Values Short
+        it("should parse multiple short switches' quoted values", () => {
+            // Multiple Quoted Values -> -h
+            expect(result7[0].key).to.equal("h");
+            expect(result7[0].short).to.equal(true);
+            expect(result7[0].value).to.equal(null);
 
-        // Multiple Quoted Values -> -q
-        expect(result7[1].key).to.equal("q");
-        expect(result7[1].short).to.equal(true);
-        expect(result7[1].value).to.equal(null);
+            // Multiple Quoted Values -> -q
+            expect(result7[1].key).to.equal("q");
+            expect(result7[1].short).to.equal(true);
+            expect(result7[1].value).to.equal(null);
+        });
 
-        // Multiple Quoted Values -> --hello="world hello"
-        expect(result7[2].key).to.equal("hello");
-        expect(result7[2].short).to.equal(false);
-        expect(result7[2].value).to.equal("world hello");
+        // Multiple Quoted Values Long
+        it("should parse multiple long switches' quoted values", () => {
+            // Multiple Quoted Values -> --hello="world hello"
+            expect(result7[2].key).to.equal("hello");
+            expect(result7[2].short).to.equal(false);
+            expect(result7[2].value).to.equal("world hello");
 
-        // Multiple Quoted Values -> --world="hello world"
-        expect(result7[3].key).to.equal("world");
-        expect(result7[3].short).to.equal(false);
-        expect(result7[3].value).to.equal("hello world");
+            // Multiple Quoted Values -> --world="hello world"
+            expect(result7[3].key).to.equal("world");
+            expect(result7[3].short).to.equal(false);
+            expect(result7[3].value).to.equal("hello world");
+        });
     });
 });
 
@@ -448,65 +484,67 @@ describe("Pagination.previous()", () => {
     });
 }); */
 
-describe("LogSerializer.serialize()", () => {
-    const serializer: LogSerializer = new LogSerializer();
+describe("LogSerializer", () => {
+    describe("serialize()", () => {
+        const serializer: LogSerializer = new LogSerializer();
 
-    it("should serialize log messages", () => {
-        expect(serializer.serialize({
-            message: "Hello world",
+        it("should serialize log messages", () => {
+            expect(serializer.serialize({
+                message: "Hello world",
 
-            source: {
-                main: "World",
-                extra: "doe"
-            },
+                source: {
+                    main: "World",
+                    extra: "doe"
+                },
 
-            time: "Today"
-        })).to.be.a("string").and.to.equal("{Today} [World.doe] Hello world");
+                time: "Today"
+            })).to.be.a("string").and.to.equal("{Today} [World.doe] Hello world");
 
-        expect(serializer.serialize({
-            message: "{[Hello world]}",
+            expect(serializer.serialize({
+                message: "{[Hello world]}",
 
-            source: {
-                main: "It's a",
-                extra: "[Doe's world]"
-            },
+                source: {
+                    main: "It's a",
+                    extra: "[Doe's world]"
+                },
 
-            time: "{Tomorrow}"
-        })).to.be.a("string").and.to.equal("{{Tomorrow}} [It's a.[Doe's world]] {[Hello world]}");
+                time: "{Tomorrow}"
+            })).to.be.a("string").and.to.equal("{{Tomorrow}} [It's a.[Doe's world]] {[Hello world]}");
+        });
+
+        it("should not serialize when provided invalid arguments", () => {
+            expect(serializer.serialize(null as any)).to.be.a("null");
+            expect(serializer.serialize(undefined as any)).to.be.a("null");
+            expect(serializer.serialize("" as any)).to.be.a("null");
+            expect(serializer.serialize("hello world" as any)).to.be.a("null");
+            expect(serializer.serialize(3 as any)).to.be.a("null");
+        });
     });
 
-    it("should not serialize when provided invalid arguments", () => {
-        expect(serializer.serialize(null as any)).to.be.a("null");
-        expect(serializer.serialize(undefined as any)).to.be.a("null");
-        expect(serializer.serialize("" as any)).to.be.a("null");
-        expect(serializer.serialize("hello world" as any)).to.be.a("null");
-        expect(serializer.serialize(3 as any)).to.be.a("null");
-    });
-});
+    describe("deserialize()", () => {
+        const serializer: LogSerializer = new LogSerializer();
 
-describe("LogSerializer.deserialize()", () => {
-    const serializer: LogSerializer = new LogSerializer();
-    
-    it("should deserialize serialized log messages", () => {
-        const result: ILogMsg = serializer.deserialize("{Today} [Some.where] Hello world") as ILogMsg;
+        it("should deserialize serialized log messages", () => {
+            const result: ILogMsg = serializer.deserialize("{Today} [Some.where] Hello world") as ILogMsg;
 
-        expect(result).to.be.an("object");
-        expect(result.message).to.be.a("string").and.to.equal("Hello world");
-        expect(result.source).to.be.an("object");
-        expect(result.source.main).to.be.an("string").and.to.equal("Some");
-        expect(result.source.extra).to.be.an("string").and.to.equal("where");
-        expect(result.time).to.be.a("string").and.to.equal("Today");
-    });
+            expect(result).to.be.an("object");
+            expect(result.message).to.be.a("string").and.to.equal("Hello world");
+            expect(result.source).to.be.an("object");
+            expect(result.source.main).to.be.an("string").and.to.equal("Some");
+            expect(result.source.extra).to.be.an("string").and.to.equal("where");
+            expect(result.time).to.be.a("string").and.to.equal("Today");
+        });
 
-    it("should deserialize serialized log messages with one source", () => {
-        const result: ILogMsg = serializer.deserialize("{Today} [Some] Hello world") as ILogMsg;
+        it("should deserialize serialized log messages with one source", () => {
+            const result: ILogMsg = serializer.deserialize("{Today} [Some] Hello world") as ILogMsg;
 
-        expect(result).to.be.an("object");
-        expect(result.message).to.be.a("string").and.to.equal("Hello world");
-        expect(result.source).to.be.an("object");
-        expect(result.source.main).to.be.an("string").and.to.equal("Some");
-        expect(result.source.extra).to.be.a("undefined");
-        expect(result.time).to.be.a("string").and.to.equal("Today");
+            expect(result).to.be.an("object");
+            expect(result.message).to.be.a("string").and.to.equal("Hello world");
+            expect(result.source).to.be.an("object");
+            expect(result.source.main).to.be.an("string").and.to.equal("Some");
+            expect(result.source.extra).to.be.a("undefined");
+            expect(result.time).to.be.a("string").and.to.equal("Today");
+        });
     });
 });
 
@@ -735,35 +773,35 @@ describe("bot", () => {
         expect(testBot.internalCommands[1]).to.be.a("string").and.to.equal("usage");
         expect(testBot.internalCommands[2]).to.be.a("string").and.to.equal("ping");
     });
-});
 
-describe("bot timeouts", () => {
-    it("should have no timeouts set", () => {
-        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
-    });
+    describe("timeouts", () => {
+        it("should have no timeouts set", () => {
+            expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
+        });
 
-    it("should set a timeout", () => {
-        return new Promise((resolve) => {
-            testBot.setTimeout(() => {
-                // Tests
-                expect(testBot.timeouts.length).to.be.a("number").and.to.equal(1);
+        it("should set a timeout", () => {
+            return new Promise((resolve) => {
+                testBot.setTimeout(() => {
+                    // Tests
+                    expect(testBot.timeouts.length).to.be.a("number").and.to.equal(1);
 
-                resolve();
-            }, 100);
+                    resolve();
+                }, 100);
+            });
+        });
+
+        it("should clear timeouts after executing", () => {
+            expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
         });
     });
 
-    it("should clear timeouts after executing", () => {
-        expect(testBot.timeouts.length).to.be.a("number").and.to.equal(0);
-    });
-});
+    describe("intervals", () => {
+        it("should have no intervals set", () => {
+            expect(testBot.intervals.length).to.be.a("number").and.to.equal(0);
+        });
 
-describe("bot intervals", () => {
-    it("should have no intervals set", () => {
-        expect(testBot.intervals.length).to.be.a("number").and.to.equal(0);
+        // TODO: More tests
     });
-
-    // TODO: More tests
 });
 
 describe("commands", () => {
@@ -1032,24 +1070,28 @@ describe("store", () => {
         expect(testBot.store.getState()).to.be.a("undefined");
     });
 
-    it("should throw on invalid subscribe parameters", () => {
-        assert.throws(() => testBot.store.subscribe(1 as any));
-        assert.throws(() => testBot.store.subscribe(0 as any));
-        assert.throws(() => testBot.store.subscribe(false as any));
-        assert.throws(() => testBot.store.subscribe(true as any));
-        assert.throws(() => testBot.store.subscribe(null as any));
-        assert.throws(() => testBot.store.subscribe(undefined as any));
-        assert.throws(() => testBot.store.subscribe("hello" as any));
-        assert.throws(() => testBot.store.subscribe({} as any));
-        assert.throws(() => testBot.store.subscribe([] as any));
+    describe("dispatch()", () => {
+        it("should throw on invalid parameters", () => {
+            assert.throws(() => testBot.store.dispatch("test" as any));
+            assert.throws(() => testBot.store.dispatch(undefined as any));
+            assert.throws(() => testBot.store.dispatch(null as any));
+            assert.throws(() => testBot.store.dispatch(false as any));
+            assert.throws(() => testBot.store.dispatch(true as any));
+        });
     });
 
-    it("should throw on invalid dispatch parameters", () => {
-        assert.throws(() => testBot.store.dispatch("test" as any));
-        assert.throws(() => testBot.store.dispatch(undefined as any));
-        assert.throws(() => testBot.store.dispatch(null as any));
-        assert.throws(() => testBot.store.dispatch(false as any));
-        assert.throws(() => testBot.store.dispatch(true as any));
+    describe("subscribe()", () => {
+        it("should throw on invalid parameters", () => {
+            assert.throws(() => testBot.store.subscribe(1 as any));
+            assert.throws(() => testBot.store.subscribe(0 as any));
+            assert.throws(() => testBot.store.subscribe(false as any));
+            assert.throws(() => testBot.store.subscribe(true as any));
+            assert.throws(() => testBot.store.subscribe(null as any));
+            assert.throws(() => testBot.store.subscribe(undefined as any));
+            assert.throws(() => testBot.store.subscribe("hello" as any));
+            assert.throws(() => testBot.store.subscribe({} as any));
+            assert.throws(() => testBot.store.subscribe([] as any));
+        });
     });
 });
 

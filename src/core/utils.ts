@@ -41,6 +41,13 @@ export type ISendOptions = {
     readonly title?: string;
 }
 
+export interface IBinarySearchResult {
+    readonly iterations: number;
+    readonly index: number | null;
+    readonly result: number | null;
+    readonly found: boolean;
+}
+
 export default class Utils {
     public static readonly botLists: Snowflake[] = [
         "374071874222686211", // Bots for Discord (BFD)
@@ -94,6 +101,48 @@ export default class Utils {
         }
 
         return Math.floor(Math.random() * max) + min;
+    }
+
+    public static binarySearch(subject: number, host: number[]): IBinarySearchResult {
+        if (typeof subject !== "number" || !Array.isArray(host)) {
+            throw new Error("[Utils] Expecting subject to be a number and host to be an array of numbers");
+        }
+
+        let midPoint: number = Math.round(host.length / 2);
+        let pool: number[] = [...host];
+        let middle: number | null = null;
+        let counter: number = 0;
+
+        while (middle !== subject) {
+            midPoint = Math.round(pool.length / 2);
+            middle = pool[midPoint];
+
+            if (middle > subject) {
+                pool.splice(midPoint, pool.length);
+            }
+            else if (middle < subject) {
+                pool.splice(0, midPoint);
+            }
+
+            counter++;
+        }
+        
+        return {
+            iterations: counter,
+            index: middle !== undefined ? midPoint : null,
+            result: middle !== undefined ? middle : null,
+            found: middle !== undefined
+        };
+    }
+
+    public static populate(amount: number): number[] {
+        const result: number[] = [];
+
+        for (let i: number = 0; i < amount; i++) {
+            result.push(i);
+        }
+
+        return result;
     }
 
     /**

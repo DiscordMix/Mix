@@ -1,7 +1,7 @@
 // Environment variables
 require("dotenv").config();
 
-import {Bot, Log, Task, Rgb, Rgba, List, Utils, ActionType} from "..";
+import {Bot, Log, Task, Rgb, Rgba, List, Utils} from "..";
 import Settings from "../core/settings";
 import {Snowflake, Guild, TextChannel, Message} from "discord.js";
 import CommandContext from "../commands/command-context";
@@ -16,6 +16,7 @@ import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
 import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
 import {IStoreAction, StoreActionType, IStateCapsule, IState, Reducer, Delta} from "../state/store";
 import BotMessages from "../core/messages";
+import {IBinarySearchResult} from "../core/utils";
 
 // Test globals
 const globalAny: any = global;
@@ -227,6 +228,24 @@ describe("Utils", () => {
             assert.throws(() => Utils.getUserIdentifier("hello world" as any));
             assert.throws(() => Utils.getUserIdentifier(123 as any));
             assert.throws(() => Utils.getUserIdentifier({} as any));
+        });
+    });
+
+    const populated: number[] = Utils.populate(50);
+
+    describe("populate()", () => {
+        it("should populate an array", () => {
+            expect(populated).to.be.an("array").and.to.have.length(50);
+        });
+    });
+
+    describe("binarySearch()", () => {
+        it("should find an existing item", () => {
+            const result: IBinarySearchResult = Utils.binarySearch(3, populated);
+
+            expect(result).to.be.an("object");
+            expect(result.found).to.be.a("boolean").and.to.equal(true);
+            expect(result.iterations).to.be.a("number").and.to.equal(6);
         });
     });
 });
@@ -477,7 +496,7 @@ describe("Delta", () => {
     });
 });
 
-// TODO: Disable for future fix
+// TODO: Disabled for future fix
 /* describe("Pagination.next()", () => {
     it("should return the valid next page", () => {
         const pagination: PaginatedMessage = new PaginatedMessage("hello world", 1);

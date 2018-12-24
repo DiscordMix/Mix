@@ -5,7 +5,7 @@ import {DefaultCommandRestrict} from "../commands/command";
 import {InternalCommand} from "../core/bot";
 
 export default class FragmentManager extends EventEmitter {
-    private readonly bot: Bot;
+    protected readonly bot: Bot;
 
     public constructor(bot: Bot) {
         super();

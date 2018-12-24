@@ -2,8 +2,8 @@ import Bot from "../core/bot";
 import Settings from "../core/settings";
 
 export default class BotBuilder {
-    private readonly settings: any;
-    private readonly bot: any;
+    protected readonly settings: any;
+    protected readonly bot: any;
 
     public constructor() {
         /**

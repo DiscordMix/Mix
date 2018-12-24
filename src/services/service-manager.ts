@@ -16,10 +16,10 @@ export type IReadonlyServiceMap = ReadonlyMap<string, GenericService>;
 export default class ServiceManager extends EventEmitter {
     public static heartbeatTimeout: number = 6000;
 
-    private readonly bot: Bot;
-    private readonly services: IServiceMap;
-    private readonly forkedServices: Map<string, ChildProcess>;
-    private readonly forkHeartbeats: Map<string, NodeJS.Timeout>;
+    protected readonly bot: Bot;
+    protected readonly services: IServiceMap;
+    protected readonly forkedServices: Map<string, ChildProcess>;
+    protected readonly forkHeartbeats: Map<string, NodeJS.Timeout>;
 
     /**
      * @param {Bot} bot
@@ -29,28 +29,28 @@ export default class ServiceManager extends EventEmitter {
 
         /**
          * @type {Bot}
-         * @private
+         * @protected
          * @readonly
          */
         this.bot = bot;
 
         /**
          * @type {IServiceMap}
-         * @private
+         * @protected
          * @readonly
          */
         this.services = new Map();
 
         /**
          * @type {Map<string, Service>}
-         * @private
+         * @protected
          * @readonly
          */
         this.forkedServices = new Map();
 
         /**
          * @type {Map<string, NodeJS.Timeout>}
-         * @private
+         * @protected
          * @readonly
          */
         this.forkHeartbeats = new Map();
@@ -181,7 +181,7 @@ export default class ServiceManager extends EventEmitter {
         return enabled;
     }
 
-    private heartbeatFork(name: string): boolean {
+    protected heartbeatFork(name: string): boolean {
         if (!this.forkedServices.has(name)) {
             return false;
         }

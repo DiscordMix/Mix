@@ -1,10 +1,10 @@
 export default class ConfigBuilder {
-    private readonly properties: any;
+    protected readonly properties: any;
 
     public constructor() {
         /**
          * @type {Object}
-         * @private
+         * @protected
          * @readonly
          */
         this.properties = [];

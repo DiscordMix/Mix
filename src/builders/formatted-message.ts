@@ -1,5 +1,5 @@
 export default class FormattedMessage {
-    private message: string;
+    protected message: string;
 
     /**
      * @param {string} [startingString=""]
@@ -7,7 +7,7 @@ export default class FormattedMessage {
     public constructor(startingString = "") {
         /**
          * @type {string}
-         * @private
+         * @protected
          */
         this.message = startingString;
     }

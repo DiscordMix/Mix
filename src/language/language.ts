@@ -6,9 +6,9 @@ import BotMessages from "../core/messages";
 export type ILanguageSource = Map<string, any>;
 
 export default class Language {
-    private readonly languages: Map<string, ILanguageSource>;
+    protected readonly languages: Map<string, ILanguageSource>;
 
-    private default?: ILanguageSource;
+    protected default?: ILanguageSource;
 
     public readonly directory?: string;
 
@@ -18,13 +18,13 @@ export default class Language {
     public constructor(directory: string) {
         /**
          * @type {ILanguageSource | undefined}
-         * @private
+         * @protected
          */
         this.directory = directory;
 
         /**
          * @type {Map<string, ILanguageSource>}
-         * @private
+         * @protected
          * @readonly
          */
         this.languages = new Map();

@@ -3,7 +3,7 @@ export default class EmojiTableBuilder {
     public readonly height: number;
 
     // 2D Array
-    private readonly table: any[];
+    protected readonly table: any[];
 
     /**
      * @param {number} width

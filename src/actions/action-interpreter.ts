@@ -44,14 +44,14 @@ export enum ChannelType {
 
 // TODO: Possibly consider attaching ActionInterpreter into commands' "this" so it's easier to return and ActionInterpreter can auto-determine some stuff...
 export default class ActionInterpreter extends EventEmitter {
-    private readonly bot: Bot;
+    protected readonly bot: Bot;
 
     public constructor(bot: Bot) {
         super();
 
         /**
          * @type {Bot}
-         * @private
+         * @protected
          * @readonly
          */
         this.bot = bot;
@@ -227,7 +227,7 @@ export default class ActionInterpreter extends EventEmitter {
         }
     }
 
-    private ensureChannel<ReturnType = TextChannel>(channelId: Snowflake, actionType: ActionType, type: ChannelType = ChannelType.Text): ReturnType | null {
+    protected ensureChannel<ReturnType = TextChannel>(channelId: Snowflake, actionType: ActionType, type: ChannelType = ChannelType.Text): ReturnType | null {
         if (!this.bot.client.channels.has(channelId)) {
             this.error(actionType, `Unknown channel '${channelId}'`);
 
@@ -245,7 +245,7 @@ export default class ActionInterpreter extends EventEmitter {
         return channel as any;
     }
 
-    private error(type: ActionType, message: string): void {
+    protected error(type: ActionType, message: string): void {
         Log.error(`[InstructionInterpreter.interpret] Could not interpret instruction (${ActionType[type].toString()}): ${message}`);
     }
 }

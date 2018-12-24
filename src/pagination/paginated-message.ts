@@ -17,7 +17,7 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
     public readonly maxLength: number;
     public readonly breakLines: boolean;
 
-    private current: number;
+    protected current: number;
 
     public constructor(content: string, maxLength: number = 2000, breakLines: boolean = true, currentPage: number = 0) {
         super();

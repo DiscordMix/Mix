@@ -43,9 +43,9 @@ export default class CommandStore {
 
     public simpleCommands: Map<string, any>;
 
-    private readonly commands: ICommandMap;
-    private readonly released: Map<string, string>;
-    private readonly aliases: Map<string, string>;
+    protected readonly commands: ICommandMap;
+    protected readonly released: Map<string, string>;
+    protected readonly aliases: Map<string, string>;
 
     /**
      * @param {Bot} bot
@@ -53,14 +53,14 @@ export default class CommandStore {
     public constructor(bot: Bot) {
         /**
          * @type {Bot}
-         * @private
+         * @protected
          * @readonly
          */
         this.bot = bot;
 
         /**
          * @type {ICommandMap}
-         * @private
+         * @protected
          */
         this.commands = new Map();
 
@@ -72,13 +72,13 @@ export default class CommandStore {
 
         /**
          * @type {Map<string, string>}
-         * @private
+         * @protected
          */
         this.aliases = new Map();
 
         /**
          * @type {ICommandCooldown[]}
-         * @private
+         * @protected
          * @readonly
          */
         this.cooldowns = new Map();

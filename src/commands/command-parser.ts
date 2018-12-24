@@ -359,7 +359,7 @@ export default class CommandParser {
      * @param {IRawArguments} args
      * @return {boolean} Whether the argument count is valid
      */
-    private static validateArgumentCount(command: Command, args: IRawArguments): boolean {
+    protected static validateArgumentCount(command: Command, args: IRawArguments): boolean {
         if (command.singleArg && (args.length < command.maxArguments || args.length > command.minArguments)) {
             return false;
         }
@@ -374,7 +374,7 @@ export default class CommandParser {
      * @param {IArgumentType} type
      * @return {boolean}
      */
-    private static isTypeTrivial(type: IArgumentType): boolean {
+    protected static isTypeTrivial(type: IArgumentType): boolean {
         return typeof (type) === "number" && TrivialArgType[type] !== undefined;
     }
 
@@ -382,7 +382,7 @@ export default class CommandParser {
      * @param {IArgumentType} type
      * @return {boolean} Whether the provided type is valid
      */
-    private static isTypeValid(type: IArgumentType): boolean {
+    protected static isTypeValid(type: IArgumentType): boolean {
         return typeof type !== "string" && !CommandParser.isTypeTrivial(type);
     }
 
@@ -390,7 +390,7 @@ export default class CommandParser {
      * @param {string} value
      * @return {boolean | null}
      */
-    private static parseBoolean(value: string): boolean | null {
+    protected static parseBoolean(value: string): boolean | null {
         const lowerCaseValue: string = value.toString().toLowerCase();
 
         if (lowerCaseValue == "true" || lowerCaseValue == "1" || lowerCaseValue == "yes") {

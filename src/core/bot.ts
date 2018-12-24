@@ -43,7 +43,7 @@ import {IDisposable, ITimeoutAttachable} from "./helpers";
 import ActionInterpreter from "../actions/action-interpreter";
 import TaskManager from "../tasks/task-manager";
 import {EventEmitter} from "events";
-import TempoEngine from "../tempo-engine/tempo-engine";
+import Optimizer from "../tempo-engine/tempo-engine";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
 import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath} from "./constants";
@@ -221,7 +221,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly state: BotState;
     public readonly suspended: boolean;
     public readonly client: Client;
-    public readonly tempoEngine: TempoEngine;
+    public readonly tempoEngine: Optimizer;
     public readonly fragments: FragmentManager;
     public readonly paths: PathResolver;
     public readonly store: Store;
@@ -440,7 +440,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         /**
          * A list of disposable objects
          * @type {IDisposable[]}
-         * @private
+         * @protected
          * @readonly
          */
         this.disposables = [];
@@ -474,10 +474,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
         /**
          * Optimization engine for large bots
-         * @type {TempoEngine}
+         * @type {Optimizer}
          * @readonly
          */
-        this.tempoEngine = new TempoEngine(this);
+        this.tempoEngine = new Optimizer(this);
 
         /**
          * Fragment manager
@@ -566,14 +566,14 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
         /**
          * @type {ApiType}
-         * @private
+         * @protected
          * @readonly
          */
         this.api = api;
 
         /**
          * @type {number}
-         * @private
+         * @protected
          */
         this.setupStart = performance.now();
 

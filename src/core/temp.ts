@@ -7,8 +7,8 @@ import rimraf from "rimraf";
 import {default as main} from "require-main-filename";
 
 export default class Temp {
-    private id?: string;
-    private resolvedPath?: string;
+    protected id?: string;
+    protected resolvedPath?: string;
 
     /**
      * @todo Temp base path should be optionally determined from settings
@@ -24,13 +24,13 @@ export default class Temp {
     public setup(id: Snowflake): this {
         /**
          * @type {string | undefined}
-         * @private
+         * @protected
          */
         this.id = id;
 
         /**
          * @type {string | undefined}
-         * @private
+         * @protected
          */
         this.resolvedPath = Temp.resolvePath(this.id);
 

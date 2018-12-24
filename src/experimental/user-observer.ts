@@ -2,8 +2,8 @@ import {User, Client, Message, MessageReaction, GuildMember, Guild} from "discor
 import {EventEmitter} from "events";
 
 export default class UserObserver extends EventEmitter {
-    private readonly client: Client;
-    private readonly user: User;
+    protected readonly client: Client;
+    protected readonly user: User;
 
     /**
      * @param {Client} client
@@ -14,14 +14,14 @@ export default class UserObserver extends EventEmitter {
 
         /**
          * @type {Client}
-         * @private
+         * @protected
          * @readonly
          */
         this.client = client;
 
         /**
          * @type {User}
-         * @private
+         * @protected
          * @readonly
          */
         this.user = user;
@@ -29,7 +29,7 @@ export default class UserObserver extends EventEmitter {
         this.setupEvents();
     }
 
-    private setupEvents(): void {
+    protected setupEvents(): void {
         // Message
         this.client.on("message", (message: Message) => {
             if (message.author.id === this.user.id) {

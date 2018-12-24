@@ -1,12 +1,12 @@
 import Discord, {RichEmbed} from "discord.js";
 
 export default class EmbedBuilder {
-    private readonly embed: RichEmbed;
+    protected readonly embed: RichEmbed;
 
     public constructor() {
         /**
          * @type {Discord.RichEmbed}
-         * @private
+         * @protected
          * @readonly
          */
         this.embed = new Discord.RichEmbed();

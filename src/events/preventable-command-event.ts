@@ -7,7 +7,7 @@ import {ICommandEvent} from "./command-event";
 export default class PreventableCommandEvent implements ICommandEvent {
     public readonly context: CommandContext;
 
-    private prevented: boolean = false;
+    protected prevented: boolean = false;
 
     /**
      * @param {CommandContext} context
@@ -23,7 +23,7 @@ export default class PreventableCommandEvent implements ICommandEvent {
     /**
      * @param {boolean} [prevent=true]
      */
-    public prevent(prevent = true): void {
+    public prevent(prevent: boolean = true): void {
         /**
          * @type {boolean}
          * @readonly

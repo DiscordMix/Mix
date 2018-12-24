@@ -25,8 +25,8 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
     // TODO: Should be more productive if using Map
     public readonly buttons: IEmojiButton[];
 
-    private bot?: Bot;
-    private messageAttached?: Message;
+    protected bot?: Bot;
+    protected messageAttached?: Message;
 
     /**
      * @param {Snowflake} messageId
@@ -76,7 +76,7 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
      * @param {MessageReaction} reaction
      * @param {User} user
      */
-    private async handleMessageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
+    protected async handleMessageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
             return;
         }
@@ -100,7 +100,7 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
      * @param {MessageReaction} reaction
      * @param {User} user
      */
-    private async handleMessageReactionRemove(reaction: MessageReaction, user: User): Promise<void> {
+    protected async handleMessageReactionRemove(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.message.id !== this.messageId) {
             return;
         }
@@ -135,7 +135,7 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
         return this;
     }
 
-    private async react(): Promise<void> {
+    protected async react(): Promise<void> {
         if (!this.messageAttached) {
             return;
         }

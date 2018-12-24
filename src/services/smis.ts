@@ -7,10 +7,10 @@ import {ProcessMsgType, IProcessMsg, Log} from "..";
  * @extends EventEmitter
  */
 export default class SMIS extends EventEmitter {
-    private readonly child: ChildProcess;
-    private readonly timeout: number;
+    protected readonly child: ChildProcess;
+    protected readonly timeout: number;
 
-    private timeoutSource?: NodeJS.Timeout;
+    protected timeoutSource?: NodeJS.Timeout;
 
     /**
      * 
@@ -38,7 +38,11 @@ export default class SMIS extends EventEmitter {
      */
     public async handshake(): Promise<boolean> {
         // Send the SMIS handshake to start the connection
-        const response: IProcessMsg = await this.request(ProcessMsgType.SmisProtocolHandshake);
+        const response: IProcessMsg | null = await this.request(ProcessMsgType.SmisProtocolHandshake);
+
+        if (response === null) {
+            return false;
+        }
 
         switch (response.type) {
             case ProcessMsgType.SmisProtocolAccept: {

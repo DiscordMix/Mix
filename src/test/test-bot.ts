@@ -259,6 +259,38 @@ describe("Utils", () => {
 
             populated.splice(index + 1, 0, 5);
         });
+
+        it("should throw on invalid parameters", () => {
+            assert.throws(() => Utils.binaryInsert(undefined as any, []));
+            assert.throws(() => Utils.binaryInsert(null as any, []));
+            assert.throws(() => Utils.binaryInsert(false as any, []));
+            assert.throws(() => Utils.binaryInsert(true as any, []));
+            assert.throws(() => Utils.binaryInsert("hello" as any, []));
+            assert.throws(() => Utils.binaryInsert("" as any, []));
+            assert.throws(() => Utils.binaryInsert({} as any, []));
+            assert.throws(() => Utils.binaryInsert([] as any, []));
+
+            assert.throws(() => Utils.binaryInsert(undefined as any, null as any));
+            assert.throws(() => Utils.binaryInsert(undefined as any, undefined as any));
+            assert.throws(() => Utils.binaryInsert(undefined as any, false as any));
+            assert.throws(() => Utils.binaryInsert(undefined as any, true as any));
+            assert.throws(() => Utils.binaryInsert(undefined as any, "hello" as any));
+            assert.throws(() => Utils.binaryInsert(undefined as any, "" as any));
+            assert.throws(() => Utils.binaryInsert(undefined as any, {} as any));
+            assert.throws(() => Utils.binaryInsert(undefined as any, [] as any));
+            assert.throws(() => Utils.binaryInsert(undefined as any, 1 as any));
+            assert.throws(() => Utils.binaryInsert(undefined as any, 0 as any));
+
+            assert.throws(() => Utils.binaryInsert(1, 1 as any));
+            assert.throws(() => Utils.binaryInsert(1, 0 as any));
+            assert.throws(() => Utils.binaryInsert(1, {} as any));
+            assert.throws(() => Utils.binaryInsert(1, null as any));
+            assert.throws(() => Utils.binaryInsert(1, undefined as any));
+            assert.throws(() => Utils.binaryInsert(1, "hello" as any));
+            assert.throws(() => Utils.binaryInsert(1, "" as any));
+            assert.throws(() => Utils.binaryInsert(1, true as any));
+            assert.throws(() => Utils.binaryInsert(1, false as any));
+        });
     });
 });
 

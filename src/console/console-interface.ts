@@ -13,7 +13,7 @@ type ConsoleCommandHandler = (args: string[]) => void;
 export default class ConsoleInterface {
     public ready: boolean;
 
-    private readonly commands: Map<string, ConsoleCommandHandler>;
+    protected readonly commands: Map<string, ConsoleCommandHandler>;
 
     public constructor() {
         /**
@@ -24,7 +24,7 @@ export default class ConsoleInterface {
 
         /**
          * @type {Map<string, ConsoleCommandHandler}
-         * @private
+         * @protected
          * @readonly
          */
         this.commands = new Map();

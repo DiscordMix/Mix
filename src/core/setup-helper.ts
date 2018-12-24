@@ -36,13 +36,13 @@ export type ISetupHelperResult = {
 export type IResponseHandler = (response: string, index: number) => string;
 
 export default class SetupHelper {
-    private readonly client: any;
-    private readonly channel: TextChannel;
-    private readonly userId: Snowflake;
-    private readonly title?: string;
-    private readonly timeout: number;
-    private readonly embed: boolean;
-    private readonly actionMap: ISetupHelperAction[];
+    protected readonly client: any;
+    protected readonly channel: TextChannel;
+    protected readonly userId: Snowflake;
+    protected readonly title?: string;
+    protected readonly timeout: number;
+    protected readonly embed: boolean;
+    protected readonly actionMap: ISetupHelperAction[];
 
     /**
      * @param {ISetupHelperOptions} options
@@ -50,49 +50,49 @@ export default class SetupHelper {
     public constructor(options: ISetupHelperOptions) {
         /**
          * @type {*}
-         * @private
+         * @protected
          * @readonly
          */
         this.client = options.client;
 
         /**
          * @type {TextChannel}
-         * @private
+         * @protected
          * @readonly
          */
         this.channel = options.channel;
 
         /**
          * @type {Snowflake}
-         * @private
+         * @protected
          * @readonly
          */
         this.userId = options.userId;
 
         /**
          * @type {string | undefined}
-         * @private
+         * @protected
          * @readonly
          */
         this.title = options.title;
 
         /**
          * @type {number}
-         * @private
+         * @protected
          * @readonly
          */
         this.timeout = options.timeout || 60;
 
         /**
          * @type {boolean}
-         * @private
+         * @protected
          * @readonly
          */
         this.embed = options.embed !== undefined ? options.embed : true;
 
         /**
          * @type {ISetupHelperAction[]}
-         * @private
+         * @protected
          * @readonly
          */
         this.actionMap = [];
@@ -168,7 +168,7 @@ export default class SetupHelper {
     /**
      * @return {Promise<string | null>}
      */
-    private awaitResponse(): Promise<string | null> {
+    protected awaitResponse(): Promise<string | null> {
         return new Promise((resolve) => {
             // Timeout after x seconds
             const responseTimeout = setTimeout(() => {

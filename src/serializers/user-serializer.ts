@@ -3,7 +3,7 @@ import {User, Collection, Snowflake} from "discord.js";
 import {Patterns} from "..";
 
 export default class UserSerializer<UserType = User> implements ISerializer<UserType> {
-    private readonly source: Collection<Snowflake, UserType>;
+    protected readonly source: Collection<Snowflake, UserType>;
 
     public constructor(source: Collection<Snowflake, UserType>) {
         this.source = source;

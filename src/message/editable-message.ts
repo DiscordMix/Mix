@@ -28,7 +28,7 @@ export default class EditableMessage {
 
         /**
          * @type {Message}
-         * @private
+         * @protected
          * @readonly
          */
         this.msg = msg;

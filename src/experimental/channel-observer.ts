@@ -5,8 +5,8 @@ import {EventEmitter} from "events";
  * @extends EventEmitter
  */
 export default class ChannelObserver extends EventEmitter {
-    private readonly client: Client;
-    private readonly channel: TextChannel;
+    protected readonly client: Client;
+    protected readonly channel: TextChannel;
 
     /**
      * 
@@ -18,14 +18,14 @@ export default class ChannelObserver extends EventEmitter {
 
         /**
          * @type {Client}
-         * @private
+         * @protected
          * @readonly
          */
         this.client = client;
 
         /**
          * @type {TextChannel}
-         * @private
+         * @protected
          * @readonly
          */
         this.channel = channel;
@@ -33,7 +33,7 @@ export default class ChannelObserver extends EventEmitter {
         this.setupListeners();
     }
 
-    private setupListeners(): void {
+    protected setupListeners(): void {
         // Message
         this.client.on("message", (message: Message) => {
             if (message.channel.id === this.channel.id) {

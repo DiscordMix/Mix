@@ -13,11 +13,11 @@ export type GuildConfig = {
  * Provides interface to easily interact with per-guild configuration
  */
 export class GuildConfigMongoProvider extends AutoTransaction<GuildConfig, Collection<Snowflake, GuildConfig>, number> implements IQueriableProvider<GuildConfig> {
-    private static readonly key: string = "guildId";
+    protected static readonly key: string = "guildId";
 
     public readonly cache: Collection<Snowflake, GuildConfig>;
 
-    private readonly x: MongoCollection;
+    protected readonly x: MongoCollection;
 
     public constructor(bot: Bot, collection: MongoCollection) {
         super(bot, 10 * 1000);

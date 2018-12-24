@@ -2,8 +2,8 @@ import {Guild, Client, Message, MessageReaction, User, Channel, GuildChannel, Ro
 import {EventEmitter} from "events";
 
 export default class GuildObserver extends EventEmitter {
-    private readonly client: Client;
-    private readonly guild: Guild;
+    protected readonly client: Client;
+    protected readonly guild: Guild;
 
     /**
      * @param {Client} client
@@ -14,20 +14,20 @@ export default class GuildObserver extends EventEmitter {
 
         /**
          * @type {Client}
-         * @private
+         * @protected
          * @readonly
          */
         this.client = client;
 
         /**
          * @type {Guild}
-         * @private
+         * @protected
          * @readonly
          */
         this.guild = guild;
     }
 
-    private setupEvents(): void {
+    protected setupEvents(): void {
         // Message
         this.client.on("message", (message: Message) => {
             if (message.guild && message.guild.id === this.guild.id) {

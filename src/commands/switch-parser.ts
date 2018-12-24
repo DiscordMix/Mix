@@ -25,15 +25,15 @@ export default abstract class SwitchParser {
         return result;
     }
 
-    private static isShortSwitch(match: RegExpExecArray): boolean {
+    protected static isShortSwitch(match: RegExpExecArray): boolean {
         return !match[0].startsWith("--") && match[0].startsWith("-");
     }
 
-    private static getSwitchKey(match: RegExpExecArray): string {
+    protected static getSwitchKey(match: RegExpExecArray): string {
         return match[1] || match[4];
     }
 
-    private static getSwitchValue(match: RegExpExecArray): string | null {
+    protected static getSwitchValue(match: RegExpExecArray): string | null {
         return match[2] || match[3] || null;
     }
 }

@@ -2,7 +2,7 @@ import path from "path";
 import {ISettingsPaths} from "./settings";
 
 export default class PathResolver {
-    private paths: ISettingsPaths;
+    protected paths: ISettingsPaths;
 
     public constructor(paths: ISettingsPaths) {
         this.paths = paths;

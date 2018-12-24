@@ -5,7 +5,7 @@ import {default as _} from "lodash";
  * @extends EventEmitter
  */
 export default class List<DataType> extends EventEmitter {
-    private readonly items: DataType[];
+    protected readonly items: DataType[];
 
     /**
      * @param {Array} items
@@ -15,7 +15,7 @@ export default class List<DataType> extends EventEmitter {
 
         /**
          * @type {Array<*>}
-         * @private
+         * @protected
          */
         this.items = items;
     }
@@ -104,8 +104,8 @@ export default class List<DataType> extends EventEmitter {
 }
 
 export class Collection<KeyType, ValueType> extends Map<KeyType, ValueType> {
-    private cachedValueArray: ValueType[] | null;
-    private cachedKeyArray: KeyType[] | null;
+    protected cachedValueArray: ValueType[] | null;
+    protected cachedKeyArray: KeyType[] | null;
 
     public constructor(iterable?: any) {
         super(iterable);
@@ -114,7 +114,7 @@ export class Collection<KeyType, ValueType> extends Map<KeyType, ValueType> {
         this.cachedKeyArray = null;
     }
 
-    private resetCache(): this {
+    protected resetCache(): this {
         this.cachedKeyArray = null;
         this.cachedValueArray = null;
 

@@ -10,7 +10,7 @@ export default class TimeParser {
     public constructor(timeString: string) {
         /**
          * @type {string}
-         * @private
+         * @protected
          * @readonly
          */
         this.timeString = timeString;

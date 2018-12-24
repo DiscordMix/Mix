@@ -72,7 +72,7 @@ export default class CommandHandler {
      * @param {Command} command
      * @return {boolean}
      */
-    private handleError(event: CommandManagerEvent, context: CommandContext, command: Command): boolean {
+    protected handleError(event: CommandManagerEvent, context: CommandContext, command: Command): boolean {
         if (this._errorHandlers.get(event) !== undefined) {
             return this._errorHandlers.get(event)(context, command);
         }
@@ -86,7 +86,7 @@ export default class CommandHandler {
      * @param {IArgument[]} rawArgs
      * @return {boolean}
      */
-    private meetsRequirements(context: CommandContext, command: Command, rawArgs: IRawArguments): boolean {
+    protected meetsRequirements(context: CommandContext, command: Command, rawArgs: IRawArguments): boolean {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 

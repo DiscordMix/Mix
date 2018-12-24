@@ -7,9 +7,9 @@ import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
  * Manages, triggers, and executes tasks
  */
 export default class TaskManager {
-    private readonly bot: Bot;
-    private readonly tasks: Map<string, Task>;
-    private readonly scheduler: Map<string, NodeJS.Timeout>;
+    protected readonly bot: Bot;
+    protected readonly tasks: Map<string, Task>;
+    protected readonly scheduler: Map<string, NodeJS.Timeout>;
 
     /**
      * @param {Bot} bot
@@ -17,21 +17,21 @@ export default class TaskManager {
     public constructor(bot: Bot) {
         /**
          * @type {Bot}
-         * @private
+         * @protected
          * @readonly
          */
         this.bot = bot;
 
         /**
          * @type {Map<string, Task>}
-         * @private
+         * @protected
          * @readonly
          */
         this.tasks = new Map();
 
         /**
          * @type {Map<string, NodeJS.Timeout}
-         * @private
+         * @protected
          * @readonly
          */
         this.scheduler = new Map();
@@ -132,7 +132,7 @@ export default class TaskManager {
      * @param {string} name
      * @return {boolean}
      */
-    private run(name: string): boolean {
+    protected run(name: string): boolean {
         if (!this.tasks.has(name)) {
             return false;
         }

@@ -8,12 +8,12 @@ export type ISqlQueryWhere = {
 }
 
 export default class SqlQuery {
-    private readonly table: string;
+    protected readonly table: string;
 
-    private prefix: string;
-    private suffix?: string;
-    private wheres: ISqlQueryWhere[];
-    private limitAmount?: number;
+    protected prefix: string;
+    protected suffix?: string;
+    protected wheres: ISqlQueryWhere[];
+    protected limitAmount?: number;
 
     /**
      * @param {string} table
@@ -128,7 +128,7 @@ export default class SqlQuery {
      * @param value
      * @return {string}
      */
-    private static getValueQueryForm(value: any): string {
+    protected static getValueQueryForm(value: any): string {
         if (typeof(value) === "string") {
             return `"${value}"`;
         }

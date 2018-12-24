@@ -6,14 +6,14 @@ import fs from "fs";
 /**
  * Used in large bots for memory optimization
  */
-export default class TempoEngine implements IDisposable {
-    private readonly bot: Bot;
-    private readonly interval: number;
-    private readonly sizeThreshold: number;
+export default class Optimizer implements IDisposable {
+    protected readonly bot: Bot;
+    protected readonly interval: number;
+    protected readonly sizeThreshold: number;
 
-    private commandsUsed: string[];
+    protected commandsUsed: string[];
 
-    private processInterval: NodeJS.Timeout | null;
+    protected processInterval: NodeJS.Timeout | null;
     
     // TODO: Interval should be calculated based on amount of commands
     public constructor(bot: Bot, interval: number = 10*60*1000, sizeThreshold: number = 102400) {
@@ -76,7 +76,7 @@ export default class TempoEngine implements IDisposable {
      * Handle performance optimization iteration
      * @return {Promise<number>}
      */
-    private async processTempo(): Promise<number> {
+    protected async processTempo(): Promise<number> {
         const commands: IReadonlyCommandMap = this.bot.commandStore.getAll();
 
         let released: number = 0;

@@ -18,11 +18,11 @@ export enum MemberType {
 
 // TODO: Should also be able to call a callback function every X iterations
 export default class DataCollector {
-    private readonly guild: Guild;
-    private readonly collectionType: MemberDataType;
+    protected readonly guild: Guild;
+    protected readonly collectionType: MemberDataType;
 
-    private fromType: MemberType;
-    private whereCondition?: (member: GuildMember) => boolean;
+    protected fromType: MemberType;
+    protected whereCondition?: (member: GuildMember) => boolean;
 
     /**
      * @param {Guild} guild
@@ -30,20 +30,20 @@ export default class DataCollector {
     public constructor(guild: Guild) {
         /**
          * @type {Guild}
-         * @private
+         * @protected
          * @readonly
          */
         this.guild = guild;
 
         /**
          * @type {MemberDataType}
-         * @private
+         * @protected
          */
         this.collectionType = MemberDataType.Everything;
 
         /**
          * @type {MemberType}
-         * @private
+         * @protected
          */
         this.fromType = MemberType.Everyone;
     }

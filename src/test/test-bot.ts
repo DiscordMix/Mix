@@ -143,6 +143,16 @@ describe("Utils", () => {
                 expect(result).to.have.lengthOf(18);
             }
         });
+
+        it("should throw on invalid parameters", () => {
+            assert.throws(() => Utils.resolveId(undefined as any));
+            assert.throws(() => Utils.resolveId(1 as any));
+            assert.throws(() => Utils.resolveId(0 as any));
+            assert.throws(() => Utils.resolveId(false as any));
+            assert.throws(() => Utils.resolveId(true as any));
+            assert.throws(() => Utils.resolveId({} as any));
+            assert.throws(() => Utils.resolveId([] as any));
+        });
     });
 
     describe("timeAgo()", () => {
@@ -159,20 +169,20 @@ describe("Utils", () => {
             expect([0, 1]).to.include(result as number);
         });
 
-        it("should return null when provided invalid arguments", () => {
-            expect(Utils.getRandomInt(0, 0)).to.be.a("null");
-            expect(Utils.getRandomInt(0, -1)).to.be.a("null");
-            expect(Utils.getRandomInt(50, 10)).to.be.a("null");
-            expect(Utils.getRandomInt("hello" as any, 3)).to.be.a("null");
-            expect(Utils.getRandomInt("" as any, 3)).to.be.a("null");
-            expect(Utils.getRandomInt(3, "hello" as any)).to.be.a("null");
-            expect(Utils.getRandomInt(3, "" as any)).to.be.a("null");
-            expect(Utils.getRandomInt(undefined as any, 3)).to.be.a("null");
-            expect(Utils.getRandomInt(3 as any, undefined as any)).to.be.a("null");
-            expect(Utils.getRandomInt(null as any, 3)).to.be.a("null");
-            expect(Utils.getRandomInt(3, null as any)).to.be.a("null");
-            expect(Utils.getRandomInt({} as any, 3)).to.be.a("null");
-            expect(Utils.getRandomInt(3, {} as any)).to.be.a("null");
+        it("should throw on invalid parameters", () => {
+            assert.throws(() => Utils.getRandomInt(0, 0));
+            assert.throws(() => Utils.getRandomInt(0, -1));
+            assert.throws(() => Utils.getRandomInt(50, 10));
+            assert.throws(() => Utils.getRandomInt("hello" as any, 3));
+            assert.throws(() => Utils.getRandomInt("" as any, 3));
+            assert.throws(() => Utils.getRandomInt(3, "hello" as any));
+            assert.throws(() => Utils.getRandomInt(3, "" as any));
+            assert.throws(() => Utils.getRandomInt(undefined as any, 3));
+            assert.throws(() => Utils.getRandomInt(3 as any, undefined as any));
+            assert.throws(() => Utils.getRandomInt(null as any, 3));
+            assert.throws(() => Utils.getRandomInt(3, null as any));
+            assert.throws(() => Utils.getRandomInt({} as any, 3));
+            assert.throws(() => Utils.getRandomInt(3, {} as any));
         });
     });
 
@@ -204,15 +214,19 @@ describe("Utils", () => {
     describe("shuffle()", () => {
         it("should shuffle an array", () => {
             expect(Utils.shuffle(["hello", "my", "name", "is", "john doe"])).to.be.an("array").and.to.have.length(5);
+            expect(Utils.shuffle([])).to.be.an("array").and.to.have.length(0);
         });
 
-        it("should return an empty array when provided invalid arguments", () => {
-            expect(Utils.shuffle([])).to.be.an("array").and.to.have.length(0);
-            expect(Utils.shuffle(undefined as any)).to.be.an("array").and.to.have.length(0);
-            expect(Utils.shuffle(null as any)).to.be.an("array").and.to.have.length(0);
-            expect(Utils.shuffle("" as any)).to.be.an("array").and.to.have.length(0);
-            expect(Utils.shuffle("hello world" as any)).to.be.an("array").and.to.have.length(0);
-            expect(Utils.shuffle(3 as any)).to.be.an("array").and.to.have.length(0);
+        it("should throw on invalid parameters", () => {
+            assert.throws(() => Utils.shuffle(undefined as any))
+            assert.throws(() => Utils.shuffle(null as any));
+            assert.throws(() => Utils.shuffle("" as any));
+            assert.throws(() => Utils.shuffle("hello world" as any));
+            assert.throws(() => Utils.shuffle(1 as any));
+            assert.throws(() => Utils.shuffle(0 as any));
+            assert.throws(() => Utils.shuffle({} as any));
+            assert.throws(() => Utils.shuffle(false as any));
+            assert.throws(() => Utils.shuffle(true as any));
         });
     });
 
@@ -240,6 +254,17 @@ describe("Utils", () => {
         it("should populate an array", () => {
             expect(populated).to.be.an("array").and.to.have.length(50);
         });
+
+        it("should throw on invalid parameters", () => {
+            assert.throws(() => Utils.populate(undefined as any));
+            assert.throws(() => Utils.populate(null as any));
+            assert.throws(() => Utils.populate([] as any));
+            assert.throws(() => Utils.populate({} as any));
+            assert.throws(() => Utils.populate(false as any));
+            assert.throws(() => Utils.populate(true as any));
+            assert.throws(() => Utils.populate("test" as any));
+            assert.throws(() => Utils.populate("" as any));
+        });
     });
 
     describe("binarySearch()", () => {
@@ -249,6 +274,17 @@ describe("Utils", () => {
             expect(result).to.be.an("object");
             expect(result.found).to.be.a("boolean").and.to.equal(true);
             expect(result.iterations).to.be.a("number").and.to.equal(6);
+        });
+
+        it("should throw on invalid parameters", () => {
+            assert.throws(() => Utils.binarySearch(undefined as any, []));
+            assert.throws(() => Utils.binarySearch(false as any, []));
+            assert.throws(() => Utils.binarySearch(true as any, []));
+            assert.throws(() => Utils.binarySearch([] as any, []));
+            assert.throws(() => Utils.binarySearch({} as any, []));
+            assert.throws(() => Utils.binarySearch(null as any, []));
+            assert.throws(() => Utils.binarySearch("test" as any, []));
+            assert.throws(() => Utils.binarySearch("" as any, []));
         });
     });
 
@@ -569,7 +605,7 @@ describe("Pagination.previous()", () => {
     });
 }); */
 
-describe("LogSerializer", () => {
+describe("Log Serializer", () => {
     describe("serialize()", () => {
         const serializer: LogSerializer = new LogSerializer();
 

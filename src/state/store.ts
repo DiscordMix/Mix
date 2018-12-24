@@ -22,7 +22,7 @@ export interface IStateCapsule {
     readonly time: number;
 }
 
-export class Delta {
+export abstract class Delta {
     /**
      * Compare two objects's properties without recursion
      * @param entity1

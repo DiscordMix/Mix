@@ -32,7 +32,7 @@ TimeAgo.locale(en);
 
 const timeAgo: any = new TimeAgo("en-US");
 
-export type ISendOptions = {
+export interface ISendOptions {
     readonly avatarUrl: string;
     readonly channel: TextChannel;
     readonly message: string;
@@ -48,7 +48,7 @@ export interface IBinarySearchResult {
     readonly found: boolean;
 }
 
-export default class Utils {
+export default abstract class Utils {
     public static readonly botLists: Snowflake[] = [
         "374071874222686211", // Bots for Discord (BFD)
         "264445053596991498", // Discord Bot List (DBL)
@@ -62,6 +62,10 @@ export default class Utils {
      * @return {string}
      */
     public static resolveId(mention: string): string {
+        if (typeof mention !== "string") {
+            throw new Error("Expecting mention to be a string");
+        }
+
         return mention
             .replace("<", "")
             .replace(">", "")
@@ -95,9 +99,9 @@ export default class Utils {
      * @param {number} max The maximum amount
      * @return {number} The random number
      */
-    public static getRandomInt(min: number, max: number): number | null {
+    public static getRandomInt(min: number, max: number): number {
         if (typeof min !== "number" || typeof max !== "number" || min > max || min === max) {
-            return null;
+            throw new Error("Expecting min and max parameters to be numbers");
         }
 
         return Math.floor(Math.random() * max) + min;
@@ -168,6 +172,10 @@ export default class Utils {
     }
 
     public static populate(amount: number): number[] {
+        if (typeof amount !== "number") {
+            throw new Error("Expecting amount to be a number");
+        }
+
         const result: number[] = [];
 
         for (let i: number = 0; i < amount; i++) {
@@ -224,7 +232,10 @@ export default class Utils {
      * @return {Array<*>} The shuffled array
      */
     public static shuffle(array: any[]): any[] {
-        if (!Array.isArray(array) || array.length === 0) {
+        if (!Array.isArray(array)) {
+            throw new Error("Expecting parameter to be an array");
+        }
+        else if (array.length === 0) {
             return [];
         }
 

@@ -84,7 +84,7 @@ describe("Utils", () => {
             expect(Utils.hasMentionPrefix(`<@${subjects.ids[0]}> hello world`, subjects.ids[0])).to.equal(true);
             expect(Utils.hasMentionPrefix(`hello world <@${subjects.ids[0]}>`, subjects.ids[0])).to.equal(false);
         });
-    
+
         it("should throw an error when provided invalid input", () => {
             assert.throws(() => Utils.hasMentionPrefix(undefined as any, undefined as any));
             assert.throws(() => Utils.hasMentionPrefix(null as any, null as any));
@@ -100,13 +100,13 @@ describe("Utils", () => {
             expect(Utils.escapeText(`hi world, ${subjects.token}, john doe`, "hello world")).to.equal("hi world, [Token], john doe");
             expect(Utils.escapeText(`hi world, ${subjects.token}, john doe, hello world, hi`, "hello world")).to.equal("hi world, [Token], john doe, [Token], hi");
         });
-    
+
         it("should escape IPv4s", () => {
             expect(Utils.escapeText("192.168.0.1", "empty")).to.equal("[IPv4]");
             expect(Utils.escapeText("53.32.53.252", "empty")).to.equal("[IPv4]");
             expect(Utils.escapeText("hello 192.168.0.1 world", "empty")).to.equal("hello [IPv4] world");
         });
-    
+
         it("should escape mentions", () => {
             expect(Utils.escapeText("@everyone hello world", "empty")).to.equal("[Mention] hello world");
             expect(Utils.escapeText("hello @everyone world", "empty")).to.equal("hello [Mention] world");
@@ -119,7 +119,7 @@ describe("Utils", () => {
             expect(Utils.escapeText(`hello ${subjects.ids[2]} world`, "empty")).to.equal("hello [Mention] world");
             expect(Utils.escapeText(`hello ${subjects.ids[3]} world`, "empty")).to.equal(`hello ${subjects.ids[3]} world`);
         });
-    
+
         it("should throw when provided invalid input", () => {
             assert.throws(() => Utils.escapeText(undefined as any, undefined as any));
             assert.throws(() => Utils.escapeText(null as any, null as any));
@@ -135,7 +135,7 @@ describe("Utils", () => {
             // TODO: Review?
             for (let i = 0; i < subjects.ids.length; i++) {
                 const result: any = Utils.resolveId(subjects.ids[i]);
-    
+
                 expect(result).to.be.an("string");
                 expect(result).to.have.lengthOf(18);
             }
@@ -151,11 +151,11 @@ describe("Utils", () => {
     describe("getRandomInt()", () => {
         it("should return a random number", () => {
             const result: number | null = Utils.getRandomInt(0, 2);
-    
+
             expect(result).to.be.an("number");
             expect([0, 1]).to.include(result as number);
         });
-    
+
         it("should return null when provided invalid arguments", () => {
             expect(Utils.getRandomInt(0, 0)).to.be.a("null");
             expect(Utils.getRandomInt(0, -1)).to.be.a("null");
@@ -182,7 +182,7 @@ describe("Utils", () => {
                 "yes",
                 "on"
             ];
-    
+
             for (let i: number = 0; i < subjects.length; i++) {
                 expect(Utils.translateState(subjects[i].toString())).to.be.an("boolean").and.to.equal(true);
             }
@@ -192,7 +192,7 @@ describe("Utils", () => {
     describe("timeFromNow()", () => {
         it("should return the time from now in milliseconds", () => {
             const result = Utils.timeFromNow(0, 0, 50);
-    
+
             expect(result).to.be.an("number");
             expect(result.toString()).to.have.lengthOf(13);
         });
@@ -202,7 +202,7 @@ describe("Utils", () => {
         it("should shuffle an array", () => {
             expect(Utils.shuffle(["hello", "my", "name", "is", "john doe"])).to.be.an("array").and.to.have.length(5);
         });
-    
+
         it("should return an empty array when provided invalid arguments", () => {
             expect(Utils.shuffle([])).to.be.an("array").and.to.have.length(0);
             expect(Utils.shuffle(undefined as any)).to.be.an("array").and.to.have.length(0);
@@ -219,10 +219,10 @@ describe("Utils", () => {
                 id: subjects.ids[3],
                 tag: "JohnDoe#1234"
             } as any);
-    
+
             expect(result1).to.equal(`<@${subjects.ids[3]}> (JohnDoe#1234:${subjects.ids[3]})`);
         });
-    
+
         it("should throw when provided invalid input", () => {
             assert.throws(() => Utils.getUserIdentifier("" as any));
             assert.throws(() => Utils.getUserIdentifier("hello world" as any));
@@ -246,6 +246,18 @@ describe("Utils", () => {
             expect(result).to.be.an("object");
             expect(result.found).to.be.a("boolean").and.to.equal(true);
             expect(result.iterations).to.be.a("number").and.to.equal(6);
+        });
+    });
+
+    describe("binaryInsert()", () => {
+        it("should determine an index to insert", () => {
+            populated.splice(5, 1);
+
+            const index: number = Utils.binaryInsert(5, populated);
+
+            expect(index).to.be.a("number").and.to.equal(4);
+
+            populated.splice(index + 1, 0, 5);
         });
     });
 });
@@ -327,11 +339,11 @@ describe("Collection", () => {
             const settingsPromise: Promise<Settings> = new Promise(async (resolve) => {
                 resolve(await Settings.fromFile(subjects.settingsPath));
             });
-    
+
             const settingsSecondPromise: Promise<Settings> = new Promise(async (resolve) => {
                 resolve(await Settings.fromFile(subjects.settingsPathTwo));
             });
-    
+
             settingsPromise.then((result: Settings) => {
                 expect(result.general.prefixes).to.be.an("array");
                 expect(result.general.prefixes[0]).to.equal("!");
@@ -341,7 +353,7 @@ describe("Collection", () => {
                 expect(result.keys.dbl).to.be.an("string").and.to.equal("my_dbl_key");
                 expect(result.keys.bfd).to.be.an("string").and.to.equal("my_bfd_key");
             });
-    
+
             return settingsSecondPromise.then((result: Settings) => {
                 expect(result.general.prefixes).to.be.an("array");
                 expect(result.general.prefixes[0]).to.equal(".");
@@ -1114,7 +1126,7 @@ describe("store", () => {
                 return {
                     ...state,
                     $$test: action.payload
-                }
+                };
             }
 
             return null;
@@ -1167,7 +1179,7 @@ describe("store", () => {
                 testBot.store.dispatch(StoreActionType.$$Test);
             });
         });
-        
+
         it("should throw on invalid parameters", () => {
             assert.throws(() => testBot.store.subscribe(1 as any));
             assert.throws(() => testBot.store.subscribe(0 as any));
@@ -1196,6 +1208,13 @@ describe("store", () => {
             assert.throws(() => testBot.store.isSubscribed(0 as any), BotMessages.STORE_EXPECT_HANDLER_FUNC);
         });
     });
+
+    describe("insert()", () => {
+        it("should insert a new state", () => {
+
+            expect(true).to.equal(true);
+        });
+    });
 });
 
 describe("time machine", () => {
@@ -1203,16 +1222,54 @@ describe("time machine", () => {
         expect(testBot.store.timeMachine.present()).to.be.a("null");
     });
 
-    it("should record state changes", () => {
-        testBot.store.dispatch<string>(StoreActionType.$$Test, "hello");
+    describe("present()", () => {
+        it("should return null when there are no records", () => {
+            expect(testBot.store.timeMachine.present()).to.be.a("null");
+        });
 
-        const capsule: IStateCapsule = testBot.store.timeMachine.present() as IStateCapsule;
+        it("should return expected state capsule", () => {
+            testBot.store.dispatch<string>(StoreActionType.$$Test, "hello");
 
-        expect(capsule).to.be.an("object");
-        expect(capsule.time).to.be.a("number");
-        expect(capsule.state).to.be.an("object");
-        expect(capsule.state.$$test).to.be.a("string");
-        expect(capsule.state.$$test).to.equal("hello");
+            const capsule: IStateCapsule = testBot.store.timeMachine.present() as IStateCapsule;
+
+            expect(capsule).to.be.an("object");
+            expect(capsule.time).to.be.a("number");
+            expect(capsule.state).to.be.an("object");
+            expect(capsule.state.$$test).to.be.a("string");
+            expect(capsule.state.$$test).to.equal("hello");
+        });
+    });
+
+    describe("before()", () => {
+        it("should aggregate capsules before specified time", () => {
+            const now: number = Date.now();
+            const beforeNow1: IStateCapsule[] = testBot.store.timeMachine.before(now);
+
+            expect(beforeNow1).to.be.an("array").and.to.have.length(1);
+            expect(beforeNow1[0].time).to.be.a("number").and.to.be.lessThan(now);
+
+            testBot.store.dispatch<string>(StoreActionType.$$Test, "world");
+
+            const beforeNow2: IStateCapsule[] = testBot.store.timeMachine.before(now);
+
+            expect(beforeNow2).to.be.an("array").and.to.have.length(1);
+            expect(beforeNow2[0]).to.be.an("object");
+            expect(beforeNow2[0].state).to.be.an("object");
+            expect(beforeNow2[0].state.$$test).to.be.a("string").and.to.equal("hello");
+            expect(beforeNow2[0].time).to.be.a("number").and.to.be.lessThan(now);
+        });
+    });
+
+    describe("after()", () => {
+        it("should aggregate capsules after specified time", () => {
+            const firstTime: number = (testBot.store.timeMachine.wayback() as IStateCapsule).time;
+            const afterNow: IStateCapsule[] = testBot.store.timeMachine.after(firstTime);
+
+            expect(afterNow).to.be.an("array").and.to.have.length(1);
+            expect(afterNow[0].state).to.be.an("object");
+            expect(afterNow[0].state.$$test).to.be.a("string").and.to.equal("world");
+            expect(afterNow[0].time).to.be.a("number").and.to.be.greaterThan(firstTime);
+        });
     });
 });
 

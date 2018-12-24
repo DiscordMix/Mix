@@ -31,9 +31,9 @@ enum BotMessages {
     CFG_FILE_NO_EXIST = "[Settings.fromFile] Could not load settings: File does not exist",
 
     STORE_EXPECT_HANDLER_FUNC = "[Store.subscribe] Expecting handler to be a function",
-    STORE_UNEXPECTED_PAYLOAD = "[Store] Unexpected payload parameter when already provided full action object",
     STORE_INVALID_ACTION = "[Store] Expecting action parameter to be either an action object or an action type",
     STORE_EXPECT_REDUCER_FUNC = "[Store] Expecting reducer to be a function",
+    STORE_REDUCER_NO_UNDEFINED = "[Store] Reducer must return a state, otherwise return null to indicate no changes",
 
     INTENTIONAL_ERROR = "Intentionally thrown error"
 }

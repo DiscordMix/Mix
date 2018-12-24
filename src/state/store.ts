@@ -1,4 +1,5 @@
 import BotMessages from "../core/messages";
+import Utils from "../core/utils";
 
 export interface IStoreAction<T = any> {
     readonly type: StoreActionType;
@@ -58,9 +59,17 @@ export class TimeMachine {
 
     public constructor(store: Store) {
         this.store = store;
-
         this.capsules = [];
         this.setup();
+    }
+
+    protected insert(state: IState): this {
+        this.capsules.push({
+            state,
+            time: Date.now()
+        });
+
+        return this;
     }
 
     public wayback(): IStateCapsule | null {
@@ -75,7 +84,6 @@ export class TimeMachine {
         return null;
     }
 
-    // TODO: It is way more efficient to use binary searched, with the capsule array being sorted by time. (before(), after())
     public before(time: number): IStateCapsule[] {
         const result: IStateCapsule[] = [];
 
@@ -104,18 +112,12 @@ export class TimeMachine {
         const currentState: IState | undefined = this.store.getState();
 
         if (currentState !== undefined) {
-            this.capsules.push({
-                state: currentState,
-                time: Date.now()
-            });
+            this.insert(currentState);
         }
 
         this.store.subscribe((action: IStoreAction, previousState: IState | undefined, newState: IState | undefined, changed: boolean) => {
             if (changed && newState !== undefined) {
-                this.capsules.push({
-                    state: newState,
-                    time: Date.now()
-                });
+                this.insert(newState);
             }
         });
     }
@@ -136,21 +138,18 @@ export default class Store {
         this.timeMachine = new TimeMachine(this);
     }
 
-    public dispatch<T = any>(actionOrType: IStoreAction | StoreActionType, payload?: T): this {
+    public dispatch<T = any>(type: StoreActionType, payload?: T): this {
         // TODO: Also validate whether type (only) is defined
-        if (typeof actionOrType === "object" && actionOrType !== null && payload !== undefined) {
-            throw new Error(BotMessages.STORE_UNEXPECTED_PAYLOAD);
-        }
-        else if (typeof actionOrType !== "number" && typeof actionOrType !== "object") {
+        if (typeof type !== "number") {
             throw new Error(BotMessages.STORE_INVALID_ACTION);
         }
 
         const previousState: IState | undefined = this.state;
 
-        const action: IStoreAction = typeof actionOrType === "number" ? {
-            type: actionOrType,
+        const action: IStoreAction = {
+            type,
             payload
-        } : actionOrType;
+        };
 
         let changed: boolean = false;
 
@@ -158,7 +157,7 @@ export default class Store {
             const result: IState | null = reducer(this.state, action);
 
             if (result === undefined) {
-                throw new Error("[Store] Reducer must return a state, otherwise return null to indicate no changes");
+                throw new Error(BotMessages.STORE_REDUCER_NO_UNDEFINED);
             }
             else if (result !== null) {
                 this.state = result;

@@ -135,6 +135,38 @@ export default class Utils {
         };
     }
 
+    public static binaryInsert(subject: number, host: number[]): number {
+        if (typeof subject !== "number" || !Array.isArray(host)) {
+            throw new Error("Expecting subject to be a number and host to be an array of numbers");
+        }
+        else if (host.length === 0) {
+            return 0;
+        }
+
+        let pool: number[] = [...host];
+        let midPoint: number = -1;
+
+        while (pool.length !== 1) {
+            midPoint = Math.round(pool.length / 2);
+
+            if (pool[midPoint] > subject) {
+                pool.splice(midPoint, pool.length);
+            }
+            else if (pool[midPoint] < subject) {
+                pool.splice(0, midPoint);
+            }
+            else if (pool[midPoint] === undefined) {
+                pool.splice(midPoint - 1, 1);
+            }
+            else if (pool[midPoint] === subject) {
+                throw new Error("Unexpected host to already contain value");
+            }
+        }
+
+        // TODO: Might fail if the host contains multiple of such elements
+        return host.indexOf(pool[0]);
+    }
+
     public static populate(amount: number): number[] {
         const result: number[] = [];
 

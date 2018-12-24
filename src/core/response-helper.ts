@@ -1,7 +1,11 @@
-import {EmbedBuilder, EditableMessage, Log, Utils, FormattedMessage} from "..";
 import {RichEmbed, Message, User, TextChannel} from "discord.js";
 import Discord from "discord.js";
 import Bot from "./bot";
+import EditableMessage from "../message/editable-message";
+import EmbedBuilder from "../builders/embed-builder";
+import Log from "./log";
+import FormattedMessage from "../builders/formatted-message";
+import Utils from "./utils";
 
 export default class ResponseHelper {
     public readonly channel: TextChannel;

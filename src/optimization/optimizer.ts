@@ -1,7 +1,9 @@
-import {IDisposable, Bot, Command, Log} from "..";
-import {EBotEvents} from "../core/bot";
+import Bot, {EBotEvents} from "../core/bot";
 import {IReadonlyCommandMap} from "../commands/command-store";
 import fs from "fs";
+import Log from "../core/log";
+import Command from "../commands/command";
+import {IDisposable} from "../core/helpers";
 
 /**
  * Used in large bots for memory optimization

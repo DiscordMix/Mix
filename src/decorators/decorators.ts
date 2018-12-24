@@ -1,5 +1,4 @@
-import {ICommandExecuted, ICommandRestrict} from "../commands/command";
-import {IArgument} from "..";
+import {ICommandExecuted, ICommandRestrict, IArgument} from "../commands/command";
 import {IFragment} from "../fragments/fragment";
 import Log from "../core/log";
 import {Snowflake} from "discord.js";

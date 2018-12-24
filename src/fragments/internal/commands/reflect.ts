@@ -1,6 +1,9 @@
-import {Command, IFragmentMeta, IAction, IMessageActionArgs, IArgument, CommandContext, FormattedMessage, Service} from "../../..";
-import {TrivialArgType, RestrictGroup} from "../../../commands/command";
-import {ActionType} from "../../../actions/action";
+import Command, {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
+import {ActionType, IAction} from "../../../actions/action";
+import {IFragmentMeta, IMessageActionArgs} from "../../..";
+import CommandContext from "../../../commands/command-context";
+import Service from "../../../services/service";
+import FormattedMessage from "../../../builders/formatted-message";
 
 type IReflectArgs = {
     readonly type: ReflectDataType;

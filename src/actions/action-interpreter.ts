@@ -1,8 +1,12 @@
 import Bot from "../core/bot";
 import {IAction, ActionType} from "./action";
 import {Snowflake, Channel, TextChannel, Guild, User, RichEmbed, Message} from "discord.js";
-import {Log, Utils, PaginatedMessage, EmojiMenu, CommandContext} from "..";
 import {EventEmitter} from "events";
+import CommandContext from "../commands/command-context";
+import PaginatedMessage from "../pagination/paginated-message";
+import EmojiMenu from "../emoji-menu/emoji-menu";
+import Log from "../core/log";
+import Utils from "../core/utils";
 
 // Arg types
 export type IMessageActionArgs = {

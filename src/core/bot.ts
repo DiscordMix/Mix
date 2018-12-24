@@ -43,7 +43,7 @@ import {IDisposable, ITimeoutAttachable} from "./helpers";
 import ActionInterpreter from "../actions/action-interpreter";
 import TaskManager from "../tasks/task-manager";
 import {EventEmitter} from "events";
-import Optimizer from "../tempo-engine/tempo-engine";
+import Optimizer from "../optimization/optimizer";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
 import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath} from "./constants";

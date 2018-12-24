@@ -2,8 +2,8 @@ import {IQueriableProvider} from "./provider";
 import {Snowflake} from "discord.js";
 import {Collection as MongoCollection, DeleteWriteOpResultObject} from "mongodb";
 import {AutoTransaction} from "../transactions/transaction";
-import {Bot} from "..";
 import {Collection} from "../collections/collection";
+import Bot from "../core/bot";
 
 export type GuildConfig = {
     readonly guildId: Snowflake;

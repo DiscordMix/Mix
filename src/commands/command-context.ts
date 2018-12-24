@@ -3,8 +3,10 @@ import Bot from "../core/bot";
 import ResponseHelper from "../core/response-helper";
 import Utils from "../core/utils";
 import {ChannelType} from "../actions/action-interpreter";
-import {EmojiMenu, Log, EditableMessage} from "..";
 import BotMessages from "../core/messages";
+import EditableMessage from "../message/editable-message";
+import EmojiMenu from "../emoji-menu/emoji-menu";
+import Log from "../core/log";
 
 export type ICommandExecutionContextOptions = {
     readonly msg: Message;

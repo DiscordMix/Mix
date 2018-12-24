@@ -14,7 +14,7 @@ import Command, {
 import {Message} from "discord.js";
 import Log from "../core/log";
 import SwitchParser, {ICommandSwitch} from "./switch-parser";
-import {Patterns} from "..";
+import Patterns from "../core/patterns";
 
 export type IResolveArgumentsOptions = {
     readonly arguments: IRawArguments;

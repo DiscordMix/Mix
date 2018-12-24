@@ -13,7 +13,7 @@ import {
 import fs from "fs";
 import path from "path";
 import Patterns from "./patterns";
-import {Bot} from "..";
+import Bot from "./bot";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");

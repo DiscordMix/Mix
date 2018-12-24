@@ -1,8 +1,10 @@
 import {EventEmitter} from "events";
-import {Bot, Command, Log, Service, ForkedService, IFragment} from "..";
 import FragmentLoader, {IPackage, ILivePackage} from "./fragment-loader";
-import {DefaultCommandRestrict} from "../commands/command";
-import {InternalCommand} from "../core/bot";
+import Command, {DefaultCommandRestrict} from "../commands/command";
+import Bot, {InternalCommand} from "../core/bot";
+import {IFragment} from "./fragment";
+import Service, {ForkedService} from "../services/service";
+import Log from "../core/log";
 
 export default class FragmentManager extends EventEmitter {
     protected readonly bot: Bot;

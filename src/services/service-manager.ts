@@ -1,10 +1,12 @@
 import Bot from "../core/bot";
-import {IRawProcessMsg, ProcessMsgType, IProcessMsg} from "./service";
-import {Log, Utils, SMIS, GenericService} from "..";
+import {IRawProcessMsg, ProcessMsgType, IProcessMsg, GenericService} from "./service";
 import {fork, ChildProcess} from "child_process";
 import fs from "fs";
 import path from "path";
 import {EventEmitter} from "events";
+import Log from "../core/log";
+import SMIS from "./smis";
+import Utils from "../core/utils";
 
 export type IServiceMap = Map<string, GenericService>;
 export type IReadonlyServiceMap = ReadonlyMap<string, GenericService>;

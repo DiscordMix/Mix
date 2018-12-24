@@ -1,4 +1,7 @@
-import {Command, CommandContext, RestrictGroup} from "../../..";
+import Command from "../../../commands/command";
+import {RestrictGroup} from "../../..";
+import CommandContext from "../../../commands/command-context";
+
 
 /**
  * @extends Command

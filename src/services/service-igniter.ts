@@ -4,9 +4,9 @@ if (!process.send || !process.connected) {
 }
 
 import fs from "fs";
-import {Log} from "..";
 import {ForkedService, IRawProcessMsg, ProcessMsgType} from "./service";
 import ServiceManager from "./service-manager";
+import Log from "../core/log";
 
 const args: string[] = process.argv.splice(2);
 

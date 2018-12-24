@@ -1,5 +1,4 @@
-import {Command} from "../../..";
-import {RestrictGroup} from "../../../commands/command";
+import Command, {RestrictGroup} from "../../../commands/command";
 import BotMessages from "../../../core/messages";
 
 /**

@@ -1,4 +1,6 @@
-import {Command, RestrictGroup, CommandContext} from "../..";
+import Command from "../../commands/command";
+import {RestrictGroup} from "../..";
+import CommandContext from "../../commands/command-context";
 
 export default class EvalCommand extends Command {
     readonly meta = {

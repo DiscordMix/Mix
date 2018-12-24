@@ -1,9 +1,9 @@
 import CommandContext from "../../../commands/command-context";
-import {Command, Utils} from "../../..";
 import {exec} from "child_process";
 import FormattedMessage from "../../../builders/formatted-message";
-import {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
+import Command, {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
 import EmbedBuilder from "../../../builders/embed-builder";
+import Utils from "../../../core/utils";
 
 type CliArgs = {
     readonly command: string;

@@ -2,7 +2,8 @@ import {Message, MessageReaction, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
 import CommandContext from "../commands/command-context";
 import {EventEmitter} from "events";
-import {DiscordEvent, IDisposable} from "..";
+import {IDisposable} from "../core/helpers";
+import {DiscordEvent} from "../decorators/decorators";
 
 export type IEmojiButtonClickHandler = (reaction: MessageReaction, user: User) => void;
 

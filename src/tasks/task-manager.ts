@@ -1,7 +1,8 @@
-import {Bot, Utils} from "..";
 import Task from "./task";
 import Log from "../core/log";
 import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
+import Bot from "../core/bot";
+import Utils from "../core/utils";
 
 /**
  * Manages, triggers, and executes tasks

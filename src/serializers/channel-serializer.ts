@@ -1,6 +1,6 @@
-import {ISerializer} from "..";
 import {TextChannel, Snowflake} from "discord.js";
 import {Collection} from "../collections/collection";
+import {ISerializer} from "./serializer";
 
 /**
  * Serializes Discord.JS channels from strings to channel objects and vise versa

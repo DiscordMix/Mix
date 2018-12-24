@@ -3,7 +3,8 @@ import Context from "./command-context";
 import CommandContext from "./command-context";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
-import {Bot, IDisposable} from "..";
+import Bot from "../core/bot";
+import {IDisposable} from "../core/helpers";
 
 export type IUserGroup = string[];
 

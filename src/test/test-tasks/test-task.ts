@@ -1,5 +1,5 @@
-import {Task} from "../..";
 import {IFragmentMeta} from "../../fragments/fragment";
+import Task from "../../tasks/task";
 
 export default class DoSomeMathTask extends Task {
     public readonly meta: IFragmentMeta = {

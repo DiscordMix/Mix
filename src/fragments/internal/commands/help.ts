@@ -1,7 +1,7 @@
 import CommandContext from "../../../commands/command-context";
-import {Command} from "../../..";
 import {RichEmbed} from "discord.js";
 import {IReadonlyCommandMap} from "../../../commands/command-store";
+import Command from "../../../commands/command";
 
 /**
  * @extends Command

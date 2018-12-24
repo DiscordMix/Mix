@@ -1,4 +1,5 @@
-import {IFragmentMeta, Service} from "../../..";
+import {IFragmentMeta} from "../../..";
+import Service from "../../../services/service";
 
 export default class WatchdogService extends Service {
     readonly meta: IFragmentMeta = {

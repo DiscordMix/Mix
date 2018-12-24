@@ -1,14 +1,12 @@
 // Environment variables
 require("dotenv").config();
 
-import {Bot, Log, Task, Rgb, Rgba, List, Utils} from "..";
 import Settings from "../core/settings";
 import {Snowflake, Guild, TextChannel, Message} from "discord.js";
 import CommandContext from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect, assert} from "chai";
-import {LogLevel} from "..";
-import {EBotEvents} from "../core/bot";
+import Bot, {EBotEvents} from "../core/bot";
 import Language, {ILanguageSource} from "../language/language";
 import SwitchParser from "../commands/switch-parser";
 import path from "path";
@@ -16,7 +14,12 @@ import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
 import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
 import {IStoreAction, StoreActionType, IStateCapsule, IState, Reducer, Delta} from "../state/store";
 import BotMessages from "../core/messages";
-import {IBinarySearchResult} from "../core/utils";
+import Utils, {IBinarySearchResult} from "../core/utils";
+import Rgba from "../misc/rgba";
+import Rgb from "../misc/rgb";
+import List from "../collections/collection";
+import Log, {LogLevel} from "../core/log";
+import Task from "../tasks/task";
 
 // Test globals
 const globalAny: any = global;

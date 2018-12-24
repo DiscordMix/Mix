@@ -1,4 +1,5 @@
-import {Command, CommandContext} from "../../..";
+import CommandContext from "../../../commands/command-context";
+import Command from "../../../commands/command";
 
 /**
  * @extends Command

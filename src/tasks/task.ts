@@ -14,7 +14,6 @@ export default abstract class Task implements IFragment, IDisposable {
     protected readonly bot: Bot;
 
     /**
-     * 
      * @param {Bot} bot
      */
     protected constructor(bot: Bot) {
@@ -35,10 +34,17 @@ export default abstract class Task implements IFragment, IDisposable {
         return true;
     }
 
+    /**
+     * Dispose resources used by this task
+     */
     public dispose(): void {
         //
     }
 
+    /**
+     * Whether the task is persistent
+     * @return {boolean}
+     */
     public get persistent(): boolean {
         return this instanceof PeristentTask;
     }

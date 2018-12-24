@@ -6,7 +6,7 @@ export interface IStoreAction<T = any> {
 }
 
 export interface IState {
-    readonly $$test: string;
+    readonly $$test?: string;
 }
 
 export enum StoreActionType {

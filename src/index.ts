@@ -54,6 +54,7 @@ import UrlSerializer from "./serializers/url-serializer";
 import UserSerializer from "./serializers/user-serializer";
 import {IProvider, PromiseOr, IDuplexProvider, IQueriableProvider} from "./providers/provider";
 import {GuildConfig, GuildConfigMongoProvider} from "./providers/mongo-providers";
+import Store, {StoreActionType, IStoreAction, TimeMachine, Reducer, IState} from "./state/store";
 
 export {
     // Fragments
@@ -169,5 +170,13 @@ export {
 
     // Providers -> MongoDB
     GuildConfig,
-    GuildConfigMongoProvider
+    GuildConfigMongoProvider,
+
+    // Store
+    Store,
+    StoreActionType,
+    IStoreAction,
+    TimeMachine,
+    Reducer,
+    IState
 };

@@ -1,8 +1,7 @@
 import BotMessages from "../core/messages";
-import Utils from "../core/utils";
 
 export interface IStoreAction<T = any> {
-    readonly type: StoreActionType;
+    readonly type: StoreActionType | number;
     readonly payload?: T;
 }
 
@@ -138,7 +137,7 @@ export default class Store {
         this.timeMachine = new TimeMachine(this);
     }
 
-    public dispatch<T = any>(type: StoreActionType, payload?: T): this {
+    public dispatch<T = any>(type: StoreActionType | number, payload?: T): this {
         // TODO: Also validate whether type (only) is defined
         if (typeof type !== "number") {
             throw new Error(BotMessages.STORE_INVALID_ACTION);

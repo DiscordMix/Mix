@@ -365,7 +365,7 @@ describe("Collection", () => {
     });
 });
 
-describe("SwitchParser", () => {
+describe("Switch Parser", () => {
     describe("getSwitches()", () => {
         const result1 = SwitchParser.getSwitches(subjects.switches.short);
         const result2 = SwitchParser.getSwitches(subjects.switches.long);
@@ -745,7 +745,7 @@ beforeEach(async () => {
 });
 
 // Tests
-describe("bot", () => {
+describe("Bot", () => {
     it("should init and login", async () => {
         await init();
 
@@ -854,7 +854,7 @@ describe("bot", () => {
     });
 });
 
-describe("commands", () => {
+describe("Commands", () => {
     it("should register commands", () => {
         const actualCmds: string[] = ["hi"];
         const fakeCmds: string[] = ["john", "doe"]
@@ -884,7 +884,7 @@ describe("commands", () => {
     });
 });
 
-describe("services", () => {
+describe("Services", () => {
     it("should register services", () => {
         expect(testBot.services.contains("test")).to.be.a("boolean").and.to.equal(true);
         expect(testBot.services.contains("fake")).to.be.a("boolean").and.to.equal(false);
@@ -928,7 +928,7 @@ describe("services", () => {
     });
 });
 
-describe("tasks", () => {
+describe("Tasks", () => {
     it("should register tasks", () => {
         const actualTasks: string[] = ["do-some-math"];
         const fakeTasks: string[] = ["doe", "john"]
@@ -1012,7 +1012,7 @@ describe("tasks", () => {
     });
 });
 
-describe("languages", () => {
+describe("Languages", () => {
     it("should register languages", () => {
         expect(testBot.language).to.be.an("object");
 
@@ -1056,7 +1056,7 @@ describe("languages", () => {
     });
 });
 
-describe("send messages", () => {
+describe("Send Messages", () => {
     it("should send an embed message using ok()", async () => {
         const message: Message = await testBot.$sendEmbedMessageOk();
 
@@ -1086,7 +1086,7 @@ describe("send messages", () => {
     });
 });
 
-describe("long messages", () => {
+describe("Long Messages", () => {
     it("should trim long messages", async () => {
         const randomStr: string = randomStringX(50);
         const message: Message = await testBot.$longMessages(randomStr);
@@ -1100,7 +1100,7 @@ describe("long messages", () => {
     });
 });
 
-describe("store", () => {
+describe("Store", () => {
     it("should have undefined initial state", () => {
         expect(testBot.store.getState()).to.be.a("undefined");
     });
@@ -1208,16 +1208,9 @@ describe("store", () => {
             assert.throws(() => testBot.store.isSubscribed(0 as any), BotMessages.STORE_EXPECT_HANDLER_FUNC);
         });
     });
-
-    describe("insert()", () => {
-        it("should insert a new state", () => {
-
-            expect(true).to.equal(true);
-        });
-    });
 });
 
-describe("time machine", () => {
+describe("Time Machine", () => {
     it("should have no initial state recorded", () => {
         expect(testBot.store.timeMachine.present()).to.be.a("null");
     });
@@ -1273,7 +1266,7 @@ describe("time machine", () => {
     });
 });
 
-describe("restart", () => {
+describe("Restart", () => {
     it("should restart without throwing", () => {
         return new Promise((resolve) => {
             assert.doesNotThrow(async () => {
@@ -1285,7 +1278,7 @@ describe("restart", () => {
     });
 });
 
-describe("disconnect", () => {
+describe("Disconnect", () => {
     it("should disconnect", async () => {
         const result: Bot = await testBot.disconnect();
 

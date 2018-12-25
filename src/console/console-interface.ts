@@ -8,7 +8,8 @@ import {IReadonlyCommandMap} from "../commands/command-store";
 import {IReadonlyServiceMap} from "../services/service-manager";
 import chalk from "chalk";
 
-type ConsoleCommandHandler = (args: string[]) => void;
+// TODO: Export in index
+export type ConsoleCommandHandler = (args: string[]) => void;
 
 export default class ConsoleInterface {
     public ready: boolean;
@@ -34,7 +35,7 @@ export default class ConsoleInterface {
      * @param {Bot} bot
      * @return {ConsoleInterface}
      */
-    public setup(bot: Bot): ConsoleInterface {
+    public setup(bot: Bot, registerDefaults: boolean = true): ConsoleInterface {
         Log.verbose("[ConsoleInterface] Setting up console interface");
 
         const ci = readline.createInterface({
@@ -45,9 +46,58 @@ export default class ConsoleInterface {
         ci.setPrompt(`${chalk.cyan.bold(bot.client.user.tag)} > `);
         ci.prompt(true);
 
+        if (registerDefaults) {
+            this.defaultCommands(bot);
+        }
+
+        // Prompt setup
+        ci.on("line", async (input: string) => {
+            const args: string[] = input.trim().split(" ");
+            const base: string = args[0].trim();
+
+            args.splice(0, 1);
+
+            if (base === "") {
+                ci.prompt();
+
+                return;
+            }
+
+            if (this.commands.has(base)) {
+                await (this.commands.get(base) as ConsoleCommandHandler)(args);
+            }
+            else {
+                console.log(chalk.white(`\nUnknown command: ${input}\n`));
+            }
+
+            ci.prompt();
+        });
+
+        // TODO:
+        /* ci.on("error", (error: Error) => {
+            Log.error(error.message);
+        }); */
+
+        // TODO: Disabled due to directly exiting on vps/linux
+        /* ci.on("close", async () => {
+            await bot.disconnect();
+            process.exit(0);
+        }); */
+
+        // TODO: Should log before setting the prompt
+        this.ready = true;
+        Log.success("[ConsoleInterface.setup] Console interface setup completed");
+
+        return this;
+    }
+
+    /**
+     * @param {Bot} bot
+     * @return {this}
+     */
+    protected defaultCommands(bot: Bot): this {
         let using: Guild | null = null;
 
-        // Setup Commands
         if (DebugMode) {
             this.commands.set("bug", (args: string[]) => {
                 if (args[0] === "commands") {
@@ -95,11 +145,11 @@ export default class ConsoleInterface {
         });
 
         this.commands.set("guilds", () => {
-            console.log("\n" + bot.client.guilds.map((guild: Guild) => `${guild.name} ${guild.id}\n`));
+            console.log(bot.client.guilds.map((guild: Guild) => `${guild.name} ${guild.id}`));
         });
 
         this.commands.set("pid", () => {
-            console.log(`\nCurrent process running @ ${process.pid.toString()}\n`);
+            console.log(`Current process running @ ${process.pid.toString()}`);
         });
 
         this.commands.set("use", (args: string[]) => {
@@ -109,14 +159,14 @@ export default class ConsoleInterface {
                 using = bot.client.guilds.get(guild) || null;
 
                 if (using !== null) {
-                    console.log(`\nUsing ${using.name} (${using.id})\n`);
+                    console.log(`Using ${using.name} (${using.id})`);
                 }
                 else {
-                    console.log("\nGuild does not exist in the client\n");
+                    console.log("Guild does not exist in the client");
                 }
             }
             else {
-                console.log("\nGuild does not exist in the client\n");
+                console.log("Guild does not exist in the client");
             }
         });
 
@@ -135,7 +185,7 @@ export default class ConsoleInterface {
 
         this.commands.set("id", () => {
             if (!bot.client.user) {
-                console.log("Not logged in!");
+                console.log("Not logged in");
 
                 return;
             }
@@ -145,10 +195,10 @@ export default class ConsoleInterface {
 
         this.commands.set("membercount", () => {
             if (using !== null) {
-                console.log(`\n${using.name} has ${using.memberCount} member(s)\n`);
+                console.log(`${using.name} has ${using.memberCount} member(s)`);
             }
             else {
-                console.log(`\nNot using any guild\n`);
+                console.log("Not using any guild");
             }
         });
 
@@ -159,14 +209,14 @@ export default class ConsoleInterface {
                 const member: GuildMember | null = await using.member(memberId) || null;
 
                 if (member === null) {
-                    console.log(`\nGuild '${using.name}' does not contain such member\n`);
+                    console.log(`Guild '${using.name}' does not contain such member`);
                 }
                 else {
-                    console.log("\n", member, "\n");
+                    console.log(member);
                 }
             }
             else {
-                console.log(`\nNot using any guild\n`);
+                console.log("Not using any guild");
             }
         });
 
@@ -186,53 +236,13 @@ export default class ConsoleInterface {
         this.commands.set("clear", console.clear);
 
         this.commands.set("help", () => {
-            console.log("\nAvailable Commands\n");
+            console.log("Available Commands\n");
 
             // TODO: Also show command description
             for (let [base, command] of this.commands) {
                 console.log(chalk.white(`\t${base}`));
             }
-
-            console.log("");
         });
-
-        // Prompt setup
-        ci.on("line", async (input: string) => {
-            const args: string[] = input.trim().split(" ");
-            const base: string = args[0].trim();
-
-            args.splice(0, 1);
-
-            if (base === "") {
-                ci.prompt();
-
-                return;
-            }
-
-            if (this.commands.has(base)) {
-                await (this.commands.get(base) as ConsoleCommandHandler)(args);
-            }
-            else {
-                console.log(chalk.white(`\nUnknown command: ${input}\n`));
-            }
-
-            ci.prompt();
-        });
-
-        // TODO:
-        /* ci.on("error", (error: Error) => {
-            Log.error(error.message);
-        }); */
-
-        // TODO: Disabled due to directly exiting on vps/linux
-        /* ci.on("close", async () => {
-            await bot.disconnect();
-            process.exit(0);
-        }); */
-
-        // TODO: Should log before setting the prompt
-        this.ready = true;
-        Log.success("[ConsoleInterface.setup] Console interface setup completed");
 
         return this;
     }

@@ -54,7 +54,7 @@ import UrlSerializer from "./serializers/url-serializer";
 import UserSerializer from "./serializers/user-serializer";
 import {IProvider, PromiseOr, IDuplexProvider, IQueriableProvider} from "./providers/provider";
 import {GuildConfig, GuildConfigMongoProvider} from "./providers/mongo-providers";
-import Store, {StoreActionType, IStoreAction, TimeMachine, Reducer, IState} from "./state/store";
+import Store, {TestStoreActionType, IStoreAction, TimeMachine, Reducer, ITestState} from "./state/store";
 
 export {
     // Fragments
@@ -174,9 +174,9 @@ export {
 
     // Store
     Store,
-    StoreActionType,
+    TestStoreActionType as StoreActionType,
     IStoreAction,
     TimeMachine,
     Reducer,
-    IState
+    ITestState as IState
 };

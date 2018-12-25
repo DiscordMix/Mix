@@ -1,24 +1,24 @@
 import BotMessages from "../core/messages";
 
 export interface IStoreAction<T = any> {
-    readonly type: StoreActionType | number;
+    readonly type: number | string;
     readonly payload?: T;
 }
 
-export interface IState {
+export interface ITestState {
     readonly $$test?: string;
 }
 
-export enum StoreActionType {
+export enum TestStoreActionType {
     $$Test = -1
 }
 
-export type Reducer = (state: IState | undefined, action: IStoreAction) => IState | null;
+export type Reducer<T> = (action: IStoreAction, state?: T) => T | null;
 
-export type StoreActionHandler = (action: IStoreAction, previousState: IState | undefined, newState: IState | undefined, changed: boolean) => void;
+export type StoreActionHandler<T> = (action: IStoreAction, changed: boolean, previousState?: T, newState?: T) => void;
 
-export interface IStateCapsule {
-    readonly state: IState;
+export interface IStateCapsule<T> {
+    readonly state: T;
     readonly time: number;
 }
 
@@ -52,17 +52,17 @@ export abstract class Delta {
     }
 }
 
-export class TimeMachine {
-    protected store: Store;
-    protected capsules: IStateCapsule[];
+export class TimeMachine<TState, TActionType> {
+    protected store: Store<TState, TActionType>;
+    protected capsules: IStateCapsule<TState>[];
 
-    public constructor(store: Store) {
+    public constructor(store: Store<TState, TActionType>) {
         this.store = store;
         this.capsules = [];
         this.setup();
     }
 
-    protected insert(state: IState): this {
+    protected insert(state: TState): this {
         this.capsules.push({
             state,
             time: Date.now()
@@ -71,11 +71,11 @@ export class TimeMachine {
         return this;
     }
 
-    public wayback(): IStateCapsule | null {
+    public wayback(): IStateCapsule<TState> | null {
         return this.capsules[0] || null;
     }
 
-    public present(): IStateCapsule | null {
+    public present(): IStateCapsule<TState> | null {
         if (this.capsules.length > 0) {
             return this.capsules[this.capsules.length - 1] || null;
         }
@@ -83,8 +83,8 @@ export class TimeMachine {
         return null;
     }
 
-    public before(time: number): IStateCapsule[] {
-        const result: IStateCapsule[] = [];
+    public before(time: number): IStateCapsule<TState>[] {
+        const result: IStateCapsule<TState>[] = [];
 
         for (const capsule of this.capsules) {
             if (capsule.time < time) {
@@ -95,8 +95,8 @@ export class TimeMachine {
         return result;
     }
 
-    public after(time: number): IStateCapsule[] {
-        const result: IStateCapsule[] = [];
+    public after(time: number): IStateCapsule<TState>[] {
+        const result: IStateCapsule<TState>[] = [];
 
         for (const capsule of this.capsules) {
             if (capsule.time > time) {
@@ -108,13 +108,13 @@ export class TimeMachine {
     }
 
     protected setup(): void {
-        const currentState: IState | undefined = this.store.getState();
+        const currentState: TState | undefined = this.store.getState();
 
         if (currentState !== undefined) {
             this.insert(currentState);
         }
 
-        this.store.subscribe((action: IStoreAction, previousState: IState | undefined, newState: IState | undefined, changed: boolean) => {
+        this.store.subscribe((action: IStoreAction, changed: boolean, previousState?: TState, newState?: TState) => {
             if (changed && newState !== undefined) {
                 this.insert(newState);
             }
@@ -122,28 +122,27 @@ export class TimeMachine {
     }
 }
 
-export default class Store {
-    public readonly timeMachine: TimeMachine;
+export default class Store<TState, TActionType> {
+    public readonly timeMachine: TimeMachine<TState, TActionType>;
 
-    protected readonly handlers: StoreActionHandler[];
-    protected readonly reducers: Reducer[];
+    protected readonly handlers: StoreActionHandler<TState>[];
+    protected readonly reducers: Reducer<TState>[];
 
-    protected state?: IState;
+    protected state?: TState;
 
-    public constructor(initialState?: IState, reducers: Reducer[] = []) {
+    public constructor(initialState?: TState, reducers: Reducer<TState>[] = []) {
         this.state = initialState;
         this.handlers = [];
         this.reducers = reducers;
         this.timeMachine = new TimeMachine(this);
     }
 
-    public dispatch<T = any>(type: StoreActionType | number, payload?: T): this {
-        // TODO: Also validate whether type (only) is defined
-        if (typeof type !== "number") {
+    public dispatch<T = any>(type: TActionType, payload?: T): this {
+        if (typeof type !== "number" && typeof type !== "string") {
             throw new Error(BotMessages.STORE_INVALID_ACTION);
         }
 
-        const previousState: IState | undefined = this.state;
+        const previousState: TState | undefined = this.state;
 
         const action: IStoreAction = {
             type,
@@ -153,7 +152,7 @@ export default class Store {
         let changed: boolean = false;
 
         for (const reducer of this.reducers) {
-            const result: IState | null = reducer(this.state, action);
+            const result: TState | null = reducer(action, this.state);
 
             if (result === undefined) {
                 throw new Error(BotMessages.STORE_REDUCER_NO_UNDEFINED);
@@ -165,17 +164,17 @@ export default class Store {
         }
 
         for (const handler of this.handlers) {
-            handler(action, previousState, this.state, changed);
+            handler(action, changed, previousState, this.state);
         }
 
         return this;
     }
 
-    public getState(): IState | undefined {
+    public getState(): TState | undefined {
         return this.state;
     }
 
-    public subscribe(handler: StoreActionHandler): boolean {
+    public subscribe(handler: StoreActionHandler<TState>): boolean {
         if (typeof handler !== "function") {
             throw new Error(BotMessages.STORE_EXPECT_HANDLER_FUNC);
         }
@@ -188,7 +187,7 @@ export default class Store {
         return false;
     }
 
-    public unsubscribe(handler: StoreActionHandler): boolean {
+    public unsubscribe(handler: StoreActionHandler<TState>): boolean {
         if (this.handlers.includes(handler)) {
             this.handlers.splice(this.handlers.indexOf(handler), 1);
 
@@ -204,7 +203,7 @@ export default class Store {
         return this;
     }
 
-    public isSubscribed(handler: StoreActionHandler): boolean {
+    public isSubscribed(handler: StoreActionHandler<TState>): boolean {
         if (typeof handler !== "function") {
             throw new Error(BotMessages.STORE_EXPECT_HANDLER_FUNC);
         }
@@ -212,7 +211,7 @@ export default class Store {
         return this.handlers.includes(handler);
     }
 
-    public addReducer(reducer: Reducer): boolean {
+    public addReducer(reducer: Reducer<TState>): boolean {
         if (typeof reducer !== "function") {
             throw new Error(BotMessages.STORE_EXPECT_REDUCER_FUNC);
         }

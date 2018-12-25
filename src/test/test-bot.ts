@@ -12,7 +12,7 @@ import SwitchParser from "../commands/switch-parser";
 import path from "path";
 import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
 import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
-import {IStoreAction, StoreActionType, IStateCapsule, IState, Reducer, Delta} from "../state/store";
+import {IStoreAction, TestStoreActionType, IStateCapsule, ITestState, Reducer, Delta} from "../state/store";
 import BotMessages from "../core/messages";
 import Utils, {IBinarySearchResult} from "../core/utils";
 import Rgba from "../misc/rgba";
@@ -689,7 +689,7 @@ else if (!testGuildChannelId) {
 
 Log.level = LogLevel.None;
 
-export default class TestBot extends Bot {
+export default class TestBot extends Bot<ITestState, TestStoreActionType> {
     public static testGuild: Guild;
     public static testChannel: TextChannel;
 
@@ -1179,11 +1179,11 @@ describe("Store", () => {
     it("should dispatch events", () => {
         return new Promise((resolve) => {
             testBot.store.subscribe((action: IStoreAction): void => {
-                expect(action.type).to.equal(StoreActionType.$$Test);
+                expect(action.type).to.equal(TestStoreActionType.$$Test);
                 resolve();
             });
 
-            testBot.store.dispatch(StoreActionType.$$Test);
+            testBot.store.dispatch(TestStoreActionType.$$Test);
         });
     });
 
@@ -1192,8 +1192,8 @@ describe("Store", () => {
     });
 
     describe("addReducer()", () => {
-        const testReducer: Reducer = (state: IState | undefined, action: IStoreAction): IState | null => {
-            if (action.type === StoreActionType.$$Test && action.payload !== undefined && typeof action.payload === "string") {
+        const testReducer: Reducer<ITestState> = (action: IStoreAction, state?: ITestState): ITestState | null => {
+            if (action.type === TestStoreActionType.$$Test && action.payload !== undefined && typeof action.payload === "string") {
                 return {
                     ...state,
                     $$test: action.payload
@@ -1238,7 +1238,7 @@ describe("Store", () => {
         it("should subscribe handlers", () => {
             return new Promise((resolve, reject) => {
                 expect(testBot.store.subscribe((action: IStoreAction) => {
-                    if (action.type === StoreActionType.$$Test) {
+                    if (action.type === TestStoreActionType.$$Test) {
                         resolve();
 
                         return;
@@ -1247,7 +1247,7 @@ describe("Store", () => {
                     reject();
                 })).to.be.a("boolean").and.to.equal(true);
 
-                testBot.store.dispatch(StoreActionType.$$Test);
+                testBot.store.dispatch(TestStoreActionType.$$Test);
             });
         });
 
@@ -1292,9 +1292,9 @@ describe("Time Machine", () => {
         });
 
         it("should return expected state capsule", () => {
-            testBot.store.dispatch<string>(StoreActionType.$$Test, "hello");
+            testBot.store.dispatch<string>(TestStoreActionType.$$Test, "hello");
 
-            const capsule: IStateCapsule = testBot.store.timeMachine.present() as IStateCapsule;
+            const capsule: IStateCapsule<ITestState> = testBot.store.timeMachine.present() as IStateCapsule<ITestState>;
 
             expect(capsule).to.be.an("object");
             expect(capsule.time).to.be.a("number");
@@ -1307,14 +1307,14 @@ describe("Time Machine", () => {
     describe("before()", () => {
         it("should aggregate capsules before specified time", () => {
             const now: number = Date.now();
-            const beforeNow1: IStateCapsule[] = testBot.store.timeMachine.before(now);
+            const beforeNow1: IStateCapsule<ITestState>[] = testBot.store.timeMachine.before(now);
 
             expect(beforeNow1).to.be.an("array").and.to.have.length(1);
             expect(beforeNow1[0].time).to.be.a("number").and.to.be.lessThan(now);
 
-            testBot.store.dispatch<string>(StoreActionType.$$Test, "world");
+            testBot.store.dispatch<string>(TestStoreActionType.$$Test, "world");
 
-            const beforeNow2: IStateCapsule[] = testBot.store.timeMachine.before(now);
+            const beforeNow2: IStateCapsule<ITestState>[] = testBot.store.timeMachine.before(now);
 
             expect(beforeNow2).to.be.an("array").and.to.have.length(1);
             expect(beforeNow2[0]).to.be.an("object");
@@ -1326,8 +1326,8 @@ describe("Time Machine", () => {
 
     describe("after()", () => {
         it("should aggregate capsules after specified time", () => {
-            const firstTime: number = (testBot.store.timeMachine.wayback() as IStateCapsule).time;
-            const afterNow: IStateCapsule[] = testBot.store.timeMachine.after(firstTime);
+            const firstTime: number = (testBot.store.timeMachine.wayback() as IStateCapsule<ITestState>).time;
+            const afterNow: IStateCapsule<ITestState>[] = testBot.store.timeMachine.after(firstTime);
 
             expect(afterNow).to.be.an("array").and.to.have.length(1);
             expect(afterNow[0].state).to.be.an("object");

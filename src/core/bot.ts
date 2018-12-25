@@ -47,11 +47,11 @@ import Optimizer from "../optimization/optimizer";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
 import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath} from "./constants";
-import Store, {IState, Reducer} from "../state/store";
+import Store, {Reducer} from "../state/store";
 import BotMessages from "./messages";
 
 // TODO: Already made optional by Partial?
-export type IBotOptions = {
+export type IBotOptions<T> = {
     readonly settings: Settings;
     readonly prefixCommand?: boolean;
     readonly internalCommands?: InternalCommand[];
@@ -61,8 +61,8 @@ export type IBotOptions = {
     readonly argumentResolvers?: IArgumentResolver[];
     readonly argumentTypes?: ICustomArgType[];
     readonly languages?: string[];
-    readonly initialState?: IState;
-    readonly reducers?: Reducer[];
+    readonly initialState?: T;
+    readonly reducers?: Reducer<T>[];
 }
 
 export type Action<ReturnType = void> = () => ReturnType;
@@ -197,7 +197,7 @@ export type BotToken = string;
 /**
  * @extends EventEmitter
  */
-export default class Bot<ApiType = any> extends EventEmitter implements IDisposable, ITimeoutAttachable {
+export default class Bot<TState = any, TActionType = any, TAPI = any> extends EventEmitter implements IDisposable, ITimeoutAttachable {
     public readonly settings: Settings;
     public readonly temp: Temp;
     public readonly services: ServiceManager;
@@ -224,9 +224,9 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     public readonly tempoEngine: Optimizer;
     public readonly fragments: FragmentManager;
     public readonly paths: PathResolver;
-    public readonly store: Store;
+    public readonly store: Store<TState, TActionType>;
 
-    protected api?: ApiType;
+    protected api?: TAPI;
     protected setupStart: number = 0;
 
     // TODO: Implement stat counter
@@ -237,10 +237,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
      * @param {Partial<IBotOptions> | BotToken} botOptionsOrToken
      * @param {boolean} [testMode=false]
      */
-    public constructor(botOptionsOrToken: Partial<IBotOptions> | BotToken, testMode: boolean = false) {
+    public constructor(botOptionsOrToken: Partial<IBotOptions<TState>> | BotToken, testMode: boolean = false) {
         super();
 
-        let options: Partial<IBotOptions> = typeof botOptionsOrToken === "object" && botOptionsOrToken !== null && !Array.isArray(botOptionsOrToken) ? Object.assign({}, botOptionsOrToken) : (typeof botOptionsOrToken === "string" ? {
+        let options: Partial<IBotOptions<TState>> = typeof botOptionsOrToken === "object" && botOptionsOrToken !== null && !Array.isArray(botOptionsOrToken) ? Object.assign({}, botOptionsOrToken) : (typeof botOptionsOrToken === "string" ? {
             settings: new Settings({
                 general: {
                     prefixes: ["!"],
@@ -280,7 +280,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
          * @type {Store}
          * @readonly
          */
-        this.store = new Store(options.initialState, options.reducers);
+        this.store = new Store<TState, TActionType>(options.initialState, options.reducers);
 
         /**
          * @type {BotState}
@@ -490,17 +490,17 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
     }
 
     /**
-     * @return {ApiType | null}
+     * @return {TAPI | null}
      */
-    public getAPI(): ApiType | null {
+    public getAPI(): TAPI | null {
         return this.api || null;
     }
 
     /**
-     * @param {ApiType} api
+     * @param {TAPI} api
      * @return {this}
      */
-    public setAPI(api: ApiType): this {
+    public setAPI(api: TAPI): this {
         this.api = api;
 
         return this;
@@ -550,10 +550,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
     /**
      * Setup the bot
-     * @param {ApiType | undefined} api
+     * @param {TAPI | undefined} api
      * @return {Promise<this>}
      */
-    protected async setup(api?: ApiType): Promise<this> {
+    protected async setup(api?: TAPI): Promise<this> {
         this.emit(EBotEvents.SetupStart, api);
 
         if (this.options.asciiTitle) {
@@ -565,7 +565,7 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
         }
 
         /**
-         * @type {ApiType}
+         * @type {TAPI}
          * @protected
          * @readonly
          */
@@ -1085,10 +1085,10 @@ export default class Bot<ApiType = any> extends EventEmitter implements IDisposa
 
     /**
      * Connect the client
-     * @param {ApiType | undefined} api
+     * @param {TAPI | undefined} api
      * @return {Promise<this>}
      */
-    public async connect(api?: ApiType): Promise<this> {
+    public async connect(api?: TAPI): Promise<this> {
         this.setState(BotState.Connecting);
         await this.setup(api);
         Log.verbose("[Bot.connect] Starting");

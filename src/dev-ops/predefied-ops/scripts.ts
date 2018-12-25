@@ -25,4 +25,9 @@ export default abstract class ScriptOperations {
             return false;
         }
     }
+
+    // TODO: Implement
+    public npm(name: string): boolean {
+        throw new Error("Not yet implemented");
+    }
 }

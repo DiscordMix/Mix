@@ -1,7 +1,7 @@
 import {exec, execSync} from "child_process";
 
 export default abstract class ScriptOperations {
-    public execute(base: string, ...args: string[]): Promise<boolean> {
+    public static execute(base: string, ...args: string[]): Promise<boolean> {
         return new Promise((resolve) => {
             exec(`${base} ${args.join(" ")}`.trim(), (error: Error | null) => {
                 if (error) {
@@ -15,7 +15,7 @@ export default abstract class ScriptOperations {
         });
     }
 
-    public executeSync(base: string, ...args: string[]): boolean {
+    public static executeSync(base: string, ...args: string[]): boolean {
         try {
             execSync(`${base} ${args.join(" ")}`.trim());
 
@@ -25,9 +25,8 @@ export default abstract class ScriptOperations {
             return false;
         }
     }
-
-    // TODO: Implement
-    public npm(name: string): boolean {
-        throw new Error("Not yet implemented");
+    
+    public static npm(name: string): Promise<boolean> {
+        return ScriptOperations.execute("npm", "run-script", name);
     }
 }

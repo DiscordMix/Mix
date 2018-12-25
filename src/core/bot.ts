@@ -753,7 +753,7 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
 
             const took: number = Math.round(performance.now() - this.setupStart);
 
-            Log.success(`[Bot.setupEvents] Ready | Took ${took}ms`);
+            Log.success(`[Bot.setupEvents] Ready | Took ${took}ms | PID ${process.pid}`);
             this.setState(BotState.Connected);
             this.emit(EBotEvents.Ready);
         });

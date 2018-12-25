@@ -349,8 +349,7 @@ export default abstract class Utils {
                     return;
                 }
 
-                // TODO: Type
-                let parsed;
+                let parsed: ReturnType;
 
                 try {
                     parsed = JSON.parse(data.toString());
@@ -461,7 +460,7 @@ export default abstract class Utils {
     public static findChannelByName(guild: Guild, name: string, textChannel: boolean = true, caseSensitive: boolean = false): GuildChannel | null {
         const channels: GuildChannel[] = guild.channels.array();
 
-        for (let i = 0; i < channels.length; i++) {
+        for (let i: number = 0; i < channels.length; i++) {
             if (channels[i].type === "category") {
                 continue;
             }
@@ -510,7 +509,7 @@ export default abstract class Utils {
             return defaultChannel;
         }
 
-        for (let [id, channel] of guild.channels) {
+        for (const [id, channel] of guild.channels) {
             if (channel.type === "text") {
                 return channel as TextChannel;
             }
@@ -536,7 +535,7 @@ export default abstract class Utils {
     /**
      * Determine the guild owners by searching for members with the MANAGE_GUILD permission
      * @param {Guild} guild
-     * @return {GuildMember[]}
+     * @return {GuildMember[]} The owners of the guild
      */
     public static getOwners(guild: Guild): GuildMember[] {
         return guild.members.filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).array();

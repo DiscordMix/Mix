@@ -1,6 +1,6 @@
 {
     "name": "@cloudrex/forge",
-    "version": "1.2.5-beta.4",
+    "version": "1.2.5-beta.5",
     "description": "Advanced Discord bot framework for serious bot development",
     "main": "./dist/index.js",
     "keywords": [

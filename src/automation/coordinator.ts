@@ -3,6 +3,7 @@ import express from "express";
 import bodyParser = require("body-parser");
 import crypto from "crypto";
 import {Server} from "http";
+import {performance} from "perf_hooks";
 
 export type Operation = () => PromiseOr<boolean>;
 

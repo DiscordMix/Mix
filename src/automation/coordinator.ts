@@ -193,7 +193,7 @@ export class Coordinator {
         };
     }
 
-    public clear(): this {
+    public clear(): this 
         if (this.isRunning) {
             throw new Error("Cannot clear operations while running");
         }

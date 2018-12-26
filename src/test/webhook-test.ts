@@ -3,7 +3,7 @@ import ScriptOperations from "../automation/predefied-ops/scripts";
 import GitOperations from "../automation/predefied-ops/git";
 import FileSystemOperations from "../automation/predefied-ops/file-system";
 
-const coordinator: Coordinator = new Coordinator();
+const coordinator: Coordinator = new Coordinator(;
 const secret: string = "keyboard_cat";
 
 const githubPort: number = coordinator.githubWebhook(secret, async (event: GithubEvent, body: any) => {

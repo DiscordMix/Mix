@@ -32,9 +32,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         .fallback(async () => {
             console.log("Github | Fallback sequence initiated");
 
-            const result: ICoordinatorRunResult = await coordinator
-                .then(TestOperations.testFalseSync)
-                
+            const result: ICoordinatorRunResult = await coordinator                
                 .then(() => GitOperations.branch(masterBranch))
                 .then(() => GitOperations.deleteBranch(deployBranch), true)
 

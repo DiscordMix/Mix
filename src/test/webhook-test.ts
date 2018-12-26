@@ -14,9 +14,8 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
     }
 
     const result: ICoordinatorRunResult = await coordinator
-        // TODO: Can't run condition first; Ruins the whole purpose
-        .onlyIf(ScriptOperations.npmTest)
         .then(GitOperations.pull)
+        .then(ScriptOperations.npmTest)
         .then(() => FileSystemOperations.forceRemove("./dist"))
         .then(ScriptOperations.npmInstall)
         .then(ScriptOperations.npmBuild)

@@ -71,28 +71,16 @@ export interface ICoordinatorRunResult {
 export class Coordinator {
     public static webhookPort: number = 52671;
 
-    protected conditions: Operation[];
     protected operations: Operation[];
     protected isRunning: boolean;
     protected webhooks: Server[];
     protected retryTimes: number;
 
     public constructor(...operations: Operation[]) {
-        this.conditions = [];
         this.operations = operations !== undefined && Array.isArray(operations) ? operations : [];
         this.isRunning = false;
         this.webhooks = [];
         this.retryTimes = 0;
-    }
-
-    public onlyIf(condition: Operation): this {
-        if (this.isRunning) {
-            throw new Error("Cannot append condition while running");
-        }
-
-        this.conditions.push(condition);
-
-        return this;
     }
 
     public retry(times: number): this {
@@ -132,7 +120,7 @@ export class Coordinator {
 
         let completed: number = 0;
 
-        const totalLength: number = this.operations.length + this.conditions.length;
+        const totalLength: number = this.operations.length;
 
         const pending: ICoordinatorRunResult = {
             operations: totalLength,
@@ -142,9 +130,7 @@ export class Coordinator {
             state: CoordinatorState.Failed
         };
 
-        const operations: Operation[] = [...this.conditions, ...this.operations];
-
-        for (const op of operations) {
+        for (const op of this.operations) {
             if (callback !== undefined) {
                 callback(completed + 1, totalLength - (completed + 1), totalLength, Math.round(completed / totalLength * 100));
             }

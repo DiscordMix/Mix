@@ -25,7 +25,7 @@ export interface ICoordinatorRunResult {
 
 // TODO: Implement retry functionality
 export class Coordinator {
-    public static webhookPort: number = 3561;
+    public static webhookPort: number = 52671;
 
     protected conditions: Operation[];
     protected operations: Operation[];
@@ -216,7 +216,7 @@ export class Coordinator {
         app.post("/github", (req, res) => {
             const inputHash: string | undefined = req.header("X-Hub-Signature");
 
-            if (!inputHash || inputHash !== secretHash) {
+            if (!inputHash || inputHash.substr(4) !== secretHash) {
                 res.status(401).end("Unauthorized");
 
                 return;

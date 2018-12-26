@@ -7,7 +7,7 @@ import {performance} from "perf_hooks";
 
 export type Operation = () => PromiseOr<boolean>;
 
-export interface ISavedOp {
+export interface ISavedOp 
     readonly op: Operation;
     readonly regardless: boolean;
 }

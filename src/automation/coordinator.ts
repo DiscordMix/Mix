@@ -168,7 +168,7 @@ export class Coordinator {
             }
 
             if (callback !== undefined) {
-                callback(completed, totalLength - completed, totalLength, Math.round(completed / totalLength));
+                callback(completed, totalLength - completed, totalLength, Math.round(completed / totalLength * 100));
             }
 
             // TODO: Read-only hotfix

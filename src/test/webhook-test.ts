@@ -2,6 +2,7 @@ import {Coordinator, GithubEvent, ICoordinatorRunResult, CoordinatorState} from 
 import ScriptOperations from "../automation/predefied-ops/scripts";
 import GitOperations from "../automation/predefied-ops/git";
 import FileSystemOperations from "../automation/predefied-ops/file-system";
+import TestOperations from "../automation/predefied-ops/test";
 
 const coordinator: Coordinator = new Coordinator();
 const secret: string = "keyboard_cat";
@@ -32,6 +33,8 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
             console.log("Github | Fallback sequence initiated");
 
             const result: ICoordinatorRunResult = await coordinator
+                .then(TestOperations.testFalseSync)
+                
                 .then(() => GitOperations.branch(masterBranch))
                 .then(() => GitOperations.deleteBranch(deployBranch))
 

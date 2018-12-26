@@ -217,10 +217,10 @@ export class Coordinator {
             const inputHash: string | undefined = req.header("X-Hub-Signature");
 
             if (inputHash) {
-                console.log(`Tried to authorize with key: ${inputHash} | Expecting ${secretHash}`);
+                console.log(`Tried to authorize with key: ${inputHash.substr(5)} | Expecting ${secretHash}`);
             }
 
-            if (!inputHash || inputHash.substr(4) !== secretHash) {
+            if (!inputHash || inputHash.substr(5) !== secretHash) {
                 res.status(401).end("Unauthorized");
 
                 return;

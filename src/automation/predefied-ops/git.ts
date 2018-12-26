@@ -64,4 +64,20 @@ export default abstract class GitOperations {
     public static revertSync(commit: string = "HEAD"): boolean {
         return ScriptOperations.executeSync("git", "revert", commit);
     }
+
+    public static createBranch(name: string): Promise<boolean> {
+        return ScriptOperations.execute("git", "checkout", "-b", name);
+    }
+
+    public static createBranchSync(name: string): boolean {
+        return ScriptOperations.executeSync("git", "checkout", "-b", name);
+    }
+
+    public static deleteBranch(name: string): Promise<boolean> {
+        return ScriptOperations.execute("git", "branch", "-D", name);
+    }
+
+    public static deleteBranchSync(name: string): boolean {
+        return ScriptOperations.executeSync("git", "branch", "-D", name);
+    }
 }

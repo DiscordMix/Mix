@@ -13,12 +13,19 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         return;
     }
 
+    const deployBranch: string = "webhook_deploy";
+    const masterBranch: string = "master";
+    const buildDir: string = "./dist";
+
     const result: ICoordinatorRunResult = await coordinator
+        .then(() => GitOperations.branch(masterBranch))
+        .then(() => GitOperations.deleteBranch(deployBranch))
+        .then(() => GitOperations.createBranch(deployBranch))
         .then(GitOperations.pull)
-        .then(ScriptOperations.npmTest)
-        .then(() => FileSystemOperations.forceRemove("./dist"))
+        .then(() => FileSystemOperations.forceRemove(buildDir))
         .then(ScriptOperations.npmInstall)
         .then(ScriptOperations.npmBuild)
+        .then(ScriptOperations.npmTest)
 
         .run((current: number, left: number, total: number, percentage: number) => {
             console.log(`Github | Processing action ${current}/${total} : ${percentage}% (${left} left)`);

@@ -184,7 +184,6 @@ export class Coordinator {
         }
 
         this.operations.length = 0;
-        this.conditions.length = 0;
 
         return this;
     }

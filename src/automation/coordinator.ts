@@ -150,11 +150,13 @@ export class Coordinator {
 
     // TODO: Repeated usage of both functions's functionality, .webhook() and .githubWebhook(); Use a generic function
     /**
+     * Create a webhook server. Content type must be set to application/json only.
      * @param {WebhookCallback} callback The callback to invoke upon receiving a valid and authorized request
      * @param {string | undefined} secret A key that must be sent as authorization
      * @param {number} port The port that the webhook server will listen on
      */
     public webhook<T = object>(callback: WebhookCallback<T>, secret?: string, port: number = Coordinator.webhookPort++): number {
+        // TODO: CRITICAL: Express throws errors (internal errors, 500) into the response stream!
         const app: express.Express = express();
         const shasum = crypto.createHash("sha1");
 
@@ -168,10 +170,6 @@ export class Coordinator {
         }
 
         app.use(bodyParser.json());
-
-        app.use(bodyParser.urlencoded({
-            extended: true
-        }));
 
         app.post("/", (req, res) => {
             const inputHash: string | undefined = req.header("authorization");
@@ -193,19 +191,17 @@ export class Coordinator {
 
     // TODO: Port may be constant, meaning that it does not ++ on each function call. Same for above. (.webhook())
     /**
+     * Create a webhook server for GitHub events. Content type must be set to application/json only.
      * @param {string} secret The secret which must be sent as authorization
      * @param {WebhookCallback} callback The callback to invoke upon valid request with authorization
      * @param {number} port The port that the webhook server will listen on
      * @return {number} The port that the webhook will listen on
      */
     public githubWebhook<T = object>(secret: string, callback: WebhookCallback<T>, port: number = Coordinator.webhookPort++): number {
+        // TODO: CRITICAL: Express throws errors (internal errors, 500) into the response stream!
         const app: express.Express = express();
 
         app.use(bodyParser.json());
-
-        app.use(bodyParser.urlencoded({
-            extended: true
-        }));
 
         app.post("/github", (req, res) => {
             const inputHash: string | undefined = req.header("X-Hub-Signature");
@@ -222,9 +218,6 @@ export class Coordinator {
                 shasum.update(JSON.stringify(req.body));
 
                 const secretHash: string = shasum.digest("hex");
-
-                // TODO
-                console.log(`Tried to authorize with hash: ${inputHash} | Locally produced was ${secretHash}`);
 
                 if (!crypto.timingSafeEqual(Buffer.from(secretHash), Buffer.from(inputHash.substr(5)))) {
                     res.status(401).end("Unauthorized");

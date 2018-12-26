@@ -145,15 +145,16 @@ export class Coordinator {
             }
 
             const start: number = performance.now();
-            const result: PromiseOr<boolean> = op();
 
+            let result: PromiseOr<boolean> = op();
             let time: number = Math.round(performance.now() - start);
 
             if (result instanceof Promise) {
-                await result;
+                result = await result;
                 time = Math.round(performance.now() - start);
             }
-            else if (!result) {
+
+            if (!result) {
                 this.isRunning = false;
 
                 if (clear) {

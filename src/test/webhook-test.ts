@@ -14,7 +14,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         return;
     }
 
-    const deployBranch string = "webhook_deploy";
+    const deployBranch: string = "webhook_deploy";
     const masterBranch: string = "dev-2.0";
     const buildDir: string = "./dist";
 

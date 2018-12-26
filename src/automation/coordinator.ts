@@ -218,7 +218,7 @@ export class Coordinator {
             else {
                 const shasum = crypto.createHmac("sha1", secret);
 
-                shasum.update(req.body);
+                shasum.update(JSON.stringify(req.body));
 
                 const secretHash: string = shasum.digest("hex");
 

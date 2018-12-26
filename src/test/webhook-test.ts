@@ -29,6 +29,18 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         .then(ScriptOperations.npmBuild)
         .then(ScriptOperations.npmTest)
 
+        .fallback(async () => {
+            console.log("Github | Fallback sequence initiated");
+
+            const result: ICoordinatorRunResult = await coordinator
+                .then(() => GitOperations.branch(masterBranch))
+                .then(() => GitOperations.deleteBranch(deployBranch))
+
+                .run();
+
+            console.log(`Github | Fallback sequence completed | Result is '${result.state === CoordinatorState.OK ? "OK" : "Failed"}'`);
+        })
+
         .run((current: number, left: number, total: number, percentage: number) => {
             console.log(`Github | Processing action ${current}/${total} : ${percentage}% (${left} left)`);
         });

@@ -53,6 +53,8 @@ export enum GithubEvent {
     Watch = "watch"
 }
 
+export type Callback = () => void;
+
 export type GithubWebhookCallback<T> = (type: GithubEvent, body: T) => void;
 
 export type WebhookCallback<T> = (body: T) => void;
@@ -75,6 +77,7 @@ export class Coordinator {
     protected isRunning: boolean;
     protected webhooks: Server[];
     protected retryTimes: number;
+    protected fallbackCallback?: Callback;
 
     public constructor(...operations: Operation[]) {
         this.operations = operations !== undefined && Array.isArray(operations) ? operations : [];
@@ -105,6 +108,12 @@ export class Coordinator {
 
     public get running(): boolean {
         return this.isRunning;
+    }
+
+    public fallback(callback: Callback): this {
+        this.fallbackCallback = callback;
+
+        return this;
     }
 
     // TOOD: Better report of why failed/completed
@@ -151,6 +160,11 @@ export class Coordinator {
                     this.clear();
                 }
 
+                if (this.fallbackCallback) {
+                    this.fallbackCallback();
+                }
+
+                // TODO: Should return final fallback result (if any fallback was set)
                 return {
                     ...pending,
                     state: CoordinatorState.Failed,

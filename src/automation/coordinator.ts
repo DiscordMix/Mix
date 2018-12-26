@@ -11,7 +11,7 @@ export enum CoordinatorState {
     Failed
 }
 
-export type WebhookCallback = (body: any) => void;
+export type WebhookCallback<T> = (body: T) => void;
 
 export interface ICoordinatorRunResult {
     readonly state: CoordinatorState;
@@ -116,7 +116,7 @@ export class Coordinator {
      * @param {string | undefined} secret A key that must be sent as authorization
      * @param {number} port The port that the webhook server will listen on
      */
-    public webhook(callback: WebhookCallback, secret?: string, port: number = Coordinator.webhookPort++): number {
+    public webhook<T = object>(callback: WebhookCallback<T>, secret?: string, port: number = Coordinator.webhookPort++): number {
         const app: express.Express = express();
         const shasum = crypto.createHash("sha1");
         
@@ -160,7 +160,7 @@ export class Coordinator {
      * @param {number} port The port that the webhook server will listen on
      * @return {number} The port that the webhook will listen on
      */
-    public githubWebhook(secret: string, callback: WebhookCallback, port: number = Coordinator.webhookPort++): number {
+    public githubWebhook<T = object>(secret: string, callback: WebhookCallback<T>, port: number = Coordinator.webhookPort++): number {
         const app: express.Express = express();
         const shasum = crypto.createHash("sha1");
 

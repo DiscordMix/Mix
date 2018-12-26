@@ -7,6 +7,11 @@ import {performance} from "perf_hooks";
 
 export type Operation = () => PromiseOr<boolean>;
 
+export interface ISavedOp {
+    readonly op: Operation;
+    readonly regardless: boolean;
+}
+
 export enum CoordinatorState {
     OK,
     Failed
@@ -73,14 +78,20 @@ export interface ICoordinatorRunResult {
 export class Coordinator {
     public static webhookPort: number = 52671;
 
-    protected operations: Operation[];
+    protected operations: ISavedOp[];
     protected isRunning: boolean;
     protected webhooks: Server[];
     protected retryTimes: number;
     protected fallbackCallback?: Callback;
 
     public constructor(...operations: Operation[]) {
-        this.operations = operations !== undefined && Array.isArray(operations) ? operations : [];
+        this.operations = operations !== undefined && Array.isArray(operations) ? operations.map((op: Operation): ISavedOp => {
+            return {
+                op,
+                regardless: false
+            };
+        }) : [];
+
         this.isRunning = false;
         this.webhooks = [];
         this.retryTimes = 0;
@@ -96,12 +107,15 @@ export class Coordinator {
         return this;
     }
 
-    public then(op: Operation): this {
+    public then(op: Operation, regardless: boolean = false): this {
         if (this.isRunning) {
             throw new Error("Cannot append operation while running");
         }
 
-        this.operations.push(op);
+        this.operations.push({
+            op,
+            regardless
+        });
 
         return this;
     }
@@ -139,14 +153,14 @@ export class Coordinator {
             state: CoordinatorState.Failed
         };
 
-        for (const op of this.operations) {
+        for (const savedOp of this.operations) {
             if (callback !== undefined) {
                 callback(completed + 1, totalLength - (completed + 1), totalLength, Math.round(completed / totalLength * 100));
             }
 
             const start: number = performance.now();
 
-            let result: PromiseOr<boolean> = op();
+            let result: PromiseOr<boolean> = savedOp.regardless ? true : savedOp.op();
             let time: number = Math.round(performance.now() - start);
 
             if (result instanceof Promise) {

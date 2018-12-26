@@ -20,8 +20,8 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
 
     const result: ICoordinatorRunResult = await coordinator
         .then(() => GitOperations.branch(masterBranch))
-        .then(() => GitOperations.deleteBranch(deployBranch))
-        .then(() => GitOperations.createBranch(deployBranch))
+        .then(() => GitOperations.deleteBranch(deployBranch), true)
+        .then(() => GitOperations.createBranch(deployBranch), true)
         .then(() => GitOperations.setUpstream(masterBranch))
         .then(GitOperations.pull)
         .then(() => FileSystemOperations.forceRemove(buildDir))
@@ -36,7 +36,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
                 .then(TestOperations.testFalseSync)
                 
                 .then(() => GitOperations.branch(masterBranch))
-                .then(() => GitOperations.deleteBranch(deployBranch))
+                .then(() => GitOperations.deleteBranch(deployBranch), true)
 
                 .run();
 

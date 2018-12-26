@@ -199,6 +199,8 @@ export class Coordinator {
         }
 
         this.operations.length = 0;
+        this.fallbackCallback = undefined;
+        this.retryTimes = 0;
 
         return this;
     }

@@ -82,10 +82,10 @@ export default abstract class FileSystemOperations {
             fs.copyFile(from, to, (error: Error) => {
                 if (error) {
                     resolve(false);
-    
+
                     return;
                 }
-    
+
                 resolve(true);
             });
         });
@@ -125,5 +125,20 @@ export default abstract class FileSystemOperations {
         catch {
             return false;
         }
+    }
+
+    public static workingDir(path: string): boolean {
+        try {
+            process.chdir(path);
+
+            return true;
+        }
+        catch {
+            return false;
+        }
+    }
+
+    public ensure(path: string): boolean {
+        return fs.existsSync(path);
     }
 }

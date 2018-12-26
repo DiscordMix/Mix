@@ -33,19 +33,35 @@ export default abstract class GitOperations {
         return ScriptOperations.executeSync("git", "checkout", name);
     }
 
+    public add(items: string = "*"): Promise<boolean> {
+        return ScriptOperations.execute("git", "add", items);
+    }
+
+    public addSync(items: string = "*"): boolean {
+        return ScriptOperations.executeSync("git", "add", items);
+    }
+
     public static commit(message: string): Promise<boolean> {
-        return ScriptOperations.execute("git", "commit", "-am", message);
+        return ScriptOperations.execute("git", "commit", "-m", message);
     }
 
     public static commitSync(message: string): boolean {
+        return ScriptOperations.executeSync("git", "commit", "-m", message);
+    }
+
+    public static commitAll(message: string): Promise<boolean> {
+        return ScriptOperations.execute("git", "commit", "-am", message);
+    }
+
+    public static commitAllSync(message: string): boolean {
         return ScriptOperations.executeSync("git", "commit", "-am", message);
     }
 
-    public static revert(commitId: string): Promise<boolean> {
-        return ScriptOperations.execute("git", "revert", commitId);
+    public static revert(commit: string = "HEAD"): Promise<boolean> {
+        return ScriptOperations.execute("git", "revert", commit);
     }
 
-    public static revertSync(commitId: string): boolean {
-        return ScriptOperations.executeSync("git", "revert", commitId);
+    public static revertSync(commit: string = "HEAD"): boolean {
+        return ScriptOperations.executeSync("git", "revert", commit);
     }
 }

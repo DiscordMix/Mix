@@ -9,6 +9,10 @@ const secret: string = "keyboard_cat";
 const githubPort: number = coordinator.githubWebhook(secret, async (event: GithubEvent, body: any) => {
     console.log(`Github | Processing webhook trigger | Event is ${event}`);
 
+    if (event !== GithubEvent.Push) {
+        return;
+    }
+
     const result: ICoordinatorRunResult = await coordinator
         .onlyIf(ScriptOperations.npmTest)
         .then(GitOperations.pull)

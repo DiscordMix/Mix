@@ -19,7 +19,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
     const buildDir: string = "./dist";
 
     const result: ICoordinatorRunResult = await coordinator
-        .then(TestOperations.testFalseSync)
+        //.then(TestOperations.testFalseSync)
         .then(() => GitOperations.branch(masterBranch))
         .then(() => GitOperations.deleteBranch(deployBranch))
         .then(() => GitOperations.createBranch(deployBranch))

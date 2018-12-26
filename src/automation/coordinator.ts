@@ -111,6 +111,11 @@ export class Coordinator {
     }
 
     // TODO: Repeated usage of both functions's functionality, .webhook() and .githubWebhook(); Use a generic function
+    /**
+     * @param {WebhookCallback} callback The callback to invoke upon receiving a valid and authorized request
+     * @param {string | undefined} secret A key that must be sent as authorization
+     * @param {number} port The port that the webhook server will listen on
+     */
     public webhook(callback: WebhookCallback, secret?: string, port: number = Coordinator.webhookPort++): number {
         const app: express.Express = express();
         const shasum = crypto.createHash("sha1");
@@ -150,6 +155,9 @@ export class Coordinator {
 
     // TODO: Port may be constant, meaning that it does not ++ on each function call. Same for above. (.webhook())
     /**
+     * @param {string} secret The secret which must be sent as authorization
+     * @param {WebhookCallback} callback The callback to invoke upon valid request with authorization
+     * @param {number} port The port that the webhook server will listen on
      * @return {number} The port that the webhook will listen on
      */
     public githubWebhook(secret: string, callback: WebhookCallback, port: number = Coordinator.webhookPort++): number {

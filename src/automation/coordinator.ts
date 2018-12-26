@@ -119,7 +119,7 @@ export class Coordinator {
     }
 
     // TOOD: Better report of why failed/completed
-    public async run(callback?: ProgressCallback): Promise<ICoordinatorRunResult> {
+    public async run(callback?: ProgressCallback, clear: boolean = true): Promise<ICoordinatorRunResult> {
         if (callback !== undefined && typeof callback !== "function") {
             throw new Error("Expecting callback to be a function");
         }
@@ -154,6 +154,10 @@ export class Coordinator {
             else if (!result) {
                 this.isRunning = false;
 
+                if (clear) {
+                    this.clear();
+                }
+
                 return {
                     ...pending,
                     state: CoordinatorState.Failed,
@@ -173,6 +177,10 @@ export class Coordinator {
 
         this.isRunning = false;
 
+        if (clear) {
+            this.clear();
+        }
+
         return {
             ...pending,
             state: CoordinatorState.OK,
@@ -187,6 +195,7 @@ export class Coordinator {
         }
 
         this.operations.length = 0;
+        this.conditions.length = 0;
 
         return this;
     }

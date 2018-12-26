@@ -3,16 +3,12 @@ import {exec, execSync} from "child_process";
 export default abstract class ScriptOperations {
     public static execute(base: string, ...args: string[]): Promise<boolean> {
         return new Promise((resolve) => {
-            console.log("Executing", `${base} ${args.join(" ")}`);
-
             exec(`${base} ${args.join(" ")}`.trim(), (error: Error | null) => {
                 if (error !== null) {
                     resolve(false);
 
                     return;
                 }
-
-                console.log("||=> Exec completed, error is", error);
 
                 resolve(true);
             });

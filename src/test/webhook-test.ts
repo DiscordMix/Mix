@@ -2,8 +2,13 @@ import {Coordinator} from "../automation/coordinator";
 
 const coordinator: Coordinator = new Coordinator();
 
-const port: number = coordinator.githubWebhook("k3yboard_cat!", (body: any) => {
-    console.log("Received webhook trigger with body", body);
+const githubPort: number = coordinator.githubWebhook("k3yboard_cat!", (body: any) => {
+    console.log("Github | Received webhook trigger with body", body);
 });
 
-console.log(`Webhook Test ready | Port ${port}`);
+const normalPort: number = coordinator.webhook((body: any) => {
+    console.log("Normal | Received webhook trigger with body", body);
+}, "k3yboard_cat!");
+
+console.log(`Github webhook ready | Port ${githubPort}`);
+console.log(`Normal webhook ready | Port ${normalPort}`);

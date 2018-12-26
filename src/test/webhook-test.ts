@@ -15,7 +15,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
 
     console.log(`Github | Processing webhook trigger to ref '${ref}' | Event is '${event}'`);
 
-    if (event !== GithubEvent.Push || !ref.endsWith(`/${masterBranch}`)) {
+    if (event !== GithubEvent.Push || !ref || !ref.endsWith(`/${masterBranch}`)) {
         return;
     }
 

@@ -6,17 +6,18 @@ import TestOperations from "../automation/predefied-ops/test";
 
 const coordinator: Coordinator = new Coordinator();
 const secret: string = "keyboard_cat";
+const deployBranch: string = "webhook_deploy";
+const masterBranch: string = "dev-2.0";
+const buildDir: string = "./dist";
 
 const githubPort: number = coordinator.githubWebhook(secret, async (event: GithubEvent, body: any) => {
-    console.log(`Github | Processing webhook trigger | Event is '${event}'`);
+    const ref: string = body.ref as string;
 
-    if (event !== GithubEvent.Push) {
+    console.log(`Github | Processing webhook trigger to ref '${ref}' | Event is '${event}'`);
+
+    if (event !== GithubEvent.Push || !ref.endsWith(`/${masterBranch}`)) {
         return;
     }
-
-    const deployBranch: string = "webhook_deploy";
-    const masterBranch: string = "dev-2.0";
-    const buildDir: string = "./dist";
 
     const result: ICoordinatorRunResult = await coordinator
         .then(() => GitOperations.branch(masterBranch))
@@ -32,7 +33,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         .fallback(async () => {
             console.log("Github | Fallback sequence initiated");
 
-            const result: ICoordinatorRunResult = await coordinator                
+            const result: ICoordinatorRunResult = await coordinator
                 .then(() => GitOperations.branch(masterBranch))
                 .then(() => GitOperations.deleteBranch(deployBranch), true)
 

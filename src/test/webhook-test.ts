@@ -18,9 +18,12 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         .then(GitOperations.pull)
         .then(() => FileSystemOperations.forceRemove("./dist"))
         .then(ScriptOperations.npmInstall)
-        .run();
 
-    console.log(`Github | Process completed | Result is ${result.state === CoordinatorState.OK ? "OK" : "Failed"}`, result);
+        .run((current: number, left: number, total: number, percentage: number) => {
+            console.log(`Github | Processing action ${current}/${total} : ${percentage}% (${left} left)`);
+        });
+
+    console.log(`Github | Process completed in ${result.time}ms (${result.averageTime}ms avg.) | Result is ${result.state === CoordinatorState.OK ? "OK" : "Failed"}`);
 });
 
 const normalPort: number = coordinator.webhook((body: any) => {

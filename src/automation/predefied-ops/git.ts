@@ -80,4 +80,12 @@ export default abstract class GitOperations {
     public static deleteBranchSync(name: string): boolean {
         return ScriptOperations.executeSync("git", "branch", "-D", name);
     }
+
+    public static setUpstream(remoteBranch: string, remote: string = "origin"): Promise<boolean> {
+        return ScriptOperations.execute("git", "branch", `--set-upstream-to=${remote}/${remoteBranch}`);
+    }
+
+    public static setUpstreamSync(remoteBranch: string, remote: string = "origin"): boolean {
+        return ScriptOperations.executeSync("git", "branch", `--set-upstream-to=${remote}/${remoteBranch}`);
+    }
 }

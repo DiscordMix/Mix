@@ -146,7 +146,7 @@ export class Coordinator {
 
         for (const op of operations) {
             if (callback !== undefined) {
-                callback(completed + 1, totalLength - completed, totalLength, Math.round(completed / totalLength * 100));
+                callback(completed + 1, totalLength - (completed + 1), totalLength, Math.round(completed / totalLength * 100));
             }
 
             const start: number = performance.now();

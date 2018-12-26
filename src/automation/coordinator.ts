@@ -163,7 +163,7 @@ export class Coordinator {
                     ...pending,
                     state: CoordinatorState.Failed,
                     operationsCompleted: completed,
-                    averageTime: pending.time / completed
+                    averageTime: Math.round(pending.time / completed)
                 };
             }
 
@@ -186,7 +186,7 @@ export class Coordinator {
             ...pending,
             state: CoordinatorState.OK,
             operationsCompleted: completed,
-            averageTime: pending.time / completed
+            averageTime: Math.round(pending.time / completed)
         };
     }
 

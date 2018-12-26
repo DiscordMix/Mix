@@ -131,7 +131,7 @@ export class Coordinator {
 
         const totalLength: number = this.operations.length;
 
-        const pending: ICoordinatorRunResult = {
+        const pending: ICoordinatorRunResult = 
             operations: totalLength,
             time: 0,
             averageTime: 0,

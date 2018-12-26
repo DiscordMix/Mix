@@ -77,6 +77,31 @@ export default abstract class FileSystemOperations {
         }
     }
 
+    public static copy(from: string, to: string): Promise<boolean> {
+        return new Promise((resolve) => {
+            fs.copyFile(from, to, (error: Error) => {
+                if (error) {
+                    resolve(false);
+    
+                    return;
+                }
+    
+                resolve(true);
+            });
+        });
+    }
+
+    public static copySync(from: string, to: string): boolean {
+        try {
+            fs.copyFileSync(from, to);
+
+            return true;
+        }
+        catch {
+            return false;
+        }
+    }
+
     public static run(path: string): Promise<boolean> {
         return new Promise((resolve) => {
             execFile(path, (error: Error | null) => {

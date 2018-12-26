@@ -200,12 +200,6 @@ export class Coordinator {
      */
     public githubWebhook<T = object>(secret: string, callback: WebhookCallback<T>, port: number = Coordinator.webhookPort++): number {
         const app: express.Express = express();
-        const shasum = crypto.createHash("sha1");
-
-        // Hash for future authentication
-        shasum.update(secret);
-
-        const secretHash: string = shasum.digest("hex");
 
         app.use(bodyParser.json());
 
@@ -216,14 +210,26 @@ export class Coordinator {
         app.post("/github", (req, res) => {
             const inputHash: string | undefined = req.header("X-Hub-Signature");
 
-            if (inputHash) {
-                console.log(`Tried to authorize with key: ${inputHash.substr(5)} | Expecting ${secretHash}`);
-            }
-
-            if (!inputHash || inputHash.substr(5) !== secretHash) {
+            if (!inputHash) {
                 res.status(401).end("Unauthorized");
 
                 return;
+            }
+            else {
+                const shasum = crypto.createHmac("sha1", secret);
+
+                shasum.update(req.body);
+
+                const secretHash: string = shasum.digest("hex");
+
+                // TODO
+                console.log(`Tried to authorize with hash: ${inputHash} | Locally produced was ${secretHash}`);
+
+                if (!crypto.timingSafeEqual(Buffer.from(secretHash), Buffer.from(inputHash))) {
+                    res.status(401).end("Unauthorized");
+
+                    return;
+                }
             }
 
             res.status(200).end("OK");

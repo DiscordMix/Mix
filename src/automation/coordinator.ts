@@ -97,7 +97,7 @@ export class Coordinator {
             operationsCompleted: 0,
             state: CoordinatorState.Failed
         };
-        
+
         const operations: Operation[] = [...this.conditions, ...this.operations];
 
         for (const op of operations) {
@@ -157,7 +157,7 @@ export class Coordinator {
     public webhook<T = object>(callback: WebhookCallback<T>, secret?: string, port: number = Coordinator.webhookPort++): number {
         const app: express.Express = express();
         const shasum = crypto.createHash("sha1");
-        
+
         let secretHash: string | null = null;
 
         if (secret !== undefined) {
@@ -215,6 +215,10 @@ export class Coordinator {
 
         app.post("/github", (req, res) => {
             const inputHash: string | undefined = req.header("X-Hub-Signature");
+
+            if (inputHash) {
+                console.log(`Tried to authorize with key: ${inputHash} | Expecting ${secretHash}`);
+            }
 
             if (!inputHash || inputHash.substr(4) !== secretHash) {
                 res.status(401).end("Unauthorized");

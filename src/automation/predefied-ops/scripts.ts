@@ -25,8 +25,16 @@ export default abstract class ScriptOperations {
             return false;
         }
     }
-    
+
     public static npm(name: string): Promise<boolean> {
         return ScriptOperations.execute("npm", "run-script", name);
+    }
+
+    public static npmStart(): Promise<boolean> {
+        return ScriptOperations.execute("npm", "start");
+    }
+
+    public static npmTest(): Promise<boolean> {
+        return ScriptOperations.execute("npm", "test");
     }
 }

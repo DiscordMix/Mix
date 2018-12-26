@@ -167,13 +167,13 @@ export class Coordinator {
                 };
             }
 
-            if (callback !== undefined) {
-                callback(completed, totalLength - completed, totalLength, Math.round(completed / totalLength * 100));
-            }
-
             // TODO: Read-only hotfix
             (pending.time as any) += time;
             completed++;
+
+            if (callback !== undefined) {
+                callback(completed, totalLength - completed, totalLength, Math.round(completed / totalLength * 100));
+            }
         }
 
         this.isRunning = false;

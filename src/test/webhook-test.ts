@@ -1,10 +1,10 @@
-import {Coordinator} from "../automation/coordinator";
+import {Coordinator, GithubEvent} from "../automation/coordinator";
 
 const coordinator: Coordinator = new Coordinator();
 const secret: string = "keyboard_cat";
 
-const githubPort: number = coordinator.githubWebhook(secret, (body: any) => {
-    console.log("Github | Received webhook trigger with body", body);
+const githubPort: number = coordinator.githubWebhook(secret, (event: GithubEvent, body: any) => {
+    console.log(`Github | Received webhook trigger | Event is ${event}`);
 });
 
 const normalPort: number = coordinator.webhook((body: any) => {

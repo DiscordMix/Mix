@@ -11,6 +11,49 @@ export enum CoordinatorState {
     Failed
 }
 
+export enum GithubEvent {
+    CheckRun = "check_run",
+    CheckSuite = "check_suite",
+    CommitComment = "commit_comment",
+    BranchOrTagCreation = "create",
+    BranchOrTagDeletion = "delete",
+    Deployment = "deployment",
+    DeploymentStatus = "deployment_status",
+    Fork = "fork",
+    GithubAppAuthorization = "github_app_authorization",
+    Wiki = "gollum",
+    AppInstallation = "installation",
+    RepositoryAppInstallation = "installation_repositories",
+    IssueComment = "issue_comment",
+    Issue = "issues",
+    Label = "label",
+    MarketplacePurchase = "marketplace_purchase",
+    Member = "member",
+    Membership = "membership",
+    Milestone = "milestone",
+    Organization = "organization",
+    OrganizationBlock = "org_block",
+    PageBuild = "page_build",
+    ProjectCard = "project_card",
+    Project = "project",
+    Public = "public",
+    PullRequestReviewComment = "pull_request_review_comment",
+    PullRequestReview = "pull_request_review",
+    PullRequest = "pull_request",
+    Push = "push",
+    Repository = "repository",
+    RepositoryImport = "repository_import",
+    RepositoryVulnerabilityAlert = "repository_vulnerability_alert",
+    Release = "release",
+    SecurityAdvisory = "security_advisory",
+    Status = "status",
+    Team = "team",
+    TeamRepositoryAdd = "team_add",
+    Watch = "watch"
+}
+
+export type GithubWebhookCallback<T> = (type: GithubEvent, body: T) => void;
+
 export type WebhookCallback<T> = (body: T) => void;
 
 export type ProgressCallback = (current: number, left: number, total: number, percentage: number) => void;
@@ -151,7 +194,7 @@ export class Coordinator {
     // TODO: Repeated usage of both functions's functionality, .webhook() and .githubWebhook(); Use a generic function
     /**
      * Create a webhook server. Content type must be set to application/json only.
-     * @param {WebhookCallback} callback The callback to invoke upon receiving a valid and authorized request
+     * @param {GithubWebhookCallback} callback The callback to invoke upon receiving a valid and authorized request
      * @param {string | undefined} secret A key that must be sent as authorization
      * @param {number} port The port that the webhook server will listen on
      */
@@ -193,11 +236,11 @@ export class Coordinator {
     /**
      * Create a webhook server for GitHub events. Content type must be set to application/json only.
      * @param {string} secret The secret which must be sent as authorization
-     * @param {WebhookCallback} callback The callback to invoke upon valid request with authorization
+     * @param {GithubWebhookCallback} callback The callback to invoke upon valid request with authorization
      * @param {number} port The port that the webhook server will listen on
      * @return {number} The port that the webhook will listen on
      */
-    public githubWebhook<T = object>(secret: string, callback: WebhookCallback<T>, port: number = Coordinator.webhookPort++): number {
+    public githubWebhook<T = object>(secret: string, callback: GithubWebhookCallback<T>, port: number = Coordinator.webhookPort++): number {
         // TODO: CRITICAL: Express throws errors (internal errors, 500) into the response stream!
         const app: express.Express = express();
 
@@ -205,8 +248,9 @@ export class Coordinator {
 
         app.post("/github", (req, res) => {
             const inputHash: string | undefined = req.header("X-Hub-Signature");
+            const event: GithubEvent | undefined = req.header("X-GitHub-Event") as GithubEvent | undefined;
 
-            if (!inputHash) {
+            if (!inputHash || !event) {
                 res.status(401).end("Unauthorized");
 
                 return;
@@ -227,7 +271,7 @@ export class Coordinator {
             }
 
             res.status(200).end("OK");
-            callback(req.body);
+            callback(event, req.body);
         });
 
         this.webhooks.push(app.listen(port));

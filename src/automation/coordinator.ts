@@ -218,6 +218,7 @@ export class Coordinator {
             else {
                 const shasum = crypto.createHmac("sha1", secret);
 
+                // TODO: Inefficient, express should already contain a property like this
                 shasum.update(JSON.stringify(req.body));
 
                 const secretHash: string = shasum.digest("hex");
@@ -225,7 +226,7 @@ export class Coordinator {
                 // TODO
                 console.log(`Tried to authorize with hash: ${inputHash} | Locally produced was ${secretHash}`);
 
-                if (!crypto.timingSafeEqual(Buffer.from(secretHash), Buffer.from(inputHash))) {
+                if (!crypto.timingSafeEqual(Buffer.from(secretHash), Buffer.from(inputHash.substr(5)))) {
                     res.status(401).end("Unauthorized");
 
                     return;

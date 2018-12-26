@@ -147,7 +147,7 @@ export class Coordinator {
         for (const op of operations) {
             const start: number = performance.now();
             const result: PromiseOr<boolean> = op();
-            const time: number = performance.now() - start;
+            const time: number = Math.round(performance.now() - start);
 
             if (result instanceof Promise) {
                 await result;

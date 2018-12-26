@@ -18,6 +18,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         .then(GitOperations.pull)
         .then(() => FileSystemOperations.forceRemove("./dist"))
         .then(ScriptOperations.npmInstall)
+        .then(ScriptOperations.npmBuild)
 
         .run((current: number, left: number, total: number, percentage: number) => {
             console.log(`Github | Processing action ${current}/${total} : ${percentage}% (${left} left)`);

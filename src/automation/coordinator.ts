@@ -145,12 +145,18 @@ export class Coordinator {
         const operations: Operation[] = [...this.conditions, ...this.operations];
 
         for (const op of operations) {
+            if (callback !== undefined) {
+                callback(completed + 1, totalLength - completed, totalLength, Math.round(completed / totalLength * 100));
+            }
+
             const start: number = performance.now();
             const result: PromiseOr<boolean> = op();
-            const time: number = Math.round(performance.now() - start);
+
+            let time: number = Math.round(performance.now() - start);
 
             if (result instanceof Promise) {
                 await result;
+                time = Math.round(performance.now() - start);
             }
             else if (!result) {
                 this.isRunning = false;
@@ -170,10 +176,6 @@ export class Coordinator {
             // TODO: Read-only hotfix
             (pending.time as any) += time;
             completed++;
-
-            if (callback !== undefined) {
-                callback(completed, totalLength - completed, totalLength, Math.round(completed / totalLength * 100));
-            }
         }
 
         this.isRunning = false;

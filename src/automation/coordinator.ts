@@ -13,6 +13,8 @@ export enum CoordinatorState {
 
 export type WebhookCallback<T> = (body: T) => void;
 
+export type ProgressCallback = (current: number, left: number, total: number, percentage: number) => void;
+
 export interface ICoordinatorRunResult {
     readonly state: CoordinatorState;
     readonly operations: number;
@@ -21,17 +23,42 @@ export interface ICoordinatorRunResult {
     readonly averageTime: number;
 }
 
+// TODO: Implement retry functionality
 export class Coordinator {
     public static webhookPort: number = 3561;
 
+    protected conditions: Operation[];
     protected operations: Operation[];
     protected isRunning: boolean;
     protected webhooks: Server[];
+    protected retryTimes: number;
 
     public constructor(...operations: Operation[]) {
+        this.conditions = [];
         this.operations = operations !== undefined && Array.isArray(operations) ? operations : [];
         this.isRunning = false;
         this.webhooks = [];
+        this.retryTimes = 0;
+    }
+
+    public onlyIf(condition: Operation): this {
+        if (this.isRunning) {
+            throw new Error("Cannot append condition while running");
+        }
+
+        this.conditions.push(condition);
+
+        return this;
+    }
+
+    public retry(times: number): this {
+        if (this.isRunning) {
+            throw new Error("Cannot set retry times while running");
+        }
+
+        this.retryTimes = times;
+
+        return this;
     }
 
     public then(op: Operation): this {
@@ -49,8 +76,11 @@ export class Coordinator {
     }
 
     // TOOD: Better report of why failed/completed
-    public async run(): Promise<ICoordinatorRunResult> {
-        if (this.isRunning) {
+    public async run(callback?: ProgressCallback): Promise<ICoordinatorRunResult> {
+        if (callback !== undefined && typeof callback !== "function") {
+            throw new Error("Expecting callback to be a function");
+        }
+        else if (this.isRunning) {
             throw new Error("Cannot run; Already running");
         }
 
@@ -58,15 +88,19 @@ export class Coordinator {
 
         let completed: number = 0;
 
+        const totalLength: number = this.operations.length + this.conditions.length;
+
         const pending: ICoordinatorRunResult = {
-            operations: this.operations.length,
+            operations: totalLength,
             time: 0,
             averageTime: 0,
             operationsCompleted: 0,
             state: CoordinatorState.Failed
         };
+        
+        const operations: Operation[] = [...this.conditions, ...this.operations];
 
-        for (const op of this.operations) {
+        for (const op of operations) {
             const start: number = performance.now();
             const result: PromiseOr<boolean> = op();
             const time: number = performance.now() - start;
@@ -83,6 +117,10 @@ export class Coordinator {
                     operationsCompleted: completed,
                     averageTime: pending.time / completed
                 };
+            }
+
+            if (callback !== undefined) {
+                callback(completed, totalLength - completed, totalLength, Math.round(completed / totalLength));
             }
 
             // TODO: Read-only hotfix

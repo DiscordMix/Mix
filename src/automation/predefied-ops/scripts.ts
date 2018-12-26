@@ -30,11 +30,35 @@ export default abstract class ScriptOperations {
         return ScriptOperations.execute("npm", "run-script", name);
     }
 
+    public static npmSync(name: string): boolean {
+        return ScriptOperations.executeSync("npm", "run-script", name);
+    }
+
     public static npmStart(): Promise<boolean> {
         return ScriptOperations.execute("npm", "start");
     }
 
     public static npmTest(): Promise<boolean> {
         return ScriptOperations.execute("npm", "test");
+    }
+
+    public static npmTestSync(): boolean {
+        return ScriptOperations.executeSync("npm", "test");
+    }
+
+    public static npmBuild(): Promise<boolean> {
+        return ScriptOperations.execute("npm", "run-script", "build");
+    }
+
+    public static npmBuildSync(): boolean {
+        return ScriptOperations.executeSync("npm", "run-script", "build");
+    }
+
+    public static npmInstall(): Promise<boolean> {
+        return ScriptOperations.execute("npm", "install");
+    }
+
+    public static npmInstallSync(): boolean {
+        return ScriptOperations.executeSync("npm", "install");
     }
 }

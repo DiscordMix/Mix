@@ -30,7 +30,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         .then(() => GitOperations.branch(deployBranch))
         .then(() => GitOperations.setUpstream(masterBranch))
         .then(GitOperations.pull)
-        .then(() => FileSystemOperations.forceRemove(buildDir))
+        .then(() => FileSystemOperations.forceRemove(buildDir), true)
         .then(ScriptOperations.npmInstall)
         .then(ScriptOperations.npmBuild)
         .then(ScriptOperations.npmTest)

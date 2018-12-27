@@ -31,7 +31,7 @@
         "webhook-test": "npm run build && node dist/test/webhook-test.js",
         "manualtest": "npm run build && node dist/test/manual-tests.js",
         "prepublish": "npm run build",
-        "prepare": "npm run build"
+        "prepare": "npm run build && npm test"
     },
     "author": "CloudRex <cloudrex@outlook.com>",
     "license": "MIT",

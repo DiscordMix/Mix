@@ -5,7 +5,7 @@ import crypto from "crypto";
 import {Server} from "http";
 import {performance} from "perf_hooks";
 
-export type Operation = () => PromiseOr<boolean>;
+export type Operation = () => PromiseOr<boolean> | PromiseOr<void>;
 
 export interface ISavedOp {
     readonly op: Operation;
@@ -160,7 +160,7 @@ export class Coordinator {
 
             const start: number = performance.now();
 
-            let result: PromiseOr<boolean> = savedOp.regardless ? true : savedOp.op();
+            let result: PromiseOr<boolean> | PromiseOr<void> = savedOp.regardless ? true : savedOp.op();
             let time: number = Math.round(performance.now() - start);
 
             if (result instanceof Promise) {
@@ -168,7 +168,7 @@ export class Coordinator {
                 time = Math.round(performance.now() - start);
             }
 
-            if (!result) {
+            if (result === false) {
                 this.isRunning = false;
 
                 if (clear) {

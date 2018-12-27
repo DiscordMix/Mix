@@ -21,6 +21,7 @@ export type IComposeOptions = {
 }
 
 export default class Log {
+    public static hiddenItems: boolean = false;
     public static level: LogLevel = LogLevel.Success;
 
     /**
@@ -42,6 +43,10 @@ export default class Log {
         return new Promise<void>((resolve) => {
             // TODO: Make sure check is working as intended, seems a bit suspicious
             if (Log.level < options.type) {
+                if (Log.hiddenItems) {
+                    console.log(colors.gray("1 hidden item"));
+                }
+
                 resolve();
 
                 return;
@@ -65,14 +70,14 @@ export default class Log {
                 finalMessages = `<${finalPrefix.toUpperCase()}> ${finalMessages}`;
             } */
 
+            resolve();
+
             fs.writeFile("bot.log", `[${date}] ${message} ${options.params.map((param: any) => param.toString()).join(" ")}\n`, {
                 flag: "a"
             }, (error: Error) => {
                 if (error) {
                     throw error;
                 }
-
-                resolve();
             });
         });
     }

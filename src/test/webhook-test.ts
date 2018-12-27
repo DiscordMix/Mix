@@ -18,6 +18,8 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
 
     // Verify that action is being performed to desired branch(es)
     if (event !== GithubEvent.Push || !ref || !ref.endsWith(`/${masterBranch}`)) {
+        Log.verbose("Github | Ignoring event");
+
         return;
     }
 

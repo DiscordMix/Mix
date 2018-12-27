@@ -47,11 +47,11 @@ export default abstract class ScriptOperations {
     }
 
     public static npmBuild(): Promise<boolean> {
-        return ScriptOperations.execute("npm", "run-script", "build");
+        return ScriptOperations.npm("build");
     }
 
     public static npmBuildSync(): boolean {
-        return ScriptOperations.executeSync("npm", "run-script", "build");
+        return ScriptOperations.npmSync("build");
     }
 
     public static npmInstall(): Promise<boolean> {

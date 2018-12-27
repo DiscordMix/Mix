@@ -1,6 +1,6 @@
 import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
-import Command, {IRawArguments, RestrictGroup} from "./command";
+import Command, {RawArguments, RestrictGroup} from "./command";
 import CommandStore, {CommandManagerEvent} from "./command-store";
 import CommandContext from "./command-context";
 import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
@@ -86,7 +86,7 @@ export default class CommandHandler {
      * @param {IArgument[]} rawArgs
      * @return {boolean}
      */
-    protected meetsRequirements(context: CommandContext, command: Command, rawArgs: IRawArguments): boolean {
+    protected meetsRequirements(context: CommandContext, command: Command, rawArgs: RawArguments): boolean {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 
@@ -194,10 +194,10 @@ export default class CommandHandler {
      * @todo Since it's returning a Promise, review
      * @param {CommandContext} context
      * @param {Command} command The command to handle
-     * @param {IRawArguments} rawArgs
+     * @param {RawArguments} rawArgs
      * @return {Promise<boolean>} Whether the command was successfully executed
      */
-    public async handle(context: CommandContext, command: Command, rawArgs: IRawArguments): Promise<boolean> {
+    public async handle(context: CommandContext, command: Command, rawArgs: RawArguments): Promise<boolean> {
         if (!this.meetsRequirements(context, command, rawArgs)) {
             return false;
         }

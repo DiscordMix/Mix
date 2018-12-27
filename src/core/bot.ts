@@ -67,7 +67,7 @@ export type IBotOptions<T> = {
 
 export type Action<T = void> = () => T;
 
-export const DefaultBotEmojiOptions: Partial<IBotEmojiOptions> = {
+export const DefaultBotEmojiOptions: IBotEmojiOptions = {
     success: ":white_check_mark:",
     error: ":thinking:"
 };

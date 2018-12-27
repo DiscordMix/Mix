@@ -3,11 +3,11 @@ import CommandStore from "./command-store";
 
 import Command, {
     IArgumentType,
-    IArgumentTypeChecker,
+    ArgumentTypeChecker,
     IArgument,
-    IArgumentResolver, IDefaultValueResolver,
+    IArgumentResolver, DefaultValueResolver,
     TrivialArgType,
-    IRawArguments,
+    RawArguments,
     ICustomArgType
 } from "./command";
 
@@ -17,21 +17,21 @@ import SwitchParser, {ICommandSwitch} from "./switch-parser";
 import Patterns from "../core/patterns";
 
 export type IResolveArgumentsOptions = {
-    readonly arguments: IRawArguments;
+    readonly arguments: RawArguments;
     readonly schema: IArgument[];
     readonly resolvers: IArgumentResolver[];
     readonly message: Message;
 }
 
 export type IResolveDefaultArgsOptions = {
-    readonly arguments: IRawArguments;
+    readonly arguments: RawArguments;
     readonly schema: IArgument[];
     readonly message: Message;
     readonly command: Command;
 }
 
 export type ICheckArgumentsOptions = {
-    readonly arguments: IRawArguments;
+    readonly arguments: RawArguments;
     readonly schema: IArgument[];
     readonly types: ICustomArgType[];
     readonly message: Message;
@@ -97,8 +97,8 @@ export default class CommandParser {
      * @param {string} commandString
      * @return {string[]}
      */
-    public static getArguments(commandString: string, schema: IArgument[]): IRawArguments {
-        const result: IRawArguments = [];
+    public static getArguments(commandString: string, schema: IArgument[]): RawArguments {
+        const result: RawArguments = [];
         const argCleanExpression: RegExp = /(```|`|'|"|)(.+)\1/;
 
         let match: RegExpExecArray | null = Patterns.args.exec(commandString);
@@ -207,10 +207,10 @@ export default class CommandParser {
 
     /**
      * @param {IResolveDefaultArgsOptions} options
-     * @return {IRawArguments}
+     * @return {RawArguments}
      */
-    public static resolveDefaultArgs(options: IResolveDefaultArgsOptions): IRawArguments {
-        const result: IRawArguments = [];
+    public static resolveDefaultArgs(options: IResolveDefaultArgsOptions): RawArguments {
+        const result: RawArguments = [];
 
         for (let i = 0; i < options.schema.length; i++) {
             let value: any = options.arguments[i];
@@ -223,7 +223,7 @@ export default class CommandParser {
                 const type: string = typeof options.schema[i].defaultValue;
 
                 if (type === "function") {
-                    value = (options.schema[i].defaultValue as IDefaultValueResolver)(options.message);
+                    value = (options.schema[i].defaultValue as DefaultValueResolver)(options.message);
                 }
                 else if (type === "string" || type === "number" || type === "boolean") {
                     value = options.schema[i].defaultValue as any;
@@ -321,7 +321,7 @@ export default class CommandParser {
                             return false;
                         }
                         else if (typeof (options.types[t].check) === "function") {
-                            if (!(options.types[t].check as IArgumentTypeChecker)(options.arguments[i] as any, options.message)) {
+                            if (!(options.types[t].check as ArgumentTypeChecker)(options.arguments[i] as any, options.message)) {
                                 return false;
                             }
                         }
@@ -342,7 +342,7 @@ export default class CommandParser {
             }
             // In-command method check
             else if (typeof (options.schema[i].type) === "function") {
-                if (!(options.schema[i].type as IArgumentTypeChecker)(options.arguments[i] as any, options.message)) {
+                if (!(options.schema[i].type as ArgumentTypeChecker)(options.arguments[i] as any, options.message)) {
                     return false;
                 }
             }
@@ -356,10 +356,10 @@ export default class CommandParser {
 
     /**
      * @param {Command} command
-     * @param {IRawArguments} args
+     * @param {RawArguments} args
      * @return {boolean} Whether the argument count is valid
      */
-    protected static validateArgumentCount(command: Command, args: IRawArguments): boolean {
+    protected static validateArgumentCount(command: Command, args: RawArguments): boolean {
         if (command.singleArg && (args.length < command.maxArguments || args.length > command.minArguments)) {
             return false;
         }

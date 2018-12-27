@@ -8,23 +8,23 @@ import EditableMessage from "../message/editable-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
 
-export type ICommandExecutionContextOptions = {
+export type ICommandContextOptions = {
     readonly msg: Message;
     readonly bot: Bot;
     readonly label: string | null;
 }
 
-export default class CommandContext<DataType = any, ChannelType = TextChannel | DMChannel | GroupDMChannel> extends ResponseHelper {
+export default class CommandContext<TData = any, TChannel = TextChannel | DMChannel | GroupDMChannel> extends ResponseHelper {
     public readonly bot: Bot;
     public readonly msg: Message;
     public readonly label: string | null;
 
-    public data?: DataType;
+    public data?: TData;
 
     /**
-     * @param {ICommandExecutionContextOptions} options
+     * @param {ICommandContextOptions} options
      */
-    public constructor(options: ICommandExecutionContextOptions) {
+    public constructor(options: ICommandContextOptions) {
         if (options.msg.channel.type !== "text") {
             throw new Error(BotMessages.CONTEXT_EXPECT_TEXT_CHANNEL);
         }
@@ -54,7 +54,7 @@ export default class CommandContext<DataType = any, ChannelType = TextChannel | 
         return this.msg.guild;
     }
 
-    public get c(): ChannelType {
+    public get c(): TChannel {
         return this.msg.channel as any;
     }
 
@@ -157,6 +157,7 @@ export default class CommandContext<DataType = any, ChannelType = TextChannel | 
 
         return await Utils.createTimedAction<Promise<boolean>>(this.bot, (): Promise<boolean> => {
             return new Promise<boolean>((resolve) => {
+                // TODO: Debugging?
                 new EmojiMenu(response.msg.id, this.msg.author.id, [
                     {
                         emoji: "white_check_mark",

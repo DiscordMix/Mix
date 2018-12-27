@@ -19,8 +19,8 @@ import axios from "axios";
 import Command, {
     IArgumentResolver,
     ICustomArgType,
-    IRawArguments,
-    IUserGroup
+    RawArguments,
+    UserGroup
 } from "../commands/command";
 
 import CommandHandler from "../commands/command-handler";
@@ -55,7 +55,7 @@ export type IBotOptions<T> = {
     readonly settings: Settings;
     readonly prefixCommand?: boolean;
     readonly internalCommands?: InternalCommand[];
-    readonly userGroups?: IUserGroup[];
+    readonly userGroups?: UserGroup[];
     readonly owner?: Snowflake;
     readonly options?: Partial<IBotExtraOptions>;
     readonly argumentResolvers?: IArgumentResolver[];
@@ -65,19 +65,14 @@ export type IBotOptions<T> = {
     readonly reducers?: Reducer<T>[];
 }
 
-export type Action<ReturnType = void> = () => ReturnType;
+export type Action<T = void> = () => T;
 
-export const DefaultBotEmojiOptions: IDefiniteBotEmojiOptions = {
+export const DefaultBotEmojiOptions: Partial<IBotEmojiOptions> = {
     success: ":white_check_mark:",
     error: ":thinking:"
 };
 
 export type IBotEmojiOptions = {
-    readonly success?: string;
-    readonly error?: string;
-}
-
-export type IDefiniteBotEmojiOptions = {
     readonly success: string;
     readonly error: string;
 }
@@ -96,7 +91,7 @@ export type IBotExtraOptions = {
     readonly autoResetAuthStore: boolean;
     readonly logMessages: boolean;
     readonly dmHelp: boolean;
-    readonly emojis: IDefiniteBotEmojiOptions;
+    readonly emojis: IBotEmojiOptions;
     readonly optimizer: boolean;
 }
 
@@ -206,7 +201,7 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
     public readonly console: ConsoleInterface;
     public readonly prefixCommand: boolean;
     public readonly internalCommands: InternalCommand[];
-    public readonly userGroups: IUserGroup[];
+    public readonly userGroups: UserGroup[];
     public readonly owner?: Snowflake;
     public readonly options: IBotExtraOptions;
     public readonly language?: Language;
@@ -401,7 +396,7 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
 
         // TODO: Make use of the userGroups property
         /**
-         * @type {IUserGroup[]}
+         * @type {UserGroup[]}
          * @readonly
          */
         this.userGroups = options.userGroups || [];
@@ -816,7 +811,7 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
 
         command = command as Command;
 
-        const rawArgs: IRawArguments = CommandParser.resolveDefaultArgs({
+        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
             arguments: CommandParser.getArguments(content, command.arguments),
             schema: command.arguments,
 
@@ -1062,7 +1057,7 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
             return;
         }
 
-        const rawArgs: IRawArguments = CommandParser.resolveDefaultArgs({
+        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
             arguments: CommandParser.getArguments(content, command.arguments),
             schema: command.arguments,
 

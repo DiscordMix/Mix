@@ -4,7 +4,7 @@ import CommandContext from "./commands/command-context";
 import CommandStore, {CommandManagerEvent} from "./commands/command-store";
 
 import Command, {
-    IArgumentTypeChecker,
+    ArgumentTypeChecker,
     IArgument,
     TrivialArgType,
     ICustomArgType,
@@ -69,7 +69,7 @@ export {
     CommandParser,
     IArgument,
     ICustomArgType,
-    IArgumentTypeChecker,
+    ArgumentTypeChecker as IArgumentTypeChecker,
     Command,
     TrivialArgType,
     IArgumentResolver,

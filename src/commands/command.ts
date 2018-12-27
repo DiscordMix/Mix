@@ -6,9 +6,9 @@ import {Message, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
 
-export type IUserGroup = string[];
+export type UserGroup = string[];
 
-export type ICommandExecuted = (context: Context, args: any, api: any) => any;
+export type CommandExeHandler = (context: Context, args: any, api: any) => any;
 
 export enum RestrictGroup {
     ServerOwner,
@@ -16,23 +16,23 @@ export enum RestrictGroup {
     BotOwner
 }
 
-export type IDefaultValueResolver = (message: Message) => string;
+export type DefaultValueResolver = (message: Message) => string;
 
-export type IArgumentTypeChecker = (argument: string, message: Message) => boolean;
+export type ArgumentTypeChecker = (argument: string, message: Message) => boolean;
 
 /**
  * TrivialArgType       : Internal check
  * RegExp               : Inline check
  * IArgumentTypeChecker : Provided type check by method
  */
-export type IArgumentType = TrivialArgType | IArgumentTypeChecker | RegExp | string;
+export type IArgumentType = TrivialArgType | ArgumentTypeChecker | RegExp | string;
 
 export type ICustomArgType = {
     readonly name: string;
-    readonly check: IArgumentTypeChecker | RegExp;
+    readonly check: ArgumentTypeChecker | RegExp;
 }
 
-export type IRawArguments = Array<string | number | boolean>;
+export type RawArguments = Array<string | number | boolean>;
 
 export type DefiniteArgument = string | number | boolean;
 
@@ -52,23 +52,23 @@ export enum InternalArgType {
     Role = "role"
 }
 
-export type IArgumentResolver = {
+export interface IArgumentResolver {
     readonly name: string;
     readonly resolve: (argument: DefiniteArgument, message: Message) => any;
 }
 
-export type IArgument = {
+export interface IArgument {
     readonly name: string;
     readonly type: IArgumentType;
     readonly description?: string;
-    readonly defaultValue?: DefiniteArgument | IDefaultValueResolver;
+    readonly defaultValue?: DefiniteArgument | DefaultValueResolver;
     readonly required?: boolean;
 
     // TODO: CRTICAL: X2 : Must verify that the same short switch isn't already being used by another argument of the same command.
     readonly switchShortName?: string;
 }
 
-export type ICommandRestrict = {
+export interface IConstraints {
     selfPermissions: any[];
     issuerPermissions: any[];
     environment: ChatEnvironment;
@@ -77,7 +77,7 @@ export type ICommandRestrict = {
     cooldown: number;
 }
 
-export const DefaultCommandRestrict: ICommandRestrict = {
+export const DefaultCommandRestrict: IConstraints = {
     auth: 0,
     cooldown: 0,
     environment: ChatEnvironment.Anywhere,
@@ -86,21 +86,22 @@ export const DefaultCommandRestrict: ICommandRestrict = {
     specific: []
 };
 
-export enum GenericCommandStatus {
+export enum CommandStatus {
     OK = 0,
     Failed = 1
 }
 
-export type ICommandResult = {
+export interface ICommandResult {
     readonly responses: Array<string | RichEmbed>;
-    readonly status: GenericCommandStatus | number;
+    readonly status: CommandStatus | number;
 }
 
-export abstract class GenericCommand<ArgumentsType = any> implements IFragment, IDisposable {
+export abstract class GenericCommand<T = any> implements IFragment, IDisposable {
     public readonly abstract meta: IFragmentMeta;
+
     public readonly aliases: string[] = [];
     public readonly arguments: IArgument[] = [];
-    public readonly restrict: ICommandRestrict = Object.assign({}, DefaultCommandRestrict);
+    public readonly restrict: IConstraints = Object.assign({}, DefaultCommandRestrict);
     public readonly exclude: string[] = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
@@ -118,7 +119,7 @@ export abstract class GenericCommand<ArgumentsType = any> implements IFragment, 
     }
 
     // TODO: Implement/shouldn't be negative response?
-    public async undo(oldContext: CommandContext, message: Message, args: ArgumentsType): Promise<boolean> {
+    public async undo(oldContext: CommandContext, message: Message, args: T): Promise<boolean> {
         await message.reply("That action cannot be undone");
 
         return false;
@@ -135,7 +136,7 @@ export abstract class GenericCommand<ArgumentsType = any> implements IFragment, 
         return true;
     }
 
-    public abstract executed(context: Context, args: ArgumentsType, api: any): ICommandResult | any;
+    public abstract executed(context: Context, args: T, api: any): ICommandResult | any;
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts
@@ -163,15 +164,15 @@ export abstract class GenericCommand<ArgumentsType = any> implements IFragment, 
 /**
  * @extends GenericCommand
  */
-export abstract class Subcommand<ArgumentsType = any> extends GenericCommand<ArgumentsType> {
+export abstract class Subcommand<T = any> extends GenericCommand<T> {
     //
 }
 
 /**
  * @extends GenericCommand
  */
-export default abstract class Command<ArgumentsType = any> extends GenericCommand<ArgumentsType> {
-    public readonly subcommands: Subcommand<ArgumentsType>[] = [];
+export default abstract class Command<T = any> extends GenericCommand<T> {
+    public readonly subcommands: Subcommand<T>[] = [];
 
     /**
      * @todo canExecute should default boolean, same concept as Service

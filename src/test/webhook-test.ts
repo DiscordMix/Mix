@@ -1,7 +1,4 @@
-import {Coordinator, GithubEvent, ICoordinatorRunResult, CoordinatorState} from "../automation/coordinator";
-import ScriptOperations from "../automation/predefied-ops/scripts";
-import GitOperations from "../automation/predefied-ops/git";
-import FileSystemOperations from "../automation/predefied-ops/file-system";
+import {FileSystemOperations, Coordinator, GitOperations, ScriptOperations, GithubEvent, ICoordinatorRunResult, CoordinatorState} from "@atlas/automata";
 import Utils from "../core/utils";
 import Log from "../core/log";
 import colors from "colors";

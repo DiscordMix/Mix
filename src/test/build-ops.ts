@@ -1,8 +1,6 @@
-import {Coordinator, CoordinatorState} from "../automation/coordinator";
 import {Log, LogLevel, Utils} from "..";
-import FileSystemOperations from "../automation/predefied-ops/file-system";
-import ScriptOperations from "../automation/predefied-ops/scripts";
 import colors from "colors";
+import {Coordinator, FileSystemOperations, ScriptOperations, CoordinatorState} from "@atlas/automata";
 
 enum BuildMode {
     Default

@@ -75,6 +75,25 @@ export default abstract class Utils {
             .replace("#", "");
     }
 
+    public static spreadTime(time: number): string {
+        const timeStr: string = time.toString();
+
+        let result: string[] = timeStr.split("");
+        let counter: number = 0;
+
+        for (let i: number = timeStr.length; i > 0; i--) {
+            if (counter >= 3) {
+                result.splice(i, 0, " ");
+                counter = 0;
+            }
+            else {
+                counter++;
+            }
+        }
+
+        return result.join("");
+    }
+
     // TODO: Needs testing
     public static createTimedAction<ReturnType = any>(bot: Bot, action: () => ReturnType, timeout: number, timeoutResult: ReturnType | any): Promise<ReturnType> {
         return new Promise(async (resolve) => {
@@ -130,7 +149,7 @@ export default abstract class Utils {
 
             counter++;
         }
-        
+
         return {
             iterations: counter,
             index: middle !== undefined ? midPoint : null,

@@ -188,7 +188,7 @@ describe("Utils", () => {
 
     describe("translateState()", () => {
         it("should return the translated state", () => {
-            const subjects = [
+            const subjects: any[] = [
                 true,
                 1,
                 "y",
@@ -329,6 +329,16 @@ describe("Utils", () => {
             assert.throws(() => Utils.binaryInsert(1, "" as any));
             assert.throws(() => Utils.binaryInsert(1, true as any));
             assert.throws(() => Utils.binaryInsert(1, false as any));
+        });
+    });
+
+    describe("spreadTime()", () => {
+        it("should return spread time", () => {
+            expect(Utils.spreadTime(1000)).to.be.a("string").and.to.equal("1 000");
+            expect(Utils.spreadTime(10000)).to.be.a("string").and.to.equal("10 000");
+            expect(Utils.spreadTime(531352)).to.be.a("string").and.to.equal("531 352");
+            expect(Utils.spreadTime(1)).to.be.a("string").and.to.equal("1");
+            expect(Utils.spreadTime(10)).to.be.a("string").and.to.equal("10");
         });
     });
 });

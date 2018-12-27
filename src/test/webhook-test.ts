@@ -3,6 +3,7 @@ import ScriptOperations from "../automation/predefied-ops/scripts";
 import GitOperations from "../automation/predefied-ops/git";
 import FileSystemOperations from "../automation/predefied-ops/file-system";
 import TestOperations from "../automation/predefied-ops/test";
+import Utils from "../core/utils";
 
 const coordinator: Coordinator = new Coordinator();
 const secret: string = "keyboard_cat";
@@ -47,7 +48,10 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
             console.log(`Github | Processing action ${current}/${total} : ${percentage}% (${left} left)`);
         });
 
-    console.log(`Github | Process completed in ${result.time}ms (${result.averageTime}ms avg.) | Result is '${result.state === CoordinatorState.OK ? "OK" : "Failed"}'`);
+    const time: string = Utils.spreadTime(result.time);
+    const avgTime: string = Utils.spreadTime(result.averageTime);
+
+    console.log(`Github | Process completed in ${time}ms (${avgTime}ms avg.) | Result is '${result.state === CoordinatorState.OK ? "OK" : "Failed"}'`);
 });
 
 const normalPort: number = coordinator.webhook((body: any) => {

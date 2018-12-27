@@ -13,7 +13,7 @@ const buildDir: string = "./dist";
 const githubPort: number = coordinator.githubWebhook(secret, async (event: GithubEvent, body: any) => {
     const ref: string = body.ref as string;
 
-    console.log("Github".gray, `| Processing webhook trigger to ref '${ref}' | Event is '${event}'`);
+    console.log(`Github | Processing webhook trigger to ref '${ref}' | Event is '${event}'`);
 
     if (event !== GithubEvent.Push || !ref || !ref.endsWith(`/${masterBranch}`)) {
         return;
@@ -32,7 +32,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         .then(ScriptOperations.npmTest)
 
         .fallback(async () => {
-            console.log("Github".gray, "| Fallback sequence initiated");
+            console.log("Github | Fallback sequence initiated");
 
             const result: ICoordinatorRunResult = await coordinator
                 .then(() => GitOperations.branch(masterBranch))
@@ -40,17 +40,17 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
 
                 .run();
 
-            console.log("Github".gray, `| Fallback sequence completed | Result is '${result.state === CoordinatorState.OK ? "OK".green : "Failed".red}'`);
+            console.log(`Github | Fallback sequence completed | Result is '${result.state === CoordinatorState.OK ? "OK" : "Failed"}'`);
         })
 
         .run((current: number, left: number, total: number, percentage: number) => {
-            console.log("Github".gray, `| Processing action ${current}/${total} : ${percentage}% (${left} left)`);
+            console.log(`Github | Processing action ${current}/${total} : ${percentage}% (${left} left)`);
         });
 
     const time: string = Utils.spreadTime(result.time);
     const avgTime: string = Utils.spreadTime(result.averageTime);
 
-    console.log("Github".gray, `| Process completed in ${time}ms (${avgTime}ms avg.) | Result is '${result.state === CoordinatorState.OK ? "OK".green : "Failed".red}'`);
+    console.log(`Github | Process completed in ${time}ms (${avgTime}ms avg.) | Result is '${result.state === CoordinatorState.OK ? "OK" : "Failed"}'`);
 });
 
 const normalPort: number = coordinator.webhook((body: any) => {

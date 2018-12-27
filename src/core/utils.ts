@@ -63,7 +63,7 @@ export default abstract class Utils {
      */
     public static resolveId(mention: string): string {
         if (typeof mention !== "string") {
-            throw new Error("Expecting mention to be a string");
+            throw new Error("Expecting mention parameter to be a string");
         }
 
         return mention
@@ -76,6 +76,10 @@ export default abstract class Utils {
     }
 
     public static spreadTime(time: number): string {
+        if (typeof time !== "number") {
+            throw new Error("Expecting time parameter to be a number");
+        }
+
         const timeStr: string = time.toString();
 
         let result: string[] = timeStr.split("");

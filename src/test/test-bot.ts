@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 import Settings from "../core/settings";
-import {Snowflake, Guild, TextChannel, Message} from "discord.js";
+import {Snowflake, Guild, TextChannel, Message, Util} from "discord.js";
 import CommandContext from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect, assert} from "chai";
@@ -339,6 +339,17 @@ describe("Utils", () => {
             expect(Utils.spreadTime(531352)).to.be.a("string").and.to.equal("531 352");
             expect(Utils.spreadTime(1)).to.be.a("string").and.to.equal("1");
             expect(Utils.spreadTime(10)).to.be.a("string").and.to.equal("10");
+        });
+
+        it("should throw on invalid parameters", () => {
+            assert.throws(() => Utils.spreadTime("hello" as any));
+            assert.throws(() => Utils.spreadTime("" as any));
+            assert.throws(() => Utils.spreadTime(undefined as any));
+            assert.throws(() => Utils.spreadTime(null as any));
+            assert.throws(() => Utils.spreadTime([] as any));
+            assert.throws(() => Utils.spreadTime({} as any));
+            assert.throws(() => Utils.spreadTime(false as any));
+            assert.throws(() => Utils.spreadTime(true as any));
         });
     });
 });

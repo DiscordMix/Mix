@@ -334,11 +334,20 @@ describe("Utils", () => {
 
     describe("spreadTime()", () => {
         it("should return spread time", () => {
-            expect(Utils.spreadTime(1000)).to.be.a("string").and.to.equal("1 000");
-            expect(Utils.spreadTime(10000)).to.be.a("string").and.to.equal("10 000");
-            expect(Utils.spreadTime(531352)).to.be.a("string").and.to.equal("531 352");
+            expect(Utils.spreadTime(1_000)).to.be.a("string").and.to.equal("1 000");
+            expect(Utils.spreadTime(10_000)).to.be.a("string").and.to.equal("10 000");
+            expect(Utils.spreadTime(531_352)).to.be.a("string").and.to.equal("531 352");
             expect(Utils.spreadTime(1)).to.be.a("string").and.to.equal("1");
             expect(Utils.spreadTime(10)).to.be.a("string").and.to.equal("10");
+            // expect(Utils.spreadTime(-15_050_050)).to.be.a("string").and.to.equal("-15 050 050"); // TODO: Not working
+            expect(Utils.spreadTime(-+-15)).to.be.a("string").and.to.equal("15");
+        });
+
+        it("should use delimiters", () => {
+            expect(Utils.spreadTime(1_000, ",")).to.be.a("string").and.to.equal("1,000");
+            expect(Utils.spreadTime(1, ",")).to.be.a("string").and.to.equal("1");
+            expect(Utils.spreadTime(100_000, ",")).to.be.a("string").and.to.equal("100,000");
+            expect(Utils.spreadTime(-1_000, ",")).to.be.a("string").and.to.equal("-1,000");
         });
 
         it("should throw on invalid parameters", () => {

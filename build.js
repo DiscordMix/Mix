@@ -1,0 +1,33 @@
+const automata = require("@atlas/automata");
+const CoordinatorState = automata.CoordinatorState;
+const colors = require("colors");
+const os = require("os");
+
+const coordinator = new automata.Coordinator();
+const buildDir = "./dist";
+const buildMode = process.env.BUILD_MODE ? process.env.BUILD_MODE.toLowerCase() : "default";
+
+// TODO: Implement different build modes
+async function build() {
+    const result = await coordinator
+        .then(() => {
+            console.log(`Platform: ${os.platform()} | ${os.arch()}`);
+            console.log(`Forge v${process.env.npm_package_version}`);
+            console.log(`NodeJS ${process.version}`);
+            console.log(`\nUsing mode: ${buildMode}`)
+            console.log("Building project");
+        })
+
+        .then(() => automata.FileSystemOperations.forceRemove(buildDir))
+        .then(() => automata.ScriptOperations.execute("tsc"))
+
+        .run();
+
+    const state = result.state === CoordinatorState.OK ? colors.green("OK") : colors.red("FAIL");
+
+    console.log(`Operation completed with state '${state}' | Took ${result.time}ms (${result.averageTime}ms avg.) | ${result.operationsCompleted}/${result.operations} task(s)`);
+
+    return result.operations === result.operationsCompleted ? 0 : 1;
+}
+
+build().then((code) => process.exit(code));

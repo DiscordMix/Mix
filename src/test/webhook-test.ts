@@ -4,6 +4,7 @@ import GitOperations from "../automation/predefied-ops/git";
 import FileSystemOperations from "../automation/predefied-ops/file-system";
 import Utils from "../core/utils";
 import Log from "../core/log";
+import colors from "colors";
 
 const coordinator: Coordinator = new Coordinator();
 const secret: string = "keyboard_cat";
@@ -44,7 +45,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
 
                 .run();
 
-            Log.verbose(`Github | Fallback sequence completed | Result is '${result.state === CoordinatorState.OK ? "OK" : "Failed"}'`);
+            Log.verbose(`Github | Fallback sequence completed | Result is '${result.state === CoordinatorState.OK ? colors.green("OK") : colors.red("FAIL")}'`);
         })
 
         .run((current: number, left: number, total: number, percentage: number) => {

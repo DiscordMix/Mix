@@ -1,7 +1,8 @@
-import {Coordinator} from "../automation/coordinator";
+import {Coordinator, CoordinatorState} from "../automation/coordinator";
 import {Log, LogLevel, Utils} from "..";
 import FileSystemOperations from "../automation/predefied-ops/file-system";
 import ScriptOperations from "../automation/predefied-ops/scripts";
+import colors from "colors";
 
 enum BuildMode {
     Default
@@ -28,8 +29,9 @@ async function build(): Promise<number> {
 
     const time: string = Utils.spreadTime(result.time);
     const avgTime: string = Utils.spreadTime(result.averageTime);
+    const state: string = result.state === CoordinatorState.OK ? colors.green("OK") : colors.red("FAIL");
 
-    Log.verbose(`Operation completed | Took ${time}ms (${avgTime}ms avg.) | ${result.operationsCompleted/result.operations} operations`);
+    Log.verbose(`Operation completed with state '${state}' | Took ${time}ms (${avgTime}ms avg.) | ${result.operationsCompleted}/${result.operations} task(s)`);
 
     return result.operations === result.operationsCompleted ? 0 : 1;
 }

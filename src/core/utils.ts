@@ -75,9 +75,14 @@ export default abstract class Utils {
             .replace("#", "");
     }
 
-    public static spreadTime(time: number): string {
-        if (typeof time !== "number") {
-            throw new Error("Expecting time parameter to be a number");
+    /**
+     * @param {number} time
+     * @param {string} [delimiter=" "]
+     * @return {string}
+     */
+    public static spreadTime(time: number, delimiter: string = " "): string {
+        if (typeof time !== "number" || typeof delimiter !== "string") {
+            throw new Error("Expecting time parameter to be a number and delimiter parameter to be a string");
         }
 
         const timeStr: string = time.toString();
@@ -87,7 +92,7 @@ export default abstract class Utils {
 
         for (let i: number = timeStr.length; i > 0; i--) {
             if (counter >= 3) {
-                result.splice(i, 0, " ");
+                result.splice(i, 0, delimiter);
                 counter = 0;
             }
             else {

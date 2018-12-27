@@ -44,7 +44,7 @@ export default class Log {
             // TODO: Make sure check is working as intended, seems a bit suspicious
             if (Log.level < options.type) {
                 if (Log.hiddenItems) {
-                    console.log(colors.gray("1 hidden item"));
+                    console.log(colors.gray("+ 1 Hidden Item"));
                 }
 
                 resolve();

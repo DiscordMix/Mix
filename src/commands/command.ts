@@ -8,7 +8,7 @@ import {IDisposable} from "../core/helpers";
 
 export type UserGroup = string[];
 
-export type CommandExeHandler = (context: Context, args: any, api: any) => any;
+export type CommandExeHandler<TArgs extends object = object, TReturn = any> = (context: Context, args: TArgs, api: any) => TReturn;
 
 export enum RestrictGroup {
     ServerOwner,
@@ -96,7 +96,7 @@ export interface ICommandResult {
     readonly status: CommandStatus | number;
 }
 
-export abstract class GenericCommand<T = any> implements IFragment, IDisposable {
+export abstract class GenericCommand<T extends object = object> implements IFragment, IDisposable {
     public readonly abstract meta: IFragmentMeta;
 
     public readonly aliases: string[] = [];
@@ -164,14 +164,14 @@ export abstract class GenericCommand<T = any> implements IFragment, IDisposable 
 /**
  * @extends GenericCommand
  */
-export abstract class Subcommand<T = any> extends GenericCommand<T> {
+export abstract class Subcommand<T extends object = object> extends GenericCommand<T> {
     //
 }
 
 /**
  * @extends GenericCommand
  */
-export default abstract class Command<T = any> extends GenericCommand<T> {
+export default abstract class Command<T extends object = object> extends GenericCommand<T> {
     public readonly subcommands: Subcommand<T>[] = [];
 
     /**

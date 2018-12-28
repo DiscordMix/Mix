@@ -8,7 +8,7 @@ export default class ArgumentParser {
      * @param {object} resolvers
      * @return {*}
      */
-    public static resolve(type: string, arg: string, resolvers: any): any {
+    public static resolve(type: string, arg: string, resolvers: object): any {
         const keys: string[] = Object.keys(resolvers);
 
         for (let i = 0; i < keys.length; i++) {
@@ -17,7 +17,7 @@ export default class ArgumentParser {
             }
         }
 
-        Log.error(`[CommandArgumentParser.resolve] Argument resolver missing: ${type}`);
+        throw Log.error(`[CommandArgumentParser.resolve] Argument resolver missing: ${type}`);
     }
 
     /**

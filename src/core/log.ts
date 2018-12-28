@@ -138,7 +138,7 @@ export default class Log {
      * @param {Array<*>} params
      * @return {Promise<void>}
      */
-    public static error(message: any, ...params: any[]): Promise<void> {
+    public static error(message: any, ...params: any[]): string {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -147,7 +147,9 @@ export default class Log {
             prefix: "dang"
         };
 
-        return Log.compose(options);
+        Log.compose(options);
+
+        return message;
     }
 
     /**

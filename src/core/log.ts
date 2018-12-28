@@ -138,7 +138,7 @@ export default class Log {
      * @param {Array<*>} params
      * @return {Promise<void>}
      */
-    public static error(message: any, ...params: any[]): string {
+    public static error(message: any, ...params: any[]): Error {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -149,7 +149,7 @@ export default class Log {
 
         Log.compose(options);
 
-        return message;
+        return new Error(message);
     }
 
     /**

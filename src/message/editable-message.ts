@@ -22,10 +22,6 @@ export default class EditableMessage {
             msg = msg[0];
         }
 
-        if (msg.embeds.length === 0) {
-            throw Log.error("[EditableMessage] Message parameter must contain embeds");
-        }
-
         /**
          * @type {Message}
          * @protected

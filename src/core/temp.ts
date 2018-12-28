@@ -83,7 +83,7 @@ export default class Temp {
             if (fs.existsSync(this.resolvedPath)) {
                 rimraf(this.resolvedPath, (error: Error) => {
                     if (error) {
-                        Log.error(`[Temp.reset] There was an error while resetting the temp folder: ${error.message}`)
+                        Log.error(`[Temp.reset] There was an error while resetting the temp folder: ${error.message}`);
                     }
 
                     resolve(this);

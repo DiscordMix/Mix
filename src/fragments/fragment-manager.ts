@@ -58,7 +58,7 @@ export default class FragmentManager extends EventEmitter {
 
                 instance: new service({
                     bot: this.bot,
-                    api: this.bot.getAPI()
+                    lib: this.bot.getLib()
                 })
             };
         }
@@ -115,7 +115,7 @@ export default class FragmentManager extends EventEmitter {
             if (mod instanceof Service) {
                 service = new (packg.module as any)({
                     bot: this.bot,
-                    api: this.bot.getAPI()
+                    lib: this.bot.getLib()
                 });
             }
             else {

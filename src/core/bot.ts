@@ -165,7 +165,7 @@ export type BotToken = string;
 /**
  * Bot events:
  *
- * - setupStart(ApiType?)
+ * - setupStart(LibType?)
  * - loadInternalFragments()
  * - loadedInternalFragments(Fragment[]?)
  * - loadServices()
@@ -192,7 +192,7 @@ export type BotToken = string;
 /**
  * @extends EventEmitter
  */
-export default class Bot<TState = any, TActionType = any, TAPI = any> extends EventEmitter implements IDisposable, ITimeoutAttachable {
+export default class Bot<TState = any, TActionType = any, TLib = any> extends EventEmitter implements IDisposable, ITimeoutAttachable {
     public readonly settings: Settings;
     public readonly temp: Temp;
     public readonly services: ServiceManager;
@@ -221,7 +221,7 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
     public readonly paths: PathResolver;
     public readonly store: Store<TState, TActionType>;
 
-    protected api?: TAPI;
+    protected lib?: TLib;
     protected setupStart: number = 0;
 
     // TODO: Implement stat counter
@@ -485,18 +485,18 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
     }
 
     /**
-     * @return {TAPI | null}
+     * @return {TLib | null}
      */
-    public getAPI(): TAPI | null {
-        return this.api || null;
+    public getLib(): TLib | null {
+        return this.lib || null;
     }
 
     /**
-     * @param {TAPI} api
+     * @param {TLib} lib
      * @return {this}
      */
-    public setAPI(api: TAPI): this {
-        this.api = api;
+    public setLib(lib: TLib): this {
+        this.lib = lib;
 
         return this;
     }
@@ -545,11 +545,11 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
 
     /**
      * Setup the bot
-     * @param {TAPI | undefined} api
+     * @param {TLib | undefined} lib
      * @return {Promise<this>}
      */
-    protected async setup(api?: TAPI): Promise<this> {
-        this.emit(EBotEvents.SetupStart, api);
+    protected async setup(lib?: TLib): Promise<this> {
+        this.emit(EBotEvents.SetupStart, lib);
 
         if (this.options.asciiTitle) {
             console.log("\n" + Title.replace("{version}", "beta") + "\n");
@@ -560,11 +560,11 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
         }
 
         /**
-         * @type {TAPI}
+         * @type {TLib}
          * @protected
          * @readonly
          */
-        this.api = api;
+        this.lib = lib;
 
         /**
          * @type {number}
@@ -1076,12 +1076,12 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
 
     /**
      * Connect the client
-     * @param {TAPI | undefined} api
+     * @param {TLib | undefined} lib
      * @return {Promise<this>}
      */
-    public async connect(api?: TAPI): Promise<this> {
+    public async connect(lib?: TLib): Promise<this> {
         this.setState(BotState.Connecting);
-        await this.setup(api);
+        await this.setup(lib);
         Log.verbose("[Bot.connect] Starting");
 
         await this.client.login(this.settings.general.token).catch(async (error: Error) => {

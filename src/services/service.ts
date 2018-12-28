@@ -26,7 +26,7 @@ export type IRawProcessMsg<DataType = any> = {
 
 export interface IServiceOptions {
     readonly bot: Bot;
-    readonly api?: any;
+    readonly lib?: any;
 }
 
 export abstract class GenericService implements IFragment, IDisposable {
@@ -45,11 +45,11 @@ export abstract class GenericService implements IFragment, IDisposable {
     public abstract start(): void;
 }
 
-export default abstract class Service<ApiType = undefined | any> extends GenericService {
+export default abstract class Service<T extends object = undefined | any> extends GenericService {
     public readonly listeners: Map<DiscordEvent, any>;
 
     protected readonly bot: Bot;
-    protected readonly api: ApiType;
+    protected readonly lib: T;
 
     /**
      * @todo Just accept bot and api, no need for Options obj
@@ -65,10 +65,10 @@ export default abstract class Service<ApiType = undefined | any> extends Generic
         this.bot = options.bot;
 
         /**
-         * @type {ApiType}
+         * @type {T}
          * @readonly
          */
-        this.api = options.api;
+        this.lib = options.lib;
 
         /**
          * @type {Map<DiscordEvent, *>}

@@ -874,22 +874,22 @@ describe("Bot", () => {
         expect(testBot.suspended).to.be.a("boolean").and.to.equal(false);
     });
 
-    it("should have no api set", () => {
-        expect(testBot.getAPI()).to.be.a("null");
-        expect((testBot as any).api).to.be.a("undefined");
+    it("should have no lib set", () => {
+        expect(testBot.getLib()).to.be.a("null");
+        expect((testBot as any).lib).to.be.a("undefined");
     });
 
-    it("should set api", () => {
-        expect(testBot.setAPI({
+    it("should set lib", () => {
+        expect(testBot.setLib({
             name: "john doe",
             age: 100
         })).to.be.an("object");
 
-        const api: any = testBot.getAPI();
+        const lib: any = testBot.getLib();
 
-        expect(api).to.be.an("object");
-        expect(api.name).to.be.a("string").and.to.equal("john doe");
-        expect(api.age).to.be.a("number").and.to.equal(100);
+        expect(lib).to.be.an("object");
+        expect(lib.name).to.be.a("string").and.to.equal("john doe");
+        expect(lib.age).to.be.a("number").and.to.equal(100);
     });
 
     it("should have no owner", () => {

@@ -798,9 +798,7 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
         );
 
         if (command === null) {
-            Log.error("[Bot.handleCommandMessage] Failed parsing command");
-
-            return;
+            throw Log.error("[Bot.handleCommandMessage] Failed parsing command; Command is null");
         }
 
         if ((command as any).type !== undefined && typeof (command as any).type === "number" && DecoratorCommandType[(command as any).type] !== undefined) {
@@ -1052,9 +1050,7 @@ export default class Bot<TState = any, TActionType = any, TAPI = any> extends Ev
         );
 
         if (command === null) {
-            Log.error("[Bot.handleCommandMessage] Failed parsing command");
-
-            return;
+            throw Log.error("[Bot.handleCommandMessage] Failed parsing command; Command is null");
         }
 
         const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({

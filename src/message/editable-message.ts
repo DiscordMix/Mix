@@ -23,7 +23,7 @@ export default class EditableMessage {
         }
 
         if (msg.embeds.length === 0) {
-            Log.error("[EditableMessage] Message parameter must contain embeds");
+            throw Log.error("[EditableMessage] Message parameter must contain embeds");
         }
 
         /**

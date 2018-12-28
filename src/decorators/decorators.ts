@@ -121,9 +121,7 @@ export interface SimpleCommand extends IDecoratorCommand {
 export function command(options: string | PartialWeakCommand, description?: string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         if (descriptor.value === undefined) {
-            Log.error("[Decorators.command] Expecting value for command decorator");
-
-            return;
+            throw Log.error("[Decorators.command] Expecting value for command decorator");
         }
 
         let finalCommand: WeakCommand | SimpleCommand | null = null;
@@ -132,9 +130,7 @@ export function command(options: string | PartialWeakCommand, description?: stri
         if (typeof options === "string") {
             if (description === undefined) {
                 // TODO: Log command name (if it's there)
-                Log.error("[Decorators.command] Expecting command description");
-
-                return;
+                throw Log.error("[Decorators.command] Expecting command description");
             }
 
             (finalCommand as any).meta = {
@@ -144,9 +140,7 @@ export function command(options: string | PartialWeakCommand, description?: stri
         }
         else if (typeof options !== "object") {
             // TODO: Log command name (if it's there)
-            Log.error("[Decorators.command] Invalid type of input, expecting either string or object");
-
-            return;
+            throw Log.error("[Decorators.command] Invalid type of input, expecting either string or object");
         }
         else if (typeof options === "object" && options !== null && description !== undefined) {
             // TODO: Log command name (if it's there)

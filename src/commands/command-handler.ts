@@ -242,7 +242,7 @@ export default class CommandHandler {
             // Delete the last cooldown before adding the new one for this command + user
             if (lastCooldown !== null) {
                 if (!this.commandStore.clearCooldown(context.sender.id, command.meta.name)) {
-                    Log.error(`[CommandHandler.handle] Expecting cooldown of '${context.sender.id} (${context.sender.tag})' to exist for command '${command.meta.name}'`);
+                    throw Log.error(`[CommandHandler.handle] Expecting cooldown of '${context.sender.id} (${context.sender.tag})' to exist for command '${command.meta.name}'`);
                 }
             }
 
@@ -369,7 +369,7 @@ export default class CommandHandler {
             }
 
             if (!valid) {
-                Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`)
+                throw Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`)
             }
 
             if (met) {

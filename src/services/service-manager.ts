@@ -126,9 +126,7 @@ export default class ServiceManager extends EventEmitter {
                 }
             }
             else {
-                Log.error(`[ServiceManager.enable] Unexpected type of canEnable service property, expecting either a boolean or function for service '${name}'`);
-
-                return false;
+                throw Log.error(`[ServiceManager.enable] Unexpected type of canEnable service property, expecting either a boolean or function for service '${name}'`);
             }
 
             if (!service.fork) {

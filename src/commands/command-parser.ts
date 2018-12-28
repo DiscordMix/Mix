@@ -160,9 +160,9 @@ export default class CommandParser {
     /**
      * Resolve the command arguments' values
      * @param {IResolveArgumentsOptions} options
-     * @return {Array<*> | null} The resolved arguments
+     * @return {*} The resolved arguments
      */
-    public static resolveArguments(options: IResolveArgumentsOptions): any | null {
+    public static resolveArguments(options: IResolveArgumentsOptions): any {
         const result: any = {};
 
         // If the command accept no arguments, return an empty object
@@ -177,9 +177,7 @@ export default class CommandParser {
 
             // Ignore the type if it's not a string
             if (CommandParser.isTypeValid(schemaEntry.type)) {
-                Log.error(`[CommandParser.resolveArguments] Expecting type of schema entry '${schemaEntry.name}' to be either a string or a trivial type`);
-
-                return null;
+                throw Log.error(`[CommandParser.resolveArguments] Expecting type of schema entry '${schemaEntry.name}' to be either a string or a trivial type`);
             }
 
             for (let r: number = 0; r < options.resolvers.length; r++) {

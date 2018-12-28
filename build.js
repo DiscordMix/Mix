@@ -24,6 +24,11 @@ async function build() {
 
                 return false;
             }
+            else if (buildMode !== "default") {
+                console.log(`Unsupported build mode: ${buildMode}`);
+
+                return false;
+            }
 
             console.log(`\nUsing mode: ${buildMode}`)
             console.log("Building project");

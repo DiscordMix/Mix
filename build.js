@@ -4,7 +4,7 @@ const colors = require("colors");
 const os = require("os");
 
 const coordinator = new automata.Coordinator();
-const buildDir = "./dist";
+const buildDir = process.env.BUILD_DIR ? process.env.BUILD_DIR.toLocaleLowerCase() : "./dist";
 const buildMode = process.env.BUILD_MODE ? process.env.BUILD_MODE.toLowerCase() : "default";
 const versionLock = [8, 11];
 

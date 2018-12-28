@@ -34,8 +34,7 @@ async function build() {
 
         .fallback(async () => {
             console.log("Running fallback sequence");
-
-            await automata.FileSystemOperations.forceRemove(buildDir)
+            await automata.FileSystemOperations.forceRemove(buildDir);
         })
 
         .run();

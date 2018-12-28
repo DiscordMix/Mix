@@ -26,10 +26,9 @@
     "scripts": {
         "watch": "tsc --watch",
         "build": "node build.js",
-        "type-check": "tsc --noEmit",
+        "check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/test-bot.js --timeout 5s --slow 1.5s",
         "webhook-test": "npm run build && node dist/test/webhook-test.js",
-        "manualtest": "npm run build && node dist/test/manual-tests.js",
         "prepublish": "npm run build",
         "prepare": "npm run build && npm test"
     },
@@ -67,13 +66,10 @@
         "@types/mongodb": "^3.1.14",
         "@types/mysql": "^2.15.5",
         "@types/node": "^10.12.8",
-        "@types/rimraf": "^2.0.2",
-        "@types/xml2js": "^0.4.3",
         "chai": "^4.2.0",
         "dotenv": "^6.1.0",
         "mocha": "^5.2.0",
-        "typedoc": "^0.13.0",
-        "typescript": "^3.1.6"
+        "typescript": "^3.2.2"
     },
     "files": [
         "dist"

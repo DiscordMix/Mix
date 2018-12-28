@@ -30,7 +30,7 @@ async function build() {
         })
 
         .then(() => automata.FileSystemOperations.forceRemove(buildDir))
-        .then(() => automata.ScriptOperations.execute("tsc"))
+        .then(() => automata.ScriptOperations.execute("tsc", undefined, true))
 
         .fallback(async () => {
             console.log("Running fallback sequence");

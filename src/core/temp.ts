@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import rimraf from "rimraf";
 import {default as main} from "require-main-filename";
+import {FileSystemOperations} from "@atlas/automata";
 
 export default class Temp {
     protected id?: string;
@@ -73,26 +74,14 @@ export default class Temp {
      * @return {Promise<this>}
      */
     public async reset(): Promise<this> {
-        return new Promise<this>((resolve) => {
-            if (!this.resolvedPath) {
-                resolve(this);
+        if (!this.resolvedPath) {
+            return this;
+        }
+        else if (fs.existsSync(this.resolvedPath)) {
+            FileSystemOperations.forceRemoveSync(this.resolvedPath);
+        }
 
-                return;
-            }
-
-            if (fs.existsSync(this.resolvedPath)) {
-                rimraf(this.resolvedPath, (error: Error) => {
-                    if (error) {
-                        Log.error(`[Temp.reset] There was an error while resetting the temp folder: ${error.message}`);
-                    }
-
-                    resolve(this);
-                });
-            }
-            else {
-                resolve(this);
-            }
-        });
+        return this;
     }
 
     /**

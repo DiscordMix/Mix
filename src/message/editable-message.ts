@@ -19,6 +19,7 @@ export default class EditableMessage {
     public constructor(msg: Message | Message[]) {
         // TODO: Hotfix
         if (Array.isArray(msg)) {
+            Log.warn("Arrays are not supported as the message parameter, choosing the first element");
             msg = msg[0];
         }
 

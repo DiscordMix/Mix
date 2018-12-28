@@ -221,7 +221,6 @@ export default class Bot<TState = any, TActionType = any, TLib = any> extends Ev
     public readonly paths: PathResolver;
     public readonly store: Store<TState, TActionType>;
 
-    protected lib?: TLib;
     protected setupStart: number = 0;
 
     // TODO: Implement stat counter
@@ -485,23 +484,6 @@ export default class Bot<TState = any, TActionType = any, TLib = any> extends Ev
     }
 
     /**
-     * @return {TLib | null}
-     */
-    public getLib(): TLib | null {
-        return this.lib || null;
-    }
-
-    /**
-     * @param {TLib} lib
-     * @return {this}
-     */
-    public setLib(lib: TLib): this {
-        this.lib = lib;
-
-        return this;
-    }
-
-    /**
      * Post stats to various bot lists
      */
     public async postStats(): Promise<void> {
@@ -558,13 +540,6 @@ export default class Bot<TState = any, TActionType = any, TLib = any> extends Ev
         if (DebugMode) {
             Log.info("[Forge] Debug mode is enabled");
         }
-
-        /**
-         * @type {TLib}
-         * @protected
-         * @readonly
-         */
-        this.lib = lib;
 
         /**
          * @type {number}

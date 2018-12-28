@@ -221,7 +221,7 @@ export default class CommandHandler {
         try {
             // TODO: Only check if result is true, make sure commandStore return booleans or actions?
             // TODO: Bot should be accessed protected (from this class)
-            const rawResult: any = command.executed(context, resolvedArgs, context.bot.getLib());
+            const rawResult: any = command.executed(context, resolvedArgs);
             const result: any = rawResult instanceof Promise ? await rawResult : rawResult;
 
             // Actions

@@ -45,11 +45,10 @@ export abstract class GenericService implements IFragment, IDisposable {
     public abstract start(): void;
 }
 
-export default abstract class Service<T extends object = undefined | any> extends GenericService {
+export default abstract class Service extends GenericService {
     public readonly listeners: Map<DiscordEvent, any>;
 
     protected readonly bot: Bot;
-    protected readonly lib: T;
 
     /**
      * @todo Just accept bot and api, no need for Options obj
@@ -63,12 +62,6 @@ export default abstract class Service<T extends object = undefined | any> extend
          * @readonly
          */
         this.bot = options.bot;
-
-        /**
-         * @type {T}
-         * @readonly
-         */
-        this.lib = options.lib;
 
         /**
          * @type {Map<DiscordEvent, *>}

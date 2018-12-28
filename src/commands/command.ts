@@ -136,7 +136,7 @@ export abstract class GenericCommand<T extends object = object> implements IFrag
         return true;
     }
 
-    public abstract executed(context: Context, args: T, api: any): ICommandResult | any;
+    public abstract executed(context: Context, args: T): ICommandResult | any;
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts

@@ -50,7 +50,7 @@ export enum DiscordEvent {
     Warn = "warn"
 }
 
-export type IBotEvent = {
+export interface IBotEvent {
     readonly name: string;
     readonly handler: any;
 }

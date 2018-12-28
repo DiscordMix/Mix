@@ -5,7 +5,7 @@ import CommandContext from "../../../commands/command-context";
 import Service from "../../../services/service";
 import FormattedMessage from "../../../builders/formatted-message";
 
-type IReflectArgs = {
+interface IReflectArgs {
     readonly type: ReflectDataType;
 }
 

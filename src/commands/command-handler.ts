@@ -9,15 +9,15 @@ import Utils from "../core/utils";
 import {IAction} from "../actions/action";
 import {EBotEvents} from "../core/bot";
 
-export type ICommandHandlerOptions = {
+export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;
     readonly errorHandlers: Function[];
     readonly argumentTypes: any;
 }
 
-export type ICommandErrorHandler = (context: CommandContext, command: Command) => boolean;
+export type CommandErrorHandler = (context: CommandContext, command: Command) => boolean;
 
-export type IUndoAction = {
+export interface IUndoAction {
     readonly command: Command;
     readonly context: CommandContext;
     readonly args?: any;

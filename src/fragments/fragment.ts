@@ -1,10 +1,10 @@
-export type IFragmentMeta = {
+export interface IFragmentMeta {
     readonly name: string;
     readonly description: string;
     readonly author?: string;
     readonly version?: string;
 }
 
-export type IFragment = {
+export interface IFragment {
     readonly meta: IFragmentMeta;
 }

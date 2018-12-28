@@ -9,16 +9,16 @@ import Log from "../core/log";
 import Utils from "../core/utils";
 
 // Arg types
-export type IMessageActionArgs = {
+export interface IMessageActionArgs {
     readonly channelId: Snowflake;
     readonly message: string;
 }
 
-export type IGuildLeaveActionArgs = {
+export interface IGuildLeaveActionArgs {
     readonly guildId: Snowflake;
 }
 
-export type IPrivateMessageActionArgs = {
+export interface IPrivateMessageActionArgs {
     readonly userId: Snowflake;
     readonly message: string;
 }
@@ -28,12 +28,12 @@ export interface IRequestActionArgs extends IMessageActionArgs {
     readonly avatarUrl: string;
 }
 
-export type IEmbedActionArgs = {
+export interface IEmbedActionArgs {
     readonly channelId: Snowflake;
     readonly embed: RichEmbed;
 }
 
-export type IPaginatedActionArgs = {
+export interface IPaginatedActionArgs {
     readonly message: string;
     readonly inputMessage: Message;
     readonly bot: Bot;

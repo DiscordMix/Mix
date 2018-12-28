@@ -23,19 +23,19 @@ export enum CommandManagerEvent {
     UnderCooldown
 }
 
-export type ICommandCooldown = {
+export interface ICommandCooldown {
     readonly context: CommandContext;
     readonly command: Command;
     readonly end: number;
 }
 
-export type ICommandPackage = ILivePackage<Command>;
+export type CommandPackage = ILivePackage<Command>;
 
 const validCommandNamePattern: RegExp = /^[a-z_0-9-]{1,40}$/mi;
 
-export type ICommandMap = Map<string, ICommandPackage>;
+export type CommandMap = Map<string, CommandPackage>;
 
-export type IReadonlyCommandMap = ReadonlyMap<string, ICommandPackage>;
+export type ReadonlyCommandMap = ReadonlyMap<string, CommandPackage>;
 
 export default class CommandStore {
     public readonly bot: Bot;
@@ -43,7 +43,7 @@ export default class CommandStore {
 
     public simpleCommands: Map<string, any>;
 
-    protected readonly commands: ICommandMap;
+    protected readonly commands: CommandMap;
     protected readonly released: Map<string, string>;
     protected readonly aliases: Map<string, string>;
 
@@ -59,7 +59,7 @@ export default class CommandStore {
         this.bot = bot;
 
         /**
-         * @type {ICommandMap}
+         * @type {CommandMap}
          * @protected
          */
         this.commands = new Map();
@@ -98,7 +98,7 @@ export default class CommandStore {
             return false;
         }
 
-        const packg: ICommandPackage = this.commands.get(commandName) as ICommandPackage;
+        const packg: CommandPackage = this.commands.get(commandName) as CommandPackage;
         const reloadedPackage: IPackage | null = await FragmentLoader.reload(packg.path) as IPackage | null;
 
         if (reloadedPackage === null) {
@@ -108,7 +108,7 @@ export default class CommandStore {
         // Delete current command
         this.commands.delete(commandName);
 
-        const cmdPackg: ICommandPackage | null = await this.bot.fragments.prepare<Command>(reloadedPackage);
+        const cmdPackg: CommandPackage | null = await this.bot.fragments.prepare<Command>(reloadedPackage);
 
         if (cmdPackg === null) {
             return false;
@@ -133,10 +133,10 @@ export default class CommandStore {
             return false;
         }
         else if (this.contains(name) && !this.isReleased(name)) {
-            const cmdPackg: ICommandPackage = this.commands.get(name) as ICommandPackage;
+            const cmdPackg: CommandPackage = this.commands.get(name) as CommandPackage;
 
             await cmdPackg.instance.dispose();
-            await this.remove(name, (this.commands.get(name) as ICommandPackage).instance.aliases);
+            await this.remove(name, (this.commands.get(name) as CommandPackage).instance.aliases);
             delete require.cache[cmdPackg.path];
             this.released.set(name, cmdPackg.path);
 
@@ -172,9 +172,9 @@ export default class CommandStore {
 
     /**
      * Register a command
-     * @param {ICommandPackage} commandPackage
+     * @param {CommandPackage} commandPackage
      */
-    public async register(commandPackage: ICommandPackage): Promise<boolean> {
+    public async register(commandPackage: CommandPackage): Promise<boolean> {
         if (Utils.isEmpty(commandPackage) || typeof commandPackage !== "object") {
             return false;
         }
@@ -259,7 +259,7 @@ export default class CommandStore {
     public async get(name: string): Promise<Command | null> {
         // TODO: CRITICAL: Will probably error since property may be undefined (Trying to access .module of undefined)
         if (this.aliases.get(name) !== undefined) {
-            const command: ICommandPackage | null = (this.commands.get(this.aliases.get(name) as string) as ICommandPackage) || null;
+            const command: CommandPackage | null = (this.commands.get(this.aliases.get(name) as string) as CommandPackage) || null;
 
             return command === null ? null : command.instance;
         }
@@ -284,17 +284,17 @@ export default class CommandStore {
             }
         }
 
-        const command: ICommandPackage | null = (this.commands.get(name) as ICommandPackage) || null;
+        const command: CommandPackage | null = (this.commands.get(name) as CommandPackage) || null;
 
         return command === null ? null : command.instance;
     }
 
     // TODO: Return amount registered instead
     /**
-     * @param {ICommandPackage[]} commands
+     * @param {CommandPackage[]} commands
      * @return {Promise<CommandStore>}
      */
-    public async registerMultiple(commands: ICommandPackage[]): Promise<this> {
+    public async registerMultiple(commands: CommandPackage[]): Promise<this> {
         for (let i = 0; i < commands.length; i++) {
             await this.register(commands[i]);
         }
@@ -304,10 +304,10 @@ export default class CommandStore {
 
     /**
      * Get all the registered commands
-     * @return {IReadonlyCommandMap}
+     * @return {ReadonlyCommandMap}
      */
-    public getAll(): IReadonlyCommandMap {
-        return this.commands as IReadonlyCommandMap;
+    public getAll(): ReadonlyCommandMap {
+        return this.commands as ReadonlyCommandMap;
     }
 
     /**

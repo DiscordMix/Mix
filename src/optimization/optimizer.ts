@@ -1,5 +1,5 @@
 import Bot, {EBotEvents} from "../core/bot";
-import {IReadonlyCommandMap} from "../commands/command-store";
+import {ReadonlyCommandMap} from "../commands/command-store";
 import fs from "fs";
 import Log from "../core/log";
 import Command from "../commands/command";
@@ -52,7 +52,7 @@ export default class Optimizer implements IDisposable {
         });
 
         // Determine if Tempo Engine should be used
-        const commandPackages: IReadonlyCommandMap = this.bot.commandStore.getAll();
+        const commandPackages: ReadonlyCommandMap = this.bot.commandStore.getAll();
 
         let avg: number = 0;
 
@@ -79,7 +79,7 @@ export default class Optimizer implements IDisposable {
      * @return {Promise<number>}
      */
     protected async processTempo(): Promise<number> {
-        const commands: IReadonlyCommandMap = this.bot.commandStore.getAll();
+        const commands: ReadonlyCommandMap = this.bot.commandStore.getAll();
 
         let released: number = 0;
 

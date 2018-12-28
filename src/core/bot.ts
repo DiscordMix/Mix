@@ -51,7 +51,7 @@ import Store, {Reducer} from "../state/store";
 import BotMessages from "./messages";
 
 // TODO: Already made optional by Partial?
-export type IBotOptions<T> = {
+export interface IBotOptions<T> {
     readonly settings: Settings;
     readonly prefixCommand?: boolean;
     readonly internalCommands?: InternalCommand[];
@@ -72,7 +72,7 @@ export const DefaultBotEmojiOptions: IBotEmojiOptions = {
     error: ":thinking:"
 };
 
-export type IBotEmojiOptions = {
+export interface IBotEmojiOptions {
     readonly success: string;
     readonly error: string;
 }
@@ -80,7 +80,7 @@ export type IBotEmojiOptions = {
 /**
  * Extra options used by the bot
  */
-export type IBotExtraOptions = {
+export interface IBotExtraOptions {
     readonly asciiTitle: boolean;
     readonly consoleInterface: boolean;
     readonly allowCommandChain: boolean;

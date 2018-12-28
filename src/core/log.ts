@@ -12,7 +12,7 @@ export enum LogLevel {
     Debug
 }
 
-export type IComposeOptions = {
+export interface IComposeOptions {
     readonly message: any;
     readonly params: any[];
     readonly type: LogLevel;
@@ -85,9 +85,8 @@ export default class Log {
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<void>}
      */
-    public static info(message: any, ...params: any[]): Promise<void> {
+    public static info(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -96,15 +95,14 @@ export default class Log {
             prefix: "info"
         };
 
-        return Log.compose(options);
+        Log.compose(options);
     }
 
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<void>}
      */
-    public static success(message: any, ...params: any[]): Promise<void> {
+    public static success(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -113,15 +111,14 @@ export default class Log {
             prefix: "sucs"
         };
 
-        return Log.compose(options);
+        Log.compose(options);
     }
 
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<void>}
      */
-    public static warn(message: any, ...params: any[]): Promise<void> {
+    public static warn(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -130,13 +127,12 @@ export default class Log {
             prefix: "warn"
         };
 
-        return Log.compose(options);
+        Log.compose(options);
     }
 
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<void>}
      */
     public static error(message: any, ...params: any[]): Error {
         const options: IComposeOptions = {
@@ -155,30 +151,25 @@ export default class Log {
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<void>}
      */
-    public static throw(message: any, ...params: any[]): Promise<void> {
+    public static fatal(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
             message: message,
             params: params,
             type: LogLevel.Fatal,
             color: "red",
-            prefix: "fata"
+            prefix: "fatal"
         };
 
-        const result: any = Log.compose(options);
-
+        Log.compose(options);
         process.exit(1);
-
-        return result;
     }
 
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<void>}
      */
-    public static verbose(message: any, ...params: any[]): Promise<void> {
+    public static verbose(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -187,15 +178,14 @@ export default class Log {
             prefix: "verb"
         };
 
-        return Log.compose(options);
+        Log.compose(options);
     }
 
     /**
      * @param {*} message
      * @param {Array<*>} params
-     * @return {Promise<void>}
      */
-    public static debug(message: any, ...params: any[]): Promise<void> {
+    public static debug(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -204,6 +194,6 @@ export default class Log {
             prefix: "dbug"
         };
 
-        return Log.compose(options);
+        Log.compose(options);
     }
 }

@@ -2,7 +2,7 @@ import {IArgument, default as Command, TrivialArgType} from "../../../commands/c
 import CommandContext from "../../../commands/command-context";
 import {IDecoratorCommand} from "../../../decorators/decorators";
 
-type IUsageArgs = {
+interface IUsageArgs {
     readonly command: string;
 }
 

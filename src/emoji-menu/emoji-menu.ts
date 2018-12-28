@@ -5,19 +5,20 @@ import {EventEmitter} from "events";
 import {IDisposable} from "../core/helpers";
 import {DiscordEvent} from "../decorators/decorators";
 
-export type IEmojiButtonClickHandler = (reaction: MessageReaction, user: User) => void;
+export type EmojiClickHandler = (reaction: MessageReaction, user: User) => void;
 
-export type IEmojiButton = {
+export interface IEmojiButton {
     readonly emoji: Snowflake;
     readonly public?: boolean;
-    readonly added?: IEmojiButtonClickHandler;
-    readonly removed?: IEmojiButtonClickHandler;
-    readonly clicked?: IEmojiButtonClickHandler;
+    readonly added?: EmojiClickHandler;
+    readonly removed?: EmojiClickHandler;
+    readonly clicked?: EmojiClickHandler;
     readonly add?: boolean;
 }
 
 /**
  * @extends EventEmitter
+ * @implements {IDisposable}
  */
 export default class EmojiMenu extends EventEmitter implements IDisposable {
     public readonly messageId: Snowflake;
@@ -89,7 +90,7 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
                 }
 
                 if (this.buttons[i].added !== undefined && typeof this.buttons[i].added === "function") {
-                    await (this.buttons[i].added as IEmojiButtonClickHandler)(reaction, user);
+                    await (this.buttons[i].added as EmojiClickHandler)(reaction, user);
                 }
 
                 this.emit("emojiClick", reaction, user, this.buttons[i]);
@@ -113,7 +114,7 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
                 }
 
                 if (this.buttons[i].removed !== undefined && typeof this.buttons[i].removed === "function") {
-                    await (this.buttons[i].removed as IEmojiButtonClickHandler)(reaction, user);
+                    await (this.buttons[i].removed as EmojiClickHandler)(reaction, user);
                 }
 
                 this.emit("emojiClick", reaction, user, this.buttons[i]);

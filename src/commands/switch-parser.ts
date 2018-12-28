@@ -1,6 +1,6 @@
 import Patterns from "../core/patterns";
 
-export type ICommandSwitch = {
+export interface ICommandSwitch {
     readonly key: string;
     readonly value: string | null;
     readonly short: boolean;

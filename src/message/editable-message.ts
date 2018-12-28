@@ -1,7 +1,7 @@
 import Log from "../core/log";
 import Discord, {Message} from "discord.js";
 
-export type IMessageEditOptions = {
+export interface IMessageEditOptions {
     readonly message: string;
     readonly title?: string;
     readonly color?: string;

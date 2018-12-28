@@ -1,7 +1,7 @@
 import CommandContext from "../commands/command-context";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 
-export type IInhibitorOptions = {
+export interface IInhibitorOptions {
     readonly meta: IFragmentMeta;
     readonly inspector: (context: CommandContext) => void;
 }

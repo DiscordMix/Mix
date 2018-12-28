@@ -3,8 +3,8 @@ import {Snowflake} from "discord.js";
 
 // TODO: Delete as new providers implemented
 
-export type IReadonlyProvider<ValueType, KeyType = string> = {
-    get(key: KeyType): ValueType;
+export interface IReadonlyProvider<TValue, TKey = string> {
+    get(key: TKey): TValue;
 }
 
 export interface IProvider<ValueType, KeyType = string> extends IReadonlyProvider<ValueType, KeyType> {

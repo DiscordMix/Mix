@@ -14,13 +14,13 @@ export enum ProcessMsgType {
     StdOutPipe
 }
 
-export type IProcessMsg<DataType = any> = {
+export interface IProcessMsg<T = any> {
     readonly type: ProcessMsgType;
-    readonly data: DataType;
+    readonly data: T;
 };
 
-export type IRawProcessMsg<DataType = any> = {
-    readonly _d: DataType;
+export interface IRawProcessMsg<T = any> {
+    readonly _d: T;
     readonly _t: ProcessMsgType;
 }
 

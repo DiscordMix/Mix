@@ -1,6 +1,6 @@
 import CommandContext from "../../../commands/command-context";
 import {RichEmbed} from "discord.js";
-import {IReadonlyCommandMap} from "../../../commands/command-store";
+import {ReadonlyCommandMap} from "../../../commands/command-store";
 import Command from "../../../commands/command";
 
 /**
@@ -15,7 +15,7 @@ export default class HelpCommand extends Command {
     public async executed(context: CommandContext): Promise<void> {
         // TODO: Decorator commands broke it (can't .map through a Map)
 
-        const commandMap: IReadonlyCommandMap = context.bot.commandStore.getAll();
+        const commandMap: ReadonlyCommandMap = context.bot.commandStore.getAll();
         const commands: Command[] = [];
 
         for (let [base, command] of commandMap) {

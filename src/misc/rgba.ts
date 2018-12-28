@@ -1,6 +1,6 @@
 import Rgb from "./rgb";
 
-export type IRgbaOptions = {
+export interface IRgbaOptions {
     readonly red: number,
     readonly green: number,
     readonly blue: number,

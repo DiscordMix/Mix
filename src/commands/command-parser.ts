@@ -2,7 +2,7 @@ import Utils from "../core/utils";
 import CommandStore from "./command-store";
 
 import Command, {
-    IArgumentType,
+    ArgumentType,
     ArgumentTypeChecker,
     IArgument,
     IArgumentResolver, DefaultValueResolver,
@@ -16,21 +16,21 @@ import Log from "../core/log";
 import SwitchParser, {ICommandSwitch} from "./switch-parser";
 import Patterns from "../core/patterns";
 
-export type IResolveArgumentsOptions = {
+export interface IResolveArgumentsOptions {
     readonly arguments: RawArguments;
     readonly schema: IArgument[];
     readonly resolvers: IArgumentResolver[];
     readonly message: Message;
 }
 
-export type IResolveDefaultArgsOptions = {
+export interface IResolveDefaultArgsOptions {
     readonly arguments: RawArguments;
     readonly schema: IArgument[];
     readonly message: Message;
     readonly command: Command;
 }
 
-export type ICheckArgumentsOptions = {
+export interface ICheckArgumentsOptions {
     readonly arguments: RawArguments;
     readonly schema: IArgument[];
     readonly types: ICustomArgType[];
@@ -345,7 +345,7 @@ export default class CommandParser {
                 }
             }
             else {
-                Log.throw(`[CommandParser.checkArguments] Invalid argument type type, expected either a function or a regex expression: ${options.schema[i].name}`);
+                Log.fatal(`[CommandParser.checkArguments] Invalid argument type type, expected either a function or a regex expression: ${options.schema[i].name}`);
             }
         }
 
@@ -369,18 +369,18 @@ export default class CommandParser {
     }
 
     /**
-     * @param {IArgumentType} type
+     * @param {ArgumentType} type
      * @return {boolean}
      */
-    protected static isTypeTrivial(type: IArgumentType): boolean {
+    protected static isTypeTrivial(type: ArgumentType): boolean {
         return typeof (type) === "number" && TrivialArgType[type] !== undefined;
     }
 
     /**
-     * @param {IArgumentType} type
+     * @param {ArgumentType} type
      * @return {boolean} Whether the provided type is valid
      */
-    protected static isTypeValid(type: IArgumentType): boolean {
+    protected static isTypeValid(type: ArgumentType): boolean {
         return typeof type !== "string" && !CommandParser.isTypeTrivial(type);
     }
 

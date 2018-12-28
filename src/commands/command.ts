@@ -25,9 +25,9 @@ export type ArgumentTypeChecker = (argument: string, message: Message) => boolea
  * RegExp               : Inline check
  * IArgumentTypeChecker : Provided type check by method
  */
-export type IArgumentType = TrivialArgType | ArgumentTypeChecker | RegExp | string;
+export type ArgumentType = TrivialArgType | ArgumentTypeChecker | RegExp | string;
 
-export type ICustomArgType = {
+export interface ICustomArgType {
     readonly name: string;
     readonly check: ArgumentTypeChecker | RegExp;
 }
@@ -59,7 +59,7 @@ export interface IArgumentResolver {
 
 export interface IArgument {
     readonly name: string;
-    readonly type: IArgumentType;
+    readonly type: ArgumentType;
     readonly description?: string;
     readonly defaultValue?: DefiniteArgument | DefaultValueResolver;
     readonly required?: boolean;

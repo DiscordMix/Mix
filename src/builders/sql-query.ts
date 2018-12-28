@@ -1,10 +1,10 @@
 // TODO: Move this into it's own thing
-export type ISqlQueryOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
+export type SqlQueryOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
 
-export type ISqlQueryWhere = {
+export interface ISqlQueryWhere {
     readonly property: string;
     readonly value: any;
-    readonly operator?: ISqlQueryOperator;
+    readonly operator?: SqlQueryOperator;
 }
 
 export default class SqlQuery {

@@ -8,7 +8,7 @@ import EditableMessage from "../message/editable-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
 
-export type ICommandContextOptions = {
+export interface ICommandContextOptions {
     readonly msg: Message;
     readonly bot: Bot;
     readonly label: string | null;

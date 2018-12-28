@@ -6,7 +6,7 @@ export type PromiseOr<Type> = Promise<Type> | Type;
 /**
  * Provides functionality to interact with different data sources
  */
-export type IProvider<ItemType> = {
+export interface IProvider<ItemType> {
     /**
      * Retrieve guild data
      * @abstract

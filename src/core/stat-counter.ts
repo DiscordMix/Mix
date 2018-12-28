@@ -1,10 +1,10 @@
-export type IBotStats = {
+export interface IBotStats {
     commandsHandled: number;
     commandsFailed: number;
     messagesSeen: number;
 }
 
-export type IReadonlyBotStats = Readonly<IBotStats>;
+export type ReadonlyBotStats = Readonly<IBotStats>;
 
 const DefaultBotStats: IBotStats = {
     commandsFailed: 0,
@@ -33,9 +33,9 @@ export default class StatCounter {
     }
 
     /**
-     * @return {IReadonlyBotStats}
+     * @return {ReadonlyBotStats}
      */
-    public getAsReadonly(): IReadonlyBotStats {
+    public getAsReadonly(): ReadonlyBotStats {
         return this.stats;
     }
 }

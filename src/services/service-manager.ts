@@ -8,8 +8,8 @@ import Log from "../core/log";
 import SMIS from "./smis";
 import Utils from "../core/utils";
 
-export type IServiceMap = Map<string, GenericService>;
-export type IReadonlyServiceMap = ReadonlyMap<string, GenericService>;
+export type ServiceMap = Map<string, GenericService>;
+export type ReadonlyServiceMap = ReadonlyMap<string, GenericService>;
 
 // TODO: Emit events through bot instead
 /**
@@ -19,7 +19,7 @@ export default class ServiceManager extends EventEmitter {
     public static heartbeatTimeout: number = 6000;
 
     protected readonly bot: Bot;
-    protected readonly services: IServiceMap;
+    protected readonly services: ServiceMap;
     protected readonly forkedServices: Map<string, ChildProcess>;
     protected readonly forkHeartbeats: Map<string, NodeJS.Timeout>;
 
@@ -37,7 +37,7 @@ export default class ServiceManager extends EventEmitter {
         this.bot = bot;
 
         /**
-         * @type {IServiceMap}
+         * @type {ServiceMap}
          * @protected
          * @readonly
          */
@@ -323,10 +323,10 @@ export default class ServiceManager extends EventEmitter {
     }
 
     /**
-     * @return {IReadonlyServiceMap}
+     * @return {ReadonlyServiceMap}
      */
-    public getAll(): IReadonlyServiceMap {
-        return this.services as IReadonlyServiceMap;
+    public getAll(): ReadonlyServiceMap {
+        return this.services as ReadonlyServiceMap;
     }
 
     // TODO: .stop()

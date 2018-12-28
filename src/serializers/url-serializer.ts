@@ -13,19 +13,19 @@ export enum CommonUrlProtocols {
     UDP = "udp"
 }
 
-export type IUrlDomain = {
+export interface IUrlDomain {
     readonly subdomain?: string;
     readonly name: string;
     readonly extension: string;
 }
 
-export type IUrl<ParametersType = any> = {
+export interface IUrl<T = any> {
     readonly protocol: CommonUrlProtocols | string;
     readonly domain: IUrlDomain;
     readonly port?: number;
     readonly path?: string;
     readonly queryString?: string;
-    readonly parameters?: ParametersType;
+    readonly parameters?: T;
     readonly fragment?: string;
 }
 

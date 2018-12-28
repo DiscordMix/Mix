@@ -3,12 +3,12 @@ import path from "path";
 import fs from "fs";
 import BotMessages from "../core/messages";
 
-export type ILanguageSource = Map<string, any>;
+export type LanguageSource = Map<string, any>;
 
 export default class Language {
-    protected readonly languages: Map<string, ILanguageSource>;
+    protected readonly languages: Map<string, LanguageSource>;
 
-    protected default?: ILanguageSource;
+    protected default?: LanguageSource;
 
     public readonly directory?: string;
 
@@ -17,13 +17,13 @@ export default class Language {
      */
     public constructor(directory: string) {
         /**
-         * @type {ILanguageSource | undefined}
+         * @type {LanguageSource | undefined}
          * @protected
          */
         this.directory = directory;
 
         /**
-         * @type {Map<string, ILanguageSource>}
+         * @type {Map<string, LanguageSource>}
          * @protected
          * @readonly
          */
@@ -31,9 +31,9 @@ export default class Language {
     }
 
     /**
-     * @return {ReadonlyMap<string, ILanguageSource>}
+     * @return {ReadonlyMap<string, LanguageSource>}
      */
-    public getLanguages(): ReadonlyMap<string, ILanguageSource> {
+    public getLanguages(): ReadonlyMap<string, LanguageSource> {
         return this.languages as ReadonlyMap<string, any>;
     }
 
@@ -87,7 +87,7 @@ export default class Language {
             throw new Error(`[Language.load] Language file does not exist: ${filePath}`);
         }
 
-        const data: ILanguageSource = await Utils.readJson(filePath);
+        const data: LanguageSource = await Utils.readJson(filePath);
 
         if (typeof data != "object" || Object.keys(data).length === 0) {
             throw new Error(`[Language.load] Language file is either not an object or empty: ${name}`);

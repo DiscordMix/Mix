@@ -1,14 +1,15 @@
 import {ISerializer} from "./serializer";
 
+// TODO: This should be under Patterns?
 const logMsgPattern: RegExp = /{([^}]+)} (?:\[([^\]]+)\.([^\]]+)\]|\[([^\]]+)\]) ([\S\s]+)$/gmi;
 
-export type ILogMsg = {
+export interface ILogMsg {
     readonly source: ILogSource;
     readonly message: string;
     readonly time: string;
 }
 
-export type ILogSource = {
+export interface ILogSource {
     readonly main: string;
     readonly extra?: string;
 }

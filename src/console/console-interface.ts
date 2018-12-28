@@ -4,8 +4,8 @@ import Bot, {DebugMode} from "../core/bot";
 import readline from "readline";
 import {performance} from "perf_hooks";
 import {Guild, GuildMember} from "discord.js";
-import {IReadonlyCommandMap} from "../commands/command-store";
-import {IReadonlyServiceMap} from "../services/service-manager";
+import {ReadonlyCommandMap} from "../commands/command-store";
+import {ReadonlyServiceMap} from "../services/service-manager";
 import chalk from "chalk";
 
 // TODO: Export in index
@@ -101,14 +101,14 @@ export default class ConsoleInterface {
         if (DebugMode) {
             this.commands.set("bug", (args: string[]) => {
                 if (args[0] === "commands") {
-                    const commands: IReadonlyCommandMap = bot.commandStore.getAll();
+                    const commands: ReadonlyCommandMap = bot.commandStore.getAll();
 
                     for (const [base, command] of commands) {
                         console.log(`\n\nCommand: ${base}\n\n`, command);
                     }
                 }
                 else if (args[0] === "services") {
-                    const services: IReadonlyServiceMap = bot.services.getAll();
+                    const services: ReadonlyServiceMap = bot.services.getAll();
 
                     for (const [name, service] of services) {
                         console.log(`\n\nService: ${name}\n\n`, service);

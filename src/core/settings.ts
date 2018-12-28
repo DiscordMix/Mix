@@ -3,17 +3,17 @@ import Utils from "./utils";
 import fs from "fs";
 import BotMessages from "./messages";
 
-export type ISettingsGeneral = {
+export interface ISettingsGeneral {
     readonly token: string;
     readonly prefixes: string[];
 }
 
-export type ISettingsKeys = {
+export interface ISettingsKeys {
     readonly dbl?: string;
     readonly bfd?: string;
 }
 
-export type ISettingsPaths = {
+export interface ISettingsPaths {
     readonly commands: string;
     readonly plugins: string;
     readonly services: string;
@@ -21,7 +21,7 @@ export type ISettingsPaths = {
     readonly tasks: string;
 }
 
-export type ISettingsOptions = {
+export interface ISettingsOptions {
     readonly general: ISettingsGeneral;
     readonly paths?: Partial<ISettingsPaths>;
     readonly keys?: Partial<ISettingsKeys>;
@@ -74,7 +74,7 @@ export default class Settings {
      */
     public static async fromFile(path: string): Promise<Settings> {
         if (!fs.existsSync(path)) {
-            Log.throw(BotMessages.CFG_FILE_NO_EXIST);
+            Log.fatal(BotMessages.CFG_FILE_NO_EXIST);
         }
 
         const fileSettings: ISettingsOptions = await Utils.readJson(path);

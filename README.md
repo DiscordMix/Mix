@@ -85,7 +85,7 @@ Command with arguments
 ```ts
 import {Command, CommandContext, IFragmentMeta, IArgument, TrivialArgType} from "@cloudrex/forge"
 
-type IMyCommandArgs = {
+interface IMyCommandArgs {
     readonly message: string;
 }
 
@@ -265,7 +265,7 @@ Serializer
 ```ts
 import {ISerializer} from "@cloudrex/forge"
 
-type IHelloObject = {
+interface IHelloObject {
     readonly message: string;
 }
 

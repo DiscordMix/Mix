@@ -7,7 +7,7 @@ import CommandContext from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect, assert} from "chai";
 import Bot, {EBotEvents} from "../core/bot";
-import Language, {ILanguageSource} from "../language/language";
+import Language, {LanguageSource} from "../language/language";
 import SwitchParser from "../commands/switch-parser";
 import path from "path";
 import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
@@ -1100,7 +1100,7 @@ describe("Languages", () => {
         expect(testBot.language).to.be.an("object");
 
         const language: Language = testBot.language as Language;
-        const languages: ReadonlyMap<string, ILanguageSource> = language.getLanguages();
+        const languages: ReadonlyMap<string, LanguageSource> = language.getLanguages();
 
         expect(languages.size).to.be.a("number").and.to.equal(1);
         expect(language.setDefault("test-language")).to.be.a("boolean").and.to.equal(true);

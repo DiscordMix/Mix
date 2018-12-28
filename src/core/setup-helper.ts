@@ -7,14 +7,14 @@ export enum SetupHelperActionType {
     Question
 }
 
-export type IFromContextOptions = {
+export interface IFromContextOptions {
     readonly context: CommandContext;
     readonly title?: string;
     readonly embed?: boolean;
     readonly timeout?: number
 }
 
-export type ISetupHelperOptions = {
+export interface ISetupHelperOptions {
     readonly client: Client;
     readonly channel: TextChannel;
     readonly userId: Snowflake;
@@ -23,17 +23,17 @@ export type ISetupHelperOptions = {
     readonly embed?: boolean;
 }
 
-export type ISetupHelperAction = {
+export interface ISetupHelperAction {
     readonly type: SetupHelperActionType;
     readonly text: string;
 }
 
-export type ISetupHelperResult = {
+export interface ISetupHelperResult {
     readonly responses: string[];
     readonly expired: boolean;
 }
 
-export type IResponseHandler = (response: string, index: number) => string;
+export type ResponseHandler = (response: string, index: number) => string;
 
 export default class SetupHelper {
     protected readonly client: any;
@@ -125,10 +125,10 @@ export default class SetupHelper {
     }
 
     /**
-     * @param {IResponseHandler} responseHandler
+     * @param {ResponseHandler} responseHandler
      * @return {Promise<ISetupHelperResult>}
      */
-    public async finish(responseHandler?: IResponseHandler): Promise<ISetupHelperResult> {
+    public async finish(responseHandler?: ResponseHandler): Promise<ISetupHelperResult> {
         const responses: string[] = [];
 
         for (let i = 0; i < this.actionMap.length; i++) {

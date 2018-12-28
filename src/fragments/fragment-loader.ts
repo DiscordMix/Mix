@@ -7,13 +7,13 @@ import path from "path";
 const validFragmentNamePattern: RegExp = /^(?:[a-z]{0,}[a-z0-9-_\S]+){2,50}$/i;
 const validFragmentDescPattern: RegExp = /^(?:[a-z]{0,}[^\n\r\t\0]+){1,100}$/i;
 
-export type IPackage = {
+export interface IPackage {
     readonly module: IFragment;
     readonly path: string;
 }
 
-export type ILivePackage<InstanceType extends IFragment> = {
-    readonly instance: InstanceType;
+export interface ILivePackage<T extends IFragment> {
+    readonly instance: T;
     readonly path: string;
 }
 

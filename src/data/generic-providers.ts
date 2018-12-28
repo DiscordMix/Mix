@@ -1,6 +1,6 @@
 import {Snowflake} from "discord.js";
 
-export type IDbMessage = {
+export interface IDbMessage {
     readonly id: Snowflake;
     readonly authorId: Snowflake;
     readonly authorName: string;

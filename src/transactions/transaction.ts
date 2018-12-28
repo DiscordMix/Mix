@@ -5,8 +5,8 @@ export interface ITransaction<ItemType, ReturnType = boolean> extends IProvider<
     commit(): PromiseOr<ReturnType>;
 }
 
-export type ICachedTransaction<CacheType = any[]> = {
-    readonly cache: CacheType;
+export interface ICachedTransaction<T = any[]> {
+    readonly cache: T;
 }
 
 export abstract class AutoTransaction<ItemType, CacheType = ItemType[], ReturnType = boolean> implements ITransaction<ItemType, ReturnType>, ICachedTransaction<CacheType> {

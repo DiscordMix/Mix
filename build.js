@@ -32,6 +32,12 @@ async function build() {
         .then(() => automata.FileSystemOperations.forceRemove(buildDir))
         .then(() => automata.ScriptOperations.execute("tsc"))
 
+        .fallback(async () => {
+            console.log("Running fallback sequence");
+
+            await automata.FileSystemOperations.forceRemove(buildDir)
+        })
+
         .run();
 
     const state = result.state === CoordinatorState.OK ? colors.green("OK") : colors.red("FAIL");

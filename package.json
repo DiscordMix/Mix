@@ -78,7 +78,6 @@
         "@types/xml2js": "^0.4.3",
         "chai": "^4.2.0",
         "dotenv": "^6.1.0",
-        "grunt": "^1.0.3",
         "mocha": "^5.2.0",
         "typedoc": "^0.13.0",
         "typescript": "^3.1.6"

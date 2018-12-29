@@ -1,5 +1,5 @@
 import Bot from "../core/bot";
-import {IRawProcessMsg, ProcessMsgType, IProcessMsg, GenericService} from "./service";
+import {IRawProcessMsg, ProcessMsgType, IProcessMsg, IGenericService} from "./service";
 import {fork, ChildProcess} from "child_process";
 import fs from "fs";
 import path from "path";
@@ -7,15 +7,33 @@ import {EventEmitter} from "events";
 import Log from "../core/log";
 import SMIS from "./smis";
 import Utils from "../core/utils";
+import {PromiseOr} from "..";
 
-export type ServiceMap = Map<string, GenericService>;
-export type ReadonlyServiceMap = ReadonlyMap<string, GenericService>;
+export type ServiceMap = Map<string, IGenericService>;
+export type ReadonlyServiceMap = ReadonlyMap<string, IGenericService>;
+
+export interface IServiceManager extends EventEmitter {
+    isForked(name: string): boolean;
+    getFork(name: string): ChildProcess | null;
+    register(service: IGenericService): boolean;
+    registerMultiple(multipleServices: IGenericService[]): number;
+    start(name: string): PromiseOr<boolean>;
+    startAll(): PromiseOr<number>;
+    ignite(name: string): boolean;
+    stopFork(name: string): PromiseOr<boolean>;
+    stopAllForks(): PromiseOr<number>;
+    getService(name: string): Readonly<IGenericService> | null;
+    disposeAll(): PromiseOr<void>;
+    getAll(): ReadonlyServiceMap;
+    stopAll(): PromiseOr<number>;
+    contains(name: string): boolean;
+}
 
 // TODO: Emit events through bot instead
 /**
  * Manages service states
  */
-export default class ServiceManager extends EventEmitter {
+export default class ServiceManager extends EventEmitter implements IServiceManager {
     public static heartbeatTimeout: number = 6000;
 
     protected readonly bot: Bot;
@@ -70,7 +88,7 @@ export default class ServiceManager extends EventEmitter {
      * @param {GenericService} service
      * @return {boolean}
      */
-    public register(service: GenericService): boolean {
+    public register(service: IGenericService): boolean {
         if (!service || typeof service !== "object" || Array.isArray(service)) {
             return false;
         }
@@ -88,7 +106,7 @@ export default class ServiceManager extends EventEmitter {
      * @param {GenericService[]} multipleServices
      * @return {number}
      */
-    public registerMultiple(multipleServices: GenericService[]): number {
+    public registerMultiple(multipleServices: IGenericService[]): number {
         let registered: number = 0;
 
         for (let i: number = 0; i < multipleServices.length; i++) {
@@ -109,7 +127,7 @@ export default class ServiceManager extends EventEmitter {
             return false;
         }
 
-        const service: GenericService | null = this.services.get(name) || null;
+        const service: IGenericService | null = this.services.get(name) || null;
 
         if (typeof service !== "object") {
             Log.warn(`[ServiceManager.enable] Failed to enable service '${name}' because it is not an object`);
@@ -305,7 +323,7 @@ export default class ServiceManager extends EventEmitter {
      * @param {string} name
      * @return {Readonly<GenericService> | null}
      */
-    public getService(name: string): Readonly<GenericService> | null {
+    public getService(name: string): Readonly<IGenericService> | null {
         if (typeof name !== "string" || Utils.isEmpty(name) || Array.isArray(name)) {
             return null;
         }

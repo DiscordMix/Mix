@@ -9,11 +9,11 @@ import Context from "../commands/command-context";
 import ConsoleInterface, {IConsoleInterface} from "../console/console-interface";
 import CommandStore, {ICommandStore} from "../commands/command-store";
 import Utils from "./utils";
-import Settings from "./settings";
+import Settings, {ISettings} from "./settings";
 import Log from "./log";
-import Temp from "./temp";
+import Temp, {ITemp} from "./temp";
 import Discord, {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
-import ServiceManager from "../services/service-manager";
+import ServiceManager, {IServiceManager} from "../services/service-manager";
 import axios from "axios";
 
 import Command, {
@@ -178,9 +178,9 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     disconnect(): PromiseOr<this>;
     clearTemp(): void;
 
-    readonly settings: Settings;
-    readonly temp: Temp;
-    readonly services: ServiceManager;
+    readonly settings: ISettings;
+    readonly temp: ITemp;
+    readonly services: IServiceManager;
     readonly commandStore: ICommandStore;
     readonly commandHandler: ICommandHandler;
     readonly console: IConsoleInterface;

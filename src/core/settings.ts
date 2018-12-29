@@ -27,7 +27,13 @@ export interface ISettingsOptions {
     readonly keys?: Partial<ISettingsKeys>;
 }
 
-export default class Settings {
+export interface ISettings {
+    readonly general: ISettingsGeneral;
+    readonly paths: ISettingsPaths;
+    readonly keys: ISettingsKeys;
+}
+
+export default class Settings implements ISettings {
     public general: ISettingsGeneral;
     public paths: ISettingsPaths;
     public keys: ISettingsKeys;

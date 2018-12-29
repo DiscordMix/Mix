@@ -29,10 +29,21 @@ export interface IServiceOptions {
     readonly lib?: any;
 }
 
-export abstract class GenericService implements IFragment, IDisposable {
+export interface IGenericService extends IFragment, IDisposable {
+    start(): void;
+    stop(): void;
+    canStart(): boolean;
+
+    readonly fork: boolean;
+}
+
+export abstract class GenericService implements IGenericService {
     public abstract meta: IFragmentMeta;
     public readonly fork: boolean = false;
-    public readonly canStart: (() => boolean) | boolean = true;
+
+    public canStart(): boolean {
+        return true;
+    }
 
     public stop(): void {
         //

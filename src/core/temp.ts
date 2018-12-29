@@ -5,8 +5,16 @@ import fs from "fs";
 import path from "path";
 import {default as main} from "require-main-filename";
 import {FileSystemOperations} from "@atlas/automata";
+import {PromiseOr} from "..";
 
-export default class Temp {
+export interface ITemp {
+    setup(id: Snowflake): this;
+    create(): PromiseOr<this>;
+    reset(): PromiseOr<this>;
+    store(data: any, file: string): PromiseOr<this>;
+}
+
+export default class Temp implements ITemp {
     protected id?: string;
     protected resolvedPath?: string;
 
@@ -89,12 +97,14 @@ export default class Temp {
      * @param {string} file The file in which to store the data
      * @return {Promise<void>}
      */
-    public store(data: any, file: string): Promise<void> {
+    public async store(data: any, file: string): Promise<this> {
         if (!this.resolvedPath) {
             throw new Error("[Temp.store] Trying to store when the resolved path is undefined");
         }
 
-        return Utils.writeJson(path.resolve(path.join(this.resolvedPath, file)), data);
+        await Utils.writeJson(path.resolve(path.join(this.resolvedPath, file)), data);
+
+        return this;
     }
 
     /**

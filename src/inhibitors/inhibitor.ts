@@ -1,14 +1,14 @@
-import CommandContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 
 export interface IInhibitorOptions {
     readonly meta: IFragmentMeta;
-    readonly inspector: (context: CommandContext) => void;
+    readonly inspector: (context: Context) => void;
 }
 
 export default class Inhibitor implements IFragment {
     public readonly meta: IFragmentMeta;
-    public readonly inspector: (context: CommandContext) => void;
+    public readonly inspector: (context: Context) => void;
 
     /**
      * @param {IInhibitorOptions} options

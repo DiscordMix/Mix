@@ -2,32 +2,32 @@ import Bot from "../core/bot";
 import Settings from "../core/settings";
 
 export default class BotBuilder {
-    protected readonly settings: any;
+    protected readonly _settings: any;
     protected readonly bot: any;
 
     public constructor() {
         /**
          * @type {*}
          */
-        this.settings = [];
+        this._settings = [];
     }
 
     /**
      * @param {string} token
      * @return {BotBuilder}
      */
-    public setToken(token: string): BotBuilder {
-        this.settings.general.token = token;
+    public token(token: string): BotBuilder {
+        this._settings.general.token = token;
 
         return this;
     }
 
     /**
-     * @param {string[]} prefixes
+     * @param {string | string[]} prefixes
      * @return {BotBuilder}
      */
-    public setPrefixes(prefixes: string[]): BotBuilder {
-        this.settings.general.prefixes = prefixes;
+    public prefixes(prefixes: string | string[]): BotBuilder {
+        this._settings.general.prefixes = Array.isArray(prefixes) ? prefixes : [prefixes];
 
         return this;
     }
@@ -36,7 +36,7 @@ export default class BotBuilder {
      * @param {string[]} internalCommands
      * @return {BotBuilder}
      */
-    public setInternalCommands(internalCommands: string[]): BotBuilder {
+    public internalCommands(internalCommands: string[]): BotBuilder {
         this.bot.internalCommands = internalCommands;
 
         return this;
@@ -46,7 +46,7 @@ export default class BotBuilder {
      * @param {*} argumentTypes
      * @return {BotBuilder}
      */
-    public setArgumentTypes(argumentTypes: any): BotBuilder {
+    public argumentTypes(argumentTypes: any): BotBuilder {
         this.bot.argumentTypes = argumentTypes;
 
         return this;
@@ -56,7 +56,7 @@ export default class BotBuilder {
      * @param {boolean} prefixCommand
      * @return {BotBuilder}
      */
-    public setPrefixCommand(prefixCommand: boolean): BotBuilder {
+    public prefixCommand(prefixCommand: boolean): BotBuilder {
         this.bot.prefixCommand = prefixCommand;
 
         return this;
@@ -66,7 +66,7 @@ export default class BotBuilder {
      * @param {Settings} settings
      * @return {BotBuilder}
      */
-    public setSettings(settings: Settings): BotBuilder {
+    public settings(settings: Settings): BotBuilder {
         this.bot.settings = settings;
 
         return this;

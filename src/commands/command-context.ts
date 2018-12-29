@@ -7,6 +7,7 @@ import BotMessages from "../core/messages";
 import EditableMessage from "../message/editable-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
+import {Store} from "..";
 
 export interface ICommandContextOptions {
     readonly msg: Message;
@@ -14,7 +15,7 @@ export interface ICommandContextOptions {
     readonly label: string | null;
 }
 
-export default class CommandContext<TData = any, TChannel = TextChannel | DMChannel | GroupDMChannel> extends ResponseHelper {
+export default class Context<TData = any, TChannel = TextChannel | DMChannel | GroupDMChannel> extends ResponseHelper {
     public readonly bot: Bot;
     public readonly msg: Message;
     public readonly label: string | null;
@@ -48,6 +49,14 @@ export default class CommandContext<TData = any, TChannel = TextChannel | DMChan
          * @readonly
          */
         this.label = options.label;
+    }
+
+    /**
+     * Access the bot's store
+     * @return {Store}
+     */
+    public get store(): Store {
+        return this.bot.store;
     }
 
     public get g(): Guild {

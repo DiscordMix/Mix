@@ -4,7 +4,7 @@ import Bot from "./bot";
 import EditableMessage from "../message/editable-message";
 import EmbedBuilder from "../builders/embed-builder";
 import Log from "./log";
-import FormattedMessage from "../builders/formatted-message";
+import MsgBuilder from "../builders/msg-builder";
 import Utils from "./utils";
 
 export default class ResponseHelper {
@@ -140,7 +140,7 @@ export default class ResponseHelper {
      * @param {boolean} [clean=true] Whether to filter the message
      * @return {Promise<EditableMessage | null>}
      */
-    public async ok(text: string | FormattedMessage, title: string = "", clean: boolean = true): Promise<EditableMessage | null> {
+    public async ok(text: string | MsgBuilder, title: string = "", clean: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
             text: typeof text === "string" ? `${this.bot.options.emojis.success} ${text}` : text.build(),
             title: title

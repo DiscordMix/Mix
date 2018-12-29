@@ -1,5 +1,5 @@
-import CommandContext from "../../../commands/command-context";
-import FormattedMessage from "../../../builders/formatted-message";
+import Context from "../../../commands/command-context";
+import MsgBuilder from "../../../builders/msg-builder";
 import Command, {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
 import EmbedBuilder from "../../../builders/embed-builder";
 import Utils from "../../../core/utils";
@@ -33,11 +33,11 @@ export default class EvalCommand extends Command<EvalArgs> {
         }
     ];
 
-    readonly restrict: any = {
+    readonly constraints: any = {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public async executed(context: CommandContext, args: EvalArgs): Promise<void> {
+    public async run(context: Context, args: EvalArgs): Promise<void> {
         const code: string = args.code;
         const started: number = Date.now();
 
@@ -54,9 +54,9 @@ export default class EvalCommand extends Command<EvalArgs> {
 
         const embed: EmbedBuilder = new EmbedBuilder();
         embed.footer(`Evaluated in ${(Date.now() - started)}ms`);
-        embed.field(`Input`, new FormattedMessage().codeBlock(code, "js").build());
+        embed.field(`Input`, new MsgBuilder().codeBlock(code, "js").build());
         embed.field(`Output`,
-            new FormattedMessage().codeBlock(Utils.escapeText(result.toString().trim() === '' || !result ? 'No return value.' : result.toString(), context.bot.client.token), "js").build()
+            new MsgBuilder().codeBlock(Utils.escapeText(result.toString().trim() === '' || !result ? 'No return value.' : result.toString(), context.bot.client.token), "js").build()
         );
         embed.color('#36393f');
 

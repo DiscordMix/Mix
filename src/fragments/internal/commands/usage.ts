@@ -1,5 +1,5 @@
 import {IArgument, default as Command, TrivialArgType} from "../../../commands/command";
-import CommandContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 import {IDecoratorCommand} from "../../../decorators/decorators";
 
 interface IUsageArgs {
@@ -24,7 +24,7 @@ export default class UsageCommand extends Command<IUsageArgs> {
         }
     ];
 
-    public async executed(context: CommandContext, args: IUsageArgs): Promise<void> {
+    public async run(context: Context, args: IUsageArgs): Promise<void> {
         const targetCommand: Command | IDecoratorCommand | null = await context.bot.commandStore.get(args.command);
 
         if (!targetCommand) {

@@ -1,10 +1,10 @@
 import ChatEnvironment from "../core/chat-environment";
 import Context from "./command-context";
-import CommandContext from "./command-context";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
+import {PromiseOr} from "..";
 
 export type UserGroup = string[];
 
@@ -96,12 +96,30 @@ export interface ICommandResult {
     readonly status: CommandStatus | number;
 }
 
-export abstract class GenericCommand<T extends object = object> implements IFragment, IDisposable {
+export interface IGenericCommand<T extends object = object> extends IFragment, IDisposable {
+    undo(oldContext: Context, message: Message, args: T): PromiseOr<boolean>;
+    enabled(): PromiseOr<boolean>;
+    run(context: Context, args: T): ICommandResult | any;
+    isExcluded(query: string): boolean;
+    
+    readonly minArguments: number;
+    readonly maxArguments: number;
+    readonly meta: IFragmentMeta;
+    readonly aliases: string[];
+    readonly arguments: IArgument[];
+    readonly constraints: IConstraints;
+    readonly exclude: string[];
+    readonly singleArg: boolean;
+    readonly isEnabled: boolean;
+    readonly undoable: boolean;
+}
+
+export abstract class GenericCommand<T extends object = object> implements IGenericCommand<T> {
     public readonly abstract meta: IFragmentMeta;
 
     public readonly aliases: string[] = [];
     public readonly arguments: IArgument[] = [];
-    public readonly restrict: IConstraints = Object.assign({}, DefaultCommandRestrict);
+    public readonly constraints: IConstraints = Object.assign({}, DefaultCommandRestrict);
     public readonly exclude: string[] = [];
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
@@ -119,7 +137,7 @@ export abstract class GenericCommand<T extends object = object> implements IFrag
     }
 
     // TODO: Implement/shouldn't be negative response?
-    public async undo(oldContext: CommandContext, message: Message, args: T): Promise<boolean> {
+    public async undo(oldContext: Context, message: Message, args: T): Promise<boolean> {
         await message.reply("That action cannot be undone");
 
         return false;
@@ -136,7 +154,7 @@ export abstract class GenericCommand<T extends object = object> implements IFrag
         return true;
     }
 
-    public abstract executed(context: Context, args: T): ICommandResult | any;
+    public abstract run(context: Context, args: T): ICommandResult | any;
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts

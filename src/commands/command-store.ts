@@ -1,11 +1,12 @@
 import Log from "../core/log";
 import Bot, {InternalCommand} from "../core/bot";
 import Command, {GenericCommand} from "./command";
-import CommandContext from "./command-context";
+import Context from "./command-context";
 import {Snowflake} from "discord.js";
 import FragmentLoader, {IPackage, ILivePackage} from "../fragments/fragment-loader";
 import Utils from "../core/utils";
 import path from "path";
+import {PromiseOr} from "..";
 
 /**
  * @enum {number}
@@ -24,7 +25,7 @@ export enum CommandManagerEvent {
 }
 
 export interface ICommandCooldown {
-    readonly context: CommandContext;
+    readonly context: Context;
     readonly command: Command;
     readonly end: number;
 }
@@ -36,6 +37,28 @@ const validCommandNamePattern: RegExp = /^[a-z_0-9-]{1,40}$/mi;
 export type CommandMap = Map<string, CommandPackage>;
 
 export type ReadonlyCommandMap = ReadonlyMap<string, CommandPackage>;
+
+export interface ICommandStore {
+    reload(commandName: string): PromiseOr<boolean>;
+    release(name: string): PromiseOr<boolean>;
+    isReleased(name: string): boolean;
+    getReleased(): ReadonlyMap<string, string>;
+    reloadAll(): PromiseOr<number>;
+    register(commandPackage: CommandPackage): PromiseOr<boolean>;
+    remove(name: string, aliases: string[]): PromiseOr<boolean>;
+    contains(name: string): boolean;
+    get(name: string): PromiseOr<Command | null>;
+    registerMultiple(commands: CommandPackage[]): PromiseOr<number>;
+    getAll(): ReadonlyCommandMap;
+    getCooldown(user: Snowflake, command: string): number | null;
+    cooldownExpired(user: Snowflake, command: string): boolean;
+    clearCooldown(user: Snowflake, command: string): boolean;
+    setCooldown(user: Snowflake, cooldown: number, command: string): this;
+    disposeAll(): PromiseOr<this>;
+    unloadAll(): PromiseOr<this>;
+
+    readonly size: number;
+}
 
 export default class CommandStore {
     public readonly bot: Bot;
@@ -218,10 +241,10 @@ export default class CommandStore {
 
     // TODO: Accepting aliases as an argument for a hot-fix of an infinite loop (looks like this.get(commandBase) calls back .remove() somehow or something similar)
     /**
-     * @param {string} commandBase
+     * @param {string} name
      * @return {boolean} Whether the command was removed
      */
-    public async remove(commandBase: string, aliases: string[]): Promise<boolean> {
+    public async remove(name: string, aliases: string[]): Promise<boolean> {
         // TODO: Release resources when removing too (delete require.cache)
         // Remove any command aliases that might exist
         if (aliases.length > 0) {
@@ -232,11 +255,11 @@ export default class CommandStore {
 
         // TODO: Remove cooldown if was set for command?
 
-        if (this.isReleased(commandBase) && !this.released.delete(commandBase)) {
+        if (this.isReleased(name) && !this.released.delete(name)) {
             return false;
         }
 
-        return this.commands.delete(commandBase);
+        return this.commands.delete(name);
     }
 
     /**
@@ -292,14 +315,18 @@ export default class CommandStore {
     // TODO: Return amount registered instead
     /**
      * @param {CommandPackage[]} commands
-     * @return {Promise<CommandStore>}
+     * @return {Promise<number>}
      */
-    public async registerMultiple(commands: CommandPackage[]): Promise<this> {
+    public async registerMultiple(commands: CommandPackage[]): Promise<number> {
+        let registered: number = 0;
+
         for (let i = 0; i < commands.length; i++) {
-            await this.register(commands[i]);
+            if (await this.register(commands[i])) {
+                registered++;
+            }
         }
 
-        return this;
+        return registered;
     }
 
     /**
@@ -311,41 +338,41 @@ export default class CommandStore {
     }
 
     /**
-     * @param {Snowflake} userId
-     * @param {string} commandName
+     * @param {Snowflake} user
+     * @param {string} command
      * @return {number | null} The cooldown
      */
-    public getCooldown(userId: Snowflake, commandName: string): number | null {
-        const issuerCooldowns: Map<string, number> | null = this.cooldowns.get(userId) || null;
+    public getCooldown(user: Snowflake, command: string): number | null {
+        const issuerCooldowns: Map<string, number> | null = this.cooldowns.get(user) || null;
 
         if (issuerCooldowns === null) {
             return null;
         }
 
-        return issuerCooldowns.get(commandName) || null;
+        return issuerCooldowns.get(command) || null;
     }
 
     /**
-     * @param {Snowflake} userId
-     * @param {Command} commandName
+     * @param {Snowflake} user
+     * @param {string} command
      * @return {boolean}
      */
-    public cooldownExpired(userId: Snowflake, commandName: string): boolean {
-        const cooldown: number | null = this.getCooldown(userId, commandName);
+    public cooldownExpired(user: Snowflake, command: string): boolean {
+        const cooldown: number | null = this.getCooldown(user, command);
 
         return (cooldown !== null && Date.now() > cooldown) || cooldown === null;
     }
 
     /**
-     * @param {Snowflake} userId
-     * @param {string} commandName
+     * @param {Snowflake} user
+     * @param {string} command
      * @return {boolean}
      */
-    public clearCooldown(userId: Snowflake, commandName: string): boolean {
-        const issuerCooldowns: Map<string, number> | null = this.cooldowns.get(userId) || null;
+    public clearCooldown(user: Snowflake, command: string): boolean {
+        const issuerCooldowns: Map<string, number> | null = this.cooldowns.get(user) || null;
 
         if (issuerCooldowns) {
-            issuerCooldowns.delete(commandName);
+            issuerCooldowns.delete(command);
 
             return true;
         }
@@ -354,47 +381,52 @@ export default class CommandStore {
     }
 
     /**
-     * @param {Snowflake} userId
+     * @param {Snowflake} user
      * @param {number} cooldown
-     * @param {string} commandName
+     * @param {string} command
      */
-    public setCooldown(userId: Snowflake, cooldown: number, commandName: string): void {
-        const currentCooldown: number | null = this.getCooldown(userId, commandName);
+    public setCooldown(user: Snowflake, cooldown: number, command: string): this {
+        const currentCooldown: number | null = this.getCooldown(user, command);
 
         if (currentCooldown !== null) {
             // Must exist at this point
-            (this.cooldowns.get(userId) as Map<string, number>).set(commandName, cooldown);
+            (this.cooldowns.get(user) as Map<string, number>).set(command, cooldown);
 
-            return;
+            return this;
         }
 
         const newCooldowns: Map<string, number> = new Map();
 
-        newCooldowns.set(commandName, cooldown);
+        newCooldowns.set(command, cooldown);
+        this.cooldowns.set(user, newCooldowns);
 
-        this.cooldowns.set(userId, newCooldowns);
+        return this;
     }
 
     /**
      * @return {Promise<void>}
      */
-    public async disposeAll(): Promise<void> {
+    public async disposeAll(): Promise<this> {
         for (let [base, command] of this.commands) {
             if (command instanceof GenericCommand) {
                 await command.dispose();
             }
         }
+
+        return this;
     }
 
     /**
      * Unload all commandStore
      */
-    public unloadAll(): void {
+    public unloadAll(): this {
         if (this.commands.size > 0) {
             const count: number = this.commands.size;
 
             this.commands.clear();
             Log.success(`[CommandManager.unloadAll] Unloaded ${count} command(s)`);
         }
+
+        return this;
     }
 }

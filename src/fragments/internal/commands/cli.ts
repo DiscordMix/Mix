@@ -1,6 +1,6 @@
-import CommandContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 import {exec} from "child_process";
-import FormattedMessage from "../../../builders/formatted-message";
+import MsgBuilder from "../../../builders/msg-builder";
 import Command, {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
 import EmbedBuilder from "../../../builders/embed-builder";
 import Utils from "../../../core/utils";
@@ -29,11 +29,11 @@ export default class CliCommand extends Command<CliArgs> {
         }
     ];
 
-    readonly restrict: any = {
+    readonly constraints: any = {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public async executed(context: CommandContext, args: CliArgs): Promise<void> {
+    public async run(context: Context, args: CliArgs): Promise<void> {
         const started: number = Date.now();
 
         exec(args.command, (error, stdout: string, stderror: string) => {
@@ -44,10 +44,10 @@ export default class CliCommand extends Command<CliArgs> {
             const embed: EmbedBuilder = new EmbedBuilder();
 
             embed.footer(`Evaluated in ${(Date.now() - started)}ms`);
-            embed.field(`Input`, new FormattedMessage().codeBlock(args.command, "js").build());
+            embed.field(`Input`, new MsgBuilder().codeBlock(args.command, "js").build());
 
             embed.field("Output",
-                new FormattedMessage().codeBlock(Utils.escapeText(result, context.bot.client.token), "js").build()
+                new MsgBuilder().codeBlock(Utils.escapeText(result, context.bot.client.token), "js").build()
             )
             .color("#36393f");
 

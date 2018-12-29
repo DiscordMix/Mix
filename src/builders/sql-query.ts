@@ -1,3 +1,5 @@
+import {IBuilder} from "./builder";
+
 // TODO: Move this into it's own thing
 export type SqlQueryOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
 
@@ -7,7 +9,15 @@ export interface ISqlQueryWhere {
     readonly operator?: SqlQueryOperator;
 }
 
-export default class SqlQuery {
+export interface ISqlQueryBuilder<T> extends IBuilder<string> {
+    where(query: Partial<T>): this;
+    limit(amount: number): this;
+    select(properties: string[]): this;
+    update(values: Partial<T>): this;
+    insert(values: T | Partial<T>): this;
+}
+
+export default class SqlQuery<T extends object> implements ISqlQueryBuilder<T> {
     protected readonly table: string;
 
     protected prefix: string;
@@ -25,16 +35,16 @@ export default class SqlQuery {
     }
 
     /**
-     * @param search
+     * @param {Partial<T>} query
      * @return {SqlQuery}
      */
-    public where(search: any): SqlQuery {
-        const searchKeys: string[] = Object.keys(search);
+    public where(query: Partial<T>): this {
+        const searchKeys: string[] = Object.keys(query);
 
         for (let i: number = 0; i < searchKeys.length; i++) {
             this.wheres.push({
                 property: searchKeys[i],
-                value: search[searchKeys[i]]
+                value: query[searchKeys[i]]
             });
         }
 
@@ -45,7 +55,7 @@ export default class SqlQuery {
      * @param {number} amount
      * @return {SqlQuery}
      */
-    public limit(amount: number): SqlQuery {
+    public limit(amount: number = 1): this {
         this.limitAmount = amount;
 
         return this;
@@ -55,7 +65,7 @@ export default class SqlQuery {
      * @param {string[]} properties
      * @return {SqlQuery}
      */
-    public select(properties: string[]): SqlQuery {
+    public select(properties: string[]): this {
         this.prefix = `SELECT (${properties.join(",")})`;
 
         return this;
@@ -65,7 +75,7 @@ export default class SqlQuery {
      * @param values
      * @return {SqlQuery}
      */
-    public update(values: any): SqlQuery {
+    public update(values: Partial<T>): this {
         const valuesKeys: string[] = Object.keys(values);
         const setAddition: string[] = [];
 
@@ -83,7 +93,7 @@ export default class SqlQuery {
      * @param values
      * @return {SqlQuery}
      */
-    public insert(values: any): SqlQuery {
+    public insert(values: T | Partial<T>): this {
         const valuesKeys: string[] = Object.keys(values);
         const columns: string[] = [];
         const finalValues: string[] = [];

@@ -5,7 +5,7 @@ require("dotenv").config();
 export const DebugMode: boolean = process.env.FORGE_DEBUG_MODE == "true";
 
 import CommandParser from "../commands/command-parser";
-import CommandContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
 import CommandStore from "../commands/command-store";
 import Utils from "./utils";
@@ -994,10 +994,10 @@ export default class Bot<TState = any, TActionType = any, TLib = any> extends Ev
 
     /**
      * @param {Message} msg
-     * @return {CommandContext}
+     * @return {Context}
      */
-    protected createCommandContext(msg: Message): CommandContext {
-        return new CommandContext({
+    protected createCommandContext(msg: Message): Context {
+        return new Context({
             msg,
             // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
             bot: this,

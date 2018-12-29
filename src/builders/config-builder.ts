@@ -14,7 +14,7 @@ export default class ConfigBuilder {
      * @param {string} path
      * @return {ConfigBuilder}
      */
-    public setCommandsPath(path: string): ConfigBuilder {
+    public commandsPath(path: string): ConfigBuilder {
         this.properties.paths.commandStore = path;
 
         return this;
@@ -24,36 +24,26 @@ export default class ConfigBuilder {
      * @param {string} path
      * @return {ConfigBuilder}
      */
-    public setSettingsPath(path: string): ConfigBuilder {
+    public settingsPath(path: string): ConfigBuilder {
         this.properties.paths.settings = path;
 
         return this;
     }
 
     /**
-     * @param {string} path
+     * @param {object} argumentTypes
      * @return {ConfigBuilder}
      */
-    public setEmojisPath(path: string): ConfigBuilder {
-        this.properties.paths.emojis = path;
-
-        return this;
-    }
-
-    /**
-     * @param {Object} argumentTypes
-     * @return {ConfigBuilder}
-     */
-    public setArgumentTypes(argumentTypes: any): ConfigBuilder {
+    public argumentTypes(argumentTypes: object): ConfigBuilder {
         this.properties.argumentTypes = argumentTypes;
 
         return this;
     }
 
     /**
-     * @return {Object}
+     * @return {object}
      */
-    public build(): any {
+    public build(): object {
         return this.properties;
     }
 }

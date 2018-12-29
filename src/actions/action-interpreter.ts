@@ -2,7 +2,7 @@ import Bot from "../core/bot";
 import {IAction, ActionType} from "./action";
 import {Snowflake, Channel, TextChannel, Guild, User, RichEmbed, Message} from "discord.js";
 import {EventEmitter} from "events";
-import CommandContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import PaginatedMessage from "../pagination/paginated-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
@@ -37,7 +37,7 @@ export interface IPaginatedActionArgs {
     readonly message: string;
     readonly inputMessage: Message;
     readonly bot: Bot;
-    readonly context: CommandContext;
+    readonly context: Context;
 }
 
 export enum ChannelType {
@@ -47,6 +47,9 @@ export enum ChannelType {
 }
 
 // TODO: Possibly consider attaching ActionInterpreter into commands' "this" so it's easier to return and ActionInterpreter can auto-determine some stuff...
+/**
+ * @extends EventEmitter
+ */
 export default class ActionInterpreter extends EventEmitter {
     protected readonly bot: Bot;
 
@@ -65,7 +68,7 @@ export default class ActionInterpreter extends EventEmitter {
         switch (action.type) {
             case ActionType.Message: {
                 const act: IAction<IMessageActionArgs> = action;
-                const channel: TextChannel | null = this.ensureChannel(act.args.channelId, act.type);
+                const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);
 
                 if (channel === null) {
                     return;
@@ -78,7 +81,7 @@ export default class ActionInterpreter extends EventEmitter {
 
             case ActionType.RichEmbed: {
                 const act: IAction<IEmbedActionArgs> = action;
-                const channel: TextChannel | null = this.ensureChannel(act.args.channelId, act.type);
+                const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);
 
                 if (channel === null) {
                     return;
@@ -121,7 +124,7 @@ export default class ActionInterpreter extends EventEmitter {
 
             case ActionType.Reply: {
                 const act: IAction<IMessageActionArgs> = action;
-                const channel: TextChannel | null = this.ensureChannel(act.args.channelId, act.type);
+                const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);
 
                 if (channel === null) {
                     return;
@@ -134,7 +137,7 @@ export default class ActionInterpreter extends EventEmitter {
 
             case ActionType.OkEmbed: {
                 const act: IAction<IRequestActionArgs> = action;
-                const channel: TextChannel | null = this.ensureChannel(act.args.channelId, act.type);
+                const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);
 
                 if (channel === null) {
                     return;
@@ -153,7 +156,7 @@ export default class ActionInterpreter extends EventEmitter {
 
             case ActionType.PaginatedOkEmbed: {
                 const act: IAction<IPaginatedActionArgs> = action;
-                const channel: TextChannel | null = this.ensureChannel(act.args.inputMessage.channel.id, act.type);
+                const channel: TextChannel = this.ensureChannel(act.args.inputMessage.channel.id, act.type);
 
                 if (channel === null) {
                     return;
@@ -196,7 +199,7 @@ export default class ActionInterpreter extends EventEmitter {
             
             case ActionType.FailEmbed: {
                 const act: IAction<IRequestActionArgs> = action;
-                const channel: TextChannel | null = this.ensureChannel(act.args.channelId, act.type);
+                const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);
 
                 if (channel === null) {
                     return;
@@ -231,19 +234,15 @@ export default class ActionInterpreter extends EventEmitter {
         }
     }
 
-    protected ensureChannel<ReturnType = TextChannel>(channelId: Snowflake, actionType: ActionType, type: ChannelType = ChannelType.Text): ReturnType | null {
+    protected ensureChannel<T extends Channel = TextChannel>(channelId: Snowflake, actionType: ActionType, type: ChannelType = ChannelType.Text): T {
         if (!this.bot.client.channels.has(channelId)) {
             this.error(actionType, `Unknown channel '${channelId}'`);
-
-            return null;
         }
 
         const channel: Channel = this.bot.client.channels.get(channelId) as Channel;
 
         if (channel.type !== "text") {
             this.error(actionType, `Channel '${channelId}' does not match required channel type: ${type}`);
-
-            return null;
         }
 
         return channel as any;

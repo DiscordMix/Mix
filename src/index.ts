@@ -1,6 +1,6 @@
 import Bot from "./core/bot";
 import ArgumentParser from "./commands/argument-parser";
-import CommandContext from "./commands/command-context";
+import Context from "./commands/command-context";
 import CommandStore, {CommandManagerEvent} from "./commands/command-store";
 
 import Command, {
@@ -19,7 +19,7 @@ import ConsoleCommand from "./console/console-command";
 import BotBuilder from "./builders/bot-builder";
 import EmbedBuilder from "./builders/embed-builder";
 import ConfigBuilder from "./builders/config-builder";
-import FormattedMessage from "./builders/formatted-message";
+import MsgBuilder from "./builders/msg-builder";
 import EditableMessage from "./message/editable-message";
 import Log, {LogLevel} from "./core/log";
 import Rgb from "./misc/rgb";
@@ -63,7 +63,7 @@ export {
 
     // Commands
     ArgumentParser,
-    CommandContext,
+    Context as CommandContext,
     CommandStore,
     CommandManagerEvent,
     CommandParser,
@@ -84,7 +84,7 @@ export {
     BotBuilder,
     EmbedBuilder,
     ConfigBuilder,
-    FormattedMessage,
+    MsgBuilder as FormattedMessage,
 
     // Core
     Bot,

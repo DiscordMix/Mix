@@ -38,7 +38,7 @@ export interface ICheckArgumentsOptions {
     readonly command: Command;
 }
 
-export default class CommandParser {
+export default abstract class CommandParser {
     /**
      * @param {string} commandString
      * @param {CommandStore} manager

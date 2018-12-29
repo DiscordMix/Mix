@@ -1,5 +1,5 @@
 import {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
-import CommandContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import Log from "./log";
 
 export enum SetupHelperActionType {
@@ -8,7 +8,7 @@ export enum SetupHelperActionType {
 }
 
 export interface IFromContextOptions {
-    readonly context: CommandContext;
+    readonly context: Context;
     readonly title?: string;
     readonly embed?: boolean;
     readonly timeout?: number

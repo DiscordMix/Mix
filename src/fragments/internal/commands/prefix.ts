@@ -1,4 +1,4 @@
-import CommandContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 import Command from "../../../commands/command";
 
 /**
@@ -15,7 +15,7 @@ export default class PrefixCommand extends Command {
         prefix: "!string"
     };
 
-    public async executed(context: CommandContext): Promise<void> {
+    public async run(context: Context): Promise<void> {
         // TODO:
         await context.ok("Command not yet implemented.");
     }

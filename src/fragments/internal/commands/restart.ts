@@ -1,6 +1,6 @@
 import Command from "../../../commands/command";
 import {RestrictGroup} from "../../..";
-import CommandContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 
 
 /**
@@ -12,12 +12,12 @@ export default class RestartCommand extends Command {
         description: "Restart the bot"
     };
 
-    readonly restrict: any = {
+    readonly constraints: any = {
         cooldown: 5,
         specific: [RestrictGroup.BotOwner]
     };
 
-    public async executed(context: CommandContext): Promise<void> {
+    public async run(context: Context): Promise<void> {
         await context.ok("Restarting the bot");
         await context.bot.restart();
     }

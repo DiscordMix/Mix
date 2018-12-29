@@ -1,9 +1,9 @@
 import Command, {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
 import {ActionType, IAction} from "../../../actions/action";
 import {IFragmentMeta, IMessageActionArgs} from "../../..";
-import CommandContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 import Service from "../../../services/service";
-import FormattedMessage from "../../../builders/formatted-message";
+import MsgBuilder from "../../../builders/msg-builder";
 
 interface IReflectArgs {
     readonly type: ReflectDataType;
@@ -29,12 +29,12 @@ export default class ReflectCommand extends Command {
         }
     ];
 
-    readonly restrict: any = {
+    readonly constraints: any = {
         cooldown: 1,
         specific: [RestrictGroup.BotOwner]
     };
 
-    public executed(x: CommandContext, args: IReflectArgs): IAction<IMessageActionArgs> {
+    public run(x: Context, args: IReflectArgs): IAction<IMessageActionArgs> {
         switch (args.type) {
             case ReflectDataType.Services: {
                 let services: string = "";
@@ -45,7 +45,7 @@ export default class ReflectCommand extends Command {
                     }
                 }
 
-                const result: string = new FormattedMessage().codeBlock(services, "diff").build();
+                const result: string = new MsgBuilder().codeBlock(services, "diff").build();
 
                 return {
                     type: ActionType.Message,

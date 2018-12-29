@@ -8,7 +8,7 @@ export default class ArgumentParser {
      * @param {object} resolvers
      * @return {*}
      */
-    public static resolve(type: string, arg: string, resolvers: object): any {
+    public static resolve<T = any>(type: string, arg: string, resolvers: object): TemplateStringsArray {
         const keys: string[] = Object.keys(resolvers);
 
         for (let i = 0; i < keys.length; i++) {

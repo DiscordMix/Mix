@@ -1,22 +1,24 @@
-export default class FormattedMessage {
+import {IBuilder} from "./builder";
+
+export default class MsgBuilder implements IBuilder<string> {
     protected message: string;
 
     /**
-     * @param {string} [startingString=""]
+     * @param {string} [value=""]
      */
-    public constructor(startingString = "") {
+    public constructor(value = "") {
         /**
          * @type {string}
          * @protected
          */
-        this.message = startingString;
+        this.message = value;
     }
 
     /**
      * @param {string} text
-     * @return {FormattedMessage}
+     * @return {MsgBuilder}
      */
-    public add(text: string): FormattedMessage {
+    public add(text: string): MsgBuilder {
         this.message += text;
 
         return this;
@@ -24,9 +26,9 @@ export default class FormattedMessage {
 
     /**
      * @param {string} text
-     * @return {FormattedMessage}
+     * @return {MsgBuilder}
      */
-    public addLine(text: string): FormattedMessage {
+    public addLine(text: string): MsgBuilder {
         this.add(text);
         this.line();
 
@@ -36,9 +38,9 @@ export default class FormattedMessage {
     /**
      * @param {string | null} [language=null]
      * @param {string | null} [code=null]
-     * @return {FormattedMessage}
+     * @return {MsgBuilder}
      */
-    public codeBlock(code: string | null = null, language: string | null = null): FormattedMessage {
+    public codeBlock(code: string | null = null, language: string | null = null): MsgBuilder {
         let result = "```";
 
         if (language !== null) {
@@ -54,49 +56,49 @@ export default class FormattedMessage {
 
     /**
      * @param {string} code
-     * @return {FormattedMessage}
+     * @return {MsgBuilder}
      */
-    public code(code: string): FormattedMessage {
+    public code(code: string): MsgBuilder {
         return this.add(`\`${code}\``);
     }
 
     /**
      * @param {string} text
-     * @return {FormattedMessage}
+     * @return {MsgBuilder}
      */
-    public italic(text: string): FormattedMessage {
+    public italic(text: string): MsgBuilder {
         return this.add(`*${text}*`);
     }
 
     /**
      * @param {string} text
-     * @return {FormattedMessage}
+     * @return {MsgBuilder}
      */
-    public bold(text: string): FormattedMessage {
+    public bold(text: string): MsgBuilder {
         return this.add(`**${text}**`);
     }
 
     /**
      * @param {string} text
-     * @return {FormattedMessage}
+     * @return {MsgBuilder}
      */
-    public underline(text: string): FormattedMessage {
+    public underline(text: string): MsgBuilder {
         return this.add(`__${text}__`);
     }
 
     /**
      * @param {string} text
-     * @return {FormattedMessage}
+     * @return {MsgBuilder}
      */
-    public strike(text: string): FormattedMessage {
+    public strike(text: string): MsgBuilder {
         return this.add(`~~${text}~~`);
     }
 
     /**
      * @param {number} amount
-     * @return {FormattedMessage}
+     * @return {MsgBuilder}
      */
-    public line(amount: number = 1): FormattedMessage {
+    public line(amount: number = 1): MsgBuilder {
         let counter = 0;
 
         while (counter !== amount) {
@@ -109,9 +111,9 @@ export default class FormattedMessage {
 
     /**
      * @param {string} emoji
-     * @return {FormattedMessage}
+     * @return {MsgBuilder}
      */
-    public emoji(emoji: string): FormattedMessage {
+    public emoji(emoji: string): MsgBuilder {
         return this.add(`:${emoji}:`);
     }
 

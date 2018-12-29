@@ -90,9 +90,9 @@ export default class FragmentManager extends EventEmitter {
             }
 
             // Overwrite command restrict with default values
-            (command.restrict as any) = {
+            (command.constraints as any) = {
                 ...DefaultCommandRestrict,
-                ...command.restrict
+                ...command.constraints
             };
 
             if (await command.enabled()) {

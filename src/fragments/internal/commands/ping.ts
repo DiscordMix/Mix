@@ -1,4 +1,4 @@
-import CommandContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 import Command from "../../../commands/command";
 
 /**
@@ -10,11 +10,11 @@ export default class PingCommand extends Command {
         description: "View the latency and heartbeat of the bot"
     };
 
-    readonly restrict: any = {
+    readonly constraints: any = {
         cooldown: 1
     };
 
-    public async executed(context: CommandContext): Promise<void> {
+    public async run(context: Context): Promise<void> {
         await context.ok(`:ping_pong: Beep Boop! ${Math.round(context.bot.client.ping)}ms`); // TODO: Missing heartbeat
     }
 }

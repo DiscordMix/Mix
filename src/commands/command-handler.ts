@@ -2,12 +2,13 @@ import Log from "../core/log";
 import ChatEnvironment from "../core/chat-environment";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import CommandStore, {CommandManagerEvent} from "./command-store";
-import CommandContext from "./command-context";
+import Context from "./command-context";
 import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
 import {IAction} from "../actions/action";
 import {EBotEvents} from "../core/bot";
+import {PromiseOr} from "..";
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;
@@ -15,15 +16,20 @@ export interface ICommandHandlerOptions {
     readonly argumentTypes: any;
 }
 
-export type CommandErrorHandler = (context: CommandContext, command: Command) => boolean;
+export type CommandErrorHandler = (context: Context, command: Command) => boolean;
 
 export interface IUndoAction {
     readonly command: Command;
-    readonly context: CommandContext;
+    readonly context: Context;
     readonly args?: any;
 }
 
-export default class CommandHandler {
+export interface ICommandHandler {
+    undoAction(user: Snowflake, message: Message): PromiseOr<boolean>;
+    handle(context: Context, command: Command, rawArgs: RawArguments): PromiseOr<boolean>;
+}
+
+export default class CommandHandler implements ICommandHandler {
     public readonly commandStore: CommandStore;
     public readonly errorHandlers: Function[];
     public readonly _errorHandlers: Map<CommandManagerEvent, any>;
@@ -68,11 +74,11 @@ export default class CommandHandler {
 
     /**
      * @param {CommandManagerEvent} event
-     * @param {CommandContext} context
+     * @param {Context} context
      * @param {Command} command
      * @return {boolean}
      */
-    protected handleError(event: CommandManagerEvent, context: CommandContext, command: Command): boolean {
+    protected handleError(event: CommandManagerEvent, context: Context, command: Command): boolean {
         if (this._errorHandlers.get(event) !== undefined) {
             return this._errorHandlers.get(event)(context, command);
         }
@@ -81,17 +87,17 @@ export default class CommandHandler {
     }
 
     /**
-     * @param {CommandContext} context
+     * @param {Context} context
      * @param {Command} command
      * @param {IArgument[]} rawArgs
      * @return {boolean}
      */
-    protected meetsRequirements(context: CommandContext, command: Command, rawArgs: RawArguments): boolean {
+    protected meetsRequirements(context: Context, command: Command, rawArgs: RawArguments): boolean {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 
         if (!CommandHandler.validateEnvironment(
-            command.restrict.environment,
+            command.constraints.environment,
             context.msg.channel.type,
             (context.msg.channel as any).nsfw || false)
         ) {
@@ -104,7 +110,7 @@ export default class CommandHandler {
                 context.fail("That command is disabled and may not be used.");
             }
         }
-        else if (command.restrict.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
+        else if (command.constraints.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
             context.fail("You're not allowed to use that command");
         }
         else if (!CommandParser.checkArguments({
@@ -141,21 +147,21 @@ export default class CommandHandler {
                 context.fail("Invalid argument usage. Please use the `usage` command.");
             }
         }
-        else if (command.restrict.selfPermissions.length > 0 && !context.msg.guild.me.hasPermission(command.restrict.selfPermissions.map((permissionObj) => permissionObj.permission))) {
+        else if (command.constraints.selfPermissions.length > 0 && !context.msg.guild.me.hasPermission(command.constraints.selfPermissions.map((permissionObj) => permissionObj.permission))) {
             if (!this.handleError(CommandManagerEvent.MissingSelfPermissions, context, command)) {
-                const permissions = command.restrict.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
+                const permissions = command.constraints.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`I require the following permission(s) to execute that command: ${permissions}`);
             }
         }
-        else if (command.restrict.issuerPermissions.length > 0 && !context.msg.member.hasPermission(command.restrict.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
+        else if (command.constraints.issuerPermissions.length > 0 && !context.msg.member.hasPermission(command.constraints.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
             if (!this.handleError(CommandManagerEvent.MissingIssuerPermissions, context, command)) {
-                const permissions = command.restrict.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
+                const permissions = command.constraints.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
-        else if (command.restrict.cooldown && !this.commandStore.cooldownExpired(context.sender.id, command.meta.name)) {
+        else if (command.constraints.cooldown && !this.commandStore.cooldownExpired(context.sender.id, command.meta.name)) {
             if (!this.handleError(CommandManagerEvent.UnderCooldown, context, command)) {
                 const timeLeft: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 
@@ -192,12 +198,12 @@ export default class CommandHandler {
     /**
      * @todo Split this method into a class?
      * @todo Since it's returning a Promise, review
-     * @param {CommandContext} context
+     * @param {Context} context
      * @param {Command} command The command to handle
      * @param {RawArguments} rawArgs
      * @return {Promise<boolean>} Whether the command was successfully executed
      */
-    public async handle(context: CommandContext, command: Command, rawArgs: RawArguments): Promise<boolean> {
+    public async handle(context: Context, command: Command, rawArgs: RawArguments): Promise<boolean> {
         if (!this.meetsRequirements(context, command, rawArgs)) {
             return false;
         }
@@ -221,7 +227,7 @@ export default class CommandHandler {
         try {
             // TODO: Only check if result is true, make sure commandStore return booleans or actions?
             // TODO: Bot should be accessed protected (from this class)
-            const rawResult: any = command.executed(context, resolvedArgs);
+            const rawResult: any = command.run(context, resolvedArgs);
             const result: any = rawResult instanceof Promise ? await rawResult : rawResult;
 
             // Actions
@@ -236,7 +242,7 @@ export default class CommandHandler {
                 }
             }
 
-            const commandCooldown: number = Date.now() + (command.restrict.cooldown * 1000);
+            const commandCooldown: number = Date.now() + (command.constraints.cooldown * 1000);
             const lastCooldown: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 
             // Delete the last cooldown before adding the new one for this command + user
@@ -290,14 +296,14 @@ export default class CommandHandler {
 
     /**
      * @param {Command} command
-     * @param {CommandContext} context
+     * @param {Context} context
      * @return {boolean}
      */
-    public static specificMet(command: Command, context: CommandContext): boolean {
+    public static specificMet(command: Command, context: Context): boolean {
         let met = false;
 
-        for (let i = 0; i < command.restrict.specific.length; i++) {
-            let specific: string | RestrictGroup = command.restrict.specific[i];
+        for (let i = 0; i < command.constraints.specific.length; i++) {
+            let specific: string | RestrictGroup = command.constraints.specific[i];
 
             let valid: boolean = true;
 

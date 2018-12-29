@@ -1,5 +1,5 @@
-import CommandContext from "../commands/command-context";
+import Context from "../commands/command-context";
 
 export interface ICommandEvent {
-    readonly context: CommandContext;
+    readonly context: Context;
 }

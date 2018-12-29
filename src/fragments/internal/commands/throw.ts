@@ -10,11 +10,11 @@ export default class ThrowCommand extends Command {
         description: "Throw an error"
     };
 
-    readonly restrict: any = {
+    readonly constraints: any = {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public async executed(): Promise<void> {
+    public async run(): Promise<void> {
         throw new Error(BotMessages.INTENTIONAL_ERROR);
     }
 };

@@ -3,7 +3,7 @@ require("dotenv").config();
 
 import Settings from "../core/settings";
 import {Snowflake, Guild, TextChannel, Message, Util} from "discord.js";
-import CommandContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect, assert} from "chai";
 import Bot, {EBotEvents} from "../core/bot";
@@ -742,8 +742,8 @@ export default class TestBot extends Bot<ITestState, TestStoreActionType> {
         return this.client.user.lastMessage;
     }
 
-    public getContext(): CommandContext {
-        return new CommandContext({
+    public getContext(): Context {
+        return new Context({
             bot: this,
             label: "?",
 

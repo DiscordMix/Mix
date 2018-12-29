@@ -122,7 +122,7 @@ export class TimeMachine<TState, TActionType> {
     }
 }
 
-export default class Store<TState, TActionType> {
+export default class Store<TState = any, TActionType = any> {
     public readonly timeMachine: TimeMachine<TState, TActionType>;
 
     protected readonly handlers: StoreActionHandler<TState>[];

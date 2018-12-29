@@ -1,6 +1,6 @@
 import Command from "../../commands/command";
 import {RestrictGroup} from "../..";
-import CommandContext from "../../commands/command-context";
+import Context from "../../commands/command-context";
 
 export default class EvalCommand extends Command {
     readonly meta = {
@@ -8,11 +8,11 @@ export default class EvalCommand extends Command {
         description: "Don't say hi"
     };
 
-    readonly restrict: any = {
+    readonly constraints: any = {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public executed(context: CommandContext): string {
+    public run(context: Context): string {
         // Don't say hi!
         return "don't say hi!";
     }

@@ -1,6 +1,6 @@
 import {Message, MessageReaction, Snowflake, User} from "discord.js";
 import Bot from "../core/bot";
-import CommandContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import {EventEmitter} from "events";
 import {IDisposable} from "../core/helpers";
 import {DiscordEvent} from "../decorators/decorators";
@@ -123,10 +123,10 @@ export default class EmojiMenu extends EventEmitter implements IDisposable {
     }
 
     /**
-     * @param {CommandContext} context
+     * @param {Context} context
      * @return {Promise<this>}
      */
-    public async attach(context: CommandContext): Promise<this> {
+    public async attach(context: Context): Promise<this> {
         this.bot = context.bot;
         this.bot.client.on(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd.bind(this));
         this.bot.client.on(DiscordEvent.MessageReactionRemoved, this.handleMessageReactionRemove.bind(this));

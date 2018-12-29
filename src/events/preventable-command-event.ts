@@ -1,20 +1,20 @@
-import CommandContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import {ICommandEvent} from "./command-event";
 
 /**
  * @extends ICommandEvent
  */
 export default class PreventableCommandEvent implements ICommandEvent {
-    public readonly context: CommandContext;
+    public readonly context: Context;
 
     protected prevented: boolean = false;
 
     /**
-     * @param {CommandContext} context
+     * @param {Context} context
      */
-    public constructor(context: CommandContext) {
+    public constructor(context: Context) {
         /**
-         * @type {CommandContext}
+         * @type {Context}
          * @readonly
          */
         this.context = context;

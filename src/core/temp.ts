@@ -3,7 +3,6 @@ import Utils from "./utils";
 import {Snowflake} from "discord.js";
 import fs from "fs";
 import path from "path";
-import rimraf from "rimraf";
 import {default as main} from "require-main-filename";
 import {FileSystemOperations} from "@atlas/automata";
 

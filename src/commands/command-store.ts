@@ -57,6 +57,8 @@ export interface ICommandStore {
     disposeAll(): PromiseOr<this>;
     unloadAll(): PromiseOr<this>;
 
+    readonly bot: Bot;
+    readonly cooldowns: Map<Snowflake, Map<string, number>>;
     readonly size: number;
 }
 

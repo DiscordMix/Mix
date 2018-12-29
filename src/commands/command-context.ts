@@ -1,4 +1,4 @@
-import {Message, TextChannel, Snowflake, Guild, DMChannel, GroupDMChannel} from "discord.js";
+import {Message, TextChannel, Snowflake, Guild, DMChannel, GroupDMChannel, Channel} from "discord.js";
 import Bot from "../core/bot";
 import ResponseHelper from "../core/response-helper";
 import Utils from "../core/utils";
@@ -7,7 +7,7 @@ import BotMessages from "../core/messages";
 import EditableMessage from "../message/editable-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
-import {Store} from "..";
+import {Store, PromiseOr} from "..";
 
 export interface ICommandContextOptions {
     readonly msg: Message;
@@ -15,12 +15,30 @@ export interface ICommandContextOptions {
     readonly label: string | null;
 }
 
-export default class Context<TData = any, TChannel = TextChannel | DMChannel | GroupDMChannel> extends ResponseHelper {
+export type TextBasedChannel = TextChannel | DMChannel;
+
+export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper {
+    joinArguments(): string;
+    reply(message: string): PromiseOr<Message | Message[] | null>;
+    privateReply(message: string): PromiseOr<Message | Message[]>;
+    createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number): PromiseOr<string | null>;
+    request(message: string, timeout?: number): PromiseOr<string | null>;
+    requestDM(message: string, timeout?: number): PromiseOr<string | null>;
+    promptDM(message: string, timeout: number): PromiseOr<boolean | null>
+
+    readonly bot: Bot;
+    readonly msg: Message;
+    readonly label: string | null;
+    readonly store: Store;
+    readonly g: Guild;
+    readonly c: T;
+    readonly triggeringMessageId: Snowflake;
+}
+
+export default class Context<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IContext {
     public readonly bot: Bot;
     public readonly msg: Message;
     public readonly label: string | null;
-
-    public data?: TData;
 
     /**
      * @param {ICommandContextOptions} options
@@ -63,7 +81,7 @@ export default class Context<TData = any, TChannel = TextChannel | DMChannel | G
         return this.msg.guild;
     }
 
-    public get c(): TChannel {
+    public get c(): T {
         return this.msg.channel as any;
     }
 
@@ -109,7 +127,7 @@ export default class Context<TData = any, TChannel = TextChannel | DMChannel | G
      * @param {number} [timeout=7500] The time to wait until automatic cancellation
      * @return {Promise<string | null>}
      */
-    public async createRequest(channel: TextChannel | DMChannel, message: string, from: Snowflake, timeout: number = 7500): Promise<string | null> {
+    public async createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number = 7500): Promise<string | null> {
         if (channel.type !== ChannelType.DM && channel.type !== ChannelType.Text) {
             throw new Error(`[CommandContext.createRequest] Epxecting channel '${channel.id}' to be either DMs or text-based`);
         }

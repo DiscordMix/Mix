@@ -3,11 +3,24 @@ import Log from "../core/log";
 import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
 import Bot from "../core/bot";
 import Utils from "../core/utils";
+import {PromiseOr} from "..";
+
+export interface ITaskManager {
+    registerTask(task: Task): boolean;
+    get(name: string): Task | null;
+    unschedule(name: string): boolean;
+    trigger(name: string): boolean;
+    unregisterAll(): PromiseOr<this>;
+    disable(name: string): PromiseOr<boolean>;
+    enableAll(): number;
+    contains(name: string): boolean;
+    loadAll(path: string): PromiseOr<number>;
+}
 
 /**
  * Manages, triggers, and executes tasks
  */
-export default class TaskManager {
+export default class TaskManager implements ITaskManager {
     protected readonly bot: Bot;
     protected readonly tasks: Map<string, Task>;
     protected readonly scheduler: Map<string, NodeJS.Timeout>;

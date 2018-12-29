@@ -5,10 +5,17 @@ import Log from "../core/log";
 import Command from "../commands/command";
 import {IDisposable} from "../core/helpers";
 
+export interface IOptimizer extends IDisposable {
+    start(): this;
+    stop(): this;
+
+    readonly running: boolean;
+}
+
 /**
  * Used in large bots for memory optimization
  */
-export default class Optimizer implements IDisposable {
+export default class Optimizer implements IOptimizer {
     protected readonly bot: Bot;
     protected readonly interval: number;
     protected readonly sizeThreshold: number;
@@ -18,7 +25,7 @@ export default class Optimizer implements IDisposable {
     protected processInterval: NodeJS.Timeout | null;
     
     // TODO: Interval should be calculated based on amount of commands
-    public constructor(bot: Bot, interval: number = 10*60*1000, sizeThreshold: number = 102400) {
+    public constructor(bot: Bot, interval: number = 10 * 60 * 1_000, sizeThreshold: number = 102_400) {
         this.bot = bot;
         this.commandsUsed = [];
         this.interval = interval;
@@ -69,7 +76,7 @@ export default class Optimizer implements IDisposable {
         }
 
         // Start the interval
-        this.processInterval = this.bot.setInterval(this.processTempo.bind(this), this.interval);
+        this.processInterval = this.bot.setInterval(this.process.bind(this), this.interval);
 
         return this;
     }
@@ -78,7 +85,7 @@ export default class Optimizer implements IDisposable {
      * Handle performance optimization iteration
      * @return {Promise<number>}
      */
-    protected async processTempo(): Promise<number> {
+    protected async process(): Promise<number> {
         const commands: ReadonlyCommandMap = this.bot.commandStore.getAll();
 
         let released: number = 0;

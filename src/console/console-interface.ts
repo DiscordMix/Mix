@@ -11,6 +11,12 @@ import chalk from "chalk";
 // TODO: Export in index
 export type ConsoleCommandHandler = (args: string[]) => void;
 
+export interface IConsoleInterface {
+    setup(bot: Bot, registerDefaults: boolean): this;
+
+    readonly ready: boolean;
+}
+
 export default class ConsoleInterface {
     public ready: boolean;
 
@@ -35,7 +41,7 @@ export default class ConsoleInterface {
      * @param {Bot} bot
      * @return {ConsoleInterface}
      */
-    public setup(bot: Bot, registerDefaults: boolean = true): ConsoleInterface {
+    public setup(bot: Bot, registerDefaults: boolean = true): this {
         Log.verbose("[ConsoleInterface] Setting up console interface");
 
         const ci = readline.createInterface({

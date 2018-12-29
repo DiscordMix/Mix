@@ -1,7 +1,14 @@
 import path from "path";
 import {ISettingsPaths} from "./settings";
 
-export default class PathResolver {
+export interface IPathResolver {
+    command(name: string): string;
+    service(name: string): string;
+    task(name: string): string;
+    language(name: string): string;
+}
+
+export default class PathResolver implements IPathResolver {
     protected paths: ISettingsPaths;
 
     public constructor(paths: ISettingsPaths) {

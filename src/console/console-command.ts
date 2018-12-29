@@ -6,7 +6,7 @@ export interface IConsoleCommand {
     readonly arguments: ParsedArgs;
 }
 
-export default class ConsoleCommand {
+export default abstract class ConsoleCommand {
     /**
      * @param {string} consoleCommandString
      * @return {ConsoleCommand}

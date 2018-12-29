@@ -6,8 +6,8 @@ export const DebugMode: boolean = process.env.FORGE_DEBUG_MODE == "true";
 
 import CommandParser from "../commands/command-parser";
 import Context from "../commands/command-context";
-import ConsoleInterface from "../console/console-interface";
-import CommandStore from "../commands/command-store";
+import ConsoleInterface, {IConsoleInterface} from "../console/console-interface";
+import CommandStore, {ICommandStore} from "../commands/command-store";
 import Utils from "./utils";
 import Settings from "./settings";
 import Log from "./log";
@@ -23,7 +23,7 @@ import Command, {
     UserGroup
 } from "../commands/command";
 
-import CommandHandler from "../commands/command-handler";
+import CommandHandler, {ICommandHandler} from "../commands/command-handler";
 import fs from "fs";
 import {performance} from "perf_hooks";
 import path from "path";
@@ -41,14 +41,15 @@ import {
 import StatCounter from "./stat-counter";
 import {IDisposable, ITimeoutAttachable} from "./helpers";
 import ActionInterpreter from "../actions/action-interpreter";
-import TaskManager from "../tasks/task-manager";
+import TaskManager, {ITaskManager} from "../tasks/task-manager";
 import {EventEmitter} from "events";
-import Optimizer from "../optimization/optimizer";
-import FragmentManager from "../fragments/fragment-manager";
-import PathResolver from "./path-resolver";
+import Optimizer, {IOptimizer} from "../optimization/optimizer";
+import FragmentManager, {IFragmentManager} from "../fragments/fragment-manager";
+import PathResolver, {IPathResolver} from "./path-resolver";
 import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath} from "./constants";
-import Store, {Reducer} from "../state/store";
+import Store, {Reducer, IStore} from "../state/store";
 import BotMessages from "./messages";
+import {PromiseOr} from "..";
 
 // TODO: Already made optional by Partial?
 export interface IBotOptions<T> {
@@ -162,6 +163,50 @@ export enum InternalCommand {
 
 export type BotToken = string;
 
+export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDisposable, ITimeoutAttachable {
+    postStats(): PromiseOr<void>;
+    suspend(suspend: boolean): this;
+    triggerCommand(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
+    clearTimeout(timeout: NodeJS.Timeout): boolean;
+    clearAllTimeouts(): number;
+    clearInterval(interval: NodeJS.Timeout): boolean;
+    clearAllIntervals(): number;
+    handleMessage(msg: Message, edited: boolean): PromiseOr<boolean>;
+    handleCommandMessage(message: Message, content: string, resolvers: any): PromiseOr<void>;
+    connect(): PromiseOr<this>;
+    restart(reloadModules: boolean): PromiseOr<this>;
+    disconnect(): PromiseOr<this>;
+    clearTemp(): void;
+
+    readonly settings: Settings;
+    readonly temp: Temp;
+    readonly services: ServiceManager;
+    readonly commandStore: ICommandStore;
+    readonly commandHandler: ICommandHandler;
+    readonly console: IConsoleInterface;
+    readonly prefixCommand: boolean;
+    readonly internalCommands: InternalCommand[];
+    readonly userGroups: UserGroup[];
+    readonly owner?: Snowflake;
+    readonly options: IBotExtraOptions;
+    readonly language?: Language;
+    readonly argumentResolvers: IArgumentResolver[];
+    readonly argumentTypes: ICustomArgType[];
+    readonly disposables: IDisposable[];
+    readonly actionInterpreter: ActionInterpreter;
+    readonly tasks: ITaskManager;
+    readonly timeouts: NodeJS.Timeout[];
+    readonly intervals: NodeJS.Timeout[];
+    readonly languages?: string[];
+    readonly state: BotState;
+    readonly suspended: boolean;
+    readonly client: Client;
+    readonly optimizer: IOptimizer;
+    readonly fragments: IFragmentManager;
+    readonly paths: IPathResolver;
+    readonly store: IStore<TState, TActionType>;
+}
+
 /**
  * Bot events:
  *
@@ -192,7 +237,7 @@ export type BotToken = string;
 /**
  * @extends EventEmitter
  */
-export default class Bot<TState = any, TActionType = any, TLib = any> extends EventEmitter implements IDisposable, ITimeoutAttachable {
+export default class Bot<TState = any, TActionType = any> extends EventEmitter implements IBot<TState, TActionType> {
     public readonly settings: Settings;
     public readonly temp: Temp;
     public readonly services: ServiceManager;
@@ -216,7 +261,7 @@ export default class Bot<TState = any, TActionType = any, TLib = any> extends Ev
     public readonly state: BotState;
     public readonly suspended: boolean;
     public readonly client: Client;
-    public readonly tempoEngine: Optimizer;
+    public readonly optimizer: Optimizer;
     public readonly fragments: FragmentManager;
     public readonly paths: PathResolver;
     public readonly store: Store<TState, TActionType>;
@@ -471,7 +516,7 @@ export default class Bot<TState = any, TActionType = any, TLib = any> extends Ev
          * @type {Optimizer}
          * @readonly
          */
-        this.tempoEngine = new Optimizer(this);
+        this.optimizer = new Optimizer(this);
 
         /**
          * Fragment manager
@@ -530,8 +575,8 @@ export default class Bot<TState = any, TActionType = any, TLib = any> extends Ev
      * @param {TLib | undefined} lib
      * @return {Promise<this>}
      */
-    protected async setup(lib?: TLib): Promise<this> {
-        this.emit(EBotEvents.SetupStart, lib);
+    protected async setup(): Promise<this> {
+        this.emit(EBotEvents.SetupStart);
 
         if (this.options.asciiTitle) {
             console.log("\n" + Title.replace("{version}", "beta") + "\n");
@@ -671,7 +716,7 @@ export default class Bot<TState = any, TActionType = any, TLib = any> extends Ev
             Log.verbose(BotMessages.SETUP_START_OPTIMIZER);
 
             // Start tempo engine
-            this.tempoEngine.start();
+            this.optimizer.start();
 
             Log.success(BotMessages.SETUP_STARTED_OPTIMIZER);
         }
@@ -1051,12 +1096,11 @@ export default class Bot<TState = any, TActionType = any, TLib = any> extends Ev
 
     /**
      * Connect the client
-     * @param {TLib | undefined} lib
      * @return {Promise<this>}
      */
-    public async connect(lib?: TLib): Promise<this> {
+    public async connect(): Promise<this> {
         this.setState(BotState.Connecting);
-        await this.setup(lib);
+        await this.setup();
         Log.verbose("[Bot.connect] Starting");
 
         await this.client.login(this.settings.general.token).catch(async (error: Error) => {

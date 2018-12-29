@@ -122,6 +122,18 @@ export class TimeMachine<TState, TActionType> {
     }
 }
 
+export interface IStore<TState = any, TActionType = any> {
+    dispatch<T = any>(type: TActionType, payload?: T): this;
+    getState(): TState | undefined;
+    subscribe(handler: StoreActionHandler<TState>): boolean;
+    unsubscribe(handler: StoreActionHandler<TState>): boolean;
+    unsubscribeAll(): this;
+    isSubscribed(handler: StoreActionHandler<TState>): boolean;
+    addReducer(reducer: Reducer<TState>): boolean;
+
+    readonly timeMachine: TimeMachine<TState, TActionType>;
+}
+
 export default class Store<TState = any, TActionType = any> {
     public readonly timeMachine: TimeMachine<TState, TActionType>;
 

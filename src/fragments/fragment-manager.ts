@@ -5,8 +5,15 @@ import Bot, {InternalCommand} from "../core/bot";
 import {IFragment} from "./fragment";
 import Service, {ForkedService} from "../services/service";
 import Log from "../core/log";
+import {PromiseOr} from "..";
 
-export default class FragmentManager extends EventEmitter {
+export interface IFragmentManager extends EventEmitter {
+    enableMultiple(packages: IPackage[], internal: boolean): PromiseOr<number>;
+    prepare<InstanceType extends IFragment>(packg: IPackage): ILivePackage<InstanceType> | null;
+    enable(packg: IPackage, internal: boolean, overwrite: boolean): PromiseOr<boolean>;
+}
+
+export default class FragmentManager extends EventEmitter implements IFragmentManager {
     protected readonly bot: Bot;
 
     public constructor(bot: Bot) {

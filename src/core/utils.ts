@@ -455,7 +455,7 @@ export default abstract class Utils {
      * @return {boolean}
      */
     public static hasStringsPrefix(message: Message, strings: string[]): boolean {
-        for (let i = 0; i < strings.length; i++) {
+        for (let i: number = 0; i < strings.length; i++) {
             if (message.content.startsWith(strings[i])) {
                 return true;
             }

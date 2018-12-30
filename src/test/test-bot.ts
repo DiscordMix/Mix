@@ -136,7 +136,7 @@ describe("Utils", () => {
     describe("resolveId()", () => {
         it("should return the resolved ids", () => {
             // TODO: Review?
-            for (let i = 0; i < subjects.ids.length; i++) {
+            for (let i: number = 0; i < subjects.ids.length; i++) {
                 const result: any = Utils.resolveId(subjects.ids[i]);
 
                 expect(result).to.be.an("string");
@@ -477,7 +477,7 @@ describe("Switch Parser", () => {
         const result7 = SwitchParser.getSwitches(subjects.switches.multipleQuotedValues);
 
         it("parse command switches into objects", () => {
-            for (let i = 0; i < result1.length; i++) {
+            for (let i: number = 0; i < result1.length; i++) {
                 expect(result1[0]).to.be.an("object");
             }
         });

@@ -300,11 +300,10 @@ export default class CommandHandler implements ICommandHandler {
      * @return {boolean}
      */
     public static specificMet(command: Command, context: Context): boolean {
-        let met = false;
+        let met: boolean = false;
 
-        for (let i = 0; i < command.constraints.specific.length; i++) {
+        for (let i: number = 0; i < command.constraints.specific.length; i++) {
             let specific: string | RestrictGroup = command.constraints.specific[i];
-
             let valid: boolean = true;
 
             if (typeof specific === "string" && (specific.startsWith("@") || specific.startsWith("&"))) {
@@ -416,7 +415,7 @@ export default class CommandHandler implements ICommandHandler {
      */
     public static validateEnvironment(environment: ChatEnvironment, channelType: string, nsfw: boolean): boolean {
         if (Array.isArray(environment)) {
-            for (let i = 0; i < environment.length; i++) {
+            for (let i: number = 0; i < environment.length; i++) {
                 if (CommandHandler.validateChannelTypeEnv(environment, channelType, nsfw)) {
                     return true;
                 }

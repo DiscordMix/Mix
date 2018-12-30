@@ -159,7 +159,7 @@ export default class EmbedBuilder {
     public static sections(sections: any, color: string = ""): EmbedBuilder {
         const result = new EmbedBuilder();
 
-        for (let i = 0; i < Object.keys(sections).length; i++) {
+        for (let i: number = 0; i < Object.keys(sections).length; i++) {
             result.field(Object.keys(sections)[i], sections[Object.keys(sections)[i]]);
         }
 

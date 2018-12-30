@@ -322,7 +322,7 @@ export default class CommandStore {
     public async registerMultiple(commands: CommandPackage[]): Promise<number> {
         let registered: number = 0;
 
-        for (let i = 0; i < commands.length; i++) {
+        for (let i: number = 0; i < commands.length; i++) {
             if (await this.register(commands[i])) {
                 registered++;
             }

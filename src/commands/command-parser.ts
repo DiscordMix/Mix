@@ -210,7 +210,7 @@ export default abstract class CommandParser {
     public static resolveDefaultArgs(options: IResolveDefaultArgsOptions): RawArguments {
         const result: RawArguments = [];
 
-        for (let i = 0; i < options.schema.length; i++) {
+        for (let i: number = 0; i < options.schema.length; i++) {
             let value: any = options.arguments[i];
 
             if (!options.schema[i].required && options.arguments[i] === undefined && options.schema[i].defaultValue !== undefined) {

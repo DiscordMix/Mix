@@ -1185,7 +1185,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         // TODO: Path may need to be resolved/maybe it wont be relative...
         if (fs.existsSync("./temp")) {
             fs.readdir("./temp", (error: any, files: any) => {
-                for (let i = 0; i < files.length; i++) {
+                for (let i: number = 0; i < files.length; i++) {
                     fs.unlink(`./temp/${files[i]}`, (error: Error) => {
                         throw error;
                     });

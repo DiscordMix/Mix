@@ -138,7 +138,7 @@ export default class SetupHelper implements ISetupHelper {
     public async finish(responseHandler?: ResponseHandler): Promise<ISetupHelperResult> {
         const responses: string[] = [];
 
-        for (let i = 0; i < this.actionMap.length; i++) {
+        for (let i: number = 0; i < this.actionMap.length; i++) {
             // TODO: Inefficient check position
             if (this.embed) {
                 this.channel.send(new RichEmbed()

@@ -33,6 +33,14 @@ export interface ISettings {
     readonly keys: ISettingsKeys;
 }
 
+const DefaultPaths: ISettingsPaths = {
+    commands: "commands",
+    plugins: "plugins",
+    services: "services",
+    languages: "languages",
+    tasks: "tasks"
+};
+
 export default class Settings implements ISettings {
     public general: ISettingsGeneral;
     public paths: ISettingsPaths;
@@ -57,12 +65,8 @@ export default class Settings implements ISettings {
          * @readonly
          */
         this.paths = {
-            // TODO: Find a way to simplify this process
-            commands: options.paths && options.paths.commands ? options.paths.commands : "./commandStore",
-            plugins: options.paths && options.paths.plugins ? options.paths.plugins : "./plugins",
-            services: options.paths && options.paths.services ? options.paths.services : "./services",
-            languages: options.paths && options.paths.languages ? options.paths.languages : "./languages",
-            tasks: options.paths && options.paths.tasks ? options.paths.tasks : "./tasks"
+            ...DefaultPaths,
+            ...options.paths
         };
 
         /**

@@ -459,8 +459,10 @@ describe("Collection", () => {
                 expect(result.general.prefixes).to.be.an("array");
                 expect(result.general.prefixes[0]).to.equal(".");
                 expect(result.general.token).to.be.an("string").and.to.equal("another_secret_token");
-                expect(result.paths.commands).to.be.an("string").and.to.equal("./commandStore");
-                expect(result.paths.plugins).to.be.an("string").and.to.equal("./plugins");
+
+                // TODO: Use default paths reference instead of being hard-coded
+                expect(result.paths.commands).to.be.an("string").and.to.equal("commands");
+                expect(result.paths.plugins).to.be.an("string").and.to.equal("plugins");
             });
         });
     });

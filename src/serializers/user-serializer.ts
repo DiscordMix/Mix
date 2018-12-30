@@ -2,18 +2,18 @@ import {ISerializer} from "./serializer";
 import {User, Collection, Snowflake} from "discord.js";
 import Patterns from "../core/patterns";
 
-export default class UserSerializer<UserType = User> implements ISerializer<UserType> {
-    protected readonly source: Collection<Snowflake, UserType>;
+export default class UserSerializer<T extends User = User> implements ISerializer<T> {
+    protected readonly source: Collection<Snowflake, T>;
 
-    public constructor(source: Collection<Snowflake, UserType>) {
+    public constructor(source: Collection<Snowflake, T>) {
         this.source = source;
     }
 
-    public serialize(data: UserType): string {
+    public serialize(data: T): string {
         return data.toString();
     }
     
-    public deserialize(serializedData: string): UserType | null {
+    public deserialize(serializedData: string): T | null {
         if (!Patterns.mention.test(serializedData)) {
             return null;
         }

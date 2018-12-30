@@ -12,7 +12,7 @@ export type GuildConfig = {
 /**
  * Provides interface to easily interact with per-guild configuration
  */
-export class GuildConfigMongoProvider extends AutoTransaction<GuildConfig, Collection<Snowflake, GuildConfig>, number> implements IQueriableProvider<GuildConfig> {
+export class GuildCfgMongoProvider extends AutoTransaction<GuildConfig, Collection<Snowflake, GuildConfig>, number> implements IQueriableProvider<GuildConfig> {
     protected static readonly key: string = "guildId";
 
     public readonly cache: Collection<Snowflake, GuildConfig>;
@@ -36,7 +36,7 @@ export class GuildConfigMongoProvider extends AutoTransaction<GuildConfig, Colle
         }
 
         return await this.x.count({
-            [GuildConfigMongoProvider.key]: key
+            [GuildCfgMongoProvider.key]: key
         }) > 0;
     }
 
@@ -74,7 +74,7 @@ export class GuildConfigMongoProvider extends AutoTransaction<GuildConfig, Colle
 
         // TODO: Add to cache
         return (await this.x.findOne({
-            [GuildConfigMongoProvider.key]: key
+            [GuildCfgMongoProvider.key]: key
         })).toArray();
     }
 

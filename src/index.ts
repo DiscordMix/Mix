@@ -53,7 +53,7 @@ import StateSerializer from "./serializers/state-serializer";
 import UrlSerializer from "./serializers/url-serializer";
 import UserSerializer from "./serializers/user-serializer";
 import {IProvider, PromiseOr, IDuplexProvider, IQueriableProvider} from "./providers/provider";
-import {GuildConfig, GuildConfigMongoProvider} from "./providers/mongo-providers";
+import {GuildConfig, GuildCfgMongoProvider} from "./providers/mongo-providers";
 import Store, {TestStoreActionType, IStoreAction, TimeMachine, Reducer, ITestState} from "./state/store";
 
 export {
@@ -170,7 +170,7 @@ export {
 
     // Providers -> MongoDB
     GuildConfig,
-    GuildConfigMongoProvider,
+    GuildCfgMongoProvider as GuildConfigMongoProvider,
 
     // Store
     Store,

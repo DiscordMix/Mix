@@ -21,7 +21,6 @@ export default class Optimizer implements IOptimizer {
     protected readonly sizeThreshold: number;
 
     protected commandsUsed: string[];
-
     protected processInterval: NodeJS.Timeout | null;
     
     // TODO: Interval should be calculated based on amount of commands

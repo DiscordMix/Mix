@@ -2,10 +2,20 @@ import Utils from "../core/utils";
 import path from "path";
 import fs from "fs";
 import BotMessages from "../core/messages";
+import {PromiseOr} from "..";
 
 export type LanguageSource = Map<string, any>;
 
-export default class Language {
+export interface ILanguage {
+    getLanguages(): ReadonlyMap<string, LanguageSource>;
+    setDefault(name: string): boolean;
+    get(key: string): string | null;
+    load(name: string): PromiseOr<this>;
+
+    readonly directory?: string;
+}
+
+export default class Language implements ILanguage {
     protected readonly languages: Map<string, LanguageSource>;
 
     protected default?: LanguageSource;

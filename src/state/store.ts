@@ -52,7 +52,14 @@ export abstract class Delta {
     }
 }
 
-export class TimeMachine<TState, TActionType> {
+export interface ITimeMachine<T> {
+    wayback(): IStateCapsule<T> | null;
+    present(): IStateCapsule<T> | null;
+    before(time: number): IStateCapsule<T>[];
+    after(time: number): IStateCapsule<T>[];
+}
+
+export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
     protected store: Store<TState, TActionType>;
     protected capsules: IStateCapsule<TState>[];
 
@@ -131,7 +138,7 @@ export interface IStore<TState = any, TActionType = any> {
     isSubscribed(handler: StoreActionHandler<TState>): boolean;
     addReducer(reducer: Reducer<TState>): boolean;
 
-    readonly timeMachine: TimeMachine<TState, TActionType>;
+    readonly timeMachine: ITimeMachine<TState>;
 }
 
 export default class Store<TState = any, TActionType = any> {

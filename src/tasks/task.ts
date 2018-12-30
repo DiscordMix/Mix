@@ -2,8 +2,21 @@ import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import Bot from "../core/bot";
 import {IDisposable, IVolatile, ISyncable} from "../core/helpers";
 
+export interface ITask extends IFragment, IDisposable {
+    run(): void;
+    canRun(): boolean;
+
+    readonly nextIteration: number;
+    readonly lastIterationDifference: number;
+    readonly persistent: boolean;
+    readonly interval: number;
+    readonly maxIterations: number;
+    readonly iterations: number;
+    readonly lastIteration: number;
+}
+
 // TODO: Add ForkedTask class
-export default abstract class Task implements IFragment, IDisposable {
+export default abstract class Task implements ITask {
     public readonly abstract meta: IFragmentMeta;
     
     public readonly interval: number = -1;
@@ -68,8 +81,12 @@ export default abstract class Task implements IFragment, IDisposable {
     }
 }
 
+export interface IPersistentTask extends ITask, IVolatile, ISyncable {
+    //
+}
+
 // TODO: Implement mechanism to handle persistent tasks
-export abstract class PeristentTask extends Task implements IVolatile, ISyncable {
+export abstract class PeristentTask extends Task implements IPersistentTask {
     public abstract save(): void;
     public abstract sync(): void;
 }

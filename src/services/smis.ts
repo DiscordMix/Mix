@@ -14,7 +14,6 @@ export default class SMIS extends EventEmitter {
     protected timeoutSource?: NodeJS.Timeout;
 
     /**
-     * 
      * @param {ChildProcess} child
      * @param {number} [timeout=5000]
      */

@@ -161,7 +161,7 @@ export function command(options: string | PartialWeakCommand, description?: stri
 }
 
 export function deprecated(use?: string): any {
-    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
+    return function (target) {
         const functionName: string = Object.keys(target)[0];
         const className: string = target.constructor.name;
 

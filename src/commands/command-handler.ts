@@ -7,8 +7,8 @@ import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
 import CommandParser from "./command-parser";
 import Utils from "../core/utils";
 import {IAction} from "../actions/action";
-import {EBotEvents} from "../core/bot";
 import {PromiseOr} from "..";
+import {EBotEvents} from "../core/bot-extra";
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;

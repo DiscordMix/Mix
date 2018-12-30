@@ -1,4 +1,4 @@
-import Bot, {IBot} from "./core/bot";
+import Bot from "./core/bot";
 import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
 import Context, {IContext, TextBasedChannel, IContextOptions} from "./commands/command-context";
 import CommandStore, {CommandManagerEvent, ICommandStore} from "./commands/command-store";
@@ -58,6 +58,7 @@ import {IProvider, PromiseOr, IDuplexProvider, IQueriableProvider} from "./provi
 import {GuildConfig, GuildCfgMongoProvider} from "./providers/mongo-providers";
 import Store, {TestStoreActionType, IStoreAction, TimeMachine, Reducer, ITestState, IStore, ITimeMachine} from "./state/store";
 import {IBuilder} from "./builders/builder";
+import {IBot} from "./core/bot-extra";
 
 export {
     // Fragments

@@ -6,7 +6,7 @@ import {Snowflake, Guild, TextChannel, Message, Util} from "discord.js";
 import Context from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect, assert} from "chai";
-import Bot, {EBotEvents} from "../core/bot";
+import Bot from "../core/bot";
 import Language, {LanguageSource} from "../language/language";
 import SwitchParser from "../commands/switch-parser";
 import path from "path";
@@ -20,6 +20,7 @@ import Rgb from "../misc/rgb";
 import List from "../collections/collection";
 import Log, {LogLevel} from "../core/log";
 import Task from "../tasks/task";
+import {EBotEvents} from "../core/bot-extra";
 
 // Test globals
 const globalAny: any = global;

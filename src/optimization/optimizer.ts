@@ -1,9 +1,10 @@
-import Bot, {EBotEvents} from "../core/bot";
+import Bot from "../core/bot";
 import {ReadonlyCommandMap} from "../commands/command-store";
 import fs from "fs";
 import Log from "../core/log";
 import Command from "../commands/command";
 import {IDisposable} from "../core/helpers";
+import {EBotEvents} from "../core/bot-extra";
 
 export interface IOptimizer extends IDisposable {
     start(): this;
@@ -31,11 +32,11 @@ export default class Optimizer implements IOptimizer {
         this.sizeThreshold = sizeThreshold;
 
         if (this.interval < 60*1000) {
-            Log.warn("[TempoEngine] Interval lower than 1 minute is not suggested");
+            Log.warn("[Optimizer] Interval lower than 1 minute is not suggested");
         }
         else if (this.interval < 30*1000) {
             this.interval = 30*1000;
-            Log.warn("[TempoEngine] Interval lower than 30 seconds may be inefficient; Using 30 seconds as interval instead");
+            Log.warn("[Optimizer] Interval lower than 30 seconds may be inefficient; Using 30 seconds as interval instead");
         }
 
         this.processInterval = null;

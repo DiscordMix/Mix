@@ -1,5 +1,5 @@
 import Log from "../core/log";
-import Bot, {InternalCommand} from "../core/bot";
+import Bot from "../core/bot";
 import Command, {GenericCommand} from "./command";
 import Context from "./command-context";
 import {Snowflake} from "discord.js";
@@ -7,6 +7,7 @@ import FragmentLoader, {IPackage, ILivePackage} from "../fragments/fragment-load
 import Utils from "../core/utils";
 import path from "path";
 import {PromiseOr} from "..";
+import {InternalCommand} from "../core/bot-extra";
 
 /**
  * @enum {number}

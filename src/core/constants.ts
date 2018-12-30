@@ -3,6 +3,7 @@ import {DefiniteArgument, IArgumentResolver, InternalArgType, ICustomArgType} fr
 import {Message, GuildMember, Role, Snowflake} from "discord.js";
 import Patterns from "./patterns";
 import Utils from "./utils";
+import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
 
 export const Title: string =
 
@@ -94,3 +95,23 @@ export const InternalArgTypes: ICustomArgType[] = [
         check: Patterns.state
     }
 ];
+
+export const DefaultBotEmojiOptions: IBotEmojiOptions = {
+    success: ":white_check_mark:",
+    error: ":thinking:"
+};
+
+export const DefaultBotOptions: IBotExtraOptions = {
+    allowCommandChain: true,
+    autoDeleteCommands: false,
+    checkCommands: true,
+    ignoreBots: true,
+    updateOnMessageEdit: false,
+    asciiTitle: true,
+    autoResetAuthStore: false,
+    dmHelp: true,
+    logMessages: false,
+    emojis: DefaultBotEmojiOptions,
+    consoleInterface: true,
+    optimizer: false
+};

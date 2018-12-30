@@ -6,14 +6,14 @@ export const DebugMode: boolean = process.env.FORGE_DEBUG_MODE == "true";
 
 import CommandParser from "../commands/command-parser";
 import Context from "../commands/command-context";
-import ConsoleInterface, {IConsoleInterface} from "../console/console-interface";
-import CommandStore, {ICommandStore} from "../commands/command-store";
+import ConsoleInterface from "../console/console-interface";
+import CommandStore from "../commands/command-store";
 import Utils from "./utils";
-import Settings, {ISettings} from "./settings";
+import Settings from "./settings";
 import Log from "./log";
-import Temp, {ITemp} from "./temp";
+import Temp from "./temp";
 import Discord, {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
-import ServiceManager, {IServiceManager} from "../services/service-manager";
+import ServiceManager from "../services/service-manager";
 import axios from "axios";
 
 import Command, {
@@ -23,7 +23,7 @@ import Command, {
     UserGroup
 } from "../commands/command";
 
-import CommandHandler, {ICommandHandler} from "../commands/command-handler";
+import CommandHandler from "../commands/command-handler";
 import fs from "fs";
 import {performance} from "perf_hooks";
 import path from "path";
@@ -39,173 +39,19 @@ import {
 } from "../decorators/decorators";
 
 import StatCounter from "./stat-counter";
-import {IDisposable, ITimeoutAttachable} from "./helpers";
+import {IDisposable} from "./helpers";
 import ActionInterpreter from "../actions/action-interpreter";
-import TaskManager, {ITaskManager} from "../tasks/task-manager";
+import TaskManager from "../tasks/task-manager";
 import {EventEmitter} from "events";
-import Optimizer, {IOptimizer} from "../optimization/optimizer";
-import FragmentManager, {IFragmentManager} from "../fragments/fragment-manager";
-import PathResolver, {IPathResolver} from "./path-resolver";
-import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath} from "./constants";
-import Store, {Reducer, IStore} from "../state/store";
+import Optimizer from "../optimization/optimizer";
+import FragmentManager from "../fragments/fragment-manager";
+import PathResolver from "./path-resolver";
+import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath, DefaultBotOptions} from "./constants";
+import Store from "../state/store";
 import BotMessages from "./messages";
-import {PromiseOr} from "..";
-
-// TODO: Already made optional by Partial?
-export interface IBotOptions<T> {
-    readonly settings: Settings;
-    readonly prefixCommand?: boolean;
-    readonly internalCommands?: InternalCommand[];
-    readonly userGroups?: UserGroup[];
-    readonly owner?: Snowflake;
-    readonly options?: Partial<IBotExtraOptions>;
-    readonly argumentResolvers?: IArgumentResolver[];
-    readonly argumentTypes?: ICustomArgType[];
-    readonly languages?: string[];
-    readonly initialState?: T;
-    readonly reducers?: Reducer<T>[];
-}
-
-export type Action<T = void> = () => T;
-
-export const DefaultBotEmojiOptions: IBotEmojiOptions = {
-    success: ":white_check_mark:",
-    error: ":thinking:"
-};
-
-export interface IBotEmojiOptions {
-    readonly success: string;
-    readonly error: string;
-}
-
-/**
- * Extra options used by the bot
- */
-export interface IBotExtraOptions {
-    readonly asciiTitle: boolean;
-    readonly consoleInterface: boolean;
-    readonly allowCommandChain: boolean;
-    readonly updateOnMessageEdit: boolean;
-    readonly checkCommands: boolean;
-    readonly autoDeleteCommands: boolean;
-    readonly ignoreBots: boolean;
-    readonly autoResetAuthStore: boolean;
-    readonly logMessages: boolean;
-    readonly dmHelp: boolean;
-    readonly emojis: IBotEmojiOptions;
-    readonly optimizer: boolean;
-}
-
-const DefaultBotOptions: IBotExtraOptions = {
-    allowCommandChain: true,
-    autoDeleteCommands: false,
-    checkCommands: true,
-    ignoreBots: true,
-    updateOnMessageEdit: false,
-    asciiTitle: true,
-    autoResetAuthStore: false,
-    dmHelp: true,
-    logMessages: false,
-    emojis: DefaultBotEmojiOptions,
-    consoleInterface: true,
-    optimizer: false
-};
-
-/**
- * Events fired by the bot
- */
-export enum EBotEvents {
-    SetupStart = "setupStart",
-    LoadingInternalFragments = "loadInternalFragments",
-    LoadedInternalFragments = "loadedInternalFragments",
-    LoadingServices = "loadServices",
-    LoadedServices = "loadedServices",
-    LoadingCommands = "loadCommands",
-    LoadedCommands = "loadedCommands",
-    Ready = "ready",
-    HandleMessageStart = "handleMessageStart",
-    HandleMessageEnd = "handleMessageEnd",
-    HandleCommandMessageStart = "handleCommandMessageStart",
-    HandleCommandMessageEnd = "handleCommandMessageEnd",
-    Restarting = "restartStart",
-    Restarted = "restartCompleted",
-    Disconnecting = "disconnecting",
-    Disconnected = "disconnected",
-    ClearingTemp = "clearingTemp",
-    ClearedTemp = "clearedTemp",
-    HandlingCommand = "handlingCommand",
-    CommandError = "commandError",
-    CommandExecuted = "commandExecuted"
-}
-
-/**
- * Possible states of the bot
- */
-export enum BotState {
-    Disconnected,
-    Connecting,
-    Restarting,
-    Suspended,
-    Connected
-}
-
-export enum InternalCommand {
-    CLI = "cli",
-    Eval = "eval",
-    Help = "help",
-    Ping = "ping",
-    Prefix = "prefix",
-    Reflect = "reflect",
-    Restart = "restart",
-    Throw = "throw",
-    Usage = "usage"
-}
-
-export type BotToken = string;
-
-export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDisposable, ITimeoutAttachable {
-    postStats(): PromiseOr<void>;
-    suspend(suspend: boolean): this;
-    triggerCommand(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
-    clearTimeout(timeout: NodeJS.Timeout): boolean;
-    clearAllTimeouts(): number;
-    clearInterval(interval: NodeJS.Timeout): boolean;
-    clearAllIntervals(): number;
-    handleMessage(msg: Message, edited: boolean): PromiseOr<boolean>;
-    handleCommandMessage(message: Message, content: string, resolvers: any): PromiseOr<void>;
-    connect(): PromiseOr<this>;
-    restart(reloadModules: boolean): PromiseOr<this>;
-    disconnect(): PromiseOr<this>;
-    clearTemp(): void;
-
-    readonly settings: ISettings;
-    readonly temp: ITemp;
-    readonly services: IServiceManager;
-    readonly commandStore: ICommandStore;
-    readonly commandHandler: ICommandHandler;
-    readonly console: IConsoleInterface;
-    readonly prefixCommand: boolean;
-    readonly internalCommands: InternalCommand[];
-    readonly userGroups: UserGroup[];
-    readonly owner?: Snowflake;
-    readonly options: IBotExtraOptions;
-    readonly language?: Language;
-    readonly argumentResolvers: IArgumentResolver[];
-    readonly argumentTypes: ICustomArgType[];
-    readonly disposables: IDisposable[];
-    readonly actionInterpreter: ActionInterpreter;
-    readonly tasks: ITaskManager;
-    readonly timeouts: NodeJS.Timeout[];
-    readonly intervals: NodeJS.Timeout[];
-    readonly languages?: string[];
-    readonly state: BotState;
-    readonly suspended: boolean;
-    readonly client: Client;
-    readonly optimizer: IOptimizer;
-    readonly fragments: IFragmentManager;
-    readonly paths: IPathResolver;
-    readonly store: IStore<TState, TActionType>;
-}
+import {IBot} from "..";
+import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, EBotEvents} from "./bot-extra";
+import {Action} from "@atlas/automata";
 
 /**
  * Bot events:

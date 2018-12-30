@@ -56,7 +56,12 @@ export abstract class GenericService implements IGenericService {
     public abstract start(): void;
 }
 
-export default abstract class Service extends GenericService {
+export interface IService extends IGenericService {
+    readonly running: boolean;
+    readonly listeners: Map<DiscordEvent, any>;
+}
+
+export default abstract class Service extends GenericService implements IService {
     public readonly listeners: Map<DiscordEvent, any>;
 
     protected readonly bot: Bot;
@@ -110,10 +115,16 @@ export default abstract class Service extends GenericService {
     }
 }
 
+export interface IForkedService extends IGenericService {
+    onMessage(msg: IProcessMsg, sender: any): IProcessMsg[] | IProcessMsg | void;
+
+    readonly useSMIS: boolean;
+}
+
 /**
  * @extends GenericService
  */
-export abstract class ForkedService extends GenericService {
+export abstract class ForkedService extends GenericService implements IForkedService {
     public readonly useSMIS: boolean = false;
 
     protected readonly smis?: SMIS;

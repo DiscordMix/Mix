@@ -4,6 +4,7 @@ import Context from "../commands/command-context";
 import {EventEmitter} from "events";
 import {IDisposable} from "../core/helpers";
 import {DiscordEvent} from "../decorators/decorators";
+import {PromiseOr} from "..";
 
 export type EmojiClickHandler = (reaction: MessageReaction, user: User) => void;
 
@@ -16,11 +17,20 @@ export interface IEmojiButton {
     readonly add?: boolean;
 }
 
+export interface IEmojiMenu extends EventEmitter {
+    add(button: IEmojiButton): this;
+    attach(context: Context): PromiseOr<this>;
+
+    readonly messageId: Snowflake;
+    readonly ownerId: Snowflake;
+    readonly buttons: IEmojiButton[];
+}
+
 /**
  * @extends EventEmitter
  * @implements {IDisposable}
  */
-export default class EmojiMenu extends EventEmitter implements IDisposable {
+export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisposable {
     public readonly messageId: Snowflake;
     public readonly ownerId: Snowflake;
 

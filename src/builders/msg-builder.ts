@@ -1,6 +1,19 @@
 import {IBuilder} from "./builder";
 
-export default class MsgBuilder implements IBuilder<string> {
+export interface IMsgBuilder extends IBuilder<string> {
+    add(text: string): this;
+    addLine(text: string): this;
+    codeBlock(code: string | null, language: string | null): this;
+    code(code: string): this;
+    italic(text: string): this;
+    bold(text: string): this;
+    underline(text: string): this;
+    strike(text: string): this;
+    line(amount: number): this;
+    emoji(emoji: string): this;
+}
+
+export default class MsgBuilder implements IMsgBuilder {
     protected message: string;
 
     /**
@@ -18,7 +31,7 @@ export default class MsgBuilder implements IBuilder<string> {
      * @param {string} text
      * @return {MsgBuilder}
      */
-    public add(text: string): MsgBuilder {
+    public add(text: string): this {
         this.message += text;
 
         return this;
@@ -28,7 +41,7 @@ export default class MsgBuilder implements IBuilder<string> {
      * @param {string} text
      * @return {MsgBuilder}
      */
-    public addLine(text: string): MsgBuilder {
+    public addLine(text: string): this {
         this.add(text);
         this.line();
 
@@ -40,7 +53,7 @@ export default class MsgBuilder implements IBuilder<string> {
      * @param {string | null} [code=null]
      * @return {MsgBuilder}
      */
-    public codeBlock(code: string | null = null, language: string | null = null): MsgBuilder {
+    public codeBlock(code: string | null = null, language: string | null = null): this {
         let result = "```";
 
         if (language !== null) {
@@ -58,7 +71,7 @@ export default class MsgBuilder implements IBuilder<string> {
      * @param {string} code
      * @return {MsgBuilder}
      */
-    public code(code: string): MsgBuilder {
+    public code(code: string): this {
         return this.add(`\`${code}\``);
     }
 
@@ -66,7 +79,7 @@ export default class MsgBuilder implements IBuilder<string> {
      * @param {string} text
      * @return {MsgBuilder}
      */
-    public italic(text: string): MsgBuilder {
+    public italic(text: string): this {
         return this.add(`*${text}*`);
     }
 
@@ -74,7 +87,7 @@ export default class MsgBuilder implements IBuilder<string> {
      * @param {string} text
      * @return {MsgBuilder}
      */
-    public bold(text: string): MsgBuilder {
+    public bold(text: string): this {
         return this.add(`**${text}**`);
     }
 
@@ -82,7 +95,7 @@ export default class MsgBuilder implements IBuilder<string> {
      * @param {string} text
      * @return {MsgBuilder}
      */
-    public underline(text: string): MsgBuilder {
+    public underline(text: string): this {
         return this.add(`__${text}__`);
     }
 
@@ -90,7 +103,7 @@ export default class MsgBuilder implements IBuilder<string> {
      * @param {string} text
      * @return {MsgBuilder}
      */
-    public strike(text: string): MsgBuilder {
+    public strike(text: string): this {
         return this.add(`~~${text}~~`);
     }
 
@@ -98,7 +111,7 @@ export default class MsgBuilder implements IBuilder<string> {
      * @param {number} amount
      * @return {MsgBuilder}
      */
-    public line(amount: number = 1): MsgBuilder {
+    public line(amount: number = 1): this {
         let counter = 0;
 
         while (counter !== amount) {
@@ -113,7 +126,7 @@ export default class MsgBuilder implements IBuilder<string> {
      * @param {string} emoji
      * @return {MsgBuilder}
      */
-    public emoji(emoji: string): MsgBuilder {
+    public emoji(emoji: string): this {
         return this.add(`:${emoji}:`);
     }
 

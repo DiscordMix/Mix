@@ -44,7 +44,7 @@ export enum ActionType {
     GuildRename
 }
 
-export interface IAction<T> {
+export interface IAction<T = any> {
     readonly type: ActionType;
     readonly args: T;
 }

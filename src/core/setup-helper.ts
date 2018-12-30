@@ -1,6 +1,7 @@
 import {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
 import Context from "../commands/command-context";
 import Log from "./log";
+import {PromiseOr} from "..";
 
 export enum SetupHelperActionType {
     Input,
@@ -35,7 +36,13 @@ export interface ISetupHelperResult {
 
 export type ResponseHandler = (response: string, index: number) => string;
 
-export default class SetupHelper {
+export interface ISetupHelper {
+    input(text: string): this;
+    question(text: string): this;
+    finish(responseHandler?: ResponseHandler): PromiseOr<ISetupHelperResult>;
+}
+
+export default class SetupHelper implements ISetupHelper {
     protected readonly client: any;
     protected readonly channel: TextChannel;
     protected readonly userId: Snowflake;

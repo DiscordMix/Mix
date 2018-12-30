@@ -1,7 +1,17 @@
-import Bot from "../core/bot";
+import Bot, {IBot} from "../core/bot";
 import Settings from "../core/settings";
+import {IBuilder} from "./builder";
 
-export default class BotBuilder {
+export interface IBotBuilder extends IBuilder<IBot> {
+    token(token: string): this;
+    prefixes(prefixes: string | string[]): this;
+    internalCommands(internalCommands: string[]): this;
+    argumentTypes(argumentTypes: any): this;
+    prefixCommand(prefixCommand: boolean): this;
+    settings(settings: Settings): this;
+}
+
+export default class BotBuilder implements IBotBuilder {
     protected readonly _settings: any;
     protected readonly bot: any;
 
@@ -16,7 +26,7 @@ export default class BotBuilder {
      * @param {string} token
      * @return {BotBuilder}
      */
-    public token(token: string): BotBuilder {
+    public token(token: string): this {
         this._settings.general.token = token;
 
         return this;
@@ -26,7 +36,7 @@ export default class BotBuilder {
      * @param {string | string[]} prefixes
      * @return {BotBuilder}
      */
-    public prefixes(prefixes: string | string[]): BotBuilder {
+    public prefixes(prefixes: string | string[]): this {
         this._settings.general.prefixes = Array.isArray(prefixes) ? prefixes : [prefixes];
 
         return this;
@@ -36,7 +46,7 @@ export default class BotBuilder {
      * @param {string[]} internalCommands
      * @return {BotBuilder}
      */
-    public internalCommands(internalCommands: string[]): BotBuilder {
+    public internalCommands(internalCommands: string[]): this {
         this.bot.internalCommands = internalCommands;
 
         return this;
@@ -46,7 +56,7 @@ export default class BotBuilder {
      * @param {*} argumentTypes
      * @return {BotBuilder}
      */
-    public argumentTypes(argumentTypes: any): BotBuilder {
+    public argumentTypes(argumentTypes: any): this {
         this.bot.argumentTypes = argumentTypes;
 
         return this;
@@ -56,7 +66,7 @@ export default class BotBuilder {
      * @param {boolean} prefixCommand
      * @return {BotBuilder}
      */
-    public prefixCommand(prefixCommand: boolean): BotBuilder {
+    public prefixCommand(prefixCommand: boolean): this {
         this.bot.prefixCommand = prefixCommand;
 
         return this;
@@ -66,7 +76,7 @@ export default class BotBuilder {
      * @param {Settings} settings
      * @return {BotBuilder}
      */
-    public settings(settings: Settings): BotBuilder {
+    public settings(settings: Settings): this {
         this.bot.settings = settings;
 
         return this;
@@ -75,7 +85,7 @@ export default class BotBuilder {
     /**
      * @return {Bot}
      */
-    public build(): Bot {
+    public build(): IBot {
         // TODO:
         return new Bot(this.bot);
     }

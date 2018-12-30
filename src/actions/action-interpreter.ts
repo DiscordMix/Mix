@@ -7,6 +7,7 @@ import PaginatedMessage from "../pagination/paginated-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
 import Utils from "../core/utils";
+import {PromiseOr} from "..";
 
 // Arg types
 export interface IMessageActionArgs {
@@ -46,11 +47,16 @@ export enum ChannelType {
     Group = "group"
 }
 
+export interface IActionInterpreter extends EventEmitter {
+    interpret(action: IAction): PromiseOr<this>;
+    interpretMany(actions: IAction[]): PromiseOr<this>;
+}
+
 // TODO: Possibly consider attaching ActionInterpreter into commands' "this" so it's easier to return and ActionInterpreter can auto-determine some stuff...
 /**
  * @extends EventEmitter
  */
-export default class ActionInterpreter extends EventEmitter {
+export default class ActionInterpreter extends EventEmitter implements IActionInterpreter {
     protected readonly bot: Bot;
 
     public constructor(bot: Bot) {
@@ -64,14 +70,14 @@ export default class ActionInterpreter extends EventEmitter {
         this.bot = bot;
     }
 
-    public async interpret(action: IAction<any>): Promise<void> {
+    public async interpret(action: IAction): Promise<this> {
         switch (action.type) {
             case ActionType.Message: {
                 const act: IAction<IMessageActionArgs> = action;
                 const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);
 
                 if (channel === null) {
-                    return;
+                    return this;
                 }
 
                 await (channel as TextChannel).send(act.args.message);
@@ -84,7 +90,7 @@ export default class ActionInterpreter extends EventEmitter {
                 const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);
 
                 if (channel === null) {
-                    return;
+                    return this;
                 }
 
                 await (channel as TextChannel).send(act.args.embed);
@@ -98,7 +104,7 @@ export default class ActionInterpreter extends EventEmitter {
                 if (!this.bot.client.guilds.has(act.args.guildId)) {
                     this.error(act.type, `Bot is not part of the guild '${act.args.guildId}' or guild does not exist`);
 
-                    return;
+                    return this;
                 }
 
                 await (this.bot.client.guilds.get(act.args.guildId) as Guild).leave();
@@ -112,7 +118,7 @@ export default class ActionInterpreter extends EventEmitter {
                 if (!this.bot.client.users.has(act.args.userId)) {
                     this.error(act.type, `User '${act.args.userId}' is either invalid or not cached by the client`);
 
-                    return;
+                    return this;
                 }
 
                 const user: User = this.bot.client.users.get(act.args.userId) as User;
@@ -127,7 +133,7 @@ export default class ActionInterpreter extends EventEmitter {
                 const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);
 
                 if (channel === null) {
-                    return;
+                    return this;
                 }
 
                 await (channel as TextChannel).send(act.args.message);
@@ -140,7 +146,7 @@ export default class ActionInterpreter extends EventEmitter {
                 const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);
 
                 if (channel === null) {
-                    return;
+                    return this;
                 }
 
                 await Utils.send({
@@ -159,7 +165,7 @@ export default class ActionInterpreter extends EventEmitter {
                 const channel: TextChannel = this.ensureChannel(act.args.inputMessage.channel.id, act.type);
 
                 if (channel === null) {
-                    return;
+                    return this;
                 }
 
                 const paginatedMessage: PaginatedMessage = new PaginatedMessage(act.args.message);
@@ -202,7 +208,7 @@ export default class ActionInterpreter extends EventEmitter {
                 const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);
 
                 if (channel === null) {
-                    return;
+                    return this;
                 }
 
                 await Utils.send({
@@ -226,12 +232,16 @@ export default class ActionInterpreter extends EventEmitter {
                 }
             }
         }
+
+        return this;
     }
 
-    public async interpretMany(actions: IAction<any>[]): Promise<void> {
+    public async interpretMany(actions: IAction[]): Promise<this> {
         for (let i: number = 0; i < actions.length; i++) {
             await this.interpret(actions[i]);
         }
+
+        return this;
     }
 
     protected ensureChannel<T extends Channel = TextChannel>(channelId: Snowflake, actionType: ActionType, type: ChannelType = ChannelType.Text): T {

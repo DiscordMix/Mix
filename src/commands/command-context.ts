@@ -9,7 +9,7 @@ import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
 import {Store, PromiseOr} from "..";
 
-export interface ICommandContextOptions {
+export interface IContextOptions {
     readonly msg: Message;
     readonly bot: Bot;
     readonly label: string | null;
@@ -41,9 +41,9 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
     public readonly label: string | null;
 
     /**
-     * @param {ICommandContextOptions} options
+     * @param {IContextOptions} options
      */
-    public constructor(options: ICommandContextOptions) {
+    public constructor(options: IContextOptions) {
         if (options.msg.channel.type !== "text") {
             throw new Error(BotMessages.CONTEXT_EXPECT_TEXT_CHANNEL);
         }

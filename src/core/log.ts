@@ -152,7 +152,7 @@ export default class Log {
      * @param {*} message
      * @param {Array<*>} params
      */
-    public static fatal(message: any, ...params: any[]): void {
+    public static fatal(message: any, ...params: any[]): Error {
         const options: IComposeOptions = {
             message: message,
             params: params,
@@ -163,6 +163,8 @@ export default class Log {
 
         Log.compose(options);
         process.exit(1);
+
+        return new Error(message);
     }
 
     /**

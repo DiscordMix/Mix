@@ -14,7 +14,7 @@ export enum TestStoreActionType {
     $$Test = -1
 }
 
-export type Reducer<T> = (action: IStoreAction, state?: T) => T | null;
+export type Reducer<T> = (action: IStoreAction, state: T) => T | null;
 
 export type StoreActionHandler<T> = (action: IStoreAction, changed: boolean, previousState?: T, newState?: T) => void;
 
@@ -31,6 +31,22 @@ export interface IStore<TState = any, TActionType = any> {
 }
 
 export default class Store<TState = any, TActionType = any> {
+    public static mergeReducers<T = any>(...reducers: Reducer<T>[]): Reducer<T> {
+        return (action: IStoreAction, state: T): T | null => {
+            let finalState: T = state;
+
+            for (const reducer of reducers) {
+                const newState: T | null = reducer(action, finalState);
+
+                if (newState !== null) {
+                    finalState = newState;
+                }
+            }
+
+            return finalState;
+        };
+    }
+
     public readonly timeMachine: TimeMachine<TState, TActionType>;
 
     protected readonly handlers: StoreActionHandler<TState>[];

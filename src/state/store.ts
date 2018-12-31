@@ -14,7 +14,7 @@ export enum TestStoreActionType {
     $$Test = -1
 }
 
-export type Reducer<T> = (action: IStoreAction, state: T) => T | null;
+export type Reducer<T> = (action: IStoreAction, state?: T) => T | null;
 
 export type StoreActionHandler<T> = (action: IStoreAction, changed: boolean, previousState?: T, newState?: T) => void;
 
@@ -32,8 +32,8 @@ export interface IStore<TState = any, TActionType = any> {
 
 export default class Store<TState = any, TActionType = any> {
     public static mergeReducers<T = any>(...reducers: Reducer<T>[]): Reducer<T> {
-        return (action: IStoreAction, state: T): T | null => {
-            let finalState: T = state;
+        return (action: IStoreAction, state?: T): T | null => {
+            let finalState: T | undefined = state;
 
             for (const reducer of reducers) {
                 const newState: T | null = reducer(action, finalState);
@@ -43,7 +43,7 @@ export default class Store<TState = any, TActionType = any> {
                 }
             }
 
-            return finalState;
+            return finalState !== undefined ? finalState : null;
         };
     }
 
@@ -52,9 +52,9 @@ export default class Store<TState = any, TActionType = any> {
     protected readonly handlers: StoreActionHandler<TState>[];
     protected readonly reducers: Reducer<TState>[];
 
-    protected state: TState;
+    protected state?: TState;
 
-    public constructor(initialState: TState, reducers: Reducer<TState>[] = []) {
+    public constructor(initialState?: TState, reducers: Reducer<TState>[] = []) {
         this.state = initialState;
         this.handlers = [];
         this.reducers = reducers;

@@ -52,9 +52,9 @@ export default class Store<TState = any, TActionType = any> {
     protected readonly handlers: StoreActionHandler<TState>[];
     protected readonly reducers: Reducer<TState>[];
 
-    protected state?: TState;
+    protected state: TState;
 
-    public constructor(initialState?: TState, reducers: Reducer<TState>[] = []) {
+    public constructor(initialState: TState, reducers: Reducer<TState>[] = []) {
         this.state = initialState;
         this.handlers = [];
         this.reducers = reducers;

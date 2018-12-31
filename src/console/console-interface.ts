@@ -84,11 +84,10 @@ export default class ConsoleInterface {
             Log.error(error.message);
         }); */
 
-        // TODO: Disabled due to directly exiting on vps/linux
-        /* ci.on("close", async () => {
+        ci.on("close", async () => {
             await bot.disconnect();
             process.exit(0);
-        }); */
+        });
 
         // TODO: Should log before setting the prompt
         this.ready = true;
@@ -195,7 +194,7 @@ export default class ConsoleInterface {
 
                 return;
             }
-            
+
             console.log(`My ID is => ${bot.client.user.id}`);
         });
 

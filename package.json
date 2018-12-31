@@ -36,6 +36,7 @@
     "license": "MIT",
     "dependencies": {
         "@atlas/automata": "^1.0.0-alpha.4",
+        "@atlas/xlib": "^1.0.0-alpha.1",
         "axios": "^0.18.0",
         "babel-polyfill": "^6.26.0",
         "body-parser": "^1.18.3",

@@ -465,6 +465,18 @@ export default abstract class Utils {
     }
 
     /**
+     * @param {number} range
+     * @return {boolean}
+     */
+    public static chance(range: number): boolean {
+        if (typeof range !== "number" || range <= 0) {
+            throw new Error("Expecting range parameter to be a number and to be higher than 0");
+        }
+
+        return Utils.getRandomInt(0, range) === 0;
+    }
+
+    /**
      * @param {GuildMember} member
      * @return {boolean}
      */

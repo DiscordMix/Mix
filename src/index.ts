@@ -56,9 +56,10 @@ import UrlSerializer from "./serializers/url-serializer";
 import UserSerializer from "./serializers/user-serializer";
 import {IProvider, PromiseOr, IDuplexProvider, IQueriableProvider} from "./providers/provider";
 import {GuildConfig, GuildCfgMongoProvider} from "./providers/mongo-providers";
-import Store, {TestStoreActionType, IStoreAction, TimeMachine, Reducer, ITestState, IStore, ITimeMachine} from "./state/store";
+import Store, {TestStoreActionType, IStoreAction, Reducer, ITestState, IStore} from "./state/store";
 import {IBuilder} from "./builders/builder";
-import {IBot} from "./core/bot-extra";
+import {IBot, EBotEvents} from "./core/bot-extra";
+import {TimeMachine, ITimeMachine} from "./state/time-machine";
 
 export {
     // Fragments
@@ -119,6 +120,7 @@ export {
     ChatEnvironment,
     Patterns,
     DiscordEvent,
+    EBotEvents,
 
     // Collections
     List,

@@ -1,4 +1,5 @@
 import BotMessages from "../core/messages";
+import {ITimeMachine, TimeMachine} from "..";
 
 export interface IStoreAction<T = any> {
     readonly type: number | string;
@@ -16,118 +17,6 @@ export enum TestStoreActionType {
 export type Reducer<T> = (action: IStoreAction, state?: T) => T | null;
 
 export type StoreActionHandler<T> = (action: IStoreAction, changed: boolean, previousState?: T, newState?: T) => void;
-
-export interface IStateCapsule<T> {
-    readonly state: T;
-    readonly time: number;
-}
-
-export abstract class Delta {
-    /**
-     * Compare two objects's properties without recursion
-     * @param entity1
-     * @param entity2
-     * @return {string[]} The changes
-     */
-    public static compare(entity1: object, entity2: object): string[] {
-        const deltas: string[] = [];
-        const keys: string[] = Object.keys(entity1);
-        const keys2: string[] = Object.keys(entity2);
-
-        for (let i: number = 0; i < keys2.length; i++) {
-            if (!keys.includes(keys2[i])) {
-                keys.push(keys2[i]);
-            }
-        }
-
-        for (let i: number = 0; i < keys.length; i++) {
-            const key: string = keys[i];
-
-            if (!entity2.hasOwnProperty(key) || entity2[key] !== entity1[key]) {
-                deltas.push(key);
-            }
-        }
-
-        return deltas;
-    }
-}
-
-export interface ITimeMachine<T> {
-    wayback(): IStateCapsule<T> | null;
-    present(): IStateCapsule<T> | null;
-    before(time: number): IStateCapsule<T>[];
-    after(time: number): IStateCapsule<T>[];
-}
-
-export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
-    protected store: Store<TState, TActionType>;
-    protected capsules: IStateCapsule<TState>[];
-
-    public constructor(store: Store<TState, TActionType>) {
-        this.store = store;
-        this.capsules = [];
-        this.setup();
-    }
-
-    protected insert(state: TState): this {
-        this.capsules.push({
-            state,
-            time: Date.now()
-        });
-
-        return this;
-    }
-
-    public wayback(): IStateCapsule<TState> | null {
-        return this.capsules[0] || null;
-    }
-
-    public present(): IStateCapsule<TState> | null {
-        if (this.capsules.length > 0) {
-            return this.capsules[this.capsules.length - 1] || null;
-        }
-
-        return null;
-    }
-
-    public before(time: number): IStateCapsule<TState>[] {
-        const result: IStateCapsule<TState>[] = [];
-
-        for (const capsule of this.capsules) {
-            if (capsule.time < time) {
-                result.push(capsule);
-            }
-        }
-
-        return result;
-    }
-
-    public after(time: number): IStateCapsule<TState>[] {
-        const result: IStateCapsule<TState>[] = [];
-
-        for (const capsule of this.capsules) {
-            if (capsule.time > time) {
-                result.push(capsule);
-            }
-        }
-
-        return result;
-    }
-
-    protected setup(): void {
-        const currentState: TState | undefined = this.store.getState();
-
-        if (currentState !== undefined) {
-            this.insert(currentState);
-        }
-
-        this.store.subscribe((action: IStoreAction, changed: boolean, previousState?: TState, newState?: TState) => {
-            if (changed && newState !== undefined) {
-                this.insert(newState);
-            }
-        });
-    }
-}
 
 export interface IStore<TState = any, TActionType = any> {
     dispatch<T = any>(type: TActionType, payload?: T): this;

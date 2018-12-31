@@ -418,7 +418,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Setup the bot
-     * @param {TLib | undefined} lib
      * @return {Promise<this>}
      */
     protected async setup(): Promise<this> {

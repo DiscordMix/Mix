@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 import Settings from "../core/settings";
-import {Snowflake, Guild, TextChannel, Message, Util} from "discord.js";
+import {Snowflake, Guild, TextChannel, Message} from "discord.js";
 import Context from "../commands/command-context";
 import ResponseHelper from "../core/response-helper";
 import {expect, assert} from "chai";
@@ -12,7 +12,7 @@ import SwitchParser from "../commands/switch-parser";
 import path from "path";
 import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
 import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
-import {IStoreAction, TestStoreActionType, IStateCapsule, ITestState, Reducer, Delta} from "../state/store";
+import {IStoreAction, TestStoreActionType, ITestState, Reducer} from "../state/store";
 import BotMessages from "../core/messages";
 import Utils, {IBinarySearchResult} from "../core/utils";
 import Rgba from "../misc/rgba";
@@ -21,6 +21,8 @@ import List from "../collections/collection";
 import Log, {LogLevel} from "../core/log";
 import Task from "../tasks/task";
 import {EBotEvents} from "../core/bot-extra";
+import {IStateCapsule} from "../state/time-machine";
+import {Delta} from "../state/delta";
 
 // Test globals
 const globalAny: any = global;

@@ -63,22 +63,22 @@ When contributing, please follow the [Semantic Versioning](https://semver.org/) 
 
 #### Helpful Snippets
 
-[Command](https://example.com/)
+[Command](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#command)
 
-[Command with arguments](https://example.com/)
+[Command with arguments](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#command-with-arguments)
 
-[Service](https://example.com/)
+[Service](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#service)
 
-[Service with event handling](https://example.com/)
+[Service with event handling](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#service-with-event-handling)
 
-[Service handling multiple events with the same action](https://example.com/)
+[Service handling multiple events with the same action](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#service-handling-multiple-events-with-the-same-action)
 
-[Service with disposable resources](https://example.com/)
+[Service with disposable resources](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#service-with-disposable-resources)
 
-[Forked service](https://example.com/)
+[Forked service](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#forked-service)
 
-[Task](https://example.com/)
+[Task](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#task)
 
-[Recurring task](https://example.com/)
+[Recurring task](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#recurring-task)
 
-[Serializer](https://example.com/)
+[Serializer](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#serializer)

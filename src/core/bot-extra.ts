@@ -1,19 +1,37 @@
 import {UserGroup} from "../commands/command";
 import {Snowflake, Message, Client} from "discord.js";
-import {IArgumentResolver, ICustomArgType, Reducer, IDisposable, PromiseOr, ISettings, ICommandStore, IConsoleInterface, ActionInterpreter, ITaskManager, IStore, Settings} from "..";
+import {IArgumentResolver, ICustomArgType, Reducer, IDisposable, PromiseOr, ISettings, ICommandStore, IConsoleInterface, ActionInterpreter, ITaskManager, IStore, Settings, IActionInterpreter} from "..";
 import {EventEmitter} from "events";
 import {ITimeoutAttachable} from "./helpers";
 import {ITemp} from "./temp";
 import {IServiceManager} from "../services/service-manager";
 import {ICommandHandler} from "../commands/command-handler";
-import Language from "../language/language";
+import Language, {ILanguage} from "../language/language";
 import {IOptimizer} from "../optimization/optimizer";
 import {IFragmentManager} from "../fragments/fragment-manager";
 import {IPathResolver} from "./path-resolver";
+import {IStatsCounter} from "./stat-counter";
+
+export interface IBotModules {
+    readonly store: IStore;
+    readonly paths: IPathResolver;
+    readonly temp: ITemp;
+    readonly client: Client;
+    readonly serviceManager: IServiceManager;
+    readonly commandStore: ICommandStore;
+    readonly commandHandler: ICommandHandler;
+    readonly consoleInterface: IConsoleInterface;
+    readonly language: ILanguage;
+    readonly statsCounter: IStatsCounter;
+    readonly actionInterpreter: IActionInterpreter;
+    readonly taskManager: ITaskManager;
+    readonly optimizer: IOptimizer;
+    readonly fragmentManager: IFragmentManager;
+}
 
 // TODO: Already made optional by Partial?
 export interface IBotOptions<T> {
-    readonly settings: Settings;
+    readonly settings: ISettings;
     readonly prefixCommand?: boolean;
     readonly internalCommands?: InternalCommand[];
     readonly userGroups?: UserGroup[];
@@ -24,6 +42,7 @@ export interface IBotOptions<T> {
     readonly languages?: string[];
     readonly initialState?: T;
     readonly reducers?: Reducer<T>[];
+    readonly modules?: IBotModules;
 }
 
 export type Action<T = void> = () => T;

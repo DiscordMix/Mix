@@ -12,7 +12,14 @@ const DefaultBotStats: IBotStats = {
     messagesSeen: 0
 };
 
-export default class StatCounter {
+export interface IStatsCounter {
+    reset(): this;
+    getAsReadonly(): ReadonlyBotStats;
+
+    readonly stats: IBotStats;
+}
+
+export default class StatCounter implements IStatsCounter {
     public stats: IBotStats;
 
     public constructor() {

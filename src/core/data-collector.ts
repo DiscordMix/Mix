@@ -16,13 +16,22 @@ export enum MemberType {
     Everyone
 }
 
+export type ConditionCallback = (member: GuildMember) => boolean;
+
+export interface IDataCollector {
+    collect(dataType: MemberDataType): this;
+    from(memberType: MemberType): this;
+    where(condition: ConditionCallback): this;
+    finish(): GuildMember[];
+}
+
 // TODO: Should also be able to call a callback function every X iterations
-export default class DataCollector {
+export default class DataCollector implements IDataCollector {
     protected readonly guild: Guild;
     protected readonly collectionType: MemberDataType;
 
     protected fromType: MemberType;
-    protected whereCondition?: (member: GuildMember) => boolean;
+    protected whereCondition?: ConditionCallback;
 
     /**
      * @param {Guild} guild
@@ -72,7 +81,7 @@ export default class DataCollector {
      * @param {(GuildMember) => boolean} condition
      * @return {this}
      */
-    public where(condition: (member: GuildMember) => boolean): this {
+    public where(condition: ConditionCallback): this {
         this.whereCondition = condition;
 
         return this;

@@ -20,7 +20,7 @@ export interface IComposeOptions {
     readonly prefix?: string;
 }
 
-export default class Log {
+export default abstract class Log {
     public static hiddenItems: boolean = false;
     public static level: LogLevel = LogLevel.Success;
 

@@ -579,7 +579,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * @param {boolean} suspend
      * @return {this}
      */
-    public suspend(suspend: boolean): this {
+    public suspend(suspend: boolean = true): this {
         if (this.state !== BotState.Connected) {
             return this;
         }
@@ -1012,7 +1012,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         const servicesStopped: number = await this.services.stopAll();
 
         Log.verbose(`[Bot.disconnect] Stopped ${servicesStopped} service(s)`);
-
         await this.dispose();
         await this.client.destroy();
         (this.client as any) = new Client();

@@ -60,6 +60,7 @@ import Store, {TestStoreActionType, IStoreAction, Reducer, ITestState, IStore} f
 import {IBuilder} from "./builders/builder";
 import {IBot, EBotEvents} from "./core/bot-extra";
 import {TimeMachine, ITimeMachine} from "./state/time-machine";
+import Delta from "./state/delta";
 
 export {
     // Fragments
@@ -208,5 +209,6 @@ export {
     TimeMachine,
     ITimeMachine,
     Reducer,
-    ITestState
+    ITestState,
+    Delta
 };

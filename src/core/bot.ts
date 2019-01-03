@@ -134,6 +134,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             })
         } : undefined as any);
 
+        // Special options for unit tests
         if (testMode) {
             (options.options as any) = {
                 ...options.options,

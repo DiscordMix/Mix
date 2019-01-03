@@ -22,7 +22,7 @@ import Log, {LogLevel} from "../core/log";
 import Task from "../tasks/task";
 import {EBotEvents} from "../core/bot-extra";
 import {IStateCapsule} from "../state/time-machine";
-import {Delta} from "../state/delta";
+import Delta from "../state/delta";
 
 // Test globals
 const globalAny: any = global;

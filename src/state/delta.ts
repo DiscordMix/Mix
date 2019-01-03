@@ -1,8 +1,8 @@
-export abstract class Delta {
+export default abstract class Delta {
     /**
      * Compare two objects's properties without recursion
-     * @param entity1
-     * @param entity2
+     * @param {object} entity1
+     * @param {object} entity2
      * @return {string[]} The changes
      */
     public static compare(entity1: object, entity2: object): string[] {

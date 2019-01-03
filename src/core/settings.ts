@@ -5,7 +5,7 @@ import BotMessages from "./messages";
 
 export interface ISettingsGeneral {
     readonly token: string;
-    readonly prefixes: string[];
+    readonly prefix: string | string[];
 }
 
 export interface ISettingsKeys {
@@ -54,11 +54,17 @@ export default class Settings implements ISettings {
             throw new Error(BotMessages.CFG_EXPECT_GENERAL);
         }
 
+        // Force single prefix to be an array, if needed
+        const prefix: string[] = Array.isArray(options.general.prefix) ? options.general.prefix : [options.general.prefix];
+
         /**
          * @type {ISettingsGeneral}
          * @readonly
          */
-        this.general = options.general;
+        this.general = {
+            ...options.general,
+            prefix
+        };
 
         /**
          * @type {ISettingsPaths}

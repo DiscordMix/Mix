@@ -449,8 +449,8 @@ describe("Collection", () => {
             });
 
             settingsPromise.then((result: Settings) => {
-                expect(result.general.prefixes).to.be.an("array");
-                expect(result.general.prefixes[0]).to.equal("!");
+                expect(result.general.prefix).to.be.an("array");
+                expect(result.general.prefix[0]).to.equal("!");
                 expect(result.general.token).to.be.an("string").and.to.equal("my_secret_token");
                 expect(result.paths.commands).to.be.an("string").and.to.equal("./my_commands");
                 expect(result.paths.plugins).to.be.an("string").and.to.equal("./my_plugins");
@@ -459,8 +459,8 @@ describe("Collection", () => {
             });
 
             return settingsSecondPromise.then((result: Settings) => {
-                expect(result.general.prefixes).to.be.an("array");
-                expect(result.general.prefixes[0]).to.equal(".");
+                expect(result.general.prefix).to.be.an("array");
+                expect(result.general.prefix[0]).to.equal(".");
                 expect(result.general.token).to.be.an("string").and.to.equal("another_secret_token");
 
                 // TODO: Use default paths reference instead of being hard-coded
@@ -791,7 +791,7 @@ let testBot: TestBot = new TestBot({
     settings: new Settings({
         general: {
             token: token,
-            prefixes: ["!"]
+            prefix: ["!"]
         }
     })
 }, true);

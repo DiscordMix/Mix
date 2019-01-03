@@ -128,7 +128,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         let options: Partial<IBotOptions<TState>> = typeof botOptionsOrToken === "object" && botOptionsOrToken !== null && !Array.isArray(botOptionsOrToken) ? Object.assign({}, botOptionsOrToken) : (typeof botOptionsOrToken === "string" ? {
             settings: new Settings({
                 general: {
-                    prefixes: ["!"],
+                    prefix: ["!"],
                     token: botOptionsOrToken
                 }
             })
@@ -655,12 +655,12 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      */
     public async triggerCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
         // Use any registered prefix, default to index 0
-        const content: string = `${this.settings.general.prefixes[0]}${base} ${args.join(" ")}`.trim();
+        const content: string = `${this.settings.general.prefix[0]}${base} ${args.join(" ")}`.trim();
 
         let command: Command | IDecoratorCommand | null = await CommandParser.parse(
             content,
             this.commandStore,
-            this.settings.general.prefixes
+            this.settings.general.prefix
         );
 
         if (command === null) {
@@ -828,7 +828,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         // TODO: Cannot do .startsWith with a prefix array
-        if ((!msg.author.bot || (msg.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.commandStore, this.settings.general.prefixes)) {
+        if ((!msg.author.bot || (msg.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.commandStore, this.settings.general.prefix)) {
             if (this.options.allowCommandChain) {
                 // TODO: Might split values too
                 const rawChain: string[] = msg.content.split("~");
@@ -859,7 +859,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         // TODO: ?prefix should also be chain-able
         else if (!msg.author.bot && msg.content === "?prefix" && this.prefixCommand) {
             await msg.channel.send(new RichEmbed()
-                .setDescription(`Command prefix(es): **${this.settings.general.prefixes.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
+                .setDescription(`Command prefix(es): **${this.settings.general.prefix.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
                 .setColor("GREEN"));
         }
         // TODO: There should be an option to disable this
@@ -895,7 +895,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
 
-            label: CommandParser.getCommandBase(msg.content, this.settings.general.prefixes)
+            label: CommandParser.getCommandBase(msg.content, this.settings.general.prefix)
         });
     }
 
@@ -912,7 +912,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         let command: Command | null = await CommandParser.parse(
             content,
             this.commandStore,
-            this.settings.general.prefixes
+            this.settings.general.prefix
         );
 
         if (command === null) {

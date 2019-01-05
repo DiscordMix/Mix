@@ -4,6 +4,10 @@ import {Message, GuildMember, Role, Snowflake} from "discord.js";
 import Patterns from "./patterns";
 import Utils from "./utils";
 import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
+import {ISettingsPaths} from "./settings";
+
+// TODO: Not working
+export const DebugMode: boolean = process.env.FORGE_DEBUG_MODE == "true";
 
 export const Title: string =
 
@@ -114,4 +118,12 @@ export const DefaultBotOptions: IBotExtraOptions = {
     emojis: DefaultBotEmojiOptions,
     consoleInterface: true,
     optimizer: false
+};
+
+export const DefaultSettingPaths: ISettingsPaths = {
+    commands: "commands",
+    plugins: "plugins",
+    services: "services",
+    languages: "languages",
+    tasks: "tasks"
 };

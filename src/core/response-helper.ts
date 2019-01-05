@@ -7,7 +7,21 @@ import Log from "./log";
 import MsgBuilder from "../builders/msg-builder";
 import Utils from "./utils";
 
-export default class ResponseHelper {
+export interface IResponseHelper {
+    fileStream(stream: any, name: string): Promise<EditableMessage | null>;
+    respond(content: EmbedBuilder | any, autoDelete: boolean): Promise<EditableMessage | null>;
+    sections(sections: any, color: string): Promise<EditableMessage | null>;
+    ok(text: string | MsgBuilder, title: string, clean: boolean): Promise<EditableMessage | null>;
+    send(text: string | RichEmbed | Message): Promise<EditableMessage | null>;
+    loading(text: string): Promise<EditableMessage | null>;
+    fail(text: string, autoDelete: boolean): Promise<EditableMessage | null>;
+
+    readonly channel: TextChannel;
+    readonly bot: Bot;
+    readonly sender: User;
+}
+
+export default class ResponseHelper implements IResponseHelper {
     public readonly channel: TextChannel;
     public readonly bot: Bot;
     public readonly sender: User;

@@ -2,6 +2,7 @@ import Log from "./log";
 import Utils from "./utils";
 import fs from "fs";
 import BotMessages from "./messages";
+import {DefaultSettingPaths} from "./constants";
 
 export interface ISettingsGeneral {
     readonly token: string;
@@ -33,14 +34,6 @@ export interface ISettings {
     readonly keys: ISettingsKeys;
 }
 
-const DefaultPaths: ISettingsPaths = {
-    commands: "commands",
-    plugins: "plugins",
-    services: "services",
-    languages: "languages",
-    tasks: "tasks"
-};
-
 export default class Settings implements ISettings {
     public general: ISettingsGeneral;
     public paths: ISettingsPaths;
@@ -65,7 +58,7 @@ export default class Settings implements ISettings {
          * @readonly
          */
         this.paths = {
-            ...DefaultPaths,
+            ...DefaultSettingPaths,
             ...options.paths
         };
 

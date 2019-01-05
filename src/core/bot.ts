@@ -1,9 +1,6 @@
 // Setup environment variables
 require("dotenv").config();
 
-// TODO: Not working
-export const DebugMode: boolean = process.env.FORGE_DEBUG_MODE == "true";
-
 import CommandParser from "../commands/command-parser";
 import Context from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
@@ -46,7 +43,7 @@ import {EventEmitter} from "events";
 import Optimizer from "../optimization/optimizer";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
-import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath, DefaultBotOptions} from "./constants";
+import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath, DefaultBotOptions, DebugMode} from "./constants";
 import Store from "../state/store";
 import BotMessages from "./messages";
 import {IBot} from "..";

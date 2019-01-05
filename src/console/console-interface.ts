@@ -1,12 +1,13 @@
 import Log from "../core/log";
 import Utils from "../core/utils";
-import Bot, {DebugMode} from "../core/bot";
+import Bot from "../core/bot";
 import readline from "readline";
 import {performance} from "perf_hooks";
 import {Guild, GuildMember} from "discord.js";
 import {ReadonlyCommandMap} from "../commands/command-store";
 import {ReadonlyServiceMap} from "../services/service-manager";
 import chalk from "chalk";
+import {DebugMode} from "../core/constants";
 
 // TODO: Export in index
 export type ConsoleCommandHandler = (args: string[]) => void;

@@ -122,6 +122,8 @@ export enum InternalCommand {
 
 export type BotToken = string;
 
+export type Snowflake = string;
+
 export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDisposable, ITimeoutAttachable {
     postStats(): PromiseOr<void>;
     suspend(suspend: boolean): this;

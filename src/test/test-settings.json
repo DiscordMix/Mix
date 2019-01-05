@@ -1,7 +1,7 @@
 {
     "general": {
         "token": "my_secret_token",
-        "prefixes": [
+        "prefix": [
             "!"
         ]
     },

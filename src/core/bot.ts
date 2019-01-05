@@ -53,7 +53,7 @@ import {Action} from "@atlas/automata";
 /**
  * Bot events:
  *
- * - setupStart(LibType?)
+ * - setupStart()
  * - loadInternalFragments()
  * - loadedInternalFragments(Fragment[]?)
  * - loadServices()

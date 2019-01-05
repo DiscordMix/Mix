@@ -40,8 +40,6 @@ import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
 import {IDisposable} from "./core/helpers";
-import {ICommandExecutedEvent} from "./events/command-executed-event";
-import {ICommandWillExecuteEvent} from "./events/command-will-execute-event";
 import PaginatedMessage from "./pagination/paginated-message";
 import Task, {ITask} from "./tasks/task";
 import TaskManager, {ITaskManager} from "./tasks/task-manager";
@@ -61,6 +59,7 @@ import {IBuilder} from "./builders/builder";
 import {IBot, EBotEvents} from "./core/bot-extra";
 import {TimeMachine, ITimeMachine} from "./state/time-machine";
 import Delta from "./state/delta";
+import {ICommandEvent} from "./events/command-event";
 
 export {
     // Fragments
@@ -132,8 +131,7 @@ export {
     IEmojiMenu,
 
     // Events
-    ICommandWillExecuteEvent,
-    ICommandExecutedEvent,
+    ICommandEvent,
 
     // Setup Helper
     SetupHelper,

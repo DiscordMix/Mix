@@ -23,63 +23,50 @@ export interface IComposeOptions {
 export default abstract class Log {
     public static hiddenItems: boolean = false;
     public static level: LogLevel = LogLevel.Success;
+    public static file: string = "bot.log";
+    public static write: boolean = true;
 
     /**
      * @param {IComposeOptions} options
-     * @return {Promise<void>}
      */
-    public static async compose(options: IComposeOptions): Promise<void> {
+    public static compose(options: IComposeOptions): void {
         if (Log.level === LogLevel.None) {
             return;
         }
 
-        const finalColor: string = options.color || "white";
-
-        // TODO:
-        const finalPrefix: string | null = options.prefix ? options.prefix : null;
+        const color: string = options.color || "white";
 
         let message: any = options.message;
 
-        return new Promise<void>((resolve) => {
-            // TODO: Make sure check is working as intended, seems a bit suspicious
-            if (Log.level < options.type) {
-                if (Log.hiddenItems) {
-                    console.log(colors.gray("+ 1 Hidden Item"));
-                }
-
-                resolve();
-
-                return;
+        // TODO: Make sure check is working as intended, seems a bit suspicious
+        if (Log.level < options.type) {
+            if (Log.hiddenItems) {
+                console.log(colors.gray("+ 1 Hidden Item"));
             }
 
-            const date: string = new Date().toISOString()
-                .replace(/T/, " ")
-                .replace(/\..+/, "");
+            return;
+        }
 
-            // TODO: Make this next line work on the vps
-            // process.stdout.write(`\x1B[2D[${date}] ${colors[color](message)}\n> `);
-            if (typeof message === "string") {
-                console.log(`[${date}] ${(colors as any)[finalColor](message)}`, ...options.params);
-            }
-            else {
-                console.log(`[${date}] `, message, ...options.params);
-            }
+        const date: string = new Date().toISOString()
+            .replace(/T/, " ")
+            .replace(/\..+/, "");
 
-            // TODO
-            /* if (finalPrefix !== null) {
-                finalMessages = `<${finalPrefix.toUpperCase()}> ${finalMessages}`;
-            } */
+        if (typeof message === "string") {
+            console.log(`{${date}} ${(colors as any)[color](message)}`, ...options.params);
+        }
+        else {
+            console.log(`{${date}} `, message, ...options.params);
+        }
 
-            resolve();
-
-            fs.writeFile("bot.log", `[${date}] ${message} ${options.params.map((param: any) => param.toString()).join(" ")}\n`, {
+        if (Log.write) {
+            fs.writeFile(Log.file, `{${date}} ${message} ${options.params.map((param: any) => param.toString()).join(" ")}\n`, {
                 flag: "a"
             }, (error: Error) => {
                 if (error) {
                     throw error;
                 }
             });
-        });
+        }
     }
 
     /**

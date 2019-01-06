@@ -389,12 +389,12 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             await axios.post(dblUrl.replace("{botId}", this.client.user.id), {
                 server_count
             }, {
-                    headers: {
-                        Authorization: this.settings.keys.dbl
-                    }
-                }).catch((error: Error) => {
-                    Log.warn(`[Bot.postStats] Could not post stats to discordbots.org (${error.message})`);
-                });
+                headers: {
+                    Authorization: this.settings.keys.dbl
+                }
+            }).catch((error: Error) => {
+                Log.warn(`[Bot.postStats] Could not post stats to discordbots.org (${error.message})`);
+            });
         }
 
         // Bots for Discord.com
@@ -404,13 +404,13 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             await axios.post(bfdUrl.replace("{botId}", this.client.user.id), {
                 server_count
             }, {
-                    headers: {
-                        Authorization: this.settings.keys.bfd,
-                        "Content-Type": "application/json"
-                    }
-                }).catch((error: Error) => {
-                    Log.warn(`[Bot.postStats] Could not post stats to botsfordiscord.com (${error.message})`);
-                });
+                headers: {
+                    Authorization: this.settings.keys.bfd,
+                    "Content-Type": "application/json"
+                }
+            }).catch((error: Error) => {
+                Log.warn(`[Bot.postStats] Could not post stats to botsfordiscord.com (${error.message})`);
+            });
         }
     }
 

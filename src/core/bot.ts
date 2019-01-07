@@ -369,6 +369,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
          */
         this.fragments = new FragmentManager(this);
 
+        // Force-bind certain methods
+        this.connect = this.connect.bind(this);
+        this.disconnect = this.disconnect.bind(this);
+
         return this;
     }
 

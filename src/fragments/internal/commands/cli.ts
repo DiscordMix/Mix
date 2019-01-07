@@ -48,14 +48,14 @@ export default class CliCommand extends Command<Args> {
 
             embed.field(`Input`, new MsgBuilder()
                 .block("js")
-                .add(args.command)
+                .append(args.command)
                 .block()
                 .build());
 
             embed.field("Output",
                 new MsgBuilder()
                     .block("js")
-                    .add(Utils.escapeText(result, x.bot.client.token))
+                    .append(Utils.escapeText(result, x.bot.client.token))
                     .block()
                     .build()
             );

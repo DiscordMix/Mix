@@ -47,7 +47,7 @@ export default class ReflectCommand extends Command {
 
                 const result: string = new MsgBuilder()
                     .block("diff")
-                    .add(services)
+                    .append(services)
                     .block()
                     .build();
 

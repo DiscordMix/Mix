@@ -57,14 +57,14 @@ export default class EvalCommand extends Command<Args> {
 
         embed.field(`Input`, new MsgBuilder()
             .block("js")
-            .add(code)
+            .append(code)
             .block()
             .build());
 
         embed.field(`Output`,
             new MsgBuilder()
                 .block("js")
-                .add(Utils.escapeText(result.toString().trim() === '' || !result ? 'No return value.' : result.toString(), x.bot.client.token))
+                .append(Utils.escapeText(result.toString().trim() === '' || !result ? 'No return value.' : result.toString(), x.bot.client.token))
                 .block()
                 .build()
         );

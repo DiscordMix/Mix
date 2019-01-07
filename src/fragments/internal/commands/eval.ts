@@ -4,7 +4,7 @@ import Command, {TrivialArgType, RestrictGroup, IArgument} from "../../../comman
 import EmbedBuilder from "../../../builders/embed-builder";
 import Utils from "../../../core/utils";
 
-type EvalArgs = {
+type Args = {
     readonly code: string;
     readonly silent: boolean;
 }
@@ -12,7 +12,7 @@ type EvalArgs = {
 /**
  * @extends Command
  */
-export default class EvalCommand extends Command<EvalArgs> {
+export default class EvalCommand extends Command<Args> {
     readonly meta = {
         name: "eval",
         description: "Evaluate code"
@@ -37,7 +37,7 @@ export default class EvalCommand extends Command<EvalArgs> {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public async run(context: Context, args: EvalArgs): Promise<void> {
+    public async run(x: Context, args: Args): Promise<void> {
         const code: string = args.code;
         const started: number = Date.now();
 
@@ -54,12 +54,23 @@ export default class EvalCommand extends Command<EvalArgs> {
 
         const embed: EmbedBuilder = new EmbedBuilder();
         embed.footer(`Evaluated in ${(Date.now() - started)}ms`);
-        embed.field(`Input`, new MsgBuilder().codeBlock(code, "js").build());
+
+        embed.field(`Input`, new MsgBuilder()
+            .block("js")
+            .add(code)
+            .block()
+            .build());
+
         embed.field(`Output`,
-            new MsgBuilder().codeBlock(Utils.escapeText(result.toString().trim() === '' || !result ? 'No return value.' : result.toString(), context.bot.client.token), "js").build()
+            new MsgBuilder()
+                .block("js")
+                .add(Utils.escapeText(result.toString().trim() === '' || !result ? 'No return value.' : result.toString(), x.bot.client.token))
+                .block()
+                .build()
         );
+
         embed.color('#36393f');
 
-        context.send(embed.build());
+        x.send(embed.build());
     }
 };

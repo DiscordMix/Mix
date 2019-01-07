@@ -2,14 +2,14 @@ import {IArgument, default as Command, TrivialArgType} from "../../../commands/c
 import Context from "../../../commands/command-context";
 import {IDecoratorCommand} from "../../../decorators/decorators";
 
-interface IUsageArgs {
+interface Args {
     readonly command: string;
 }
 
 /**
  * @extends Command
  */
-export default class UsageCommand extends Command<IUsageArgs> {
+export default class UsageCommand extends Command<Args> {
     readonly meta = {
         name: "usage",
         description: "View the usage of a command"
@@ -24,17 +24,20 @@ export default class UsageCommand extends Command<IUsageArgs> {
         }
     ];
 
-    public async run(context: Context, args: IUsageArgs): Promise<void> {
-        const targetCommand: Command | IDecoratorCommand | null = await context.bot.commandStore.get(args.command);
+    public async run(x: Context, args: Args): Promise<void> {
+        const targetCommand: Command | IDecoratorCommand | null = await x.bot.commandStore.get(args.command);
 
         if (!targetCommand) {
-            context.fail("That command doesn't exist.");
+            x.fail("That command doesn't exist.");
 
             return;
         }
         else if ((targetCommand as any).type !== undefined) {
 
         }
+
+        await x.fail("Not yet implemented");
+
         // TODO: New decorator commands broke it
         /* else if (targetCommand.arguments.length === 0) {
             context.fail("That command doesn't accept any arguments.");

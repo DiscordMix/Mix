@@ -5,14 +5,14 @@ import Command, {TrivialArgType, RestrictGroup, IArgument} from "../../../comman
 import EmbedBuilder from "../../../builders/embed-builder";
 import Utils from "../../../core/utils";
 
-type CliArgs = {
+type Args = {
     readonly command: string;
 }
 
 /**
  * @extends Command
  */
-export default class CliCommand extends Command<CliArgs> {
+export default class CliCommand extends Command<Args> {
     readonly meta = {
         name: "cli",
         description: "Access the local machine's CLI"
@@ -33,7 +33,7 @@ export default class CliCommand extends Command<CliArgs> {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public async run(context: Context, args: CliArgs): Promise<void> {
+    public async run(x: Context, args: Args): Promise<void> {
         const started: number = Date.now();
 
         exec(args.command, (error, stdout: string, stderror: string) => {
@@ -44,14 +44,24 @@ export default class CliCommand extends Command<CliArgs> {
             const embed: EmbedBuilder = new EmbedBuilder();
 
             embed.footer(`Evaluated in ${(Date.now() - started)}ms`);
-            embed.field(`Input`, new MsgBuilder().codeBlock(args.command, "js").build());
+
+            embed.field(`Input`, new MsgBuilder()
+                .block("js")
+                .add(args.command)
+                .block()
+                .build());
 
             embed.field("Output",
-                new MsgBuilder().codeBlock(Utils.escapeText(result, context.bot.client.token), "js").build()
-            )
-            .color("#36393f");
+                new MsgBuilder()
+                    .block("js")
+                    .add(Utils.escapeText(result, x.bot.client.token))
+                    .block()
+                    .build()
+            );
 
-            context.send(embed.build());
+            embed.color("#36393f");
+
+            x.send(embed.build());
         });
     }
 };

@@ -5,7 +5,7 @@ import Context from "../../../commands/command-context";
 import Service from "../../../services/service";
 import MsgBuilder from "../../../builders/msg-builder";
 
-interface IReflectArgs {
+interface Args {
     readonly type: ReflectDataType;
 }
 
@@ -34,7 +34,7 @@ export default class ReflectCommand extends Command {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public run(x: Context, args: IReflectArgs): IAction<IMessageActionArgs> {
+    public run(x: Context, args: Args): IAction<IMessageActionArgs> {
         switch (args.type) {
             case ReflectDataType.Services: {
                 let services: string = "";
@@ -45,7 +45,11 @@ export default class ReflectCommand extends Command {
                     }
                 }
 
-                const result: string = new MsgBuilder().codeBlock(services, "diff").build();
+                const result: string = new MsgBuilder()
+                    .block("diff")
+                    .add(services)
+                    .block()
+                    .build();
 
                 return {
                     type: ActionType.Message,

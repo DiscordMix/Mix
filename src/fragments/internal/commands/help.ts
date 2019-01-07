@@ -12,10 +12,10 @@ export default class HelpCommand extends Command {
         description: "View available commands and their descriptions"
     };
 
-    public async run(context: Context): Promise<void> {
+    public async run(x: Context): Promise<void> {
         // TODO: Decorator commands broke it (can't .map through a Map)
 
-        const commandMap: ReadonlyCommandMap = context.bot.commandStore.getAll();
+        const commandMap: ReadonlyCommandMap = x.bot.commandStore.getAll();
         const commands: Command[] = [];
 
         for (let [base, command] of commandMap) {
@@ -28,21 +28,21 @@ export default class HelpCommand extends Command {
             .map((command: Command) => `**${command.meta.name}**: ${command.meta.description}`)
             .join("\n");
 
-        if (context.bot.options.dmHelp) {
-            await (await context.sender.createDM()).send(new RichEmbed()
+        if (x.bot.options.dmHelp) {
+            await (await x.sender.createDM()).send(new RichEmbed()
                 .setColor("GREEN")
                 .setDescription(commandsString)).catch(async (error: Error) => {
                     
                 if (error.message === "Cannot send messages to this user") {
-                    await context.fail("You're not accepting direct messages.");
+                    await x.fail("You're not accepting direct messages.");
                 }
                 else {
-                    await context.fail(`I was unable to send you my commands. (${error.message})`);
+                    await x.fail(`I was unable to send you my commands. (${error.message})`);
                 }
             });
         }
         else {
-            await context.ok(commandsString, "Help - Available Commands");
+            await x.ok(commandsString, "Help - Available Commands");
         }
     }
 };

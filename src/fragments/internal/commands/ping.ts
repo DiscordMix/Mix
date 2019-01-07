@@ -14,7 +14,7 @@ export default class PingCommand extends Command {
         cooldown: 1
     };
 
-    public async run(context: Context): Promise<void> {
-        await context.ok(`:ping_pong: Beep Boop! ${Math.round(context.bot.client.ping)}ms`); // TODO: Missing heartbeat
+    public async run(x: Context): Promise<void> {
+        await x.ok(`:ping_pong: Beep Boop! ${Math.round(x.bot.client.ping)}ms`); // TODO: Missing heartbeat
     }
 }

@@ -17,8 +17,8 @@ export default class RestartCommand extends Command {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public async run(context: Context): Promise<void> {
-        await context.ok("Restarting the bot");
-        await context.bot.restart();
+    public async run(x: Context): Promise<void> {
+        await x.ok("Restarting the bot");
+        await x.bot.restart();
     }
 }

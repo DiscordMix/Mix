@@ -668,4 +668,8 @@ export default abstract class Utils {
     public static getMemberIdentifier(member: GuildMember): string {
         return Utils.getUserIdentifier(member.user);
     }
+
+    public static hash(id: Snowflake, max: number, precision: number = 6): number {
+        return parseInt(id.substr(0, precision)) % max;
+    }
 }

@@ -365,6 +365,13 @@ describe("Utils", () => {
             assert.throws(() => Utils.spreadTime(true as any));
         });
     });
+
+    describe("hash()", () => {
+        it("should hash a snowflake", () => {
+            expect(Utils.hash("285578743324606482", 100)).to.be.a("number").and.to.equal(78);
+            expect(Utils.hash("531932528131702785", 100)).to.be.a("number").and.to.equal(32);
+        });
+    });
 });
 
 describe("Rgb", () => {

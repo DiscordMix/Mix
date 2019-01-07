@@ -15,6 +15,7 @@ import {Message} from "discord.js";
 import Log from "../core/log";
 import SwitchParser, {ICommandSwitch} from "./switch-parser";
 import Patterns from "../core/patterns";
+import {TrueDelegates, FalseDelegates} from "../core/constants";
 
 export interface IResolveArgumentsOptions {
     readonly arguments: RawArguments;
@@ -389,12 +390,12 @@ export default abstract class CommandParser {
      * @return {boolean | null}
      */
     protected static parseBoolean(value: string): boolean | null {
-        const lowerCaseValue: string = value.toString().toLowerCase();
+        value = value.toString().toLowerCase();
 
-        if (lowerCaseValue == "true" || lowerCaseValue == "1" || lowerCaseValue == "yes") {
+        if (TrueDelegates.includes(value)) {
             return true;
         }
-        else if (lowerCaseValue == "false" || lowerCaseValue == "0" || lowerCaseValue == "no") {
+        else if (FalseDelegates.includes(value)) {
             return false;
         }
 

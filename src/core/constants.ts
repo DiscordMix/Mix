@@ -127,3 +127,7 @@ export const DefaultSettingPaths: ISettingsPaths = {
     languages: "languages",
     tasks: "tasks"
 };
+
+export const TrueDelegates: string[] = ["true", "1", "yes"];
+
+export const FalseDelegates: string[] = ["false", "0", "no"];

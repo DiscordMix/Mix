@@ -3,7 +3,7 @@ import {IBuilder} from "./builder";
 export interface IMsgBuilder extends IBuilder<string> {
     add(text: string): this;
     addLine(text: string): this;
-    codeBlock(code: string | null, language: string | null): this;
+    codeBlock(language?: string): this;
     code(code: string): this;
     italic(text: string): this;
     bold(text: string): this;
@@ -49,19 +49,14 @@ export default class MsgBuilder implements IMsgBuilder {
     }
 
     /**
-     * @param {string | null} [language=null]
-     * @param {string | null} [code=null]
+     * @param {string | undefined} language
      * @return {MsgBuilder}
      */
-    public codeBlock(code: string | null = null, language: string | null = null): this {
+    public codeBlock(language?: string): this {
         let result = "```";
 
-        if (language !== null) {
+        if (language !== undefined) {
             result += `${language}\n`;
-        }
-
-        if (code !== null) {
-            result += `${code}\n\`\`\``;
         }
 
         return this.add(result);

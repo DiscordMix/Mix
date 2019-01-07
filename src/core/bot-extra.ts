@@ -1,6 +1,6 @@
 import {UserGroup} from "../commands/command";
 import {Snowflake, Message, Client} from "discord.js";
-import {IArgumentResolver, ICustomArgType, Reducer, IDisposable, PromiseOr, ISettings, ICommandStore, IConsoleInterface, ActionInterpreter, ITaskManager, IStore, Settings, IActionInterpreter} from "..";
+import {IArgumentResolver, ICustomArgType, Reducer, IDisposable, PromiseOr, ISettings, ICommandStore, IConsoleInterface, ActionInterpreter, ITaskManager, IStore, IActionInterpreter} from "..";
 import {EventEmitter} from "events";
 import {ITimeoutAttachable} from "./helpers";
 import {ITemp} from "./temp";

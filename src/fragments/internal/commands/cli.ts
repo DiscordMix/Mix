@@ -36,6 +36,7 @@ export default class CliCommand extends Command<Args> {
     public async run(x: Context, args: Args): Promise<void> {
         const started: number = Date.now();
 
+        // TODO: Consider returning a promise?
         exec(args.command, (error, stdout: string, stderror: string) => {
             let result: string = stdout || stderror;
 

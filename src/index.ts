@@ -31,7 +31,7 @@ import TimeParser from "./time/time-parser";
 import TimeSuffixType from "./time/time-suffix-type";
 import Utils from "./core/utils";
 import Permission from "./core/permission";
-import ChatEnvironment from "./core/chat-environment";
+import ChatEnv from "./core/chat-env";
 import List from "./collections/collection";
 import SetupHelper, {ISetupHelperResult, ISetupHelper} from "./core/setup-helper";
 import Service, {IServiceOptions, ForkedService, GenericService, ProcessMsgType, IProcessMsg, IGenericService, IService, IForkedService} from "./services/service";
@@ -117,7 +117,7 @@ export {
     TimeSuffixType,
     Utils,
     Permission,
-    ChatEnvironment,
+    ChatEnv,
     Patterns,
     DiscordEvent,
     EBotEvents,

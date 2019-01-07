@@ -1,4 +1,4 @@
-import ChatEnvironment from "../core/chat-environment";
+import ChatEnv from "../core/chat-env";
 import Context from "./command-context";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
@@ -71,7 +71,7 @@ export interface IArgument {
 export interface IConstraints {
     selfPermissions: any[];
     issuerPermissions: any[];
-    environment: ChatEnvironment;
+    environment: ChatEnv;
     auth: number;
     specific: Array<string | RestrictGroup>;
     cooldown: number;
@@ -80,7 +80,7 @@ export interface IConstraints {
 export const DefaultCommandRestrict: IConstraints = {
     auth: 0,
     cooldown: 0,
-    environment: ChatEnvironment.Anywhere,
+    environment: ChatEnv.Anywhere,
     issuerPermissions: [],
     selfPermissions: [],
     specific: []

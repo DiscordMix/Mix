@@ -1,5 +1,5 @@
 import Log from "../core/log";
-import ChatEnvironment from "../core/chat-environment";
+import ChatEnv from "../core/chat-env";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import CommandStore, {CommandManagerEvent} from "./command-store";
 import Context from "./command-context";
@@ -386,22 +386,22 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {ChatEnvironment} environment
+     * @param {ChatEnv} environment
      * @param {string} type
      * @param {boolean} nsfw
      * @return {boolean}
      */
-    public static validateChannelTypeEnv(environment: ChatEnvironment, type: string, nsfw: boolean): boolean {
-        if (environment === ChatEnvironment.Anywhere) {
+    public static validateChannelTypeEnv(environment: ChatEnv, type: string, nsfw: boolean): boolean {
+        if (environment === ChatEnv.Anywhere) {
             return true;
         }
-        else if (environment === ChatEnvironment.Private && type === "dm") {
+        else if (environment === ChatEnv.Private && type === "dm") {
             return true;
         }
-        else if (environment === ChatEnvironment.NSFW && type === "text") {
+        else if (environment === ChatEnv.NSFW && type === "text") {
             return true;
         }
-        else if (environment === ChatEnvironment.Guild && type === "text") {
+        else if (environment === ChatEnv.Guild && type === "text") {
             return true;
         }
 
@@ -409,11 +409,11 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {ChatEnvironment|ChatEnvironment[]} environment
+     * @param {ChatEnv|ChatEnv[]} environment
      * @param {string} channelType
      * @return {boolean}
      */
-    public static validateEnvironment(environment: ChatEnvironment, channelType: string, nsfw: boolean): boolean {
+    public static validateEnvironment(environment: ChatEnv, channelType: string, nsfw: boolean): boolean {
         if (Array.isArray(environment)) {
             for (let i: number = 0; i < environment.length; i++) {
                 if (CommandHandler.validateChannelTypeEnv(environment, channelType, nsfw)) {

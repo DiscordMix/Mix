@@ -187,6 +187,6 @@ export default abstract class Log {
     }
 
     public static get notImplemented(): Error {
-        return Log.notImplemented;
+        return new Error("Not yet implemented");
     }
 }

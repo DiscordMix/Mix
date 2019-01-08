@@ -1,6 +1,6 @@
 import Task from "./task";
 import Log from "../core/log";
-import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
+import Loader, {IPackage} from "../fragments/loader";
 import Bot from "../core/bot";
 import Utils from "../core/utils";
 import {PromiseOr} from "..";
@@ -226,13 +226,13 @@ export default class TaskManager implements ITaskManager {
      * @return {Promise<number>} The amount of tasks loaded
      */
     public async loadAll(path: string): Promise<number> {
-        const candidates: string[] | null = await FragmentLoader.pickupCandidates(path, true);
+        const candidates: string[] | null = await Loader.scan(path, true);
 
         if (candidates === null) {
             return 0;
         }
 
-        const loaded: IPackage[] | null = await FragmentLoader.loadMultiple(candidates);
+        const loaded: IPackage[] | null = await Loader.loadMultiple(candidates);
 
         if (loaded !== null) {
             for (let i: number = 0; i < loaded.length; i++) {

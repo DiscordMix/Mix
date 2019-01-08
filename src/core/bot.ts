@@ -24,7 +24,7 @@ import CommandHandler from "../commands/command-handler";
 import fs from "fs";
 import {performance} from "perf_hooks";
 import path from "path";
-import FragmentLoader, {IPackage} from "../fragments/fragment-loader";
+import Loader, {IPackage} from "../fragments/loader";
 import Language from "../language/language";
 
 import {
@@ -450,7 +450,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.emit(EBotEvents.LoadingInternalFragments);
 
         // Load & enable internal fragments
-        const internalFragmentCandidates: string[] | null = await FragmentLoader.pickupCandidates(InternalFragmentsPath);
+        const internalFragmentCandidates: string[] | null = await Loader.scan(InternalFragmentsPath);
 
         if (!internalFragmentCandidates) {
             throw new Error(BotMessages.SETUP_FAIL_LOAD_FRAGMENTS);
@@ -463,7 +463,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             Log.warn(BotMessages.SETUP_NO_FRAGMENTS_DETECTED);
         }
 
-        const internalFragments: IPackage[] | null = await FragmentLoader.loadMultiple(internalFragmentCandidates);
+        const internalFragments: IPackage[] | null = await Loader.loadMultiple(internalFragmentCandidates);
 
         if (!internalFragments || internalFragments.length === 0) {
             Log.warn(BotMessages.SETUP_NO_FRAGMENTS_LOADED);
@@ -483,7 +483,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.emit(EBotEvents.LoadingServices);
 
         // Load & enable services
-        const consumerServiceCandidates: string[] | null = await FragmentLoader.pickupCandidates(this.settings.paths.services);
+        const consumerServiceCandidates: string[] | null = await Loader.scan(this.settings.paths.services);
 
         if (!consumerServiceCandidates || consumerServiceCandidates.length === 0) {
             Log.verbose(`[Bot.setup] No services were detected under '${this.settings.paths.services}'`);
@@ -491,7 +491,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         else {
             Log.verbose(`[Bot.setup] Loading ${consumerServiceCandidates.length} service(s)`);
 
-            const servicesLoaded: IPackage[] | null = await FragmentLoader.loadMultiple(consumerServiceCandidates);
+            const servicesLoaded: IPackage[] | null = await Loader.loadMultiple(consumerServiceCandidates);
 
             if (!servicesLoaded || servicesLoaded.length === 0) {
                 Log.warn(BotMessages.SETUP_NO_SERVICES_LOADED);
@@ -510,7 +510,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.emit(EBotEvents.LoadingCommands);
 
         // Load & enable consumer command fragments
-        const consumerCommandCandidates: string[] | null = await FragmentLoader.pickupCandidates(this.settings.paths.commands);
+        const consumerCommandCandidates: string[] | null = await Loader.scan(this.settings.paths.commands);
 
         if (!consumerCommandCandidates || consumerCommandCandidates.length === 0) {
             Log.warn(`[Bot.setup] No commands were detected under '${this.settings.paths.commands}'`);
@@ -518,7 +518,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         else {
             Log.verbose(`[Bot.setup] Loading ${consumerCommandCandidates.length} command(s)`);
 
-            const commandsLoaded: IPackage[] | null = await FragmentLoader.loadMultiple(consumerCommandCandidates);
+            const commandsLoaded: IPackage[] | null = await Loader.loadMultiple(consumerCommandCandidates);
 
             if (!commandsLoaded || commandsLoaded.length === 0) {
                 Log.warn(BotMessages.SETUP_NO_COMMANDS_LOADED);
@@ -677,8 +677,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         command = command as Command;
 
         const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
-            arguments: CommandParser.getArguments(content, command.arguments),
-            schema: command.arguments,
+            arguments: CommandParser.getArguments(content, command.args),
+            schema: command.args,
 
             // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
             message: referer,
@@ -921,8 +921,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
-            arguments: CommandParser.getArguments(content, command.arguments),
-            schema: command.arguments,
+            arguments: CommandParser.getArguments(content, command.args),
+            schema: command.args,
 
             // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
             message,

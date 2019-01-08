@@ -19,6 +19,9 @@ export interface IStatsCounter {
     readonly stats: IBotStats;
 }
 
+/**
+ * Allows detailed tracking of statistics and interactions of the bot
+ */
 export default class StatCounter implements IStatsCounter {
     public stats: IBotStats;
 

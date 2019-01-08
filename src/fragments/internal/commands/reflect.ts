@@ -19,7 +19,7 @@ export default class ReflectCommand extends Command {
         description: "Access bot's internal state"
     };
 
-    readonly arguments: IArgument[] = [
+    readonly args: IArgument[] = [
         {
             name: "type",
             description: "The data to inspect",

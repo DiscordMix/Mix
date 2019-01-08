@@ -14,6 +14,9 @@ export interface ITemp {
     store(data: any, file: string): PromiseOr<this>;
 }
 
+/**
+ * Allows management of temporary data storage
+ */
 export default class Temp implements ITemp {
     protected id?: string;
     protected resolvedPath?: string;

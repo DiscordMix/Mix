@@ -135,6 +135,12 @@ export default abstract class Utils {
         return Math.floor(Math.random() * max) + min;
     }
 
+    /**
+     * Performs the binary search algorithm on the host array
+     * @param {number[]} subject
+     * @param {number[]} host
+     * @return {IBinarySearchResult}
+     */
     public static binarySearch(subject: number, host: number[]): IBinarySearchResult {
         if (typeof subject !== "number" || !Array.isArray(host)) {
             throw new Error("[Utils] Expecting subject to be a number and host to be an array of numbers");
@@ -199,6 +205,10 @@ export default abstract class Utils {
         return host.indexOf(pool[0]);
     }
 
+    /**
+     * Creates an array of numbers
+     * @param {number} amount The amount of elements
+     */
     public static populate(amount: number): number[] {
         if (typeof amount !== "number") {
             throw new Error("Expecting amount to be a number");
@@ -465,6 +475,7 @@ export default abstract class Utils {
     }
 
     /**
+     * Uses random number generation to assert chance
      * @param {number} range
      * @return {boolean}
      */
@@ -477,6 +488,7 @@ export default abstract class Utils {
     }
 
     /**
+     * Determine if a guild member has moderation powers such as managing messages and/or kicking members
      * @param {GuildMember} member
      * @return {boolean}
      */
@@ -521,6 +533,7 @@ export default abstract class Utils {
     }
 
     /**
+     * Attempt to find a default or general channel in the specified guild
      * @param {Guild} guild
      * @returns {TextChannel | null}
      */
@@ -582,6 +595,7 @@ export default abstract class Utils {
     }
 
     /**
+     * Extract the object keys of a TypeScript enum
      * @param {*} enumerator
      * @return {string[]}
      */
@@ -614,7 +628,7 @@ export default abstract class Utils {
     }
 
     /**
-     * Clean a string from mentions and token
+     * Clean a string from mentions and tokens
      * @param {string} text
      * @param {string} token
      * @return {string} The escaped text
@@ -669,6 +683,13 @@ export default abstract class Utils {
         return Utils.getUserIdentifier(member.user);
     }
 
+    /**
+     * Hash a snowflake into a unique, persistent number
+     * @param {Snowflake} id
+     * @param {number} max
+     * @param {number} [precision=6]
+     * @return {number} A number lower or equal to the max
+     */
     public static hash(id: Snowflake, max: number, precision: number = 6): number {
         return parseInt(id.substr(0, precision)) % max;
     }

@@ -18,7 +18,7 @@ export default class EvalCommand extends Command<Args> {
         description: "Evaluate code"
     };
 
-    readonly arguments: IArgument[] = [
+    readonly args: IArgument[] = [
         {
             name: "code",
             description: "The code to evaluate",
@@ -38,12 +38,12 @@ export default class EvalCommand extends Command<Args> {
     };
 
     public async run(x: Context, args: Args): Promise<void> {
-        const code: string = args.code;
         const started: number = Date.now();
 
         let result: string;
+
         try {
-            result = await eval(code);
+            result = await eval(args.code);
         } catch (err) {
             result = err.message;
         }
@@ -53,11 +53,12 @@ export default class EvalCommand extends Command<Args> {
         }
 
         const embed: EmbedBuilder = new EmbedBuilder();
+
         embed.footer(`Evaluated in ${(Date.now() - started)}ms`);
 
         embed.field(`Input`, new MsgBuilder()
             .block("js")
-            .append(code)
+            .append(args.code)
             .block()
             .build());
 

@@ -1,5 +1,5 @@
 import {EventEmitter} from "events";
-import FragmentLoader, {IPackage, ILivePackage} from "./fragment-loader";
+import Loader, {IPackage, ILivePackage} from "./loader";
 import Command, {DefaultCommandRestrict} from "../commands/command";
 import Bot from "../core/bot";
 import {IFragment} from "./fragment";
@@ -81,7 +81,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
             const command: Command = new (packg.module as any)();
 
             // TODO: Repeated below, somehow merge for efficiency.
-            if (!FragmentLoader.validate(command)) {
+            if (!Loader.validate(command)) {
                 Log.warn(`[FragmentManager.enable] Refusing to enable fragment with invalid name '${command.meta.name}'; Please note fragment names cannot contain spaces`);
     
                 return false;
@@ -131,7 +131,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
             service = service as Service | ForkedService;
 
             // TODO: Repeated below, somehow merge for efficiency.
-            if (!FragmentLoader.validate(service)) {
+            if (!Loader.validate(service)) {
                 Log.warn(`[FragmentManager.enable] Refusing to enable fragment with invalid name '${service.meta.name}'; Please note fragment names cannot contain spaces`);
     
                 return false;

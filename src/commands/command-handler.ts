@@ -114,7 +114,7 @@ export default class CommandHandler implements ICommandHandler {
             context.fail("You're not allowed to use that command");
         }
         else if (!CommandParser.checkArguments({
-            schema: command.arguments,
+            schema: command.args,
             arguments: rawArgs,
             message: context.msg,
             types: context.bot.argumentTypes,
@@ -212,7 +212,7 @@ export default class CommandHandler implements ICommandHandler {
             arguments: rawArgs,
             message: context.msg,
             resolvers: context.bot.argumentResolvers,
-            schema: command.arguments
+            schema: command.args
         });
 
         // Do not execute command if arguments failed to resolve

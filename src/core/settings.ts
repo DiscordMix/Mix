@@ -5,20 +5,53 @@ import BotMessages from "./messages";
 import {DefaultSettingPaths} from "./constants";
 
 export interface ISettingsGeneral {
+    /**
+     * The token used to login to Discord
+     */
     readonly token: string;
+
+    /**
+     * The prefixes that will trigger commands
+     */
     readonly prefix: string[];
 }
 
 export interface ISettingsKeys {
+    /**
+     * The API key for DiscordBotList.org
+     */
     readonly dbl?: string;
+
+    /**
+     * The API key for BotsForDiscord.com
+     */
     readonly bfd?: string;
 }
 
 export interface ISettingsPaths {
+    /**
+     * The path to the commands directory
+     */
     readonly commands: string;
+
+    /**
+     * The path to the plugins directory
+     */
     readonly plugins: string;
+
+    /**
+     * The path to the services directory
+     */
     readonly services: string;
+
+    /**
+     * The path to the languages directory
+     */
     readonly languages: string;
+
+    /**
+     * The path to the tasks directory
+     */
     readonly tasks: string;
 }
 

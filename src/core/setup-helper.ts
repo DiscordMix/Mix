@@ -3,6 +3,9 @@ import Context from "../commands/command-context";
 import Log from "./log";
 import {PromiseOr} from "..";
 
+/**
+ * The type of action performed by a setup helper
+ */
 export enum SetupHelperActionType {
     Input,
     Question

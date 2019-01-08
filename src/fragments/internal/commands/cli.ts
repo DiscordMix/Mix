@@ -20,7 +20,7 @@ export default class CliCommand extends Command<Args> {
 
     readonly aliases = ["exec", "exe"];
 
-    readonly arguments: IArgument[] = [
+    readonly args: IArgument[] = [
         {
             name: "command",
             description: "The command to execute",

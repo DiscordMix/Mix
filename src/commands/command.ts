@@ -106,7 +106,7 @@ export interface IGenericCommand<T extends object = object> extends IFragment, I
     readonly maxArguments: number;
     readonly meta: IFragmentMeta;
     readonly aliases: string[];
-    readonly arguments: IArgument[];
+    readonly args: IArgument[];
     readonly constraints: IConstraints;
     readonly exclude: string[];
     readonly singleArg: boolean;
@@ -118,7 +118,7 @@ export abstract class GenericCommand<T extends object = object> implements IGene
     public readonly abstract meta: IFragmentMeta;
 
     public readonly aliases: string[] = [];
-    public readonly arguments: IArgument[] = [];
+    public readonly args: IArgument[] = [];
     public readonly constraints: IConstraints = Object.assign({}, DefaultCommandRestrict);
     public readonly exclude: string[] = [];
     public readonly singleArg: boolean = false;
@@ -160,14 +160,14 @@ export abstract class GenericCommand<T extends object = object> implements IGene
      * @return {number} The minimum amount of required arguments that this command accepts
      */
     public get minArguments(): number {
-        return this.arguments.filter((arg: IArgument) => arg.required).length;
+        return this.args.filter((arg: IArgument) => arg.required).length;
     }
 
     /**
      * @return {number} The maximum amount of arguments that this command accepts
      */
     public get maxArguments(): number {
-        return this.arguments.length;
+        return this.args.length;
     }
 
     /**

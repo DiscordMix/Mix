@@ -15,7 +15,7 @@ export default class UsageCommand extends Command<Args> {
         description: "View the usage of a command"
     };
 
-    readonly arguments: IArgument[] = [
+    readonly args: IArgument[] = [
         {
             name: "command",
             type: TrivialArgType.String,

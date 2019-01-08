@@ -3,7 +3,7 @@ import Bot from "../core/bot";
 import Command, {GenericCommand} from "./command";
 import Context from "./command-context";
 import {Snowflake} from "discord.js";
-import FragmentLoader, {IPackage, ILivePackage} from "../fragments/fragment-loader";
+import Loader, {IPackage, ILivePackage} from "../fragments/loader";
 import Utils from "../core/utils";
 import path from "path";
 import {PromiseOr} from "..";
@@ -125,7 +125,7 @@ export default class CommandStore {
         }
 
         const packg: CommandPackage = this.commands.get(commandName) as CommandPackage;
-        const reloadedPackage: IPackage | null = await FragmentLoader.reload(packg.path) as IPackage | null;
+        const reloadedPackage: IPackage | null = await Loader.reload(packg.path) as IPackage | null;
 
         if (reloadedPackage === null) {
             return false;
@@ -292,7 +292,7 @@ export default class CommandStore {
         else if (this.isReleased(name)) {
             // TODO: Re-load command here
 
-            const packg: IPackage | null = await FragmentLoader.load(this.released.get(name) as string);
+            const packg: IPackage | null = await Loader.load(this.released.get(name) as string);
 
             if (packg !== null && (packg.module as any).prototype instanceof Command) {
                 if (!await this.bot.fragments.enable(packg)) {

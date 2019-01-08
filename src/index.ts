@@ -60,11 +60,13 @@ import {IBot, EBotEvents} from "./core/bot-extra";
 import {TimeMachine, ITimeMachine} from "./state/time-machine";
 import Delta from "./state/delta";
 import {ICommandEvent} from "./events/command-event";
+import Loader from "./fragments/loader";
 
 export {
     // Fragments
     IFragment,
     IFragmentMeta,
+    Loader,
 
     // Commands
     ArgumentParser,

@@ -1,4 +1,5 @@
 import {ISerializer} from "./serializer";
+import {Log} from "..";
 
 export enum CommonUrlProtocols {
     Http = "http",
@@ -55,6 +56,6 @@ export default class UrlSerializer<ParametersType = any, UrlType extends IUrl = 
     
     public deserialize(serializedData: string): UrlType | null {
         // TODO: Implement
-        throw new Error("Method not implemented.");
+        throw Log.notImplemented;
     }
 }

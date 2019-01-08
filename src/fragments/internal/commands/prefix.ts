@@ -1,5 +1,6 @@
 import Context from "../../../commands/command-context";
 import Command from "../../../commands/command";
+import {Log} from "../../..";
 
 /**
  * @extends Command
@@ -11,12 +12,13 @@ export default class PrefixCommand extends Command {
     };
 
     // TODO: Update
-    readonly args = {
+    /* readonly args = {
         prefix: "!string"
-    };
+    }; */
 
     public async run(x: Context): Promise<void> {
-        // TODO:
-        await x.ok("Command not yet implemented.");
+        // TODO: Implement
+
+        throw Log.notImplemented;
     }
 };

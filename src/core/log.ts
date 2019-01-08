@@ -185,4 +185,8 @@ export default abstract class Log {
 
         Log.compose(options);
     }
+
+    public static get notImplemented(): Error {
+        return Log.notImplemented;
+    }
 }

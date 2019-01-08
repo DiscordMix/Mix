@@ -78,9 +78,9 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
      * @return {this}
      */
     public dispose(): this {
-        Log.warn("[Pagination.dispose] Not yet implemented");
+        // TODO: Implement
 
-        return this;
+        throw Log.notImplemented;
     }
 
     /**

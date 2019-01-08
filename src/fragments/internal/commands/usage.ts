@@ -1,6 +1,7 @@
 import {IArgument, default as Command, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import {IDecoratorCommand} from "../../../decorators/decorators";
+import {Log} from "../../..";
 
 interface Args {
     readonly command: string;
@@ -36,7 +37,7 @@ export default class UsageCommand extends Command<Args> {
 
         }
 
-        await x.fail("Not yet implemented");
+        throw Log.notImplemented;
 
         // TODO: New decorator commands broke it
         /* else if (targetCommand.arguments.length === 0) {

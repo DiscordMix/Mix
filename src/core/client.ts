@@ -7,8 +7,9 @@ import {Guild} from "discord.js";
 export type EventEmitterListener = (...args: any[]) => void;
 
 export interface IClient extends EventEmitter {
-    guilds: Dictionary<Snowflake, Guild>;
     on(event: DiscordEvent, listener: EventEmitterListener): this;
     once(event: DiscordEvent, listener: EventEmitterListener): this;
     emit(event: DiscordEvent, ...args: any[]): boolean;
+
+    readonly guilds: Dictionary<Snowflake, Guild>;
 }

@@ -9,7 +9,13 @@ export interface IMessageEditOptions {
     readonly imageUrl?: string;
 }
 
-export default class EditableMessage {
+export interface IEditableMessage {
+    edit(options: IMessageEditOptions): Promise<Message>;
+
+    readonly msg: Message;
+}
+
+export default class EditableMessage implements IEditableMessage {
     public readonly msg: Message;
 
     /**

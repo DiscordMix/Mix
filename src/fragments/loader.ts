@@ -57,9 +57,6 @@ export default abstract class Loader {
             };
         }
         catch (exception) {
-            // TODO: Was debugging I guess?
-            throw exception;
-
             Log.warn(`[Loader.load] There was an error while loading a fragment: ${exception}`);
 
             return null;

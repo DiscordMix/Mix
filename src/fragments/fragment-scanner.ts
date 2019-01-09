@@ -7,8 +7,10 @@ export interface IFragmentScanner {
 
 export default class FragmentScanner implements IFragmentScanner {
     protected patterns: RegExp[];
+    protected basePath: string;
 
-    public constructor() {
+    public constructor(basePath: string) {
+        this.basePath = basePath;
         this.patterns = [];
     }
 

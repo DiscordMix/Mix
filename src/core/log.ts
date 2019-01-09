@@ -1,5 +1,6 @@
 import fs from "fs";
 import colors from "colors";
+import BotMessages from "./messages";
 
 export enum LogLevel {
     None = -1,
@@ -187,6 +188,6 @@ export default abstract class Log {
     }
 
     public static get notImplemented(): Error {
-        return new Error("Not yet implemented");
+        return new Error(BotMessages.NOT_IMPLEMENTED);
     }
 }

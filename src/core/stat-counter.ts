@@ -1,6 +1,17 @@
 export interface IBotStats {
+    /**
+     * The amount of commands intercepted and handled by the command handler
+     */
     commandsHandled: number;
+
+    /**
+     * The amount of commands that failed to be executed
+     */
     commandsFailed: number;
+
+    /**
+     * The amount of messages that the bot has seen in the current session
+     */
     messagesSeen: number;
 }
 

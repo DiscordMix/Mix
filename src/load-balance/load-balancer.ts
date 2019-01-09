@@ -11,6 +11,9 @@ export interface ILoadBalancer extends EventEmitter {
     readonly requestsPerHour: number;
 }
 
+/**
+ * @extends EventEmitter
+ */
 export default class LoadBalancer extends EventEmitter implements ILoadBalancer {
     public readonly threshold: number;
 

@@ -35,7 +35,8 @@ enum BotMessages {
     STORE_EXPECT_REDUCER_FUNC = "[Store] Expecting reducer to be a function",
     STORE_REDUCER_NO_UNDEFINED = "[Store] Reducer must return a state, otherwise return null to indicate no changes",
 
-    INTENTIONAL_ERROR = "Intentionally thrown error"
+    INTENTIONAL_ERROR = "Intentionally thrown error",
+    NOT_IMPLEMENTED = "Not yet implemented"
 }
 
 export default BotMessages;

@@ -1,6 +1,5 @@
 import {expect} from "chai";
 import assert = require("assert");
-import BotMessages from "../core/messages";
 import {TestStoreActionType, IStoreAction, ITestState, Reducer} from "../state/store";
 import {testBot} from "./test-bot";
 import TestUtils, {ExcludeParam} from "./test-utils";

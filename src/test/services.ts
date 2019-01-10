@@ -5,7 +5,11 @@ import TestUtils, {ExcludeParam} from "./test-utils";
 describe("Services", () => {
     it("should register services", () => {
         expect(testBot.services.contains("test")).to.be.a("boolean").and.to.equal(true);
-        expect(testBot.services.contains("fake")).to.be.a("boolean").and.to.equal(false);
+    
+        for (const item of TestUtils.makeParams(["test"])) {
+            expect(testBot.services.contains(item)).to.be.a("boolean").and.to.equal(false);
+        }
+
         expect(testBot.services.getAll().size).to.be.a("number").and.to.equal(3);
     });
 

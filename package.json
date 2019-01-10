@@ -27,7 +27,7 @@
         "watch": "tsc --watch",
         "build": "node build.js",
         "check": "tsc --noEmit",
-        "test": "npm run build && mocha dist/test/test-bot.js --timeout 5s --slow 1.5s",
+        "test": "npm run build && mocha dist/test/tests.js --timeout 5s --slow 1.5s",
         "webhook-test": "npm run build && node dist/test/webhook-test.js",
         "prepublish": "npm run build && npm test"
     },

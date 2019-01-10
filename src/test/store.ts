@@ -3,6 +3,7 @@ import assert = require("assert");
 import BotMessages from "../core/messages";
 import {TestStoreActionType, IStoreAction, ITestState, Reducer} from "../state/store";
 import {testBot} from "./test-bot";
+import TestUtils, {ExcludeParam} from "./test-utils";
 
 describe("Store", () => {
     it("should have undefined initial state", () => {
@@ -36,7 +37,7 @@ describe("Store", () => {
             return null;
         };
 
-        it("should add a valid reducer", () => {
+        it("should add reducers", () => {
             expect(testBot.store.addReducer(testReducer)).to.be.a("boolean").and.to.equal(true);
         });
 
@@ -45,25 +46,18 @@ describe("Store", () => {
         });
 
         it("should throw when passed invalid reducers", () => {
-            assert.throws(() => testBot.store.addReducer(null as any));
-            assert.throws(() => testBot.store.addReducer(undefined as any));
-            assert.throws(() => testBot.store.addReducer([] as any));
-            assert.throws(() => testBot.store.addReducer({} as any));
-            assert.throws(() => testBot.store.addReducer("hello" as any));
-            assert.throws(() => testBot.store.addReducer(0 as any));
-            assert.throws(() => testBot.store.addReducer(1 as any));
-            assert.throws(() => testBot.store.addReducer(true as any));
-            assert.throws(() => testBot.store.addReducer(false as any));
+            for (const param of TestUtils.makeParams()) {
+                assert.throws(() => testBot.store.addReducer(param));
+            }
         });
     });
 
     describe("dispatch()", () => {
         it("should throw on invalid parameters", () => {
-            assert.throws(() => testBot.store.dispatch("test" as any));
-            assert.throws(() => testBot.store.dispatch(undefined as any));
-            assert.throws(() => testBot.store.dispatch(null as any));
-            assert.throws(() => testBot.store.dispatch(false as any));
-            assert.throws(() => testBot.store.dispatch(true as any));
+            // TODO: Takes 2 arguments
+            for (const param of TestUtils.makeParams([ExcludeParam.Number])) {
+                assert.throws(() => testBot.store.dispatch(param));
+            }
         });
     });
 
@@ -85,15 +79,9 @@ describe("Store", () => {
         });
 
         it("should throw on invalid parameters", () => {
-            assert.throws(() => testBot.store.subscribe(1 as any));
-            assert.throws(() => testBot.store.subscribe(0 as any));
-            assert.throws(() => testBot.store.subscribe(false as any));
-            assert.throws(() => testBot.store.subscribe(true as any));
-            assert.throws(() => testBot.store.subscribe(null as any));
-            assert.throws(() => testBot.store.subscribe(undefined as any));
-            assert.throws(() => testBot.store.subscribe("hello" as any));
-            assert.throws(() => testBot.store.subscribe({} as any));
-            assert.throws(() => testBot.store.subscribe([] as any));
+            for (const param of TestUtils.makeParams()) {
+                assert.throws(() => testBot.store.subscribe(param));
+            }
         });
     });
 
@@ -103,13 +91,9 @@ describe("Store", () => {
         });
 
         it("should throw on invalid parameters", () => {
-            assert.throws(() => testBot.store.isSubscribed(true as any));
-            assert.throws(() => testBot.store.isSubscribed(false as any));
-            assert.throws(() => testBot.store.isSubscribed([] as any));
-            assert.throws(() => testBot.store.isSubscribed({} as any));
-            assert.throws(() => testBot.store.isSubscribed("hello" as any));
-            assert.throws(() => testBot.store.isSubscribed(1 as any));
-            assert.throws(() => testBot.store.isSubscribed(0 as any));
+            for (const param of TestUtils.makeParams()) {
+                assert.throws(() => testBot.store.isSubscribed(param));
+            }
         });
     });
 });

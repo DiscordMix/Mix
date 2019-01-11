@@ -1,5 +1,5 @@
-import {IBuilder} from "./builder";
 import {Log} from "..";
+import {IBuilder} from "./builder";
 
 export interface IMsgBuilder<T> extends IBuilder<string> {
     append(text: string): this;

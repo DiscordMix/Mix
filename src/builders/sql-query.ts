@@ -1,15 +1,15 @@
 import {IBuilder} from "./builder";
 
 // TODO: Move this into it's own thing
-export type SqlQueryOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
+export type SqlOperator = "=" | "!=" | ">" | "<" | ">=" | "<=" | "BETWEEN" | "LIKE" | "IN";
 
-export interface ISqlQueryWhere {
+export interface ISqlWhere {
     readonly property: string;
     readonly value: any;
-    readonly operator?: SqlQueryOperator;
+    readonly operator?: SqlOperator;
 }
 
-export interface ISqlQueryBuilder<T> extends IBuilder<string> {
+export interface ISqlQueryBuilder<T = any> extends IBuilder<string> {
     where(query: Partial<T>): this;
     limit(amount: number): this;
     select(properties: string[]): this;
@@ -17,12 +17,27 @@ export interface ISqlQueryBuilder<T> extends IBuilder<string> {
     insert(values: T | Partial<T>): this;
 }
 
-export default class SqlQuery<T extends object> implements ISqlQueryBuilder<T> {
+export default class SqlQuery<T = any> implements ISqlQueryBuilder<T> {
+    /**
+     * @param value
+     * @return {string}
+     */
+    protected static getValueQueryForm(value: any): string {
+        if (typeof (value) === "string") {
+            return `"${value}"`;
+        }
+        else if (typeof (value) === "number") {
+            return value.toString();
+        }
+
+        return value.toString();
+    }
+
     protected readonly table: string;
 
     protected prefix: string;
     protected suffix?: string;
-    protected wheres: ISqlQueryWhere[];
+    protected wheres: ISqlWhere[];
     protected limitAmount?: number;
 
     /**
@@ -41,10 +56,10 @@ export default class SqlQuery<T extends object> implements ISqlQueryBuilder<T> {
     public where(query: Partial<T>): this {
         const searchKeys: string[] = Object.keys(query);
 
-        for (let i: number = 0; i < searchKeys.length; i++) {
+        for (const key of searchKeys) {
             this.wheres.push({
-                property: searchKeys[i],
-                value: query[searchKeys[i]]
+                property: key,
+                value: query[key]
             });
         }
 
@@ -79,8 +94,8 @@ export default class SqlQuery<T extends object> implements ISqlQueryBuilder<T> {
         const valuesKeys: string[] = Object.keys(values);
         const setAddition: string[] = [];
 
-        for (let i: number = 0; i < valuesKeys.length; i++) {
-            setAddition.push(`${valuesKeys[i]} = ${values[valuesKeys[i]]}`);
+        for (const key of valuesKeys) {
+            setAddition.push(`${key} = ${values[key]}`);
         }
 
         this.prefix = "UPDATE ";
@@ -98,9 +113,9 @@ export default class SqlQuery<T extends object> implements ISqlQueryBuilder<T> {
         const columns: string[] = [];
         const finalValues: string[] = [];
 
-        for (let i: number = 0; i < valuesKeys.length; i++) {
-            columns.push(valuesKeys[i]);
-            finalValues.push(SqlQuery.getValueQueryForm(values[valuesKeys[i]]));
+        for (const key of valuesKeys) {
+            columns.push(key);
+            finalValues.push(SqlQuery.getValueQueryForm(values[key]));
         }
 
         this.prefix = "INSERT INTO ";
@@ -132,20 +147,5 @@ export default class SqlQuery<T extends object> implements ISqlQueryBuilder<T> {
         }
 
         return `${query};`;
-    }
-
-    /**
-     * @param value
-     * @return {string}
-     */
-    protected static getValueQueryForm(value: any): string {
-        if (typeof(value) === "string") {
-            return `"${value}"`;
-        }
-        else if (typeof(value) === "number") {
-            return value.toString();
-        }
-
-        return value.toString();
     }
 }

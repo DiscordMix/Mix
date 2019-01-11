@@ -13,6 +13,8 @@ export type ServiceMap = Map<string, IGenericService>;
 export type ReadonlyServiceMap = ReadonlyMap<string, IGenericService>;
 
 export interface IServiceManager extends EventEmitter {
+    readonly size: number;
+
     isForked(name: string): boolean;
     getFork(name: string): ChildProcess | null;
     register(service: IGenericService): boolean;
@@ -340,6 +342,10 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         }
 
         return this.services.has(name);
+    }
+
+    public get size(): number {
+        return this.services.size;
     }
 
     protected heartbeatFork(name: string): boolean {

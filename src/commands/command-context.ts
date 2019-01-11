@@ -1,4 +1,4 @@
-import {Channel, DMChannel, GroupDMChannel, Guild, Message, Snowflake, TextChannel} from "discord.js";
+import {DMChannel, Guild, Message, Snowflake, TextChannel} from "discord.js";
 import {PromiseOr, Store} from "..";
 import {ChannelType} from "../actions/action-interpreter";
 import Bot from "../core/bot";

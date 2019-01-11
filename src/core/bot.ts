@@ -776,8 +776,9 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public async disconnect(): Promise<this> {
         this.emit(EBotEvents.Disconnecting);
 
-        const servicesStopped: number = await this.services.stopAll();
+        const servicesStopped: number = this.services.size;
 
+        await this.services.stopAll();
         Log.verbose(`[Bot.disconnect] Stopped ${servicesStopped} service(s)`);
         await this.dispose();
         await this.client.destroy();
@@ -870,10 +871,11 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             this.client.on(event.name, event.handler);
         }
 
-        for (let i: number = 0; i < ChannelMessageEvents.length; i++) {
+        // TODO: Decorator listeners/commands are deprecated?
+        for (const event of ChannelMessageEvents) {
             this.client.on(DiscordEvent.Message, (message: Message) => {
-                if (message.channel.id === ChannelMessageEvents[i].name) {
-                    ChannelMessageEvents[i].handler();
+                if (message.channel.id === event.name) {
+                    event.handler();
                 }
             });
         }

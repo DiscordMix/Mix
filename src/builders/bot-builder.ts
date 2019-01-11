@@ -1,7 +1,7 @@
 import Bot from "../core/bot";
+import {IBot} from "../core/bot-extra";
 import Settings from "../core/settings";
 import {IBuilder} from "./builder";
-import {IBot} from "../core/bot-extra";
 
 export interface IBotBuilder extends IBuilder<IBot> {
     token(token: string): this;

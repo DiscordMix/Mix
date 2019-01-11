@@ -1,10 +1,9 @@
 import {EventEmitter} from "events";
-import {PromiseOr} from "..";
+import {ForkedService, PromiseOr, Service} from "..";
 import Command, {DefaultCommandRestrict} from "../commands/command";
 import Bot from "../core/bot";
 import {InternalCommand} from "../core/bot-extra";
 import Log from "../core/log";
-import Service, {ForkedService} from "../services/generic-service";
 import {IFragment} from "./fragment";
 import Loader, {ILivePackage, IPackage} from "./loader";
 
@@ -125,7 +124,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
                 });
             }
             else {
-                service = new (packg.module as any);
+                service = new (packg.module as any)();
             }
 
             service = service as Service | ForkedService;

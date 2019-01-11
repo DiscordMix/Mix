@@ -31,11 +31,11 @@ export default class Optimizer implements IOptimizer {
         this.interval = interval;
         this.sizeThreshold = sizeThreshold;
 
-        if (this.interval < 60 * 1000) {
+        if (this.interval < 60 * 1_000) {
             Log.warn("[Optimizer] Interval lower than 1 minute is not suggested");
         }
-        else if (this.interval < 30 * 1000) {
-            this.interval = 30 * 1000;
+        else if (this.interval < 30 * 1_000) {
+            this.interval = 30 * 1_000;
             Log.warn("[Optimizer] Interval lower than 30 seconds may be inefficient; Using 30 seconds as interval instead");
         }
 

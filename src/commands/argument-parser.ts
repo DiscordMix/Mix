@@ -2,7 +2,7 @@ import Log from "../core/log";
 import {IArgument} from "./command";
 
 export interface IArgumentParser {
-    resolve<T = any>(type: string, arg: string, resolvers: object): TemplateStringsArray;
+    resolve(type: string, arg: string, resolvers: object): TemplateStringsArray;
     getRequiredArguments(schema: IArgument[]): IArgument[];
 }
 
@@ -13,7 +13,7 @@ export default class ArgumentParser {
      * @param {object} resolvers
      * @return {*}
      */
-    public resolve<T = any>(type: string, arg: string, resolvers: object): TemplateStringsArray {
+    public resolve(type: string, arg: string, resolvers: object): TemplateStringsArray {
         const keys: string[] = Object.keys(resolvers);
 
         for (const key of keys) {

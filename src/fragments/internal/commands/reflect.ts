@@ -1,11 +1,10 @@
-import {IFragmentMeta, IMessageActionArgs} from "../../..";
+import {IFragmentMeta, IMessageActionArgs, Service} from "../../..";
 import {ActionType, IAction} from "../../../actions/action";
 import MsgBuilder from "../../../builders/msg-builder";
 import Command, {IArgument, RestrictGroup, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
-import Service from "../../../services/generic-service";
 
-interface Args {
+interface IArgs {
     readonly type: ReflectDataType;
 }
 
@@ -34,7 +33,7 @@ export default class ReflectCommand extends Command {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public run(x: Context, args: Args): IAction<IMessageActionArgs> {
+    public run(x: Context, args: IArgs): IAction<IMessageActionArgs> {
         switch (args.type) {
             case ReflectDataType.Services: {
                 let services: string = "";

@@ -1,7 +1,7 @@
 import {ChildProcess} from "child_process";
 import {EventEmitter} from "events";
-import {IProcessMsg, ProcessMsgType} from "./service";
 import Log from "../core/log";
+import {IProcessMsg, ProcessMsgType} from "./generic-service";
 
 /**
  * Service Messages Interchange System
@@ -73,7 +73,7 @@ export default class SMIS extends EventEmitter {
 
                 return;
             }
-    
+
             this.child.send({
                 _t: type,
                 _d: msg

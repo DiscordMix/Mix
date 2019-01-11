@@ -393,12 +393,12 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             await axios.post(dblUrl.replace("{botId}", this.client.user.id), {
                 server_count
             }, {
-                headers: {
-                    Authorization: this.settings.keys.dbl
-                }
-            }).catch((error: Error) => {
-                Log.warn(`[Bot.postStats] Could not post stats to discordbots.org (${error.message})`);
-            });
+                    headers: {
+                        Authorization: this.settings.keys.dbl
+                    }
+                }).catch((error: Error) => {
+                    Log.warn(`[Bot.postStats] Could not post stats to discordbots.org (${error.message})`);
+                });
         }
 
         // Bots for Discord.com
@@ -408,14 +408,499 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             await axios.post(bfdUrl.replace("{botId}", this.client.user.id), {
                 server_count
             }, {
-                headers: {
-                    Authorization: this.settings.keys.bfd,
-                    "Content-Type": "application/json"
+                    headers: {
+                        Authorization: this.settings.keys.bfd,
+                        "Content-Type": "application/json"
+                    }
+                }).catch((error: Error) => {
+                    Log.warn(`[Bot.postStats] Could not post stats to botsfordiscord.com (${error.message})`);
+                });
+        }
+    }
+
+    /**
+     * @param {boolean} suspend
+     * @return {this}
+     */
+    public suspend(suspend: boolean = true): this {
+        if (this.state !== BotState.Connected) {
+            return this;
+        }
+        else if (this.suspended !== suspend) {
+            (this.suspended as any) = suspend;
+            this.setState(this.suspended ? BotState.Suspended : BotState.Connected);
+        }
+
+        return this;
+    }
+
+    /**
+     * Directly trigger a command
+     * @todo 'args' type on docs (here)
+     * @param {string} base
+     * @param {Message} referer
+     * @param {string[]} args
+     * @return {Promise<*>}
+     */
+    public async triggerCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
+        // Use any registered prefix, default to index 0
+        const content: string = `${this.settings.general.prefix[0]}${base} ${args.join(" ")}`.trim();
+
+        let command: Command | IDecoratorCommand | null = await CommandParser.parse(
+            content,
+            this.commandStore,
+            this.settings.general.prefix
+        );
+
+        if (command === null) {
+            throw Log.error("[Bot.handleCommandMessage] Failed parsing command; Command is null");
+        }
+
+        if ((command as any).type !== undefined && typeof (command as any).type === "number" && DecoratorCommandType[(command as any).type] !== undefined) {
+            Log.warn("[Bot.triggerCommand] Triggering weak, simple or decorator commands is not supported.");
+
+            return;
+        }
+
+        command = command as Command;
+
+        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
+            arguments: CommandParser.getArguments(content, command.args),
+            command,
+            schema: command.args,
+
+            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
+            message: referer
+        });
+
+        // TODO: Debugging
+        // Log.debug("raw args, ", rawArgs);
+
+        return this.commandHandler.handle(
+            this.createCommandContext(referer),
+            command,
+            rawArgs
+        );
+    }
+
+    /**
+     * Set a timeout
+     * @param {Action} action
+     * @param {number} time
+     * @return {NodeJS.Timeout}
+     */
+    public setTimeout(action: Action, time: number): NodeJS.Timeout {
+        const timeout: NodeJS.Timeout = setTimeout(() => {
+            action();
+            this.clearTimeout(timeout);
+        }, time);
+
+        this.timeouts.push(timeout);
+
+        return timeout;
+    }
+
+    /**
+     * Clear a timeout
+     * @param {NodeJS.Timeout} timeout
+     * @return {boolean} Whether the timeout was cleared
+     */
+    public clearTimeout(timeout: NodeJS.Timeout): boolean {
+        const index: number = this.timeouts.indexOf(timeout);
+
+        if (index !== -1) {
+            clearTimeout(this.timeouts[index]);
+            this.timeouts.splice(index, 1);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Clear all timeouts
+     * @return {number} The amount of timeouts cleared
+     */
+    public clearAllTimeouts(): number {
+        let cleared: number = 0;
+
+        for (const timeout of this.timeouts) {
+            if (this.clearTimeout(timeout)) {
+                cleared++;
+            }
+        }
+
+        return cleared;
+    }
+
+    /**
+     * @param {Action} action
+     * @param {number} time
+     */
+    public setInterval(action: any, time: number): NodeJS.Timeout {
+        const interval: any = setInterval(action, time);
+
+        this.intervals.push(interval);
+
+        return interval;
+    }
+
+    /**
+     * @param {NodeJS.Timeout} interval
+     * @return {boolean} Whether the interval was cleared
+     */
+    public clearInterval(interval: NodeJS.Timeout): boolean {
+        const index: number = this.timeouts.indexOf(interval);
+
+        if (index !== -1) {
+            clearTimeout(this.intervals[index]);
+            this.intervals.splice(index, 1);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Clear all attached intervals
+     * @return {number} The amount of cleared intervals
+     */
+    public clearAllIntervals(): number {
+        let cleared: number = 0;
+
+        for (const interval of this.intervals) {
+            if (this.clearInterval(interval)) {
+                cleared++;
+            }
+        }
+
+        return cleared;
+    }
+
+    /**
+     * @param {Message} msg
+     * @param {boolean} [edited=false] Whether the message was edited
+     * @return {Promise<boolean>}
+     */
+    public async handleMessage(msg: Message, edited: boolean = false): Promise<boolean> {
+        if (Utils.isEmpty(msg) || typeof msg !== "object" || !(msg instanceof Message) || Array.isArray(msg)) {
+            return false;
+        }
+
+        this.statCounter.stats.messagesSeen++;
+
+        if (this.suspended) {
+            return false;
+        }
+
+        this.emit(EBotEvents.HandleMessageStart);
+
+        if (this.options.logMessages) {
+            const names: any = {};
+
+            if (msg.channel.type === "text" && msg.guild !== undefined) {
+                names.guild = msg.guild.name;
+                names.channel = ` # ${(msg.channel as TextChannel).name}`;
+            }
+            else if (msg.channel.type === "dm" && msg.guild === undefined) {
+                names.guild = "";
+                names.channel = "Direct Messages";
+            }
+            else {
+                names.guild = "Unknown";
+                names.channel = " # Unknown";
+            }
+
+            Log.info(`[${msg.author.tag} @ ${names.guild}${names.channel}] ${Utils.cleanMessage(msg)}${edited ? " [Edited]" : ""}`);
+        }
+
+        // TODO: Cannot do .startsWith with a prefix array
+        if ((!msg.author.bot || (msg.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.commandStore, this.settings.general.prefix)) {
+            if (this.options.allowCommandChain) {
+                // TODO: Might split values too
+                const rawChain: string[] = msg.content.split("~");
+
+                // TODO: Should be bot option
+                const maxChainLength: number = 5;
+
+                let allowed: boolean = true;
+
+                if (rawChain.length > maxChainLength) {
+                    allowed = false;
+                    msg.reply(`Maximum allowed chain length is ${maxChainLength} commands. Your commands were not executed.`);
                 }
-            }).catch((error: Error) => {
-                Log.warn(`[Bot.postStats] Could not post stats to botsfordiscord.com (${error.message})`);
+
+                if (allowed) {
+                    const chain: string[] = rawChain.slice(0, maxChainLength);
+
+                    // TODO: What if commandChecks is start and the bot tries to react twice or more?
+                    for (const chainItem of chain) {
+                        await this.handleCommandMessage(msg, chainItem.trim(), this.argumentResolvers);
+                    }
+                }
+            }
+            else {
+                await this.handleCommandMessage(msg, msg.content, this.argumentResolvers);
+            }
+        }
+        // TODO: ?prefix should also be chain-able
+        else if (!msg.author.bot && msg.content === "?prefix" && this.prefixCommand) {
+            await msg.channel.send(new RichEmbed()
+                .setDescription(`Command prefix(es): **${this.settings.general.prefix.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
+                .setColor("GREEN"));
+        }
+        // TODO: There should be an option to disable this
+        // TODO: Use embeds
+        // TODO: Verify that it was done in the same environment and that the user still has perms
+        else if (!msg.author.bot && msg.content === "?undo") {
+            if (!this.commandHandler.undoMemory.has(msg.author.id)) {
+                await msg.reply("You haven't performed any undoable action");
+            }
+            else if (this.commandHandler.undoAction(msg.author.id, msg)) {
+                await msg.reply("The action was successfully undone");
+                this.commandHandler.undoMemory.delete(msg.author.id);
+            }
+            else {
+                await msg.reply("The action failed to be undone");
+            }
+        }
+
+        this.emit(EBotEvents.HandleMessageEnd);
+
+        return true;
+    }
+
+    /**
+     * @todo Investigate the resolvers parameter usage (is it even used or required?)
+     * @param {Message} message
+     * @param {string} content
+     * @param {*} resolvers
+     * @return {Promise<void>}
+     */
+    public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
+        this.emit(EBotEvents.HandleCommandMessageStart, message, content);
+
+        const command: Command | null = await CommandParser.parse(
+            content,
+            this.commandStore,
+            this.settings.general.prefix
+        );
+
+        if (command === null) {
+            throw Log.error("[Bot.handleCommandMessage] Failed parsing command; Command is null");
+        }
+
+        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
+            arguments: CommandParser.getArguments(content, command.args),
+            command,
+            schema: command.args,
+
+            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
+            message
+        });
+
+        // TODO: Debugging
+        Log.debug("Raw arguments are", rawArgs);
+
+        await this.commandHandler.handle(
+            this.createCommandContext(message),
+            command,
+            rawArgs
+        );
+
+        this.emit(EBotEvents.HandleCommandMessageEnd, message, content);
+    }
+
+    /**
+     * Connect the client
+     * @return {Promise<this>}
+     */
+    public async connect(): Promise<this> {
+        this.setState(BotState.Connecting);
+        await this.setup();
+        Log.verbose("[Bot.connect] Starting");
+
+        await this.client.login(this.settings.general.token).catch(async (error: Error) => {
+            if (error.message === "Incorrect login details were provided.") {
+                Log.error("[Bot.connect] The provided token is invalid or has been regenerated");
+                await this.disconnect();
+                process.exit(0);
+            }
+            else {
+                throw error;
+            }
+        });
+
+        return this;
+    }
+
+    /**
+     * @todo "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached)
+     * @todo Use the reload modules param
+     * Restart the client
+     * @param {boolean} [reloadModules=true] Whether to reload all modules
+     * @return {Promise<this>}
+     */
+    public async restart(reloadModules: boolean = true): Promise<this> {
+        this.emit(EBotEvents.Restarting, reloadModules);
+        Log.verbose("[Bot.restart] Restarting");
+
+        // Dispose resources
+        await this.dispose();
+
+        // Disconnect the bot
+        await this.disconnect();
+
+        if (reloadModules) {
+            const commands: number = this.commandStore.getAll().size;
+
+            Log.verbose(`[Bot.restart] Reloading ${commands} command(s)`);
+
+            const reloaded: number = await this.commandStore.reloadAll();
+
+            Log.success(`[Bot.restart] Reloaded ${reloaded}/${commands} command(s)`);
+        }
+
+        await this.connect();
+        this.emit(EBotEvents.Restarted, reloadModules);
+
+        return this;
+    }
+
+    /**
+     * Disconnect the client
+     * @return {Promise<this>}
+     */
+    public async disconnect(): Promise<this> {
+        this.emit(EBotEvents.Disconnecting);
+
+        const servicesStopped: number = await this.services.stopAll();
+
+        Log.verbose(`[Bot.disconnect] Stopped ${servicesStopped} service(s)`);
+        await this.dispose();
+        await this.client.destroy();
+        (this.client as any) = new Client();
+        Log.info("[Bot.disconnect] Disconnected");
+        this.emit(EBotEvents.Disconnected);
+
+        return this;
+    }
+
+    /**
+     * Clear all the files inside the temp folder
+     */
+    public clearTemp(): void {
+        this.emit(EBotEvents.ClearingTemp);
+
+        // TODO: Path may need to be resolved/maybe it wont be relative...
+        if (fs.existsSync("./temp")) {
+            fs.readdir("./temp", (error: any, files: any) => {
+                for (const file of files) {
+                    fs.unlink(`./temp/${file}`, (fileError: Error) => {
+                        throw fileError;
+                    });
+                }
             });
         }
+
+        this.emit(EBotEvents.ClearedTemp);
+    }
+
+    /**
+     * Dispose the bot's resources
+     */
+    public async dispose(): Promise<void> {
+        for (const disposable of this.disposables) {
+            await disposable.dispose();
+        }
+
+        // Reset the temp folder before shutdown
+        await this.temp.reset();
+
+        this.clearAllTimeouts();
+        this.clearAllIntervals();
+        await this.commandStore.disposeAll();
+        await this.services.disposeAll();
+        await this.services.stopAllForks();
+        this.clearTemp();
+    }
+
+    /**
+     * Setup the client's events
+     */
+    protected setupEvents(): void {
+        Log.verbose("[Bot.setupEvents] Setting up Discord events");
+
+        // Discord client events
+        this.client.on(DiscordEvent.Ready, async () => {
+            // Setup temp
+            this.temp.setup(this.client.user.id);
+
+            // Create the temp folder
+            await this.temp.create();
+
+            if (this.options.consoleInterface && !this.console.ready) {
+                // Setup the console command interface
+                this.console.setup(this);
+            }
+
+            Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag} | ${this.client.guilds.size} guild(s)`);
+
+            const took: number = Math.round(performance.now() - this.setupStart);
+
+            Log.success(`[Bot.setupEvents] Ready | Took ${took}ms | PID ${process.pid}`);
+            this.setState(BotState.Connected);
+            this.emit(EBotEvents.Ready);
+        });
+
+        this.client.on(DiscordEvent.Message, this.handleMessage.bind(this));
+        this.client.on(DiscordEvent.Error, (error: Error) => Log.error(error.message));
+
+        // If enabled, handle message edits (if valid) as commands
+        if (this.options.updateOnMessageEdit) {
+            this.client.on(DiscordEvent.MessageUpdated, async (oldMessage: Message, newMessage: Message) => {
+                await this.handleMessage(newMessage, true);
+            });
+        }
+
+        // Setup user events
+        for (const event of BotEvents) {
+            this.client.on(event.name, event.handler);
+        }
+
+        for (let i: number = 0; i < ChannelMessageEvents.length; i++) {
+            this.client.on(DiscordEvent.Message, (message: Message) => {
+                if (message.channel.id === ChannelMessageEvents[i].name) {
+                    ChannelMessageEvents[i].handler();
+                }
+            });
+        }
+
+        Log.success("[Bot.setupEvents] Discord events setup completed");
+    }
+
+    protected setState(state: BotState): this {
+        (this.state as any) = state;
+
+        return this;
+    }
+
+    /**
+     * @param {Message} msg
+     * @return {Context}
+     */
+    protected createCommandContext(msg: Message): Context {
+        return new Context({
+            bot: this,
+            msg,
+            // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
+
+            // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
+
+            label: CommandParser.getCommandBase(msg.content, this.settings.general.prefix)
+        });
     }
 
     /**
@@ -441,8 +926,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
         // Load languages
         if (this.language && this.languages) {
-            for (let i: number = 0; i < this.languages.length; i++) {
-                await this.language.load(this.languages[i]);
+            for (const lang of this.languages) {
+                await this.language.load(lang);
             }
         }
 
@@ -574,490 +1059,5 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         Log.success(BotMessages.SETUP_COMPLETED);
 
         return this;
-    }
-
-    /**
-     * @param {boolean} suspend
-     * @return {this}
-     */
-    public suspend(suspend: boolean = true): this {
-        if (this.state !== BotState.Connected) {
-            return this;
-        }
-        else if (this.suspended !== suspend) {
-            (this.suspended as any) = suspend;
-            this.setState(this.suspended ? BotState.Suspended : BotState.Connected);
-        }
-
-        return this;
-    }
-
-    /**
-     * Setup the client's events
-     */
-    protected setupEvents(): void {
-        Log.verbose("[Bot.setupEvents] Setting up Discord events");
-
-        // Discord client events
-        this.client.on(DiscordEvent.Ready, async () => {
-            // Setup temp
-            this.temp.setup(this.client.user.id);
-
-            // Create the temp folder
-            await this.temp.create();
-
-            if (this.options.consoleInterface && !this.console.ready) {
-                // Setup the console command interface
-                this.console.setup(this);
-            }
-
-            Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag} | ${this.client.guilds.size} guild(s)`);
-
-            const took: number = Math.round(performance.now() - this.setupStart);
-
-            Log.success(`[Bot.setupEvents] Ready | Took ${took}ms | PID ${process.pid}`);
-            this.setState(BotState.Connected);
-            this.emit(EBotEvents.Ready);
-        });
-
-        this.client.on(DiscordEvent.Message, this.handleMessage.bind(this));
-        this.client.on(DiscordEvent.Error, (error: Error) => Log.error(error.message));
-
-        // If enabled, handle message edits (if valid) as commands
-        if (this.options.updateOnMessageEdit) {
-            this.client.on(DiscordEvent.MessageUpdated, async (oldMessage: Message, newMessage: Message) => {
-                await this.handleMessage(newMessage, true);
-            });
-        }
-
-        // Setup user events
-        for (let i: number = 0; i < BotEvents.length; i++) {
-            this.client.on(BotEvents[i].name, BotEvents[i].handler);
-        }
-
-        for (let i: number = 0; i < ChannelMessageEvents.length; i++) {
-            this.client.on(DiscordEvent.Message, (message: Message) => {
-                if (message.channel.id === ChannelMessageEvents[i].name) {
-                    ChannelMessageEvents[i].handler();
-                }
-            });
-        }
-
-        Log.success("[Bot.setupEvents] Discord events setup completed");
-    }
-
-    /**
-     * Directly trigger a command
-     * @todo 'args' type on docs (here)
-     * @param {string} base
-     * @param {Message} referer
-     * @param {string[]} args
-     * @return {Promise<*>}
-     */
-    public async triggerCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
-        // Use any registered prefix, default to index 0
-        const content: string = `${this.settings.general.prefix[0]}${base} ${args.join(" ")}`.trim();
-
-        let command: Command | IDecoratorCommand | null = await CommandParser.parse(
-            content,
-            this.commandStore,
-            this.settings.general.prefix
-        );
-
-        if (command === null) {
-            throw Log.error("[Bot.handleCommandMessage] Failed parsing command; Command is null");
-        }
-
-        if ((command as any).type !== undefined && typeof (command as any).type === "number" && DecoratorCommandType[(command as any).type] !== undefined) {
-            Log.warn("[Bot.triggerCommand] Triggering weak, simple or decorator commands is not supported.");
-
-            return;
-        }
-
-        command = command as Command;
-
-        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
-            arguments: CommandParser.getArguments(content, command.args),
-            schema: command.args,
-
-            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
-            message: referer,
-            command: command
-        });
-
-        // TODO: Debugging
-        // Log.debug("raw args, ", rawArgs);
-
-        return this.commandHandler.handle(
-            this.createCommandContext(referer),
-            command,
-            rawArgs
-        );
-    }
-
-    /**
-     * Set a timeout
-     * @param {Action} action
-     * @param {number} time
-     * @return {NodeJS.Timeout}
-     */
-    public setTimeout(action: Action, time: number): NodeJS.Timeout {
-        const timeout: NodeJS.Timeout = setTimeout(() => {
-            action();
-            this.clearTimeout(timeout);
-        }, time);
-
-        this.timeouts.push(timeout);
-
-        return timeout;
-    }
-
-    /**
-     * Clear a timeout
-     * @param {NodeJS.Timeout} timeout
-     * @return {boolean} Whether the timeout was cleared
-     */
-    public clearTimeout(timeout: NodeJS.Timeout): boolean {
-        const index: number = this.timeouts.indexOf(timeout);
-
-        if (index !== -1) {
-            clearTimeout(this.timeouts[index]);
-            this.timeouts.splice(index, 1);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Clear all timeouts
-     * @return {number} The amount of timeouts cleared
-     */
-    public clearAllTimeouts(): number {
-        let cleared: number = 0;
-
-        for (let i: number = 0; i < this.timeouts.length; i++) {
-            if (this.clearTimeout(this.timeouts[i])) {
-                cleared++;
-            }
-        }
-
-        return cleared;
-    }
-
-    /**
-     * @param {Action} action
-     * @param {number} time
-     */
-    public setInterval(action: any, time: number): NodeJS.Timeout {
-        const interval: any = setInterval(action, time);
-
-        this.intervals.push(interval);
-
-        return interval;
-    }
-
-    /**
-     * @param {NodeJS.Timeout} interval
-     * @return {boolean} Whether the interval was cleared
-     */
-    public clearInterval(interval: NodeJS.Timeout): boolean {
-        const index: number = this.timeouts.indexOf(interval);
-
-        if (index !== -1) {
-            clearTimeout(this.intervals[index]);
-            this.intervals.splice(index, 1);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Clear all attached intervals
-     * @return {number} The amount of cleared intervals
-     */
-    public clearAllIntervals(): number {
-        let cleared: number = 0;
-
-        for (let i: number = 0; i < this.intervals.length; i++) {
-            if (this.clearInterval(this.intervals[i])) {
-                cleared++;
-            }
-        }
-
-        return cleared;
-    }
-
-    /**
-     * @param {Message} msg
-     * @param {boolean} [edited=false] Whether the message was edited
-     * @return {Promise<boolean>}
-     */
-    public async handleMessage(msg: Message, edited: boolean = false): Promise<boolean> {
-        if (Utils.isEmpty(msg) || typeof msg !== "object" || !(msg instanceof Message) || Array.isArray(msg)) {
-            return false;
-        }
-
-        this.statCounter.stats.messagesSeen++;
-
-        if (this.suspended) {
-            return false;
-        }
-
-        this.emit(EBotEvents.HandleMessageStart);
-
-        if (this.options.logMessages) {
-            const names: any = {};
-
-            if (msg.channel.type === "text" && msg.guild !== undefined) {
-                names.guild = msg.guild.name;
-                names.channel = ` # ${(msg.channel as TextChannel).name}`;
-            }
-            else if (msg.channel.type === "dm" && msg.guild === undefined) {
-                names.guild = "";
-                names.channel = "Direct Messages";
-            }
-            else {
-                names.guild = "Unknown";
-                names.channel = " # Unknown";
-            }
-
-            Log.info(`[${msg.author.tag} @ ${names.guild}${names.channel}] ${Utils.cleanMessage(msg)}${edited ? " [Edited]" : ""}`);
-        }
-
-        // TODO: Cannot do .startsWith with a prefix array
-        if ((!msg.author.bot || (msg.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.commandStore, this.settings.general.prefix)) {
-            if (this.options.allowCommandChain) {
-                // TODO: Might split values too
-                const rawChain: string[] = msg.content.split("~");
-
-                // TODO: Should be bot option
-                const maxChainLength: number = 5;
-
-                let allowed: boolean = true;
-
-                if (rawChain.length > maxChainLength) {
-                    allowed = false;
-                    msg.reply(`Maximum allowed chain length is ${maxChainLength} commands. Your commands were not executed.`);
-                }
-
-                if (allowed) {
-                    const chain: string[] = rawChain.slice(0, maxChainLength);
-
-                    // TODO: What if commandChecks is start and the bot tries to react twice or more?
-                    for (let i: number = 0; i < chain.length; i++) {
-                        await this.handleCommandMessage(msg, chain[i].trim(), this.argumentResolvers);
-                    }
-                }
-            }
-            else {
-                await this.handleCommandMessage(msg, msg.content, this.argumentResolvers);
-            }
-        }
-        // TODO: ?prefix should also be chain-able
-        else if (!msg.author.bot && msg.content === "?prefix" && this.prefixCommand) {
-            await msg.channel.send(new RichEmbed()
-                .setDescription(`Command prefix(es): **${this.settings.general.prefix.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
-                .setColor("GREEN"));
-        }
-        // TODO: There should be an option to disable this
-        // TODO: Use embeds
-        // TODO: Verify that it was done in the same environment and that the user still has perms
-        else if (!msg.author.bot && msg.content === "?undo") {
-            if (!this.commandHandler.undoMemory.has(msg.author.id)) {
-                await msg.reply("You haven't performed any undoable action");
-            }
-            else if (this.commandHandler.undoAction(msg.author.id, msg)) {
-                await msg.reply("The action was successfully undone");
-                this.commandHandler.undoMemory.delete(msg.author.id);
-            }
-            else {
-                await msg.reply("The action failed to be undone");
-            }
-        }
-
-        this.emit(EBotEvents.HandleMessageEnd);
-
-        return true;
-    }
-
-    /**
-     * @param {Message} msg
-     * @return {Context}
-     */
-    protected createCommandContext(msg: Message): Context {
-        return new Context({
-            msg,
-            // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
-            bot: this,
-
-            // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
-
-            label: CommandParser.getCommandBase(msg.content, this.settings.general.prefix)
-        });
-    }
-
-    /**
-     * @todo Investigate the resolvers parameter usage (is it even used or required?)
-     * @param {Message} message
-     * @param {string} content
-     * @param {*} resolvers
-     * @return {Promise<void>}
-     */
-    public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
-        this.emit(EBotEvents.HandleCommandMessageStart, message, content);
-
-        let command: Command | null = await CommandParser.parse(
-            content,
-            this.commandStore,
-            this.settings.general.prefix
-        );
-
-        if (command === null) {
-            throw Log.error("[Bot.handleCommandMessage] Failed parsing command; Command is null");
-        }
-
-        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
-            arguments: CommandParser.getArguments(content, command.args),
-            schema: command.args,
-
-            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
-            message,
-            command
-        });
-
-        // TODO: Debugging
-        Log.debug("Raw arguments are", rawArgs);
-
-        await this.commandHandler.handle(
-            this.createCommandContext(message),
-            command,
-            rawArgs
-        );
-
-        this.emit(EBotEvents.HandleCommandMessageEnd, message, content);
-    }
-
-    /**
-     * Connect the client
-     * @return {Promise<this>}
-     */
-    public async connect(): Promise<this> {
-        this.setState(BotState.Connecting);
-        await this.setup();
-        Log.verbose("[Bot.connect] Starting");
-
-        await this.client.login(this.settings.general.token).catch(async (error: Error) => {
-            if (error.message === "Incorrect login details were provided.") {
-                Log.error("[Bot.connect] The provided token is invalid or has been regenerated");
-                await this.disconnect();
-                process.exit(0);
-            }
-            else {
-                throw error;
-            }
-        });
-
-        return this;
-    }
-
-    protected setState(state: BotState): this {
-        (this.state as any) = state;
-
-        return this;
-    }
-
-    /**
-     * @todo "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached)
-     * @todo Use the reload modules param
-     * Restart the client
-     * @param {boolean} [reloadModules=true] Whether to reload all modules
-     * @return {Promise<this>}
-     */
-    public async restart(reloadModules: boolean = true): Promise<this> {
-        this.emit(EBotEvents.Restarting, reloadModules);
-        Log.verbose("[Bot.restart] Restarting");
-
-        // Dispose resources
-        await this.dispose();
-
-        // Disconnect the bot
-        await this.disconnect();
-
-        if (reloadModules) {
-            const commands: number = this.commandStore.getAll().size;
-
-            Log.verbose(`[Bot.restart] Reloading ${commands} command(s)`);
-
-            const reloaded: number = await this.commandStore.reloadAll();
-
-            Log.success(`[Bot.restart] Reloaded ${reloaded}/${commands} command(s)`);
-        }
-
-        await this.connect();
-        this.emit(EBotEvents.Restarted, reloadModules);
-
-        return this;
-    }
-
-    /**
-     * Disconnect the client
-     * @return {Promise<this>}
-     */
-    public async disconnect(): Promise<this> {
-        this.emit(EBotEvents.Disconnecting);
-
-        const servicesStopped: number = await this.services.stopAll();
-
-        Log.verbose(`[Bot.disconnect] Stopped ${servicesStopped} service(s)`);
-        await this.dispose();
-        await this.client.destroy();
-        (this.client as any) = new Client();
-        Log.info("[Bot.disconnect] Disconnected");
-        this.emit(EBotEvents.Disconnected);
-
-        return this;
-    }
-
-    /**
-     * Clear all the files inside the temp folder
-     */
-    public clearTemp(): void {
-        this.emit(EBotEvents.ClearingTemp);
-
-        // TODO: Path may need to be resolved/maybe it wont be relative...
-        if (fs.existsSync("./temp")) {
-            fs.readdir("./temp", (error: any, files: any) => {
-                for (let i: number = 0; i < files.length; i++) {
-                    fs.unlink(`./temp/${files[i]}`, (error: Error) => {
-                        throw error;
-                    });
-                }
-            });
-        }
-
-        this.emit(EBotEvents.ClearedTemp);
-    }
-
-    /**
-     * Dispose the bot's resources
-     */
-    public async dispose(): Promise<void> {
-        for (let i: number = 0; i < this.disposables.length; i++) {
-            await this.disposables[i].dispose();
-        }
-
-        // Reset the temp folder before shutdown
-        await this.temp.reset();
-
-        this.clearAllTimeouts();
-        this.clearAllIntervals();
-        await this.commandStore.disposeAll();
-        await this.services.disposeAll();
-        await this.services.stopAllForks();
-        this.clearTemp();
     }
 }

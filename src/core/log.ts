@@ -76,10 +76,10 @@ export default abstract class Log {
      */
     public static info(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
+            color: "cyan",
             message,
             params,
             type: LogLevel.Info,
-            color: "cyan",
             prefix: "info"
         };
 

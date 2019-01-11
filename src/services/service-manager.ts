@@ -1,13 +1,13 @@
-import Bot from "../core/bot";
-import {IRawProcessMsg, ProcessMsgType, IProcessMsg, IGenericService} from "./service";
-import {fork, ChildProcess} from "child_process";
+import {ChildProcess, fork} from "child_process";
+import {EventEmitter} from "events";
 import fs from "fs";
 import path from "path";
-import {EventEmitter} from "events";
-import Log from "../core/log";
-import SMIS from "./smis";
-import Utils from "../core/utils";
 import {PromiseOr} from "..";
+import Bot from "../core/bot";
+import Log from "../core/log";
+import Utils from "../core/utils";
+import {IGenericService, IProcessMsg, IRawProcessMsg, ProcessMsgType} from "./generic-service";
+import SMIS from "./smis";
 
 export type ServiceMap = Map<string, IGenericService>;
 export type ReadonlyServiceMap = ReadonlyMap<string, IGenericService>;
@@ -25,7 +25,7 @@ export interface IServiceManager extends EventEmitter {
     getService(name: string): Readonly<IGenericService> | null;
     disposeAll(): PromiseOr<void>;
     getAll(): ReadonlyServiceMap;
-    stopAll(): PromiseOr<number>;
+    stopAll(): PromiseOr<this>;
     contains(name: string): boolean;
 }
 
@@ -109,8 +109,8 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
     public registerMultiple(multipleServices: IGenericService[]): number {
         let registered: number = 0;
 
-        for (let i: number = 0; i < multipleServices.length; i++) {
-            if (this.register(multipleServices[i])) {
+        for (const service of multipleServices) {
+            if (this.register(service)) {
                 registered++;
             }
         }
@@ -190,40 +190,13 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
     public async startAll(): Promise<number> {
         let enabled: number = 0;
 
-        for (let [name, service] of this.services) {
+        for (const [name, service] of this.services) {
             if (await this.start(name)) {
                 enabled++;
             }
         }
 
         return enabled;
-    }
-
-    protected heartbeatFork(name: string): boolean {
-        if (!this.forkedServices.has(name)) {
-            return false;
-        }
-
-        const child: ChildProcess = this.forkedServices.get(name) as ChildProcess;
-        
-        if (this.forkHeartbeats.has(name)) {
-            clearTimeout(this.forkHeartbeats.get(name) as NodeJS.Timeout);
-        }
-
-        // TODO: Auto-restart on timeout
-        this.forkHeartbeats.set(name, setTimeout(() => {
-            if (!child.killed) {
-                child.kill("timeout");
-            }
-
-            this.forkHeartbeats.delete(name);
-            this.forkedServices.delete(name);
-            Log.warn(`[ServiceManager.heartbeatFork] Forked service '${name}' timed out`);
-        }, ServiceManager.heartbeatTimeout));
-
-        this.emit("heartbeat", name);
-
-        return true;
     }
 
     public ignite(name: string): boolean {
@@ -335,7 +308,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
      * Dispose all services
      */
     public async disposeAll(): Promise<void> {
-        for (let [name, service] of this.services) {
+        for (const [name, service] of this.services) {
             await service.dispose();
         }
     }
@@ -349,14 +322,12 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
 
     // TODO: .stop()
 
-    public async stopAll(): Promise<number> {
-        let stopped: number = this.services.size;
-
-        for (let [name, service] of this.services) {
+    public async stopAll(): Promise<this> {
+        for (const [name, service] of this.services) {
             await service.stop();
         }
 
-        return stopped;
+        return this;
     }
 
     /**
@@ -369,5 +340,32 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         }
 
         return this.services.has(name);
+    }
+
+    protected heartbeatFork(name: string): boolean {
+        if (!this.forkedServices.has(name)) {
+            return false;
+        }
+
+        const child: ChildProcess = this.forkedServices.get(name) as ChildProcess;
+
+        if (this.forkHeartbeats.has(name)) {
+            clearTimeout(this.forkHeartbeats.get(name) as NodeJS.Timeout);
+        }
+
+        // TODO: Auto-restart on timeout
+        this.forkHeartbeats.set(name, setTimeout(() => {
+            if (!child.killed) {
+                child.kill("timeout");
+            }
+
+            this.forkHeartbeats.delete(name);
+            this.forkedServices.delete(name);
+            Log.warn(`[ServiceManager.heartbeatFork] Forked service '${name}' timed out`);
+        }, ServiceManager.heartbeatTimeout));
+
+        this.emit("heartbeat", name);
+
+        return true;
     }
 }

@@ -1,18 +1,17 @@
-import Command from "../../../commands/command";
 import {RestrictGroup} from "../../..";
+import Command from "../../../commands/command";
 import Context from "../../../commands/command-context";
-
 
 /**
  * @extends Command
  */
 export default class RestartCommand extends Command {
-    readonly meta = {
+    public readonly meta = {
         name: "restart",
         description: "Restart the bot"
     };
 
-    readonly constraints: any = {
+    public readonly constraints: any = {
         cooldown: 5,
         specific: [RestrictGroup.BotOwner]
     };

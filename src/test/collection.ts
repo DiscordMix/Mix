@@ -1,6 +1,6 @@
-import {TestSubjects} from "./test-bot";
 import {expect} from "chai";
 import Settings from "../core/settings";
+import {TestSubjects} from "./test-bot";
 
 describe("Collection", () => {
     describe("at()", () => {

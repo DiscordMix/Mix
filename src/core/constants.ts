@@ -106,9 +106,9 @@ export const DefaultBotEmojiOptions: IBotEmojiOptions = {
 };
 
 export const DefaultBotOptions: IBotExtraOptions = {
-    autoDeleteCommands: false,
     allowCommandChain: true,
     asciiTitle: true,
+    autoDeleteCommands: false,
     autoResetAuthStore: false,
     checkCommands: true,
     ignoreBots: true,

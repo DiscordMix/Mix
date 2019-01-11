@@ -93,17 +93,17 @@ export default class DataCollector implements IDataCollector {
     public finish(): GuildMember[] {
         const members: GuildMember[] = this.guild.members.array();
 
-        let result: GuildMember[] = [];
+        const result: GuildMember[] = [];
 
-        for (let i: number = 0; i < members.length; i++) {
-            if (this.fromType === MemberType.User && members[i].user.bot) {
+        for (const member of members) {
+            if (this.fromType === MemberType.User && member.user.bot) {
                 continue;
             }
-            else if (this.fromType === MemberType.Bot && !members[i].user.bot) {
+            else if (this.fromType === MemberType.Bot && !member.user.bot) {
                 continue;
             }
 
-            result.push(members[i]);
+            result.push(member);
         }
 
         if (this.whereCondition) {

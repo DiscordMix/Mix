@@ -42,7 +42,7 @@ export default class LogSerializer implements ISerializer<ILogMsg> {
 
         return {
             time: match[1],
-            
+
             source: {
                 main: match[2] || match[4],
                 extra: match[3]

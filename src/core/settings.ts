@@ -1,8 +1,8 @@
-import Log from "./log";
-import Utils from "./utils";
 import fs from "fs";
-import BotMessages from "./messages";
 import {DefaultSettingPaths} from "./constants";
+import Log from "./log";
+import BotMessages from "./messages";
+import Utils from "./utils";
 
 export interface ISettingsGeneral {
     /**

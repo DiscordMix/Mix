@@ -1,10 +1,10 @@
-import Context from "../../../commands/command-context";
-import MsgBuilder from "../../../builders/msg-builder";
-import Command, {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
 import EmbedBuilder from "../../../builders/embed-builder";
+import MsgBuilder from "../../../builders/msg-builder";
+import Command, {IArgument, RestrictGroup, TrivialArgType} from "../../../commands/command";
+import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
 
-type Args = {
+interface IArgs {
     readonly code: string;
     readonly silent: boolean;
 }
@@ -12,13 +12,13 @@ type Args = {
 /**
  * @extends Command
  */
-export default class EvalCommand extends Command<Args> {
-    readonly meta = {
+export default class EvalCommand extends Command<IArgs> {
+    public readonly meta = {
         name: "eval",
         description: "Evaluate code"
     };
 
-    readonly args: IArgument[] = [
+    public readonly args: IArgument[] = [
         {
             name: "code",
             description: "The code to evaluate",
@@ -33,11 +33,11 @@ export default class EvalCommand extends Command<Args> {
         }
     ];
 
-    readonly constraints: any = {
+    public readonly constraints: any = {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public async run(x: Context, args: Args): Promise<void> {
+    public async run(x: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();
 
         let result: string;
@@ -70,7 +70,7 @@ export default class EvalCommand extends Command<Args> {
                 .build()
         );
 
-        embed.color('#36393f');
+        embed.color("#36393f");
 
         x.send(embed.build());
     }

@@ -4,9 +4,9 @@ if (!process.send || !process.connected) {
 }
 
 import fs from "fs";
-import {ForkedService, IRawProcessMsg, ProcessMsgType} from "./service";
-import ServiceManager from "./service-manager";
 import Log from "../core/log";
+import {IForkedService, IRawProcessMsg, ProcessMsgType} from "./generic-service";
+import ServiceManager from "./service-manager";
 
 const args: string[] = process.argv.splice(2);
 
@@ -21,7 +21,7 @@ if (!fs.existsSync(target)) {
 }
 
 // Start service
-const service: ForkedService = new (require(target).default)();
+const service: IForkedService = new (require(target).default)();
 const logPrefix: string = `[ServiceIgniter.${service.meta.name}@${process.pid.toString()}]`;
 
 let smisProtocol: boolean = false;

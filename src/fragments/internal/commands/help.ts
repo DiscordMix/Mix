@@ -1,13 +1,13 @@
-import Context from "../../../commands/command-context";
 import {RichEmbed} from "discord.js";
-import {ReadonlyCommandMap} from "../../../commands/command-store";
 import Command from "../../../commands/command";
+import Context from "../../../commands/command-context";
+import {ReadonlyCommandMap} from "../../../commands/command-store";
 
 /**
  * @extends Command
  */
 export default class HelpCommand extends Command {
-    readonly meta = {
+    public readonly meta = {
         name: "help",
         description: "View available commands and their descriptions"
     };
@@ -18,7 +18,7 @@ export default class HelpCommand extends Command {
         const commandMap: ReadonlyCommandMap = x.bot.commandStore.getAll();
         const commands: Command[] = [];
 
-        for (let [base, command] of commandMap) {
+        for (const [base, command] of commandMap) {
             if (command instanceof Command) {
                 commands.push(command);
             }
@@ -32,14 +32,14 @@ export default class HelpCommand extends Command {
             await (await x.sender.createDM()).send(new RichEmbed()
                 .setColor("GREEN")
                 .setDescription(commandsString)).catch(async (error: Error) => {
-                    
-                if (error.message === "Cannot send messages to this user") {
-                    await x.fail("You're not accepting direct messages.");
-                }
-                else {
-                    await x.fail(`I was unable to send you my commands. (${error.message})`);
-                }
-            });
+
+                    if (error.message === "Cannot send messages to this user") {
+                        await x.fail("You're not accepting direct messages.");
+                    }
+                    else {
+                        await x.fail(`I was unable to send you my commands. (${error.message})`);
+                    }
+                });
         }
         else {
             await x.ok(commandsString, "Help - Available Commands");

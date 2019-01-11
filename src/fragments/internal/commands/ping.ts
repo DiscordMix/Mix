@@ -1,16 +1,16 @@
-import Context from "../../../commands/command-context";
 import Command from "../../../commands/command";
+import Context from "../../../commands/command-context";
 
 /**
  * @extends Command
  */
 export default class PingCommand extends Command {
-    readonly meta = {
+    public readonly meta = {
         name: "ping",
         description: "View the latency and heartbeat of the bot"
     };
 
-    readonly constraints: any = {
+    public readonly constraints: any = {
         cooldown: 1
     };
 

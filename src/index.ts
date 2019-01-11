@@ -1,66 +1,68 @@
-import Bot from "./core/bot";
 import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
-import Context, {IContext, TextBasedChannel, IContextOptions} from "./commands/command-context";
+import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/command-context";
 import CommandStore, {CommandManagerEvent, ICommandStore} from "./commands/command-store";
+import Bot from "./core/bot";
 
 import Command, {
     ArgumentTypeChecker,
-    IArgument,
-    TrivialArgType,
-    ICustomArgType,
-    IArgumentResolver,
-    RestrictGroup,
-    InternalArgType,
     GenericCommand,
-    IGenericCommand
+    IArgument,
+    IArgumentResolver,
+    ICustomArgType,
+    IGenericCommand,
+    InternalArgType,
+    RestrictGroup,
+    TrivialArgType
 } from "./commands/command";
 
-import ConsoleInterface, {IConsoleInterface} from "./console/console-interface";
+import {ActionType, IAction} from "./actions/action";
+import ActionInterpreter, {IActionInterpreter, IEmbedActionArgs, IMessageActionArgs, IPaginatedActionArgs, IPrivateMessageActionArgs, IRequestActionArgs} from "./actions/action-interpreter";
+import BotBuilder, {IBotBuilder} from "./builders/bot-builder";
+import {IBuilder} from "./builders/builder";
+import ConfigBuilder, {IConfigBuilder} from "./builders/config-builder";
+import EmbedBuilder from "./builders/embed-builder";
+import MsgBuilder, {IMsgBuilder} from "./builders/msg-builder";
+import List from "./collections/collection";
 import CommandParser from "./commands/command-parser";
 import ConsoleCommand from "./console/console-command";
-import BotBuilder, {IBotBuilder} from "./builders/bot-builder";
-import EmbedBuilder from "./builders/embed-builder";
-import ConfigBuilder, {IConfigBuilder} from "./builders/config-builder";
-import MsgBuilder, {IMsgBuilder} from "./builders/msg-builder";
-import EditableMessage from "./message/editable-message";
+import ConsoleInterface, {IConsoleInterface} from "./console/console-interface";
+import {EBotEvents, IBot} from "./core/bot-extra";
+import ChatEnv from "./core/chat-env";
+import {IDisposable} from "./core/helpers";
 import Log, {LogLevel} from "./core/log";
+import Patterns from "./core/patterns";
+import Permission from "./core/permission";
+import Settings, {ISettings} from "./core/settings";
+import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setup-helper";
+import Utils from "./core/utils";
+import {DiscordEvent, IDecoratorCommand, ISimpleCommand, IWeakCommand, on} from "./decorators/decorators";
+import {command} from "./decorators/decorators";
+import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
+import {ICommandEvent} from "./events/command-event";
+import {IFragment, IFragmentMeta} from "./fragments/fragment";
+import Loader from "./fragments/loader";
+import EditableMessage from "./message/editable-message";
 import Rgb from "./misc/rgb";
 import Rgba from "./misc/rgba";
-import Settings, {ISettings} from "./core/settings";
-import TimeParser from "./time/time-parser";
-import TimeSuffixType from "./time/time-suffix-type";
-import Utils from "./core/utils";
-import Permission from "./core/permission";
-import ChatEnv from "./core/chat-env";
-import List from "./collections/collection";
-import SetupHelper, {ISetupHelperResult, ISetupHelper} from "./core/setup-helper";
-import Service, {IServiceOptions, ForkedService, GenericService, ProcessMsgType, IProcessMsg, IGenericService, IService, IForkedService} from "./services/service";
-import {on, IWeakCommand, IDecoratorCommand, ISimpleCommand, DiscordEvent} from "./decorators/decorators";
-import {command} from "./decorators/decorators";
-import Patterns from "./core/patterns";
-import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
-import {IDisposable} from "./core/helpers";
 import PaginatedMessage from "./pagination/paginated-message";
-import Task, {ITask} from "./tasks/task";
-import TaskManager, {ITaskManager} from "./tasks/task-manager";
-import {IAction, ActionType} from "./actions/action";
-import ActionInterpreter, {IPaginatedActionArgs, IRequestActionArgs, IEmbedActionArgs, IPrivateMessageActionArgs, IMessageActionArgs, IActionInterpreter} from "./actions/action-interpreter";
-import {IFragment, IFragmentMeta} from "./fragments/fragment";
-import SMIS from "./services/smis";
+import {GuildCfgMongoProvider, IGuildConfig} from "./providers/mongo-providers";
+import {IDuplexProvider, IProvider, IQueriableProvider, PromiseOr} from "./providers/provider";
+import LogSerializer, {ILogMsg, ILogSource} from "./serializers/log-serializer";
 import {ISerializer} from "./serializers/serializer";
-import LogSerializer, {ILogSource, ILogMsg} from "./serializers/log-serializer";
 import StateSerializer from "./serializers/state-serializer";
 import UrlSerializer from "./serializers/url-serializer";
 import UserSerializer from "./serializers/user-serializer";
-import {IProvider, PromiseOr, IDuplexProvider, IQueriableProvider} from "./providers/provider";
-import {GuildConfig, GuildCfgMongoProvider} from "./providers/mongo-providers";
-import Store, {TestStoreActionType, IStoreAction, Reducer, ITestState, IStore} from "./state/store";
-import {IBuilder} from "./builders/builder";
-import {IBot, EBotEvents} from "./core/bot-extra";
-import {TimeMachine, ITimeMachine} from "./state/time-machine";
+import {ForkedService} from "./services/forked-service";
+import {GenericService, IForkedService, IGenericService, IProcessMsg, IService, IServiceOptions, ProcessMsgType} from "./services/generic-service";
+import Service from "./services/service";
+import SMIS from "./services/smis";
 import Delta from "./state/delta";
-import {ICommandEvent} from "./events/command-event";
-import Loader from "./fragments/loader";
+import Store, {IStore, IStoreAction, ITestState, Reducer, TestStoreActionType} from "./state/store";
+import {ITimeMachine, TimeMachine} from "./state/time-machine";
+import Task, {ITask} from "./tasks/task";
+import TaskManager, {ITaskManager} from "./tasks/task-manager";
+import TimeParser from "./time/time-parser";
+import TimeSuffixType from "./time/time-suffix-type";
 
 export {
     // Fragments
@@ -164,9 +166,9 @@ export {
     // Decorators
     on,
     command,
-    OWeakCommand as WeakCommand,
+    IWeakCommand,
     IDecoratorCommand,
-    ISimpleCommand as SimpleCommand,
+    ISimpleCommand,
 
     // Tasks
     Task,
@@ -198,7 +200,7 @@ export {
     IQueriableProvider,
 
     // Providers -> MongoDB
-    GuildConfig,
+    IGuildConfig,
     GuildCfgMongoProvider,
 
     // Store

@@ -1,16 +1,16 @@
-import Bot from "../core/bot";
-import {ReadonlyCommandMap} from "../commands/command-store";
 import fs from "fs";
-import Log from "../core/log";
 import Command from "../commands/command";
-import {IDisposable} from "../core/helpers";
+import {ReadonlyCommandMap} from "../commands/command-store";
+import Bot from "../core/bot";
 import {EBotEvents} from "../core/bot-extra";
+import {IDisposable} from "../core/helpers";
+import Log from "../core/log";
 
 export interface IOptimizer extends IDisposable {
+    readonly running: boolean;
+
     start(): this;
     stop(): this;
-
-    readonly running: boolean;
 }
 
 /**
@@ -23,7 +23,7 @@ export default class Optimizer implements IOptimizer {
 
     protected commandsUsed: string[];
     protected processInterval: NodeJS.Timeout | null;
-    
+
     // TODO: Interval should be calculated based on amount of commands
     public constructor(bot: Bot, interval: number = 10 * 60 * 1_000, sizeThreshold: number = 102_400) {
         this.bot = bot;
@@ -31,11 +31,11 @@ export default class Optimizer implements IOptimizer {
         this.interval = interval;
         this.sizeThreshold = sizeThreshold;
 
-        if (this.interval < 60*1000) {
+        if (this.interval < 60 * 1000) {
             Log.warn("[Optimizer] Interval lower than 1 minute is not suggested");
         }
-        else if (this.interval < 30*1000) {
-            this.interval = 30*1000;
+        else if (this.interval < 30 * 1000) {
+            this.interval = 30 * 1000;
             Log.warn("[Optimizer] Interval lower than 30 seconds may be inefficient; Using 30 seconds as interval instead");
         }
 
@@ -63,7 +63,7 @@ export default class Optimizer implements IOptimizer {
 
         let avg: number = 0;
 
-        for (let [name, commandPckg] of commandPackages) {
+        for (const [name, commandPckg] of commandPackages) {
             avg += fs.statSync(commandPckg.path).size;
         }
 
@@ -79,32 +79,6 @@ export default class Optimizer implements IOptimizer {
         this.processInterval = this.bot.setInterval(this.process.bind(this), this.interval);
 
         return this;
-    }
-
-    /**
-     * Handle performance optimization iteration
-     * @return {Promise<number>}
-     */
-    protected async process(): Promise<number> {
-        const commands: ReadonlyCommandMap = this.bot.commandStore.getAll();
-
-        let released: number = 0;
-
-        for (let [name, command] of commands) {
-            if (!this.bot.internalCommands.includes(name as any) && !this.commandsUsed.includes(name) && !this.bot.commandStore.isReleased(name)) {
-                if (await this.bot.commandStore.release(name)) {
-                    released++;
-                }
-            }
-        }
-
-        if (released > 0) {
-            Log.verbose(`[TempoEngine] Released ${released} unused command(s)`);
-        }
-
-        this.commandsUsed = [];
-
-        return released;
     }
 
     /**
@@ -126,5 +100,31 @@ export default class Optimizer implements IOptimizer {
         if (this.processInterval !== null) {
             this.bot.clearInterval(this.processInterval);
         }
+    }
+
+    /**
+     * Handle performance optimization iteration
+     * @return {Promise<number>}
+     */
+    protected async process(): Promise<number> {
+        const commands: ReadonlyCommandMap = this.bot.commandStore.getAll();
+
+        let released: number = 0;
+
+        for (const [name, command] of commands) {
+            if (!this.bot.internalCommands.includes(name as any) && !this.commandsUsed.includes(name) && !this.bot.commandStore.isReleased(name)) {
+                if (await this.bot.commandStore.release(name)) {
+                    released++;
+                }
+            }
+        }
+
+        if (released > 0) {
+            Log.verbose(`[TempoEngine] Released ${released} unused command(s)`);
+        }
+
+        this.commandsUsed = [];
+
+        return released;
     }
 }

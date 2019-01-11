@@ -16,11 +16,11 @@ export interface ILanguage {
 }
 
 export default class Language implements ILanguage {
+    public readonly directory?: string;
+
     protected readonly languages: Map<string, LanguageSource>;
 
     protected default?: LanguageSource;
-
-    public readonly directory?: string;
 
     /**
      * @param {string} directory

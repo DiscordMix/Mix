@@ -72,10 +72,10 @@ export function on(eventName: DiscordEvent | string) {
         }
 
         BotEvents.push({
-            name: eventName,
-            handler: descriptor.value
+            handler: descriptor.value,
+            name: eventName
         });
-    }
+    };
 }
 
 export function message(channel: Snowflake) {
@@ -88,10 +88,10 @@ export function message(channel: Snowflake) {
         }
 
         ChannelMessageEvents.push({
-            name: channel,
-            handler: descriptor.value
+            handler: descriptor.value,
+            name: channel
         });
-    }
+    };
 }
 
 export enum DecoratorCommandType {
@@ -134,8 +134,8 @@ export function command(options: string | IPartialWeakCommand, description?: str
             }
 
             (finalCommand as any).meta = {
-                name: options,
-                description: description
+                description,
+                name: options
             };
         }
         else if (typeof options !== "object") {
@@ -157,7 +157,7 @@ export function command(options: string | IPartialWeakCommand, description?: str
 
         // Push for the command store to pickup and register
         DecoratorCommands.push(finalCommand as IWeakCommand | ISimpleCommand);
-    }
+    };
 }
 
 export function deprecated(use?: string): any {
@@ -172,5 +172,5 @@ export function deprecated(use?: string): any {
         }
 
         Log.warn(message);
-    }
+    };
 }

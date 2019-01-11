@@ -5,16 +5,16 @@ import BotMessages from "../../../core/messages";
  * @extends Command
  */
 export default class ThrowCommand extends Command {
-    readonly meta = {
+    public readonly meta = {
         name: "throw",
         description: "Throw an error"
     };
 
-    readonly constraints: any = {
+    public readonly constraints: any = {
         specific: [RestrictGroup.BotOwner]
     };
 
     public async run(): Promise<void> {
         throw new Error(BotMessages.INTENTIONAL_ERROR);
     }
-};
+}

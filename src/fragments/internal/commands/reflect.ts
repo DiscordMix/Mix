@@ -1,9 +1,9 @@
-import Command, {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
-import {ActionType, IAction} from "../../../actions/action";
 import {IFragmentMeta, IMessageActionArgs} from "../../..";
-import Context from "../../../commands/command-context";
-import Service from "../../../services/service";
+import {ActionType, IAction} from "../../../actions/action";
 import MsgBuilder from "../../../builders/msg-builder";
+import Command, {IArgument, RestrictGroup, TrivialArgType} from "../../../commands/command";
+import Context from "../../../commands/command-context";
+import Service from "../../../services/generic-service";
 
 interface Args {
     readonly type: ReflectDataType;
@@ -14,12 +14,12 @@ enum ReflectDataType {
 }
 
 export default class ReflectCommand extends Command {
-    readonly meta: IFragmentMeta = {
+    public readonly meta: IFragmentMeta = {
         name: "reflect",
         description: "Access bot's internal state"
     };
 
-    readonly args: IArgument[] = [
+    public readonly args: IArgument[] = [
         {
             name: "type",
             description: "The data to inspect",
@@ -29,7 +29,7 @@ export default class ReflectCommand extends Command {
         }
     ];
 
-    readonly constraints: any = {
+    public readonly constraints: any = {
         cooldown: 1,
         specific: [RestrictGroup.BotOwner]
     };
@@ -39,7 +39,7 @@ export default class ReflectCommand extends Command {
             case ReflectDataType.Services: {
                 let services: string = "";
 
-                for (let [name, service] of x.bot.services.getAll()) {
+                for (const [name, service] of x.bot.services.getAll()) {
                     if (service instanceof Service) {
                         services += `${service.running ? "+" : "-"} ${service.meta.name}\n\t${service.meta.description}\n`;
                     }

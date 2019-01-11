@@ -12,7 +12,7 @@ export default class UserSerializer<T extends User = User> implements ISerialize
     public serialize(data: T): string {
         return data.toString();
     }
-    
+
     public deserialize(serializedData: string): T | null {
         if (!Patterns.mention.test(serializedData)) {
             return null;

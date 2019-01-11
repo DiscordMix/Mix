@@ -1,5 +1,5 @@
 import BotMessages from "../core/messages";
-import {ITimeMachine, TimeMachine} from "..";
+import {ITimeMachine, TimeMachine} from "./time-machine";
 
 export interface IStoreAction<T = any> {
     readonly type: number | string;
@@ -19,6 +19,8 @@ export type Reducer<T> = (action: IStoreAction, state?: T) => T | null;
 export type StoreActionHandler<T> = (action: IStoreAction, changed: boolean, previousState?: T, newState?: T) => void;
 
 export interface IStore<TState = any, TActionType = any> {
+    readonly timeMachine: ITimeMachine<TState>;
+
     dispatch<T = any>(type: TActionType, payload?: T): this;
     getState(): TState | undefined;
     subscribe(handler: StoreActionHandler<TState>): boolean;
@@ -26,8 +28,6 @@ export interface IStore<TState = any, TActionType = any> {
     unsubscribeAll(): this;
     isSubscribed(handler: StoreActionHandler<TState>): boolean;
     addReducer(reducer: Reducer<TState>): boolean;
-
-    readonly timeMachine: ITimeMachine<TState>;
 }
 
 export default class Store<TState = any, TActionType = any> {

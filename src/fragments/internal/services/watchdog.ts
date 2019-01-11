@@ -1,14 +1,14 @@
-import Service from "../../../services/service";
 import {IFragmentMeta} from "../../..";
+import Service from "../../../services/generic-service";
 
 export default class WatchdogService extends Service {
-    readonly meta: IFragmentMeta = {
+    public readonly meta: IFragmentMeta = {
         name: "watchdog",
         description: "Bot status supervision service"
     };
 
     public start(): void {
-        //Log.debug("Watchdog service started! Hello from watchdog!");
+        // Log.debug("Watchdog service started! Hello from watchdog!");
         // TODO:
     }
 }

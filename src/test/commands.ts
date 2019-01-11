@@ -7,13 +7,13 @@ describe("Commands", () => {
         const fakeCmds: string[] = ["john", "doe"]
 
         // Actual commands
-        for (let i: number = 0; i < actualCmds.length; i++) {
-            expect(testBot.commandStore.contains(actualCmds[i])).to.be.a("boolean").and.to.equal(true);
+        for (const actualCmd of actualCmds) {
+            expect(testBot.commandStore.contains(actualCmd)).to.be.a("boolean").and.to.equal(true);
         }
 
         // Fake commands
-        for (let i: number = 0; i < fakeCmds.length; i++) {
-            expect(testBot.commandStore.contains(fakeCmds[i])).to.be.a("boolean").and.to.equal(false);
+        for (const fakeCmd of fakeCmds) {
+            expect(testBot.commandStore.contains(fakeCmd)).to.be.a("boolean").and.to.equal(false);
         }
 
         // Other tests
@@ -25,8 +25,8 @@ describe("Commands", () => {
     it("should not register invalid commands", async () => {
         const subjects: any[] = [true, false, null, undefined, "hello", "", "    ", 1, 0, -1, []];
 
-        for (let i: number = 0; i < subjects.length; i++) {
-            expect(await testBot.commandStore.register(subjects[i])).to.be.a("boolean").and.to.equal(false);
+        for (const subject of subjects) {
+            expect(await testBot.commandStore.register(subject)).to.be.a("boolean").and.to.equal(false);
         }
     });
 });

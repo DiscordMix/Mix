@@ -1,8 +1,8 @@
-import Context from "../../../commands/command-context";
 import {exec} from "child_process";
-import MsgBuilder from "../../../builders/msg-builder";
-import Command, {TrivialArgType, RestrictGroup, IArgument} from "../../../commands/command";
 import EmbedBuilder from "../../../builders/embed-builder";
+import MsgBuilder from "../../../builders/msg-builder";
+import Command, {IArgument, RestrictGroup, TrivialArgType} from "../../../commands/command";
+import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
 
 type Args = {
@@ -13,14 +13,14 @@ type Args = {
  * @extends Command
  */
 export default class CliCommand extends Command<Args> {
-    readonly meta = {
+    public readonly meta = {
         name: "cli",
         description: "Access the local machine's CLI"
     };
 
-    readonly aliases = ["exec", "exe"];
+    public readonly aliases = ["exec", "exe"];
 
-    readonly args: IArgument[] = [
+    public readonly args: IArgument[] = [
         {
             name: "command",
             description: "The command to execute",
@@ -29,7 +29,7 @@ export default class CliCommand extends Command<Args> {
         }
     ];
 
-    readonly constraints: any = {
+    public readonly constraints: any = {
         specific: [RestrictGroup.BotOwner]
     };
 

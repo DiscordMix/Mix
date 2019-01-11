@@ -1,6 +1,6 @@
 import {expect} from "chai";
-import {InternalArgTypes, InternalArgResolvers} from "../core/constants";
-import {testBot, init} from "./test-bot";
+import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
+import {init, testBot} from "./test-bot";
 
 describe("Bot", () => {
     it("should init and login", async () => {

@@ -1,5 +1,5 @@
-import Log from "../core/log";
 import Discord, {Message} from "discord.js";
+import Log from "../core/log";
 
 export interface IMessageEditOptions {
     readonly message: string;
@@ -10,9 +10,9 @@ export interface IMessageEditOptions {
 }
 
 export interface IEditableMessage {
-    edit(options: IMessageEditOptions): Promise<Message>;
-
     readonly msg: Message;
+
+    edit(options: IMessageEditOptions): Promise<Message>;
 }
 
 export default class EditableMessage implements IEditableMessage {

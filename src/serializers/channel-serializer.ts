@@ -1,7 +1,7 @@
-import {TextChannel, Snowflake, Channel} from "discord.js";
+import {Channel, Snowflake, TextChannel} from "discord.js";
+import {Log} from "..";
 import {Collection} from "../collections/collection";
 import {ISerializer} from "./serializer";
-import {Log} from "..";
 
 /**
  * Serializes Discord.JS channels from strings to channel objects and vise versa
@@ -16,7 +16,7 @@ export default class ChannelSerializer<T extends Channel = TextChannel> implemen
     public serialize(data: T): string {
         return data.toString();
     }
-    
+
     // TODO: Implement
     public deserialize(serializedData: string): T | null {
         throw Log.notImplemented;

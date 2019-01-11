@@ -4,7 +4,7 @@ import Command, {DefaultCommandRestrict} from "../commands/command";
 import Bot from "../core/bot";
 import {InternalCommand} from "../core/bot-extra";
 import Log from "../core/log";
-import Service, {ForkedService} from "../services/service";
+import Service, {ForkedService} from "../services/generic-service";
 import {IFragment} from "./fragment";
 import Loader, {ILivePackage, IPackage} from "./loader";
 

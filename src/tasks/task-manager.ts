@@ -1,9 +1,9 @@
-import Task from "./task";
-import Log from "../core/log";
-import Loader, {IPackage} from "../fragments/loader";
-import Bot from "../core/bot";
-import Utils from "../core/utils";
 import {PromiseOr} from "..";
+import Bot from "../core/bot";
+import Log from "../core/log";
+import Utils from "../core/utils";
+import Loader, {IPackage} from "../fragments/loader";
+import Task from "./task";
 
 export interface ITaskManager {
     registerTask(task: Task): boolean;
@@ -142,25 +142,6 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
-     * Run a task
-     * @param {string} name
-     * @return {boolean}
-     */
-    protected run(name: string): boolean {
-        if (!this.tasks.has(name)) {
-            return false;
-        }
-
-        const task: Task = this.tasks.get(name) as Task;
-
-        task.run();
-        (task as any).iterations++;
-        (task as any).lastIteration = Date.now();
-
-        return true;
-    }
-
-    /**
      * Disable all registered tasks
      * @return {Promise<this>}
      */
@@ -243,5 +224,24 @@ export default class TaskManager implements ITaskManager {
         }
 
         return 0;
+    }
+
+    /**
+     * Run a task
+     * @param {string} name
+     * @return {boolean}
+     */
+    protected run(name: string): boolean {
+        if (!this.tasks.has(name)) {
+            return false;
+        }
+
+        const task: Task = this.tasks.get(name) as Task;
+
+        task.run();
+        (task as any).iterations++;
+        (task as any).lastIteration = Date.now();
+
+        return true;
     }
 }

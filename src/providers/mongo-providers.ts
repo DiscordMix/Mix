@@ -5,24 +5,24 @@ import Bot from "../core/bot";
 import {AutoTransaction} from "../transactions/transaction";
 import {IQueriableProvider} from "./provider";
 
-export type GuildConfig = {
+export interface IGuildConfig {
     readonly guildId: Snowflake;
 }
 
 /**
  * Provides interface to easily interact with per-guild configuration
  */
-export class GuildCfgMongoProvider extends AutoTransaction<GuildConfig, Collection<Snowflake, GuildConfig>, number> implements IQueriableProvider<GuildConfig> {
+export class GuildCfgMongoProvider extends AutoTransaction<IGuildConfig, Collection<Snowflake, IGuildConfig>, number> implements IQueriableProvider<IGuildConfig> {
     protected static readonly key: string = "guildId";
 
-    public readonly cache: Collection<Snowflake, GuildConfig>;
+    public readonly cache: Collection<Snowflake, IGuildConfig>;
 
     protected readonly x: MongoCollection;
 
     public constructor(bot: Bot, collection: MongoCollection) {
         super(bot, 10 * 1000);
 
-        this.cache = new Collection<Snowflake, GuildConfig>();
+        this.cache = new Collection<Snowflake, IGuildConfig>();
         this.x = collection;
     }
 
@@ -40,34 +40,34 @@ export class GuildCfgMongoProvider extends AutoTransaction<GuildConfig, Collecti
         }) > 0;
     }
 
-    public find(query: Partial<GuildConfig>): Promise<GuildConfig[] | null> {
+    public find(query: Partial<IGuildConfig>): Promise<IGuildConfig[] | null> {
         return this.x.find(query).toArray();
     }
 
-    public findOne(query: Partial<GuildConfig>): Promise<GuildConfig | null> {
+    public findOne(query: Partial<IGuildConfig>): Promise<IGuildConfig | null> {
         return this.x.findOne(query);
     }
 
-    public async update(query: Partial<GuildConfig>, value: GuildConfig): Promise<number> {
+    public async update(query: Partial<IGuildConfig>, value: IGuildConfig): Promise<number> {
         // TODO: Inspect result
         return (await this.x.update(query, value)).result;
     }
 
-    public async updateOne(query: Partial<GuildConfig>, value: GuildConfig): Promise<boolean> {
+    public async updateOne(query: Partial<IGuildConfig>, value: IGuildConfig): Promise<boolean> {
         return (await this.x.updateOne(query, value)).upsertedCount > 0;
     }
 
-    public async delete(query: Partial<GuildConfig>): Promise<number> {
+    public async delete(query: Partial<IGuildConfig>): Promise<number> {
         return (await this.x.deleteMany(query)).deletedCount || 0;
     }
 
-    public async deleteOne(query: Partial<GuildConfig>): Promise<boolean> {
+    public async deleteOne(query: Partial<IGuildConfig>): Promise<boolean> {
         const result: DeleteWriteOpResultObject = await this.x.deleteOne(query);
 
         return result.deletedCount ? result.deletedCount > 0 : false;
     }
 
-    public async get(key: string): Promise<GuildConfig | null> {
+    public async get(key: string): Promise<IGuildConfig | null> {
         if (this.cache.has(key)) {
             return this.cache.get(key) || null;
         }
@@ -78,7 +78,7 @@ export class GuildCfgMongoProvider extends AutoTransaction<GuildConfig, Collecti
         })).toArray();
     }
 
-    public set(key: string, value: GuildConfig): boolean {
+    public set(key: string, value: IGuildConfig): boolean {
         this.cache.set(key, value);
 
         return true;

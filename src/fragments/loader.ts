@@ -116,24 +116,24 @@ export default abstract class Loader {
             const result: string[] = [];
             const scanQueue: string[] = [directory];
 
-            for (let dir: number = 0; dir < scanQueue.length; dir++) {
-                const files: string[] | null = await Utils.getFiles(scanQueue[dir], true);
+            for (const dir of scanQueue) {
+                const files: string[] | null = await Utils.getFiles(dir, true);
 
                 if (files === null) {
-                    Log.warn(`[Loader.pickupCandidates] Failed to read files of the directory: ${scanQueue[dir]}`);
+                    Log.warn(`[Loader.pickupCandidates] Failed to read files of the directory: ${dir}`);
 
                     continue;
                 }
 
-                for (let file: number = 0; file < files.length; file++) {
-                    const isDir: boolean = fs.lstatSync(files[file]).isDirectory();
+                for (const file of files) {
+                    const isDir: boolean = fs.lstatSync(file).isDirectory();
 
                     if (recursive && isDir) {
-                        scanQueue.push(files[file]);
+                        scanQueue.push(file);
                     }
                     // Verify the filename
-                    else if (!isDir && pattern.test(files[file])) {
-                        result.push(files[file]);
+                    else if (!isDir && pattern.test(file)) {
+                        result.push(file);
                     }
                 }
             }

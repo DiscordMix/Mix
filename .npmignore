@@ -16,6 +16,5 @@ docs/
 .env
 yarn.lock
 dist/test/**
-CODE_STYLE.md
 CODE_OF_CONDUCT.md
 issues.txt

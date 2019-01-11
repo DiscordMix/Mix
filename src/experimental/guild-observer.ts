@@ -1,4 +1,4 @@
-import {Guild, Client, Message, MessageReaction, User, Channel, GuildChannel, Role, Emoji, GuildMember} from "discord.js";
+import {Channel, Client, Emoji, Guild, GuildChannel, GuildMember, Message, MessageReaction, Role, User} from "discord.js";
 import {EventEmitter} from "events";
 
 export default class GuildObserver extends EventEmitter {

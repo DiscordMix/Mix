@@ -1,12 +1,12 @@
 import {EventEmitter} from "events";
-import Loader, {IPackage, ILivePackage} from "./loader";
+import {PromiseOr} from "..";
 import Command, {DefaultCommandRestrict} from "../commands/command";
 import Bot from "../core/bot";
-import {IFragment} from "./fragment";
-import Service, {ForkedService} from "../services/service";
-import Log from "../core/log";
-import {PromiseOr} from "..";
 import {InternalCommand} from "../core/bot-extra";
+import Log from "../core/log";
+import Service, {ForkedService} from "../services/service";
+import {IFragment} from "./fragment";
+import Loader, {ILivePackage, IPackage} from "./loader";
 
 export interface IFragmentManager extends EventEmitter {
     enableMultiple(packages: IPackage[], internal: boolean): PromiseOr<number>;
@@ -32,8 +32,8 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
     public async enableMultiple(packages: IPackage[], internal: boolean = false): Promise<number> {
         let enabled: number = 0;
 
-        for (let i: number = 0; i < packages.length; i++) {
-            if (await this.enable(packages[i], internal)) {
+        for (const pckg of packages) {
+            if (await this.enable(pckg, internal)) {
                 enabled++;
             }
         }
@@ -83,7 +83,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
             // TODO: Repeated below, somehow merge for efficiency.
             if (!Loader.validate(command)) {
                 Log.warn(`[FragmentManager.enable] Refusing to enable fragment with invalid name '${command.meta.name}'; Please note fragment names cannot contain spaces`);
-    
+
                 return false;
             }
 
@@ -133,7 +133,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
             // TODO: Repeated below, somehow merge for efficiency.
             if (!Loader.validate(service)) {
                 Log.warn(`[FragmentManager.enable] Refusing to enable fragment with invalid name '${service.meta.name}'; Please note fragment names cannot contain spaces`);
-    
+
                 return false;
             }
 

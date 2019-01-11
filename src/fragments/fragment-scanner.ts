@@ -22,7 +22,6 @@ export default class FragmentScanner implements IFragmentScanner {
 
     public scan(): string[] {
         // TODO
-        
         throw Log.notImplemented;
     }
 }

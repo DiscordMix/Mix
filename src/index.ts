@@ -35,7 +35,7 @@ import ChatEnv from "./core/chat-env";
 import List from "./collections/collection";
 import SetupHelper, {ISetupHelperResult, ISetupHelper} from "./core/setup-helper";
 import Service, {IServiceOptions, ForkedService, GenericService, ProcessMsgType, IProcessMsg, IGenericService, IService, IForkedService} from "./services/service";
-import {on, WeakCommand, IDecoratorCommand, SimpleCommand, DiscordEvent} from "./decorators/decorators";
+import {on, IWeakCommand, IDecoratorCommand, ISimpleCommand, DiscordEvent} from "./decorators/decorators";
 import {command} from "./decorators/decorators";
 import Patterns from "./core/patterns";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
@@ -164,9 +164,9 @@ export {
     // Decorators
     on,
     command,
-    WeakCommand,
+    OWeakCommand as WeakCommand,
     IDecoratorCommand,
-    SimpleCommand,
+    ISimpleCommand as SimpleCommand,
 
     // Tasks
     Task,

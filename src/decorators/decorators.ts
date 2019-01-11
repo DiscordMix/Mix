@@ -1,7 +1,7 @@
-import {CommandExeHandler, IConstraints, IArgument} from "../commands/command";
-import {IFragment} from "../fragments/fragment";
-import Log from "../core/log";
 import {Snowflake} from "discord.js";
+import {CommandExeHandler, IArgument, IConstraints} from "../commands/command";
+import Log from "../core/log";
+import {IFragment} from "../fragments/fragment";
 
 export enum DiscordEvent {
     Message = "message",
@@ -103,28 +103,28 @@ export interface IDecoratorCommand extends IFragment {
     readonly type: DecoratorCommandType;
 }
 
-export interface WeakCommand extends PartialWeakCommand {
+export interface IWeakCommand extends IPartialWeakCommand {
     readonly executed: CommandExeHandler;
 }
 
-export interface PartialWeakCommand extends IDecoratorCommand {
+export interface IPartialWeakCommand extends IDecoratorCommand {
     readonly aliases?: string[];
     readonly restrict?: IConstraints;
     readonly arguments?: IArgument[];
 }
 
-export interface SimpleCommand extends IDecoratorCommand {
+export interface ISimpleCommand extends IDecoratorCommand {
     readonly executed: CommandExeHandler;
 }
 
 // options: command name | WeakCommand
-export function command(options: string | PartialWeakCommand, description?: string) {
+export function command(options: string | IPartialWeakCommand, description?: string) {
     return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
         if (descriptor.value === undefined) {
             throw Log.error("[Decorators.command] Expecting value for command decorator");
         }
 
-        let finalCommand: WeakCommand | SimpleCommand | null = null;
+        let finalCommand: IWeakCommand | ISimpleCommand | null = null;
         let type: DecoratorCommandType = DecoratorCommandType.Simple;
 
         if (typeof options === "string") {
@@ -156,7 +156,7 @@ export function command(options: string | PartialWeakCommand, description?: stri
         (finalCommand as any).type = type;
 
         // Push for the command store to pickup and register
-        DecoratorCommands.push(finalCommand as WeakCommand | SimpleCommand);
+        DecoratorCommands.push(finalCommand as IWeakCommand | ISimpleCommand);
     }
 }
 

@@ -1,4 +1,4 @@
-import {User, Client, Message, MessageReaction, GuildMember, Guild} from "discord.js";
+import {Client, Guild, GuildMember, Message, MessageReaction, User} from "discord.js";
 import {EventEmitter} from "events";
 
 export default class UserObserver extends EventEmitter {
@@ -25,7 +25,7 @@ export default class UserObserver extends EventEmitter {
          * @readonly
          */
         this.user = user;
-        
+
         this.setupEvents();
     }
 

@@ -1,14 +1,14 @@
-import {EventEmitter} from "events";
 import {PriorityQueue} from "@atlas/xlib";
+import {EventEmitter} from "events";
 import {Action} from "../core/bot-extra";
 
 export interface ILoadBalancer extends EventEmitter {
-    next(action: Action): this;
-
     readonly threshold: number;
     readonly requestsPerSecond: number;
     readonly requestsPerMinute: number;
     readonly requestsPerHour: number;
+
+    next(action: Action): this;
 }
 
 /**
@@ -26,17 +26,17 @@ export default class LoadBalancer extends EventEmitter implements ILoadBalancer 
         this.queue = new PriorityQueue();
     }
 
+    public next(action: Action, highPriority?: boolean): this {
+        this.queue.enqueue(action, highPriority);
+
+        return this;
+    }
+
     protected async process(): Promise<this> {
         // TODO: Finish implementing
         /* for (const action of this.queue) {
             await action();
         } */
-
-        return this;
-    }
-
-    public next(action: Action, highPriority?: boolean): this {
-        this.queue.enqueue(action, highPriority);
 
         return this;
     }

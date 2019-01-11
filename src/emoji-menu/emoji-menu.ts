@@ -1,10 +1,10 @@
 import {Message, MessageReaction, Snowflake, User} from "discord.js";
-import Bot from "../core/bot";
-import Context from "../commands/command-context";
 import {EventEmitter} from "events";
+import {PromiseOr} from "..";
+import Context from "../commands/command-context";
+import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
 import {DiscordEvent} from "../decorators/decorators";
-import {PromiseOr} from "..";
 
 export type EmojiClickHandler = (reaction: MessageReaction, user: User) => void;
 
@@ -18,12 +18,12 @@ export interface IEmojiButton {
 }
 
 export interface IEmojiMenu extends EventEmitter {
-    add(button: IEmojiButton): this;
-    attach(context: Context): PromiseOr<this>;
-
     readonly messageId: Snowflake;
     readonly ownerId: Snowflake;
     readonly buttons: IEmojiButton[];
+
+    add(button: IEmojiButton): this;
+    attach(context: Context): PromiseOr<this>;
 }
 
 /**
@@ -53,7 +53,7 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
          * @readonly
          */
         this.messageId = messageId;
-        
+
         /**
          * @type {Snowflake}
          * @readonly
@@ -119,7 +119,7 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
 
         for (let i: number = 0; i < this.buttons.length; i++) {
             if (this.buttons[i].emoji === reaction.emoji.id || this.buttons[i].emoji === reaction.emoji.name) {
-                if (!this.buttons[i].public && user.id !== this.ownerId  || (this.bot && this.bot.client.user.id === user.id)) {
+                if (!this.buttons[i].public && user.id !== this.ownerId || (this.bot && this.bot.client.user.id === user.id)) {
                     continue;
                 }
 

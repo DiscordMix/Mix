@@ -1,16 +1,38 @@
 import Rgb from "./rgb";
 
 export interface IRgbaOptions {
-    readonly red: number,
-    readonly green: number,
-    readonly blue: number,
-    readonly alpha: number
+    readonly red: number;
+    readonly green: number;
+    readonly blue: number;
+    readonly alpha: number;
 }
 
 /**
  * @extends Rgb
  */
 export default class Rgba extends Rgb {
+    /**
+     * @param {string} hex
+     * @return {Rgba | null}
+     */
+    public static fromHex(hex: string): Rgba | null {
+        const result: RegExpExecArray | null = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+        if (result === null) {
+            return null;
+        }
+
+        const options: IRgbaOptions = {
+            alpha: 255,
+            blue: parseInt(result[2], 16),
+            green: parseInt(result[3], 16),
+            red: parseInt(result[1], 16)
+        };
+
+        // TODO: Also get the Alpha value (instead of being hardcoded).
+        return result ? new Rgba(options) : null;
+    }
+
     public readonly alpha: number;
 
     /**
@@ -43,28 +65,6 @@ export default class Rgba extends Rgb {
             blue: this.blue,
             alpha: this.alpha
         };
-    }
-
-    /**
-     * @param {string} hex
-     * @return {Rgba | null}
-     */
-    public static fromHex(hex: string): Rgba | null {
-        const result: RegExpExecArray | null = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-
-        if (result === null) {
-            return null;
-        }
-
-        const options: IRgbaOptions = {
-            red: parseInt(result[1], 16),
-            blue: parseInt(result[2], 16),
-            green: parseInt(result[3], 16),
-            alpha: 255
-        };
-
-        // TODO: Also get the Alpha value (instead of being hardcoded).
-        return result ? new Rgba(options) : null;
     }
 
     // TODO: Support for shorthand hex:

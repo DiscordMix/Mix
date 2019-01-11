@@ -1,9 +1,9 @@
-import {IQueriableProvider} from "./provider";
 import {Snowflake} from "discord.js";
 import {Collection as MongoCollection, DeleteWriteOpResultObject} from "mongodb";
-import {AutoTransaction} from "../transactions/transaction";
 import {Collection} from "../collections/collection";
 import Bot from "../core/bot";
+import {AutoTransaction} from "../transactions/transaction";
+import {IQueriableProvider} from "./provider";
 
 export type GuildConfig = {
     readonly guildId: Snowflake;
@@ -43,7 +43,7 @@ export class GuildCfgMongoProvider extends AutoTransaction<GuildConfig, Collecti
     public find(query: Partial<GuildConfig>): Promise<GuildConfig[] | null> {
         return this.x.find(query).toArray();
     }
-    
+
     public findOne(query: Partial<GuildConfig>): Promise<GuildConfig | null> {
         return this.x.findOne(query);
     }
@@ -52,7 +52,7 @@ export class GuildCfgMongoProvider extends AutoTransaction<GuildConfig, Collecti
         // TODO: Inspect result
         return (await this.x.update(query, value)).result;
     }
-    
+
     public async updateOne(query: Partial<GuildConfig>, value: GuildConfig): Promise<boolean> {
         return (await this.x.updateOne(query, value)).upsertedCount > 0;
     }

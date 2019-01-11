@@ -1,5 +1,5 @@
-import {IDbMessage} from "./generic-providers";
 import {Snowflake} from "discord.js";
+import {IDbMessage} from "./generic-providers";
 
 // TODO: Delete as new providers implemented
 

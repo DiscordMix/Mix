@@ -1,8 +1,8 @@
 import fs from "fs";
-import {IFragment} from "./fragment";
+import {Patterns} from "..";
 import Log from "../core/log";
 import Utils from "../core/utils";
-import {Patterns} from "..";
+import {IFragment} from "./fragment";
 
 const validFragmentNamePattern: RegExp = /^(?:[a-z]{0,}[a-z0-9-_\S]+){2,50}$/i;
 const validFragmentDescPattern: RegExp = /^(?:[a-z]{0,}[^\n\r\t\0]+){1,100}$/i;
@@ -156,8 +156,8 @@ export default abstract class Loader {
 
         const result: IPackage[] = [];
 
-        for (let i: number = 0; i < items.length; i++) {
-            const packg: IPackage | null = await Loader.load(items[i]);
+        for (const item of items) {
+            const packg: IPackage | null = await Loader.load(item);
 
             if (packg !== null) {
                 result.push(packg);

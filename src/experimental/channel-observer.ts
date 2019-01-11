@@ -1,4 +1,4 @@
-import {TextChannel, Client, Message, Channel, Collection, MessageReaction, User} from "discord.js";
+import {Channel, Client, Collection, Message, MessageReaction, TextChannel, User} from "discord.js";
 import {EventEmitter} from "events";
 
 /**

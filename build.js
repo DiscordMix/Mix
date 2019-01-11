@@ -36,6 +36,7 @@ async function build() {
 
         .then(() => automata.FileSystemOperations.forceRemove(buildDir))
         .then(() => automata.ScriptOperations.execute("tsc", undefined, true))
+        .then(() => automata.ScriptOperations.execute("tslint", ["-c", "tslint.json", "'src/**/*.ts'"], true))
 
         .fallback(async () => {
             console.log("Running fallback sequence");

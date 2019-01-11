@@ -1,7 +1,7 @@
 import {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
+import {PromiseOr} from "..";
 import Context from "../commands/command-context";
 import Log from "./log";
-import {PromiseOr} from "..";
 
 /**
  * The type of action performed by a setup helper
@@ -15,7 +15,7 @@ export interface IFromContextOptions {
     readonly context: Context;
     readonly title?: string;
     readonly embed?: boolean;
-    readonly timeout?: number
+    readonly timeout?: number;
 }
 
 export interface ISetupHelperOptions {
@@ -46,6 +46,28 @@ export interface ISetupHelper {
 }
 
 export default class SetupHelper implements ISetupHelper {
+    /**
+     * @param {IFromContextOptions} options
+     * @return {SetupHelper | null}
+     */
+    public static fromContext(options: IFromContextOptions): SetupHelper | null {
+        if (options.context.msg.channel instanceof TextChannel) {
+            // context.bot.client, context.message.channel, context.sender.id, title, timeout, embed
+            return new SetupHelper({
+                channel: options.context.msg.channel,
+                client: options.context.bot.client,
+                title: options.title,
+                userId: options.context.sender.id,
+                timeout: options.timeout,
+                embed: options.embed
+            });
+        }
+
+        Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${options.context.msg.channel.type}'`);
+
+        return null;
+    }
+
     protected readonly client: any;
     protected readonly channel: TextChannel;
     protected readonly userId: Snowflake;
@@ -200,27 +222,5 @@ export default class SetupHelper implements ISetupHelper {
 
             this.client.on("message", messageHandler);
         });
-    }
-
-    /**
-     * @param {IFromContextOptions} options
-     * @return {SetupHelper | null}
-     */
-    public static fromContext(options: IFromContextOptions): SetupHelper | null {
-        if (options.context.msg.channel instanceof TextChannel) {
-            //context.bot.client, context.message.channel, context.sender.id, title, timeout, embed
-            return new SetupHelper({
-                client: options.context.bot.client,
-                channel: options.context.msg.channel,
-                userId: options.context.sender.id,
-                title: options.title,
-                embed: options.embed,
-                timeout: options.timeout
-            });
-        }
-
-        Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${options.context.msg.channel.type}'`);
-
-        return null;
     }
 }

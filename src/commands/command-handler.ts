@@ -1,14 +1,14 @@
-import Log from "../core/log";
-import ChatEnv from "../core/chat-env";
-import Command, {RawArguments, RestrictGroup} from "./command";
-import CommandStore, {CommandManagerEvent} from "./command-store";
-import Context from "./command-context";
 import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
-import CommandParser from "./command-parser";
-import Utils from "../core/utils";
-import {IAction} from "../actions/action";
 import {PromiseOr} from "..";
+import {IAction} from "../actions/action";
 import {EBotEvents} from "../core/bot-extra";
+import ChatEnv from "../core/chat-env";
+import Log from "../core/log";
+import Utils from "../core/utils";
+import Command, {RawArguments, RestrictGroup} from "./command";
+import Context from "./command-context";
+import CommandParser from "./command-parser";
+import CommandStore, {CommandManagerEvent} from "./command-store";
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;
@@ -30,6 +30,142 @@ export interface ICommandHandler {
 }
 
 export default class CommandHandler implements ICommandHandler {
+    /**
+     * @param {Command} command
+     * @param {Context} context
+     * @return {boolean}
+     */
+    public static specificMet(command: Command, context: Context): boolean {
+        let met: boolean = false;
+
+        for (let i: number = 0; i < command.constraints.specific.length; i++) {
+            const specific: string | RestrictGroup = command.constraints.specific[i];
+
+            let valid: boolean = true;
+
+            if (typeof specific === "string" && (specific.startsWith("@") || specific.startsWith("&"))) {
+                switch (specific[0]) {
+                    case "@": {
+                        if (context.sender.id === specific.substring(1)) {
+                            met = true;
+                        }
+
+                        break;
+                    }
+
+                    case "&": {
+                        if (context.msg.member.roles.find("id", specific.substr(1, specific.length))) {
+                            met = true;
+                        }
+
+                        break;
+                    }
+
+                    default: {
+                        valid = false;
+                    }
+                }
+            }
+            else if (typeof specific === "number" && RestrictGroup[specific] !== undefined) {
+                // Override for bot owner
+                if (context.sender.id === context.bot.owner) {
+                    met = true;
+
+                    break;
+                }
+
+                switch (specific) {
+                    case RestrictGroup.ServerOwner: {
+                        const owners: Snowflake[] = context.msg.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
+
+                        if (owners.includes(context.sender.id)) {
+                            met = true;
+                        }
+
+                        break;
+                    }
+
+                    case RestrictGroup.ServerModerator: {
+                        const moderators: Snowflake[] = context.msg.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
+
+                        if (moderators.includes(context.sender.id)) {
+                            met = true;
+                        }
+
+                        break;
+                    }
+
+                    case RestrictGroup.BotOwner: {
+                        met = !Utils.isEmpty(context.bot.owner) && context.sender.id === context.bot.owner;
+
+                        break;
+                    }
+
+                    default: {
+                        valid = false;
+                    }
+                }
+            }
+            else {
+                valid = false;
+            }
+
+            if (!valid) {
+                throw Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`)
+            }
+
+            if (met) {
+                break;
+            }
+        }
+
+        return met;
+    }
+
+    /**
+     * @param {ChatEnv} environment
+     * @param {string} type
+     * @param {boolean} nsfw
+     * @return {boolean}
+     */
+    public static validateChannelTypeEnv(environment: ChatEnv, type: string, nsfw: boolean): boolean {
+        if (environment === ChatEnv.Anywhere) {
+            return true;
+        }
+        else if (environment === ChatEnv.Private && type === "dm") {
+            return true;
+        }
+        else if (environment === ChatEnv.NSFW && type === "text") {
+            return true;
+        }
+        else if (environment === ChatEnv.Guild && type === "text") {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param {ChatEnv|ChatEnv[]} environment
+     * @param {string} channelType
+     * @return {boolean}
+     */
+    public static validateEnvironment(environment: ChatEnv, channelType: string, nsfw: boolean): boolean {
+        if (Array.isArray(environment)) {
+            // TODO: CRITICAL: Pointless loop?
+            for (const env of environment) {
+                if (CommandHandler.validateChannelTypeEnv(environment, channelType, nsfw)) {
+                    return true;
+                }
+            }
+        }
+        else {
+            return CommandHandler.validateChannelTypeEnv(environment, channelType, nsfw);
+        }
+
+        return false;
+    }
+
     public readonly commandStore: CommandStore;
     public readonly errorHandlers: Function[];
     public readonly _errorHandlers: Map<CommandManagerEvent, any>;
@@ -289,140 +425,6 @@ export default class CommandHandler implements ICommandHandler {
                 Log.error(`There was an error while executing the '${command.meta.name}' command: ${error.message}`);
                 context.fail(`There was an error executing that command. (${error.message})`);
             }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param {Command} command
-     * @param {Context} context
-     * @return {boolean}
-     */
-    public static specificMet(command: Command, context: Context): boolean {
-        let met: boolean = false;
-
-        for (let i: number = 0; i < command.constraints.specific.length; i++) {
-            let specific: string | RestrictGroup = command.constraints.specific[i];
-            let valid: boolean = true;
-
-            if (typeof specific === "string" && (specific.startsWith("@") || specific.startsWith("&"))) {
-                switch (specific[0]) {
-                    case "@": {
-                        if (context.sender.id === specific.substring(1)) {
-                            met = true;
-                        }
-
-                        break;
-                    }
-
-                    case "&": {
-                        if (context.msg.member.roles.find("id", specific.substr(1, specific.length))) {
-                            met = true;
-                        }
-
-                        break;
-                    }
-
-                    default: {
-                        valid = false;
-                    }
-                }
-            }
-            else if (typeof specific === "number" && RestrictGroup[specific] !== undefined) {
-                // Override for bot owner
-                if (context.sender.id === context.bot.owner) {
-                    met = true;
-
-                    break;
-                }
-
-                switch (specific) {
-                    case RestrictGroup.ServerOwner: {
-                        const owners: Snowflake[] = context.msg.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
-
-                        if (owners.includes(context.sender.id)) {
-                            met = true;
-                        }
-
-                        break;
-                    }
-
-                    case RestrictGroup.ServerModerator: {
-                        const moderators: Snowflake[] = context.msg.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
-
-                        if (moderators.includes(context.sender.id)) {
-                            met = true;
-                        }
-
-                        break;
-                    }
-
-                    case RestrictGroup.BotOwner: {
-                        met = !Utils.isEmpty(context.bot.owner) && context.sender.id === context.bot.owner;
-
-                        break;
-                    }
-
-                    default: {
-                        valid = false;
-                    }
-                }
-            }
-            else {
-                valid = false;
-            }
-
-            if (!valid) {
-                throw Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`)
-            }
-
-            if (met) {
-                break;
-            }
-        }
-
-        return met;
-    }
-
-    /**
-     * @param {ChatEnv} environment
-     * @param {string} type
-     * @param {boolean} nsfw
-     * @return {boolean}
-     */
-    public static validateChannelTypeEnv(environment: ChatEnv, type: string, nsfw: boolean): boolean {
-        if (environment === ChatEnv.Anywhere) {
-            return true;
-        }
-        else if (environment === ChatEnv.Private && type === "dm") {
-            return true;
-        }
-        else if (environment === ChatEnv.NSFW && type === "text") {
-            return true;
-        }
-        else if (environment === ChatEnv.Guild && type === "text") {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param {ChatEnv|ChatEnv[]} environment
-     * @param {string} channelType
-     * @return {boolean}
-     */
-    public static validateEnvironment(environment: ChatEnv, channelType: string, nsfw: boolean): boolean {
-        if (Array.isArray(environment)) {
-            for (let i: number = 0; i < environment.length; i++) {
-                if (CommandHandler.validateChannelTypeEnv(environment, channelType, nsfw)) {
-                    return true;
-                }
-            }
-        }
-        else {
-            return CommandHandler.validateChannelTypeEnv(environment, channelType, nsfw);
         }
 
         return false;

@@ -16,8 +16,8 @@ export default abstract class SwitchParser {
             if (match !== null) {
                 result.push({
                     key: SwitchParser.getSwitchKey(match),
-                    value: SwitchParser.getSwitchValue(match),
-                    short: SwitchParser.isShortSwitch(match)
+                    short: SwitchParser.isShortSwitch(match),
+                    value: SwitchParser.getSwitchValue(match)
                 });
             }
         }

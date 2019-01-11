@@ -1,5 +1,5 @@
-import fs from "fs";
 import colors from "colors";
+import fs from "fs";
 import BotMessages from "./messages";
 
 export enum LogLevel {
@@ -37,7 +37,7 @@ export default abstract class Log {
 
         const color: string = options.color || "white";
 
-        let message: any = options.message;
+        const message: any = options.message;
 
         // TODO: Make sure check is working as intended, seems a bit suspicious
         if (Log.level < options.type) {
@@ -76,8 +76,8 @@ export default abstract class Log {
      */
     public static info(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
-            message: message,
-            params: params,
+            message,
+            params,
             type: LogLevel.Info,
             color: "cyan",
             prefix: "info"
@@ -92,8 +92,8 @@ export default abstract class Log {
      */
     public static success(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
-            message: message,
-            params: params,
+            message,
+            params,
             type: LogLevel.Success,
             color: "green",
             prefix: "sucs"
@@ -108,8 +108,8 @@ export default abstract class Log {
      */
     public static warn(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
-            message: message,
-            params: params,
+            message,
+            params,
             type: LogLevel.Warn,
             color: "yellow",
             prefix: "warn"
@@ -124,8 +124,8 @@ export default abstract class Log {
      */
     public static error(message: any, ...params: any[]): Error {
         const options: IComposeOptions = {
-            message: message,
-            params: params,
+            message,
+            params,
             type: LogLevel.Error,
             color: "red",
             prefix: "dang"
@@ -142,8 +142,8 @@ export default abstract class Log {
      */
     public static fatal(message: any, ...params: any[]): Error {
         const options: IComposeOptions = {
-            message: message,
-            params: params,
+            message,
+            params,
             type: LogLevel.Fatal,
             color: "red",
             prefix: "fatal"
@@ -161,8 +161,8 @@ export default abstract class Log {
      */
     public static verbose(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
-            message: message,
-            params: params,
+            message,
+            params,
             type: LogLevel.Verbose,
             color: "white",
             prefix: "verb"
@@ -177,8 +177,8 @@ export default abstract class Log {
      */
     public static debug(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
-            message: message,
-            params: params,
+            message,
+            params,
             type: LogLevel.Debug,
             color: "magenta",
             prefix: "dbug"

@@ -1,13 +1,13 @@
-import {Message, TextChannel, Snowflake, Guild, DMChannel, GroupDMChannel, Channel} from "discord.js";
+import {Channel, DMChannel, GroupDMChannel, Guild, Message, Snowflake, TextChannel} from "discord.js";
+import {PromiseOr, Store} from "..";
+import {ChannelType} from "../actions/action-interpreter";
 import Bot from "../core/bot";
+import Log from "../core/log";
+import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
 import Utils from "../core/utils";
-import {ChannelType} from "../actions/action-interpreter";
-import BotMessages from "../core/messages";
-import EditableMessage from "../message/editable-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
-import Log from "../core/log";
-import {Store, PromiseOr} from "..";
+import EditableMessage from "../message/editable-message";
 
 export interface IContextOptions {
     readonly msg: Message;
@@ -137,16 +137,16 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
                 this.bot.client.removeListener("message", listener);
                 resolve(null);
             }, timeout);
-    
+
             const listener: any = (msg: Message) => {
                 if (msg.author.id !== from || msg.channel.id !== channel.id || !msg.content || typeof msg.content !== "string" || msg.content.startsWith("|")) {
                     return;
                 }
-    
+
                 this.bot.clearTimeout(responseTimeout);
                 resolve(msg.content);
             };
-    
+
             this.bot.client.on("message", listener);
             await channel.send(message);
         });
@@ -188,7 +188,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
                 new EmojiMenu(response.msg.id, this.msg.author.id, [
                     {
                         emoji: "white_check_mark",
-        
+
                         clicked: () => {
                             Log.debug("Check clicked!")
                             resolve(true);

@@ -9,6 +9,10 @@ export interface IPathResolver {
 }
 
 export default class PathResolver implements IPathResolver {
+    public static resolve(...paths: string[]): string {
+        return path.resolve(path.join(...paths));
+    }
+
     protected paths: ISettingsPaths;
 
     public constructor(paths: ISettingsPaths) {
@@ -29,9 +33,5 @@ export default class PathResolver implements IPathResolver {
 
     public language(name: string): string {
         return PathResolver.resolve(this.paths.languages, `${name}.json`);
-    }
-
-    public static resolve(...paths: string[]): string {
-        return path.resolve(path.join(...paths));
     }
 }

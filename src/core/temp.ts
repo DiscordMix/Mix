@@ -1,11 +1,11 @@
-import Log from "./log";
-import Utils from "./utils";
+import {FileSystemOperations} from "@atlas/automata";
 import {Snowflake} from "discord.js";
 import fs from "fs";
 import path from "path";
 import {default as main} from "require-main-filename";
-import {FileSystemOperations} from "@atlas/automata";
 import {PromiseOr} from "..";
+import Log from "./log";
+import Utils from "./utils";
 
 export interface ITemp {
     setup(id: Snowflake): this;

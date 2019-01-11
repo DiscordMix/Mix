@@ -24,10 +24,10 @@ const DefaultBotStats: IBotStats = {
 };
 
 export interface IStatsCounter {
+    readonly stats: IBotStats;
+
     reset(): this;
     getAsReadonly(): ReadonlyBotStats;
-
-    readonly stats: IBotStats;
 }
 
 /**

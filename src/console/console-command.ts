@@ -1,5 +1,5 @@
-import Log from "../core/log";
 import {default as parseArgs, ParsedArgs} from "minimist";
+import Log from "../core/log";
 
 export interface IConsoleCommand {
     readonly base: string;
@@ -17,8 +17,8 @@ export default abstract class ConsoleCommand {
         Log.info(split.join(" "));
 
         return {
-            base: split[0],
-            arguments: parseArgs()
+            arguments: parseArgs(),
+            base: split[0]
         };
     }
 }

@@ -12,8 +12,8 @@ import {
 
 import fs from "fs";
 import path from "path";
-import Patterns from "./patterns";
 import Bot from "./bot";
+import Patterns from "./patterns";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
@@ -375,12 +375,12 @@ export default abstract class Utils {
     }
 
     /**
-     * @param {string} path
+     * @param {string} filePath
      * @return {Promise<ReturnType>} The data from the specified path
      */
-    public static async readJson<ReturnType = any>(path: string): Promise<ReturnType> {
+    public static async readJson<ReturnType = any>(filePath: string): Promise<ReturnType> {
         return new Promise<ReturnType>((resolve, reject) => {
-            fs.readFile(path, (error: Error, data: any) => {
+            fs.readFile(filePath, (error: Error, data: any) => {
                 if (error) {
                     reject(error);
 
@@ -404,35 +404,35 @@ export default abstract class Utils {
     }
 
     /**
-     * @param {string} path
+     * @param {string} filePath
      * @param {*} data
      * @return {boolean}
      */
-    public static writeJsonSync(path: string, data: any): boolean {
-        if (!fs.existsSync(path)) {
+    public static writeJsonSync(filePath: string, data: any): boolean {
+        if (!fs.existsSync(filePath)) {
             return false;
         }
 
-        fs.writeFileSync(path, data);
+        fs.writeFileSync(filePath, data);
 
         return true;
     }
 
     /**
      * @todo Check for errors
-     * @param {string} path
+     * @param {string} filePath
      * @return {ReturnType | null}
      */
-    public static readJsonSync<ReturnType = any>(path: string): ReturnType | null {
-        return JSON.parse(fs.readFileSync(path).toString()) as ReturnType || null;
+    public static readJsonSync<ReturnType = any>(filePath: string): ReturnType | null {
+        return JSON.parse(fs.readFileSync(filePath).toString()) as ReturnType || null;
     }
 
     /**
-     * @param {string} string The string to escape regex of
+     * @param {string} str The string to escape regex of
      * @return {string} The escaped string
      */
-    public static escapeRegexString(string: string): string {
-        return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    public static escapeRegexString(str: string): string {
+        return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
     /**

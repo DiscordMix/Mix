@@ -4,18 +4,19 @@ import CommandStore from "./command-store";
 import Command, {
     ArgumentType,
     ArgumentTypeChecker,
+    DefaultValueResolver,
     IArgument,
-    IArgumentResolver, DefaultValueResolver,
-    TrivialArgType,
+    IArgumentResolver,
+    ICustomArgType,
     RawArguments,
-    ICustomArgType
+    TrivialArgType
 } from "./command";
 
 import {Message} from "discord.js";
+import {FalseDelegates, TrueDelegates} from "../core/constants";
 import Log from "../core/log";
-import SwitchParser, {ICommandSwitch} from "./switch-parser";
 import Patterns from "../core/patterns";
-import {TrueDelegates, FalseDelegates} from "../core/constants";
+import SwitchParser, {ICommandSwitch} from "./switch-parser";
 
 export interface IResolveArgumentsOptions {
     readonly arguments: RawArguments;
@@ -63,8 +64,8 @@ export default abstract class CommandParser {
      * @return {boolean}
      */
     public static validate(commandString: string, manager: CommandStore, prefixes: string[]): boolean {
-        for (let i: number = 0; i < prefixes.length; i++) {
-            if (commandString.startsWith(prefixes[i])) {
+        for (const prefix of prefixes) {
+            if (commandString.startsWith(prefix)) {
                 const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
                 if (commandBase !== null) {
@@ -82,8 +83,8 @@ export default abstract class CommandParser {
      * @return {string | null}
      */
     public static getCommandBase(commandString: string, prefixes: string[]): string | null {
-        for (let i: number = 0; i < prefixes.length; i++) {
-            const regexResult = new RegExp(`^${Utils.escapeRegexString(prefixes[i])}([a-zA-Z]+)`).exec(commandString);
+        for (const prefix of prefixes) {
+            const regexResult = new RegExp(`^${Utils.escapeRegexString(prefix)}([a-zA-Z]+)`).exec(commandString);
 
             if (regexResult) {
                 return regexResult[1];

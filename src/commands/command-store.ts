@@ -40,6 +40,10 @@ export type CommandMap = Map<string, CommandPackage>;
 export type ReadonlyCommandMap = ReadonlyMap<string, CommandPackage>;
 
 export interface ICommandStore {
+    readonly bot: Bot;
+    readonly cooldowns: Map<Snowflake, Map<string, number>>;
+    readonly size: number;
+
     reload(commandName: string): PromiseOr<boolean>;
     release(name: string): PromiseOr<boolean>;
     isReleased(name: string): boolean;
@@ -57,10 +61,6 @@ export interface ICommandStore {
     setCooldown(user: Snowflake, cooldown: number, command: string): this;
     disposeAll(): PromiseOr<this>;
     unloadAll(): PromiseOr<this>;
-
-    readonly bot: Bot;
-    readonly cooldowns: Map<Snowflake, Map<string, number>>;
-    readonly size: number;
 }
 
 export default class CommandStore {
@@ -410,7 +410,7 @@ export default class CommandStore {
      * @return {Promise<void>}
      */
     public async disposeAll(): Promise<this> {
-        for (let [base, command] of this.commands) {
+        for (const [base, command] of this.commands) {
             if (command instanceof GenericCommand) {
                 await command.dispose();
             }

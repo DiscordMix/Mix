@@ -1,16 +1,16 @@
-import {UserGroup} from "../commands/command";
-import {Snowflake, Message, Client} from "discord.js";
-import {IArgumentResolver, ICustomArgType, Reducer, IDisposable, PromiseOr, ISettings, ICommandStore, IConsoleInterface, ActionInterpreter, ITaskManager, IStore, IActionInterpreter} from "..";
+import {Client, Message, Snowflake} from "discord.js";
 import {EventEmitter} from "events";
-import {ITimeoutAttachable} from "./helpers";
-import {ITemp} from "./temp";
-import {IServiceManager} from "../services/service-manager";
+import {ActionInterpreter, IActionInterpreter, IArgumentResolver, ICommandStore, IConsoleInterface, ICustomArgType, IDisposable, ISettings, IStore, ITaskManager, PromiseOr, Reducer} from "..";
+import {UserGroup} from "../commands/command";
 import {ICommandHandler} from "../commands/command-handler";
+import {IFragmentManager} from "../fragments/fragment-manager";
 import Language, {ILanguage} from "../language/language";
 import {IOptimizer} from "../optimization/optimizer";
-import {IFragmentManager} from "../fragments/fragment-manager";
+import {IServiceManager} from "../services/service-manager";
+import {ITimeoutAttachable} from "./helpers";
 import {IPathResolver} from "./path-resolver";
 import {IStatsCounter} from "./stat-counter";
+import {ITemp} from "./temp";
 
 export interface IBotModules {
     readonly store: IStore;
@@ -125,20 +125,6 @@ export type BotToken = string;
 export type Snowflake = string;
 
 export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDisposable, ITimeoutAttachable {
-    postStats(): PromiseOr<void>;
-    suspend(suspend: boolean): this;
-    triggerCommand(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
-    clearTimeout(timeout: NodeJS.Timeout): boolean;
-    clearAllTimeouts(): number;
-    clearInterval(interval: NodeJS.Timeout): boolean;
-    clearAllIntervals(): number;
-    handleMessage(msg: Message, edited: boolean): PromiseOr<boolean>;
-    handleCommandMessage(message: Message, content: string, resolvers: any): PromiseOr<void>;
-    connect(): PromiseOr<this>;
-    restart(reloadModules: boolean): PromiseOr<this>;
-    disconnect(): PromiseOr<this>;
-    clearTemp(): void;
-
     readonly settings: ISettings;
     readonly temp: ITemp;
     readonly services: IServiceManager;
@@ -166,4 +152,18 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly fragments: IFragmentManager;
     readonly paths: IPathResolver;
     readonly store: IStore<TState, TActionType>;
+
+    postStats(): PromiseOr<void>;
+    suspend(suspend: boolean): this;
+    triggerCommand(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
+    clearTimeout(timeout: NodeJS.Timeout): boolean;
+    clearAllTimeouts(): number;
+    clearInterval(interval: NodeJS.Timeout): boolean;
+    clearAllIntervals(): number;
+    handleMessage(msg: Message, edited: boolean): PromiseOr<boolean>;
+    handleCommandMessage(message: Message, content: string, resolvers: any): PromiseOr<void>;
+    connect(): PromiseOr<this>;
+    restart(reloadModules: boolean): PromiseOr<this>;
+    disconnect(): PromiseOr<this>;
+    clearTemp(): void;
 }

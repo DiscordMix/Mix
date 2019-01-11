@@ -1,19 +1,19 @@
-// Environment variables
+// tslint:disable-next-line:no-var-requires
 require("dotenv").config();
 
-import Settings from "../core/settings";
-import {Snowflake, Guild, TextChannel, Message} from "discord.js";
-import Context from "../commands/command-context";
-import ResponseHelper from "../core/response-helper";
-import Bot from "../core/bot";
+import {Guild, Message, Snowflake, TextChannel} from "discord.js";
 import path from "path";
-import {TestStoreActionType, ITestState} from "../state/store";
-import BotMessages from "../core/messages";
-import Rgba from "../misc/rgba";
-import Rgb from "../misc/rgb";
 import List from "../collections/collection";
-import Log, {LogLevel} from "../core/log";
+import Context from "../commands/command-context";
+import Bot from "../core/bot";
 import {EBotEvents} from "../core/bot-extra";
+import Log, {LogLevel} from "../core/log";
+import BotMessages from "../core/messages";
+import ResponseHelper from "../core/response-helper";
+import Settings from "../core/settings";
+import Rgb from "../misc/rgb";
+import Rgba from "../misc/rgba";
+import {ITestState, TestStoreActionType} from "../state/store";
 
 // --------- STATIC TESTS
 
@@ -60,7 +60,11 @@ const token: string = process.env.TEST_BOT_TOKEN as string;
 const testGuildId: Snowflake = process.env.TEST_GUILD_ID as Snowflake;
 const testGuildChannelId: Snowflake = process.env.TEST_CHANNEL_ID as Snowflake;
 
-// TODO: The Tempo Engine's interval isn't getting cleared at bot.dispose() (on shutdown) therefore leaving tests hanging. Hotfixed by disabling tempo engine in tests.
+/*
+    TODO: The Tempo Engine's interval isn't getting
+    cleared at bot.dispose() (on shutdown) therefore leaving tests hanging.
+    Hotfixed by disabling tempo engine in tests.
+*/
 
 if (!token) {
     throw new Error(BotMessages.TEST_EXPECT_TOKEN);
@@ -140,8 +144,8 @@ export default class TestBot extends Bot<ITestState, TestStoreActionType> {
 export let testBot: TestBot = new TestBot({
     settings: new Settings({
         general: {
-            token: token,
-            prefix: ["!"]
+            prefix: ["!"],
+            token
         }
     })
 }, true);

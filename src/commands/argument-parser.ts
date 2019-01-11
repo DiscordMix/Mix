@@ -16,9 +16,9 @@ export default class ArgumentParser {
     public resolve<T = any>(type: string, arg: string, resolvers: object): TemplateStringsArray {
         const keys: string[] = Object.keys(resolvers);
 
-        for (let i: number = 0; i < keys.length; i++) {
-            if (keys[i] === type) {
-                return resolvers[keys[i]](arg);
+        for (const key of keys) {
+            if (key === type) {
+                return resolvers[key](arg);
             }
         }
 

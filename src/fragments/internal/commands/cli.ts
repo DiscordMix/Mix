@@ -4,7 +4,8 @@ import MsgBuilder from "../../../builders/msg-builder";
 import Command, {RestrictGroup, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
-import {Name, Description, Aliases, Constraint, Arguments} from "../../../decorators/decorators";
+import {Description, Name, Aliases, Arguments} from "../../../decorators/general";
+import {Constraint} from "../../../decorators/constraints";
 
 interface IArgs {
     readonly command: string;

@@ -26,15 +26,6 @@ import {performance} from "perf_hooks";
 import path from "path";
 import Loader, {IPackage} from "../fragments/loader";
 import Language from "../language/language";
-
-import {
-    BotEvents,
-    ChannelMessageEvents,
-    IDecoratorCommand,
-    DecoratorCommandType,
-    DiscordEvent
-} from "../decorators/decorators";
-
 import StatCounter from "./stat-counter";
 import {IDisposable} from "./helpers";
 import ActionInterpreter from "../actions/action-interpreter";
@@ -49,6 +40,7 @@ import BotMessages from "./messages";
 import {IBot} from "..";
 import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, EBotEvents} from "./bot-extra";
 import {Action} from "@atlas/automata";
+import DiscordEvent from "./discord-event";
 
 /**
  * Bot events:
@@ -446,7 +438,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         // Use any registered prefix, default to index 0
         const content: string = `${this.settings.general.prefix[0]}${base} ${args.join(" ")}`.trim();
 
-        let command: Command | IDecoratorCommand | null = await CommandParser.parse(
+        let command: Command | null = await CommandParser.parse(
             content,
             this.commandStore,
             this.settings.general.prefix
@@ -454,12 +446,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
         if (command === null) {
             throw Log.error("[Bot.handleCommandMessage] Failed parsing command; Command is null");
-        }
-
-        if ((command as any).type !== undefined && typeof (command as any).type === "number" && DecoratorCommandType[(command as any).type] !== undefined) {
-            Log.warn("[Bot.triggerCommand] Triggering weak, simple or decorator commands is not supported.");
-
-            return;
         }
 
         command = command as Command;
@@ -863,20 +849,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         if (this.options.updateOnMessageEdit) {
             this.client.on(DiscordEvent.MessageUpdated, async (oldMessage: Message, newMessage: Message) => {
                 await this.handleMessage(newMessage, true);
-            });
-        }
-
-        // Setup user events
-        for (const event of BotEvents) {
-            this.client.on(event.name, event.handler);
-        }
-
-        // TODO: Decorator listeners/commands are deprecated?
-        for (const event of ChannelMessageEvents) {
-            this.client.on(DiscordEvent.Message, (message: Message) => {
-                if (message.channel.id === event.name) {
-                    event.handler();
-                }
             });
         }
 

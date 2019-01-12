@@ -1,6 +1,7 @@
 import Command, {RestrictGroup} from "../../../commands/command";
 import BotMessages from "../../../core/messages";
-import {Name, Description, Constraint} from "../../../decorators/decorators";
+import {Name, Description} from "../../../decorators/general";
+import {Constraint} from "../../../decorators/constraints";
 
 @Name("throw")
 @Description("Throw an error")

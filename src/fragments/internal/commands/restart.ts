@@ -1,7 +1,8 @@
 import {RestrictGroup} from "../../..";
 import Command from "../../../commands/command";
 import Context from "../../../commands/command-context";
-import {Name, Description, Constraint} from "../../../decorators/decorators";
+import {Name, Description} from "../../../decorators/general";
+import {Constraint} from "../../../decorators/constraints";
 
 @Name("restart")
 @Description("Restart the bot and reload modules")

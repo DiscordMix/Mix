@@ -4,7 +4,7 @@ import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
-import {PromiseOr} from "..";
+import {PromiseOr, IContext} from "..";
 
 export type UserGroup = string[];
 
@@ -98,7 +98,11 @@ export interface ICommandResult {
     readonly status: CommandStatus | number;
 }
 
-export type CommandRunner<T = ICommandResult | any> = (context: Context, args: any) => T;
+export type CommandRunner<T = ICommandResult | any> = (context: IContext, args: any) => T;
+
+export type CommandRelay<T = any> = (context: Context, args: T, command: IGenericCommand) => void;
+
+export type CommandGuard<T = any> = (context: Context, args: T, command: IGenericCommand) => boolean;
 
 export interface IGenericCommand<T extends object = object> extends IFragment, IDisposable {
     readonly minArguments: number;

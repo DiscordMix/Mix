@@ -1,9 +1,10 @@
-import {IFragmentMeta, IMessageActionArgs, Service} from "../../..";
+import {IMessageActionArgs, Service} from "../../..";
 import {ActionType, IAction} from "../../../actions/action";
 import MsgBuilder from "../../../builders/msg-builder";
-import Command, {IArgument, RestrictGroup, TrivialArgType} from "../../../commands/command";
+import Command, {RestrictGroup, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
-import {Name, Description, Arguments, Constraint} from "../../../decorators/decorators";
+import {Name, Description, Arguments} from "../../../decorators/general";
+import {Constraint} from "../../../decorators/constraints";
 
 interface IArgs {
     readonly type: ReflectDataType;

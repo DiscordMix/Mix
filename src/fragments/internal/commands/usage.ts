@@ -1,7 +1,7 @@
 import {default as Command, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
-import {IDecoratorCommand, Name, Description, Arguments} from "../../../decorators/decorators";
-import {Log} from "../../..";
+import {Name, Description, Arguments} from "../../../decorators/general";
+import Log from "../../../core/log";
 
 interface IArgs {
     readonly command: string;
@@ -20,7 +20,7 @@ interface IArgs {
 export default class UsageCommand extends Command<IArgs> {
     // TODO: Finish implementing
     public async run(x: Context, args: IArgs): Promise<void> {
-        const targetCommand: Command | IDecoratorCommand | null = await x.bot.commandStore.get(args.command);
+        const targetCommand: Command | null = await x.bot.commandStore.get(args.command);
 
         if (!targetCommand) {
             x.fail("That command doesn't exist.");

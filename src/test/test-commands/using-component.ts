@@ -1,5 +1,5 @@
 import {Command} from "../..";
-import {Component} from "../../decorators/decorators";
+import Component from "../../decorators/component";
 
 @Component.Command("test-component-command", {
     description: "A test component command"

@@ -1,6 +1,6 @@
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
-import {DiscordEvent} from "../decorators/decorators";
+import {DiscordEvent} from "../decorators/utility";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 
 // TODO: Move both enum and types elsewhere

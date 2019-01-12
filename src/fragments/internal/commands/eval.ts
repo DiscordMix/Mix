@@ -1,9 +1,10 @@
 import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
-import Command, {IArgument, RestrictGroup, TrivialArgType} from "../../../commands/command";
+import Command, {RestrictGroup, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
-import {Name, Description, Arguments, Constraint} from "../../../decorators/decorators";
+import {Name, Description, Arguments} from "../../../decorators/general";
+import {Constraint} from "../../../decorators/constraints";
 
 interface IArgs {
     readonly code: string;

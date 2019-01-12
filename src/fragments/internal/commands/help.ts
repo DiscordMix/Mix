@@ -2,7 +2,7 @@ import {RichEmbed} from "discord.js";
 import Command from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import {ReadonlyCommandMap} from "../../../commands/command-store";
-import {Name, Description} from "../../../decorators/decorators";
+import {Description, Name} from "../../../decorators/general";
 
 @Name("help")
 @Description("View available commands and their descriptions")

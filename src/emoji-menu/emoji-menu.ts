@@ -4,7 +4,7 @@ import {PromiseOr} from "..";
 import Context from "../commands/command-context";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
-import {DiscordEvent} from "../decorators/decorators";
+import DiscordEvent from "../core/discord-event";
 
 export type EmojiClickHandler = (reaction: MessageReaction, user: User) => void;
 
@@ -75,64 +75,6 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
     }
 
     /**
-     * @param {IEmojiButton} button
-     * @return {this}
-     */
-    public add(button: IEmojiButton): this {
-        this.buttons.push(button);
-
-        return this;
-    }
-
-    /**
-     * @param {MessageReaction} reaction
-     * @param {User} user
-     */
-    protected async handleMessageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
-        if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
-            return;
-        }
-
-        for (let i: number = 0; i < this.buttons.length; i++) {
-            if (this.buttons[i].emoji === reaction.emoji.id || this.buttons[i].emoji === reaction.emoji.name) {
-                if (!this.buttons[i].public && user.id !== this.ownerId) {
-                    continue;
-                }
-
-                if (this.buttons[i].added !== undefined && typeof this.buttons[i].added === "function") {
-                    await (this.buttons[i].added as EmojiClickHandler)(reaction, user);
-                }
-
-                this.emit("emojiClick", reaction, user, this.buttons[i]);
-            }
-        }
-    }
-
-    /**
-     * @param {MessageReaction} reaction
-     * @param {User} user
-     */
-    protected async handleMessageReactionRemove(reaction: MessageReaction, user: User): Promise<void> {
-        if (reaction.message.id !== this.messageId) {
-            return;
-        }
-
-        for (let i: number = 0; i < this.buttons.length; i++) {
-            if (this.buttons[i].emoji === reaction.emoji.id || this.buttons[i].emoji === reaction.emoji.name) {
-                if (!this.buttons[i].public && user.id !== this.ownerId || (this.bot && this.bot.client.user.id === user.id)) {
-                    continue;
-                }
-
-                if (this.buttons[i].removed !== undefined && typeof this.buttons[i].removed === "function") {
-                    await (this.buttons[i].removed as EmojiClickHandler)(reaction, user);
-                }
-
-                this.emit("emojiClick", reaction, user, this.buttons[i]);
-            }
-        }
-    }
-
-    /**
      * @param {Context} context
      * @return {Promise<this>}
      */
@@ -147,22 +89,6 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
         return this;
     }
 
-    protected async react(): Promise<void> {
-        if (!this.messageAttached) {
-            return;
-        }
-
-        const message: Message = await this.messageAttached.channel.fetchMessage(this.messageId) as Message;
-
-        for (let i: number = 0; i < this.buttons.length; i++) {
-            if (this.buttons[i].add === false) {
-                continue
-            }
-
-            await message.react(this.buttons[i].emoji);
-        }
-    }
-
     /**
      * @return {this}
      */
@@ -173,5 +99,79 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
         }
 
         return this;
+    }
+
+    /**
+     * @param {IEmojiButton} button
+     * @return {this}
+     */
+    public add(button: IEmojiButton): this {
+        this.buttons.push(button);
+
+        return this;
+    }
+
+    protected async react(): Promise<void> {
+        if (!this.messageAttached) {
+            return;
+        }
+
+        const message: Message = await this.messageAttached.channel.fetchMessage(this.messageId) as Message;
+
+        for (const btn of this.buttons) {
+            if (btn.add === false) {
+                continue;
+            }
+
+            await message.react(btn.emoji);
+        }
+    }
+
+    /**
+     * @param {MessageReaction} reaction
+     * @param {User} user
+     */
+    protected async handleMessageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
+        if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
+            return;
+        }
+
+        for (const btn of this.buttons) {
+            if (btn.emoji === reaction.emoji.id || btn.emoji === reaction.emoji.name) {
+                if (!btn.public && user.id !== this.ownerId) {
+                    continue;
+                }
+
+                if (btn.added !== undefined && typeof btn.added === "function") {
+                    await (btn.added as EmojiClickHandler)(reaction, user);
+                }
+
+                this.emit("emojiClick", reaction, user, btn);
+            }
+        }
+    }
+
+    /**
+     * @param {MessageReaction} reaction
+     * @param {User} user
+     */
+    protected async handleMessageReactionRemove(reaction: MessageReaction, user: User): Promise<void> {
+        if (reaction.message.id !== this.messageId) {
+            return;
+        }
+
+        for (const btn of this.buttons) {
+            if (btn.emoji === reaction.emoji.id || btn.emoji === reaction.emoji.name) {
+                if (!btn.public && user.id !== this.ownerId || (this.bot && this.bot.client.user.id === user.id)) {
+                    continue;
+                }
+
+                if (btn.removed !== undefined && typeof btn.removed === "function") {
+                    await (btn.removed as EmojiClickHandler)(reaction, user);
+                }
+
+                this.emit("emojiClick", reaction, user, btn);
+            }
+        }
     }
 }

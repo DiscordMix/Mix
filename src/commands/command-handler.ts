@@ -291,6 +291,11 @@ export default class CommandHandler implements ICommandHandler {
 
             this.commandStore.setCooldown(context.sender.id, commandCooldown, command.meta.name);
 
+            // After successfully executing the command, invoke all it's relays
+            for (const connection of command.connections) {
+                connection(context, resolvedArgs, command);
+            }
+
             context.bot.emit(EBotEvents.CommandExecuted, command, context, result);
 
             if (context.bot.options.autoDeleteCommands && context.msg.deletable) {

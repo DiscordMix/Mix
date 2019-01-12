@@ -254,6 +254,14 @@ export default class CommandHandler implements ICommandHandler {
         this.commandStore.bot.emit("handlingCommand", context, command, resolvedArgs);
 
         try {
+            // Process middleware before executing command
+            for (const guard of command.guards) {
+                if (!guard(context, resolvedArgs, command)) {
+                    // TODO: Upon failure, pass error to the corresponding handler
+                    return false;
+                }
+            }
+
             // TODO: Only check if result is true, make sure commandStore return booleans or actions?
             // TODO: Bot should be accessed protected (from this class)
             const rawResult: any = command.run(context, resolvedArgs);

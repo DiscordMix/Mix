@@ -115,9 +115,9 @@ export interface IGenericCommand<T extends object = object> extends IFragment, I
     readonly singleArg: boolean;
     readonly isEnabled: boolean;
     readonly undoable: boolean;
-    readonly connections: CommandRunner[];
+    readonly connections: CommandRelay[];
     readonly dependsOn: string[];
-    readonly guards: CommandRunner<boolean>[];
+    readonly guards: CommandGuard[];
 
     undo(oldContext: Context, message: Message, args: T): PromiseOr<boolean>;
     enabled(): PromiseOr<boolean>;
@@ -138,9 +138,9 @@ export abstract class GenericCommand<T extends object = object> implements IGene
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
     public readonly undoable: boolean = false;
-    public readonly connections: CommandRunner<void>[] = [];
+    public readonly connections: CommandRelay[] = [];
     public readonly dependsOn: string[] = [];
-    public readonly guards: CommandRunner[] = [];
+    public readonly guards: CommandGuard[] = [];
 
     protected readonly bot: Bot;
 

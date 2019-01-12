@@ -1,5 +1,5 @@
-import Command, {CommandRunner} from "../commands/command";
-import {Name} from "../decorators/general";
+import Command, {CommandRunner, TrivialArgType} from "../commands/command";
+import {Name, Arguments} from "../decorators/general";
 import {AttachedLogger} from "../decorators/other";
 
 const testConnection: CommandRunner = (x, args): void => {
@@ -8,6 +8,12 @@ const testConnection: CommandRunner = (x, args): void => {
 
 @Name("mycmd")
 @AttachedLogger()
+@Arguments(
+    {
+        name: "f",
+        type: TrivialArgType.String
+    }
+)
 export class MyCommand extends Command {
     public run(): void {
         // ...

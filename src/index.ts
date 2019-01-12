@@ -34,8 +34,6 @@ import Permission from "./core/permission";
 import Settings, {ISettings} from "./core/settings";
 import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setup-helper";
 import Utils from "./core/utils";
-import {DiscordEvent, IDecoratorCommand, ISimpleCommand, IWeakCommand, on} from "./decorators/utility";
-import {command} from "./decorators/utility";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
 import {ICommandEvent} from "./events/command-event";
 import {IFragment, IFragmentMeta} from "./fragments/fragment";
@@ -63,6 +61,11 @@ import TaskManager, {ITaskManager} from "./tasks/task-manager";
 import TimeParser from "./time/time-parser";
 import TimeSuffixType from "./time/time-suffix-type";
 import List from "./collections/list";
+import DiscordEvent from "./core/discord-event";
+import {Constraint} from "./decorators/constraints";
+import {Description, Name} from "./decorators/general";
+import Component from "./decorators/component";
+import {DecoratorUtils} from "./decorators/decorator-utils";
 
 export {
     // Fragments
@@ -164,11 +167,11 @@ export {
     IDisposable,
 
     // Decorators
-    on,
-    command,
-    IWeakCommand,
-    IDecoratorCommand,
-    ISimpleCommand,
+    Name,
+    Description,
+    Constraint,
+    Component,
+    DecoratorUtils,
 
     // Tasks
     Task,

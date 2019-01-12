@@ -3,7 +3,6 @@ require("dotenv").config();
 
 import {Guild, Message, Snowflake, TextChannel} from "discord.js";
 import path from "path";
-import List from "../collections/collection";
 import Context from "../commands/command-context";
 import Bot from "../core/bot";
 import {EBotEvents} from "../core/bot-extra";
@@ -14,8 +13,7 @@ import Settings from "../core/settings";
 import Rgb from "../misc/rgb";
 import Rgba from "../misc/rgba";
 import {ITestState, TestStoreActionType} from "../state/store";
-
-// --------- STATIC TESTS
+import List from "../collections/list";
 
 export const TestSubjects = {
     ids: [
@@ -61,9 +59,9 @@ const testGuildId: Snowflake = process.env.TEST_GUILD_ID as Snowflake;
 const testGuildChannelId: Snowflake = process.env.TEST_CHANNEL_ID as Snowflake;
 
 /*
-    TODO: The Tempo Engine's interval isn't getting
+    TODO: The Optimizer's interval isn't getting
     cleared at bot.dispose() (on shutdown) therefore leaving tests hanging.
-    Hotfixed by disabling tempo engine in tests.
+    Hotfixed by disabling optimizer in tests.
 */
 
 if (!token) {

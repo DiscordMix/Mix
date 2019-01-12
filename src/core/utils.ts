@@ -146,8 +146,9 @@ export default abstract class Utils {
             throw new Error("[Utils] Expecting subject to be a number and host to be an array of numbers");
         }
 
+        const pool: number[] = [...host];
+
         let midPoint: number = Math.round(host.length / 2);
-        let pool: number[] = [...host];
         let middle: number | null = null;
         let counter: number = 0;
 

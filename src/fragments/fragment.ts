@@ -1,6 +1,6 @@
 export interface IFragmentMeta {
     readonly name: string;
-    readonly description: string;
+    readonly description?: string;
     readonly author?: string;
     readonly version?: string;
 }

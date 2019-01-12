@@ -8,6 +8,7 @@ import "./delta";
 import "./log-serializer";
 import "./time-convert";
 import "./pagination";
+import "./decorators.test";
 
 // Non-static tests
 import "./test-bot";

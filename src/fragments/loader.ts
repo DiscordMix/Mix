@@ -84,14 +84,15 @@ export default abstract class Loader {
         if (!fragment.meta) {
             return false;
         }
-        else if (!fragment.meta.name || !fragment.meta.description) {
+        else if (Utils.isEmpty(fragment.meta.name)) {
             return false;
         }
-        else if (!validFragmentNamePattern.test(fragment.meta.name) || !validFragmentDescPattern.test(fragment.meta.name) || fragment.meta.name.length > 100 || fragment.meta.description.length > 100) {
+        else if (!validFragmentNamePattern.test(fragment.meta.name) || !validFragmentDescPattern.test(fragment.meta.name) || fragment.meta.name.length > 100 || (fragment.meta.description !== undefined && fragment.meta.description.length > 100)) {
             return false;
         }
         // TODO: Implement fragment version & author validation
-        else if (typeof fragment.meta !== "object" || typeof fragment.meta.name !== "string" || typeof fragment.meta.description !== "string" || (fragment.meta.author !== undefined && typeof fragment.meta.author !== "string") || (fragment.meta.version !== undefined && typeof fragment.meta.version !== "string")) {
+        // TODO: Implement description validation (description is optional)
+        else if (typeof fragment.meta !== "object" || typeof fragment.meta.name !== "string" || (fragment.meta.author !== undefined && typeof fragment.meta.author !== "string") || (fragment.meta.version !== undefined && typeof fragment.meta.version !== "string")) {
             return false;
         }
 

@@ -202,7 +202,7 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
 
                 break;
             }
-            
+
             case ActionType.FailEmbed: {
                 const act: IAction<IRequestActionArgs> = action;
                 const channel: TextChannel = this.ensureChannel(act.args.channelId, act.type);

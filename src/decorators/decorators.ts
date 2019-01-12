@@ -1,7 +1,10 @@
+import "reflect-metadata";
+
 import {Snowflake} from "discord.js";
-import {CommandExeHandler, IArgument, IConstraints} from "../commands/command";
+import {CommandExeHandler, IArgument, IConstraints, SpecificConstraints} from "../commands/command";
 import Log from "../core/log";
-import {IFragment} from "../fragments/fragment";
+import {IFragment, IFragmentMeta} from "../fragments/fragment";
+import ChatEnv from "../core/chat-env";
 
 export enum DiscordEvent {
     Message = "message",
@@ -165,12 +168,107 @@ export function deprecated(use?: string): any {
         const functionName: string = Object.keys(target)[0];
         const className: string = target.constructor.name;
 
-        let message: string = `[Deprecated] Function '${className}.${functionName}' is deprecated and may be removed in the future.`;
+        let notice: string = `[Deprecated] Function '${className}.${functionName}' is deprecated and may be removed in the future.`;
 
         if (use !== undefined) {
-            message += ` Use ${use} instead.`;
+            notice += ` Use ${use} instead.`;
         }
 
-        Log.warn(message);
+        Log.warn(notice);
     };
+}
+
+// TODO: Values must be validated
+
+// Commands -> General
+
+export function Name(name: string): any {
+    return function (target: any, key: string) {
+        return DecoratorUtils.overrideMeta(target, "name", name);
+    };
+}
+
+export function Description(description: string): any {
+    return function (target: any, key: string) {
+        return DecoratorUtils.overrideMeta(target, "description", description);
+    };
+}
+
+export function Aliases(aliases: string[]): any {
+    return function (target: any, key: string) {
+        return class extends target {
+            public readonly aliases: string[] = aliases;
+        };
+    };
+}
+
+export function Arguments(args: IArgument[]): any {
+    return function (target: any, key: string) {
+        return class extends target {
+            public readonly args: IArgument[] = args;
+        };
+    };
+}
+
+// Commands -> Constraints
+
+type Constructor = new (...args: any[]) => {};
+
+export abstract class DecoratorUtils {
+    // TODO: Attempt to merge override methods
+    public static overrideConstraint(target: any, constraint: string, value: any): any {
+        return class extends target {
+            public readonly constraints: IConstraints = {
+                ...this.constraints,
+                [constraint]: value
+            };
+        };
+    }
+
+    public static overrideMeta(target: any, meta: string, value: any): any {
+        return class extends target {
+            public readonly ["r"]: IFragmentMeta = {
+                ...this.meta,
+                [meta]: value
+            };
+        };
+    }
+}
+
+export abstract class Constraint {
+    public static Env(env: ChatEnv): any {
+        return function (target: any, key: string) {
+            return DecoratorUtils.overrideConstraint(target, "environment", env);
+        };
+    }
+
+    public static Cooldown(time: number): any {
+        return function (target: any, key: string) {
+            return DecoratorUtils.overrideConstraint(target, "cooldown", time);
+        };
+    }
+
+    public static Disabled(target: any): any {
+        return class extends target {
+            public readonly isEnabled: boolean = false;
+        };
+    }
+
+    public static Specific(constraints: SpecificConstraints): any {
+        return function (target: any, key: string) {
+            return DecoratorUtils.overrideConstraint(target, "specific", constraints);
+        };
+    }
+
+    public static IssuerPermissions(permissions: any[]): any {
+        return function (target: any, key: string) {
+            return DecoratorUtils.overrideConstraint(target, "issuerPermissions", permissions);
+        };
+    }
+
+    public static SelfPermissions(permissions: any[]): any {
+        return function (target: any, key: string) {
+            return DecoratorUtils.overrideConstraint(target, "selfPermissions", permissions);
+        };
+    }
 }

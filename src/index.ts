@@ -22,7 +22,6 @@ import {IBuilder} from "./builders/builder";
 import ConfigBuilder, {IConfigBuilder} from "./builders/config-builder";
 import EmbedBuilder from "./builders/embed-builder";
 import MsgBuilder, {IMsgBuilder} from "./builders/msg-builder";
-import List from "./collections/collection";
 import CommandParser from "./commands/command-parser";
 import ConsoleCommand from "./console/console-command";
 import ConsoleInterface, {IConsoleInterface} from "./console/console-interface";
@@ -63,6 +62,7 @@ import Task, {ITask} from "./tasks/task";
 import TaskManager, {ITaskManager} from "./tasks/task-manager";
 import TimeParser from "./time/time-parser";
 import TimeSuffixType from "./time/time-suffix-type";
+import List from "./collections/list";
 
 export {
     // Fragments

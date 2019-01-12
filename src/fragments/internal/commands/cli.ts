@@ -4,36 +4,26 @@ import MsgBuilder from "../../../builders/msg-builder";
 import Command, {IArgument, RestrictGroup, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
+import {Name, Description, Aliases, Constraint, Arguments} from "../../../decorators/decorators";
 
-type Args = {
+interface IArgs {
     readonly command: string;
 }
 
-/**
- * @extends Command
- */
-export default class CliCommand extends Command<Args> {
-    public readonly meta = {
-        name: "cli",
-        description: "Access the local machine's CLI"
-    };
-
-    public readonly aliases = ["exec", "exe"];
-
-    public readonly args: IArgument[] = [
-        {
-            name: "command",
-            description: "The command to execute",
-            type: TrivialArgType.String,
-            required: true
-        }
-    ];
-
-    public readonly constraints: any = {
-        specific: [RestrictGroup.BotOwner]
-    };
-
-    public async run(x: Context, args: Args): Promise<void> {
+@Name("cli")
+@Description("Access the local machine's CLI")
+@Aliases(["exec", "exe"])
+@Arguments([
+    {
+        name: "command",
+        description: "The command to execute",
+        type: TrivialArgType.String,
+        required: true
+    }
+])
+@Constraint.Specific([RestrictGroup.BotOwner])
+export default class CliCommand extends Command<IArgs> {
+    public async run(x: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();
 
         // TODO: Consider returning a promise?
@@ -65,4 +55,4 @@ export default class CliCommand extends Command<Args> {
             x.send(embed.build());
         });
     }
-};
+}

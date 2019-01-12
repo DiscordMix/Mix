@@ -10,7 +10,11 @@
         "radix": false,
         "array-type": false,
         "object-literal-sort-keys": false,
-        "only-arrow-functions": false
+        "only-arrow-functions": false,
+        "ordered-imports": false,
+        "max-line-length": false,
+        "no-console": false,
+        "max-classes-per-file": false
     },
     "rulesDirectory": []
 }

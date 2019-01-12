@@ -68,12 +68,14 @@ export interface IArgument {
     readonly switchShortName?: string;
 }
 
+export type SpecificConstraints = Array<string | RestrictGroup>;
+
 export interface IConstraints {
     selfPermissions: any[];
     issuerPermissions: any[];
     environment: ChatEnv;
     auth: number;
-    specific: Array<string | RestrictGroup>;
+    specific: SpecificConstraints;
     cooldown: number;
 }
 
@@ -97,11 +99,6 @@ export interface ICommandResult {
 }
 
 export interface IGenericCommand<T extends object = object> extends IFragment, IDisposable {
-    undo(oldContext: Context, message: Message, args: T): PromiseOr<boolean>;
-    enabled(): PromiseOr<boolean>;
-    run(context: Context, args: T): ICommandResult | any;
-    isExcluded(query: string): boolean;
-    
     readonly minArguments: number;
     readonly maxArguments: number;
     readonly meta: IFragmentMeta;
@@ -112,10 +109,18 @@ export interface IGenericCommand<T extends object = object> extends IFragment, I
     readonly singleArg: boolean;
     readonly isEnabled: boolean;
     readonly undoable: boolean;
+
+    undo(oldContext: Context, message: Message, args: T): PromiseOr<boolean>;
+    enabled(): PromiseOr<boolean>;
+    run(context: Context, args: T): ICommandResult | any;
+    isExcluded(query: string): boolean;
 }
 
 export abstract class GenericCommand<T extends object = object> implements IGenericCommand<T> {
-    public readonly abstract meta: IFragmentMeta;
+    public readonly meta: IFragmentMeta = {
+        // Leave empty intentionally so the fragment validator complains
+        name: ""
+    };
 
     public readonly aliases: string[] = [];
     public readonly args: IArgument[] = [];
@@ -187,6 +192,7 @@ export abstract class Subcommand<T extends object = object> extends GenericComma
 }
 
 /**
+ * Forge's base command class. The 'meta.name' property must be set.
  * @extends GenericCommand
  */
 export default abstract class Command<T extends object = object> extends GenericCommand<T> {

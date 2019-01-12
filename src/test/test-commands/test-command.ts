@@ -3,12 +3,12 @@ import {RestrictGroup} from "../..";
 import Context from "../../commands/command-context";
 
 export default class EvalCommand extends Command {
-    readonly meta = {
+    public readonly meta = {
         name: "hi",
         description: "Don't say hi"
     };
 
-    readonly constraints: any = {
+    public readonly constraints: any = {
         specific: [RestrictGroup.BotOwner]
     };
 

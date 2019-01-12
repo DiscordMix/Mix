@@ -1,12 +1,10 @@
 import Bot from "../core/bot";
 import {IDisposable, ISyncable, IVolatile} from "../core/helpers";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
-import {PeristentTask} from "./persistent-task";
 
 export interface ITask extends IFragment, IDisposable {
     readonly nextIteration: number;
     readonly lastIterationDifference: number;
-    readonly persistent: boolean;
     readonly interval: number;
     readonly maxIterations: number;
     readonly iterations: number;
@@ -16,7 +14,7 @@ export interface ITask extends IFragment, IDisposable {
     canRun(): boolean;
 }
 
-// TODO: Add ForkedTask class
+// TODO: Add ForkedTask class?
 export default abstract class Task implements ITask {
     public readonly abstract meta: IFragmentMeta;
 
@@ -53,14 +51,6 @@ export default abstract class Task implements ITask {
      */
     public dispose(): void {
         //
-    }
-
-    /**
-     * Whether the task is persistent
-     * @return {boolean}
-     */
-    public get persistent(): boolean {
-        return this instanceof PeristentTask;
     }
 
     /**

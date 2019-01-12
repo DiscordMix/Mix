@@ -285,7 +285,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
     public async stopAllForks(): Promise<number> {
         let stopped: number = 0;
 
-        for (let [name, child] of this.forkedServices) {
+        for (const [name, child] of this.forkedServices) {
             if (await this.stopFork(name)) {
                 stopped++;
             }

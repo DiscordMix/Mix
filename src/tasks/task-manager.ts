@@ -146,7 +146,7 @@ export default class TaskManager implements ITaskManager {
      * @return {Promise<this>}
      */
     public async unregisterAll(): Promise<this> {
-        for (let [name, task] of this.tasks) {
+        for (const [name, task] of this.tasks) {
             await this.disable(name);
         }
 
@@ -216,8 +216,8 @@ export default class TaskManager implements ITaskManager {
         const loaded: IPackage[] | null = await Loader.loadMultiple(candidates);
 
         if (loaded !== null) {
-            for (let i: number = 0; i < loaded.length; i++) {
-                this.registerTask(new (loaded[i].module as any)(this.bot));
+            for (const loadedItem of loaded) {
+                this.registerTask(new (loadedItem.module as any)(this.bot));
             }
 
             return loaded.length;

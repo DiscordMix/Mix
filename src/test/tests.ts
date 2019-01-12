@@ -17,7 +17,7 @@ import "./pagination.test";
 
 // Non-static tests
 import "./test-bot";
-import "./bot";
+import "./bot.test";
 import "./send-messages.test";
 import "./long-messages.test";
 import "./commands.test";

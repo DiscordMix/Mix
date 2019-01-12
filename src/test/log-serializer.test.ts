@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {LogSerializer, ILogMsg} from "..";
+import LogSerializer, {ILogMsg} from "../serializers/log-serializer";
 
 describe("Log Serializer", () => {
     describe("serialize()", () => {

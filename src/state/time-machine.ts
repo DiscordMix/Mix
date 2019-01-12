@@ -1,4 +1,4 @@
-import {Store, IStoreAction} from "..";
+import Store, {IStoreAction} from "./store";
 
 export interface IStateCapsule<T> {
     readonly state: T;

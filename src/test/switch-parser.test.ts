@@ -13,8 +13,8 @@ describe("Switch Parser", () => {
         const result7 = SwitchParser.getSwitches(TestSubjects.switches.multipleQuotedValues);
 
         it("parse command switches into objects", () => {
-            for (let i: number = 0; i < result1.length; i++) {
-                expect(result1[0]).to.be.an("object");
+            for (const item of result1) {
+                expect(item).to.be.an("object");
             }
         });
 

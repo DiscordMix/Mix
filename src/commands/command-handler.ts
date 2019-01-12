@@ -40,9 +40,7 @@ export default class CommandHandler implements ICommandHandler {
     public static specificMet(command: Command, context: Context): boolean {
         let met: boolean = false;
 
-        for (let i: number = 0; i < command.constraints.specific.length; i++) {
-            const specific: string | RestrictGroup = command.constraints.specific[i];
-
+        for (const specific of command.constraints.specific) {
             let valid: boolean = true;
 
             if (typeof specific === "string" && (specific.startsWith("@") || specific.startsWith("&"))) {
@@ -113,7 +111,7 @@ export default class CommandHandler implements ICommandHandler {
             }
 
             if (!valid) {
-                throw Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`)
+                throw Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`);
             }
 
             if (met) {
@@ -382,7 +380,7 @@ export default class CommandHandler implements ICommandHandler {
             arguments: rawArgs,
             message: context.msg,
             types: context.bot.argumentTypes,
-            command: command
+            command
         })) {
             if (this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch]) {
                 this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);

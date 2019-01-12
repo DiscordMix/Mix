@@ -18,14 +18,6 @@ export interface IContextOptions {
 export type TextBasedChannel = TextChannel | DMChannel;
 
 export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper {
-    joinArguments(): string;
-    reply(message: string): PromiseOr<Message | Message[] | null>;
-    privateReply(message: string): PromiseOr<Message | Message[]>;
-    createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number): PromiseOr<string | null>;
-    request(message: string, timeout?: number): PromiseOr<string | null>;
-    requestDM(message: string, timeout?: number): PromiseOr<string | null>;
-    promptDM(message: string, timeout: number): PromiseOr<boolean | null>
-
     readonly bot: Bot;
     readonly msg: Message;
     readonly label: string | null;
@@ -33,6 +25,14 @@ export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends
     readonly g: Guild;
     readonly c: T;
     readonly triggeringMessageId: Snowflake;
+
+    joinArguments(): string;
+    reply(message: string): PromiseOr<Message | Message[] | null>;
+    privateReply(message: string): PromiseOr<Message | Message[]>;
+    createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number): PromiseOr<string | null>;
+    request(message: string, timeout?: number): PromiseOr<string | null>;
+    requestDM(message: string, timeout?: number): PromiseOr<string | null>;
+    promptDM(message: string, timeout: number): PromiseOr<boolean | null>;
 }
 
 export default class Context<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IContext {
@@ -190,7 +190,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
                         emoji: "white_check_mark",
 
                         clicked: () => {
-                            Log.debug("Check clicked!")
+                            Log.debug("Check clicked!");
                             resolve(true);
                         }
                     },

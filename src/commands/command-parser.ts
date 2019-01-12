@@ -118,13 +118,13 @@ export default abstract class CommandParser {
 
         const switches: ICommandSwitch[] = SwitchParser.getSwitches(commandString);
 
-        for (let sw: number = 0; sw < switches.length; sw++) {
+        for (const sw of switches) {
             // TODO: Was just left here without being used..
-            const switchString: string = `${switches[sw].key}${switches[sw].value ? "=" : ""}${switches[sw].value || ""}`;
+            const switchString: string = `${sw.key}${sw.value ? "=" : ""}${sw.value || ""}`;
 
             for (let i: number = 0; i < schema.length; i++) {
-                if (!switches[sw].short && switches[sw].key === schema[i].name) {
-                    result[i] = switches[sw].value || true;
+                if (!sw.short && sw.key === schema[i].name) {
+                    result[i] = sw.value || true;
 
                     if (result[i].toString().indexOf(" ") !== -1) {
                         const spaces: number = result[i].toString().split(" ").length - 1;
@@ -134,12 +134,12 @@ export default abstract class CommandParser {
                         }
                     }
 
-                    //result.splice(result.indexOf(switchString), 1);
+                    // result.splice(result.indexOf(switchString), 1);
 
                     break;
                 }
-                else if (schema[i].switchShortName && switches[sw].short && switches[sw].key === schema[i].switchShortName) {
-                    result[i] = switches[sw].value || true;
+                else if (schema[i].switchShortName && sw.short && sw.key === schema[i].switchShortName) {
+                    result[i] = sw.value || true;
 
                     if (result[i].toString().indexOf(" ") !== -1) {
                         const spaces: number = result[i].toString().split(" ").length - 1;
@@ -149,7 +149,7 @@ export default abstract class CommandParser {
                         }
                     }
 
-                    //result.splice(result.indexOf(switchString), 1);
+                    // result.splice(result.indexOf(switchString), 1);
 
                     break;
                 }
@@ -182,11 +182,11 @@ export default abstract class CommandParser {
                 throw Log.error(`[CommandParser.resolveArguments] Expecting type of schema entry '${schemaEntry.name}' to be either a string or a trivial type`);
             }
 
-            for (let r: number = 0; r < options.resolvers.length; r++) {
+            for (const resolver of options.resolvers) {
                 // If a resolver exists for this schema type, resolve the value
-                if (options.resolvers[r].name === schemaEntry.type) {
+                if (resolver.name === schemaEntry.type) {
                     typeFound = true;
-                    result[options.schema[a].name] = options.resolvers[r].resolve(options.arguments[a] as any, options.message);
+                    result[options.schema[a].name] = resolver.resolve(options.arguments[a] as any, options.message);
 
                     break;
                 }
@@ -313,15 +313,15 @@ export default abstract class CommandParser {
             else if (typeof (options.schema[i].type) === "string") {
                 let found = false;
 
-                for (let t: number = 0; t < options.types.length; t++) {
-                    if (options.types[t].name === options.schema[i].type) {
+                for (const type of options.types) {
+                    if (type.name === options.schema[i].type) {
                         found = true;
 
-                        if (options.types[t].check instanceof RegExp && !(options.types[t].check as RegExp).test(options.arguments[i] as any)) {
+                        if (type.check instanceof RegExp && !(type.check as RegExp).test(options.arguments[i] as any)) {
                             return false;
                         }
-                        else if (typeof (options.types[t].check) === "function") {
-                            if (!(options.types[t].check as ArgumentTypeChecker)(options.arguments[i] as any, options.message)) {
+                        else if (typeof (type.check) === "function") {
+                            if (!(type.check as ArgumentTypeChecker)(options.arguments[i] as any, options.message)) {
                                 return false;
                             }
                         }

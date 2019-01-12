@@ -183,7 +183,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         }
 
         return await Utils.createTimedAction<Promise<boolean>>(this.bot, (): Promise<boolean> => {
-            return new Promise<boolean>((resolve) => {
+        return new Promise<boolean>((resolve) => {
                 // TODO: Debugging?
                 new EmojiMenu(response.msg.id, this.msg.author.id, [
                     {

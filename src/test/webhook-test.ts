@@ -36,13 +36,13 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         .fallback(async () => {
             Log.verbose("Github | Fallback sequence initiated");
 
-            const result: ICoordinatorRunResult = await coordinator
+            const fallbackResult: ICoordinatorRunResult = await coordinator
                 .then(() => GitOperations.branch(masterBranch))
                 .then(() => GitOperations.deleteBranch(deployBranch), true)
 
                 .run();
 
-            Log.verbose(`Github | Fallback sequence completed | Result is '${result.state === CoordinatorState.OK ? colors.green("OK") : colors.red("FAIL")}'`);
+            Log.verbose(`Github | Fallback sequence completed | Result is '${fallbackResult.state === CoordinatorState.OK ? colors.green("OK") : colors.red("FAIL")}'`);
         })
 
         .run((current: number, left: number, total: number, percentage: number) => {

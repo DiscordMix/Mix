@@ -3,6 +3,7 @@ import {ActionType, IAction} from "../../../actions/action";
 import MsgBuilder from "../../../builders/msg-builder";
 import Command, {IArgument, RestrictGroup, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
+import {Name, Description, Arguments, Constraint} from "../../../decorators/decorators";
 
 interface IArgs {
     readonly type: ReflectDataType;
@@ -12,27 +13,20 @@ enum ReflectDataType {
     Services = "services"
 }
 
+@Name("reflect")
+@Description("Access the bot's internal state")
+@Arguments(
+    {
+        name: "type",
+        description: "The data to inspect",
+        required: true,
+        switchShortName: "t",
+        type: TrivialArgType.String
+    }
+)
+@Constraint.Cooldown(1)
+@Constraint.Specific([RestrictGroup.BotOwner])
 export default class ReflectCommand extends Command {
-    public readonly meta: IFragmentMeta = {
-        name: "reflect",
-        description: "Access bot's internal state"
-    };
-
-    public readonly args: IArgument[] = [
-        {
-            name: "type",
-            description: "The data to inspect",
-            required: true,
-            switchShortName: "t",
-            type: TrivialArgType.String
-        }
-    ];
-
-    public readonly constraints: any = {
-        cooldown: 1,
-        specific: [RestrictGroup.BotOwner]
-    };
-
     public run(x: Context, args: IArgs): IAction<IMessageActionArgs> {
         switch (args.type) {
             case ReflectDataType.Services: {

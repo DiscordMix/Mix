@@ -1,31 +1,25 @@
-import {IArgument, default as Command, TrivialArgType} from "../../../commands/command";
+import {default as Command, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
-import {IDecoratorCommand} from "../../../decorators/decorators";
+import {IDecoratorCommand, Name, Description, Arguments} from "../../../decorators/decorators";
 import {Log} from "../../..";
 
-interface Args {
+interface IArgs {
     readonly command: string;
 }
 
-/**
- * @extends Command
- */
-export default class UsageCommand extends Command<Args> {
-    readonly meta = {
-        name: "usage",
-        description: "View the usage of a command"
-    };
-
-    readonly args: IArgument[] = [
-        {
-            name: "command",
-            type: TrivialArgType.String,
-            required: true,
-            description: "The command to inspect"
-        }
-    ];
-
-    public async run(x: Context, args: Args): Promise<void> {
+@Name("usage")
+@Description("View the usage of a command")
+@Arguments(
+    {
+        name: "command",
+        type: TrivialArgType.String,
+        required: true,
+        description: "The command to inspect"
+    }
+)
+export default class UsageCommand extends Command<IArgs> {
+    // TODO: Finish implementing
+    public async run(x: Context, args: IArgs): Promise<void> {
         const targetCommand: Command | IDecoratorCommand | null = await x.bot.commandStore.get(args.command);
 
         if (!targetCommand) {
@@ -34,7 +28,7 @@ export default class UsageCommand extends Command<Args> {
             return;
         }
         else if ((targetCommand as any).type !== undefined) {
-
+            throw Log.notImplemented;
         }
 
         throw Log.notImplemented;
@@ -54,4 +48,4 @@ export default class UsageCommand extends Command<Args> {
 
         context.ok(usageArgs.join(" ")); */
     }
-};
+}

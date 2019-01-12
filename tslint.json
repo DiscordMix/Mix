@@ -14,7 +14,8 @@
         "ordered-imports": false,
         "max-line-length": false,
         "no-console": false,
-        "max-classes-per-file": false
+        "max-classes-per-file": false,
+        "no-var-requires": false
     },
     "rulesDirectory": []
 }

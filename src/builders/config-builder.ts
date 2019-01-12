@@ -1,7 +1,7 @@
 import {IBuilder} from "..";
 
 export interface IConfigBuilder extends IBuilder<object> {
-    commandsPath(path: string): this
+    commandsPath(path: string): this;
     settingsPath(path: string): this;
     argumentTypes(argumentTypes: object): this;
 }

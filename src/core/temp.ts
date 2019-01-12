@@ -18,6 +18,21 @@ export interface ITemp {
  * Allows management of temporary data storage
  */
 export default class Temp implements ITemp {
+    /**
+     * @param {string} id
+     * @return {string}
+     */
+    public static resolvePath(id: string): string {
+        return path.join(Temp.resolveRootPath(), `u${id}`);
+    }
+
+    /**
+     * @return {string}
+     */
+    public static resolveRootPath(): string {
+        return path.join(path.dirname(main()), "tmp");
+    }
+
     protected id?: string;
     protected resolvedPath?: string;
 
@@ -108,20 +123,5 @@ export default class Temp implements ITemp {
         await Utils.writeJson(path.resolve(path.join(this.resolvedPath, file)), data);
 
         return this;
-    }
-
-    /**
-     * @param {string} id
-     * @return {string}
-     */
-    public static resolvePath(id: string): string {
-        return path.join(Temp.resolveRootPath(), `u${id}`);
-    }
-
-    /**
-     * @return {string}
-     */
-    public static resolveRootPath(): string {
-        return path.join(path.dirname(main()), "tmp");
     }
 }

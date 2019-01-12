@@ -68,6 +68,22 @@ export interface ISettings {
 }
 
 export default class Settings implements ISettings {
+    /**
+     * Load bot settings from a file
+     * @param {string} path The file containing the settings
+     * @return {Promise<Settings>}
+     */
+    public static async fromFile(path: string): Promise<Settings> {
+        if (!fs.existsSync(path)) {
+            Log.fatal(BotMessages.CFG_FILE_NO_EXIST);
+        }
+
+        const fileSettings: ISettingsOptions = await Utils.readJson(path);
+
+        // TODO: Make sure pure objects work
+        return new Settings(fileSettings);
+    }
+
     public general: ISettingsGeneral;
     public paths: ISettingsPaths;
     public keys: ISettingsKeys;
@@ -101,21 +117,5 @@ export default class Settings implements ISettings {
          * @readonly
          */
         this.keys = options.keys || {};
-    }
-
-    /**
-     * Load bot settings from a file
-     * @param {string} path The file containing the settings
-     * @return {Promise<Settings>}
-     */
-    public static async fromFile(path: string): Promise<Settings> {
-        if (!fs.existsSync(path)) {
-            Log.fatal(BotMessages.CFG_FILE_NO_EXIST);
-        }
-
-        const fileSettings: ISettingsOptions = await Utils.readJson(path);
-
-        // TODO: Make sure pure objects work
-        return new Settings(fileSettings);
     }
 }

@@ -1,17 +1,17 @@
-import {Name, Connect, Guards, Component, Arguments} from "../decorators/decorators";
-import Command, {CommandRunner, TrivialArgType, IArgument} from "../commands/command";
+import {Name, Arguments} from "../decorators/decorators";
+import Command, {CommandRunner, TrivialArgType} from "../commands/command";
 
 const testConnection: CommandRunner = (x, args): void => {
     //
 };
 
 @Name("mycmd")
-@Arguments([
+@Arguments(
     {
         name: "f",
         type: TrivialArgType.String
     }
-])
+)
 export class MyCommand extends Command {
     public run(): void {
         // ...

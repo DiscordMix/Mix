@@ -3,40 +3,31 @@ import MsgBuilder from "../../../builders/msg-builder";
 import Command, {IArgument, RestrictGroup, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
+import {Name, Description, Arguments, Constraint} from "../../../decorators/decorators";
 
 interface IArgs {
     readonly code: string;
     readonly silent: boolean;
 }
 
-/**
- * @extends Command
- */
+@Name("eval")
+@Description("Evaluate code")
+@Arguments(
+    {
+        name: "code",
+        description: "The code to evaluate",
+        type: TrivialArgType.String,
+        required: true
+    },
+    {
+        name: "silent",
+        description: "Send result or not",
+        type: TrivialArgType.Boolean,
+        required: false
+    }
+)
+@Constraint.Specific([RestrictGroup.BotOwner])
 export default class EvalCommand extends Command<IArgs> {
-    public readonly meta = {
-        name: "eval",
-        description: "Evaluate code"
-    };
-
-    public readonly args: IArgument[] = [
-        {
-            name: "code",
-            description: "The code to evaluate",
-            type: TrivialArgType.String,
-            required: true
-        },
-        {
-            name: "silent",
-            description: "Send result or not",
-            type: TrivialArgType.Boolean,
-            required: false
-        }
-    ];
-
-    public readonly constraints: any = {
-        specific: [RestrictGroup.BotOwner]
-    };
-
     public async run(x: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();
 

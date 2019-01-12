@@ -257,7 +257,7 @@ export function Aliases(...aliases: string[]): any {
     };
 }
 
-export function Arguments(args: IArgument[]): any {
+export function Arguments(...args: IArgument[]): any {
     return function (target: any, key: string) {
         // TODO: It may not be efficient to create a new instance just to extract default properties
         const instance: Command = DecoratorUtils.createInstance(target);

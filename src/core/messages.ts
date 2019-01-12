@@ -13,7 +13,7 @@ enum BotMessages {
     SETUP_START_OPTIMIZER = "[Bot.setup] Starting optimization engine",
     SETUP_STARTED_OPTIMIZER = "[Bot.setup] Started optimization engine",
     SETUP_COMPLETED = "[Bot.setup] Bot setup completed",
-    
+
     TEST_EXPECT_TOKEN = "[Tests] Expecting test token",
     TEST_EXPECT_GUILD = "[Tests] Expecting test guild's ID",
     TEST_EXPECT_CHANNEL = "[Tests] Expecting test guild's channel",

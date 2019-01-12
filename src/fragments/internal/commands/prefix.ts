@@ -1,16 +1,11 @@
 import {Log} from "../../..";
 import Command from "../../../commands/command";
 import Context from "../../../commands/command-context";
+import {Name, Description} from "../../../decorators/decorators";
 
-/**
- * @extends Command
- */
+@Name("prefix")
+@Description("Manage bot prefixes")
 export default class PrefixCommand extends Command {
-    public readonly meta = {
-        name: "prefix",
-        description: "Manage bot prefixes"
-    };
-
     // TODO: Update
     /* readonly args = {
         prefix: "!string"

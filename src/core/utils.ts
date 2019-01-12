@@ -186,7 +186,8 @@ export default abstract class Utils {
             return 0;
         }
 
-        let pool: number[] = [...host];
+        const pool: number[] = [...host];
+
         let midPoint: number = -1;
 
         while (pool.length !== 1) {
@@ -363,13 +364,13 @@ export default abstract class Utils {
     }
 
     /**
-     * @param {string} path
+     * @param {string} filePath
      * @param {*} data
      * @return {Promise<void>}
      */
-    public static async writeJson(path: string, data: any): Promise<void> {
+    public static async writeJson(filePath: string, data: any): Promise<void> {
         return new Promise<void>((resolve) => {
-            fs.writeFile(path, JSON.stringify(data), (error: Error) => {
+            fs.writeFile(filePath, JSON.stringify(data), (error: Error) => {
                 if (error) {
                     throw error;
                 }

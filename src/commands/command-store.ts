@@ -184,7 +184,7 @@ export default class CommandStore {
     public async reloadAll(): Promise<number> {
         let reloaded: number = 0;
 
-        for (let [base, command] of this.commands) {
+        for (const [base, command] of this.commands) {
             if (await this.reload(base)) {
                 reloaded++;
             }
@@ -248,8 +248,8 @@ export default class CommandStore {
         // TODO: Release resources when removing too (delete require.cache)
         // Remove any command aliases that might exist
         if (aliases.length > 0) {
-            for (let i: number = 0; i < aliases.length; i++) {
-                this.aliases.delete(aliases[i]);
+            for (const alias of aliases) {
+                this.aliases.delete(alias);
             }
         }
 
@@ -282,9 +282,9 @@ export default class CommandStore {
     public async get(name: string): Promise<Command | null> {
         // TODO: CRITICAL: Will probably error since property may be undefined (Trying to access .module of undefined)
         if (this.aliases.get(name) !== undefined) {
-            const command: CommandPackage | null = (this.commands.get(this.aliases.get(name) as string) as CommandPackage) || null;
+            const commandPackg: CommandPackage | null = (this.commands.get(this.aliases.get(name) as string) as CommandPackage) || null;
 
-            return command === null ? null : command.instance;
+            return commandPackg === null ? null : commandPackg.instance;
         }
         else if (this.isReleased(name)) {
             // TODO: Re-load command here
@@ -320,8 +320,8 @@ export default class CommandStore {
     public async registerMultiple(commands: CommandPackage[]): Promise<number> {
         let registered: number = 0;
 
-        for (let i: number = 0; i < commands.length; i++) {
-            if (await this.register(commands[i])) {
+        for (const command of commands) {
+            if (await this.register(command)) {
                 registered++;
             }
         }

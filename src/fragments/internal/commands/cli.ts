@@ -1,7 +1,7 @@
 import {exec} from "child_process";
 import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
-import Command, {IArgument, RestrictGroup, TrivialArgType} from "../../../commands/command";
+import Command, {RestrictGroup, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
 import {Name, Description, Aliases, Constraint, Arguments} from "../../../decorators/decorators";
@@ -13,14 +13,14 @@ interface IArgs {
 @Name("cli")
 @Description("Access the local machine's CLI")
 @Aliases("exec", "exe")
-@Arguments([
+@Arguments(
     {
         name: "command",
         description: "The command to execute",
         type: TrivialArgType.String,
         required: true
     }
-])
+)
 @Constraint.Specific([RestrictGroup.BotOwner])
 export default class CliCommand extends Command<IArgs> {
     public async run(x: Context, args: IArgs): Promise<void> {

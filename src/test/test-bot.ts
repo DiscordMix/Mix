@@ -1,4 +1,3 @@
-// tslint:disable-next-line:no-var-requires
 require("dotenv").config();
 
 import {Guild, Message, Snowflake, TextChannel} from "discord.js";
@@ -6,7 +5,6 @@ import path from "path";
 import Context from "../commands/command-context";
 import Bot from "../core/bot";
 import {EBotEvents} from "../core/bot-extra";
-import Log, {LogLevel} from "../core/log";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
 import Settings from "../core/settings";

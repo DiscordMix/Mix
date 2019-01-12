@@ -70,6 +70,10 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
         this.bot = bot;
     }
 
+    /**
+     * @param {IAction} action
+     * @return {Promise<this>}
+     */
     public async interpret(action: IAction): Promise<this> {
         switch (action.type) {
             case ActionType.Message: {

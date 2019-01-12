@@ -1,5 +1,5 @@
 import Discord, {RichEmbed} from "discord.js";
-import {IBuilder} from "..";
+import {IBuilder} from "./builder";
 
 export interface IEmbedBuilder extends IBuilder<RichEmbed> {
     color(color: string): this;

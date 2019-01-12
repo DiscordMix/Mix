@@ -135,8 +135,8 @@ export default class SqlQuery<T = any> implements ISqlQueryBuilder<T> {
 
             const whereAddition: string[] = [];
 
-            for (let i: number = 0; i < this.wheres.length; i++) {
-                whereAddition.push(`${this.wheres[i].property} ${this.wheres[i].operator || "="} ${SqlQuery.getValueQueryForm(this.wheres[i].value)}`);
+            for (const where of this.wheres) {
+                whereAddition.push(`${where.property} ${where.operator || "="} ${SqlQuery.getValueQueryForm(where.value)}`);
             }
 
             query += whereAddition.join(", ");

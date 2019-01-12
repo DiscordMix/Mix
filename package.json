@@ -29,7 +29,8 @@
         "check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js --timeout 5s --slow 1.5s",
         "webhook-test": "npm run build && node dist/test/webhook-test.js",
-        "prepublish": "npm run build && npm test"
+        "prepublish": "npm run build && npm test",
+        "dec-test": "npm run build && node dist/test/decorators.test.js"
     },
     "author": "CloudRex <cloudrex@outlook.com>",
     "license": "MIT",

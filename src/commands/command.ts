@@ -98,6 +98,8 @@ export interface ICommandResult {
     readonly status: CommandStatus | number;
 }
 
+export type CommandRunner<T = ICommandResult | any> = (context: Context, args: any) => T;
+
 export interface IGenericCommand<T extends object = object> extends IFragment, IDisposable {
     readonly minArguments: number;
     readonly maxArguments: number;
@@ -109,6 +111,9 @@ export interface IGenericCommand<T extends object = object> extends IFragment, I
     readonly singleArg: boolean;
     readonly isEnabled: boolean;
     readonly undoable: boolean;
+    readonly connections: CommandRunner[];
+    readonly dependsOn: string[];
+    readonly guards: CommandRunner<boolean>[];
 
     undo(oldContext: Context, message: Message, args: T): PromiseOr<boolean>;
     enabled(): PromiseOr<boolean>;
@@ -129,6 +134,9 @@ export abstract class GenericCommand<T extends object = object> implements IGene
     public readonly singleArg: boolean = false;
     public readonly isEnabled: boolean = true;
     public readonly undoable: boolean = false;
+    public readonly connections: CommandRunner<void>[] = [];
+    public readonly dependsOn: string[] = [];
+    public readonly guards: CommandRunner[] = [];
 
     protected readonly bot: Bot;
 

@@ -12,7 +12,9 @@ import CommandStore, {CommandManagerEvent} from "./command-store";
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;
-    readonly errorHandlers: Function[];
+
+    // TODO: Types
+    readonly errorHandlers: any[];
     readonly argumentTypes: any;
 }
 
@@ -209,115 +211,6 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {CommandManagerEvent} event
-     * @param {Context} context
-     * @param {Command} command
-     * @return {boolean}
-     */
-    protected handleError(event: CommandManagerEvent, context: Context, command: Command): boolean {
-        if (this._errorHandlers.get(event) !== undefined) {
-            return this._errorHandlers.get(event)(context, command);
-        }
-
-        return false;
-    }
-
-    /**
-     * @param {Context} context
-     * @param {Command} command
-     * @param {IArgument[]} rawArgs
-     * @return {boolean}
-     */
-    protected meetsRequirements(context: Context, command: Command, rawArgs: RawArguments): boolean {
-        // TODO: Add a check for exclusions including:
-        // #channelId, &roleId, @userId, $guildId
-
-        if (!CommandHandler.validateEnvironment(
-            command.constraints.environment,
-            context.msg.channel.type,
-            (context.msg.channel as any).nsfw || false)
-        ) {
-            if (!this.handleError(CommandManagerEvent.DisallowedEnvironment, context, command)) {
-                context.msg.channel.send("That command may not be used here.");
-            }
-        }
-        else if (!command.isEnabled) {
-            if (!this.handleError(CommandManagerEvent.DisabledCommand, context, command)) {
-                context.fail("That command is disabled and may not be used.");
-            }
-        }
-        else if (command.constraints.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
-            context.fail("You're not allowed to use that command");
-        }
-        else if (!CommandParser.checkArguments({
-            schema: command.args,
-            arguments: rawArgs,
-            message: context.msg,
-            types: context.bot.argumentTypes,
-            command: command
-        })) {
-            if (this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch]) {
-                this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);
-            }
-            else if (command.maxArguments === command.minArguments) {
-                context.fail(`That command only accepts **${command.maxArguments}** arguments.`);
-            }
-            else if (command.maxArguments > 0) {
-                context.fail(`That command only accepts up to **${command.maxArguments}** and a minimum of **${command.minArguments}** arguments.`);
-            }
-            else {
-                context.fail(`That command does not accept any arguments.`);
-            }
-        }
-        else if ((typeof command.canExecute === "function" && !command.canExecute(context)) || typeof command.canExecute === "boolean" && !command.canExecute) {
-            if (!this.handleError(CommandManagerEvent.CommandMayNotExecute, context, command)) {
-                context.fail("That command cannot be executed right now.");
-            }
-        }
-        // TODO: CRITICAL Project no longer uses Typer. Is this already handled by checkArguments()?
-        else if (false/* !command.singleArg /* && (!typer.validate(command.args, CommandHandler.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) */) {
-            if (this.errorHandlers[CommandManagerEvent.InvalidArguments]) {
-                this.errorHandlers[CommandManagerEvent.InvalidArguments](context, command);
-            }
-            else {
-                context.fail("Invalid argument usage. Please use the `usage` command.");
-            }
-        }
-        else if (command.constraints.selfPermissions.length > 0 && !context.msg.guild.me.hasPermission(command.constraints.selfPermissions.map((permissionObj) => permissionObj.permission))) {
-            if (!this.handleError(CommandManagerEvent.MissingSelfPermissions, context, command)) {
-                const permissions = command.constraints.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
-
-                context.fail(`I require the following permission(s) to execute that command: ${permissions}`);
-            }
-        }
-        else if (command.constraints.issuerPermissions.length > 0 && !context.msg.member.hasPermission(command.constraints.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
-            if (!this.handleError(CommandManagerEvent.MissingIssuerPermissions, context, command)) {
-                const permissions = command.constraints.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
-
-                context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
-            }
-        }
-        else if (command.constraints.cooldown && !this.commandStore.cooldownExpired(context.sender.id, command.meta.name)) {
-            if (!this.handleError(CommandManagerEvent.UnderCooldown, context, command)) {
-                const timeLeft: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
-
-                if (timeLeft) {
-                    context.fail(`You must wait **${(timeLeft - Date.now()) / 1000}** seconds before using that command again.`);
-                }
-                else {
-                    Log.warn("[CommandStore.handle] Command cooldown returned null or undefined, this shouldn't happen");
-                    context.fail("That command is under cooldown.");
-                }
-            }
-        }
-        else {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @param {Snowflake} user
      * @param {Message} message
      */
@@ -425,6 +318,115 @@ export default class CommandHandler implements ICommandHandler {
                 Log.error(`There was an error while executing the '${command.meta.name}' command: ${error.message}`);
                 context.fail(`There was an error executing that command. (${error.message})`);
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param {CommandManagerEvent} event
+     * @param {Context} context
+     * @param {Command} command
+     * @return {boolean}
+     */
+    protected handleError(event: CommandManagerEvent, context: Context, command: Command): boolean {
+        if (this._errorHandlers.get(event) !== undefined) {
+            return this._errorHandlers.get(event)(context, command);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param {Context} context
+     * @param {Command} command
+     * @param {IArgument[]} rawArgs
+     * @return {boolean}
+     */
+    protected meetsRequirements(context: Context, command: Command, rawArgs: RawArguments): boolean {
+        // TODO: Add a check for exclusions including:
+        // #channelId, &roleId, @userId, $guildId
+
+        if (!CommandHandler.validateEnvironment(
+            command.constraints.environment,
+            context.msg.channel.type,
+            (context.msg.channel as any).nsfw || false)
+        ) {
+            if (!this.handleError(CommandManagerEvent.DisallowedEnvironment, context, command)) {
+                context.msg.channel.send("That command may not be used here.");
+            }
+        }
+        else if (!command.isEnabled) {
+            if (!this.handleError(CommandManagerEvent.DisabledCommand, context, command)) {
+                context.fail("That command is disabled and may not be used.");
+            }
+        }
+        else if (command.constraints.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
+            context.fail("You're not allowed to use that command");
+        }
+        else if (!CommandParser.checkArguments({
+            schema: command.args,
+            arguments: rawArgs,
+            message: context.msg,
+            types: context.bot.argumentTypes,
+            command: command
+        })) {
+            if (this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch]) {
+                this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);
+            }
+            else if (command.maxArguments === command.minArguments) {
+                context.fail(`That command only accepts **${command.maxArguments}** arguments.`);
+            }
+            else if (command.maxArguments > 0) {
+                context.fail(`That command only accepts up to **${command.maxArguments}** and a minimum of **${command.minArguments}** arguments.`);
+            }
+            else {
+                context.fail(`That command does not accept any arguments.`);
+            }
+        }
+        else if ((typeof command.canExecute === "function" && !command.canExecute(context)) || typeof command.canExecute === "boolean" && !command.canExecute) {
+            if (!this.handleError(CommandManagerEvent.CommandMayNotExecute, context, command)) {
+                context.fail("That command cannot be executed right now.");
+            }
+        }
+        // TODO: CRITICAL Project no longer uses Typer. Is this already handled by checkArguments()?
+        else if (false/* !command.singleArg /* && (!typer.validate(command.args, CommandHandler.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) */) {
+            if (this.errorHandlers[CommandManagerEvent.InvalidArguments]) {
+                this.errorHandlers[CommandManagerEvent.InvalidArguments](context, command);
+            }
+            else {
+                context.fail("Invalid argument usage. Please use the `usage` command.");
+            }
+        }
+        else if (command.constraints.selfPermissions.length > 0 && !context.msg.guild.me.hasPermission(command.constraints.selfPermissions.map((permissionObj) => permissionObj.permission))) {
+            if (!this.handleError(CommandManagerEvent.MissingSelfPermissions, context, command)) {
+                const permissions = command.constraints.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
+
+                context.fail(`I require the following permission(s) to execute that command: ${permissions}`);
+            }
+        }
+        else if (command.constraints.issuerPermissions.length > 0 && !context.msg.member.hasPermission(command.constraints.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
+            if (!this.handleError(CommandManagerEvent.MissingIssuerPermissions, context, command)) {
+                const permissions = command.constraints.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
+
+                context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
+            }
+        }
+        else if (command.constraints.cooldown && !this.commandStore.cooldownExpired(context.sender.id, command.meta.name)) {
+            if (!this.handleError(CommandManagerEvent.UnderCooldown, context, command)) {
+                const timeLeft: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
+
+                if (timeLeft) {
+                    context.fail(`You must wait **${(timeLeft - Date.now()) / 1000}** seconds before using that command again.`);
+                }
+                else {
+                    Log.warn("[CommandStore.handle] Command cooldown returned null or undefined, this shouldn't happen");
+                    context.fail("That command is under cooldown.");
+                }
+            }
+        }
+        else {
+            return true;
         }
 
         return false;

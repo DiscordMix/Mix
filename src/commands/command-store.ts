@@ -9,9 +9,6 @@ import path from "path";
 import {PromiseOr} from "..";
 import {InternalCommand} from "../core/bot-extra";
 
-/**
- * @enum {number}
- */
 export enum CommandManagerEvent {
     DisallowedEnvironment,
     DisabledCommand,

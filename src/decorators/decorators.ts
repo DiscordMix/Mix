@@ -1,10 +1,11 @@
 import "reflect-metadata";
 
 import {Snowflake} from "discord.js";
-import {CommandExeHandler, IArgument, IConstraints, SpecificConstraints} from "../commands/command";
+import Command, {CommandExeHandler, IArgument, IConstraints, SpecificConstraints, CommandRunner} from "../commands/command";
 import Log from "../core/log";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import ChatEnv from "../core/chat-env";
+import Utils from "../core/utils";
 
 export enum DiscordEvent {
     Message = "message",
@@ -163,7 +164,7 @@ export function command(options: string | IPartialWeakCommand, description?: str
     };
 }
 
-export function deprecated(use?: string): any {
+export function Deprecated(use?: string): any {
     return function (target) {
         const functionName: string = Object.keys(target)[0];
         const className: string = target.constructor.name;
@@ -180,32 +181,138 @@ export function deprecated(use?: string): any {
 
 // TODO: Values must be validated
 
+// Component
+
+export interface ICommandComponentOpts {
+    readonly description: string;
+    readonly cooldown: number;
+    readonly env: ChatEnv;
+    readonly specific: SpecificConstraints;
+}
+
+export abstract class Component {
+    public static Command(name: string, options?: Partial<ICommandComponentOpts>): any {
+        return function (target: any, key: string) {
+            DecoratorUtils.bind(target);
+
+            target = DecoratorUtils.overrideMeta(target, "name", name);
+
+            if (options === undefined || typeof options !== "object") {
+                return target;
+            }
+
+            // General
+            if (typeof options.description === "string") {
+                target = DecoratorUtils.overrideMeta(target, "description", options.description);
+            }
+
+            // Constraints
+            if (typeof options.cooldown === "number") {
+                target = DecoratorUtils.overrideConstraint(target, "cooldown", options.cooldown);
+            }
+
+            if (typeof options.env === "number") {
+                target = DecoratorUtils.overrideConstraint(target, "env", options.env);
+            }
+
+            if (typeof options.specific === "object") {
+                target = DecoratorUtils.overrideConstraint(target, "specific", options.specific);
+            }
+
+            return target;
+        };
+    }
+
+    public static Fragment<T = any>(name: string, options?: T): any {
+        // TODO: Implement
+        throw Log.notImplemented;
+    }
+}
+
 // Commands -> General
 
 export function Name(name: string): any {
     return function (target: any, key: string) {
+        DecoratorUtils.bind(target);
+
         return DecoratorUtils.overrideMeta(target, "name", name);
     };
 }
 
 export function Description(description: string): any {
     return function (target: any, key: string) {
+        DecoratorUtils.bind(target);
+
         return DecoratorUtils.overrideMeta(target, "description", description);
     };
 }
 
-export function Aliases(aliases: string[]): any {
+export function Aliases(...aliases: string[]): any {
     return function (target: any, key: string) {
+        DecoratorUtils.bind(target);
+
         return class extends target {
-            public readonly aliases: string[] = aliases;
+            public readonly aliases: string[] = [...target.aliases, ...aliases];
         };
     };
 }
 
 export function Arguments(args: IArgument[]): any {
     return function (target: any, key: string) {
+        DecoratorUtils.bind(target);
+
         return class extends target {
-            public readonly args: IArgument[] = args;
+            public readonly args: IArgument[] = [...target.args, ...args];
+        };
+    };
+}
+
+// Commands -> Other
+
+/**
+ * Methods that will be executed after successful command execution
+ * @param {CommandRunner[]} runners
+ * @return {*}
+ */
+export function Connect(...runners: CommandRunner<void>[]): any {
+    return function (target: any, key: string) {
+        DecoratorUtils.bind(target);
+
+        return class extends target {
+            public readonly connections: CommandRunner<void>[] = [...target.connections, ...runners];
+        };
+    };
+}
+
+/**
+ * Specify the required registered services required by this command
+ * @param {string[]} services
+ * @return {*}
+ */
+export function DependsOn(...services: string[]): any {
+    return function (target: any, key: string) {
+        DecoratorUtils.bind(target);
+
+        return class extends target {
+            public readonly dependsOn: string[] = [...target.dependsOn, ...services]
+        };
+    };
+}
+
+/**
+ * Methods that serve as pre-requisites for execution
+ * @param {string[]} guards
+ * @return {*}
+ */
+export function Guards(...guards: string[]): any {
+    return function (target: any, key: string) {
+        DecoratorUtils.bind(target);
+
+        return class extends target {
+            public readonly guards: CommandRunner[] = [
+                ...target.guards,
+                ...DecoratorUtils.extractMethods(target, [...guards])
+            ];
         };
     };
 }
@@ -233,22 +340,48 @@ export abstract class DecoratorUtils {
             };
         };
     }
+
+    public static bind(target: any): void {
+        if (typeof target !== "function") {
+            throw Log.error("Expecting target to be a class");
+        }
+    }
+
+    public static extractMethods<T = any>(source: any, keys: string[]): T[] {
+        const result: T[] = [];
+
+        for (const key of keys) {
+            if (typeof source[key] !== "function") {
+                throw Log.error("Expecting source's property to be a method");
+            }
+
+            result.push(source[key]);
+        }
+
+        return result;
+    }
 }
 
 export abstract class Constraint {
     public static Env(env: ChatEnv): any {
         return function (target: any, key: string) {
+            DecoratorUtils.bind(target);
+
             return DecoratorUtils.overrideConstraint(target, "environment", env);
         };
     }
 
     public static Cooldown(time: number): any {
         return function (target: any, key: string) {
+            DecoratorUtils.bind(target);
+
             return DecoratorUtils.overrideConstraint(target, "cooldown", time);
         };
     }
 
     public static Disabled(target: any): any {
+        DecoratorUtils.bind(target);
+
         return class extends target {
             public readonly isEnabled: boolean = false;
         };
@@ -256,18 +389,24 @@ export abstract class Constraint {
 
     public static Specific(constraints: SpecificConstraints): any {
         return function (target: any, key: string) {
+            DecoratorUtils.bind(target);
+
             return DecoratorUtils.overrideConstraint(target, "specific", constraints);
         };
     }
 
     public static IssuerPermissions(permissions: any[]): any {
         return function (target: any, key: string) {
+            DecoratorUtils.bind(target);
+
             return DecoratorUtils.overrideConstraint(target, "issuerPermissions", permissions);
         };
     }
 
     public static SelfPermissions(permissions: any[]): any {
         return function (target: any, key: string) {
+            DecoratorUtils.bind(target);
+
             return DecoratorUtils.overrideConstraint(target, "selfPermissions", permissions);
         };
     }

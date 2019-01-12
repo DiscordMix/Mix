@@ -12,7 +12,7 @@ interface IArgs {
 
 @Name("cli")
 @Description("Access the local machine's CLI")
-@Aliases(["exec", "exe"])
+@Aliases("exec", "exe")
 @Arguments([
     {
         name: "command",

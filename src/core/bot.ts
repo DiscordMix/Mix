@@ -962,7 +962,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                 Log.warn(BotMessages.SETUP_NO_FRAGMENTS_ENABLED);
             }
             else {
-                Log.success(`[Bot.setup] Enabled ${enabled}/${internalFragments.length} internal fragments`);
+                Log.success(`[Bot.setup] Enabled ${enabled}/${internalFragments.length} (${Utils.percentOf(enabled, internalFragments.length)}%) internal fragments`);
             }
         }
 
@@ -1014,7 +1014,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                 const enabled: number = await this.fragments.enableMultiple(commandsLoaded);
 
                 if (enabled > 0) {
-                    Log.success(`[Bot.setup] Enabled ${commandsLoaded.length}/${consumerCommandCandidates.length} command(s)`);
+                    Log.success(`[Bot.setup] Enabled ${commandsLoaded.length}/${consumerCommandCandidates.length} (${Utils.percentOf(commandsLoaded.length, consumerCommandCandidates.length)}%) command(s)`);
                 }
                 else {
                     Log.warn(BotMessages.SETUP_NO_COMMANDS_ENABLED);

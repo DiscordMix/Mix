@@ -4,7 +4,7 @@ import {testBot} from "./test-bot";
 describe("Commands", () => {
     it("should register commands", () => {
         const actualCmds: string[] = ["hi"];
-        const fakeCmds: string[] = ["john", "doe"]
+        const fakeCmds: string[] = ["john", "doe"];
 
         // Actual commands
         for (const actualCmd of actualCmds) {

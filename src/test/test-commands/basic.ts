@@ -2,7 +2,7 @@ import Command from "../../commands/command";
 import {RestrictGroup} from "../..";
 import Context from "../../commands/command-context";
 
-export default class EvalCommand extends Command {
+export default class TestCommand extends Command {
     public readonly meta = {
         name: "hi",
         description: "Don't say hi"

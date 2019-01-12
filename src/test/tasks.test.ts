@@ -4,33 +4,27 @@ import {testBot} from "./test-bot";
 
 describe("Tasks", () => {
     it("should register tasks", () => {
-        const actualTasks: string[] = ["do-some-math"];
-        const fakeTasks: string[] = ["doe", "john"]
+        const actualTasks: string[] = ["do-nothing"];
+        const fakeTasks: string[] = ["doe", "john"];
 
         // Actual tasks
-        for (let i: number = 0; i < actualTasks.length; i++) {
-            const check: boolean = testBot.tasks.contains(actualTasks[i]);
-
-            expect(check).to.be.a("boolean");
-            expect(check).to.equal(true);
+        for (const actualTask of actualTasks) {
+            expect(testBot.tasks.contains(actualTask)).to.be.a("boolean").and.to.equal(true);
         }
 
         // Fake tasks
-        for (let i: number = 0; i < fakeTasks.length; i++) {
-            const check: boolean = testBot.tasks.contains(fakeTasks[i]);
-
-            expect(check).to.be.a("boolean");
-            expect(check).to.equal(false);
+        for (const fakeTask of fakeTasks) {
+            expect(testBot.tasks.contains(fakeTask)).to.be.a("boolean").and.to.equal(false);
         }
 
         // Task properties
-        const task: Task = testBot.tasks.get("do-some-math") as Task;
+        const task: Task = testBot.tasks.get("do-nothing") as Task;
 
         expect(task.meta).to.be.an("object");
         expect(task.meta.name).to.be.a("string");
-        expect(task.meta.name).to.equal("do-some-math");
+        expect(task.meta.name).to.equal("do-nothing");
         expect(task.meta.description).to.be.a("string");
-        expect(task.meta.description).to.equal("Do some math!");
+        expect(task.meta.description).to.equal("Does absolutely nothing");
         expect(task.maxIterations).to.be.a("number");
         expect(task.maxIterations).to.equal(-1);
         expect(task.lastIteration).to.be.a("number");
@@ -50,7 +44,7 @@ describe("Tasks", () => {
     });
 
     it("should trigger tasks", () => {
-        const triggerResult: boolean = testBot.tasks.trigger("do-some-math");
+        const triggerResult: boolean = testBot.tasks.trigger("do-nothing");
 
         expect(triggerResult).to.be.a("boolean");
         expect(triggerResult).to.equal(true);
@@ -76,7 +70,7 @@ describe("Tasks", () => {
     });
 
     it("should update tasks after triggering", () => {
-        const task: Task = testBot.tasks.get("do-some-math") as Task;
+        const task: Task = testBot.tasks.get("do-nothing") as Task;
 
         expect(task).to.be.an("object");
         expect(task.lastIteration).to.be.a("number");

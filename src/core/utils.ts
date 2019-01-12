@@ -103,6 +103,10 @@ export default abstract class Utils {
         return result.join("");
     }
 
+    public static percentOf(amount: number, max: number): number {
+        return Math.round(amount / max) * 100;
+    }
+
     // TODO: Needs testing
     public static createTimedAction<ReturnType = any>(bot: Bot, action: () => ReturnType, timeout: number, timeoutResult: ReturnType | any): Promise<ReturnType> {
         return new Promise(async (resolve) => {

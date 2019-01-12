@@ -249,20 +249,21 @@ export function Description(description: string): any {
 
 export function Aliases(...aliases: string[]): any {
     return function (target: any, key: string) {
-        DecoratorUtils.bind(target);
+        const instance: Command = DecoratorUtils.createInstance(target);
 
         return class extends target {
-            public readonly aliases: string[] = [...target.aliases, ...aliases];
+            public readonly aliases: string[] = [...instance.aliases, ...aliases];
         };
     };
 }
 
 export function Arguments(args: IArgument[]): any {
     return function (target: any, key: string) {
-        DecoratorUtils.bind(target);
+        // TODO: It may not be efficient to create a new instance just to extract default properties
+        const instance: Command = DecoratorUtils.createInstance(target);
 
         return class extends target {
-            public readonly args: IArgument[] = [...target.args, ...args];
+            public readonly args: IArgument[] = [...instance.args, ...args];
         };
     };
 }
@@ -276,10 +277,10 @@ export function Arguments(args: IArgument[]): any {
  */
 export function Connect(...runners: CommandRunner<void>[]): any {
     return function (target: any, key: string) {
-        DecoratorUtils.bind(target);
+        const instance: Command = DecoratorUtils.createInstance(target);
 
         return class extends target {
-            public readonly connections: CommandRunner<void>[] = [...target.connections, ...runners];
+            public readonly connections: CommandRunner<void>[] = [...instance.connections, ...runners];
         };
     };
 }
@@ -291,10 +292,10 @@ export function Connect(...runners: CommandRunner<void>[]): any {
  */
 export function DependsOn(...services: string[]): any {
     return function (target: any, key: string) {
-        DecoratorUtils.bind(target);
+        const instance: Command = DecoratorUtils.createInstance(target);
 
         return class extends target {
-            public readonly dependsOn: string[] = [...target.dependsOn, ...services]
+            public readonly dependsOn: string[] = [...instance.dependsOn, ...services];
         };
     };
 }
@@ -306,12 +307,12 @@ export function DependsOn(...services: string[]): any {
  */
 export function Guards(...guards: string[]): any {
     return function (target: any, key: string) {
-        DecoratorUtils.bind(target);
+        const instance: Command = DecoratorUtils.createInstance(target);
 
         return class extends target {
             public readonly guards: CommandRunner[] = [
-                ...target.guards,
-                ...DecoratorUtils.extractMethods(target, [...guards])
+                ...instance.guards,
+                ...DecoratorUtils.extractMethods(instance, [...guards])
             ];
         };
     };
@@ -334,7 +335,7 @@ export abstract class DecoratorUtils {
 
     public static overrideMeta(target: any, meta: string, value: any): any {
         return class extends target {
-            public readonly ["r"]: IFragmentMeta = {
+            public readonly meta: IFragmentMeta = {
                 ...this.meta,
                 [meta]: value
             };
@@ -359,6 +360,12 @@ export abstract class DecoratorUtils {
         }
 
         return result;
+    }
+
+    public static createInstance<T = Command>(target: any): T {
+        DecoratorUtils.bind(target);
+
+        return new target();
     }
 }
 

@@ -1,24 +1,30 @@
+import Log, {LogLevel} from "../core/log";
+
+// Supress output
+Log.level = LogLevel.None;
+Log.write = false;
+
 // Import tests
-import "./switch-parser";
+import "./switch-parser.test";
 import "./rgb.test";
 import "./rgba.test";
 import "./utils";
-import "./collection";
+import "./collection.test";
 import "./delta.test";
 import "./log-serializer.test";
-import "./time-convert";
+import "./time-convert.test";
 import "./pagination.test";
 
 // Non-static tests
 import "./test-bot";
 import "./bot";
-import "./send-messages";
+import "./send-messages.test";
 import "./long-messages.test";
-import "./commands";
-import "./services";
-import "./tasks";
-import "./store";
-import "./time-machine";
+import "./commands.test";
+import "./services.test";
+import "./tasks.test";
+import "./store.test";
+import "./time-machine.test";
 import "./languages.test";
 import "./cmd-decorators.test";
 

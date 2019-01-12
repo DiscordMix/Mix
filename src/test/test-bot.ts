@@ -74,8 +74,6 @@ else if (!testGuildChannelId) {
     throw new Error(BotMessages.TEST_EXPECT_CHANNEL);
 }
 
-Log.level = LogLevel.None;
-
 export default class TestBot extends Bot<ITestState, TestStoreActionType> {
     public static testGuild: Guild;
     public static testChannel: TextChannel;

@@ -53,10 +53,10 @@ export default abstract class Log {
             .replace(/\..+/, "");
 
         if (typeof message === "string") {
-            console.log(`{${date}} ${(colors as any)[color](message)}`, ...options.params);
+            console.log(`${colors.gray(date)} ${(colors as any)[color](message)}`, ...options.params);
         }
         else {
-            console.log(`{${date}} `, message, ...options.params);
+            console.log(`${colors.gray(date)} `, message, ...options.params);
         }
 
         if (Log.write) {

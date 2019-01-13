@@ -6,6 +6,8 @@ import Log from "../core/log";
 import {IFragment} from "./fragment";
 import Loader, {ILivePackage, IPackage} from "./loader";
 import {ForkedService} from "../services/forked-service";
+import Service from "../services/service";
+import {PromiseOr} from "../providers/provider";
 
 export interface IFragmentManager extends EventEmitter {
     enableMultiple(packages: IPackage[], internal: boolean): PromiseOr<number>;

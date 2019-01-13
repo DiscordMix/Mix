@@ -1,11 +1,12 @@
 import Command, {CommandRunner, TrivialArgType, RestrictGroup} from "../commands/command";
 import {Name, Arguments, Description} from "../decorators/general";
-import {AttachedLogger, Guards, Connect, DependsOn} from "../decorators/other";
+import {AttachedLogger, Guard, Connect, DependsOn, attachedLogger} from "../decorators/other";
 import {describe} from "mocha";
 import {expect} from "chai";
 import {testBot} from "./test-bot";
 import {Deprecated} from "../decorators/utility";
 import {Constraint} from "../decorators/constraints";
+import Permission from "../core/permission";
 
 const testConnection: CommandRunner = (x, args): void => {
     //
@@ -21,7 +22,7 @@ const testConnection: CommandRunner = (x, args): void => {
     }
 )
 @Connect(testConnection)
-@Guards("testGuard")
+@Guard("testGuard")
 @DependsOn("service-name-1", "service-name-2")
 @Constraint.Cooldown(5)
 @Constraint.OwnerOnly
@@ -63,6 +64,10 @@ describe("Command Decorators", () => {
         expect(instance.constraints.specific).to.be.an("array");
     });
 
+    it("should have a connections property", () => {
+        expect(instance.connections).to.be.a("array").and.to.have.length(2);
+    });
+
     describe("General", () => {
         describe("Name", () => {
             it("should bind command name", () => {
@@ -96,7 +101,7 @@ describe("Command Decorators", () => {
             });
         });
 
-        describe("Guards", () => {
+        describe("Guard", () => {
             it("should bind command guards", () => {
                 expect(instance.guards).to.be.a("array").and.to.have.length(1);
                 expect(instance.guards[0]).to.be.a("function").and.to.equal(instance.testGuard);
@@ -121,10 +126,22 @@ describe("Command Decorators", () => {
 
     describe("Other", () => {
         describe("DependsOn", () => {
-            it("should bind command dependencies", () => {
+            it("should append command dependencies", () => {
                 expect(instance.dependsOn).to.be.a("array").and.to.have.length(2);
                 expect(instance.dependsOn[0]).to.be.a("string").and.to.equal("service-name-1");
                 expect(instance.dependsOn[1]).to.be.a("string").and.to.equal("service-name-2");
+            });
+        });
+
+        describe("Connect", () => {
+            it("should append command connections", () => {
+                expect(instance.connections[0]).to.be.a("function").and.to.equal(testConnection);
+            });
+        });
+
+        describe("AttachedLogger", () => {
+            it("should append the attached logger connection", () => {
+                expect(instance.connections[1]).to.be.a("function").and.to.equal(attachedLogger);
             });
         });
     });
@@ -132,7 +149,7 @@ describe("Command Decorators", () => {
 
 describe("Utility Decorators", () => {
     describe("Deprecated", () => {
-        it("should bind a proxy method", () => {
+        it("should replace input with a proxy method", () => {
             // TODO
         });
     });

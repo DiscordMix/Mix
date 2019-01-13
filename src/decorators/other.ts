@@ -57,7 +57,7 @@ export function DependsOn(...services: string[]): any {
  * @param {string[]} guards
  * @return {*}
  */
-export function Guards(...guards: string[]): any {
+export function Guard(...guards: string[]): any {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 

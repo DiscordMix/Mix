@@ -20,7 +20,7 @@ export default abstract class TestUtils {
 
     public static randomStringX(length: number): string {
         if (length < 1) {
-            throw new Error("[randomStringX] Expecting length to be a number higher than 0");
+            throw new Error("Expecting length to be a number higher than 0");
         }
 
         let finalString: string = "";

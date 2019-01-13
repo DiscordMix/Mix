@@ -150,7 +150,7 @@ export default abstract class Loader {
      */
     public static async loadMultiple(items: string[]): Promise<IPackage[] | null> {
         if (items.length === 0) {
-            Log.warn("[Loader.loadMultiple] Items array is empty");
+            Log.warn("Items array is empty");
 
             return null;
         }

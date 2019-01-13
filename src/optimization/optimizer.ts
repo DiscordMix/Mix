@@ -32,11 +32,11 @@ export default class Optimizer implements IOptimizer {
         this.sizeThreshold = sizeThreshold;
 
         if (this.interval < 60 * 1_000) {
-            Log.warn("[Optimizer] Interval lower than 1 minute is not suggested");
+            Log.warn("Interval lower than 1 minute is not suggested");
         }
         else if (this.interval < 30 * 1_000) {
             this.interval = 30 * 1_000;
-            Log.warn("[Optimizer] Interval lower than 30 seconds may be inefficient; Using 30 seconds as interval instead");
+            Log.warn("Interval lower than 30 seconds may be inefficient; Using 30 seconds as interval instead");
         }
 
         this.processInterval = null;
@@ -58,7 +58,7 @@ export default class Optimizer implements IOptimizer {
             this.commandsUsed.push(command.meta.name);
         });
 
-        // Determine if Tempo Engine should be used
+        // Determine if Optimizer should be used
         const commandPackages: ReadonlyCommandMap = this.bot.commandStore.getAll();
 
         let avg: number = 0;
@@ -70,7 +70,7 @@ export default class Optimizer implements IOptimizer {
         avg = avg / commandPackages.size;
 
         if (avg < this.sizeThreshold) {
-            Log.info("[TempoEngine] Tempo Engine is not necessary in this application; Refusing to start");
+            Log.info("Optimizer is not necessary in this application; Refusing to start");
 
             return this;
         }

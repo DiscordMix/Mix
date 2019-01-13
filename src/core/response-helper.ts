@@ -63,7 +63,8 @@ export default class ResponseHelper implements IResponseHelper {
      */
     public async respond(content: EmbedBuilder | any, autoDelete: boolean = false): Promise<EditableMessage | null> {
         let embed: EmbedBuilder | null = null;
-        let finalContent: EmbedBuilder | any = Object.assign({}, content);
+
+        const finalContent: EmbedBuilder | any = Object.assign({}, content);
 
         if (typeof (finalContent as any).text === "string") {
             if (finalContent.text.trim() === "" || finalContent.text === undefined || finalContent.text === null) {
@@ -77,7 +78,7 @@ export default class ResponseHelper implements IResponseHelper {
                 // TODO: ... not being added at the end
                 finalContent.text = finalContent.text.substring(0, 1020) + " ...";
 
-                Log.warn("[Context.respond] Attempted to send a message with more than 1024 characters (Discord limit); The message was automatically trimmed");
+                Log.warn("Attempted to send a message with more than 1024 characters (Discord limit); The message was automatically trimmed");
             }
 
             finalContent.text = Utils.escapeText(finalContent.text, this.bot.client.token);
@@ -104,7 +105,7 @@ export default class ResponseHelper implements IResponseHelper {
         let messageResult = await this.channel.send(embed.build()).catch((error: Error) => {
             if (!Utils.botLists.includes(this.channel.guild.id)) {
                 // TODO: Commented out, this.privateReply method was moved
-                //this.privateReply(`Oh no! For some reason, I was unable to reply to you in that channel. (${error.message})`);
+                // this.privateReply(`Oh no! For some reason, I was unable to reply to you in that channel. (${error.message})`);
             }
         });
 
@@ -120,8 +121,8 @@ export default class ResponseHelper implements IResponseHelper {
             let contentSize: number = 0;
 
             if (fields) {
-                for (let i: number = 0; i < fields.length; i++) {
-                    contentSize += fields[i].name.length + fields[i].value.length;
+                for (const field of fields) {
+                    contentSize += field.name.length + field.value.length;
                 }
             }
 

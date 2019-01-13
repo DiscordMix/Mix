@@ -147,7 +147,7 @@ export default abstract class Utils {
      */
     public static binarySearch(subject: number, host: number[]): IBinarySearchResult {
         if (typeof subject !== "number" || !Array.isArray(host)) {
-            throw new Error("[Utils] Expecting subject to be a number and host to be an array of numbers");
+            throw new Error("Expecting subject to be a number and host to be an array of numbers");
         }
 
         const pool: number[] = [...host];

@@ -56,14 +56,14 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
      */
     public attach(bot: Bot, message: Message, placeholder: string = "*"): this {
         if (message.author.id !== bot.client.user.id) {
-            Log.warn("[Pagination.attach] Refusing to attach to foreign message");
+            Log.warn("Refusing to attach to foreign message");
 
             return this;
         }
 
         this.on(PaginationEvent.PageChanged, async () => {
             if (!message.editable) {
-                Log.warn("[Pagination.attach] Message is un-editable");
+                Log.warn("Message is un-editable");
 
                 return;
             }

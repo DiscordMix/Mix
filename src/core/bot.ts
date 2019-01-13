@@ -445,7 +445,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         );
 
         if (command === null) {
-            throw Log.error("[Bot.handleCommandMessage] Failed parsing command; Command is null");
+            throw Log.error("Failed parsing command; Command is null");
         }
 
         command = command as Command;
@@ -675,7 +675,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         );
 
         if (command === null) {
-            throw Log.error("[Bot.handleCommandMessage] Failed parsing command; Command is null");
+            throw Log.error("Failed parsing command; Command is null");
         }
 
         const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
@@ -706,11 +706,11 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public async connect(): Promise<this> {
         this.setState(BotState.Connecting);
         await this.setup();
-        Log.verbose("[Bot.connect] Starting");
+        Log.verbose("Starting");
 
         await this.client.login(this.settings.general.token).catch(async (error: Error) => {
             if (error.message === "Incorrect login details were provided.") {
-                Log.error("[Bot.connect] The provided token is invalid or has been regenerated");
+                Log.error("The provided token is invalid or has been regenerated");
                 await this.disconnect();
                 process.exit(0);
             }

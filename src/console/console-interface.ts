@@ -43,7 +43,7 @@ export default class ConsoleInterface {
      * @return {ConsoleInterface}
      */
     public setup(bot: Bot, registerDefaults: boolean = true): this {
-        Log.verbose("[ConsoleInterface] Setting up console interface");
+        Log.verbose("Setting up console interface");
 
         const ci = readline.createInterface({
             input: process.stdin,
@@ -92,7 +92,7 @@ export default class ConsoleInterface {
 
         // TODO: Should log before setting the prompt
         this.ready = true;
-        Log.success("[ConsoleInterface.setup] Console interface setup completed");
+        Log.success("Console interface setup completed");
 
         return this;
     }

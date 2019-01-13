@@ -431,7 +431,7 @@ export default class CommandHandler implements ICommandHandler {
                     context.fail(`You must wait **${(timeLeft - Date.now()) / 1000}** seconds before using that command again.`);
                 }
                 else {
-                    Log.warn("[CommandStore.handle] Command cooldown returned null or undefined, this shouldn't happen");
+                    Log.warn("Command cooldown returned null or undefined, this shouldn't happen");
                     context.fail("That command is under cooldown.");
                 }
             }

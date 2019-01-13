@@ -21,7 +21,7 @@ export default class EmbedBuilder implements IEmbedBuilder {
         const result = new EmbedBuilder();
 
         if (!obj.text) {
-            throw new Error("[EmbedBuilder.fromObject] Text cannot be empty or null");
+            throw new Error("Text cannot be empty or null");
         }
         else {
             result.text(obj.text);

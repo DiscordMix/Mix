@@ -117,7 +117,7 @@ export default class Temp implements ITemp {
      */
     public async store(data: any, file: string): Promise<this> {
         if (!this.resolvedPath) {
-            throw new Error("[Temp.store] Trying to store when the resolved path is undefined");
+            throw new Error("Trying to store when the resolved path is undefined");
         }
 
         await Utils.writeJson(path.resolve(path.join(this.resolvedPath, file)), data);

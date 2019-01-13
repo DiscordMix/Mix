@@ -69,18 +69,3 @@ export function Guards(...guards: string[]): any {
         };
     };
 }
-
-export function OwnerOnly(target: any): any {
-    DecoratorUtils.bind(target);
-
-    return class extends target {
-        public readonly constraints: IConstraints = {
-            ...this.constraints,
-
-            specific: [
-                ...this.constraints.specific,
-                RestrictGroup.BotOwner
-            ]
-        };
-    };
-}

@@ -1,5 +1,5 @@
 import {DecoratorUtils} from "./decorator-utils";
-import {SpecificConstraints} from "../commands/command";
+import {SpecificConstraints, IConstraints, RestrictGroup} from "../commands/command";
 import ChatEnv from "../core/chat-env";
 
 export abstract class Constraint {
@@ -43,11 +43,27 @@ export abstract class Constraint {
         };
     }
 
-    public static SelfPermissions(permissions: any[]): any {
+    public static SelfPermissions(...permissions: any[]): any {
         return function (target: any, key: string) {
             DecoratorUtils.bind(target);
 
             return DecoratorUtils.overrideConstraint(target, "selfPermissions", permissions);
         };
     }
+
+    public static OwnerOnly(target: any): any {
+        DecoratorUtils.bind(target);
+
+        return class extends target {
+            public readonly constraints: IConstraints = {
+                ...this.constraints,
+
+                specific: [
+                    ...this.constraints.specific,
+                    RestrictGroup.BotOwner
+                ]
+            };
+        };
+    }
+
 }

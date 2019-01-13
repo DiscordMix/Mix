@@ -76,8 +76,11 @@ export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
         }
 
         this.store.subscribe((action: IStoreAction, previousState?: TState, newState?: TState) => {
-            // TODO: Resolve error
-            if (previousState === undefined || Delta.different(previousState, newState) && newState !== undefined) {
+            if (newState === undefined) {
+                return;
+            }
+            // TODO: Should not force cast
+            else if (previousState === undefined || Delta.different(previousState as any, newState as any) && newState !== undefined) {
                 this.insert(newState);
             }
         });

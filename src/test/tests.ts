@@ -26,7 +26,7 @@ import "./tasks.test";
 import "./store.test";
 import "./time-machine.test";
 import "./languages.test";
-import "./cmd-decorators.test";
+import "./decorators.test";
 
 // Other imports
 import {testBot} from "./test-bot";

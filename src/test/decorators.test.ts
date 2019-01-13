@@ -59,7 +59,7 @@ describe("Command Decorators", () => {
         expect(Object.keys(instance.meta).length).to.be.a("number").and.to.equal(2);
     });
 
-    it("should have constraints property", () => {
+    it("should have a constraints property", () => {
         expect(instance.constraints).to.be.an("object");
         expect(instance.constraints.specific).to.be.an("array");
     });

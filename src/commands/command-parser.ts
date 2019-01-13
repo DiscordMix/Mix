@@ -347,7 +347,7 @@ export default abstract class CommandParser {
                 }
             }
             else {
-                Log.fatal(`Invalid argument type type, expected either a function or a regex expression: ${options.schema[i].name}`);
+                throw Log.fatal(`Invalid argument type type, expected either a function or a regex expression: ${options.schema[i].name}`);
             }
         }
 

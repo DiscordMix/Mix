@@ -150,7 +150,7 @@ export default class CommandHandler implements ICommandHandler {
      * @param {string} channelType
      * @return {boolean}
      */
-    public static validateEnvironment(environment: ChatEnv, channelType: string, nsfw: boolean): boolean {
+    public static validateEnv(environment: ChatEnv, channelType: string, nsfw: boolean): boolean {
         if (Array.isArray(environment)) {
             // TODO: CRITICAL: Pointless loop?
             for (const env of environment) {
@@ -358,7 +358,7 @@ export default class CommandHandler implements ICommandHandler {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 
-        if (!CommandHandler.validateEnvironment(
+        if (!CommandHandler.validateEnv(
             command.constraints.environment,
             context.msg.channel.type,
             (context.msg.channel as any).nsfw || false)

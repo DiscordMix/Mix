@@ -22,7 +22,7 @@ export default class ArgumentParser {
             }
         }
 
-        throw Log.error(`Argument resolver missing: ${type}`);
+        throw Log.error(`Argument resolver not defined: ${type}`);
     }
 
     /**

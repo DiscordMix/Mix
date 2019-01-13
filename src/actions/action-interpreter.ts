@@ -7,7 +7,7 @@ import PaginatedMessage from "../pagination/paginated-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
 import Utils from "../core/utils";
-import {PromiseOr} from "..";
+import {PromiseOr} from "../providers/provider";
 
 // Arg types
 export interface IMessageActionArgs {
@@ -241,8 +241,8 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
     }
 
     public async interpretMany(actions: IAction[]): Promise<this> {
-        for (let i: number = 0; i < actions.length; i++) {
-            await this.interpret(actions[i]);
+        for (const action of actions) {
+            await this.interpret(action);
         }
 
         return this;

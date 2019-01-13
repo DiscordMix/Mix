@@ -25,7 +25,7 @@ export default class SMIS extends EventEmitter {
 
         // Setup listeners
         if (!this.child.connected || !this.child.send) {
-            throw new Error("[SMIS] Expecting child to be connected");
+            throw new Error("Expecting child to be connected");
         }
 
         this.child.on("message", (msg: any, sender: any) => {

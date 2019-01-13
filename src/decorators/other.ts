@@ -1,4 +1,4 @@
-import Command, {CommandRunner, CommandRelay, IGenericCommand} from "../commands/command";
+import Command, {CommandRunner, CommandRelay, IGenericCommand, IConstraints, RestrictGroup} from "../commands/command";
 import {DecoratorUtils} from "./decorator-utils";
 import Context from "../commands/command-context";
 import Log from "../core/log";
@@ -66,6 +66,21 @@ export function Guards(...guards: string[]): any {
                 ...instance.guards,
                 ...DecoratorUtils.extractMethods(instance, [...guards])
             ];
+        };
+    };
+}
+
+export function OwnerOnly(target: any): any {
+    DecoratorUtils.bind(target);
+
+    return class extends target {
+        public readonly constraints: IConstraints = {
+            ...this.constraints,
+
+            specific: [
+                ...this.constraints.specific,
+                RestrictGroup.BotOwner
+            ]
         };
     };
 }

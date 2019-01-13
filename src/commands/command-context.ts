@@ -1,5 +1,4 @@
 import {DMChannel, Guild, Message, Snowflake, TextChannel} from "discord.js";
-import {PromiseOr, Store} from "..";
 import {ChannelType} from "../actions/action-interpreter";
 import Bot from "../core/bot";
 import Log from "../core/log";
@@ -8,6 +7,8 @@ import ResponseHelper from "../core/response-helper";
 import Utils from "../core/utils";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import EditableMessage from "../message/editable-message";
+import Store from "../state/store";
+import {PromiseOr} from "../providers/provider";
 
 export interface IContextOptions {
     readonly msg: Message;

@@ -4,6 +4,7 @@ import Log from "../core/log";
 
 export abstract class DecoratorUtils {
     // TODO: Attempt to merge override methods
+    // TODO: Should append instead of override?
     public static overrideConstraint(target: any, constraint: string, value: any): any {
         return class extends target {
             public readonly constraints: IConstraints = {

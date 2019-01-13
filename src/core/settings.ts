@@ -75,7 +75,7 @@ export default class Settings implements ISettings {
      */
     public static async fromFile(path: string): Promise<Settings> {
         if (!fs.existsSync(path)) {
-            Log.fatal(BotMessages.CFG_FILE_NO_EXIST);
+            throw Log.fatal(BotMessages.CFG_FILE_NO_EXIST);
         }
 
         const fileSettings: ISettingsOptions = await Utils.readJson(path);

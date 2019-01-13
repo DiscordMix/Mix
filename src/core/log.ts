@@ -18,7 +18,7 @@ export enum LogLevel {
 export interface IComposeOptions {
     readonly message: any;
     readonly params: any[];
-    readonly type: LogLevel;
+    readonly level: LogLevel;
     readonly color?: string;
     readonly prefix?: string;
 }
@@ -38,15 +38,21 @@ export default abstract class Log {
         }
 
         const color: string = options.color || "white";
-        const message: any = options.message;
+
+        let message: any = options.message;
 
         // TODO: Make sure check is working as intended, seems a bit suspicious
-        if (Log.level < options.type) {
+        if (Log.level < options.level) {
             if (Log.hiddenItems) {
                 console.log(colors.gray("+ 1 Hidden Item"));
             }
 
             return;
+        }
+
+        // Special background for fatal
+        if (typeof message === "string" && options.level === LogLevel.Fatal) {
+            message = colors.bgRed.white(message);
         }
 
         const timePrefix: string = colors.gray(new Date().toLocaleTimeString());
@@ -78,7 +84,7 @@ export default abstract class Log {
             color: "cyan",
             message,
             params,
-            type: LogLevel.Info,
+            level: LogLevel.Info,
             prefix: "info"
         };
 
@@ -93,7 +99,7 @@ export default abstract class Log {
         const options: IComposeOptions = {
             message,
             params,
-            type: LogLevel.Success,
+            level: LogLevel.Success,
             color: "green",
             prefix: "sucs"
         };
@@ -109,7 +115,7 @@ export default abstract class Log {
         const options: IComposeOptions = {
             message,
             params,
-            type: LogLevel.Warn,
+            level: LogLevel.Warn,
             color: "yellow",
             prefix: "warn"
         };
@@ -125,7 +131,7 @@ export default abstract class Log {
         const options: IComposeOptions = {
             message,
             params,
-            type: LogLevel.Error,
+            level: LogLevel.Error,
             color: "red",
             prefix: "dang"
         };
@@ -143,7 +149,7 @@ export default abstract class Log {
         const options: IComposeOptions = {
             message,
             params,
-            type: LogLevel.Fatal,
+            level: LogLevel.Fatal,
             color: "red",
             prefix: "fatal"
         };
@@ -162,7 +168,7 @@ export default abstract class Log {
         const options: IComposeOptions = {
             message,
             params,
-            type: LogLevel.Verbose,
+            level: LogLevel.Verbose,
             color: "white",
             prefix: "verb"
         };
@@ -178,7 +184,7 @@ export default abstract class Log {
         const options: IComposeOptions = {
             message,
             params,
-            type: LogLevel.Debug,
+            level: LogLevel.Debug,
             color: "magenta",
             prefix: "dbug"
         };

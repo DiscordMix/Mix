@@ -35,7 +35,7 @@ export abstract class Constraint {
         };
     }
 
-    public static IssuerPermissions(permissions: any[]): any {
+    public static IssuerPermissions(...permissions: any[]): any {
         return function (target: any, key: string) {
             DecoratorUtils.bind(target);
 

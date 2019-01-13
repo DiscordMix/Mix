@@ -1,10 +1,10 @@
 import ChatEnv from "../core/chat-env";
-import Context from "./command-context";
+import Context, {IContext} from "./command-context";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
-import {PromiseOr, IContext} from "..";
+import {PromiseOr} from "../providers/provider";
 
 export type UserGroup = string[];
 

@@ -389,7 +389,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                         Authorization: this.settings.keys.dbl
                     }
                 }).catch((error: Error) => {
-                    Log.warn(`[Bot.postStats] Could not post stats to discordbots.org (${error.message})`);
+                    Log.warn(`Could not post stats to discordbots.org (${error.message})`);
                 });
         }
 
@@ -405,7 +405,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                         "Content-Type": "application/json"
                     }
                 }).catch((error: Error) => {
-                    Log.warn(`[Bot.postStats] Could not post stats to botsfordiscord.com (${error.message})`);
+                    Log.warn(`Could not post stats to botsfordiscord.com (${error.message})`);
                 });
         }
     }
@@ -731,7 +731,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      */
     public async restart(reloadModules: boolean = true): Promise<this> {
         this.emit(EBotEvents.Restarting, reloadModules);
-        Log.verbose("[Bot.restart] Restarting");
+        Log.verbose("Restarting");
 
         // Dispose resources
         await this.dispose();
@@ -742,11 +742,11 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         if (reloadModules) {
             const commands: number = this.commandStore.getAll().size;
 
-            Log.verbose(`[Bot.restart] Reloading ${commands} command(s)`);
+            Log.verbose(`Reloading ${commands} command(s)`);
 
             const reloaded: number = await this.commandStore.reloadAll();
 
-            Log.success(`[Bot.restart] Reloaded ${reloaded}/${commands} command(s)`);
+            Log.success(`Reloaded ${reloaded}/${commands} command(s)`);
         }
 
         await this.connect();
@@ -765,11 +765,11 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         const servicesStopped: number = this.services.size;
 
         await this.services.stopAll();
-        Log.verbose(`[Bot.disconnect] Stopped ${servicesStopped} service(s)`);
+        Log.verbose(`Stopped ${servicesStopped} service(s)`);
         await this.dispose();
         await this.client.destroy();
         (this.client as any) = new Client();
-        Log.info("[Bot.disconnect] Disconnected");
+        Log.info("Disconnected");
         this.emit(EBotEvents.Disconnected);
 
         return this;
@@ -818,7 +818,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * Setup the client's events
      */
     protected setupEvents(): void {
-        Log.verbose("[Bot.setupEvents] Setting up Discord events");
+        Log.verbose("Setting up Discord events");
 
         // Discord client events
         this.client.on(DiscordEvent.Ready, async () => {
@@ -833,11 +833,11 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                 this.console.setup(this);
             }
 
-            Log.info(`[Bot.setupEvents] Logged in as ${this.client.user.tag} | ${this.client.guilds.size} guild(s)`);
+            Log.info(`Logged in as ${this.client.user.tag} | ${this.client.guilds.size} guild(s)`);
 
             const took: number = Math.round(performance.now() - this.setupStart);
 
-            Log.success(`[Bot.setupEvents] Ready | Took ${took}ms | PID ${process.pid}`);
+            Log.success(`Ready | Took ${took}ms | PID ${process.pid}`);
             this.setState(BotState.Connected);
             this.emit(EBotEvents.Ready);
         });
@@ -852,7 +852,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             });
         }
 
-        Log.success("[Bot.setupEvents] Discord events setup completed");
+        Log.success("Discord events setup completed");
     }
 
     protected setState(state: BotState): this {
@@ -889,7 +889,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         if (DebugMode) {
-            Log.info("[Forge] Debug mode is enabled");
+            Log.info("Debug mode is enabled");
         }
 
         /**
@@ -905,7 +905,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             }
         }
 
-        Log.verbose("[Bot.setup] Attempting to load internal fragments");
+        Log.verbose("Attempting to load internal fragments");
         this.emit(EBotEvents.LoadingInternalFragments);
 
         // Load & enable internal fragments
@@ -916,7 +916,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         if (internalFragmentCandidates.length > 0) {
-            Log.verbose(`[Bot.setup] Loading ${internalFragmentCandidates.length} internal fragments`);
+            Log.verbose(`Loading ${internalFragmentCandidates.length} internal fragments`);
         }
         else {
             Log.warn(BotMessages.SETUP_NO_FRAGMENTS_DETECTED);
@@ -934,7 +934,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                 Log.warn(BotMessages.SETUP_NO_FRAGMENTS_ENABLED);
             }
             else {
-                Log.success(`[Bot.setup] Enabled ${enabled}/${internalFragments.length} (${Utils.percentOf(enabled, internalFragments.length)}%) internal fragments`);
+                Log.success(`Enabled ${enabled}/${internalFragments.length} (${Utils.percentOf(enabled, internalFragments.length)}%) internal fragments`);
             }
         }
 
@@ -945,10 +945,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         const consumerServiceCandidates: string[] | null = await Loader.scan(this.settings.paths.services);
 
         if (!consumerServiceCandidates || consumerServiceCandidates.length === 0) {
-            Log.verbose(`[Bot.setup] No services were detected under '${this.settings.paths.services}'`);
+            Log.verbose(`No services were detected under '${this.settings.paths.services}'`);
         }
         else {
-            Log.verbose(`[Bot.setup] Loading ${consumerServiceCandidates.length} service(s)`);
+            Log.verbose(`Loading ${consumerServiceCandidates.length} service(s)`);
 
             const servicesLoaded: IPackage[] | null = await Loader.loadMultiple(consumerServiceCandidates);
 
@@ -956,7 +956,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                 Log.warn(BotMessages.SETUP_NO_SERVICES_LOADED);
             }
             else {
-                Log.success(`[Bot.setup] Loaded ${servicesLoaded.length} service(s)`);
+                Log.success(`Loaded ${servicesLoaded.length} service(s)`);
                 await this.fragments.enableMultiple(servicesLoaded);
             }
         }
@@ -972,10 +972,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         const consumerCommandCandidates: string[] | null = await Loader.scan(this.settings.paths.commands);
 
         if (!consumerCommandCandidates || consumerCommandCandidates.length === 0) {
-            Log.warn(`[Bot.setup] No commands were detected under '${this.settings.paths.commands}'`);
+            Log.warn(`No commands were detected under '${this.settings.paths.commands}'`);
         }
         else {
-            Log.verbose(`[Bot.setup] Loading ${consumerCommandCandidates.length} command(s)`);
+            Log.verbose(`Loading ${consumerCommandCandidates.length} command(s)`);
 
             const commandsLoaded: IPackage[] | null = await Loader.loadMultiple(consumerCommandCandidates);
 
@@ -986,7 +986,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                 const enabled: number = await this.fragments.enableMultiple(commandsLoaded);
 
                 if (enabled > 0) {
-                    Log.success(`[Bot.setup] Enabled ${commandsLoaded.length}/${consumerCommandCandidates.length} (${Utils.percentOf(commandsLoaded.length, consumerCommandCandidates.length)}%) command(s)`);
+                    Log.success(`Enabled ${commandsLoaded.length}/${consumerCommandCandidates.length} (${Utils.percentOf(commandsLoaded.length, consumerCommandCandidates.length)}%) command(s)`);
                 }
                 else {
                     Log.warn(BotMessages.SETUP_NO_COMMANDS_ENABLED);
@@ -1001,12 +1001,12 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         const loaded: number = await this.tasks.loadAll(this.settings.paths.tasks);
 
         if (loaded > 0) {
-            Log.success(`[Bot.setup] Loaded ${loaded} task(s)`);
+            Log.success(`Loaded ${loaded} task(s)`);
 
             const enabled: number = this.tasks.enableAll();
 
             if (enabled > 0) {
-                Log.success(`[Bot.setup] Triggered ${enabled}/${loaded} task(s)`);
+                Log.success(`Triggered ${enabled}/${loaded} task(s)`);
             }
             else if (enabled === 0 && loaded > 0) {
                 Log.warn(BotMessages.SETUP_NO_TASKS_TRIGGERED);

@@ -120,7 +120,7 @@ export default class TaskManager implements ITaskManager {
                 return true;
             }
             else if (task.interval < 1000) {
-                Log.warn(`[TaskManager.enable] Refusing to run task '${name}'; Interval must be 1 second (1000ms) or higher`);
+                Log.warn(`Refusing to run task '${name}'; Interval must be 1 second (1000ms) or higher`);
 
                 return false;
             }

@@ -253,10 +253,10 @@ export default abstract class Utils {
 
             fs.readdir(directory, (error: Error, files: string[]) => {
                 if (error) {
-                    throw new Error(`[Utils.getFiles] There was an error while reading directory '${directory}': ${error.message}`);
+                    throw new Error(`There was an error while reading directory '${directory}': ${error.message}`);
                 }
 
-                let result: string[] = files;
+                const result: string[] = files;
 
                 if (absolutePath) {
                     for (let i: number = 0; i < result.length; i++) {

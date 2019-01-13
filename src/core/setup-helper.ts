@@ -63,7 +63,7 @@ export default class SetupHelper implements ISetupHelper {
             });
         }
 
-        Log.warn(`[SetupHelper.fromContext] Expecting channel to be of type 'TextChannel' but was '${options.context.msg.channel.type}'`);
+        Log.warn(`Expecting channel to be of type 'TextChannel' but was '${options.context.msg.channel.type}'`);
 
         return null;
     }

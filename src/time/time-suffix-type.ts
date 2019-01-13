@@ -1,6 +1,5 @@
 /**
  * @enum {number}
- * @readonly
  */
 const TimeSuffixType = {
     Millisecond: 0,
@@ -47,7 +46,7 @@ const TimeSuffixType = {
             }
 
             default: {
-                throw new Error(`[TimeSuffixType.fromShort] Invalid time suffix type: ${short}`);
+                throw new Error(`Invalid time suffix type: ${short}`);
             }
         }
     }

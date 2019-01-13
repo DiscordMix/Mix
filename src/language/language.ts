@@ -94,13 +94,13 @@ export default class Language implements ILanguage {
         const filePath: string = path.resolve(path.join(this.directory, `${name}.json`));
 
         if (!fs.existsSync(filePath)) {
-            throw new Error(`[Language.load] Language file does not exist: ${filePath}`);
+            throw new Error(`Language file does not exist: ${filePath}`);
         }
 
         const data: LanguageSource = await Utils.readJson(filePath);
 
         if (typeof data != "object" || Object.keys(data).length === 0) {
-            throw new Error(`[Language.load] Language file is either not an object or empty: ${name}`);
+            throw new Error(`Language file is either not an object or empty: ${name}`);
         }
 
         this.languages.set(name, data);

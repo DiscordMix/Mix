@@ -1,6 +1,8 @@
 import colors from "colors";
 import fs from "fs";
 import BotMessages from "./messages";
+import Utils from "./utils";
+import TimeConvert from "../time/time-convert";
 
 export enum LogLevel {
     None = -1,
@@ -36,7 +38,6 @@ export default abstract class Log {
         }
 
         const color: string = options.color || "white";
-
         const message: any = options.message;
 
         // TODO: Make sure check is working as intended, seems a bit suspicious
@@ -48,19 +49,17 @@ export default abstract class Log {
             return;
         }
 
-        const date: string = new Date().toISOString()
-            .replace(/T/, " ")
-            .replace(/\..+/, "");
+        const timePrefix: string = colors.gray(new Date().toLocaleTimeString());
 
         if (typeof message === "string") {
-            console.log(`${colors.gray(date)} ${(colors as any)[color](message)}`, ...options.params);
+            console.log(`${timePrefix} ${(colors as any)[color](message)}`, ...options.params);
         }
         else {
-            console.log(`${colors.gray(date)} `, message, ...options.params);
+            console.log(timePrefix, message, ...options.params);
         }
 
         if (Log.write) {
-            fs.writeFile(Log.file, `{${date}} ${message} ${options.params.map((param: any) => param.toString()).join(" ")}\n`, {
+            fs.writeFile(Log.file, `{${timePrefix}} ${message} ${options.params.map((param: any) => param.toString()).join(" ")}\n`, {
                 flag: "a"
             }, (error: Error) => {
                 if (error) {

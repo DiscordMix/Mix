@@ -1,4 +1,6 @@
-export default class EmojiTableBuilder {
+import {IBuilder} from "./builder";
+
+export default class EmojiTableBuilder implements IBuilder<string> {
     public readonly width: number;
     public readonly height: number;
 

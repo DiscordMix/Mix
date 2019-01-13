@@ -135,7 +135,7 @@ export default class DataCollector implements IDataCollector {
                     }
 
                     default: {
-                        throw new Error(`[DataCollector.finish] Invalid collection type: ${this.collectionType}`);
+                        throw new Error(`Invalid collection type: ${this.collectionType}`);
                     }
                 }
             });

@@ -70,7 +70,7 @@ export default class Temp implements ITemp {
     public async create(): Promise<this> {
         return new Promise<this>((resolve) => {
             if (!this.resolvedPath) {
-                throw new Error("[Temp.create] Trying to create when the resolved path is undefined");
+                throw new Error("Trying to create when the resolved path is undefined");
             }
 
             if (!fs.existsSync(this.resolvedPath)) {
@@ -87,7 +87,7 @@ export default class Temp implements ITemp {
                 });
             }
             else {
-                Log.warn(`[Temp.create] Temp folder already exists for the bot: ${this.id}. This may be due to an improper bot shutdown.`);
+                Log.warn(`Temp folder already exists for the bot: ${this.id}. This may be due to an improper bot shutdown.`);
 
                 resolve(this);
             }

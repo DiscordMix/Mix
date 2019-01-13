@@ -132,7 +132,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         const service: IGenericService | null = this.services.get(name) || null;
 
         if (typeof service !== "object") {
-            Log.warn(`[ServiceManager.enable] Failed to enable service '${name}' because it is not an object`);
+            Log.warn(`Failed to enable service '${name}' because it is not an object`);
         }
         else if (service !== null) {
             if (typeof service.canStart === "boolean") {
@@ -146,7 +146,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
                 }
             }
             else {
-                throw Log.error(`[ServiceManager.enable] Unexpected type of canEnable service property, expecting either a boolean or function for service '${name}'`);
+                throw Log.error(`Unexpected type of canEnable service property, expecting either a boolean or function for service '${name}'`);
             }
 
             if (!service.fork) {
@@ -155,7 +155,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
             else {
                 // TODO: CRITICAL: Should ignite by the service's ABS PATH! not the name, use similar technique as CommandStore (store packages).
                 if (!this.ignite(service.meta.name)) {
-                    Log.warn(`[ServiceManager.enable] Failed to ignite forked service '${name}'`);
+                    Log.warn(`Failed to ignite forked service '${name}'`);
                 }
                 // TODO: CRITICAL: Below will ONLY work LOCALLY! Remember forked services are ignited
                 // TODO: as ForkedService gives syntax error highlight
@@ -166,7 +166,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
                         (service as any).smis = new SMIS(child);
                     }
                     else {
-                        Log.warn("[ServiceManager.enable] Expecting forked service's process to exist");
+                        Log.warn("Expecting forked service's process to exist");
                     }
                 }
             }
@@ -176,10 +176,10 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
             return true;
         }
         else if (service === null) {
-            Log.warn(`[ServiceManager.enable] Attempted to enable an unregistered service '${name}'`);
+            Log.warn(`Attempted to enable an unregistered service '${name}'`);
         }
         else {
-            Log.warn(`[ServiceManager.enable] Unexpected composition of service '${name}'. (Your service may be invalid)`);
+            Log.warn(`Unexpected composition of service '${name}'. (Your service may be invalid)`);
         }
 
         return false;
@@ -225,7 +225,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
 
                 case ProcessMsgType.StdOutPipe: {
                     if (typeof msg.data !== "string") {
-                        Log.warn(`[ServiceManager.ignite:message] Refusing to log non-string output piped message from service '${name}'`);
+                        Log.warn(`Refusing to log non-string output piped message from service '${name}'`);
 
                         break;
                     }
@@ -238,25 +238,25 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
 
                 default: {
                     if (msg.type < 1000) {
-                        Log.warn(`[ServiceManager.ignite:message] Ignoring invalid message type ${msg.type} from '${name}'`);
+                        Log.warn(`Ignoring invalid message type ${msg.type} from '${name}'`);
                     }
                 }
             }
         });
 
         child.on("disconnect", () => {
-            Log.verbose(`[ServiceManager.ignite:disconnect] Forked service '${name}' disconnected`);
+            Log.verbose(`Forked service '${name}' disconnected`);
         });
 
         child.on("close", () => {
-            Log.verbose(`[ServiceManager.ignite:close] Forked service '${name}' closed`);
+            Log.verbose(`Forked service '${name}' closed`);
         });
 
         this.emit("ignite", name);
         this.heartbeatFork(name);
 
         // TODO: Debugging
-        Log.debug(`[ServiceManager.ignite] Spawned forked service '${name}' @ ${child.pid}`);
+        Log.debug(`Spawned forked service '${name}' @ ${child.pid}`);
 
         return true;
     }
@@ -367,7 +367,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
 
             this.forkHeartbeats.delete(name);
             this.forkedServices.delete(name);
-            Log.warn(`[ServiceManager.heartbeatFork] Forked service '${name}' timed out`);
+            Log.warn(`Forked service '${name}' timed out`);
         }, ServiceManager.heartbeatTimeout));
 
         this.emit("heartbeat", name);

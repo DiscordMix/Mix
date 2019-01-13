@@ -12,7 +12,7 @@ export function Deprecated(use?: string): any {
         const functionName: string = Object.keys(target)[0];
         const className: string = target.constructor.name;
 
-        let notice: string = `[Deprecated] Function '${className}.${functionName}' is deprecated and may be removed in the future.`;
+        let notice: string = `Function '${className}.${functionName}' is deprecated and may be removed in the future.`;
 
         if (use !== undefined) {
             notice += ` Use ${use} instead.`;

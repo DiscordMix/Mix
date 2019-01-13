@@ -1,7 +1,7 @@
 import Log, {LogLevel} from "../core/log";
 
 // Supress output
-Log.level = LogLevel.None;
+//Log.level = LogLevel.None;
 Log.write = false;
 
 // Import tests

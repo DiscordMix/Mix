@@ -179,7 +179,7 @@ export default abstract class CommandParser {
 
             // Ignore the type if it's not a string
             if (CommandParser.isTypeValid(schemaEntry.type)) {
-                throw Log.error(`[CommandParser.resolveArguments] Expecting type of schema entry '${schemaEntry.name}' to be either a string or a trivial type`);
+                throw Log.error(`Expecting type of schema entry '${schemaEntry.name}' to be either a string or a trivial type`);
             }
 
             for (const resolver of options.resolvers) {
@@ -217,7 +217,7 @@ export default abstract class CommandParser {
 
             if (!options.schema[i].required && options.arguments[i] === undefined && options.schema[i].defaultValue !== undefined) {
                 if (options.schema[i].defaultValue === undefined) {
-                    throw new Error(`[CommandParser.resolveDefaultArgs] Expecting default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'`);
+                    throw new Error(`Expecting default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'`);
                 }
 
                 const type: string = typeof options.schema[i].defaultValue;
@@ -229,7 +229,7 @@ export default abstract class CommandParser {
                     value = options.schema[i].defaultValue as any;
                 }
                 else {
-                    throw new Error(`[CommandParser.resolveDefaultArgs] Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
+                    throw new Error(`Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
                 }
             }
             else if (!options.schema[i].required && options.arguments[i] === undefined && options.schema[i].defaultValue === undefined) {
@@ -302,7 +302,7 @@ export default abstract class CommandParser {
 
                         default: {
                             // Shouldn't reach this point in code
-                            Log.warn(`[CommandParser.checkArguments] You should not be able to reach this point in code under any circumstances while checking type: ${options.schema[i].name}`);
+                            Log.warn(`You should not be able to reach this point in code under any circumstances while checking type: ${options.schema[i].name}`);
 
                             return false;
                         }
@@ -329,7 +329,7 @@ export default abstract class CommandParser {
                 }
 
                 if (!found) {
-                    Log.warn(`[CommandParser.checkArguments] Missing user-defined type check for type: ${options.schema[i].type}`);
+                    Log.warn(`Missing user-defined type check for type: ${options.schema[i].type}`);
 
                     return false;
                 }
@@ -347,7 +347,7 @@ export default abstract class CommandParser {
                 }
             }
             else {
-                Log.fatal(`[CommandParser.checkArguments] Invalid argument type type, expected either a function or a regex expression: ${options.schema[i].name}`);
+                Log.fatal(`Invalid argument type type, expected either a function or a regex expression: ${options.schema[i].name}`);
             }
         }
 

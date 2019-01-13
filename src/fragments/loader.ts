@@ -31,7 +31,7 @@ export default abstract class Loader {
      */
     public static async load(filePath: string): Promise<IPackage | null> {
         if (!fs.existsSync(filePath)) {
-            Log.warn(`[Loader.load] Fragment path does not exist: ${filePath}`);
+            Log.warn(`Fragment path does not exist: ${filePath}`);
 
             return null;
         }
@@ -57,7 +57,7 @@ export default abstract class Loader {
             };
         }
         catch (exception) {
-            Log.warn(`[Loader.load] There was an error while loading a fragment: ${exception}`);
+            Log.warn(`There was an error while loading a fragment: ${exception}`);
 
             return null;
         }
@@ -121,7 +121,7 @@ export default abstract class Loader {
                 const files: string[] | null = await Utils.getFiles(dir, true);
 
                 if (files === null) {
-                    Log.warn(`[Loader.pickupCandidates] Failed to read files of the directory: ${dir}`);
+                    Log.warn(`Failed to read files of the directory: ${dir}`);
 
                     continue;
                 }

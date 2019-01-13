@@ -236,7 +236,7 @@ export default class ConsoleInterface {
 
             const endTime: number = performance.now();
 
-            Log.success(`[CLI.reload] Reload complete | Took ${Math.round(endTime - startTime)}ms`);
+            Log.success(`Reload complete | Took ${Math.round(endTime - startTime)}ms`);
         });
 
         this.commands.set("clear", console.clear);
@@ -245,7 +245,7 @@ export default class ConsoleInterface {
             console.log("Available Commands\n");
 
             // TODO: Also show command description
-            for (let [base, command] of this.commands) {
+            for (const [base, command] of this.commands) {
                 console.log(chalk.white(`\t${base}`));
             }
         });

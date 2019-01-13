@@ -1,4 +1,4 @@
-import {IBuilder} from "..";
+import {IBuilder} from "./builder";
 
 export interface IConfigBuilder extends IBuilder<object> {
     commandsPath(path: string): this;

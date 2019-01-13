@@ -4,7 +4,7 @@ import Context from "../commands/command-context";
 import Log from "../core/log";
 
 export const attachedLogger: CommandRelay = (x: Context, args: any, cmd: IGenericCommand): void => {
-    Log.debug(`[AttachedLogger.${cmd.meta.name}] Command executed | Issued by ${x.sender.tag}`);
+    Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${x.sender.tag}`);
 };
 
 export function AttachedLogger(...relays: CommandRelay[]): any {

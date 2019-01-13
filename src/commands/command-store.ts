@@ -6,8 +6,8 @@ import {Snowflake} from "discord.js";
 import Loader, {IPackage, ILivePackage} from "../fragments/loader";
 import Utils from "../core/utils";
 import path from "path";
-import {PromiseOr} from "..";
 import {InternalCommand} from "../core/bot-extra";
+import {PromiseOr} from "../providers/provider";
 
 export enum CommandManagerEvent {
     DisallowedEnvironment,
@@ -205,12 +205,12 @@ export default class CommandStore {
         const commandName: string = commandPackage.instance.meta.name.trim();
 
         if (validCommandNamePattern.test(commandName) === false) {
-            Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Invalid name)`);
+            Log.warn(`Failed to register command '${commandName}' (Invalid name)`);
 
             return false;
         }
         else if (this.contains(commandName) && !this.isReleased(commandName)) {
-            Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (Already registered)`);
+            Log.warn(`Failed to register command '${commandName}' (Already registered)`);
 
             return false;
         }
@@ -225,7 +225,7 @@ export default class CommandStore {
                         this.aliases.delete(commandPackage.instance.aliases[undoIdx]);
                     }
 
-                    Log.warn(`[CommandStore.register] Failed to register command '${commandName}' (A command with the same alias already exists)`);
+                    Log.warn(`Failed to register command '${commandName}' (A command with the same alias already exists)`);
 
                     return false;
                 }
@@ -293,7 +293,7 @@ export default class CommandStore {
 
             if (packg !== null && (packg.module as any).prototype instanceof Command) {
                 if (!await this.bot.fragments.enable(packg)) {
-                    Log.warn(`[CommandStore.get] Failed to re-load released command '${name}'`);
+                    Log.warn(`Failed to re-load released command '${name}'`);
 
                     return null;
                 }
@@ -301,7 +301,7 @@ export default class CommandStore {
                 return await this.get(name);
             }
             else {
-                Log.warn(`[CommandStore.get] Expecting released command '${name}' to exist for re-load and to be a command`);
+                Log.warn(`Expecting released command '${name}' to exist for re-load and to be a command`);
 
                 return null;
             }
@@ -424,7 +424,7 @@ export default class CommandStore {
             const count: number = this.commands.size;
 
             this.commands.clear();
-            Log.success(`[CommandManager.unloadAll] Unloaded ${count} command(s)`);
+            Log.success(`Unloaded ${count} command(s)`);
         }
 
         return this;

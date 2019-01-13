@@ -120,7 +120,7 @@ export default class Optimizer implements IOptimizer {
         }
 
         if (released > 0) {
-            Log.verbose(`[TempoEngine] Released ${released} unused command(s)`);
+            Log.verbose(`Released ${released} unused command(s)`);
         }
 
         this.commandsUsed = [];

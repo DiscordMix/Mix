@@ -54,7 +54,7 @@ export default class SMIS extends EventEmitter {
             }
 
             default: {
-                Log.warn(`[SMIS.handshake] Unexpected handshake response with type '${response.type}'`);
+                Log.warn(`Unexpected handshake response with type '${response.type}'`);
 
                 return false;
             }

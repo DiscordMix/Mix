@@ -1,5 +1,4 @@
 import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
-import {PromiseOr} from "..";
 import {IAction} from "../actions/action";
 import {EBotEvents} from "../core/bot-extra";
 import ChatEnv from "../core/chat-env";
@@ -9,6 +8,7 @@ import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./command-context";
 import CommandParser from "./command-parser";
 import CommandStore, {CommandManagerEvent} from "./command-store";
+import {PromiseOr} from "../providers/provider";
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;
@@ -111,7 +111,7 @@ export default class CommandHandler implements ICommandHandler {
             }
 
             if (!valid) {
-                throw Log.error(`[CommandManager.specificMet] Invalid restrict group or prefix: ${specific}`);
+                throw Log.error(`Invalid restrict group or prefix: ${specific}`);
             }
 
             if (met) {
@@ -244,7 +244,7 @@ export default class CommandHandler implements ICommandHandler {
 
         // Do not execute command if arguments failed to resolve
         if (resolvedArgs === null) {
-            Log.warn(`[CommandHandler.handle] Command '${command.meta.name}' failed to execute: Failed to resolve arguments`);
+            Log.warn(`Command '${command.meta.name}' failed to execute: Failed to resolve arguments`);
 
             return false;
         }
@@ -283,7 +283,7 @@ export default class CommandHandler implements ICommandHandler {
             // Delete the last cooldown before adding the new one for this command + user
             if (lastCooldown !== null) {
                 if (!this.commandStore.clearCooldown(context.sender.id, command.meta.name)) {
-                    throw Log.error(`[CommandHandler.handle] Expecting cooldown of '${context.sender.id} (${context.sender.tag})' to exist for command '${command.meta.name}'`);
+                    throw Log.error(`Expecting cooldown of '${context.sender.id} (${context.sender.tag})' to exist for command '${command.meta.name}'`);
                 }
             }
 

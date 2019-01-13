@@ -263,6 +263,6 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
     }
 
     protected error(type: ActionType, message: string): void {
-        throw Log.error(`[InstructionInterpreter.interpret] Could not interpret instruction (${ActionType[type].toString()}): ${message}`);
+        throw Log.error(`Could not interpret instruction (${ActionType[type].toString()}): ${message}`);
     }
 }

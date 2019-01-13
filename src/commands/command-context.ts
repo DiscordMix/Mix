@@ -129,7 +129,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
      */
     public async createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number = 7500): Promise<string | null> {
         if (channel.type !== ChannelType.DM && channel.type !== ChannelType.Text) {
-            throw new Error(`[CommandContext.createRequest] Epxecting channel '${channel.id}' to be either DMs or text-based`);
+            throw new Error(`Expecting channel '${channel.id}' to be either DMs or text-based`);
         }
 
         return new Promise<string | null>(async (resolve) => {
@@ -183,7 +183,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         }
 
         return await Utils.createTimedAction<Promise<boolean>>(this.bot, (): Promise<boolean> => {
-        return new Promise<boolean>((resolve) => {
+            return new Promise<boolean>((resolve) => {
                 // TODO: Debugging?
                 new EmojiMenu(response.msg.id, this.msg.author.id, [
                     {

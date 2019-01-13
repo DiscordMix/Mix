@@ -57,7 +57,7 @@ export default class TimeParser {
             }
 
             default: {
-                throw new Error(`[TimeParser.getTimeFromNow] Invalid suffix: ${this.suffix}`);
+                throw new Error(`Invalid suffix: ${this.suffix}`);
             }
         }
     }

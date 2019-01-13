@@ -81,7 +81,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
 
             // TODO: Repeated below, somehow merge for efficiency.
             if (!Loader.validate(command)) {
-                Log.warn(`[FragmentManager.enable] Refusing to enable fragment with invalid name '${command.meta.name}'; Please note fragment names cannot contain spaces`);
+                Log.warn(`Refusing to enable fragment with invalid name '${command.meta.name}'; Please note fragment names cannot contain spaces`);
 
                 return false;
             }
@@ -93,7 +93,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
 
             // TODO: Add a way to disable the warning
             if (!internal && command.meta.name === "eval") {
-                Log.warn("[FragmentManager.enable] Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Forge.");
+                Log.warn("Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Forge.");
             }
 
             // Overwrite command restrict with default values
@@ -131,7 +131,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
 
             // TODO: Repeated below, somehow merge for efficiency.
             if (!Loader.validate(service)) {
-                Log.warn(`[FragmentManager.enable] Refusing to enable fragment with invalid name '${service.meta.name}'; Please note fragment names cannot contain spaces`);
+                Log.warn(`Refusing to enable fragment with invalid name '${service.meta.name}'; Please note fragment names cannot contain spaces`);
 
                 return false;
             }
@@ -142,7 +142,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
         }
         else {
             // TODO: Also add someway to identify the fragment
-            Log.warn("[FragmentManager.enable] Unknown fragment instance, ignoring");
+            Log.warn("Unknown fragment instance, ignoring");
         }
 
         return false;

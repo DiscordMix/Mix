@@ -1,4 +1,5 @@
 import Store, {IStoreAction} from "./store";
+import Delta from "./delta";
 
 export interface IStateCapsule<T> {
     readonly state: T;
@@ -20,15 +21,6 @@ export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
         this.store = store;
         this.capsules = [];
         this.setup();
-    }
-
-    protected insert(state: TState): this {
-        this.capsules.push({
-            state,
-            time: Date.now()
-        });
-
-        return this;
     }
 
     public wayback(): IStateCapsule<TState> | null {
@@ -67,6 +59,15 @@ export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
         return result;
     }
 
+    protected insert(state: TState): this {
+        this.capsules.push({
+            state,
+            time: Date.now()
+        });
+
+        return this;
+    }
+
     protected setup(): void {
         const currentState: TState | undefined = this.store.getState();
 
@@ -74,8 +75,9 @@ export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
             this.insert(currentState);
         }
 
-        this.store.subscribe((action: IStoreAction, changed: boolean, previousState?: TState, newState?: TState) => {
-            if (changed && newState !== undefined) {
+        this.store.subscribe((action: IStoreAction, previousState?: TState, newState?: TState) => {
+            // TODO: Resolve error
+            if (previousState === undefined || Delta.different(previousState, newState) && newState !== undefined) {
                 this.insert(newState);
             }
         });

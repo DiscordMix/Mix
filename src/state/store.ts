@@ -16,7 +16,7 @@ export enum TestStoreActionType {
 
 export type Reducer<T> = (action: IStoreAction, state?: T) => T | null;
 
-export type StoreActionHandler<T> = (action: IStoreAction, changed: boolean, previousState?: T, newState?: T) => void;
+export type StoreActionHandler<T> = (action: IStoreAction, previousState?: T, newState?: T) => void;
 
 export interface IStore<TState = any, TActionType = any> {
     readonly timeMachine: ITimeMachine<TState>;
@@ -31,6 +31,11 @@ export interface IStore<TState = any, TActionType = any> {
 }
 
 export default class Store<TState = any, TActionType = any> {
+    /**
+     * Combine multiple reducers into a single method
+     * @param {Reducer<T>[]} reducers
+     * @return {Reducer<T>}
+     */
     public static mergeReducers<T = any>(...reducers: Reducer<T>[]): Reducer<T> {
         return (action: IStoreAction, state?: T): T | null => {
             let finalState: T | undefined = state;
@@ -61,6 +66,12 @@ export default class Store<TState = any, TActionType = any> {
         this.timeMachine = new TimeMachine(this);
     }
 
+    /**
+     * Dispatch a store event
+     * @param {TActionType} type
+     * @param {T} payload
+     * @return {this}
+     */
     public dispatch<T = any>(type: TActionType, payload?: T): this {
         if (typeof type !== "number" && typeof type !== "string") {
             throw new Error(BotMessages.STORE_INVALID_ACTION);
@@ -73,8 +84,6 @@ export default class Store<TState = any, TActionType = any> {
             payload
         };
 
-        let changed: boolean = false;
-
         for (const reducer of this.reducers) {
             const result: TState | null = reducer(action, this.state);
 
@@ -83,21 +92,27 @@ export default class Store<TState = any, TActionType = any> {
             }
             else if (result !== null) {
                 this.state = result;
-                changed = true;
             }
         }
 
         for (const handler of this.handlers) {
-            handler(action, changed, previousState, this.state);
+            handler(action, previousState, this.state);
         }
 
         return this;
     }
 
+    /**
+     * Retrieve the current state of the store
+     */
     public getState(): TState | undefined {
         return this.state;
     }
 
+    /**
+     * Subscribe a event handler to listen for state changes
+     * @param handler
+     */
     public subscribe(handler: StoreActionHandler<TState>): boolean {
         if (typeof handler !== "function") {
             throw new Error(BotMessages.STORE_EXPECT_HANDLER_FUNC);

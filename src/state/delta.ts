@@ -1,3 +1,9 @@
+import {Log} from "..";
+
+export type ComparableEntity = object | string | number;
+
+const ComparableEntities: string[] = ["string", "object", "number"];
+
 export default abstract class Delta {
     /**
      * Compare two objects's properties without recursion
@@ -23,5 +29,29 @@ export default abstract class Delta {
         }
 
         return deltas;
+    }
+
+    /**
+     * Determine if two entities are different
+     * @param entity1
+     * @param entity2
+     * @return {boolean} Whether the provided entities are different
+     */
+    public static different(entity1: ComparableEntity, entity2: ComparableEntity): boolean {
+        if (typeof entity1 !== typeof entity2) {
+            throw Log.error("Unable to compare different types");
+        }
+        else if (!ComparableEntities.includes(typeof entity1)) {
+            throw Log.error("Entity type is not comparable");
+        }
+        else if (typeof entity1 === "string") {
+            return entity1 === entity2;
+        }
+        else if (typeof entity1 === "object") {
+            return Object.keys(Delta.compare(entity1, entity2 as object)).length !== 0;
+        }
+        else {
+            throw Log.error("Unable to compare unexpected type of entity");
+        }
     }
 }

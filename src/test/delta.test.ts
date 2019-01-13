@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {Delta} from "..";
+import Delta from "../state/delta";
 
 describe("Delta", () => {
     describe("compare()", () => {

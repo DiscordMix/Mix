@@ -1,11 +1,11 @@
 import Command, {CommandRunner, TrivialArgType, RestrictGroup} from "../commands/command";
 import {Name, Arguments, Description} from "../decorators/general";
 import {AttachedLogger, Guards, Connect, DependsOn} from "../decorators/other";
-import {Constraint, Permission} from "..";
 import {describe} from "mocha";
 import {expect} from "chai";
 import {testBot} from "./test-bot";
 import {Deprecated} from "../decorators/utility";
+import {Constraint} from "../decorators/constraints";
 
 const testConnection: CommandRunner = (x, args): void => {
     //

@@ -1,9 +1,9 @@
-import {PromiseOr} from "..";
 import Bot from "../core/bot";
 import Log from "../core/log";
 import Utils from "../core/utils";
 import Loader, {IPackage} from "../fragments/loader";
 import Task from "./task";
+import {PromiseOr} from "../providers/provider";
 
 export interface ITaskManager {
     registerTask(task: Task): boolean;

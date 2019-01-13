@@ -1,11 +1,11 @@
 import {EventEmitter} from "events";
-import {ForkedService, PromiseOr, Service} from "..";
 import Command, {DefaultCommandRestrict} from "../commands/command";
 import Bot from "../core/bot";
 import {InternalCommand} from "../core/bot-extra";
 import Log from "../core/log";
 import {IFragment} from "./fragment";
 import Loader, {ILivePackage, IPackage} from "./loader";
+import {ForkedService} from "../services/forked-service";
 
 export interface IFragmentManager extends EventEmitter {
     enableMultiple(packages: IPackage[], internal: boolean): PromiseOr<number>;

@@ -1,10 +1,10 @@
 import {Message, MessageReaction, Snowflake, User} from "discord.js";
 import {EventEmitter} from "events";
-import {PromiseOr} from "..";
 import Context from "../commands/command-context";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
 import DiscordEvent from "../core/discord-event";
+import {PromiseOr} from "../providers/provider";
 
 export type EmojiClickHandler = (reaction: MessageReaction, user: User) => void;
 

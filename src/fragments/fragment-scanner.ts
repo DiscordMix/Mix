@@ -1,4 +1,4 @@
-import {Log} from "..";
+import Log from "../core/log";
 
 export interface IFragmentScanner {
     match(...patterns: RegExp[]): this;

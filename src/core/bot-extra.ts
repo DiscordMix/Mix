@@ -1,16 +1,22 @@
 import {Client, Message, Snowflake} from "discord.js";
 import {EventEmitter} from "events";
-import {ActionInterpreter, IActionInterpreter, IArgumentResolver, ICommandStore, IConsoleInterface, ICustomArgType, IDisposable, ISettings, IStore, ITaskManager, PromiseOr, Reducer} from "..";
-import {UserGroup} from "../commands/command";
+import {UserGroup, IArgumentResolver, ICustomArgType} from "../commands/command";
 import {ICommandHandler} from "../commands/command-handler";
 import {IFragmentManager} from "../fragments/fragment-manager";
 import Language, {ILanguage} from "../language/language";
 import {IOptimizer} from "../optimization/optimizer";
 import {IServiceManager} from "../services/service-manager";
-import {ITimeoutAttachable} from "./helpers";
+import {ITimeoutAttachable, IDisposable} from "./helpers";
 import {IPathResolver} from "./path-resolver";
 import {IStatsCounter} from "./stat-counter";
 import {ITemp} from "./temp";
+import {ICommandStore} from "../commands/command-store";
+import {IConsoleInterface} from "../console/console-interface";
+import {ITaskManager} from "../tasks/task-manager";
+import ActionInterpreter, {IActionInterpreter} from "../actions/action-interpreter";
+import {Reducer, IStore} from "../state/store";
+import {ISettings} from "./settings";
+import {PromiseOr} from "../providers/provider";
 
 export interface IBotModules {
     readonly store: IStore;

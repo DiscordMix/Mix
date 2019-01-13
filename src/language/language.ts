@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
-import {PromiseOr} from "..";
 import BotMessages from "../core/messages";
 import Utils from "../core/utils";
+import {PromiseOr} from "../providers/provider";
 
 export type LanguageSource = Map<string, any>;
 

@@ -1,8 +1,8 @@
 import fs from "fs";
-import {Patterns} from "..";
 import Log from "../core/log";
 import Utils from "../core/utils";
 import {IFragment} from "./fragment";
+import Patterns from "../core/patterns";
 
 const validFragmentNamePattern: RegExp = /^(?:[a-z]{0,}[a-z0-9-_\S]+){2,50}$/i;
 const validFragmentDescPattern: RegExp = /^(?:[a-z]{0,}[^\n\r\t\0]+){1,100}$/i;

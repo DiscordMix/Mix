@@ -1,8 +1,8 @@
 import {Dictionary} from "@atlas/xlib";
 import {Guild} from "discord.js";
 import {EventEmitter} from "events";
-import {DiscordEvent} from "..";
 import {Snowflake} from "./bot-extra";
+import DiscordEvent from "./discord-event";
 
 export type EventEmitterListener = (...args: any[]) => void;
 

@@ -3,9 +3,9 @@ import {Snowflake} from "discord.js";
 import fs from "fs";
 import path from "path";
 import {default as main} from "require-main-filename";
-import {PromiseOr} from "..";
 import Log from "./log";
 import Utils from "./utils";
+import {PromiseOr} from "../providers/provider";
 
 export interface ITemp {
     setup(id: Snowflake): this;

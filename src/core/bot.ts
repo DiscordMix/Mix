@@ -37,8 +37,7 @@ import PathResolver from "./path-resolver";
 import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath, DefaultBotOptions, DebugMode} from "./constants";
 import Store from "../state/store";
 import BotMessages from "./messages";
-import {IBot} from "..";
-import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, EBotEvents} from "./bot-extra";
+import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, EBotEvents, IBot} from "./bot-extra";
 import {Action} from "@atlas/automata";
 import DiscordEvent from "./discord-event";
 

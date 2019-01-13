@@ -1,4 +1,4 @@
-import {Log} from "..";
+import Log from "../core/log";
 
 export type ComparableEntity = object | string | number;
 

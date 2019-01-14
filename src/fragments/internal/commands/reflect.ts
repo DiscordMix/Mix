@@ -26,7 +26,7 @@ enum ReflectDataType {
     }
 )
 @Constraint.Cooldown(1)
-@Constraint.Specific([RestrictGroup.BotOwner])
+@Constraint.OwnerOnly
 export default class ReflectCommand extends Command {
     public run(x: Context, args: IArgs): IAction<IMessageActionArgs> {
         switch (args.type) {

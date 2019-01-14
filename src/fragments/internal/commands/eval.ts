@@ -27,7 +27,7 @@ interface IArgs {
         required: false
     }
 )
-@Constraint.Specific([RestrictGroup.BotOwner])
+@Constraint.OwnerOnly
 export default class EvalCommand extends Command<IArgs> {
     public async run(x: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();

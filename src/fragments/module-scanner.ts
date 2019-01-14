@@ -1,11 +1,11 @@
 import Log from "../core/log";
 
-export interface IFragmentScanner {
+export interface IModuleScanner {
     match(...patterns: RegExp[]): this;
     scan(): string[];
 }
 
-export default class FragmentScanner implements IFragmentScanner {
+export default class ModuleScanner implements IModuleScanner {
     protected patterns: RegExp[];
     protected basePath: string;
 

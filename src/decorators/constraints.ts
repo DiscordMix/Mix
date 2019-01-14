@@ -52,18 +52,8 @@ export abstract class Constraint {
     }
 
     public static OwnerOnly(target: any): any {
-        DecoratorUtils.bind(target);
-
-        return class extends target {
-            public readonly constraints: IConstraints = {
-                ...this.constraints,
-
-                specific: [
-                    ...this.constraints.specific,
-                    RestrictGroup.BotOwner
-                ]
-            };
-        };
+        // TODO: Verify this works
+        return Constraint.Specific([RestrictGroup.BotOwner]);
     }
 
 }

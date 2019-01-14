@@ -1,7 +1,7 @@
 import {exec} from "child_process";
 import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
-import Command, {RestrictGroup, TrivialArgType} from "../../../commands/command";
+import Command, {TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
 import {Description, Name, Aliases, Arguments} from "../../../decorators/general";
@@ -22,7 +22,7 @@ interface IArgs {
         required: true
     }
 )
-@Constraint.Specific([RestrictGroup.BotOwner])
+@Constraint.OwnerOnly
 export default class CliCommand extends Command<IArgs> {
     public async run(x: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();

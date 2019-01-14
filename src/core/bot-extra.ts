@@ -161,7 +161,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
 
     postStats(): PromiseOr<void>;
     suspend(suspend: boolean): this;
-    triggerCommand(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
+    invokeCommand(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
     clearTimeout(timeout: NodeJS.Timeout): boolean;
     clearAllTimeouts(): number;
     clearInterval(interval: NodeJS.Timeout): boolean;

@@ -433,7 +433,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * @param {string[]} args
      * @return {Promise<*>}
      */
-    public async triggerCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
+    public async invokeCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
         // Use any registered prefix, default to index 0
         const content: string = `${this.settings.general.prefix[0]}${base} ${args.join(" ")}`.trim();
 

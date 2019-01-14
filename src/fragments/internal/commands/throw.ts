@@ -5,7 +5,7 @@ import {Constraint} from "../../../decorators/constraints";
 
 @Name("throw")
 @Description("Throw an error")
-@Constraint.Specific([RestrictGroup.BotOwner])
+@Constraint.OwnerOnly
 export default class ThrowCommand extends Command {
     public async run(): Promise<void> {
         throw new Error(BotMessages.INTENTIONAL_ERROR);

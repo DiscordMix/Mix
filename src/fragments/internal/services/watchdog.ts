@@ -1,11 +1,9 @@
-import {IFragmentMeta, Service} from "../../..";
+import {Service} from "../../..";
+import {Name, Description} from "../../../decorators/general";
 
+@Name("watchdog")
+@Description("Bot state supervision service")
 export default class WatchdogService extends Service {
-    public readonly meta: IFragmentMeta = {
-        name: "watchdog",
-        description: "Bot status supervision service"
-    };
-
     public start(): void {
         // Log.debug("Watchdog service started! Hello from watchdog!");
         // TODO:

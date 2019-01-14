@@ -114,7 +114,7 @@ When contributing, please follow the [Semantic Versioning](https://semver.org/) 
 
 Forge is intended for both serious, large scale and simple, elegant bot development, however it may not be suitable for everyone.
 
-If such is the case, it may be worth considering this fine alternatives:
+If such is the case, it may be worth considering the following fine alternatives:
 
 [Klasa](https://github.com/dirigeants/klasa) by [Dirigeants](https://github.com/dirigeants)
 

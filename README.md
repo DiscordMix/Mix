@@ -117,7 +117,9 @@ Forge is intended for both serious, large scale and simple, elegant bot developm
 If such is the case, it may be worth considering this fine alternatives:
 
 [Klasa](https://github.com/dirigeants/klasa) by [Dirigeants](https://github.com/dirigeants)
+
 [Commando](https://github.com/discordjs/Commando) by [discordjs](https://github.com/discordjs)
+
 [yamdbf core](https://github.com/yamdbf/core) by [yamdbf team](https://github.com/yamdbf)
 
 #### Helpful Snippets

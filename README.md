@@ -66,6 +66,9 @@ Make sure that you have installed the project dependencies (`npm install` or `ya
     * Support for Hot-reloading any module(s) and/or fragment(s)
     * Automatic advanced optimization for large bots
     * Codebase is tested
+    * Various syntaxes for creating components/fragments
+        * Using decorators
+        * Using class members
 * Commands
     * Aliases
     * Advanced argument support

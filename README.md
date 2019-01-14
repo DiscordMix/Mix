@@ -104,6 +104,16 @@ Thanks for your interest in helping in the project. To contribute to this projec
 
 When contributing, please follow the [Semantic Versioning](https://semver.org/) guidelines.
 
+#### Additional Notes
+
+Forge is intended for both serious, large scale and simple, elegant bot development, however it may not be suitable for everyone.
+
+If such is the case, it may be worth considering this fine alternatives:
+
+[Klasa](https://github.com/dirigeants/klasa) by [Dirigeants](https://github.com/dirigeants)
+[Commando](https://github.com/discordjs/Commando) by [discordjs](https://github.com/discordjs)
+[yamdbf core](https://github.com/yamdbf/core) by [yamdbf team](https://github.com/yamdbf)
+
 #### Helpful Snippets
 
 [Command](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#command)

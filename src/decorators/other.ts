@@ -1,7 +1,8 @@
-import Command, {CommandRunner, CommandRelay, IGenericCommand, IConstraints, RestrictGroup} from "../commands/command";
+import Command, {CommandRunner, CommandRelay, IGenericCommand} from "../commands/command";
 import {DecoratorUtils} from "./decorator-utils";
 import Context from "../commands/command-context";
 import Log from "../core/log";
+import {DiscordEvent} from "..";
 
 export const attachedLogger: CommandRelay = (x: Context, args: any, cmd: IGenericCommand): void => {
     Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${x.sender.tag}`);
@@ -10,7 +11,6 @@ export const attachedLogger: CommandRelay = (x: Context, args: any, cmd: IGeneri
 export function AttachedLogger(...relays: CommandRelay[]): any {
     if (relays.length === 0) {
         relays = [attachedLogger];
-        Log.debug("--- INJECTED LOGGER");
     }
 
     return function (target: any) {
@@ -68,4 +68,8 @@ export function Guard(...guards: string[]): any {
             ];
         };
     };
+}
+
+export function OnEvent(event: DiscordEvent): any {
+    // TODO
 }

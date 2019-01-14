@@ -67,3 +67,16 @@ export abstract class Constraint {
     }
 
 }
+
+export function Constraints(constraints: Partial<IConstraints>): any {
+    return function (target: any, key: string) {
+        DecoratorUtils.bind(target);
+
+        return class extends target {
+            public readonly constraints: IConstraints = {
+                ...this.constraints,
+                ...constraints
+            };
+        };
+    };
+}

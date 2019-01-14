@@ -37,6 +37,7 @@ export default class EvalCommand extends Command<IArgs> {
         try {
             result = await eval(args.code);
         } catch (err) {
+            // TODO: Should prefix with 'Error: '?
             result = err.message;
         }
 
@@ -66,4 +67,4 @@ export default class EvalCommand extends Command<IArgs> {
 
         x.send(embed.build());
     }
-};
+}

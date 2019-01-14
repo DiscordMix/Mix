@@ -31,7 +31,7 @@ export default class CliCommand extends Command<IArgs> {
         exec(args.command, (error, stdout: string, stderror: string) => {
             let result: string = stdout || stderror;
 
-            result = stdout.toString().trim() === '' || !result ? stderror.toString().trim() === '' || !stderror ? 'No return value.' : stderror : result.toString();
+            result = stdout.toString().trim() === "" || !result ? stderror.toString().trim() === "" || !stderror ? "No output" : stderror : result.toString();
 
             const embed: EmbedBuilder = new EmbedBuilder();
 

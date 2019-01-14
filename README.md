@@ -53,6 +53,46 @@ To build the project, use `npm run build` or `yarn build` if using the [Yarn](ht
 
 Make sure that you have installed the project dependencies (`npm install` or `yarn`).
 
+#### Features
+
+* Core
+    * Generic "fragment" base model for all entities (commands, services, etc.)
+    * Deep-loading for fragments
+    * Support for regular expression loading
+    * Dependency management (commands, services, etc.)
+    * Fully modular (through interfaces)
+        * Implement custom command handling
+        * Basically everything is modular
+    * Support for Hot-reloading any module(s) and/or fragment(s)
+    * Automatic advanced optimization for large bots
+    * Codebase is tested
+* Commands
+    * Aliases
+    * Advanced argument support
+        * Flag support (ex. --key or --key="value")
+        * Type system with custom type(s) support
+            * Mentions (users, channels, etc.)
+            * Booleans ("yes", "no", "false", "true", etc.)
+    * "Constraints" to limit execution
+        * Cooldowns
+        * Server permissions (both bot & issuer)
+        * Chat environemnt (NSFW, DMs, etc.)
+        * Specifics (guild(s), channel(s), member(s), role(s), etc.)
+        * Ability to define custom constraints
+    * Middleware "Guards" to limit execution
+    * Connections "Relays" allow for relaying an execution event across multiple methods
+    * Result feedback with reactions
+    * Ability to emulate command execution
+    * Ability to re-execute upon message edits
+    * Support for multiple prefixes (includes regular expression prefixes)
+* Services
+    * Run in the background
+    * Direct access to all the bot's resources and modules
+    * *And more ...*
+* Tasks
+    * Recurring tasks
+    * *And more ...*
+
 #### Contributing
 
 Thanks for your interest in helping in the project. To contribute to this project, you will be required to use pull requests.

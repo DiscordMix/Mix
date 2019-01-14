@@ -34,19 +34,39 @@ export default class UsageCommand extends Command<IArgs> {
             return;
         }
 
-        const usage: MsgBuilder = new MsgBuilder().block().add(`Usage: ${targetCommand.meta.name}`);
+        const usage: MsgBuilder = new MsgBuilder().block().append(`Usage: ${targetCommand.meta.name}`);
 
         for (const arg of targetCommand.args) {
             usage.append(" ").append(arg.required ? arg.name : `[${arg.name}]`);
         }
 
-        usage.line().add("Argument details:").line();
+        const dependencies: string = targetCommand.dependsOn.length > 0 ? targetCommand.dependsOn.join() : "None";
+        const cooldown: string = targetCommand.constraints.cooldown !== 0 ? `${targetCommand.constraints.cooldown} second(s)` : "None";
+        const aliases: string = targetCommand.aliases.length > 0 ? targetCommand.aliases.join() : "None";
+
+        const additional: string[] = [
+            !targetCommand.isEnabled ? "Disabled" : "",
+            targetCommand.undoable ? "Undoable" : "",
+            targetCommand.singleArg ? "Single-argument" : ""
+        ];
+
+        usage.line()
+            .add(`Name: ${targetCommand.meta.name}`)
+            .add(`Description: ${targetCommand.meta.description}`)
+            .add(`Aliases: ${aliases}`)
+            .add(`Dependencies: ${dependencies}`)
+            .add(`Cooldown: ${cooldown}`)
+            .add(`Additional notes: ${additional.join()}`)
+            .line()
+            .add("Argument details:")
+            .line();
 
         for (const arg of targetCommand.args) {
             const def: string = arg.defaultValue ? ` (default: ${arg.defaultValue})` : "";
-            const flag: string = arg.switchShortName ? `{-${arg.switchShortName}}` : "";
+            const flag: string = arg.switchShortName ? ` {-${arg.switchShortName}}` : "";
 
-            usage.add(`${arg.name}${flag} ${arg.required ? "!" : "?"}${def} : ${arg.description}`);
+            // TODO: Missing argument's type
+            usage.add(`${arg.name}${arg.required ? "!" : "?"}${flag}${def} : ${arg.description}`);
         }
 
         await x.send(usage.block().build());

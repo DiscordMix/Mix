@@ -5,7 +5,6 @@ import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
 import Patterns from "./patterns";
 import {ISettingsPaths} from "./settings";
 import Utils from "./utils";
-import colors from "colors";
 
 // TODO: Not working
 export const DebugMode: boolean = process.env.FORGE_DEBUG_MODE === "true";

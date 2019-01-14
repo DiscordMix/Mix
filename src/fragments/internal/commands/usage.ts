@@ -1,7 +1,7 @@
 import {default as Command, TrivialArgType} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import {Name, Description, Arguments} from "../../../decorators/general";
-import {Constraint} from "../../..";
+import {Constraint, MsgBuilder} from "../../..";
 
 interface IArgs {
     readonly command: string;
@@ -34,12 +34,21 @@ export default class UsageCommand extends Command<IArgs> {
             return;
         }
 
-        const usageArgs: string[] = [targetCommand.meta.name];
+        const usage: MsgBuilder = new MsgBuilder().block().add(`Usage: ${targetCommand.meta.name}`);
 
         for (const arg of targetCommand.args) {
-            usageArgs.push(arg.required ? arg.name : `[${arg.name}]`);
+            usage.append(" ").append(arg.required ? arg.name : `[${arg.name}]`);
         }
 
-        await x.ok(usageArgs.join(" "));
+        usage.line().add("Argument details:").line();
+
+        for (const arg of targetCommand.args) {
+            const def: string = arg.defaultValue ? ` (default: ${arg.defaultValue})` : "";
+            const flag: string = arg.switchShortName ? `{-${arg.switchShortName}}` : "";
+
+            usage.add(`${arg.name}${flag} ${arg.required ? "!" : "?"}${def} : ${arg.description}`);
+        }
+
+        await x.send(usage.block().build());
     }
 }

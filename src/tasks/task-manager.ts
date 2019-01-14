@@ -179,7 +179,7 @@ export default class TaskManager implements ITaskManager {
     public enableAll(): number {
         let enabled: number = 0;
 
-        for (let [name, task] of this.tasks) {
+        for (const [name, task] of this.tasks) {
             if (this.trigger(name)) {
                 enabled++;
             }

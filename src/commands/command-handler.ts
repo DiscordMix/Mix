@@ -9,6 +9,7 @@ import Context from "./command-context";
 import CommandParser from "./command-parser";
 import CommandStore, {CommandManagerEvent} from "./command-store";
 import {PromiseOr} from "../providers/provider";
+import {ICommandStore} from "..";
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;
@@ -27,6 +28,17 @@ export interface IUndoAction {
 }
 
 export interface ICommandHandler {
+    readonly commandStore: ICommandStore;
+
+    // TODO: Types
+    readonly errorHandlers: any[];
+
+    // TODO: _errorHandlers replaces errorHandlers
+    readonly _errorHandlers: Map<CommandManagerEvent, any>;
+    readonly argumentTypes: any;
+
+    readonly undoMemory: Map<Snowflake, IUndoAction>;
+
     undoAction(user: Snowflake, message: Message): PromiseOr<boolean>;
     handle(context: Context, command: Command, rawArgs: RawArguments): PromiseOr<boolean>;
 }
@@ -321,8 +333,10 @@ export default class CommandHandler implements ICommandHandler {
         catch (error) {
             this.commandStore.bot.emit("commandError", error);
 
-            if (this.errorHandlers[CommandManagerEvent.CommandError]) {
-                this.errorHandlers[CommandManagerEvent.CommandError](context, command, error);
+            const handler: any = this.errorHandlers[CommandManagerEvent.CommandError];
+
+            if (handler !== undefined) {
+                handler(context, command, error);
             }
             else {
                 // TODO: Include stack trace

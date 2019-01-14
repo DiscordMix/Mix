@@ -1,6 +1,6 @@
 import Bot from "../core/bot";
-import {GenericService, IService, IServiceOptions} from "./generic-service";
 import DiscordEvent from "../core/discord-event";
+import {GenericService, IService, IServiceOptions} from "./generic-service";
 
 export default abstract class Service extends GenericService implements IService {
     public readonly listeners: Map<DiscordEvent, any>;

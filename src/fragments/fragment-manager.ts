@@ -93,6 +93,13 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
                 return false;
             }
 
+            // Dependency not met (missing required service)
+            for (const dependency of command.dependsOn) {
+                if (!this.bot.services.contains(dependency)) {
+                    return false;
+                }
+            }
+
             // TODO: Add a way to disable the warning
             if (!internal && command.meta.name === "eval") {
                 Log.warn("Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Forge.");
@@ -132,6 +139,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
             service = service as Service | ForkedService;
 
             // TODO: Repeated below, somehow merge for efficiency.
+            // TODO: How does validation only validate name? How does the error message justify all the other validation procedures taking place in Loader.validate()?
             if (!Loader.validate(service)) {
                 Log.warn(`Refusing to enable fragment with invalid name '${service.meta.name}'; Please note fragment names cannot contain spaces`);
 

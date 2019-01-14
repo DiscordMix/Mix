@@ -1,4 +1,5 @@
 import {expect} from "chai";
+import {describe} from "mocha";
 import SwitchParser from "../commands/switch-parser";
 import {TestSubjects} from "./test-bot";
 

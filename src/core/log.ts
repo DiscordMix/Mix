@@ -1,8 +1,6 @@
 import colors from "colors";
 import fs from "fs";
 import BotMessages from "./messages";
-import Utils from "./utils";
-import TimeConvert from "../time/time-convert";
 
 export enum LogLevel {
     None = -1,
@@ -28,11 +26,17 @@ export default abstract class Log {
     public static level: LogLevel = LogLevel.Success;
     public static file: string = "bot.log";
     public static write: boolean = true;
+    public static history: IComposeOptions[] = [];
+    public static record: boolean = true;
 
     /**
      * @param {IComposeOptions} options
      */
     public static compose(options: IComposeOptions): void {
+        if (Log.record) {
+            Log.history.push(options);
+        }
+
         if (Log.level === LogLevel.None) {
             return;
         }
@@ -72,6 +76,12 @@ export default abstract class Log {
                     throw error;
                 }
             });
+        }
+    }
+
+    public static playback(history: IComposeOptions[]): void {
+        for (const options of history) {
+            this.compose(options);
         }
     }
 

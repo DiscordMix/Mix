@@ -7,6 +7,8 @@ interface IArgs {
     readonly command: string;
 }
 
+const delimiter: string = ", ";
+
 @Name("usage")
 @Description("View the usage of a command")
 @Arguments(
@@ -40,9 +42,9 @@ export default class UsageCommand extends Command<IArgs> {
             usage.append(" ").append(arg.required ? arg.name : `[${arg.name}]`);
         }
 
-        const dependencies: string = targetCommand.dependsOn.length > 0 ? targetCommand.dependsOn.join() : "None";
+        const dependencies: string = targetCommand.dependsOn.length > 0 ? targetCommand.dependsOn.join(delimiter) : "None";
         const cooldown: string = targetCommand.constraints.cooldown !== 0 ? `${targetCommand.constraints.cooldown} second(s)` : "None";
-        const aliases: string = targetCommand.aliases.length > 0 ? targetCommand.aliases.join() : "None";
+        const aliases: string = targetCommand.aliases.length > 0 ? targetCommand.aliases.join(delimiter) : "None";
 
         const additional: string[] = [
             !targetCommand.isEnabled ? "Disabled" : "",
@@ -56,7 +58,7 @@ export default class UsageCommand extends Command<IArgs> {
             .add(`Aliases: ${aliases}`)
             .add(`Dependencies: ${dependencies}`)
             .add(`Cooldown: ${cooldown}`)
-            .add(`Additional notes: ${additional.join()}`)
+            .add(`Additional notes: ${additional.join(delimiter)}`)
             .line()
             .add("Argument details:")
             .line();

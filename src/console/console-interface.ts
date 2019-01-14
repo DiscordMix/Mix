@@ -59,6 +59,26 @@ export default class ConsoleInterface {
 
         // Prompt setup
         ci.on("line", async (input: string) => {
+            if (input.startsWith("#")) {
+                const id: number = parseInt(input.substr(1));
+
+                if (!isNaN(id)) {
+                    if (Log.history[id] !== undefined) {
+                        console.log(chalk.gray(input));
+                        Log.compose(Log.history[id]);
+                    }
+                    else {
+                        console.log("No such message has been recorded");
+                    }
+                }
+                else {
+                    console.log("Invalid input | Expecting number after '#'");
+                }
+
+                ci.prompt();
+
+                return;
+            }
             const args: string[] = input.trim().split(" ");
             const base: string = args[0].trim();
 

@@ -22,18 +22,24 @@ Get started quickly with your next Discord bot project by using our CLI tool!
 To install and create a template bot in seconds issue the following commands:
 
 ```
+# Install the CLI utility
 $ npm install --global @cloudrex/forge-cli
 $ forge new bot
 $ cd bot
+
+# Install node modules
+$ npm install
+
+# Configure your bot
+$ npm run config
+
+# Start the bot
+$ npm start
 ```
 
 A bot boilerplate will be created under the `bot` directory.
 
-You may then install required NPM modules (`npm install`) and run `npm run config` to configure your bot.
-
-Then just start the bot using `$ npm start`
-
-That's it! You should be presented with the fancy Forge title and you're ready to get started building your next masterpiece.
+Congratulations, you are now ready to begin creating your next masterpiece.
 
 #### Installing
 

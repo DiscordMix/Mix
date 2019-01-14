@@ -79,6 +79,7 @@ export default class ConsoleInterface {
 
                 return;
             }
+
             const args: string[] = input.trim().split(" ");
             const base: string = args[0].trim();
 

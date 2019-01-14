@@ -33,7 +33,7 @@ $ npm install
 # Configure your bot
 $ npm run config
 
-# Start the bot
+# Run the bot
 $ npm start
 ```
 

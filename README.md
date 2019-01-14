@@ -19,7 +19,7 @@ Forge is a powerful, modular and extensible Discord bot framework for serious bo
 
 Get started quickly with your next Discord bot project by using our CLI tool!
 
-To install and create a template bot in seconds issue the following commands:
+To install and create a template bot in seconds, issue the following commands:
 
 ```bash
 # Install the CLI utility

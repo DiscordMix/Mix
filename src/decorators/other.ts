@@ -71,5 +71,7 @@ export function Guard(...guards: string[]): any {
 }
 
 export function OnEvent(event: DiscordEvent): any {
-    // TODO
+    return function () {
+        // TODO: Implement
+    };
 }

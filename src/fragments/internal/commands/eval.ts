@@ -1,6 +1,6 @@
 import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
-import Command, {RestrictGroup, TrivialArgType} from "../../../commands/command";
+import Command, {RestrictGroup, Type} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
 import {Name, Description, Arguments} from "../../../decorators/general";
@@ -17,13 +17,13 @@ interface IArgs {
     {
         name: "code",
         description: "The code to evaluate",
-        type: TrivialArgType.String,
+        type: Type.String,
         required: true
     },
     {
         name: "silent",
         description: "Send result or not",
-        type: TrivialArgType.Boolean,
+        type: Type.Boolean,
         required: false
     }
 )

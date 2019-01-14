@@ -9,7 +9,7 @@ import Command, {
     IArgumentResolver,
     ICustomArgType,
     RawArguments,
-    TrivialArgType
+    Type
 } from "./command";
 
 import {Message} from "discord.js";
@@ -257,12 +257,12 @@ export default abstract class CommandParser {
         for (let i: number = 0; i < options.arguments.length; i++) {
             // In-command trivial type
             if (CommandParser.isTypeTrivial(options.schema[i].type)) {
-                if (options.schema[i].type === TrivialArgType.String) {
+                if (options.schema[i].type === Type.String) {
                     if (typeof (options.arguments[i]) !== "string") {
                         return false;
                     }
                 }
-                else if (options.schema[i].type === TrivialArgType.Boolean) {
+                else if (options.schema[i].type === Type.Boolean) {
                     if (CommandParser.parseBoolean(options.arguments[i] as any) === null) {
                         return false;
                     }
@@ -276,13 +276,13 @@ export default abstract class CommandParser {
                     }
 
                     switch (options.schema[i].type) {
-                        case TrivialArgType.Integer: {
+                        case Type.Integer: {
                             // Integer covers all numbers
 
                             break;
                         }
 
-                        case TrivialArgType.UnsignedInteger: {
+                        case Type.UnsignedInteger: {
                             // Value must be higher or equal to zero
                             if (value < 0) {
                                 return false;
@@ -291,7 +291,7 @@ export default abstract class CommandParser {
                             break;
                         }
 
-                        case TrivialArgType.NonZeroInteger: {
+                        case Type.NonZeroInteger: {
                             // Value must be one or higher
                             if (value < 1) {
                                 return false;
@@ -375,7 +375,7 @@ export default abstract class CommandParser {
      * @return {boolean}
      */
     protected static isTypeTrivial(type: ArgumentType): boolean {
-        return typeof (type) === "number" && TrivialArgType[type] !== undefined;
+        return typeof (type) === "number" && Type[type] !== undefined;
     }
 
     /**

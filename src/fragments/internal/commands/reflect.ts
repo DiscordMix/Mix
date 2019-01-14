@@ -1,7 +1,7 @@
 import {IMessageActionArgs, Service} from "../../..";
 import {ActionType, IAction} from "../../../actions/action";
 import MsgBuilder from "../../../builders/msg-builder";
-import Command, {RestrictGroup, TrivialArgType} from "../../../commands/command";
+import Command, {RestrictGroup, Type} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import {Name, Description, Arguments} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
@@ -22,7 +22,7 @@ enum ReflectDataType {
         description: "The data to inspect",
         required: true,
         switchShortName: "t",
-        type: TrivialArgType.String
+        type: Type.String
     }
 )
 @Constraint.Cooldown(1)

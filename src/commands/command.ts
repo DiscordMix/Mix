@@ -21,11 +21,11 @@ export type DefaultValueResolver = (message: Message) => string;
 export type ArgumentTypeChecker = (argument: string, message: Message) => boolean;
 
 /**
- * TrivialArgType       : Internal check
+ * Type                 : Internal check
  * RegExp               : Inline check
  * IArgumentTypeChecker : Provided type check by method
  */
-export type ArgumentType = TrivialArgType | ArgumentTypeChecker | RegExp | string;
+export type ArgumentType = Type | ArgumentTypeChecker | RegExp | string;
 
 export interface ICustomArgType {
     readonly name: string;
@@ -36,7 +36,7 @@ export type RawArguments = Array<string | number | boolean>;
 
 export type DefiniteArgument = string | number | boolean;
 
-export enum TrivialArgType {
+export enum Type {
     String,
     Integer,
     UnsignedInteger,

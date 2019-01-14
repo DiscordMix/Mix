@@ -95,7 +95,7 @@ export default class ConsoleInterface {
                 await (this.commands.get(base) as ConsoleCommandHandler)(args);
             }
             else {
-                console.log(chalk.white(`\nUnknown command: ${input}\n`));
+                console.log(chalk.white(`Unknown command: ${input}`));
             }
 
             ci.prompt();
@@ -217,7 +217,7 @@ export default class ConsoleInterface {
                 return;
             }
 
-            console.log(`My ID is => ${bot.client.user.id}`);
+            console.log(bot.client.user.id);
         });
 
         this.commands.set("membercount", () => {

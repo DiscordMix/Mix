@@ -18,7 +18,7 @@ export default class MyCommand extends Command {
 ### Command with arguments
 
 ```ts
-import {Command, CommandContext, IFragmentMeta, IArgument, TrivialArgType} from "@cloudrex/forge";
+import {Command, CommandContext, IFragmentMeta, IArgument, Type} from "@cloudrex/forge";
 
 interface IMyCommandArgs {
     readonly message: string;
@@ -35,7 +35,7 @@ export default class MyCommand extends Command<IMyCommandArgs> {
             name: "message",
             description: "The message to say",
             required: true,
-            type: TrivialArgType.String
+            type: Type.String
         }
     ];
 

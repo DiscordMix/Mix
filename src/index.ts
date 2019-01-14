@@ -12,7 +12,7 @@ import Command, {
     IGenericCommand,
     InternalArgType,
     RestrictGroup,
-    TrivialArgType
+    Type
 } from "./commands/command";
 
 import {ActionType, IAction} from "./actions/action";
@@ -90,7 +90,7 @@ export {
     Command,
     GenericCommand,
     IGenericCommand,
-    TrivialArgType,
+    Type,
     IArgumentResolver,
     RestrictGroup,
     InternalArgType,

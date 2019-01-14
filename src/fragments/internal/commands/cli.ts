@@ -1,7 +1,7 @@
 import {exec} from "child_process";
 import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
-import Command, {TrivialArgType} from "../../../commands/command";
+import Command, {Type} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
 import {Description, Name, Aliases, Arguments} from "../../../decorators/general";
@@ -18,7 +18,7 @@ interface IArgs {
     {
         name: "command",
         description: "The command to execute",
-        type: TrivialArgType.String,
+        type: Type.String,
         required: true
     }
 )

@@ -1,4 +1,4 @@
-import Command, {CommandRunner, TrivialArgType, RestrictGroup} from "../commands/command";
+import Command, {CommandRunner, Type, RestrictGroup} from "../commands/command";
 import {Name, Arguments, Description} from "../decorators/general";
 import {AttachedLogger, Guard, Connect, DependsOn, attachedLogger, OnEvent} from "../decorators/other";
 import {expect} from "chai";
@@ -19,7 +19,7 @@ const testConnection: CommandRunner = (x, args): void => {
 @Arguments(
     {
         name: "name",
-        type: TrivialArgType.String
+        type: Type.String
     }
 )
 @Connect(testConnection)

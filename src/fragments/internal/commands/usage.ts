@@ -1,4 +1,4 @@
-import {default as Command, TrivialArgType} from "../../../commands/command";
+import {default as Command, Type} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import {Name, Description, Arguments} from "../../../decorators/general";
 import {Constraint, MsgBuilder} from "../../..";
@@ -14,7 +14,7 @@ const delimiter: string = ", ";
 @Arguments(
     {
         name: "command",
-        type: TrivialArgType.String,
+        type: Type.String,
         required: true,
         description: "The command to inspect"
     }

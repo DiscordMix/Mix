@@ -5,14 +5,14 @@ import assert = require("assert");
 describe("Time Convert", () => {
     describe("format()", () => {
         it("should format specified time", () => {
-            expect(TimeConvert.format(1_000, "%i")).to.be.a("string").and.to.equal("1000");
-            expect(TimeConvert.format(1_000, "%s")).to.be.a("string").and.to.equal("1");
-            expect(TimeConvert.format(1_000 * 60, "%m")).to.be.a("string").and.to.equal("1");
-            expect(TimeConvert.format(1_000 * 60 * 60, "%h")).to.be.a("string").and.to.equal("1");
-            expect(TimeConvert.format(1_000 * 60 * 60 * 60, "%h")).to.be.a("string").and.to.equal("60");
+            expect(TimeConvert.format(1000, "%i")).to.be.a("string").and.to.equal("1000");
+            expect(TimeConvert.format(1000, "%s")).to.be.a("string").and.to.equal("1");
+            expect(TimeConvert.format(1000 * 60, "%m")).to.be.a("string").and.to.equal("1");
+            expect(TimeConvert.format(1000 * 60 * 60, "%h")).to.be.a("string").and.to.equal("1");
+            expect(TimeConvert.format(1000 * 60 * 60 * 60, "%h")).to.be.a("string").and.to.equal("60");
 
-            expect(TimeConvert.format(1_000, "ms: %i, seconds: %s")).to.be.a("string").and.to.equal("ms: 1000, seconds: 1");
-            expect(TimeConvert.format(1_000, "ms: %i (%i), seconds: %s (%s)")).to.be.a("string").and.to.equal("ms: 1000 (1000), seconds: 1 (1)");
+            expect(TimeConvert.format(1000, "ms: %i, seconds: %s")).to.be.a("string").and.to.equal("ms: 1000, seconds: 1");
+            expect(TimeConvert.format(1000, "ms: %i (%i), seconds: %s (%s)")).to.be.a("string").and.to.equal("ms: 1000 (1000), seconds: 1 (1)");
         });
 
         it("should throw on invalid parameters", () => {

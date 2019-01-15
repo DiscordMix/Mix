@@ -61,7 +61,7 @@ import TimeSuffixType from "./time/time-suffix-type";
 import List from "./collections/list";
 import DiscordEvent from "./core/discord-event";
 import {Constraint, Constraints} from "./decorators/constraints";
-import {Description, Name, Aliases, Arguments} from "./decorators/general";
+import {Description, Name, Aliases, Arguments, Meta} from "./decorators/general";
 import Component from "./decorators/component";
 import {DecoratorUtils} from "./decorators/decorator-utils";
 import {OnEvent, Guard, DependsOn, Connect, AttachedLogger} from "./decorators/other";
@@ -183,6 +183,7 @@ export {
     Component,
     DecoratorUtils,
     Deprecated,
+    Meta,
 
     // Tasks
     Task,

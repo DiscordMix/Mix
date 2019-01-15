@@ -1,6 +1,6 @@
 import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
 import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/command-context";
-import CommandStore, {CommandManagerEvent, ICommandStore} from "./commands/command-store";
+import CommandStore, {ICommandStore} from "./commands/command-store";
 import Bot from "./core/bot";
 
 import Command, {
@@ -67,6 +67,7 @@ import {DecoratorUtils} from "./decorators/decorator-utils";
 import {OnEvent, Guard, DependsOn, Connect, AttachedLogger} from "./decorators/other";
 import {Deprecated} from "./decorators/utility";
 import {PromiseOr} from "@atlas/xlib";
+import {CommandHandlerEvent} from "./commands/command-handler";
 
 export {
     // Fragments
@@ -83,7 +84,7 @@ export {
     IContextOptions,
     CommandStore,
     ICommandStore,
-    CommandManagerEvent,
+    CommandHandlerEvent,
     CommandParser,
     IArgument,
     ICustomArgType,

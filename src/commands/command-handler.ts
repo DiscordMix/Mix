@@ -25,9 +25,7 @@ export enum CommandHandlerEvent {
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;
-
-    // TODO: Types
-    readonly errorHandlers: any[];
+    readonly errorHandlers: CommandErrorHandler[];
     readonly argumentTypes: any;
 }
 
@@ -43,7 +41,6 @@ export interface ICommandHandler {
     readonly commandStore: ICommandStore;
     readonly errorHandlers: Map<CommandHandlerEvent, CommandErrorHandler>;
     readonly argumentTypes: any;
-
     readonly undoMemory: Map<Snowflake, IUndoAction>;
 
     undoAction(user: Snowflake, message: Message): PromiseOr<boolean>;

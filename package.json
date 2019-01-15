@@ -1,6 +1,6 @@
 {
     "name": "@atlas/mix",
-    "version": "1.2.5-beta.12",
+    "version": "1.2.5-beta.13",
     "description": "Advanced Discord bot framework for serious bot development",
     "main": "./dist/index.js",
     "keywords": [

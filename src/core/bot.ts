@@ -633,7 +633,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         // TODO: ?prefix should also be chain-able
         else if (!msg.author.bot && msg.content === "?prefix" && this.prefixCommand) {
             await msg.channel.send(new RichEmbed()
-                .setDescription(`Command prefix(es): **${this.settings.general.prefix.join(", ")}** | Powered by [The Forge Framework](https://github.com/discord-forge/forge)`)
+                .setDescription(`Command prefix(es): **${this.settings.general.prefix.join(", ")}** | Powered by [The Mix Framework](https://github.com/discord-mix/mix)`)
                 .setColor("GREEN"));
         }
         // TODO: There should be an option to disable this

@@ -7,7 +7,7 @@ import {ISettingsPaths} from "./settings";
 import Utils from "./utils";
 
 // TODO: Not working
-export const DebugMode: boolean = process.env.FORGE_DEBUG_MODE === "true";
+export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";
 
 export const Title: string =
 

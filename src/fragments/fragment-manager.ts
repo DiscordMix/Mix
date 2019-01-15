@@ -102,7 +102,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
 
             // TODO: Add a way to disable the warning
             if (!internal && command.meta.name === "eval") {
-                Log.warn("Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Forge.");
+                Log.warn("Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Mix.");
             }
 
             // Overwrite command restrict with default values

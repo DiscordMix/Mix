@@ -1,7 +1,7 @@
 <p align="center">
-  <img alt="Mix Logo" src="https://raw.githubusercontent.com/discord-forge/forge/dev-2.0/logo-large.png">
+  <img alt="Mix Logo" src="https://raw.githubusercontent.com/discord-mix/mix/dev-2.0/logo-large.png">
   <br />
-  <img alt="Build Status" src="https://travis-ci.com/discord-forge/forge.svg?branch=dev-2.0">
+  <img alt="Build Status" src="https://travis-ci.com/discord-mix/mix.svg?branch=dev-2.0">
   <img alt="NPM Package" src="https://badge.fury.io/js/%40cloudrex%2Fforge.svg">
 </p>
 
@@ -19,7 +19,7 @@ Mix (previously known as Forge) is a powerful, modular and extensible Discord bo
 
 => [View CLI tool on NPM](https://www.npmjs.com/package/@cloudrex/forge-cli)
 
-=> [Example bot](https://github.com/discord-forge/example-forge-bot)
+=> [Example bot](https://github.com/discord-mix/example-bot)
 
 #### Quick Start with the CLI tool (recommended)
 
@@ -30,7 +30,7 @@ To install and create a template bot in seconds, issue the following commands:
 ```bash
 # Install the CLI utility
 $ npm install --global @cloudrex/forge-cli
-$ forge new bot
+$ mix new bot
 $ cd bot
 
 # Install node modules
@@ -56,7 +56,7 @@ To incorporate Mix into an existing project, simply issue the following command:
 Then you may proceed import/require Mix's classes:
 
 ```ts
-import {Bot, Utils, Store} from "@cloudrex/forge";
+import {Bot, Utils, Store} from "@discord.mix/mix";
 ```
 
 #### Building
@@ -130,22 +130,22 @@ If such is the case, it may be worth considering the following fine alternatives
 
 #### Helpful Snippets
 
-[Command](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#command)
+[Command](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#command)
 
-[Command with arguments](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#command-with-arguments)
+[Command with arguments](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#command-with-arguments)
 
-[Service](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#service)
+[Service](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service)
 
-[Service with event handling](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#service-with-event-handling)
+[Service with event handling](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-with-event-handling)
 
-[Service handling multiple events with the same action](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#service-handling-multiple-events-with-the-same-action)
+[Service handling multiple events with the same action](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-handling-multiple-events-with-the-same-action)
 
-[Service with disposable resources](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#service-with-disposable-resources)
+[Service with disposable resources](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-with-disposable-resources)
 
-[Forked service](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#forked-service)
+[Forked service](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#forked-service)
 
-[Task](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#task)
+[Task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#task)
 
-[Recurring task](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#recurring-task)
+[Recurring task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#recurring-task)
 
-[Serializer](https://github.com/discord-forge/forge/blob/dev-2.0/EXAMPLES.MD#serializer)
+[Serializer](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#serializer)

@@ -444,7 +444,7 @@ export default abstract class Utils {
     /**
      * @return {Promise<string>}
      */
-    public static async getForgeVersion(): Promise<string> {
+    public static async getMixVersion(): Promise<string> {
         // TODO:
         // return (await this.readJson("package.json")).version;
 

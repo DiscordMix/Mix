@@ -204,7 +204,7 @@ export abstract class Subcommand<T extends object = object> extends GenericComma
 }
 
 /**
- * Forge's base command class. The 'meta.name' property must be set.
+ * Base command class. The 'meta.name' property must be set.
  * @extends GenericCommand
  */
 export default abstract class Command<T extends object = object> extends GenericCommand<T> {

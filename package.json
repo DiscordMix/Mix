@@ -32,7 +32,7 @@
         "prepublish": "npm run build && npm test",
         "dec-test": "npm run build && node dist/test/decorators.test.js"
     },
-    "author": "CloudRex <cloudrex@outlook.com>",
+    "author": "Atlas <cloudrex@outlook.com>",
     "license": "MIT",
     "dependencies": {
         "@atlas/automata": "^1.0.0-alpha.4",

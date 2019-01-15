@@ -1,15 +1,11 @@
 <p align="center">
   <img alt="Mix Logo" src="https://raw.githubusercontent.com/discord-forge/forge/dev-2.0/logo-large.png">
   <br />
-  <img alt="Build Status" src="https://travis-ci.org/CloudRex/Anvil.svg?branch=master">
+  <img alt="Build Status" src="https://travis-ci.com/discord-forge/forge.svg?branch=dev-2.0">
   <img alt="NPM Version" src="https://badge.fury.io/js/discord-anvil.svg">
-  <img alt="Documentation" src="https://cloudrex.github.io/Anvil/badge.svg">
 </p>
 
 <br/>
-
-[![Build Status](https://travis-ci.com/discord-forge/forge.svg?branch=dev-2.0)](https://travis-ci.com/discord-forge/forge?branch=dev-2.0)
-[![NPM Package](https://badge.fury.io/js/%40cloudrex%2Fforge.svg)](https://www.npmjs.com/package/@cloudrex/forge)
 
 Forge is a powerful, modular and extensible Discord bot framework for serious bot development.
 

@@ -7,9 +7,9 @@
 
 <br/>
 
-Forge is a powerful, modular and extensible Discord bot framework for serious bot development.
+Mix (previously known as Forge) is a powerful, modular and extensible Discord bot framework for serious bot development.
 
-**Note**: Forge is a library to create bots and not a Discord API library.
+**Note**: Mix is a library to create bots and not a Discord API library.
 
 #### Useful Links
 
@@ -49,11 +49,11 @@ Congratulations, you are now ready to begin creating your next masterpiece.
 
 #### Installing
 
-To incorporate Forge into an existing project, simply issue the following command:
+To incorporate Mix into an existing project, simply issue the following command:
 
 `$ npm install --save @cloudrex/forge`
 
-Then you may proceed import/require Forge's classes:
+Then you may proceed import/require Mix's classes:
 
 ```ts
 import {Bot, Utils, Store} from "@cloudrex/forge";
@@ -118,7 +118,7 @@ When contributing, please follow the [Semantic Versioning](https://semver.org/) 
 
 #### Additional Notes
 
-Forge is intended for both serious, large scale and simple, elegant bot development, however it may not be suitable for everyone.
+Mix is intended for both serious, large scale and simple, elegant bot development, however it may not be suitable for everyone.
 
 If such is the case, it may be worth considering the following fine alternatives:
 

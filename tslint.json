@@ -16,7 +16,8 @@
         "no-console": false,
         "max-classes-per-file": false,
         "no-var-requires": false,
-        "object-literal-key-quotes": false
+        "object-literal-key-quotes": false,
+        "no-conditional-assignment": false
     },
     "rulesDirectory": []
 }

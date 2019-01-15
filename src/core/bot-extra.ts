@@ -16,7 +16,7 @@ import {ITaskManager} from "../tasks/task-manager";
 import ActionInterpreter, {IActionInterpreter} from "../actions/action-interpreter";
 import {Reducer, IStore} from "../state/store";
 import {ISettings} from "./settings";
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 export interface IBotModules {
     readonly store: IStore;

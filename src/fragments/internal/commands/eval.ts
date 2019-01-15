@@ -1,6 +1,6 @@
 import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
-import Command, {RestrictGroup, Type} from "../../../commands/command";
+import Command, {Type} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import Utils from "../../../core/utils";
 import {Name, Description, Arguments} from "../../../decorators/general";
@@ -35,6 +35,7 @@ export default class EvalCommand extends Command<IArgs> {
         let result: string;
 
         try {
+            // tslint:disable-next-line:no-eval
             result = await eval(args.code);
         } catch (err) {
             // TODO: Should prefix with 'Error: '?
@@ -58,7 +59,7 @@ export default class EvalCommand extends Command<IArgs> {
         embed.field(`Output`,
             new MsgBuilder()
                 .block("js")
-                .append(Utils.escapeText(result.toString().trim() === '' || !result ? 'No return value.' : result.toString(), x.bot.client.token))
+                .append(Utils.escapeText(result.toString().trim() === "" || !result ? "No return value." : result.toString(), x.bot.client.token))
                 .block()
                 .build()
         );

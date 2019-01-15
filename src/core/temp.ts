@@ -5,7 +5,7 @@ import path from "path";
 import {default as main} from "require-main-filename";
 import Log from "./log";
 import Utils from "./utils";
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 export interface ITemp {
     setup(id: Snowflake): this;

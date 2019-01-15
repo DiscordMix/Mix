@@ -1,6 +1,6 @@
 import {Snowflake} from "./bot-extra";
-import {PromiseOr} from "../providers/provider";
 import Log from "./log";
+import {PromiseOr} from "@atlas/xlib";
 
 export enum RequestType {
     CommandExecute

@@ -8,7 +8,7 @@ import Utils from "../core/utils";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import EditableMessage from "../message/editable-message";
 import Store from "../state/store";
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 export interface IContextOptions {
     readonly msg: Message;

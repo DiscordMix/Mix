@@ -7,7 +7,7 @@ import PaginatedMessage from "../pagination/paginated-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
 import Utils from "../core/utils";
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 // Arg types
 export interface IMessageActionArgs {

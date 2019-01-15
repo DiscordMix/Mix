@@ -4,7 +4,7 @@ import Context from "../commands/command-context";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
 import DiscordEvent from "../core/discord-event";
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 export type EmojiClickHandler = (reaction: MessageReaction, user: User) => void;
 

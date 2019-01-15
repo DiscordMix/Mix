@@ -3,7 +3,7 @@ import Log from "../core/log";
 import Utils from "../core/utils";
 import Loader, {IPackage} from "../fragments/loader";
 import Task from "./task";
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 export interface ITaskManager {
     registerTask(task: Task): boolean;

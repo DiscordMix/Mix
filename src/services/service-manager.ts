@@ -7,7 +7,7 @@ import Log from "../core/log";
 import Utils from "../core/utils";
 import {IGenericService, IProcessMsg, IRawProcessMsg, ProcessMsgType} from "./generic-service";
 import SMIS from "./smis";
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 export type ServiceMap = Map<string, IGenericService>;
 export type ReadonlyServiceMap = ReadonlyMap<string, IGenericService>;

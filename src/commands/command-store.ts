@@ -7,7 +7,7 @@ import Loader, {IPackage, ILivePackage} from "../fragments/loader";
 import Utils from "../core/utils";
 import path from "path";
 import {InternalCommand} from "../core/bot-extra";
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 export enum CommandManagerEvent {
     DisallowedEnvironment,

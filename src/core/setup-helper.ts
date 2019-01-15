@@ -1,7 +1,7 @@
 import {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
 import Context from "../commands/command-context";
 import Log from "./log";
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 /**
  * The type of action performed by a setup helper

@@ -1,4 +1,4 @@
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 export interface IDisposable<T = any> {
     dispose(): PromiseOr<T>;

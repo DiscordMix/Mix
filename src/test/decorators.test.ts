@@ -1,5 +1,5 @@
 import Command, {CommandRunner, Type, RestrictGroup} from "../commands/command";
-import {Name, Arguments, Description} from "../decorators/general";
+import {Name, Arguments, Description, Meta} from "../decorators/general";
 import {AttachedLogger, Guard, Connect, DependsOn, attachedLogger, OnEvent} from "../decorators/other";
 import {expect} from "chai";
 import {testBot} from "./test-bot";
@@ -8,6 +8,7 @@ import {Constraint} from "../decorators/constraints";
 import Permission from "../core/permission";
 import {Message} from "discord.js";
 import DiscordEvent from "../core/discord-event";
+import {IFragment, IFragmentMeta} from "..";
 
 const testConnection: CommandRunner = (x, args): void => {
     //
@@ -48,9 +49,20 @@ export class MyCommand extends Command {
     }
 }
 
-const instance: MyCommand = new (MyCommand as any)(null as any);
+@Meta({
+    name: "meta-test",
+    description: "Testing meta",
+    author: "John Doe",
+    version: "1.0.0"
+})
+class MetaTest {
+    readonly meta!: IFragmentMeta;
+}
 
-describe("Command Decorators", () => {
+const instance: MyCommand = new (MyCommand as any)(null as any);
+const metaInstance: MetaTest = new MetaTest();
+
+describe("Decorators", () => {
     it("instance should be an object", () => {
         expect(typeof instance === "object").to.be.a("boolean").and.to.equal(true);
         expect(instance instanceof MyCommand).to.be.a("boolean").and.to.equal(true);
@@ -92,9 +104,20 @@ describe("Command Decorators", () => {
                 expect(instance.args).to.be.a("array").and.to.have.length(1);
             });
         });
+
+        describe("Meta", () => {
+            it("should bind fragment meta", () => {
+                expect(metaInstance.meta).to.be.an("object");
+                expect(Object.keys(metaInstance.meta).length).to.be.a("number").and.to.equal(4);
+                expect(metaInstance.meta.name).to.be.a("string").and.to.equal("meta-test");
+                expect(metaInstance.meta.description).to.be.a("string").and.to.equal("Testing meta");
+                expect(metaInstance.meta.version).to.be.a("string").and.to.equal("1.0.0");
+                expect(metaInstance.meta.author).to.be.a("string").and.to.equal("John Doe");
+            });
+        });
     });
 
-    describe("Constraints", () => {
+    describe("Commands -> Constraints", () => {
         describe("OwnerOnly", () => {
             it("should bind the specific bot owner only constraint", () => {
                 expect(instance.constraints.specific.includes(RestrictGroup.BotOwner)).to.be.a("boolean").and.to.equal(true);
@@ -130,7 +153,7 @@ describe("Command Decorators", () => {
         });
     });
 
-    describe("Other", () => {
+    describe("Commands -> Other", () => {
         describe("DependsOn", () => {
             it("should append command dependencies", () => {
                 expect(instance.dependsOn).to.be.a("array").and.to.have.length(2);

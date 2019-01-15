@@ -1,6 +1,7 @@
 import "reflect-metadata";
 
 import Log from "../core/log";
+import {DecoratorUtils} from "./decorator-utils";
 
 export interface IBotEvent {
     readonly name: string;
@@ -8,7 +9,7 @@ export interface IBotEvent {
 }
 
 export function Deprecated(use?: string): any {
-    return function (target) {
+    return function (target: any) {
         const functionName: string = Object.keys(target)[0];
         const className: string = target.constructor.name;
 

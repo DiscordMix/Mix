@@ -23,9 +23,15 @@ export abstract class DecoratorUtils {
         };
     }
 
-    public static ensure(target: any): void {
+    public static ensureFunc(target: any): void {
         if (typeof target !== "function") {
-            throw Log.error("Expecting target to be a class");
+            throw Log.error("Expecting target to be a function");
+        }
+    }
+
+    public static ensureObj(target: any): void {
+        if (typeof target !== "object") {
+            throw Log.error("Expecting target to be an object");
         }
     }
 
@@ -44,7 +50,7 @@ export abstract class DecoratorUtils {
     }
 
     public static createInstance<T = Command>(target: any): T {
-        DecoratorUtils.ensure(target);
+        DecoratorUtils.ensureFunc(target);
 
         return new target();
     }

@@ -4,7 +4,7 @@ import {IFragmentMeta} from "../fragments/fragment";
 
 export function Meta(meta: IFragmentMeta): any {
     return function (target: any) {
-        DecoratorUtils.ensure(target);
+        DecoratorUtils.ensureFunc(target);
 
         return class extends target {
             readonly meta: IFragmentMeta = {
@@ -17,7 +17,7 @@ export function Meta(meta: IFragmentMeta): any {
 
 export function Name(name: string): any {
     return function (target: any) {
-        DecoratorUtils.ensure(target);
+        DecoratorUtils.ensureFunc(target);
 
         return DecoratorUtils.overrideMeta(target, "name", name);
     };
@@ -25,7 +25,7 @@ export function Name(name: string): any {
 
 export function Description(description: string): any {
     return function (target: any) {
-        DecoratorUtils.ensure(target);
+        DecoratorUtils.ensureFunc(target);
 
         return DecoratorUtils.overrideMeta(target, "description", description);
     };

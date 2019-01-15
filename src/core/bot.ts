@@ -34,7 +34,7 @@ import {EventEmitter} from "events";
 import Optimizer from "../optimization/optimizer";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
-import {InternalArgResolvers, InternalArgTypes, Title, InternalFragmentsPath, DefaultBotOptions, DebugMode} from "./constants";
+import {ArgResolvers, ArgTypes, Title, InternalFragmentsPath, DefaultBotOptions, DebugMode} from "./constants";
 import Store from "../state/store";
 import BotMessages from "./messages";
 import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, EBotEvents, IBot} from "./bot-extra";
@@ -203,7 +203,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
          * @type {IArgumentResolver[]}
          * @readonly
          */
-        this.argumentResolvers = InternalArgResolvers;
+        this.argumentResolvers = ArgResolvers;
 
         if (options.argumentResolvers) {
             this.argumentResolvers = [
@@ -216,7 +216,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
          * @type {ICustomArgType[]}
          * @readonly
          */
-        this.argumentTypes = InternalArgTypes;
+        this.argumentTypes = ArgTypes;
 
         if (options.argumentTypes) {
             this.argumentTypes = [

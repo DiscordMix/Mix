@@ -24,7 +24,7 @@ export const InternalFragmentsPath: string = path.resolve(path.join(__dirname, "
 
 // TODO: Merge this resolvers with the (if provided) provided
 // ones by the user.
-export const InternalArgResolvers: IArgumentResolver[] = [
+export const ArgResolvers: IArgumentResolver[] = [
     {
         name: InternalArgType.Member,
 
@@ -68,7 +68,7 @@ export const InternalArgResolvers: IArgumentResolver[] = [
 ];
 
 // TODO: Message type and resolver
-export const InternalArgTypes: ICustomArgType[] = [
+export const ArgTypes: ICustomArgType[] = [
     {
         name: InternalArgType.Channel,
 

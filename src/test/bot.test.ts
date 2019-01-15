@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {InternalArgResolvers, InternalArgTypes} from "../core/constants";
+import {ArgResolvers, ArgTypes} from "../core/constants";
 import {init, testBot} from "./test-bot";
 
 describe("Bot", () => {
@@ -40,11 +40,11 @@ describe("Bot", () => {
     });
 
     it("should have default argument types", () => {
-        expect(testBot.argumentTypes).to.be.an("array").and.to.equal(InternalArgTypes);
+        expect(testBot.argumentTypes).to.be.an("array").and.to.equal(ArgTypes);
     });
 
     it("should have default argument resolvers", () => {
-        expect(testBot.argumentResolvers).to.be.an("array").and.to.equal(InternalArgResolvers);
+        expect(testBot.argumentResolvers).to.be.an("array").and.to.equal(ArgResolvers);
     });
 
     it("should not handle invalid messages", async () => {

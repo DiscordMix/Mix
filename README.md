@@ -17,11 +17,11 @@ Mix (previously known as Forge) is a powerful, modular and extensible Discord bo
 
 => [View the documentation](https://cloudrex.gitbook.io/forge/) (**Still being written**)
 
-=> [View CLI tool on NPM](https://www.npmjs.com/package/@d.mix/cli)
+=> [View CLI utility on NPM](https://www.npmjs.com/package/d.mix.cli)
 
 => [Example bot](https://github.com/discord-mix/example-bot)
 
-## 🍭 Quick Start with the CLI tool (recommended)
+## 🍭 Quick Start with the CLI utility (recommended)
 
 Get started quickly with your next Discord bot project by using our CLI tool!
 
@@ -29,7 +29,7 @@ To install and create a template bot in seconds, issue the following commands:
 
 ```bash
 # Install the CLI utility
-$ npm install --global @d.mix/cli
+$ npm install --global d.mix.cli
 $ mix new bot
 $ cd bot
 
@@ -51,12 +51,12 @@ Congratulations, you are now ready to begin creating your next masterpiece.
 
 To incorporate Mix into an existing project, simply issue the following command:
 
-`$ npm install --save @cloudrex/forge`
+`$ npm install --save d.mix`
 
 Then you may proceed import/require Mix's classes:
 
 ```ts
-import {Bot, Utils, Store} from "@discord.mix/mix";
+import {Bot, Utils, Store} from "d.mix";
 ```
 
 #### Building

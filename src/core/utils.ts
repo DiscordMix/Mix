@@ -449,7 +449,7 @@ export default abstract class Utils {
         // return (await this.readJson("package.json")).version;
 
         // TODO: Hard coded
-        return "2.0.0";
+        return "1.2.5";
     }
 
     /**
@@ -471,8 +471,8 @@ export default abstract class Utils {
      * @return {boolean}
      */
     public static hasStringsPrefix(message: Message, strings: string[]): boolean {
-        for (let i: number = 0; i < strings.length; i++) {
-            if (message.content.startsWith(strings[i])) {
+        for (const str of strings) {
+            if (message.content.startsWith(str)) {
                 return true;
             }
         }
@@ -499,8 +499,8 @@ export default abstract class Utils {
      * @return {boolean}
      */
     public static hasModerationPowers(member: GuildMember): boolean {
-        for (let i: number = 0; i < moderationPermissions.length; i++) {
-            if (member.hasPermission(moderationPermissions[i])) {
+        for (const perm of moderationPermissions) {
+            if (member.hasPermission(perm)) {
                 return true;
             }
         }
@@ -518,20 +518,20 @@ export default abstract class Utils {
     public static findChannelByName(guild: Guild, name: string, textChannel: boolean = true, caseSensitive: boolean = false): GuildChannel | null {
         const channels: GuildChannel[] = guild.channels.array();
 
-        for (let i: number = 0; i < channels.length; i++) {
-            if (channels[i].type === "category") {
+        for (const channel of channels) {
+            if (channel.type === "category") {
                 continue;
             }
 
-            if (!textChannel && channels[i].type === "voice") {
+            if (!textChannel && channel.type === "voice") {
                 continue;
             }
 
-            if (caseSensitive && channels[i].name === name) {
-                return channels[i];
+            if (caseSensitive && channel.name === name) {
+                return channel;
             }
-            else if (!caseSensitive && channels[i].name.toLowerCase() === name.toLowerCase()) {
-                return channels[i];
+            else if (!caseSensitive && channel.name.toLowerCase() === name.toLowerCase()) {
+                return channel;
             }
         }
 

@@ -7,8 +7,21 @@ import Utils from "../core/utils";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./command-context";
 import CommandParser from "./command-parser";
-import CommandStore, {CommandManagerEvent, ICommandStore} from "./command-store";
+import CommandStore, {ICommandStore} from "./command-store";
 import {PromiseOr} from "@atlas/xlib";
+
+export enum CommandHandlerEvent {
+    DisallowedEnvironment,
+    DisabledCommand,
+    ArgumentAmountMismatch,
+    CommandMayNotExecute,
+    InvalidArguments,
+    MissingSelfPermissions,
+    MissingIssuerPermissions,
+    CommandError,
+    NoAuthority,
+    UnderCooldown
+}
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;
@@ -18,7 +31,7 @@ export interface ICommandHandlerOptions {
     readonly argumentTypes: any;
 }
 
-export type CommandErrorHandler = (context: Context, command: Command) => boolean;
+export type CommandErrorHandler = (context: Context, command: Command, error?: Error) => boolean;
 
 export interface IUndoAction {
     readonly command: Command;
@@ -28,12 +41,7 @@ export interface IUndoAction {
 
 export interface ICommandHandler {
     readonly commandStore: ICommandStore;
-
-    // TODO: Types
-    readonly errorHandlers: any[];
-
-    // TODO: _errorHandlers replaces errorHandlers
-    readonly _errorHandlers: Map<CommandManagerEvent, any>;
+    readonly errorHandlers: Map<CommandHandlerEvent, CommandErrorHandler>;
     readonly argumentTypes: any;
 
     readonly undoMemory: Map<Snowflake, IUndoAction>;
@@ -178,13 +186,11 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     public readonly commandStore: CommandStore;
-    public readonly errorHandlers: Function[];
-    public readonly _errorHandlers: Map<CommandManagerEvent, any>;
+    public readonly errorHandlers: Map<CommandHandlerEvent, CommandErrorHandler>;
     public readonly argumentTypes: any;
     public readonly undoMemory: Map<Snowflake, IUndoAction>;
 
     /**
-     * @todo Replace 'errorHandlers' with '_errorHandlers'
      * @param {ICommandHandlerOptions} options
      */
     public constructor(options: ICommandHandlerOptions) {
@@ -198,19 +204,13 @@ export default class CommandHandler implements ICommandHandler {
          * @type {Function[]}
          * @readonly
          */
-        this.errorHandlers = options.errorHandlers;
+        this.errorHandlers = new Map(...options.errorHandlers);
 
         /**
          * @type {*}
          * @readonly
          */
         this.argumentTypes = options.argumentTypes;
-
-        /**
-         * @type {Map<CommandManagerEvent, *>}
-         * @readonly
-         */
-        this._errorHandlers = new Map();
 
         /**
          * @type {Map<Snowflake, IUndoAction>}
@@ -332,7 +332,7 @@ export default class CommandHandler implements ICommandHandler {
         catch (error) {
             this.commandStore.bot.emit("commandError", error);
 
-            const handler: any = this.errorHandlers[CommandManagerEvent.CommandError];
+            const handler: CommandErrorHandler | undefined = this.errorHandlers.get(CommandHandlerEvent.CommandError);
 
             if (handler !== undefined) {
                 handler(context, command, error);
@@ -348,14 +348,14 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {CommandManagerEvent} event
+     * @param {CommandHandlerEvent} event
      * @param {Context} context
      * @param {Command} command
      * @return {boolean}
      */
-    protected handleError(event: CommandManagerEvent, context: Context, command: Command): boolean {
-        if (this._errorHandlers.get(event) !== undefined) {
-            return this._errorHandlers.get(event)(context, command);
+    protected handleError(event: CommandHandlerEvent, context: Context, command: Command): boolean {
+        if (this.errorHandlers.has(event)) {
+            return (this.errorHandlers.get(event) as CommandErrorHandler)(context, command);
         }
 
         return false;
@@ -376,12 +376,12 @@ export default class CommandHandler implements ICommandHandler {
             context.msg.channel.type,
             (context.msg.channel as any).nsfw || false)
         ) {
-            if (!this.handleError(CommandManagerEvent.DisallowedEnvironment, context, command)) {
+            if (!this.handleError(CommandHandlerEvent.DisallowedEnvironment, context, command)) {
                 context.msg.channel.send("That command may not be used here.");
             }
         }
         else if (!command.isEnabled) {
-            if (!this.handleError(CommandManagerEvent.DisabledCommand, context, command)) {
+            if (!this.handleError(CommandHandlerEvent.DisabledCommand, context, command)) {
                 context.fail("That command is disabled and may not be used.");
             }
         }
@@ -395,8 +395,8 @@ export default class CommandHandler implements ICommandHandler {
             types: context.bot.argumentTypes,
             command
         })) {
-            if (this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch]) {
-                this.errorHandlers[CommandManagerEvent.ArgumentAmountMismatch](context, command);
+            if (this.errorHandlers.has(CommandHandlerEvent.ArgumentAmountMismatch)) {
+                (this.errorHandlers.get(CommandHandlerEvent.ArgumentAmountMismatch) as CommandErrorHandler)(context, command);
             }
             else if (command.maxArguments === command.minArguments) {
                 context.fail(`That command only accepts **${command.maxArguments}** arguments.`);
@@ -409,35 +409,35 @@ export default class CommandHandler implements ICommandHandler {
             }
         }
         else if ((typeof command.canExecute === "function" && !command.canExecute(context)) || typeof command.canExecute === "boolean" && !command.canExecute) {
-            if (!this.handleError(CommandManagerEvent.CommandMayNotExecute, context, command)) {
+            if (!this.handleError(CommandHandlerEvent.CommandMayNotExecute, context, command)) {
                 context.fail("That command cannot be executed right now.");
             }
         }
         // TODO: CRITICAL Project no longer uses Typer. Is this already handled by checkArguments()?
         else if (false/* !command.singleArg /* && (!typer.validate(command.args, CommandHandler.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) */) {
-            if (this.errorHandlers[CommandManagerEvent.InvalidArguments]) {
-                this.errorHandlers[CommandManagerEvent.InvalidArguments](context, command);
+            if (this.errorHandlers.has(CommandHandlerEvent.InvalidArguments)) {
+                (this.errorHandlers.get(CommandHandlerEvent.InvalidArguments) as CommandErrorHandler)(context, command);
             }
             else {
                 context.fail("Invalid argument usage. Please use the `usage` command.");
             }
         }
         else if (command.constraints.selfPermissions.length > 0 && !context.msg.guild.me.hasPermission(command.constraints.selfPermissions.map((permissionObj) => permissionObj.permission))) {
-            if (!this.handleError(CommandManagerEvent.MissingSelfPermissions, context, command)) {
+            if (!this.handleError(CommandHandlerEvent.MissingSelfPermissions, context, command)) {
                 const permissions = command.constraints.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`I require the following permission(s) to execute that command: ${permissions}`);
             }
         }
         else if (command.constraints.issuerPermissions.length > 0 && !context.msg.member.hasPermission(command.constraints.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
-            if (!this.handleError(CommandManagerEvent.MissingIssuerPermissions, context, command)) {
+            if (!this.handleError(CommandHandlerEvent.MissingIssuerPermissions, context, command)) {
                 const permissions = command.constraints.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
         else if (command.constraints.cooldown && !this.commandStore.cooldownExpired(context.sender.id, command.meta.name)) {
-            if (!this.handleError(CommandManagerEvent.UnderCooldown, context, command)) {
+            if (!this.handleError(CommandHandlerEvent.UnderCooldown, context, command)) {
                 const timeLeft: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 
                 if (timeLeft) {

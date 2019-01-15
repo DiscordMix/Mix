@@ -7,7 +7,7 @@ export enum ExcludeParam {
     Number
 }
 
-const ComplexTypes = [
+const ComplexTypes: string[] = [
     "function",
     "object",
     "number"

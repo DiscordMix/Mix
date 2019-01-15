@@ -9,19 +9,6 @@ import path from "path";
 import {InternalCommand} from "../core/bot-extra";
 import {PromiseOr} from "@atlas/xlib";
 
-export enum CommandManagerEvent {
-    DisallowedEnvironment,
-    DisabledCommand,
-    ArgumentAmountMismatch,
-    CommandMayNotExecute,
-    InvalidArguments,
-    MissingSelfPermissions,
-    MissingIssuerPermissions,
-    CommandError,
-    NoAuthority,
-    UnderCooldown
-}
-
 export interface ICommandCooldown {
     readonly context: Context;
     readonly command: Command;

@@ -7,9 +7,8 @@ import Utils from "../core/utils";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./command-context";
 import CommandParser from "./command-parser";
-import CommandStore, {CommandManagerEvent} from "./command-store";
+import CommandStore, {CommandManagerEvent, ICommandStore} from "./command-store";
 import {PromiseOr} from "../providers/provider";
-import {ICommandStore} from "..";
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;

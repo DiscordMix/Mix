@@ -10,7 +10,7 @@ import CommandParser from "./command-parser";
 import CommandStore, {ICommandStore} from "./command-store";
 import {PromiseOr} from "@atlas/xlib";
 
-export enum CommandHandlerEvent {
+export enum CmdHandlerEvent {
     DisallowedEnvironment,
     DisabledCommand,
     ArgumentAmountMismatch,
@@ -25,11 +25,16 @@ export enum CommandHandlerEvent {
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;
-    readonly errorHandlers: CommandErrorHandler[];
+    readonly errorHandlers: ICmdErrorHandlerOpt[];
     readonly argumentTypes: any;
 }
 
-export type CommandErrorHandler = (context: Context, command: Command, error?: Error) => boolean;
+export interface ICmdErrorHandlerOpt {
+    readonly event: CmdHandlerEvent;
+    readonly handler: CmdErrorHandler;
+}
+
+export type CmdErrorHandler = (context: Context, command: Command, error?: Error) => boolean;
 
 export interface IUndoAction {
     readonly command: Command;
@@ -39,7 +44,7 @@ export interface IUndoAction {
 
 export interface ICommandHandler {
     readonly commandStore: ICommandStore;
-    readonly errorHandlers: Map<CommandHandlerEvent, CommandErrorHandler>;
+    readonly errorHandlers: Map<CmdHandlerEvent, CmdErrorHandler>;
     readonly argumentTypes: any;
     readonly undoMemory: Map<Snowflake, IUndoAction>;
 
@@ -183,7 +188,7 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     public readonly commandStore: CommandStore;
-    public readonly errorHandlers: Map<CommandHandlerEvent, CommandErrorHandler>;
+    public readonly errorHandlers: Map<CmdHandlerEvent, CmdErrorHandler>;
     public readonly argumentTypes: any;
     public readonly undoMemory: Map<Snowflake, IUndoAction>;
 
@@ -201,7 +206,12 @@ export default class CommandHandler implements ICommandHandler {
          * @type {Function[]}
          * @readonly
          */
-        this.errorHandlers = new Map(...options.errorHandlers);
+        this.errorHandlers = new Map();
+
+        // Populate error handlers with input
+        for (const opt of options.errorHandlers) {
+            this.errorHandlers.set(opt.event, opt.handler);
+        }
 
         /**
          * @type {*}
@@ -329,7 +339,7 @@ export default class CommandHandler implements ICommandHandler {
         catch (error) {
             this.commandStore.bot.emit("commandError", error);
 
-            const handler: CommandErrorHandler | undefined = this.errorHandlers.get(CommandHandlerEvent.CommandError);
+            const handler: CmdErrorHandler | undefined = this.errorHandlers.get(CmdHandlerEvent.CommandError);
 
             if (handler !== undefined) {
                 handler(context, command, error);
@@ -345,14 +355,14 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {CommandHandlerEvent} event
+     * @param {CmdHandlerEvent} event
      * @param {Context} context
      * @param {Command} command
      * @return {boolean}
      */
-    protected handleError(event: CommandHandlerEvent, context: Context, command: Command): boolean {
+    protected handleError(event: CmdHandlerEvent, context: Context, command: Command): boolean {
         if (this.errorHandlers.has(event)) {
-            return (this.errorHandlers.get(event) as CommandErrorHandler)(context, command);
+            return (this.errorHandlers.get(event) as CmdErrorHandler)(context, command);
         }
 
         return false;
@@ -373,12 +383,12 @@ export default class CommandHandler implements ICommandHandler {
             context.msg.channel.type,
             (context.msg.channel as any).nsfw || false)
         ) {
-            if (!this.handleError(CommandHandlerEvent.DisallowedEnvironment, context, command)) {
+            if (!this.handleError(CmdHandlerEvent.DisallowedEnvironment, context, command)) {
                 context.msg.channel.send("That command may not be used here.");
             }
         }
         else if (!command.isEnabled) {
-            if (!this.handleError(CommandHandlerEvent.DisabledCommand, context, command)) {
+            if (!this.handleError(CmdHandlerEvent.DisabledCommand, context, command)) {
                 context.fail("That command is disabled and may not be used.");
             }
         }
@@ -392,8 +402,8 @@ export default class CommandHandler implements ICommandHandler {
             types: context.bot.argumentTypes,
             command
         })) {
-            if (this.errorHandlers.has(CommandHandlerEvent.ArgumentAmountMismatch)) {
-                (this.errorHandlers.get(CommandHandlerEvent.ArgumentAmountMismatch) as CommandErrorHandler)(context, command);
+            if (this.errorHandlers.has(CmdHandlerEvent.ArgumentAmountMismatch)) {
+                (this.errorHandlers.get(CmdHandlerEvent.ArgumentAmountMismatch) as CmdErrorHandler)(context, command);
             }
             else if (command.maxArguments === command.minArguments) {
                 context.fail(`That command only accepts **${command.maxArguments}** arguments.`);
@@ -406,35 +416,35 @@ export default class CommandHandler implements ICommandHandler {
             }
         }
         else if ((typeof command.canExecute === "function" && !command.canExecute(context)) || typeof command.canExecute === "boolean" && !command.canExecute) {
-            if (!this.handleError(CommandHandlerEvent.CommandMayNotExecute, context, command)) {
+            if (!this.handleError(CmdHandlerEvent.CommandMayNotExecute, context, command)) {
                 context.fail("That command cannot be executed right now.");
             }
         }
         // TODO: CRITICAL Project no longer uses Typer. Is this already handled by checkArguments()?
         else if (false/* !command.singleArg /* && (!typer.validate(command.args, CommandHandler.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) */) {
-            if (this.errorHandlers.has(CommandHandlerEvent.InvalidArguments)) {
-                (this.errorHandlers.get(CommandHandlerEvent.InvalidArguments) as CommandErrorHandler)(context, command);
+            if (this.errorHandlers.has(CmdHandlerEvent.InvalidArguments)) {
+                (this.errorHandlers.get(CmdHandlerEvent.InvalidArguments) as CmdErrorHandler)(context, command);
             }
             else {
                 context.fail("Invalid argument usage. Please use the `usage` command.");
             }
         }
         else if (command.constraints.selfPermissions.length > 0 && !context.msg.guild.me.hasPermission(command.constraints.selfPermissions.map((permissionObj) => permissionObj.permission))) {
-            if (!this.handleError(CommandHandlerEvent.MissingSelfPermissions, context, command)) {
+            if (!this.handleError(CmdHandlerEvent.MissingSelfPermissions, context, command)) {
                 const permissions = command.constraints.selfPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`I require the following permission(s) to execute that command: ${permissions}`);
             }
         }
         else if (command.constraints.issuerPermissions.length > 0 && !context.msg.member.hasPermission(command.constraints.issuerPermissions.map((permissionObj) => permissionObj.permission))) {
-            if (!this.handleError(CommandHandlerEvent.MissingIssuerPermissions, context, command)) {
+            if (!this.handleError(CmdHandlerEvent.MissingIssuerPermissions, context, command)) {
                 const permissions = command.constraints.issuerPermissions.map((permission) => `\`${permission.name}\``).join(", ");
 
                 context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
         else if (command.constraints.cooldown && !this.commandStore.cooldownExpired(context.sender.id, command.meta.name)) {
-            if (!this.handleError(CommandHandlerEvent.UnderCooldown, context, command)) {
+            if (!this.handleError(CmdHandlerEvent.UnderCooldown, context, command)) {
                 const timeLeft: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 
                 if (timeLeft) {

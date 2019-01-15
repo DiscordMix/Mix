@@ -67,7 +67,7 @@ import {DecoratorUtils} from "./decorators/decorator-utils";
 import {OnEvent, Guard, DependsOn, Connect, AttachedLogger} from "./decorators/other";
 import {Deprecated} from "./decorators/utility";
 import {PromiseOr} from "@atlas/xlib";
-import {CommandHandlerEvent} from "./commands/command-handler";
+import {CmdHandlerEvent} from "./commands/command-handler";
 
 export {
     // Fragments
@@ -84,7 +84,7 @@ export {
     IContextOptions,
     CommandStore,
     ICommandStore,
-    CommandHandlerEvent,
+    CmdHandlerEvent,
     CommandParser,
     IArgument,
     ICustomArgType,

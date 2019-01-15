@@ -8,8 +8,8 @@ import {Constraint} from "../../../decorators/constraints";
 @Constraint.Cooldown(5)
 @Constraint.OwnerOnly
 export default class RestartCommand extends Command {
-    public async run(x: Context): Promise<void> {
-        await x.ok("Restarting the bot");
-        await x.bot.restart();
+    public async run($: Context): Promise<void> {
+        await $.ok("Restarting the bot");
+        await $.bot.restart();
     }
 }

@@ -7,8 +7,8 @@ import {Constraint} from "../../../decorators/constraints";
 @Description("View the latency and heartbeat of the bot")
 @Constraint.Cooldown(1)
 export default class PingCommand extends Command {
-    public async run(x: Context): Promise<void> {
+    public async run($: Context): Promise<void> {
         // TODO: Missing heartbeat
-        await x.ok(`:ping_pong: Beep Boop! ${Math.round(x.bot.client.ping)}ms`);
+        await $.ok(`:ping_pong: Beep Boop! ${Math.round($.bot.client.ping)}ms`);
     }
 }

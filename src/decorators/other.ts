@@ -4,8 +4,8 @@ import Context from "../commands/command-context";
 import Log from "../core/log";
 import DiscordEvent from "../core/discord-event";
 
-export const attachedLogger: CommandRelay = (x: Context, args: any, cmd: IGenericCommand): void => {
-    Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${x.sender.tag}`);
+export const attachedLogger: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
+    Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${$.sender.tag}`);
 };
 
 export function AttachedLogger(...relays: CommandRelay[]): any {

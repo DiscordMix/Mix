@@ -22,16 +22,16 @@ const delimiter: string = ", ";
 @Constraint.Cooldown(1)
 export default class UsageCommand extends Command<IArgs> {
     // TODO: Finish implementing
-    public async run(x: Context, args: IArgs): Promise<void> {
-        const targetCommand: Command | null = await x.bot.commandStore.get(args.command);
+    public async run($: Context, args: IArgs): Promise<void> {
+        const targetCommand: Command | null = await $.bot.commandStore.get(args.command);
 
         if (!targetCommand) {
-            await x.fail("That command doesn't exist.");
+            await $.fail("That command doesn't exist.");
 
             return;
         }
         else if (targetCommand.args.length === 0) {
-            await x.fail("That command doesn't accept any arguments.");
+            await $.fail("That command doesn't accept any arguments.");
 
             return;
         }
@@ -71,6 +71,6 @@ export default class UsageCommand extends Command<IArgs> {
             usage.add(`${arg.name}${arg.required ? "!" : "?"}${flag}${def} : ${arg.description}`);
         }
 
-        await x.send(usage.block().build());
+        await $.send(usage.block().build());
     }
 }

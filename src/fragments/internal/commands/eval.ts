@@ -29,7 +29,7 @@ interface IArgs {
 )
 @Constraint.OwnerOnly
 export default class EvalCommand extends Command<IArgs> {
-    public async run(x: Context, args: IArgs): Promise<void> {
+    public async run($: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();
 
         let result: string;
@@ -59,13 +59,13 @@ export default class EvalCommand extends Command<IArgs> {
         embed.field(`Output`,
             new MsgBuilder()
                 .block("js")
-                .append(Utils.escapeText(result.toString().trim() === "" || !result ? "No return value." : result.toString(), x.bot.client.token))
+                .append(Utils.escapeText(result.toString().trim() === "" || !result ? "No return value." : result.toString(), $.bot.client.token))
                 .block()
                 .build()
         );
 
         embed.color("#36393f");
 
-        x.send(embed.build());
+        $.send(embed.build());
     }
 }

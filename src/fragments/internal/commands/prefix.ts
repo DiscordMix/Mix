@@ -11,7 +11,7 @@ export default class PrefixCommand extends Command {
         prefix: "!string"
     }; */
 
-    public async run(x: Context): Promise<void> {
+    public async run($: Context): Promise<void> {
         // TODO: Implement
 
         throw Log.notImplemented;

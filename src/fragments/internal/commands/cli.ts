@@ -24,7 +24,7 @@ interface IArgs {
 )
 @Constraint.OwnerOnly
 export default class CliCommand extends Command<IArgs> {
-    public async run(x: Context, args: IArgs): Promise<void> {
+    public async run($: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();
 
         // TODO: Consider returning a promise?
@@ -46,14 +46,14 @@ export default class CliCommand extends Command<IArgs> {
             embed.field("Output",
                 new MsgBuilder()
                     .block("js")
-                    .append(Utils.escapeText(result, x.bot.client.token))
+                    .append(Utils.escapeText(result, $.bot.client.token))
                     .block()
                     .build()
             );
 
             embed.color("#36393f");
 
-            x.send(embed.build());
+            $.send(embed.build());
         });
     }
 }

@@ -28,12 +28,12 @@ enum ReflectDataType {
 @Constraint.Cooldown(1)
 @Constraint.OwnerOnly
 export default class ReflectCommand extends Command {
-    public run(x: Context, args: IArgs): IAction<IMessageActionArgs> {
+    public run($: Context, args: IArgs): IAction<IMessageActionArgs> {
         switch (args.type) {
             case ReflectDataType.Services: {
                 let services: string = "";
 
-                for (const [name, service] of x.bot.services.getAll()) {
+                for (const [name, service] of $.bot.services.getAll()) {
                     if (service instanceof Service) {
                         services += `${service.running ? "+" : "-"} ${service.meta.name}\n\t${service.meta.description}\n`;
                     }
@@ -49,7 +49,7 @@ export default class ReflectCommand extends Command {
                     type: ActionType.Message,
 
                     args: {
-                        channelId: x.c.id,
+                        channelId: $.c.id,
                         message: result
                     }
                 };
@@ -60,7 +60,7 @@ export default class ReflectCommand extends Command {
                     type: ActionType.Message,
 
                     args: {
-                        channelId: x.c.id,
+                        channelId: $.c.id,
                         message: "Invalid type provided"
                     }
                 };

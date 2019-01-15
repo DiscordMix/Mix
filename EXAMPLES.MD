@@ -9,8 +9,8 @@ export default class MyCommand extends Command {
         description: "Responds with hello world"
     };
 
-    public run(x: CommandContext): Promise<void> {
-        await x.ok("Hello world");
+    public run($: CommandContext): Promise<void> {
+        await $.ok("Hello world");
     }
 }
 ```
@@ -39,8 +39,8 @@ export default class MyCommand extends Command<IMyCommandArgs> {
         }
     ];
 
-    public run(x: CommandContext, args: IMyCommandArgs): Promise<void> {
-        await x.ok(args.message);
+    public run($: CommandContext, args: IMyCommandArgs): Promise<void> {
+        await $.ok(args.message);
     }
 }
 ```

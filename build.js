@@ -16,7 +16,7 @@ async function build() {
             const nodeJsMajor = parseInt(nodeJsVersion);
 
             console.log(`Platform: ${os.platform()} | ${os.arch()}`);
-            console.log(`Forge v${process.env.npm_package_version}`);
+            console.log(`Mix v${process.env.npm_package_version}`);
             console.log(`NodeJS ${process.version}`);
 
             if (nodeJsMajor < versionLock[0] || nodeJsMajor > versionLock[1]) {

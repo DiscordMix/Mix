@@ -1,7 +1,7 @@
 ### Command
 
 ```ts
-import {Command, CommandContext, IFragmentMeta} from "@cloudrex/forge";
+import {Command, CommandContext, IFragmentMeta} from "@atlas/mix";
 
 export default class MyCommand extends Command {
     readonly meta: IFragmentMeta = {
@@ -18,7 +18,7 @@ export default class MyCommand extends Command {
 ### Command with arguments
 
 ```ts
-import {Command, CommandContext, IFragmentMeta, IArgument, Type} from "@cloudrex/forge";
+import {Command, CommandContext, IFragmentMeta, IArgument, Type} from "@atlas/mix";
 
 interface IMyCommandArgs {
     readonly message: string;
@@ -48,7 +48,7 @@ export default class MyCommand extends Command<IMyCommandArgs> {
 ### Service
 
 ```ts
-import {Service, Log, IFragmentMeta} from "@cloudrex/forge";
+import {Service, Log, IFragmentMeta} from "@atlas/mix";
 
 export default class MyService extends Service {
     readonly meta: IFragmentMeta = {
@@ -65,7 +65,7 @@ export default class MyService extends Service {
 ### Service with event handling
 
 ```ts
-import {Service, Log, IFragmentMeta, DiscordEvent} from "@cloudrex/forge";
+import {Service, Log, IFragmentMeta, DiscordEvent} from "@atlas/mix";
 import {Message} from "dicord.js";
 
 export default class MyService extends Service {
@@ -87,7 +87,7 @@ export default class MyService extends Service {
 ### Service handling multiple events with the same action
 
 ```ts
-import {Service, Log, IFragmentMeta, DiscordEvent} from "@cloudrex/forge";
+import {Service, Log, IFragmentMeta, DiscordEvent} from "@atlas/mix";
 import {Message} from "dicord.js";
 
 export default class MyService extends Service {
@@ -113,7 +113,7 @@ export default class MyService extends Service {
 ### Service with disposable resources
 
 ```ts
-import {Service, Log, IFragmentMeta, DiscordEvent} from "@cloudrex/forge";
+import {Service, Log, IFragmentMeta, DiscordEvent} from "@atlas/mix";
 import {Message} from "discord.js";
 
 export default class MyService extends Service {
@@ -141,7 +141,7 @@ export default class MyService extends Service {
 ### Forked service
 
 ```ts
-import {ForkedService, Log, IFragmentMeta} from "@cloudrex/forge";
+import {ForkedService, Log, IFragmentMeta} from "@atlas/mix";
 
 export default class MyService extends ForkedService {
     readonly meta: IFragmentMeta = {
@@ -162,7 +162,7 @@ export default class MyService extends ForkedService {
 ### Task
 
 ```ts
-import {Task, Log} from "@cloudrex/forge";
+import {Task, Log} from "@atlas/mix";
 
 export default class MyTask extends Task {
     readonly meta: IFragmentMeta = {
@@ -179,7 +179,7 @@ export default class MyTask extends Task {
 ### Recurring task
 
 ```ts
-import {Task, Log} from "@cloudrex/forge";
+import {Task, Log} from "@atlas/mix";
 
 export default class MyRecurringTask extends Task {
     readonly meta: IFragmentMeta = {
@@ -198,7 +198,7 @@ export default class MyRecurringTask extends Task {
 ### Serializer
 
 ```ts
-import {ISerializer} from "@cloudrex/forge";
+import {ISerializer} from "@atlas/mix";
 
 interface IHelloObject {
     readonly message: string;

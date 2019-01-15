@@ -1,9 +1,23 @@
 import {DecoratorUtils} from "./decorator-utils";
 import Command, {IArgument} from "../commands/command";
+import {IFragmentMeta} from "../fragments/fragment";
+
+export function Meta(meta: IFragmentMeta): any {
+    return function (target: any) {
+        DecoratorUtils.ensure(target);
+
+        return class extends target {
+            readonly meta: IFragmentMeta = {
+                ...this.meta,
+                ...meta
+            };
+        }
+    }
+}
 
 export function Name(name: string): any {
     return function (target: any) {
-        DecoratorUtils.bind(target);
+        DecoratorUtils.ensure(target);
 
         return DecoratorUtils.overrideMeta(target, "name", name);
     };
@@ -11,7 +25,7 @@ export function Name(name: string): any {
 
 export function Description(description: string): any {
     return function (target: any) {
-        DecoratorUtils.bind(target);
+        DecoratorUtils.ensure(target);
 
         return DecoratorUtils.overrideMeta(target, "description", description);
     };

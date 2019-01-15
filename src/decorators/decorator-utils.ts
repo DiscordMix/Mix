@@ -23,7 +23,7 @@ export abstract class DecoratorUtils {
         };
     }
 
-    public static bind(target: any): void {
+    public static ensure(target: any): void {
         if (typeof target !== "function") {
             throw Log.error("Expecting target to be a class");
         }
@@ -44,7 +44,7 @@ export abstract class DecoratorUtils {
     }
 
     public static createInstance<T = Command>(target: any): T {
-        DecoratorUtils.bind(target);
+        DecoratorUtils.ensure(target);
 
         return new target();
     }

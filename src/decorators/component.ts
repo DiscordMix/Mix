@@ -13,7 +13,7 @@ export interface ICommandComponentOpts {
 export default abstract class Component {
     public static Command(name: string, options?: Partial<ICommandComponentOpts>): any {
         return function (target: any, key: string) {
-            DecoratorUtils.bind(target);
+            DecoratorUtils.ensure(target);
 
             target = DecoratorUtils.overrideMeta(target, "name", name);
 

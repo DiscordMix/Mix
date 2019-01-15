@@ -5,7 +5,7 @@ import ChatEnv from "../core/chat-env";
 export abstract class Constraint {
     public static Env(env: ChatEnv): any {
         return function (target: any) {
-            DecoratorUtils.bind(target);
+            DecoratorUtils.ensure(target);
 
             return DecoratorUtils.overrideConstraint(target, "environment", env);
         };
@@ -13,14 +13,14 @@ export abstract class Constraint {
 
     public static Cooldown(time: number): any {
         return function (target: any) {
-            DecoratorUtils.bind(target);
+            DecoratorUtils.ensure(target);
 
             return DecoratorUtils.overrideConstraint(target, "cooldown", time);
         };
     }
 
     public static Disabled(target: any): any {
-        DecoratorUtils.bind(target);
+        DecoratorUtils.ensure(target);
 
         return class extends target {
             public readonly isEnabled: boolean = false;
@@ -29,7 +29,7 @@ export abstract class Constraint {
 
     public static Specific(constraints: SpecificConstraints): any {
         return function (target: any) {
-            DecoratorUtils.bind(target);
+            DecoratorUtils.ensure(target);
 
             return DecoratorUtils.overrideConstraint(target, "specific", constraints);
         };
@@ -37,7 +37,7 @@ export abstract class Constraint {
 
     public static IssuerPermissions(...permissions: any[]): any {
         return function (target: any) {
-            DecoratorUtils.bind(target);
+            DecoratorUtils.ensure(target);
 
             return DecoratorUtils.overrideConstraint(target, "issuerPermissions", permissions);
         };
@@ -45,14 +45,14 @@ export abstract class Constraint {
 
     public static SelfPermissions(...permissions: any[]): any {
         return function (target: any) {
-            DecoratorUtils.bind(target);
+            DecoratorUtils.ensure(target);
 
             return DecoratorUtils.overrideConstraint(target, "selfPermissions", permissions);
         };
     }
 
     public static OwnerOnly(target: any): any {
-        DecoratorUtils.bind(target);
+        DecoratorUtils.ensure(target);
 
         return class extends target {
             public readonly constraints: IConstraints = {
@@ -70,7 +70,7 @@ export abstract class Constraint {
 
 export function Constraints(constraints: Partial<IConstraints>): any {
     return function (target: any) {
-        DecoratorUtils.bind(target);
+        DecoratorUtils.ensure(target);
 
         return class extends target {
             public readonly constraints: IConstraints = {

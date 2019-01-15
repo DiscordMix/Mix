@@ -8,7 +8,7 @@ import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./command-context";
 import CommandParser from "./command-parser";
 import CommandStore, {CommandManagerEvent, ICommandStore} from "./command-store";
-import {PromiseOr} from "../providers/provider";
+import {PromiseOr} from "@atlas/xlib";
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandStore;

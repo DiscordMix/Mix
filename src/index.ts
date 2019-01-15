@@ -42,8 +42,6 @@ import EditableMessage from "./message/editable-message";
 import Rgb from "./misc/rgb";
 import Rgba from "./misc/rgba";
 import PaginatedMessage from "./pagination/paginated-message";
-import {GuildCfgMongoProvider, IGuildConfig} from "./providers/mongo-providers";
-import {IDuplexProvider, IProvider, IQueriableProvider, PromiseOr} from "./providers/provider";
 import LogSerializer, {ILogMsg, ILogSource} from "./serializers/log-serializer";
 import {ISerializer} from "./serializers/serializer";
 import StateSerializer from "./serializers/state-serializer";
@@ -68,6 +66,7 @@ import Component from "./decorators/component";
 import {DecoratorUtils} from "./decorators/decorator-utils";
 import {OnEvent, Guard, DependsOn, Connect, AttachedLogger} from "./decorators/other";
 import {Deprecated} from "./decorators/utility";
+import {PromiseOr} from "@atlas/xlib";
 
 export {
     // Fragments
@@ -207,15 +206,6 @@ export {
     StateSerializer,
     UrlSerializer,
     UserSerializer,
-
-    // Providers
-    IProvider,
-    IDuplexProvider,
-    IQueriableProvider,
-
-    // Providers -> MongoDB
-    IGuildConfig,
-    GuildCfgMongoProvider,
 
     // Store
     Store,

@@ -444,7 +444,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         );
 
         if (command === null) {
-            throw Log.error("Failed parsing command; Command is null");
+            throw Log.error(BotMessages.CMD_PARSE_FAIL);
         }
 
         command = command as Command;
@@ -641,14 +641,14 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         // TODO: Verify that it was done in the same environment and that the user still has perms
         else if (!msg.author.bot && msg.content === "?undo") {
             if (!this.commandHandler.undoMemory.has(msg.author.id)) {
-                await msg.reply("You haven't performed any undoable action");
+                await msg.reply(BotMessages.UNDO_NO_ACTIONS);
             }
             else if (this.commandHandler.undoAction(msg.author.id, msg)) {
-                await msg.reply("The action was successfully undone");
+                await msg.reply(BotMessages.UNDO_OK);
                 this.commandHandler.undoMemory.delete(msg.author.id);
             }
             else {
-                await msg.reply("The action failed to be undone");
+                await msg.reply(BotMessages.UNDO_FAIL);
             }
         }
 
@@ -674,7 +674,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         );
 
         if (command === null) {
-            throw Log.error("Failed parsing command; Command is null");
+            throw Log.error(BotMessages.CMD_PARSE_FAIL);
         }
 
         const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({

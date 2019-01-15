@@ -35,6 +35,12 @@ enum BotMessages {
     STORE_EXPECT_REDUCER_FUNC = "Expecting reducer to be a function",
     STORE_REDUCER_NO_UNDEFINED = "Reducer must return a state, otherwise return null to indicate no changes",
 
+    CMD_PARSE_FAIL = "Failed parsing command | Command is null",
+
+    UNDO_NO_ACTIONS = "You haven't performed any undoable action",
+    UNDO_OK = "The action was successfully undone",
+    UNDO_FAIL = "The action failed to be undone",
+
     INTENTIONAL_ERROR = "Intentionally thrown error",
     NOT_IMPLEMENTED = "Not yet implemented"
 }

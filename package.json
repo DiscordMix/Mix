@@ -1,7 +1,7 @@
 {
-    "name": "@atlas/mix",
+    "name": "@cloudrex/forge",
     "version": "1.2.5-beta.13",
-    "description": "Advanced Discord bot framework for serious bot development",
+    "description": "The elegant bot framework",
     "main": "./dist/index.js",
     "keywords": [
         "discord",

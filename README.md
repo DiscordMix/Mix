@@ -2,7 +2,7 @@
   <img alt="Mix Logo" src="https://raw.githubusercontent.com/discord-forge/forge/dev-2.0/logo-large.png">
   <br />
   <img alt="Build Status" src="https://travis-ci.com/discord-forge/forge.svg?branch=dev-2.0">
-  <img alt="NPM Version" src="https://badge.fury.io/js/discord-anvil.svg">
+  <img alt="NPM Package" src="https://badge.fury.io/js/%40cloudrex%2Fforge.svg">
 </p>
 
 <br/>

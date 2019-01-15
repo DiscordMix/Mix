@@ -21,7 +21,7 @@ Mix (previously known as Forge) is a powerful, modular and extensible Discord bo
 
 => [Example bot](https://github.com/discord-mix/example-bot)
 
-#### Quick Start with the CLI tool (recommended)
+## 🍭 Quick Start with the CLI tool (recommended)
 
 Get started quickly with your next Discord bot project by using our CLI tool!
 

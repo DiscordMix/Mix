@@ -86,7 +86,6 @@ export default abstract class Util {
         }
 
         const timeStr: string = time.toString();
-
         const result: string[] = timeStr.split("");
 
         let counter: number = 0;

@@ -33,7 +33,7 @@ import Patterns from "./core/patterns";
 import Permission from "./core/permission";
 import Settings, {ISettings} from "./core/settings";
 import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setup-helper";
-import Utils from "./core/utils";
+import Util from "./core/utils";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
 import {ICommandEvent} from "./events/command-event";
 import {IFragment, IFragmentMeta} from "./fragments/fragment";
@@ -124,7 +124,7 @@ export {
     ISettings,
     TimeParser,
     TimeSuffixType,
-    Utils,
+    Util as Utils,
     Permission,
     ChatEnv,
     Patterns,

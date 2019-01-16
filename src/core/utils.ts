@@ -48,7 +48,7 @@ export interface IBinarySearchResult {
     readonly found: boolean;
 }
 
-export default abstract class Utils {
+export default abstract class Util {
     public static readonly botLists: Snowflake[] = [
         "374071874222686211", // Bots for Discord (BFD)
         "264445053596991498", // Discord Bot List (DBL)
@@ -87,7 +87,8 @@ export default abstract class Utils {
 
         const timeStr: string = time.toString();
 
-        let result: string[] = timeStr.split("");
+        const result: string[] = timeStr.split("");
+
         let counter: number = 0;
 
         for (let i: number = timeStr.length; i > 0; i--) {
@@ -352,7 +353,7 @@ export default abstract class Utils {
      * @return {string}
      */
     public static timeAgoFromNow(timestamp: number): string {
-        return Utils.timeAgo(Date.now() - timestamp);
+        return Util.timeAgo(Date.now() - timestamp);
     }
 
     /**
@@ -490,7 +491,7 @@ export default abstract class Utils {
             throw new Error("Expecting range parameter to be a number and to be higher than 0");
         }
 
-        return Utils.getRandomInt(0, range) === 0;
+        return Util.getRandomInt(0, range) === 0;
     }
 
     /**
@@ -547,7 +548,7 @@ export default abstract class Utils {
         let channel: TextChannel | null = guild.defaultChannel || null;
 
         if (!channel || channel.type !== "text") {
-            channel = Utils.findChannelByName(guild, "general") as TextChannel | null;
+            channel = Util.findChannelByName(guild, "general") as TextChannel | null;
 
             if (!channel) {
                 return null;
@@ -562,7 +563,7 @@ export default abstract class Utils {
      * @return {TextChannel | null}
      */
     public static findDefaultChannelOrAny(guild: Guild): TextChannel | null {
-        const defaultChannel: TextChannel | null = Utils.findDefaultChannel(guild);
+        const defaultChannel: TextChannel | null = Util.findDefaultChannel(guild);
 
         if (defaultChannel !== null) {
             return defaultChannel;
@@ -686,7 +687,7 @@ export default abstract class Utils {
      * @return {string}
      */
     public static getMemberIdentifier(member: GuildMember): string {
-        return Utils.getUserIdentifier(member.user);
+        return Util.getUserIdentifier(member.user);
     }
 
     /**

@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import Bot from "../core/bot";
 import Log from "../core/log";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import {IGenericService, IProcessMsg, IRawProcessMsg, ProcessMsgType} from "./generic-service";
 import SMIS from "./smis";
 import {PromiseOr} from "@atlas/xlib";
@@ -125,7 +125,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
      * @return {Promise<boolean>} Whether the service was started
      */
     public async start(name: string): Promise<boolean> {
-        if (typeof name !== "string" || Utils.isEmpty(name) || Array.isArray(name)) {
+        if (typeof name !== "string" || Util.isEmpty(name) || Array.isArray(name)) {
             return false;
         }
 
@@ -299,7 +299,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
      * @return {Readonly<GenericService> | null}
      */
     public getService(name: string): Readonly<IGenericService> | null {
-        if (typeof name !== "string" || Utils.isEmpty(name) || Array.isArray(name)) {
+        if (typeof name !== "string" || Util.isEmpty(name) || Array.isArray(name)) {
             return null;
         }
 
@@ -337,7 +337,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
      * @return {boolean}
      */
     public contains(name: string): boolean {
-        if (typeof name !== "string" || Utils.isEmpty(name)) {
+        if (typeof name !== "string" || Util.isEmpty(name)) {
             return false;
         }
 

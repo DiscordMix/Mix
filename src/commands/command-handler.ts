@@ -3,7 +3,7 @@ import {IAction} from "../actions/action";
 import {EBotEvents} from "../core/bot-extra";
 import ChatEnv from "../core/chat-env";
 import Log from "../core/log";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./command-context";
 import CommandParser from "./command-parser";
@@ -117,7 +117,7 @@ export default class CommandHandler implements ICommandHandler {
                     }
 
                     case RestrictGroup.BotOwner: {
-                        met = !Utils.isEmpty(context.bot.owner) && context.sender.id === context.bot.owner;
+                        met = !Util.isEmpty(context.bot.owner) && context.sender.id === context.bot.owner;
 
                         break;
                     }

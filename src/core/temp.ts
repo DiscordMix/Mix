@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import {default as main} from "require-main-filename";
 import Log from "./log";
-import Utils from "./utils";
+import Util from "./utils";
 import {PromiseOr} from "@atlas/xlib";
 
 export interface ITemp {
@@ -120,7 +120,7 @@ export default class Temp implements ITemp {
             throw new Error("Trying to store when the resolved path is undefined");
         }
 
-        await Utils.writeJson(path.resolve(path.join(this.resolvedPath, file)), data);
+        await Util.writeJson(path.resolve(path.join(this.resolvedPath, file)), data);
 
         return this;
     }

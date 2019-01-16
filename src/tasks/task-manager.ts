@@ -1,6 +1,6 @@
 import Bot from "../core/bot";
 import Log from "../core/log";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import Loader, {IPackage} from "../fragments/loader";
 import Task from "./task";
 import {PromiseOr} from "@atlas/xlib";
@@ -71,7 +71,7 @@ export default class TaskManager implements ITaskManager {
      * @return {Task | null}
      */
     public get(name: string): Task | null {
-        if (Utils.isEmpty(name) || typeof name !== "string") {
+        if (Util.isEmpty(name) || typeof name !== "string") {
             return null;
         }
 
@@ -105,7 +105,7 @@ export default class TaskManager implements ITaskManager {
      * @return {boolean}
      */
     public trigger(name: string): boolean {
-        if (Utils.isEmpty(name) || typeof name !== "string") {
+        if (Util.isEmpty(name) || typeof name !== "string") {
             return false;
         }
 

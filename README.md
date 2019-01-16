@@ -51,7 +51,9 @@ Congratulations, you are now ready to begin creating your next masterpiece.
 
 To incorporate Mix into an existing project, simply issue the following command:
 
-`$ npm install --save d.mix`
+```bash
+$ npm install --save d.mix
+```
 
 Then you may proceed import/require Mix's classes:
 

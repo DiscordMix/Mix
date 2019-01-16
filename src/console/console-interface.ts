@@ -6,7 +6,7 @@ import {ReadonlyCommandMap} from "../commands/command-store";
 import Bot from "../core/bot";
 import {DebugMode} from "../core/constants";
 import Log from "../core/log";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import {ReadonlyServiceMap} from "../services/service-manager";
 
 // TODO: Export in index
@@ -168,7 +168,7 @@ export default class ConsoleInterface {
 
         this.commands.set("uptime", () => {
             // TODO: Time is getting capitalized
-            console.log(`Started ${Utils.timeAgoFromNow(bot.client.uptime)}`);
+            console.log(`Started ${Util.timeAgoFromNow(bot.client.uptime)}`);
         });
 
         this.commands.set("guilds", () => {

@@ -4,7 +4,7 @@ import {DefiniteArgument, IArgumentResolver, ICustomArgType, InternalArgType} fr
 import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
 import Patterns from "./patterns";
 import {ISettingsPaths} from "./settings";
-import Utils from "./utils";
+import Util from "./utils";
 
 // TODO: Not working
 export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";
@@ -29,7 +29,7 @@ export const ArgResolvers: IArgumentResolver[] = [
         name: InternalArgType.Member,
 
         resolve(arg: DefiniteArgument, message: Message): GuildMember | null {
-            const resolvedMember: GuildMember = message.guild.member(Utils.resolveId(arg.toString()));
+            const resolvedMember: GuildMember = message.guild.member(Util.resolveId(arg.toString()));
 
             if (resolvedMember) {
                 return resolvedMember;
@@ -42,7 +42,7 @@ export const ArgResolvers: IArgumentResolver[] = [
         name: InternalArgType.Role,
 
         resolve(arg: DefiniteArgument, message: Message): Role | null {
-            const resolvedRole: Role | undefined = message.guild.roles.get(Utils.resolveId(arg.toString()));
+            const resolvedRole: Role | undefined = message.guild.roles.get(Util.resolveId(arg.toString()));
 
             if (resolvedRole) {
                 return resolvedRole;
@@ -55,14 +55,14 @@ export const ArgResolvers: IArgumentResolver[] = [
         name: InternalArgType.State,
 
         resolve(arg: DefiniteArgument): boolean {
-            return Utils.translateState(arg.toString());
+            return Util.translateState(arg.toString());
         }
     },
     {
         name: InternalArgType.Snowflake,
 
         resolve(arg: DefiniteArgument): Snowflake {
-            return Utils.resolveId(arg.toString());
+            return Util.resolveId(arg.toString());
         }
     }
 ];
@@ -73,21 +73,21 @@ export const ArgTypes: ICustomArgType[] = [
         name: InternalArgType.Channel,
 
         check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.channels.has(Utils.resolveId(arg));
+            return message.guild && message.guild.channels.has(Util.resolveId(arg));
         }
     },
     {
         name: InternalArgType.Member,
 
         check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.member(Utils.resolveId(arg)) !== undefined;
+            return message.guild && message.guild.member(Util.resolveId(arg)) !== undefined;
         }
     },
     {
         name: InternalArgType.Role,
 
         check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.roles.has(Utils.resolveId(arg));
+            return message.guild && message.guild.roles.has(Util.resolveId(arg));
         }
     },
     {

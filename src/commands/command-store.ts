@@ -4,7 +4,7 @@ import Command, {GenericCommand} from "./command";
 import Context from "./command-context";
 import {Snowflake} from "discord.js";
 import Loader, {IPackage, ILivePackage} from "../fragments/loader";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import path from "path";
 import {InternalCommand} from "../core/bot-extra";
 import {PromiseOr} from "@atlas/xlib";
@@ -185,7 +185,7 @@ export default class CommandStore {
      * @param {CommandPackage} commandPackage
      */
     public async register(commandPackage: CommandPackage): Promise<boolean> {
-        if (Utils.isEmpty(commandPackage) || typeof commandPackage !== "object") {
+        if (Util.isEmpty(commandPackage) || typeof commandPackage !== "object") {
             return false;
         }
 

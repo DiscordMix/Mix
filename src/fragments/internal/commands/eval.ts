@@ -2,7 +2,7 @@ import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
 import Command, {Type} from "../../../commands/command";
 import Context from "../../../commands/command-context";
-import Utils from "../../../core/utils";
+import Util from "../../../core/utils";
 import {Name, Description, Arguments} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
 
@@ -59,7 +59,7 @@ export default class EvalCommand extends Command<IArgs> {
         embed.field(`Output`,
             new MsgBuilder()
                 .block("js")
-                .append(Utils.escapeText(result.toString().trim() === "" || !result ? "No return value." : result.toString(), $.bot.client.token))
+                .append(Util.escapeText(result.toString().trim() === "" || !result ? "No return value." : result.toString(), $.bot.client.token))
                 .block()
                 .build()
         );

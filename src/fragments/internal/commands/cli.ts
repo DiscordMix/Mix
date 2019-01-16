@@ -3,7 +3,7 @@ import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
 import Command, {Type} from "../../../commands/command";
 import Context from "../../../commands/command-context";
-import Utils from "../../../core/utils";
+import Util from "../../../core/utils";
 import {Description, Name, Aliases, Arguments} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
 
@@ -46,7 +46,7 @@ export default class CliCommand extends Command<IArgs> {
             embed.field("Output",
                 new MsgBuilder()
                     .block("js")
-                    .append(Utils.escapeText(result, $.bot.client.token))
+                    .append(Util.escapeText(result, $.bot.client.token))
                     .block()
                     .build()
             );

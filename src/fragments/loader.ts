@@ -1,6 +1,6 @@
 import fs from "fs";
 import Log from "../core/log";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import {IFragment} from "./fragment";
 import Patterns from "../core/patterns";
 
@@ -84,7 +84,7 @@ export default abstract class Loader {
         if (!fragment.meta) {
             return false;
         }
-        else if (Utils.isEmpty(fragment.meta.name)) {
+        else if (Util.isEmpty(fragment.meta.name)) {
             return false;
         }
         else if (!validFragmentNamePattern.test(fragment.meta.name) || !validFragmentDescPattern.test(fragment.meta.name) || fragment.meta.name.length > 100 || (fragment.meta.description !== undefined && fragment.meta.description.length > 100)) {
@@ -118,7 +118,7 @@ export default abstract class Loader {
             const scanQueue: string[] = [directory];
 
             for (const dir of scanQueue) {
-                const files: string[] | null = await Utils.getFiles(dir, true);
+                const files: string[] | null = await Util.getFiles(dir, true);
 
                 if (files === null) {
                     Log.warn(`Failed to read files of the directory: ${dir}`);

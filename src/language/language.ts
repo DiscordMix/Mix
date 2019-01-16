@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import BotMessages from "../core/messages";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import {PromiseOr} from "@atlas/xlib";
 
 export type LanguageSource = Map<string, any>;
@@ -52,7 +52,7 @@ export default class Language implements ILanguage {
      * @return {boolean}
      */
     public setDefault(name: string): boolean {
-        if (typeof name !== "string" || Utils.isEmpty(name)) {
+        if (typeof name !== "string" || Util.isEmpty(name)) {
             return false;
         }
         else if (this.languages.size === 0 || !this.languages.has(name)) {
@@ -69,7 +69,7 @@ export default class Language implements ILanguage {
      * @return {string | null}
      */
     public get(key: string): string | null {
-        if (typeof key !== "string" || Utils.isEmpty(key)) {
+        if (typeof key !== "string" || Util.isEmpty(key)) {
             return null;
         }
         else if (!this.default) {
@@ -97,7 +97,7 @@ export default class Language implements ILanguage {
             throw new Error(`Language file does not exist: ${filePath}`);
         }
 
-        const data: LanguageSource = await Utils.readJson(filePath);
+        const data: LanguageSource = await Util.readJson(filePath);
 
         if (typeof data != "object" || Object.keys(data).length === 0) {
             throw new Error(`Language file is either not an object or empty: ${name}`);

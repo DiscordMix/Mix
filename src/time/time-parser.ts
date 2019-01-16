@@ -1,5 +1,5 @@
 import TimeSuffixType from "./time-suffix-type";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 
 export default class TimeParser {
     public readonly timeString: string;
@@ -29,31 +29,31 @@ export default class TimeParser {
     public getTimeFromNow(): number {
         switch (this.suffix) {
             case TimeSuffixType.Millisecond: {
-                return Utils.timeFromNow(this.amount);
+                return Util.timeFromNow(this.amount);
             }
 
             case TimeSuffixType.Second: {
-                return Utils.timeFromNow(0, this.amount);
+                return Util.timeFromNow(0, this.amount);
             }
 
             case TimeSuffixType.Minute: {
-                return Utils.timeFromNow(0, 0, this.amount);
+                return Util.timeFromNow(0, 0, this.amount);
             }
 
             case TimeSuffixType.Hour: {
-                return Utils.timeFromNow(0, 0, 0, this.amount);
+                return Util.timeFromNow(0, 0, 0, this.amount);
             }
 
             case TimeSuffixType.Day: {
-                return Utils.timeFromNow(0, 0, 0, 0, this.amount);
+                return Util.timeFromNow(0, 0, 0, 0, this.amount);
             }
 
             case TimeSuffixType.Month: {
-                return Utils.timeFromNow(0, 0, 0, 0, 0, this.amount);
+                return Util.timeFromNow(0, 0, 0, 0, 0, this.amount);
             }
 
             case TimeSuffixType.Year: {
-                return Utils.timeFromNow(0, 0, 0, 0, 0, 0, this.amount);
+                return Util.timeFromNow(0, 0, 0, 0, 0, 0, this.amount);
             }
 
             default: {

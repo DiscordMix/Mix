@@ -5,7 +5,7 @@ import MsgBuilder from "../builders/msg-builder";
 import EditableMessage from "../message/editable-message";
 import Bot from "./bot";
 import Log from "./log";
-import Utils from "./utils";
+import Util from "./utils";
 
 export interface IResponseHelper {
     readonly channel: TextChannel;
@@ -81,7 +81,7 @@ export default class ResponseHelper implements IResponseHelper {
                 Log.warn("Attempted to send a message with more than 1024 characters (Discord limit); The message was automatically trimmed");
             }
 
-            finalContent.text = Utils.escapeText(finalContent.text, this.bot.client.token);
+            finalContent.text = Util.escapeText(finalContent.text, this.bot.client.token);
         }
 
         if (finalContent instanceof EmbedBuilder) {
@@ -103,7 +103,7 @@ export default class ResponseHelper implements IResponseHelper {
         }
 
         let messageResult = await this.channel.send(embed.build()).catch((error: Error) => {
-            if (!Utils.botLists.includes(this.channel.guild.id)) {
+            if (!Util.botLists.includes(this.channel.guild.id)) {
                 // TODO: Commented out, this.privateReply method was moved
                 // this.privateReply(`Oh no! For some reason, I was unable to reply to you in that channel. (${error.message})`);
             }

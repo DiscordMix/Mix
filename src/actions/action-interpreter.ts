@@ -6,7 +6,7 @@ import Context from "../commands/command-context";
 import PaginatedMessage from "../pagination/paginated-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import {PromiseOr} from "@atlas/xlib";
 
 // Arg types
@@ -153,7 +153,7 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
                     return this;
                 }
 
-                await Utils.send({
+                await Util.send({
                     channel,
                     color: "GREEN",
                     footer: `Requested by ${act.args.requester}`,
@@ -215,7 +215,7 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
                     return this;
                 }
 
-                await Utils.send({
+                await Util.send({
                     channel,
                     color: "RED",
                     footer: `Requested by ${act.args.requester}`,

@@ -8,7 +8,7 @@ Log.write = false;
 import "./switch-parser.test";
 import "./rgb.test";
 import "./rgba.test";
-import "./utils";
+import "./util";
 import "./collection.test";
 import "./delta.test";
 import "./log-serializer.test";

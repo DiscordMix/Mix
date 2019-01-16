@@ -2,7 +2,7 @@ import fs from "fs";
 import {DefaultSettingPaths} from "./constants";
 import Log from "./log";
 import BotMessages from "./messages";
-import Utils from "./utils";
+import Util from "./utils";
 
 export interface ISettingsGeneral {
     /**
@@ -78,7 +78,7 @@ export default class Settings implements ISettings {
             throw Log.fatal(BotMessages.CFG_FILE_NO_EXIST);
         }
 
-        const fileSettings: ISettingsOptions = await Utils.readJson(path);
+        const fileSettings: ISettingsOptions = await Util.readJson(path);
 
         // TODO: Make sure pure objects work
         return new Settings(fileSettings);

@@ -1,4 +1,4 @@
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import CommandStore from "./command-store";
 
 import Command, {
@@ -84,7 +84,7 @@ export default abstract class CommandParser {
      */
     public static getCommandBase(commandString: string, prefixes: string[]): string | null {
         for (const prefix of prefixes) {
-            const regexResult = new RegExp(`^${Utils.escapeRegexString(prefix)}([a-zA-Z]+)`).exec(commandString);
+            const regexResult = new RegExp(`^${Util.escapeRegexString(prefix)}([a-zA-Z]+)`).exec(commandString);
 
             if (regexResult) {
                 return regexResult[1];

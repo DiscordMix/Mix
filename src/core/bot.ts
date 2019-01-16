@@ -5,7 +5,7 @@ import CommandParser from "../commands/command-parser";
 import Context from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
 import CommandStore from "../commands/command-store";
-import Utils from "./utils";
+import Util from "./utils";
 import Settings from "./settings";
 import Log from "./log";
 import Temp from "./temp";
@@ -570,7 +570,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * @return {Promise<boolean>}
      */
     public async handleMessage(msg: Message, edited: boolean = false): Promise<boolean> {
-        if (Utils.isEmpty(msg) || typeof msg !== "object" || !(msg instanceof Message) || Array.isArray(msg)) {
+        if (Util.isEmpty(msg) || typeof msg !== "object" || !(msg instanceof Message) || Array.isArray(msg)) {
             return false;
         }
 
@@ -598,7 +598,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                 names.channel = " # Unknown";
             }
 
-            Log.info(`[${msg.author.tag} @ ${names.guild}${names.channel}] ${Utils.cleanMessage(msg)}${edited ? " [Edited]" : ""}`);
+            Log.info(`[${msg.author.tag} @ ${names.guild}${names.channel}] ${Util.cleanMessage(msg)}${edited ? " [Edited]" : ""}`);
         }
 
         // TODO: Cannot do .startsWith with a prefix array
@@ -933,7 +933,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                 Log.warn(BotMessages.SETUP_NO_FRAGMENTS_ENABLED);
             }
             else {
-                Log.success(`Enabled ${enabled}/${internalFragments.length} (${Utils.percentOf(enabled, internalFragments.length)}%) internal fragments`);
+                Log.success(`Enabled ${enabled}/${internalFragments.length} (${Util.percentOf(enabled, internalFragments.length)}%) internal fragments`);
             }
         }
 
@@ -985,7 +985,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                 const enabled: number = await this.fragments.enableMultiple(commandsLoaded);
 
                 if (enabled > 0) {
-                    Log.success(`Enabled ${commandsLoaded.length}/${consumerCommandCandidates.length} (${Utils.percentOf(commandsLoaded.length, consumerCommandCandidates.length)}%) command(s)`);
+                    Log.success(`Enabled ${commandsLoaded.length}/${consumerCommandCandidates.length} (${Util.percentOf(commandsLoaded.length, consumerCommandCandidates.length)}%) command(s)`);
                 }
                 else {
                     Log.warn(BotMessages.SETUP_NO_COMMANDS_ENABLED);

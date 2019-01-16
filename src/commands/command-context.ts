@@ -4,7 +4,7 @@ import Bot from "../core/bot";
 import Log from "../core/log";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import EditableMessage from "../message/editable-message";
 import Store from "../state/store";
@@ -110,7 +110,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
      * @return {Promise<Message | Message[] | null>}
      */
     public async reply(message: string): Promise<Message | Message[] | null> {
-        return await this.msg.reply(Utils.escapeText(message, this.bot.client.token));
+        return await this.msg.reply(Util.escapeText(message, this.bot.client.token));
     }
 
     /**
@@ -118,7 +118,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
      * @return {Promise<Message | Message[]>}
      */
     public async privateReply(message: string): Promise<Message | Message[]> {
-        return await this.msg.author.send(Utils.escapeText(message, this.bot.client.token));
+        return await this.msg.author.send(Util.escapeText(message, this.bot.client.token));
     }
 
     /**
@@ -183,7 +183,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
             return false;
         }
 
-        return await Utils.createTimedAction<Promise<boolean>>(this.bot, (): Promise<boolean> => {
+        return await Util.createTimedAction<Promise<boolean>>(this.bot, (): Promise<boolean> => {
             return new Promise<boolean>((resolve) => {
                 // TODO: Debugging?
                 new EmojiMenu(response.msg.id, this.msg.author.id, [

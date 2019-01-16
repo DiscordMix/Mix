@@ -1,5 +1,5 @@
 import {FileSystemOperations, Coordinator, GitOperations, ScriptOperations, GithubEvent, ICoordinatorRunResult, CoordinatorState} from "@atlas/automata";
-import Utils from "../core/utils";
+import Util from "../core/utils";
 import Log from "../core/log";
 import colors from "colors";
 
@@ -49,8 +49,8 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
             Log.verbose(`Github | Processing action ${current}/${total} : ${percentage}% (${left} left)`);
         });
 
-    const time: string = Utils.spreadTime(result.time);
-    const avgTime: string = Utils.spreadTime(result.averageTime);
+    const time: string = Util.spreadTime(result.time);
+    const avgTime: string = Util.spreadTime(result.averageTime);
 
     Log.verbose(`Github | Process completed in ${time}ms (${avgTime}ms avg.) | Result is '${result.state === CoordinatorState.OK ? "OK" : "Failed"}'`);
 });

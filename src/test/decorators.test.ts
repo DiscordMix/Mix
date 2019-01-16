@@ -9,7 +9,6 @@ import Permission from "../core/permission";
 import {Message} from "discord.js";
 import DiscordEvent from "../core/discord-event";
 import {IFragmentMeta} from "..";
-import {Test} from "../decorators/test";
 
 const testConnection: CommandRunner = (x, args): void => {
     //
@@ -60,17 +59,8 @@ class MetaTest {
     readonly meta!: IFragmentMeta;
 }
 
-class TestDecorators {
-    @Test("My test")
-    public myTest(): void {
-        //
-        console.log("<==> myTest() Called!!");
-    }
-}
-
 const instance: MyCommand = new (MyCommand as any)(null as any);
 const metaInstance: MetaTest = new MetaTest();
-const testInstance: TestDecorators = new TestDecorators();
 
 describe("Decorators", () => {
     it("instance should be an object", () => {
@@ -192,10 +182,4 @@ describe("Utility Decorators", () => {
             // TODO
         });
     });
-});
-
-console.log("Test instance method call result is", testInstance.myTest());
-
-describe("Test Decorators", () => {
-
 });

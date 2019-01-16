@@ -71,7 +71,7 @@
         "mocha": "^5.2.0",
         "tslint": "^5.12.1",
         "typescript": "^3.2.2",
-        "unit": "^1.0.1"
+        "unit": "^1.0.2"
     },
     "files": [
         "dist"

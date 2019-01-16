@@ -105,7 +105,7 @@ export default abstract class Util {
     }
 
     public static percentOf(amount: number, max: number): number {
-        return Math.round(amount / max) * 100;
+        return Math.round(amount / max * 100);
     }
 
     // TODO: Needs testing

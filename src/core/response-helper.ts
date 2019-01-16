@@ -158,7 +158,7 @@ export default class ResponseHelper implements IResponseHelper {
     public async ok(text: string | MsgBuilder, title: string = "", clean: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
             text: typeof text === "string" ? `${this.bot.options.emojis.success} ${text}` : text.build(),
-            title: title
+            title
         });
     }
 
@@ -177,7 +177,7 @@ export default class ResponseHelper implements IResponseHelper {
     public async loading(text: string): Promise<EditableMessage | null> {
         return await this.respond({
             // TODO: Isn't the emoji missing?
-            text: text,
+            text,
             color: "BLUE"
         });
     }

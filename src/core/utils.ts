@@ -14,6 +14,7 @@ import fs from "fs";
 import path from "path";
 import Bot from "./bot";
 import Patterns from "./patterns";
+import {Log} from "..";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
@@ -104,6 +105,18 @@ export default abstract class Util {
     }
 
     public static percentOf(amount: number, max: number): number {
+        if (amount < 0 || max < 0) {
+            throw Log.error("Expecting parameters to be neutral or positive numbers");
+        }
+
+        // Prevent overflows by dividing by zero
+        if (amount === 0 && max === 0) {
+            return 100;
+        }
+        else if (max === 0) {
+            return 0;
+        }
+
         return Math.round(amount / max * 100);
     }
 

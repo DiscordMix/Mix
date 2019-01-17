@@ -248,7 +248,11 @@ export default abstract class Util {
      * @return {boolean}
      */
     public static isEmpty(input: any): boolean {
-        return input === undefined || input === null || input.toString().trim() === "" || (Array.isArray(input) && input.length === 0);
+        return input === undefined
+            || input === null
+            || input.toString().trim() === ""
+            || (Array.isArray(input) && input.length === 0)
+            || typeof input === "object" && Object.keys(input).length === 0;
     }
 
     /**

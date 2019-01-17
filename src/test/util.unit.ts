@@ -2,7 +2,7 @@ import {Unit, Test, Assert, Feed} from "unit";
 import Util from "../core/utils";
 
 @Unit("Util")
-abstract class UtilTests {
+default class {
     @Test("percentOf: should determine the percentage")
     @Feed(5, 10, 50)
     @Feed(10, 10, 100)
@@ -18,5 +18,21 @@ abstract class UtilTests {
     @Feed(1, -1)
     public percentOfThrows(amount: number, max: number): void {
         Assert.throws(() => Util.percentOf(amount, max));
+    }
+
+    @Test("isEmpty: should determine whether empty")
+    @Feed("")
+    @Feed(null)
+    @Feed(undefined)
+    @Feed([])
+    @Feed({})
+    public isEmpty(input: any): void {
+        Assert.true(Util.isEmpty(input));
+    }
+
+    @Test("escapeText: should determine if text is escaped")
+    @Feed("john doe", "john doe")
+    public escapeText(input: string, expected: string): void {
+        Assert.equals(input, expected);
     }
 }

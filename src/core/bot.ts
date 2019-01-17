@@ -5,7 +5,7 @@ import CommandParser from "../commands/command-parser";
 import Context from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
 import CommandStore from "../commands/command-store";
-import Util from "./utils";
+import Util from "./util";
 import Settings from "./settings";
 import Log from "./log";
 import Temp from "./temp";

@@ -1,5 +1,5 @@
 import {FileSystemOperations, Coordinator, GitOperations, ScriptOperations, GithubEvent, ICoordinatorRunResult, CoordinatorState} from "@atlas/automata";
-import Util from "../core/utils";
+import Util from "../core/util";
 import Log from "../core/log";
 import colors from "colors";
 

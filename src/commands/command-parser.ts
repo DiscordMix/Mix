@@ -1,4 +1,4 @@
-import Util from "../core/utils";
+import Util from "../core/util";
 import CommandStore from "./command-store";
 
 import Command, {

@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import {default as main} from "require-main-filename";
 import Log from "./log";
-import Util from "./utils";
+import Util from "./util";
 import {PromiseOr} from "@atlas/xlib";
 
 export interface ITemp {

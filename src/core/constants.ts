@@ -4,7 +4,7 @@ import {DefiniteArgument, IArgumentResolver, ICustomArgType, InternalArgType} fr
 import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
 import Patterns from "./patterns";
 import {ISettingsPaths} from "./settings";
-import Util from "./utils";
+import Util from "./util";
 
 // TODO: Not working
 export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";

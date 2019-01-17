@@ -56,10 +56,10 @@ To incorporate Mix into an existing project, simply issue the following command:
 $ npm install --save d.mix
 ```
 
-Then you may proceed import/require Mix's classes:
+Then you may proceed to import/require Mix's classes:
 
 ```ts
-import {Bot, Utils, Store} from "d.mix";
+import {Bot, Util, Store} from "d.mix";
 ```
 
 #### Building

@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import Bot from "../core/bot";
 import Log from "../core/log";
-import Util from "../core/utils";
+import Util from "../core/util";
 import {IGenericService, IProcessMsg, IRawProcessMsg, ProcessMsgType} from "./generic-service";
 import SMIS from "./smis";
 import {PromiseOr} from "@atlas/xlib";

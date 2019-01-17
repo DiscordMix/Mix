@@ -1,6 +1,6 @@
 import Bot from "../core/bot";
 import Log from "../core/log";
-import Util from "../core/utils";
+import Util from "../core/util";
 import Loader, {IPackage} from "../fragments/loader";
 import Task from "./task";
 import {PromiseOr} from "@atlas/xlib";

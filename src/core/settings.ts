@@ -2,7 +2,7 @@ import fs from "fs";
 import {DefaultSettingPaths} from "./constants";
 import Log from "./log";
 import BotMessages from "./messages";
-import Util from "./utils";
+import Util from "./util";
 
 export interface ISettingsGeneral {
     /**

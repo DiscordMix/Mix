@@ -1,4 +1,4 @@
-import Util, {IBinarySearchResult} from "../core/utils";
+import Util, {IBinarySearchResult} from "../core/util";
 import {expect, assert} from "chai";
 import {TestSubjects} from "./test-bot";
 

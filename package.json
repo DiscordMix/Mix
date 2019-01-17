@@ -31,7 +31,7 @@
         "webhook-test": "npm run build && node dist/test/webhook-test.js",
         "prepublishOnly": "npm run build && npm test",
         "dec-test": "npm run build && node dist/test/decorators.test.js",
-        "unit": "npm run build && node dist/test/unit.test.js"
+        "unit": "npm run build && node dist/test/unit/runner.js"
     },
     "author": "Atlas <cloudrex@outlook.com>",
     "license": "MIT",
@@ -71,7 +71,7 @@
         "mocha": "^5.2.0",
         "tslint": "^5.12.1",
         "typescript": "^3.2.2",
-        "unit": "^1.0.2"
+        "unit": "^1.0.3"
     },
     "files": [
         "dist"

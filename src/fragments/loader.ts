@@ -21,7 +21,7 @@ export interface ILivePackage<T extends IFragment> {
 }
 
 /**
- * Utility class for loading and detecting fragments
+ * Utility class for loading fragments
  */
 export default abstract class Loader {
     /**

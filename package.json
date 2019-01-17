@@ -29,7 +29,7 @@
         "check": "tsc --noEmit",
         "test": "npm run build && mocha dist/test/tests.js --timeout 10s --slow 1.5s",
         "webhook-test": "npm run build && node dist/test/webhook-test.js",
-        "prepublish": "npm run build && npm test",
+        "prepublishOnly": "npm run build && npm test",
         "dec-test": "npm run build && node dist/test/decorators.test.js",
         "unit": "npm run build && node dist/test/unit.test.js"
     },

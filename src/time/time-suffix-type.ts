@@ -1,3 +1,5 @@
+import Log from "../core/log";
+
 /**
  * @enum {number}
  */

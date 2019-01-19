@@ -137,7 +137,7 @@ export default class SetupHelper implements ISetupHelper {
     public input(text: string): this {
         this.actionMap.push({
             type: SetupHelperActionType.Input,
-            text: text
+            text
         });
 
         return this;
@@ -150,7 +150,7 @@ export default class SetupHelper implements ISetupHelper {
     public question(text: string): this {
         this.actionMap.push({
             type: SetupHelperActionType.Question,
-            text: text
+            text
         });
 
         return this;
@@ -185,14 +185,14 @@ export default class SetupHelper implements ISetupHelper {
             }
             else {
                 return {
-                    responses: responses,
+                    responses,
                     expired: true
                 };
             }
         }
 
         return {
-            responses: responses,
+            responses,
             expired: false
         };
     }

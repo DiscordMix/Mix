@@ -1,5 +1,5 @@
-import Util from "../core/utils";
 import CommandRegistry from "./command-store";
+import Util from "../core/util";
 
 import Command, {
     ArgumentType,

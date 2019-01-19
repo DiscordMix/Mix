@@ -1,6 +1,6 @@
 import fs from "fs";
 import Log from "../core/log";
-import Util from "../core/utils";
+import Util from "../core/util";
 import {IFragment} from "./fragment";
 import Patterns from "../core/patterns";
 
@@ -21,15 +21,16 @@ export interface ILivePackage<T extends IFragment> {
 }
 
 /**
- * Utility class for loading and detecting fragments
+ * Utility class for loading fragments
  */
 export default abstract class Loader {
+    // TODO: Make use of the 'defaultOnly' parameter
     /**
-     * @todo Make use of the 'isolate' parameter
-     * @param {string} filePath The path to the fragment
-     * @return {Promise<IFragment | null>}
+     * @param {string} filePath The path to the file containing fragment
+     * @param {boolean} [defaultOnly=false] Whether to only load the default exported module
+     * @return {Promise<IPackage | null>}
      */
-    public static async load(filePath: string): Promise<IPackage | null> {
+    public static async load(filePath: string, defaultOnly: boolean = false): Promise<IPackage | null> {
         if (!fs.existsSync(filePath)) {
             Log.warn(`Fragment path does not exist: ${filePath}`);
 
@@ -43,7 +44,6 @@ export default abstract class Loader {
                 return null;
             }
 
-            // TODO: Make use of function exports as "simple commands"?
             const validEs6DefaultTypes = ["object", "function"];
 
             // Support for ES6 default module exports

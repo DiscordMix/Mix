@@ -4,7 +4,7 @@ import Bot from "../core/bot";
 import Log from "../core/log";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
-import Util from "../core/utils";
+import Util from "../core/util";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import EditableMessage from "../message/editable-message";
 import Store from "../state/store";

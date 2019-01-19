@@ -5,7 +5,7 @@ import MsgBuilder from "../builders/msg-builder";
 import EditableMessage from "../message/editable-message";
 import Bot from "./bot";
 import Log from "./log";
-import Util from "./utils";
+import Util from "./util";
 
 export interface IResponseHelper {
     readonly channel: TextChannel;

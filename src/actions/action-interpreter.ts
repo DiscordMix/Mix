@@ -6,7 +6,7 @@ import Context from "../commands/command-context";
 import PaginatedMessage from "../pagination/paginated-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";
-import Util from "../core/utils";
+import Util from "../core/util";
 import {PromiseOr} from "@atlas/xlib";
 
 // Arg types

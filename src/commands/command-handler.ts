@@ -3,7 +3,7 @@ import {IAction} from "../actions/action";
 import {EBotEvents} from "../core/bot-extra";
 import ChatEnv from "../core/chat-env";
 import Log from "../core/log";
-import Util from "../core/utils";
+import Util from "../core/util";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./command-context";
 import CommandParser from "./command-parser";

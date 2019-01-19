@@ -69,7 +69,7 @@ describe("Decorators", () => {
     });
 
     it("should register commands with helper decorators", () => {
-        expect(testBot.commandStore.contains("test-decorator-command")).to.be.a("boolean").and.to.equal(true);
+        expect(testBot.registry.contains("test-decorator-command")).to.be.a("boolean").and.to.equal(true);
     });
 
     it("should have a meta property", () => {

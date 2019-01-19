@@ -134,7 +134,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly settings: ISettings;
     readonly temp: ITemp;
     readonly services: IServiceManager;
-    readonly commandStore: ICommandRegistry;
+    readonly registry: ICommandRegistry;
     readonly commandHandler: ICommandHandler;
     readonly console: IConsoleInterface;
     readonly prefixCommand: boolean;

@@ -4,8 +4,7 @@ require("dotenv").config();
 import CommandParser from "../commands/command-parser";
 import Context from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
-import CommandRegistry from "../commands/command-store";
-import Util from "./utils";
+import Util from "./util";
 import Settings from "./settings";
 import Log from "./log";
 import Temp from "./temp";
@@ -38,6 +37,7 @@ import BotMessages from "./messages";
 import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, EBotEvents, IBot} from "./bot-extra";
 import {Action} from "@atlas/automata";
 import BotConnector from "./bot-connector";
+import CommandRegistry from "../commands/command-store";
 
 /**
  * Bot events:
@@ -73,7 +73,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly settings: Settings;
     public readonly temp: Temp;
     public readonly services: ServiceManager;
-    public readonly commandStore: CommandRegistry;
+    public readonly registry: CommandRegistry;
     public readonly commandHandler: CommandHandler;
     public readonly console: ConsoleInterface;
     public readonly prefixCommand: boolean;
@@ -197,7 +197,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
          * @type {CommandRegistry}
          * @readonly
          */
-        this.commandStore = new CommandRegistry(this);
+        this.registry = new CommandRegistry(this);
 
         /**
          * @type {IArgumentResolver[]}
@@ -230,7 +230,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
          * @readonly
          */
         this.commandHandler = new CommandHandler({
-            commandStore: this.commandStore,
+            commandStore: this.registry,
             errorHandlers: [], // TODO: Is this like it was? Is it ok?
             argumentTypes: this.argumentTypes
         });
@@ -454,7 +454,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
         let command: Command | null = await CommandParser.parse(
             content,
-            this.commandStore,
+            this.registry,
             this.settings.general.prefix
         );
 
@@ -617,7 +617,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         // TODO: Cannot do .startsWith with a prefix array
-        if ((!msg.author.bot || (msg.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.commandStore, this.settings.general.prefix)) {
+        if ((!msg.author.bot || (msg.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.registry, this.settings.general.prefix)) {
             if (this.options.allowCommandChain) {
                 // TODO: Might split values too
                 const rawChain: string[] = msg.content.split("~");
@@ -684,7 +684,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
         const command: Command | null = await CommandParser.parse(
             content,
-            this.commandStore,
+            this.registry,
             this.settings.general.prefix
         );
 
@@ -754,11 +754,11 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         await this.disconnect();
 
         if (reloadModules) {
-            const commands: number = this.commandStore.getAll().size;
+            const commands: number = this.registry.getAll().size;
 
             Log.verbose(`Reloading ${commands} command(s)`);
 
-            const reloaded: number = await this.commandStore.reloadAll();
+            const reloaded: number = await this.registry.reloadAll();
 
             Log.success(`Reloaded ${reloaded}/${commands} command(s)`);
         }
@@ -822,7 +822,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
         this.clearAllTimeouts();
         this.clearAllIntervals();
-        await this.commandStore.disposeAll();
+        await this.registry.disposeAll();
         await this.services.disposeAll();
         await this.services.stopAllForks();
         this.clearTemp();

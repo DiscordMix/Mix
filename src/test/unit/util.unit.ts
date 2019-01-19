@@ -1,5 +1,5 @@
 import {Unit, Test, Assert, Feed} from "unit";
-import Util from "../core/utils";
+import Util from "../../core/util";
 
 @Unit("Util")
 default class {

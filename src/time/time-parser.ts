@@ -1,5 +1,5 @@
 import TimeSuffixType from "./time-suffix-type";
-import Util from "../core/utils";
+import Util from "../core/util";
 
 export default class TimeParser {
     public readonly timeString: string;

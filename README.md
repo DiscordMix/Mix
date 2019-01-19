@@ -1,11 +1,12 @@
 <p align="center">
   <img alt="Mix Logo" src="https://raw.githubusercontent.com/discord-mix/mix/dev-2.0/logo-large.png">
   <br />
+  <br />
   <img alt="Build Status" src="https://travis-ci.com/discord-mix/mix.svg?branch=dev-2.0">
   <img alt="NPM Package" src="https://badge.fury.io/js/%40cloudrex%2Fforge.svg">
 </p>
 
-<br/>
+<br />
 
 Mix (previously known as Forge) is a powerful, modular and extensible Discord bot framework for serious bot development.
 
@@ -55,10 +56,10 @@ To incorporate Mix into an existing project, simply issue the following command:
 $ npm install --save d.mix
 ```
 
-Then you may proceed import/require Mix's classes:
+Then you may proceed to import/require Mix's classes:
 
 ```ts
-import {Bot, Utils, Store} from "d.mix";
+import {Bot, Util, Store} from "d.mix";
 ```
 
 #### Building

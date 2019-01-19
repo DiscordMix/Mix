@@ -4,7 +4,7 @@ import Command, {GenericCommand} from "./command";
 import Context from "./command-context";
 import {Snowflake} from "discord.js";
 import Loader, {IPackage, ILivePackage} from "../fragments/loader";
-import Util from "../core/utils";
+import Util from "../core/util";
 import path from "path";
 import {InternalCommand} from "../core/bot-extra";
 import {PromiseOr} from "@atlas/xlib";

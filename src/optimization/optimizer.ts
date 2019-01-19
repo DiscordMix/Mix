@@ -59,7 +59,7 @@ export default class Optimizer implements IOptimizer {
         });
 
         // Determine if Optimizer should be used
-        const commandPackages: ReadonlyCommandMap = this.bot.commandStore.getAll();
+        const commandPackages: ReadonlyCommandMap = this.bot.registry.getAll();
 
         let avg: number = 0;
 
@@ -107,13 +107,13 @@ export default class Optimizer implements IOptimizer {
      * @return {Promise<number>}
      */
     protected async process(): Promise<number> {
-        const commands: ReadonlyCommandMap = this.bot.commandStore.getAll();
+        const commands: ReadonlyCommandMap = this.bot.registry.getAll();
 
         let released: number = 0;
 
         for (const [name, command] of commands) {
-            if (!this.bot.internalCommands.includes(name as any) && !this.commandsUsed.includes(name) && !this.bot.commandStore.isReleased(name)) {
-                if (await this.bot.commandStore.release(name)) {
+            if (!this.bot.internalCommands.includes(name as any) && !this.commandsUsed.includes(name) && !this.bot.registry.isReleased(name)) {
+                if (await this.bot.registry.release(name)) {
                     released++;
                 }
             }

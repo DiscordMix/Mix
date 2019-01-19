@@ -10,7 +10,7 @@ export default class HelpCommand extends Command {
     public async run($: Context): Promise<void> {
         // TODO: Decorator commands broke it (can't .map through a Map)
 
-        const commandMap: ReadonlyCommandMap = $.bot.commandStore.getAll();
+        const commandMap: ReadonlyCommandMap = $.bot.registry.getAll();
         const commands: Command[] = [];
 
         for (const [base, command] of commandMap) {

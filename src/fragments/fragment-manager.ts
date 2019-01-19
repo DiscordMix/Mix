@@ -112,11 +112,11 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
             };
 
             if (await command.enabled()) {
-                if (this.bot.commandStore.contains(command.meta.name) && overwrite) {
-                    await this.bot.commandStore.remove(command.meta.name, command.aliases);
+                if (this.bot.registry.contains(command.meta.name) && overwrite) {
+                    await this.bot.registry.remove(command.meta.name, command.aliases);
                 }
 
-                await this.bot.commandStore.register({
+                await this.bot.registry.register({
                     instance: command,
                     path: packg.path
                 });

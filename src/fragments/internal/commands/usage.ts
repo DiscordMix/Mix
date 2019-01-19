@@ -23,7 +23,7 @@ const delimiter: string = ", ";
 export default class UsageCommand extends Command<IArgs> {
     // TODO: Finish implementing
     public async run($: Context, args: IArgs): Promise<void> {
-        const targetCommand: Command | null = await $.bot.commandStore.get(args.command);
+        const targetCommand: Command | null = await $.bot.registry.get(args.command);
 
         if (!targetCommand) {
             await $.fail("That command doesn't exist.");

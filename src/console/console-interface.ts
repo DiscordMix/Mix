@@ -6,7 +6,7 @@ import {ReadonlyCommandMap} from "../commands/command-store";
 import Bot from "../core/bot";
 import {DebugMode} from "../core/constants";
 import Log from "../core/log";
-import Util from "../core/utils";
+import Util from "../core/util";
 import {ReadonlyServiceMap} from "../services/service-manager";
 
 // TODO: Export in index
@@ -128,7 +128,7 @@ export default class ConsoleInterface {
         if (DebugMode) {
             this.commands.set("bug", (args: string[]) => {
                 if (args[0] === "commands") {
-                    const commands: ReadonlyCommandMap = bot.commandStore.getAll();
+                    const commands: ReadonlyCommandMap = bot.registry.getAll();
 
                     for (const [base, command] of commands) {
                         console.log(`\n\nCommand: ${base}\n\n`, command);

@@ -8,8 +8,8 @@ import {Constraint} from "../decorators/constraints";
 import Permission from "../core/permission";
 import {Message} from "discord.js";
 import DiscordEvent from "../core/discord-event";
-import {IFragmentMeta} from "..";
 import {On} from "../decorators/events";
+import {IFragmentMeta} from "../fragments/fragment";
 
 const testConnection: CommandRunner = (x, args): void => {
     //

@@ -8,6 +8,7 @@ import BotMessages from "./messages";
 import Loader, {IPackage} from "../fragments/loader";
 import {PromiseOr} from "@atlas/xlib";
 import Util from "./util";
+import {performance} from "perf_hooks";
 
 export interface IBotConnector {
     setup(): PromiseOr<this>;

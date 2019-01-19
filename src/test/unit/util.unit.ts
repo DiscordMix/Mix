@@ -9,7 +9,7 @@ default class {
     @Feed(0, 0, 100)
     @Feed(1, 0, 0)
     public percentOf(amount: number, max: number, expected: number): void {
-        Assert.equals(expected, Util.percentOf(amount, max));
+        Assert.equal(expected, Util.percentOf(amount, max));
     }
 
     @Test("percentOf: should throw on invalid parameters")
@@ -33,6 +33,6 @@ default class {
     @Test("escapeText: should determine if text is escaped")
     @Feed("john doe", "john doe")
     public escapeText(input: string, expected: string): void {
-        Assert.equals(input, expected);
+        Assert.equal(input, expected);
     }
 }

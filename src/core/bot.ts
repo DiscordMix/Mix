@@ -4,7 +4,7 @@ require("dotenv").config();
 import CommandParser from "../commands/command-parser";
 import Context from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
-import CommandStore from "../commands/command-store";
+import CommandRegistry from "../commands/command-store";
 import Util from "./utils";
 import Settings from "./settings";
 import Log from "./log";
@@ -22,9 +22,7 @@ import Command, {
 
 import CommandHandler from "../commands/command-handler";
 import fs from "fs";
-import {performance} from "perf_hooks";
 import path from "path";
-import Loader, {IPackage} from "../fragments/loader";
 import Language from "../language/language";
 import StatCounter from "./stat-counter";
 import {IDisposable} from "./helpers";
@@ -34,12 +32,12 @@ import {EventEmitter} from "events";
 import Optimizer from "../optimization/optimizer";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
-import {ArgResolvers, ArgTypes, Title, InternalFragmentsPath, DefaultBotOptions, DebugMode} from "./constants";
+import {ArgResolvers, ArgTypes, DefaultBotOptions} from "./constants";
 import Store from "../state/store";
 import BotMessages from "./messages";
 import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, EBotEvents, IBot} from "./bot-extra";
 import {Action} from "@atlas/automata";
-import DiscordEvent from "./discord-event";
+import BotConnector from "./bot-connector";
 
 /**
  * Bot events:
@@ -75,7 +73,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly settings: Settings;
     public readonly temp: Temp;
     public readonly services: ServiceManager;
-    public readonly commandStore: CommandStore;
+    public readonly commandStore: CommandRegistry;
     public readonly commandHandler: CommandHandler;
     public readonly console: ConsoleInterface;
     public readonly prefixCommand: boolean;
@@ -104,6 +102,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     // TODO: Implement stat counter
     protected readonly statCounter: StatCounter;
+
+    protected readonly connector: BotConnector;
 
     /**
      * Setup the bot from an object
@@ -194,10 +194,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.services = new ServiceManager(this);
 
         /**
-         * @type {CommandStore}
+         * @type {CommandRegistry}
          * @readonly
          */
-        this.commandStore = new CommandStore(this);
+        this.commandStore = new CommandRegistry(this);
 
         /**
          * @type {IArgumentResolver[]}
@@ -360,11 +360,26 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
          */
         this.fragments = new FragmentManager(this);
 
+        /**
+         * Handles bot connection and setup sequence
+         * @type {BotConnector}
+         * @readonly
+         */
+        this.connector = new BotConnector(this);
+
         // Force-bind certain methods
         this.connect = this.connect.bind(this);
         this.disconnect = this.disconnect.bind(this);
 
         return this;
+    }
+
+    /**
+     * Whether the bot is currently connected
+     * @return {boolean}
+     */
+    public get connected(): boolean {
+        return this.state === BotState.Connected;
     }
 
     /**
@@ -426,7 +441,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Directly trigger a command
+     * Trigger a command
      * @todo 'args' type on docs (here)
      * @param {string} base
      * @param {Message} referer
@@ -704,7 +719,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      */
     public async connect(): Promise<this> {
         this.setState(BotState.Connecting);
-        await this.setup();
+        await this.connector.setup();
         Log.verbose("Starting");
 
         await this.client.login(this.settings.general.token).catch(async (error: Error) => {
@@ -813,48 +828,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.clearTemp();
     }
 
-    /**
-     * Setup the client's events
-     */
-    protected setupEvents(): void {
-        Log.verbose("Setting up Discord events");
-
-        // Discord client events
-        this.client.on(DiscordEvent.Ready, async () => {
-            // Setup temp
-            this.temp.setup(this.client.user.id);
-
-            // Create the temp folder
-            await this.temp.create();
-
-            if (this.options.consoleInterface && !this.console.ready) {
-                // Setup the console command interface
-                this.console.setup(this);
-            }
-
-            Log.info(`Logged in as ${this.client.user.tag} | ${this.client.guilds.size} guild(s)`);
-
-            const took: number = Math.round(performance.now() - this.setupStart);
-
-            Log.success(`Ready | Took ${took}ms | PID ${process.pid}`);
-            this.setState(BotState.Connected);
-            this.emit(EBotEvents.Ready);
-        });
-
-        this.client.on(DiscordEvent.Message, this.handleMessage.bind(this));
-        this.client.on(DiscordEvent.Error, (error: Error) => Log.error(error.message));
-
-        // If enabled, handle message edits (if valid) as commands
-        if (this.options.updateOnMessageEdit) {
-            this.client.on(DiscordEvent.MessageUpdated, async (oldMessage: Message, newMessage: Message) => {
-                await this.handleMessage(newMessage, true);
-            });
-        }
-
-        Log.success("Discord events setup completed");
-    }
-
-    protected setState(state: BotState): this {
+    public setState(state: BotState): this {
         (this.state as any) = state;
 
         return this;
@@ -874,163 +848,5 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
             label: CommandParser.getCommandBase(msg.content, this.settings.general.prefix)
         });
-    }
-
-    /**
-     * Setup the bot
-     * @return {Promise<this>}
-     */
-    protected async setup(): Promise<this> {
-        this.emit(EBotEvents.SetupStart);
-
-        if (this.options.asciiTitle) {
-            console.log("\n" + Title.replace("{version}", "beta") + "\n");
-        }
-
-        if (DebugMode) {
-            Log.info("Debug mode is enabled");
-        }
-
-        /**
-         * @type {number}
-         * @protected
-         */
-        this.setupStart = performance.now();
-
-        // Load languages
-        if (this.language && this.languages) {
-            for (const lang of this.languages) {
-                await this.language.load(lang);
-            }
-        }
-
-        Log.verbose("Attempting to load internal fragments");
-        this.emit(EBotEvents.LoadingInternalFragments);
-
-        // Load & enable internal fragments
-        const internalFragmentCandidates: string[] | null = await Loader.scan(InternalFragmentsPath);
-
-        if (!internalFragmentCandidates) {
-            throw new Error(BotMessages.SETUP_FAIL_LOAD_FRAGMENTS);
-        }
-
-        if (internalFragmentCandidates.length > 0) {
-            Log.verbose(`Loading ${internalFragmentCandidates.length} internal fragments`);
-        }
-        else {
-            Log.warn(BotMessages.SETUP_NO_FRAGMENTS_DETECTED);
-        }
-
-        const internalFragments: IPackage[] | null = await Loader.loadMultiple(internalFragmentCandidates);
-
-        if (!internalFragments || internalFragments.length === 0) {
-            Log.warn(BotMessages.SETUP_NO_FRAGMENTS_LOADED);
-        }
-        else {
-            const enabled: number = await this.fragments.enableMultiple(internalFragments, true);
-
-            if (enabled === 0) {
-                Log.warn(BotMessages.SETUP_NO_FRAGMENTS_ENABLED);
-            }
-            else {
-                Log.success(`Enabled ${enabled}/${internalFragments.length} (${Util.percentOf(enabled, internalFragments.length)}%) internal fragments`);
-            }
-        }
-
-        this.emit(EBotEvents.LoadedInternalFragments, internalFragments || []);
-        this.emit(EBotEvents.LoadingServices);
-
-        // Load & enable services
-        const consumerServiceCandidates: string[] | null = await Loader.scan(this.settings.paths.services);
-
-        if (!consumerServiceCandidates || consumerServiceCandidates.length === 0) {
-            Log.verbose(`No services were detected under '${this.settings.paths.services}'`);
-        }
-        else {
-            Log.verbose(`Loading ${consumerServiceCandidates.length} service(s)`);
-
-            const servicesLoaded: IPackage[] | null = await Loader.loadMultiple(consumerServiceCandidates);
-
-            if (!servicesLoaded || servicesLoaded.length === 0) {
-                Log.warn(BotMessages.SETUP_NO_SERVICES_LOADED);
-            }
-            else {
-                Log.success(`Loaded ${servicesLoaded.length} service(s)`);
-                await this.fragments.enableMultiple(servicesLoaded);
-            }
-        }
-
-        // After loading services, enable all of them
-        // TODO: Returns amount of enabled services
-        await this.services.startAll();
-
-        this.emit(EBotEvents.LoadedServices);
-        this.emit(EBotEvents.LoadingCommands);
-
-        // Load & enable consumer command fragments
-        const consumerCommandCandidates: string[] | null = await Loader.scan(this.settings.paths.commands);
-
-        if (!consumerCommandCandidates || consumerCommandCandidates.length === 0) {
-            Log.warn(`No commands were detected under '${this.settings.paths.commands}'`);
-        }
-        else {
-            Log.verbose(`Loading ${consumerCommandCandidates.length} command(s)`);
-
-            const commandsLoaded: IPackage[] | null = await Loader.loadMultiple(consumerCommandCandidates);
-
-            if (!commandsLoaded || commandsLoaded.length === 0) {
-                Log.warn(BotMessages.SETUP_NO_COMMANDS_LOADED);
-            }
-            else {
-                const enabled: number = await this.fragments.enableMultiple(commandsLoaded);
-
-                if (enabled > 0) {
-                    Log.success(`Enabled ${commandsLoaded.length}/${consumerCommandCandidates.length} (${Util.percentOf(commandsLoaded.length, consumerCommandCandidates.length)}%) command(s)`);
-                }
-                else {
-                    Log.warn(BotMessages.SETUP_NO_COMMANDS_ENABLED);
-                }
-            }
-        }
-
-        // Load & enable tasks
-        await this.tasks.unregisterAll();
-        Log.verbose(BotMessages.SETUP_LOADING_TASKS);
-
-        const loaded: number = await this.tasks.loadAll(this.settings.paths.tasks);
-
-        if (loaded > 0) {
-            Log.success(`Loaded ${loaded} task(s)`);
-
-            const enabled: number = this.tasks.enableAll();
-
-            if (enabled > 0) {
-                Log.success(`Triggered ${enabled}/${loaded} task(s)`);
-            }
-            else if (enabled === 0 && loaded > 0) {
-                Log.warn(BotMessages.SETUP_NO_TASKS_TRIGGERED);
-            }
-        }
-        else {
-            Log.verbose(BotMessages.SETUP_NO_TASKS_FOUND);
-        }
-
-        this.emit(EBotEvents.LoadedCommands);
-
-        if (this.options.optimizer) {
-            Log.verbose(BotMessages.SETUP_START_OPTIMIZER);
-
-            // Start tempo engine
-            this.optimizer.start();
-
-            Log.success(BotMessages.SETUP_STARTED_OPTIMIZER);
-        }
-
-        // Setup the Discord client's events
-        this.setupEvents();
-
-        Log.success(BotMessages.SETUP_COMPLETED);
-
-        return this;
     }
 }

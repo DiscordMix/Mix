@@ -1,5 +1,5 @@
 import Util from "../core/utils";
-import CommandStore from "./command-store";
+import CommandRegistry from "./command-store";
 
 import Command, {
     ArgumentType,
@@ -43,11 +43,11 @@ export interface ICheckArgumentsOptions {
 export default abstract class CommandParser {
     /**
      * @param {string} commandString
-     * @param {CommandStore} manager
+     * @param {CommandRegistry} manager
      * @param {string[]} prefixes
      * @return {Command | null}
      */
-    public static async parse(commandString: string, manager: CommandStore, prefixes: string[]): Promise<Command | null> {
+    public static async parse(commandString: string, manager: CommandRegistry, prefixes: string[]): Promise<Command | null> {
         const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
@@ -59,11 +59,11 @@ export default abstract class CommandParser {
 
     /**
      * @param {string} commandString
-     * @param {CommandStore} manager
+     * @param {CommandRegistry} manager
      * @param {string} prefixes
      * @return {boolean}
      */
-    public static validate(commandString: string, manager: CommandStore, prefixes: string[]): boolean {
+    public static validate(commandString: string, manager: CommandRegistry, prefixes: string[]): boolean {
         for (const prefix of prefixes) {
             if (commandString.startsWith(prefix)) {
                 const commandBase: string | null = this.getCommandBase(commandString, prefixes);

@@ -1,6 +1,6 @@
 import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
 import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/command-context";
-import CommandStore, {ICommandStore} from "./commands/command-store";
+import CommandRegistry, {ICommandRegistry} from "./commands/command-store";
 import Bot from "./core/bot";
 
 import Command, {
@@ -64,10 +64,12 @@ import {Constraint, Constraints} from "./decorators/constraints";
 import {Description, Name, Aliases, Arguments, Meta} from "./decorators/general";
 import Component from "./decorators/component";
 import {DecoratorUtils} from "./decorators/decorator-utils";
-import {OnEvent, Guard, DependsOn, Connect, AttachedLogger} from "./decorators/other";
+import {Guard, DependsOn, Connect, AttachedLogger} from "./decorators/other";
 import {Deprecated} from "./decorators/utility";
 import {PromiseOr} from "@atlas/xlib";
 import {CmdHandlerEvent} from "./commands/command-handler";
+import {Once, On} from "./decorators/events";
+import BotConnector, {IBotConnector} from "./core/bot-connector";
 
 export {
     // Fragments
@@ -82,8 +84,8 @@ export {
     IContext,
     TextBasedChannel,
     IContextOptions,
-    CommandStore,
-    ICommandStore,
+    CommandRegistry,
+    ICommandRegistry,
     CmdHandlerEvent,
     CommandParser,
     IArgument,
@@ -124,12 +126,14 @@ export {
     ISettings,
     TimeParser,
     TimeSuffixType,
-    Util as Utils,
+    Util,
     Permission,
     ChatEnv,
     Patterns,
     DiscordEvent,
     EBotEvents,
+    BotConnector,
+    IBotConnector,
 
     // Collections
     List,
@@ -176,7 +180,8 @@ export {
     Constraint,
     Constraints,
     Guard,
-    OnEvent,
+    On,
+    Once,
     DependsOn,
     Connect,
     AttachedLogger,

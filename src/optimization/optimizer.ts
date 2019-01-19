@@ -54,7 +54,7 @@ export default class Optimizer implements IOptimizer {
      * @return {this}
      */
     public start(): this {
-        this.bot.on(EBotEvents.CommandExecuted, (command: Command) => {
+        this.bot.on(EBotEvents.Command, (command: Command) => {
             this.commandsUsed.push(command.meta.name);
         });
 
@@ -95,7 +95,7 @@ export default class Optimizer implements IOptimizer {
      * Dispose allocated resources
      */
     public dispose(): void {
-        this.bot.removeListener(EBotEvents.CommandExecuted, this.start);
+        this.bot.removeListener(EBotEvents.Command, this.start);
 
         if (this.processInterval !== null) {
             this.bot.clearInterval(this.processInterval);

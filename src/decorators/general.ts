@@ -7,7 +7,7 @@ export function Meta(meta: IFragmentMeta): any {
         DecoratorUtils.ensureFunc(target);
 
         return class extends target {
-            readonly meta: IFragmentMeta = {
+            public readonly meta: IFragmentMeta = {
                 ...this.meta,
                 ...meta
             };

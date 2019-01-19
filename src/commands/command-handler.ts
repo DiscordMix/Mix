@@ -7,7 +7,7 @@ import Util from "../core/utils";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./command-context";
 import CommandParser from "./command-parser";
-import CommandStore, {ICommandStore} from "./command-store";
+import CommandRegistry, {ICommandRegistry} from "./command-store";
 import {PromiseOr} from "@atlas/xlib";
 
 export enum CmdHandlerEvent {
@@ -24,7 +24,7 @@ export enum CmdHandlerEvent {
 }
 
 export interface ICommandHandlerOptions {
-    readonly commandStore: CommandStore;
+    readonly commandStore: CommandRegistry;
     readonly errorHandlers: ICmdErrorHandlerOpt[];
     readonly argumentTypes: any;
 }
@@ -43,7 +43,7 @@ export interface IUndoAction {
 }
 
 export interface ICommandHandler {
-    readonly commandStore: ICommandStore;
+    readonly commandStore: ICommandRegistry;
     readonly errorHandlers: Map<CmdHandlerEvent, CmdErrorHandler>;
     readonly argumentTypes: any;
     readonly undoMemory: Map<Snowflake, IUndoAction>;
@@ -187,7 +187,7 @@ export default class CommandHandler implements ICommandHandler {
         return false;
     }
 
-    public readonly commandStore: CommandStore;
+    public readonly commandStore: CommandRegistry;
     public readonly errorHandlers: Map<CmdHandlerEvent, CmdErrorHandler>;
     public readonly argumentTypes: any;
     public readonly undoMemory: Map<Snowflake, IUndoAction>;
@@ -197,7 +197,7 @@ export default class CommandHandler implements ICommandHandler {
      */
     public constructor(options: ICommandHandlerOptions) {
         /**
-         * @type {CommandStore}
+         * @type {CommandRegistry}
          * @readonly
          */
         this.commandStore = options.commandStore;
@@ -312,7 +312,7 @@ export default class CommandHandler implements ICommandHandler {
                 connection(context, resolvedArgs, command);
             }
 
-            context.bot.emit(EBotEvents.CommandExecuted, command, context, result);
+            context.bot.emit(EBotEvents.Command, command, context, result);
 
             if (context.bot.options.autoDeleteCommands && context.msg.deletable) {
                 await context.msg.delete();

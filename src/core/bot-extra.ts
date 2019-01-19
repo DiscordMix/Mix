@@ -10,7 +10,7 @@ import {ITimeoutAttachable, IDisposable} from "./helpers";
 import {IPathResolver} from "./path-resolver";
 import {IStatsCounter} from "./stat-counter";
 import {ITemp} from "./temp";
-import {ICommandStore} from "../commands/command-store";
+import {ICommandRegistry} from "../commands/command-store";
 import {IConsoleInterface} from "../console/console-interface";
 import {ITaskManager} from "../tasks/task-manager";
 import ActionInterpreter, {IActionInterpreter} from "../actions/action-interpreter";
@@ -24,7 +24,7 @@ export interface IBotModules {
     readonly temp: ITemp;
     readonly client: Client;
     readonly serviceManager: IServiceManager;
-    readonly commandStore: ICommandStore;
+    readonly commandStore: ICommandRegistry;
     readonly commandHandler: ICommandHandler;
     readonly consoleInterface: IConsoleInterface;
     readonly language: ILanguage;
@@ -100,7 +100,7 @@ export enum EBotEvents {
     ClearedTemp = "clearedTemp",
     HandlingCommand = "handlingCommand",
     CommandError = "commandError",
-    CommandExecuted = "commandExecuted"
+    Command = "command"
 }
 
 /**
@@ -134,7 +134,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly settings: ISettings;
     readonly temp: ITemp;
     readonly services: IServiceManager;
-    readonly commandStore: ICommandStore;
+    readonly commandStore: ICommandRegistry;
     readonly commandHandler: ICommandHandler;
     readonly console: IConsoleInterface;
     readonly prefixCommand: boolean;
@@ -159,6 +159,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly paths: IPathResolver;
     readonly store: IStore<TState, TActionType>;
 
+    setState(state: BotState): this;
     postStats(): PromiseOr<void>;
     suspend(suspend: boolean): this;
     invokeCommand(base: string, referer: Message, ...args: string[]): PromiseOr<any>;

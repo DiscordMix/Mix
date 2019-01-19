@@ -23,7 +23,7 @@ export type CommandMap = Map<string, CommandPackage>;
 
 export type ReadonlyCommandMap = ReadonlyMap<string, CommandPackage>;
 
-export interface ICommandStore {
+export interface ICommandRegistry {
     readonly bot: Bot;
     readonly cooldowns: Map<Snowflake, Map<string, number>>;
     readonly size: number;
@@ -47,7 +47,7 @@ export interface ICommandStore {
     unloadAll(): PromiseOr<this>;
 }
 
-export default class CommandStore {
+export default class CommandRegistry implements ICommandRegistry {
     public readonly bot: Bot;
     public readonly cooldowns: Map<Snowflake, Map<string, number>>;
 

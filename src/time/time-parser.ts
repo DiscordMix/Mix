@@ -57,7 +57,7 @@ export default class TimeParser {
             }
 
             default: {
-                throw new Error(`Invalid suffix: ${this.suffix}`);
+                throw Log.error(`Invalid suffix: ${this.suffix}`);
             }
         }
     }

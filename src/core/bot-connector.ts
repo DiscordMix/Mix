@@ -56,7 +56,7 @@ export default class BotConnector implements IBotConnector {
         const internalFragmentCandidates: string[] | null = await Loader.scan(InternalFragmentsPath);
 
         if (!internalFragmentCandidates) {
-            throw new Error(BotMessages.SETUP_FAIL_LOAD_FRAGMENTS);
+            throw Log.error(BotMessages.SETUP_FAIL_LOAD_FRAGMENTS);
         }
 
         if (internalFragmentCandidates.length > 0) {

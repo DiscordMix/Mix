@@ -1,4 +1,5 @@
 import {Guild, GuildMember} from "discord.js";
+import Log from "./log";
 
 export enum MemberDataType {
     Username,
@@ -135,7 +136,7 @@ export default class DataCollector implements IDataCollector {
                     }
 
                     default: {
-                        throw new Error(`Invalid collection type: ${this.collectionType}`);
+                        throw Log.error(`Invalid collection type: ${this.collectionType}`);
                     }
                 }
             });

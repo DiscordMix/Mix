@@ -147,7 +147,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         if (!options || !options.settings || typeof options.settings !== "object") {
-            throw new Error(BotMessages.SETUP_INVALID);
+            throw Log.error(BotMessages.SETUP_INVALID);
         }
 
         /**

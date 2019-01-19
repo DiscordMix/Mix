@@ -70,7 +70,7 @@ export default class Temp implements ITemp {
     public async create(): Promise<this> {
         return new Promise<this>((resolve) => {
             if (!this.resolvedPath) {
-                throw new Error("Trying to create when the resolved path is undefined");
+                throw Log.error("Trying to create when the resolved path is undefined");
             }
 
             if (!fs.existsSync(this.resolvedPath)) {
@@ -117,7 +117,7 @@ export default class Temp implements ITemp {
      */
     public async store(data: any, file: string): Promise<this> {
         if (!this.resolvedPath) {
-            throw new Error("Trying to store when the resolved path is undefined");
+            throw Log.error("Trying to store when the resolved path is undefined");
         }
 
         await Util.writeJson(path.resolve(path.join(this.resolvedPath, file)), data);

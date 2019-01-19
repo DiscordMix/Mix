@@ -46,7 +46,7 @@ const TimeSuffixType = {
             }
 
             default: {
-                throw new Error(`Invalid time suffix type: ${short}`);
+                throw Log.error(`Invalid time suffix type: ${short}`);
             }
         }
     }

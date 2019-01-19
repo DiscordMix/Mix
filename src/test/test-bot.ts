@@ -12,6 +12,7 @@ import Rgb from "../misc/rgb";
 import Rgba from "../misc/rgba";
 import {ITestState, TestStoreActionType} from "../state/store";
 import List from "../collections/list";
+import Log from "../core/log";
 
 export const TestSubjects = {
     ids: [
@@ -63,13 +64,13 @@ const testGuildChannelId: Snowflake = process.env.TEST_CHANNEL_ID as Snowflake;
 */
 
 if (!token) {
-    throw new Error(BotMessages.TEST_EXPECT_TOKEN);
+    throw Log.error(BotMessages.TEST_EXPECT_TOKEN);
 }
 else if (!testGuildId) {
-    throw new Error(BotMessages.TEST_EXPECT_GUILD);
+    throw Log.error(BotMessages.TEST_EXPECT_GUILD);
 }
 else if (!testGuildChannelId) {
-    throw new Error(BotMessages.TEST_EXPECT_CHANNEL);
+    throw Log.error(BotMessages.TEST_EXPECT_CHANNEL);
 }
 
 export default class TestBot extends Bot<ITestState, TestStoreActionType> {
@@ -154,19 +155,19 @@ export async function init(): Promise<void> {
 
         // Retrieve test guild and channel
         if (!testBot.client.guilds.has(testGuildId)) {
-            throw new Error(BotMessages.TEST_NO_GUILD);
+            throw Log.error(BotMessages.TEST_NO_GUILD);
         }
 
         const testGuild: Guild = testBot.client.guilds.get(testGuildId) as Guild;
 
         if (!testGuild.channels.has(testGuildChannelId)) {
-            throw new Error(BotMessages.TEST_CHANNEL_NO_EXIST);
+            throw Log.error(BotMessages.TEST_CHANNEL_NO_EXIST);
         }
 
         const testChannel: TextChannel = testGuild.channels.get(testGuildChannelId) as TextChannel;
 
         if (testChannel.type !== "text") {
-            throw new Error(BotMessages.TEST_CHANNEL_NOT_TEXT);
+            throw Log.error(BotMessages.TEST_CHANNEL_NOT_TEXT);
         }
 
         // Set channels

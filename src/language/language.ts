@@ -3,6 +3,7 @@ import path from "path";
 import BotMessages from "../core/messages";
 import Util from "../core/utils";
 import {PromiseOr} from "@atlas/xlib";
+import Log from "../core/log";
 
 export type LanguageSource = Map<string, any>;
 
@@ -73,7 +74,7 @@ export default class Language implements ILanguage {
             return null;
         }
         else if (!this.default) {
-            throw new Error(BotMessages.LANG_NO_DEFAULT);
+            throw Log.error(BotMessages.LANG_NO_DEFAULT);
         }
 
         return this.default[key] || null;
@@ -85,22 +86,22 @@ export default class Language implements ILanguage {
      */
     public async load(name: string): Promise<this> {
         if (!this.directory) {
-            throw new Error(BotMessages.LANG_NO_BASE_DIR);
+            throw Log.error(BotMessages.LANG_NO_BASE_DIR);
         }
         else if (!fs.existsSync(this.directory)) {
-            throw new Error(BotMessages.LANG_BASE_DIR_NO_EXIST);
+            throw Log.error(BotMessages.LANG_BASE_DIR_NO_EXIST);
         }
 
         const filePath: string = path.resolve(path.join(this.directory, `${name}.json`));
 
         if (!fs.existsSync(filePath)) {
-            throw new Error(`Language file does not exist: ${filePath}`);
+            throw Log.error(`Language file does not exist: ${filePath}`);
         }
 
         const data: LanguageSource = await Util.readJson(filePath);
 
         if (typeof data != "object" || Object.keys(data).length === 0) {
-            throw new Error(`Language file is either not an object or empty: ${name}`);
+            throw Log.error(`Language file is either not an object or empty: ${name}`);
         }
 
         this.languages.set(name, data);

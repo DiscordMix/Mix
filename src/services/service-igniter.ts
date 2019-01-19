@@ -11,13 +11,13 @@ import ServiceManager from "./service-manager";
 const args: string[] = process.argv.splice(2);
 
 if (args.length !== 1) {
-    throw new Error(`Expecting one (1) argument only, received ${args.length}`);
+    throw Log.error(`Expecting one (1) argument only, received ${args.length}`);
 }
 
 const target: string = args[0];
 
 if (!fs.existsSync(target)) {
-    throw new Error("Target file path does not exist");
+    throw Log.error("Target file path does not exist");
 }
 
 // Start service
@@ -91,7 +91,7 @@ function send(type: ProcessMsgType, data?: any): void {
         });
     }
     else {
-        throw new Error("Process.send is no longer defined or accessible");
+        throw Log.error("Process.send is no longer defined or accessible");
     }
 }
 

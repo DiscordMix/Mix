@@ -1,5 +1,6 @@
 import Discord, {RichEmbed} from "discord.js";
 import {IBuilder} from "./builder";
+import Log from "../core/log";
 
 export interface IEmbedBuilder extends IBuilder<RichEmbed> {
     color(color: string): this;
@@ -14,14 +15,14 @@ export interface IEmbedBuilder extends IBuilder<RichEmbed> {
 
 export default class EmbedBuilder implements IEmbedBuilder {
     /**
-     * @param {Object} obj
+     * @param {object} obj
      * @return {EmbedBuilder}
      */
     public static fromObject(obj: any): EmbedBuilder {
         const result = new EmbedBuilder();
 
         if (!obj.text) {
-            throw new Error("Text cannot be empty or null");
+            throw Log.error("Text cannot be empty or null");
         }
         else {
             result.text(obj.text);

@@ -64,7 +64,7 @@ export default abstract class Util {
      */
     public static resolveId(mention: string): string {
         if (typeof mention !== "string") {
-            throw new Error("Expecting mention parameter to be a string");
+            throw Log.error("Expecting mention parameter to be a string");
         }
 
         return mention
@@ -83,7 +83,7 @@ export default abstract class Util {
      */
     public static spreadTime(time: number, delimiter: string = " "): string {
         if (typeof time !== "number" || typeof delimiter !== "string") {
-            throw new Error("Expecting time parameter to be a number and delimiter parameter to be a string");
+            throw Log.error("Expecting time parameter to be a number and delimiter parameter to be a string");
         }
 
         const timeStr: string = time.toString();
@@ -146,7 +146,7 @@ export default abstract class Util {
      */
     public static getRandomInt(min: number, max: number): number {
         if (typeof min !== "number" || typeof max !== "number" || min > max || min === max) {
-            throw new Error("Expecting min and max parameters to be numbers");
+            throw Log.error("Expecting min and max parameters to be numbers");
         }
 
         return Math.floor(Math.random() * max) + min;
@@ -160,7 +160,7 @@ export default abstract class Util {
      */
     public static binarySearch(subject: number, host: number[]): IBinarySearchResult {
         if (typeof subject !== "number" || !Array.isArray(host)) {
-            throw new Error("Expecting subject to be a number and host to be an array of numbers");
+            throw Log.error("Expecting subject to be a number and host to be an array of numbers");
         }
 
         const pool: number[] = [...host];
@@ -193,7 +193,7 @@ export default abstract class Util {
 
     public static binaryInsert(subject: number, host: number[]): number {
         if (typeof subject !== "number" || !Array.isArray(host)) {
-            throw new Error("Expecting subject to be a number and host to be an array of numbers");
+            throw Log.error("Expecting subject to be a number and host to be an array of numbers");
         }
         else if (host.length === 0) {
             return 0;
@@ -216,7 +216,7 @@ export default abstract class Util {
                 pool.splice(midPoint - 1, 1);
             }
             else if (pool[midPoint] === subject) {
-                throw new Error("Unexpected host to already contain value");
+                throw Log.error("Unexpected host to already contain value");
             }
         }
 
@@ -230,7 +230,7 @@ export default abstract class Util {
      */
     public static populate(amount: number): number[] {
         if (typeof amount !== "number") {
-            throw new Error("Expecting amount to be a number");
+            throw Log.error("Expecting amount to be a number");
         }
 
         const result: number[] = [];
@@ -270,7 +270,7 @@ export default abstract class Util {
 
             fs.readdir(directory, (error: Error, files: string[]) => {
                 if (error) {
-                    throw new Error(`There was an error while reading directory '${directory}': ${error.message}`);
+                    throw Log.error(`There was an error while reading directory '${directory}': ${error.message}`);
                 }
 
                 const result: string[] = files;
@@ -294,7 +294,7 @@ export default abstract class Util {
      */
     public static shuffle(array: any[]): any[] {
         if (!Array.isArray(array)) {
-            throw new Error("Expecting parameter to be an array");
+            throw Log.error("Expecting parameter to be an array");
         }
         else if (array.length === 0) {
             return [];
@@ -476,7 +476,7 @@ export default abstract class Util {
      */
     public static hasMentionPrefix(text: string, userId: Snowflake): boolean {
         if (!text || !userId || typeof text !== "string" || typeof userId !== "string") {
-            throw new Error("Invalid data provided, expecting strings");
+            throw Log.error("Invalid data provided, expecting strings");
         }
 
         return text.startsWith(`<@${userId}>`) || text.startsWith(`<@!${userId}>`);
@@ -504,7 +504,7 @@ export default abstract class Util {
      */
     public static chance(range: number): boolean {
         if (typeof range !== "number" || range <= 0) {
-            throw new Error("Expecting range parameter to be a number and to be higher than 0");
+            throw Log.error("Expecting range parameter to be a number and to be higher than 0");
         }
 
         return Util.getRandomInt(0, range) === 0;
@@ -658,7 +658,7 @@ export default abstract class Util {
      */
     public static escapeText(text: string, token: string): string {
         if (!text || !token || typeof text !== "string" || typeof token !== "string") {
-            throw new Error("Invalid input provided; Expecting strings");
+            throw Log.error("Invalid input provided; Expecting strings");
         }
 
         let finalText: string = text;
@@ -692,7 +692,7 @@ export default abstract class Util {
      */
     public static getUserIdentifier(user: User): string {
         if (!user || typeof user !== "object" || !user.id || !user.tag || typeof user.id !== "string" || typeof user.tag !== "string") {
-            throw new Error("Invalid input; Expecting User object");
+            throw Log.error("Invalid input; Expecting User object");
         }
 
         return `<@${user.id}> (${user.tag}:${user.id})`;

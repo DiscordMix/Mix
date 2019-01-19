@@ -93,7 +93,7 @@ export default class Settings implements ISettings {
      */
     public constructor(options: Partial<ISettingsOptions>) {
         if (!options.general) {
-            throw new Error(BotMessages.CFG_EXPECT_GENERAL);
+            throw Log.error(BotMessages.CFG_EXPECT_GENERAL);
         }
 
         /**

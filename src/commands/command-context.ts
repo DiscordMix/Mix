@@ -46,7 +46,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
      */
     public constructor(options: IContextOptions) {
         if (options.msg.channel.type !== "text") {
-            throw new Error(BotMessages.CONTEXT_EXPECT_TEXT_CHANNEL);
+            throw Log.error(BotMessages.CONTEXT_EXPECT_TEXT_CHANNEL);
         }
 
         super(options.msg.channel as TextChannel, options.bot, options.msg.author);
@@ -130,7 +130,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
      */
     public async createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number = 7500): Promise<string | null> {
         if (channel.type !== ChannelType.DM && channel.type !== ChannelType.Text) {
-            throw new Error(`Expecting channel '${channel.id}' to be either DMs or text-based`);
+            throw Log.error(`Expecting channel '${channel.id}' to be either DMs or text-based`);
         }
 
         return new Promise<string | null>(async (resolve) => {

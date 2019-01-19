@@ -74,7 +74,7 @@ export default class Store<TState = any, TActionType = any> {
      */
     public dispatch<T = any>(type: TActionType, payload?: T): this {
         if (typeof type !== "number" && typeof type !== "string") {
-            throw new Error(BotMessages.STORE_INVALID_ACTION);
+            throw Log.error(BotMessages.STORE_INVALID_ACTION);
         }
 
         const previousState: TState | undefined = this.state;
@@ -88,7 +88,7 @@ export default class Store<TState = any, TActionType = any> {
             const result: TState | null = reducer(action, this.state);
 
             if (result === undefined) {
-                throw new Error(BotMessages.STORE_REDUCER_NO_UNDEFINED);
+                throw Log.error(BotMessages.STORE_REDUCER_NO_UNDEFINED);
             }
             else if (result !== null) {
                 this.state = result;
@@ -115,7 +115,7 @@ export default class Store<TState = any, TActionType = any> {
      */
     public subscribe(handler: StoreActionHandler<TState>): boolean {
         if (typeof handler !== "function") {
-            throw new Error(BotMessages.STORE_EXPECT_HANDLER_FUNC);
+            throw Log.error(BotMessages.STORE_EXPECT_HANDLER_FUNC);
         }
         else if (!this.isSubscribed(handler)) {
             this.handlers.push(handler);
@@ -144,7 +144,7 @@ export default class Store<TState = any, TActionType = any> {
 
     public isSubscribed(handler: StoreActionHandler<TState>): boolean {
         if (typeof handler !== "function") {
-            throw new Error(BotMessages.STORE_EXPECT_HANDLER_FUNC);
+            throw Log.error(BotMessages.STORE_EXPECT_HANDLER_FUNC);
         }
 
         return this.handlers.includes(handler);
@@ -152,7 +152,7 @@ export default class Store<TState = any, TActionType = any> {
 
     public addReducer(reducer: Reducer<TState>): boolean {
         if (typeof reducer !== "function") {
-            throw new Error(BotMessages.STORE_EXPECT_REDUCER_FUNC);
+            throw Log.error(BotMessages.STORE_EXPECT_REDUCER_FUNC);
         }
         else if (!this.reducers.includes(reducer)) {
             this.reducers.push(reducer);

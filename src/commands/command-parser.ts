@@ -217,7 +217,7 @@ export default abstract class CommandParser {
 
             if (!options.schema[i].required && options.arguments[i] === undefined && options.schema[i].defaultValue !== undefined) {
                 if (options.schema[i].defaultValue === undefined) {
-                    throw new Error(`Expecting default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'`);
+                    throw Log.error(`Expecting default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'`);
                 }
 
                 const type: string = typeof options.schema[i].defaultValue;
@@ -229,7 +229,7 @@ export default abstract class CommandParser {
                     value = options.schema[i].defaultValue as any;
                 }
                 else {
-                    throw new Error(`Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
+                    throw Log.error(`Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
                 }
             }
             else if (!options.schema[i].required && options.arguments[i] === undefined && options.schema[i].defaultValue === undefined) {

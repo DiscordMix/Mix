@@ -1,4 +1,4 @@
-import Command, {RestrictGroup} from "../../../commands/command";
+import Command from "../../../commands/command";
 import BotMessages from "../../../core/messages";
 import {Name, Description} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
@@ -8,6 +8,6 @@ import {Constraint} from "../../../decorators/constraints";
 @Constraint.OwnerOnly
 export default class ThrowCommand extends Command {
     public async run(): Promise<void> {
-        throw new Error(BotMessages.INTENTIONAL_ERROR);
+        throw Log.error(BotMessages.INTENTIONAL_ERROR);
     }
 }

@@ -6,6 +6,7 @@ Log.level = LogLevel.None;
 
 // Import units
 import "./util.unit";
+import "./log-serializer.unit";
 
 // Run tests
 Runner.test();

@@ -57,7 +57,7 @@ export class MyCommand extends Command {
     version: "1.0.0"
 })
 class MetaTest {
-    readonly meta!: IFragmentMeta;
+    public readonly meta!: IFragmentMeta;
 }
 
 const instance: MyCommand = new (MyCommand as any)(null as any);

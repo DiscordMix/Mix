@@ -1,5 +1,6 @@
 import BotMessages from "../core/messages";
 import {ITimeMachine, TimeMachine} from "./time-machine";
+import Log from "../core/log";
 
 export interface IStoreAction<T = any> {
     readonly type: number | string;

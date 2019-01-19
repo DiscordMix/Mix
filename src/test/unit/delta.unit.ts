@@ -19,7 +19,7 @@ default class {
         Assert.that(result, Is.array);
         Assert.that(result, Does.haveLength(2));
 
-        // 
+        // Assert results
         Assert.that(result[0], Is.type(JsType.String));
         Assert.that(result[1], Is.type(JsType.String));
     }

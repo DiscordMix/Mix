@@ -14,7 +14,7 @@ import fs from "fs";
 import path from "path";
 import Bot from "./bot";
 import Patterns from "./patterns";
-import {Log} from "..";
+import Log from "./log";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");

@@ -6,8 +6,8 @@ import {Message} from "discord.js";
 import {Title, DebugMode, InternalFragmentsPath} from "./constants";
 import BotMessages from "./messages";
 import Loader, {IPackage} from "../fragments/loader";
-import Util from "./utils";
 import {PromiseOr} from "@atlas/xlib";
+import Util from "./util";
 
 export interface IBotConnector {
     setup(): PromiseOr<this>;

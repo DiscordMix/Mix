@@ -1,6 +1,6 @@
 import Command, {CommandRunner, Type, RestrictGroup} from "../commands/command";
 import {Name, Arguments, Description, Meta} from "../decorators/general";
-import {AttachedLogger, Guard, Connect, DependsOn, attachedLogger, OnEvent} from "../decorators/other";
+import {AttachedLogger, Guard, Connect, DependsOn, attachedLogger} from "../decorators/other";
 import {expect} from "chai";
 import {testBot} from "./test-bot";
 import {Deprecated} from "../decorators/utility";
@@ -9,6 +9,7 @@ import Permission from "../core/permission";
 import {Message} from "discord.js";
 import DiscordEvent from "../core/discord-event";
 import {IFragmentMeta} from "..";
+import {On} from "../decorators/events";
 
 const testConnection: CommandRunner = (x, args): void => {
     //
@@ -39,7 +40,7 @@ export class MyCommand extends Command {
         return false;
     }
 
-    @OnEvent(DiscordEvent.Message)
+    @On(DiscordEvent.Message)
     public onMessage(msg: Message): void {
         //
     }

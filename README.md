@@ -116,16 +116,6 @@ Thanks for your interest in helping in the project. To contribute to this projec
 
 When contributing, please follow the [Semantic Versioning](https://semver.org/) guidelines.
 
-#### Additional Notes
-
-Mix is intended for both serious, large scale and simple, elegant bot development, however it may not be suitable for everyone.
-
-If such is the case, it may be worth considering the following fine alternatives:
-
-[Klasa](https://github.com/dirigeants/klasa) by [Dirigeants](https://github.com/dirigeants)<br />
-[Commando](https://github.com/discordjs/Commando) by [discordjs](https://github.com/discordjs)<br />
-[yamdbf core](https://github.com/yamdbf/core) by [yamdbf team](https://github.com/yamdbf)<br />
-
 #### Helpful Snippets
 
 * Commands
@@ -142,3 +132,13 @@ If such is the case, it may be worth considering the following fine alternatives
     * [Recurring task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#recurring-task)<br />
 * Other
     * [Serializer](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#serializer)<br />
+
+#### Additional Notes
+
+Mix is intended for both serious, large scale and simple, elegant bot development, however it may not be suitable for everyone.
+
+If such is the case, it may be worth considering the following fine alternatives:
+
+[Klasa](https://github.com/dirigeants/klasa) by [Dirigeants](https://github.com/dirigeants)<br />
+[Commando](https://github.com/discordjs/Commando) by [discordjs](https://github.com/discordjs)<br />
+[yamdbf core](https://github.com/yamdbf/core) by [yamdbf team](https://github.com/yamdbf)<br />

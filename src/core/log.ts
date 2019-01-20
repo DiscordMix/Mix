@@ -79,6 +79,10 @@ export default abstract class Log {
         }
     }
 
+    /**
+     * Attempt to log a set of messages.
+     * @param {IComposeOptions[]} history
+     */
     public static playback(history: IComposeOptions[]): void {
         for (const options of history) {
             this.compose(options);
@@ -86,6 +90,7 @@ export default abstract class Log {
     }
 
     /**
+     * Display an information message.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -102,6 +107,7 @@ export default abstract class Log {
     }
 
     /**
+     * Display a success message.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -118,6 +124,7 @@ export default abstract class Log {
     }
 
     /**
+     * Display a warning message.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -134,6 +141,7 @@ export default abstract class Log {
     }
 
     /**
+     * Display an error message. Program will not break.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -152,6 +160,7 @@ export default abstract class Log {
     }
 
     /**
+     * Display a fatal error message. Process will be stopped.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -171,6 +180,7 @@ export default abstract class Log {
     }
 
     /**
+     * Display a verbose message.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -187,6 +197,7 @@ export default abstract class Log {
     }
 
     /**
+     * Display a debug message. Log level must be set to debug.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -202,6 +213,10 @@ export default abstract class Log {
         Log.compose(options);
     }
 
+    /**
+     * Create a not implemented error.
+     * @return {Error}
+     */
     public static get notImplemented(): Error {
         return new Error(BotMessages.NOT_IMPLEMENTED);
     }

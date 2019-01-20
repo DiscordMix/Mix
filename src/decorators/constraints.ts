@@ -1,13 +1,13 @@
 import {DecoratorUtils} from "./decorator-utils";
 import {SpecificConstraints, IConstraints, RestrictGroup} from "../commands/command";
-import ChatEnv from "../core/chat-env";
+import DiscordChatEnv from "../core/discord-chat-env";
 
 export abstract class Constraint {
     /**
      * Restrict command execution to a certain environment.
      * @param env The command execution environment.
      */
-    public static Env(env: ChatEnv): any {
+    public static Env(env: DiscordChatEnv): any {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 

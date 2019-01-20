@@ -1,4 +1,4 @@
-import Log from "../core/log";
+import Log from "../logging/log";
 import DiscordBot from "../bots/discord-bot";
 import Command, {GenericCommand} from "./command";
 import Context from "./command-context";

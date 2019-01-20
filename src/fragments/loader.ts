@@ -1,5 +1,5 @@
 import fs from "fs";
-import Log from "../core/log";
+import Log from "../logging/log";
 import Util from "../core/util";
 import {IFragment} from "./fragment";
 import Patterns from "../core/patterns";
@@ -26,6 +26,7 @@ export interface ILivePackage<T extends IFragment> {
 export default abstract class Loader {
     // TODO: Make use of the 'defaultOnly' parameter
     /**
+     * Load a module
      * @param {string} filePath The path to the file containing fragment
      * @param {boolean} [defaultOnly=false] Whether to only load the default exported module
      * @return {Promise<IPackage | null>}

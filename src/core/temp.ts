@@ -3,7 +3,7 @@ import {Snowflake} from "discord.js";
 import fs from "fs";
 import path from "path";
 import {default as main} from "require-main-filename";
-import Log from "./log";
+import Log from "../logging/log";
 import Util from "./util";
 import {PromiseOr} from "@atlas/xlib";
 

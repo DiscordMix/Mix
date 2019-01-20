@@ -2,9 +2,9 @@ import fs from "fs";
 import Command from "../commands/command";
 import {ReadonlyCommandMap} from "../commands/command-store";
 import DiscordBot from "../bots/discord-bot";
-import {EBotEvents} from "../core/bot-extra";
+import {BotEvent} from "../core/bot-extra";
 import {IDisposable} from "../core/helpers";
-import Log from "../core/log";
+import Log from "../logging/log";
 
 export interface IOptimizer extends IDisposable {
     readonly running: boolean;
@@ -54,7 +54,7 @@ export default class Optimizer implements IOptimizer {
      * @return {this}
      */
     public start(): this {
-        this.bot.on(EBotEvents.Command, (command: Command) => {
+        this.bot.on(BotEvent.Command, (command: Command) => {
             this.commandsUsed.push(command.meta.name);
         });
 
@@ -95,7 +95,7 @@ export default class Optimizer implements IOptimizer {
      * Dispose allocated resources
      */
     public dispose(): void {
-        this.bot.removeListener(EBotEvents.Command, this.start);
+        this.bot.removeListener(BotEvent.Command, this.start);
 
         if (this.processInterval !== null) {
             this.bot.clearInterval(this.processInterval);

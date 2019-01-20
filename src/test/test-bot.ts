@@ -4,7 +4,7 @@ import {Guild, Message, Snowflake, TextChannel} from "discord.js";
 import path from "path";
 import Context from "../commands/command-context";
 import DiscordBot from "../bots/discord-bot";
-import {EBotEvents} from "../core/bot-extra";
+import {BotEvent} from "../core/bot-extra";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
 import DiscordSettings from "../universal/discord/discord-settings";
@@ -12,7 +12,7 @@ import Rgb from "../misc/rgb";
 import Rgba from "../misc/rgba";
 import {ITestState, TestStoreActionType} from "../state/store";
 import List from "../collections/list";
-import Log from "../core/log";
+import Log from "../logging/log";
 
 export const TestSubjects = {
     ids: [
@@ -147,7 +147,7 @@ export let testBot: TestBot = new TestBot({
 
 export async function init(): Promise<void> {
     return new Promise<void>(async (resolve) => {
-        testBot.once(EBotEvents.Ready, () => {
+        testBot.once(BotEvent.Ready, () => {
             resolve();
         });
 

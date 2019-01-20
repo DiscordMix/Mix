@@ -1,4 +1,5 @@
-import Log, {LogLevel} from "../core/log";
+import Log from "../logging/log";
+import LogLevel from "../logging/log-level";
 
 // Supress output
 Log.level = LogLevel.None;

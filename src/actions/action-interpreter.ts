@@ -5,7 +5,7 @@ import {EventEmitter} from "events";
 import Context from "../commands/command-context";
 import PaginatedMessage from "../pagination/paginated-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
-import Log from "../core/log";
+import Log from "../logging/log";
 import Util from "../core/util";
 import {PromiseOr} from "@atlas/xlib";
 

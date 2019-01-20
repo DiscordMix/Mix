@@ -1,5 +1,5 @@
 import DiscordBot from "../bots/discord-bot";
-import Log from "../core/log";
+import Log from "../logging/log";
 import Util from "../core/util";
 import Loader, {IPackage} from "../fragments/loader";
 import Task from "./task";

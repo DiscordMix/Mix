@@ -1,8 +1,8 @@
 import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
 import {IAction} from "../actions/action";
-import {EBotEvents} from "../core/bot-extra";
-import ChatEnv from "../core/chat-env";
-import Log from "../core/log";
+import {BotEvent} from "../core/bot-extra";
+import DiscordChatEnv from "../core/discord-chat-env";
+import Log from "../logging/log";
 import Util from "../core/util";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./command-context";
@@ -144,22 +144,22 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {ChatEnv} environment
+     * @param {DiscordChatEnv} environment
      * @param {string} type
      * @param {boolean} nsfw
      * @return {boolean}
      */
-    public static validateChannelTypeEnv(environment: ChatEnv, type: string, nsfw: boolean): boolean {
-        if (environment === ChatEnv.Anywhere) {
+    public static validateChannelTypeEnv(environment: DiscordChatEnv, type: string, nsfw: boolean): boolean {
+        if (environment === DiscordChatEnv.Anywhere) {
             return true;
         }
-        else if (environment === ChatEnv.Private && type === "dm") {
+        else if (environment === DiscordChatEnv.Private && type === "dm") {
             return true;
         }
-        else if (environment === ChatEnv.NSFW && type === "text") {
+        else if (environment === DiscordChatEnv.NSFW && type === "text") {
             return true;
         }
-        else if (environment === ChatEnv.Guild && type === "text") {
+        else if (environment === DiscordChatEnv.Guild && type === "text") {
             return true;
         }
 
@@ -167,11 +167,11 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {ChatEnv|ChatEnv[]} environment
+     * @param {DiscordChatEnv|DiscordChatEnv[]} environment
      * @param {string} channelType
      * @return {boolean}
      */
-    public static validateEnv(environment: ChatEnv, channelType: string, nsfw: boolean): boolean {
+    public static validateEnv(environment: DiscordChatEnv, channelType: string, nsfw: boolean): boolean {
         if (Array.isArray(environment)) {
             // TODO: CRITICAL: Pointless loop?
             for (const env of environment) {
@@ -312,7 +312,7 @@ export default class CommandHandler implements ICommandHandler {
                 connection(context, resolvedArgs, command);
             }
 
-            context.bot.emit(EBotEvents.Command, command, context, result);
+            context.bot.emit(BotEvent.Command, command, context, result);
 
             if (context.bot.options.autoDeleteCommands && context.msg.deletable) {
                 await context.msg.delete();

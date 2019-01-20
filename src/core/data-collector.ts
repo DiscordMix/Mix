@@ -1,5 +1,5 @@
 import {Guild, GuildMember} from "discord.js";
-import Log from "./log";
+import Log from "../logging/log";
 
 export enum MemberDataType {
     Username,

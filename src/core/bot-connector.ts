@@ -1,7 +1,7 @@
-import Log from "./log";
+import Log from "../logging/log";
 import DiscordEvent from "./discord-event";
 import DiscordBot from "../bots/discord-bot";
-import {BotState, EBotEvents} from "./bot-extra";
+import {BotState, BotEvent} from "./bot-extra";
 import {Message} from "discord.js";
 import {Title, DebugMode, InternalFragmentsPath} from "./constants";
 import BotMessages from "./messages";
@@ -27,7 +27,7 @@ export default class BotConnector implements IBotConnector {
      * @return {Promise<this>}
      */
     public async setup(): Promise<this> {
-        this.bot.emit(EBotEvents.SetupStart);
+        this.bot.emit(BotEvent.SetupStart);
 
         if (this.bot.options.asciiTitle) {
             console.log("\n" + Title.replace("{version}", "beta") + "\n");
@@ -51,7 +51,7 @@ export default class BotConnector implements IBotConnector {
         }
 
         Log.verbose("Attempting to load internal fragments");
-        this.bot.emit(EBotEvents.LoadingInternalFragments);
+        this.bot.emit(BotEvent.LoadingInternalFragments);
 
         // Load & enable internal fragments
         const internalFragmentCandidates: string[] | null = await Loader.scan(InternalFragmentsPath);
@@ -83,8 +83,8 @@ export default class BotConnector implements IBotConnector {
             }
         }
 
-        this.bot.emit(EBotEvents.LoadedInternalFragments, internalFragments || []);
-        this.bot.emit(EBotEvents.LoadingServices);
+        this.bot.emit(BotEvent.LoadedInternalFragments, internalFragments || []);
+        this.bot.emit(BotEvent.LoadingServices);
 
         // Load & enable services
         const consumerServiceCandidates: string[] | null = await Loader.scan(this.bot.settings.paths.services);
@@ -110,8 +110,8 @@ export default class BotConnector implements IBotConnector {
         // TODO: Returns amount of enabled services
         await this.bot.services.startAll();
 
-        this.bot.emit(EBotEvents.LoadedServices);
-        this.bot.emit(EBotEvents.LoadingCommands);
+        this.bot.emit(BotEvent.LoadedServices);
+        this.bot.emit(BotEvent.LoadingCommands);
 
         // Load & enable consumer command fragments
         const consumerCommandCandidates: string[] | null = await Loader.scan(this.bot.settings.paths.commands);
@@ -161,7 +161,7 @@ export default class BotConnector implements IBotConnector {
             Log.verbose(BotMessages.SETUP_NO_TASKS_FOUND);
         }
 
-        this.bot.emit(EBotEvents.LoadedCommands);
+        this.bot.emit(BotEvent.LoadedCommands);
 
         if (this.bot.options.optimizer) {
             Log.verbose(BotMessages.SETUP_START_OPTIMIZER);
@@ -205,7 +205,7 @@ export default class BotConnector implements IBotConnector {
 
             Log.success(`Ready | Took ${took}ms | PID ${process.pid}`);
             this.bot.setState(BotState.Connected);
-            this.bot.emit(EBotEvents.Ready);
+            this.bot.emit(BotEvent.Ready);
         });
 
         this.bot.client.on(DiscordEvent.Message, this.bot.handleMessage.bind(this));

@@ -14,10 +14,10 @@ Mix (previously known as Forge) is a powerful, modular and extensible Discord bo
 
 #### Useful Links
 
-=> [View the NPM package](https://www.npmjs.com/package/@cloudrex/forge)<br />
-=> [View the documentation](https://cloudrex.gitbook.io/forge/) (**Still being written**)<br />
-=> [View CLI utility on NPM](https://www.npmjs.com/package/d.mix.cli)<br />
-=> [Example bot](https://github.com/discord-mix/example-bot)<br />
+* [View the NPM package](https://www.npmjs.com/package/@cloudrex/forge)<br />
+* [View the documentation](https://cloudrex.gitbook.io/forge/) (**Still being written**)<br />
+* [View CLI utility on NPM](https://www.npmjs.com/package/d.mix.cli)<br />
+* [Example bot](https://github.com/discord-mix/example-bot)<br />
 
 ## 🍭 Quick Start with the CLI utility (recommended)
 

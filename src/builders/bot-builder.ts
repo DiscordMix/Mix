@@ -1,6 +1,6 @@
-import Bot from "../core/bot";
+import DiscordBot from "../bots/discord-bot";
 import {IBot} from "../core/bot-extra";
-import Settings from "../core/settings";
+import DiscordSettings from "../universal/discord/discord-settings";
 import {IBuilder} from "./builder";
 
 export interface IBotBuilder extends IBuilder<IBot> {
@@ -9,7 +9,7 @@ export interface IBotBuilder extends IBuilder<IBot> {
     internalCommands(internalCommands: string[]): this;
     argumentTypes(argumentTypes: any): this;
     prefixCommand(prefixCommand: boolean): this;
-    settings(settings: Settings): this;
+    settings(settings: DiscordSettings): this;
 }
 
 export default class BotBuilder implements IBotBuilder {
@@ -74,20 +74,20 @@ export default class BotBuilder implements IBotBuilder {
     }
 
     /**
-     * @param {Settings} settings
+     * @param {DiscordSettings} settings
      * @return {BotBuilder}
      */
-    public settings(settings: Settings): this {
+    public settings(settings: DiscordSettings): this {
         this.bot.settings = settings;
 
         return this;
     }
 
     /**
-     * @return {Bot}
+     * @return {DiscordBot}
      */
     public build(): IBot {
         // TODO:
-        return new Bot(this.bot);
+        return new DiscordBot(this.bot);
     }
 }

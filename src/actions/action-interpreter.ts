@@ -1,4 +1,4 @@
-import Bot from "../core/bot";
+import DiscordBot from "../bots/discord-bot";
 import {IAction, ActionType} from "./action";
 import {Snowflake, Channel, TextChannel, Guild, User, RichEmbed, Message} from "discord.js";
 import {EventEmitter} from "events";
@@ -37,7 +37,7 @@ export interface IEmbedActionArgs {
 export interface IPaginatedActionArgs {
     readonly message: string;
     readonly inputMessage: Message;
-    readonly bot: Bot;
+    readonly bot: DiscordBot;
     readonly context: Context;
 }
 
@@ -57,13 +57,13 @@ export interface IActionInterpreter extends EventEmitter {
  * @extends EventEmitter
  */
 export default class ActionInterpreter extends EventEmitter implements IActionInterpreter {
-    protected readonly bot: Bot;
+    protected readonly bot: DiscordBot;
 
-    public constructor(bot: Bot) {
+    public constructor(bot: DiscordBot) {
         super();
 
         /**
-         * @type {Bot}
+         * @type {DiscordBot}
          * @protected
          * @readonly
          */

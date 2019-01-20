@@ -1,12 +1,10 @@
 import {Dictionary} from "@atlas/xlib";
 import {Guild} from "discord.js";
-import {EventEmitter} from "events";
-import {Snowflake} from "./bot-extra";
-import DiscordEvent from "./discord-event";
+import {Snowflake} from "../../core/bot-extra";
+import DiscordEvent from "../../core/discord-event";
+import {IUniversalClient, EventEmitterListener, IEventEmitter} from "../universal-client";
 
-export type EventEmitterListener = (...args: any[]) => void;
-
-export interface IClient extends EventEmitter {
+export interface IDiscordClient extends IEventEmitter<DiscordEvent>, IUniversalClient {
     readonly guilds: Dictionary<Snowflake, Guild>;
 
     on(event: DiscordEvent, listener: EventEmitterListener): this;

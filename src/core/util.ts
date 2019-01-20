@@ -12,7 +12,7 @@ import {
 
 import fs from "fs";
 import path from "path";
-import Bot from "./bot";
+import DiscordBot from "../bots/discord-bot";
 import Patterns from "./patterns";
 import Log from "./log";
 
@@ -128,7 +128,7 @@ export default abstract class Util {
     }
 
     // TODO: Needs testing
-    public static createTimedAction<ReturnType = any>(bot: Bot, action: () => ReturnType, timeout: number, timeoutResult: ReturnType | any): Promise<ReturnType> {
+    public static createTimedAction<ReturnType = any>(bot: DiscordBot, action: () => ReturnType, timeout: number, timeoutResult: ReturnType | any): Promise<ReturnType> {
         return new Promise(async (resolve) => {
             // TODO: Is this required?
             let stopFlag: boolean = false;

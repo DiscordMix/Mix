@@ -1,6 +1,6 @@
 import {Message} from "discord.js";
 import {EventEmitter} from "events";
-import Bot from "../core/bot";
+import DiscordBot from "../bots/discord-bot";
 import {IDisposable} from "../core/helpers";
 import Log from "../core/log";
 
@@ -49,12 +49,12 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
     }
 
     /**
-     * @param {Bot} bot
+     * @param {DiscordBot} bot
      * @param {Message} message
      * @param {string} [placeholder="*"]
      * @return {this}
      */
-    public attach(bot: Bot, message: Message, placeholder: string = "*"): this {
+    public attach(bot: DiscordBot, message: Message, placeholder: string = "*"): this {
         if (message.author.id !== bot.client.user.id) {
             Log.warn("Refusing to attach to foreign message");
 

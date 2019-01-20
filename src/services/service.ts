@@ -1,4 +1,4 @@
-import Bot from "../core/bot";
+import DiscordBot from "../bots/discord-bot";
 import DiscordEvent from "../core/discord-event";
 import {GenericService, IService, IServiceOptions} from "./generic-service";
 import {IFragmentMeta} from "../fragments/fragment";
@@ -11,7 +11,7 @@ export default abstract class Service extends GenericService implements IService
 
     public readonly listeners: Map<DiscordEvent, any>;
 
-    protected readonly bot: Bot;
+    protected readonly bot: DiscordBot;
 
     /**
      * @todo Just accept bot and api, no need for Options obj
@@ -21,7 +21,7 @@ export default abstract class Service extends GenericService implements IService
         super();
 
         /**
-         * @type {Bot}
+         * @type {DiscordBot}
          * @readonly
          */
         this.bot = options.bot;

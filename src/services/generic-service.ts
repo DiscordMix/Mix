@@ -1,4 +1,4 @@
-import Bot from "../core/bot";
+import DiscordBot from "../bots/discord-bot";
 import {IDisposable} from "../core/helpers";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import DiscordEvent from "../core/discord-event";
@@ -24,7 +24,7 @@ export interface IRawProcessMsg<T = any> {
 }
 
 export interface IServiceOptions {
-    readonly bot: Bot;
+    readonly bot: DiscordBot;
     readonly lib?: any;
 }
 

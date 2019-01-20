@@ -2,7 +2,7 @@ import ChatEnv from "../core/chat-env";
 import Context, {IContext} from "./command-context";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
-import Bot from "../core/bot";
+import DiscordBot from "../bots/discord-bot";
 import {IDisposable} from "../core/helpers";
 import {PromiseOr} from "@atlas/xlib";
 
@@ -142,11 +142,11 @@ export abstract class GenericCommand<T extends object = object> implements IGene
     public readonly dependsOn: string[] = [];
     public readonly guards: CommandGuard[] = [];
 
-    protected readonly bot: Bot;
+    protected readonly bot: DiscordBot;
 
-    protected constructor(bot: Bot) {
+    protected constructor(bot: DiscordBot) {
         /**
-         * @type {Bot}
+         * @type {DiscordBot}
          * @protected
          * @readonly
          */

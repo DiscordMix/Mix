@@ -2,7 +2,7 @@ import {ChildProcess, fork} from "child_process";
 import {EventEmitter} from "events";
 import fs from "fs";
 import path from "path";
-import Bot from "../core/bot";
+import DiscordBot from "../bots/discord-bot";
 import Log from "../core/log";
 import Util from "../core/util";
 import {IGenericService, IProcessMsg, IRawProcessMsg, ProcessMsgType} from "./generic-service";
@@ -38,19 +38,19 @@ export interface IServiceManager extends EventEmitter {
 export default class ServiceManager extends EventEmitter implements IServiceManager {
     public static heartbeatTimeout: number = 6000;
 
-    protected readonly bot: Bot;
+    protected readonly bot: DiscordBot;
     protected readonly services: ServiceMap;
     protected readonly forkedServices: Map<string, ChildProcess>;
     protected readonly forkHeartbeats: Map<string, NodeJS.Timeout>;
 
     /**
-     * @param {Bot} bot
+     * @param {DiscordBot} bot
      */
-    public constructor(bot: Bot) {
+    public constructor(bot: DiscordBot) {
         super();
 
         /**
-         * @type {Bot}
+         * @type {DiscordBot}
          * @protected
          * @readonly
          */

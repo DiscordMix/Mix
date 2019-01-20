@@ -3,13 +3,13 @@ import Discord from "discord.js";
 import EmbedBuilder from "../builders/embed-builder";
 import MsgBuilder from "../builders/msg-builder";
 import EditableMessage from "../message/editable-message";
-import Bot from "./bot";
+import DiscordBot from "../bots/discord-bot";
 import Log from "./log";
 import Util from "./util";
 
 export interface IResponseHelper {
     readonly channel: TextChannel;
-    readonly bot: Bot;
+    readonly bot: DiscordBot;
     readonly sender: User;
 
     fileStream(stream: any, name: string): Promise<EditableMessage | null>;
@@ -23,10 +23,10 @@ export interface IResponseHelper {
 
 export default class ResponseHelper implements IResponseHelper {
     public readonly channel: TextChannel;
-    public readonly bot: Bot;
+    public readonly bot: DiscordBot;
     public readonly sender: User;
 
-    public constructor(channel: TextChannel, bot: Bot, sender: User) {
+    public constructor(channel: TextChannel, bot: DiscordBot, sender: User) {
         /**
          * @type {TextChannel}
          * @readonly
@@ -34,7 +34,7 @@ export default class ResponseHelper implements IResponseHelper {
         this.channel = channel;
 
         /**
-         * @type {Bot}
+         * @type {DiscordBot}
          * @readonly
          */
         this.bot = bot;

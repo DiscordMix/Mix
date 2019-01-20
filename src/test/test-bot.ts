@@ -3,11 +3,11 @@ require("dotenv").config();
 import {Guild, Message, Snowflake, TextChannel} from "discord.js";
 import path from "path";
 import Context from "../commands/command-context";
-import Bot from "../core/bot";
+import DiscordBot from "../bots/discord-bot";
 import {EBotEvents} from "../core/bot-extra";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
-import Settings from "../core/settings";
+import DiscordSettings from "../universal/discord/discord-settings";
 import Rgb from "../misc/rgb";
 import Rgba from "../misc/rgba";
 import {ITestState, TestStoreActionType} from "../state/store";
@@ -73,7 +73,7 @@ else if (!testGuildChannelId) {
     throw Log.error(BotMessages.TEST_EXPECT_CHANNEL);
 }
 
-export default class TestBot extends Bot<ITestState, TestStoreActionType> {
+export default class TestBot extends DiscordBot<ITestState, TestStoreActionType> {
     public static testGuild: Guild;
     public static testChannel: TextChannel;
 
@@ -137,7 +137,7 @@ export default class TestBot extends Bot<ITestState, TestStoreActionType> {
 }
 
 export let testBot: TestBot = new TestBot({
-    settings: new Settings({
+    settings: new DiscordSettings({
         general: {
             prefix: ["!"],
             token

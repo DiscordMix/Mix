@@ -1,5 +1,5 @@
 import path from "path";
-import {ISettingsPaths} from "./settings";
+import {IDiscordSettingsPaths} from "../universal/discord/discord-settings";
 
 export interface IPathResolver {
     command(name: string): string;
@@ -13,9 +13,9 @@ export default class PathResolver implements IPathResolver {
         return path.resolve(path.join(...paths));
     }
 
-    protected paths: ISettingsPaths;
+    protected paths: IDiscordSettingsPaths;
 
-    public constructor(paths: ISettingsPaths) {
+    public constructor(paths: IDiscordSettingsPaths) {
         this.paths = paths;
     }
 

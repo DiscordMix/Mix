@@ -25,7 +25,7 @@ Get started quickly with your next Discord bot project by using our CLI tool!
 
 To install and create a template bot in seconds, issue the following commands:
 
-```bash
+```shell
 # Install the CLI utility
 $ npm install --global d.mix.cli
 $ mix new bot
@@ -49,7 +49,7 @@ Congratulations, you are now ready to begin creating your next masterpiece.
 
 To incorporate Mix into an existing project, simply issue the following command:
 
-```bash
+```shell
 $ npm install --save d.mix
 ```
 

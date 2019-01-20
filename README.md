@@ -89,7 +89,7 @@ Make sure that you have installed the project dependencies (`npm install` or `ya
             * Mentions (users, channels, etc.)
             * Booleans ("yes", "no", "false", "true", etc.)
     * "Constraints" to limit execution
-        * Cooldowns
+            * Cooldowns
         * Server permissions (both bot & issuer)
         * Chat environemnt (NSFW, DMs, etc.)
         * Specifics (guild(s), channel(s), member(s), role(s), etc.)
@@ -128,13 +128,17 @@ If such is the case, it may be worth considering the following fine alternatives
 
 #### Helpful Snippets
 
-[Command](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#command)<br />
-[Command with arguments](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#command-with-arguments)<br />
-[Service](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service)<br />
-[Service with event handling](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-with-event-handling)<br />
-[Service handling multiple events with the same action](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-handling-multiple-events-with-the-same-action)<br />
-[Service with disposable resources](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-with-disposable-resources)<br />
-[Forked service](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#forked-service)<br />
-[Task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#task)<br />
-[Recurring task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#recurring-task)<br />
-[Serializer](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#serializer)<br />
+* Commands
+    * [Command](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#command)<br />
+    * [Command with arguments](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#command-with-arguments)<br />
+* Services
+    * [Service](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service)<br />
+    * [Service with event handling](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-with-event-handling)<br />
+    * [Service handling multiple events with the same action](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-handling-multiple-events-with-the-same-action)<br />
+    * [Service with disposable resources](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-with-disposable-resources)<br />
+    * [Forked service](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#forked-service)<br />
+* Tasks
+    * [Task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#task)<br />
+    * [Recurring task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#recurring-task)<br />
+* Other
+    * [Serializer](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#serializer)<br />

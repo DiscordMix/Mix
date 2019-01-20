@@ -122,30 +122,19 @@ Mix is intended for both serious, large scale and simple, elegant bot developmen
 
 If such is the case, it may be worth considering the following fine alternatives:
 
-[Klasa](https://github.com/dirigeants/klasa) by [Dirigeants](https://github.com/dirigeants)
-
-[Commando](https://github.com/discordjs/Commando) by [discordjs](https://github.com/discordjs)
-
-[yamdbf core](https://github.com/yamdbf/core) by [yamdbf team](https://github.com/yamdbf)
+[Klasa](https://github.com/dirigeants/klasa) by [Dirigeants](https://github.com/dirigeants)<br />
+[Commando](https://github.com/discordjs/Commando) by [discordjs](https://github.com/discordjs)<br />
+[yamdbf core](https://github.com/yamdbf/core) by [yamdbf team](https://github.com/yamdbf)<br />
 
 #### Helpful Snippets
 
-[Command](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#command)
-
-[Command with arguments](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#command-with-arguments)
-
-[Service](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service)
-
-[Service with event handling](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-with-event-handling)
-
-[Service handling multiple events with the same action](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-handling-multiple-events-with-the-same-action)
-
-[Service with disposable resources](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-with-disposable-resources)
-
-[Forked service](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#forked-service)
-
-[Task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#task)
-
-[Recurring task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#recurring-task)
-
-[Serializer](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#serializer)
+[Command](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#command)<br />
+[Command with arguments](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#command-with-arguments)<br />
+[Service](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service)<br />
+[Service with event handling](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-with-event-handling)<br />
+[Service handling multiple events with the same action](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-handling-multiple-events-with-the-same-action)<br />
+[Service with disposable resources](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#service-with-disposable-resources)<br />
+[Forked service](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#forked-service)<br />
+[Task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#task)<br />
+[Recurring task](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#recurring-task)<br />
+[Serializer](https://github.com/discord-mix/mix/blob/dev-2.0/EXAMPLES.MD#serializer)<br />

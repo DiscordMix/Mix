@@ -59,6 +59,7 @@ export default abstract class Util {
     ];
 
     /**
+     * Strip a snowflake into it's bare ID.
      * @param {string} mention
      * @return {string}
      */
@@ -104,6 +105,12 @@ export default abstract class Util {
         return result.join("");
     }
 
+    /**
+     * Determine the percentage of the input value compared to its max value.
+     * @param amount
+     * @param max
+     * @return {number} The percentage.
+     */
     public static percentOf(amount: number, max: number): number {
         if (amount < 0 || max < 0) {
             throw Log.error("Expecting parameters to be neutral or positive numbers");
@@ -140,9 +147,10 @@ export default abstract class Util {
     }
 
     /**
-     * @param {number} min The minimum amount
-     * @param {number} max The maximum amount
-     * @return {number} The random number
+     * Generate a random number between a range.
+     * @param {number} min The minimum amount.
+     * @param {number} max The maximum amount.
+     * @return {number} The generated random number.
      */
     public static getRandomInt(min: number, max: number): number {
         if (typeof min !== "number" || typeof max !== "number" || min > max || min === max) {
@@ -153,10 +161,10 @@ export default abstract class Util {
     }
 
     /**
-     * Performs the binary search algorithm on the host array
+     * Performs the binary search algorithm on the host array.
      * @param {number[]} subject
      * @param {number[]} host
-     * @return {IBinarySearchResult}
+     * @return {IBinarySearchResult} An object containing the results of the operation.
      */
     public static binarySearch(subject: number, host: number[]): IBinarySearchResult {
         if (typeof subject !== "number" || !Array.isArray(host)) {
@@ -225,8 +233,9 @@ export default abstract class Util {
     }
 
     /**
-     * Creates an array of numbers
-     * @param {number} amount The amount of elements
+     * Creates an array of numbers.
+     * @param {number} amount The amount of elements.
+     * @return {number[]} The generated array.
      */
     public static populate(amount: number): number[] {
         if (typeof amount !== "number") {
@@ -245,7 +254,7 @@ export default abstract class Util {
     /**
      * Determine whether an object or string is empty or missing value
      * @param {*} input
-     * @return {boolean}
+     * @return {boolean} Whether the input is empty.
      */
     public static isEmpty(input: any): boolean {
         return input === undefined
@@ -258,7 +267,7 @@ export default abstract class Util {
     /**
      * @param {string} directory The directory to scan
      * @param {boolean} [absolutePath=false] Whether to return the absolute path of the files
-     * @return {Promise<string[] | null>}
+     * @return {Promise<string[] | null>} The list of files or null of the directory does not exist.
      */
     public static getFiles(directory: string, absolutePath: boolean = false): Promise<string[] | null> {
         return new Promise((resolve) => {
@@ -289,8 +298,9 @@ export default abstract class Util {
     }
 
     /**
-     * @param {Array<*>} array The array to shuffle
-     * @return {Array<*>} The shuffled array
+     * Shuffle the items of an array into random positions.
+     * @param {Array<*>} array The array to shuffle.
+     * @return {Array<*>} The shuffled array.
      */
     public static shuffle(array: any[]): any[] {
         if (!Array.isArray(array)) {
@@ -321,7 +331,7 @@ export default abstract class Util {
     }
 
     /**
-     * @todo Return type
+     * Send a formatted embed message to the specified channel.
      * @param {ISendOptions} options
      * @return {Promise<Message>} The message sent
      */
@@ -350,6 +360,7 @@ export default abstract class Util {
     }
 
     /**
+     * Compute the string representation of the provided past timestamp.
      * @param {number} timestamp
      * @param {boolean} [capitalize=true] Whether to capitalize the time
      * @return {string}
@@ -381,6 +392,7 @@ export default abstract class Util {
     }
 
     /**
+     * Write data into a JSON file.
      * @param {string} filePath
      * @param {*} data
      * @return {Promise<void>}
@@ -398,6 +410,7 @@ export default abstract class Util {
     }
 
     /**
+     * Read data from a JSON file.
      * @param {string} filePath
      * @return {Promise<ReturnType>} The data from the specified path
      */
@@ -427,6 +440,7 @@ export default abstract class Util {
     }
 
     /**
+     * Write data into a JSON file synchronously.
      * @param {string} filePath
      * @param {*} data
      * @return {boolean}
@@ -443,6 +457,7 @@ export default abstract class Util {
 
     /**
      * @todo Check for errors
+     * Read data from a JSON file synchronously.
      * @param {string} filePath
      * @return {ReturnType | null}
      */
@@ -459,6 +474,7 @@ export default abstract class Util {
     }
 
     /**
+     * Retrive Mix's current package version.
      * @return {Promise<string>}
      */
     public static async getMixVersion(): Promise<string> {
@@ -470,6 +486,7 @@ export default abstract class Util {
     }
 
     /**
+     * Determine if input text mentions input snowflake.
      * @param {string} text
      * @param {Snowflake} userId
      * @return {boolean}
@@ -498,7 +515,7 @@ export default abstract class Util {
     }
 
     /**
-     * Uses random number generation to assert chance
+     * Uses random number generation to assert chance.
      * @param {number} range
      * @return {boolean}
      */
@@ -511,7 +528,7 @@ export default abstract class Util {
     }
 
     /**
-     * Determine if a guild member has moderation powers such as managing messages and/or kicking members
+     * Determine if a guild member has moderation powers such as managing messages and/or kicking members.
      * @param {GuildMember} member
      * @return {boolean}
      */
@@ -526,6 +543,7 @@ export default abstract class Util {
     }
 
     /**
+     * Attempt to find a guild channel by name.
      * @param {Guild} guild
      * @param {string} name
      * @param {boolean} [textChannel=true]
@@ -556,7 +574,7 @@ export default abstract class Util {
     }
 
     /**
-     * Attempt to find a default or general channel in the specified guild
+     * Attempt to find a default or general channel in the specified guild.
      * @param {Guild} guild
      * @returns {TextChannel | null}
      */
@@ -595,6 +613,7 @@ export default abstract class Util {
     }
 
     /**
+     * Trim a string.
      * @param {string} text
      * @param {number} [maxLength=30]
      * @param {string} [suffix=" ..."]
@@ -609,7 +628,7 @@ export default abstract class Util {
     }
 
     /**
-     * Determine the guild owners by searching for members with the MANAGE_GUILD permission
+     * Determine the guild owners by searching for members with the MANAGE_GUILD permission.
      * @param {Guild} guild
      * @return {GuildMember[]} The owners of the guild
      */
@@ -618,7 +637,7 @@ export default abstract class Util {
     }
 
     /**
-     * Extract the object keys of a TypeScript enum
+     * Extract the object keys of a TypeScript enum.
      * @param {*} enumerator
      * @return {string[]}
      */
@@ -627,7 +646,7 @@ export default abstract class Util {
     }
 
     /**
-     * Filter mentions and embeds from a message
+     * Filter mentions and embeds from a message.
      * @param {Message} message
      * @param {string} token
      * @return {string}
@@ -651,10 +670,10 @@ export default abstract class Util {
     }
 
     /**
-     * Clean a string from mentions and tokens
+     * Clean a string from mentions and tokens.
      * @param {string} text
      * @param {string} token
-     * @return {string} The escaped text
+     * @return {string} The escaped text.
      */
     public static escapeText(text: string, token: string): string {
         if (!text || !token || typeof text !== "string" || typeof token !== "string") {
@@ -707,11 +726,11 @@ export default abstract class Util {
     }
 
     /**
-     * Hash a snowflake into a unique, persistent number
+     * Hash a snowflake into a unique, persistent number.
      * @param {Snowflake} id
      * @param {number} max
      * @param {number} [precision=6]
-     * @return {number} A number lower or equal to the max
+     * @return {number} A number lower or equal to the max.
      */
     public static hash(id: Snowflake, max: number, precision: number = 6): number {
         return parseInt(id.substr(0, precision)) % max;

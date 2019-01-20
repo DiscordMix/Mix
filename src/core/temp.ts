@@ -15,7 +15,7 @@ export interface ITemp {
 }
 
 /**
- * Allows management of temporary data storage
+ * Allows management of temporary data storage.
  */
 export default class Temp implements ITemp {
     /**
@@ -64,7 +64,7 @@ export default class Temp implements ITemp {
     }
 
     /**
-     * Create the temp folder for the bot
+     * Create the temp folder for the bot.
      * @return {Promise<this>}
      */
     public async create(): Promise<this> {
@@ -95,6 +95,7 @@ export default class Temp implements ITemp {
     }
 
     /**
+     * Clear all files and folders until the temp directory.
      * @todo: Return type
      * @return {Promise<this>}
      */
@@ -110,9 +111,9 @@ export default class Temp implements ITemp {
     }
 
     /**
-     * Write data in JSON into a file in the temp folder for the bot
+     * Write data in JSON into a file in the temp folder for the bot.
      * @param {*} data
-     * @param {string} file The file in which to store the data
+     * @param {string} file The file in which to store the data.
      * @return {Promise<void>}
      */
     public async store(data: any, file: string): Promise<this> {

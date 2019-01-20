@@ -2,12 +2,15 @@ import Command, {CommandRunner, CommandRelay, IGenericCommand} from "../commands
 import {DecoratorUtils} from "./decorator-utils";
 import Context from "../commands/command-context";
 import Log from "../core/log";
-import DiscordEvent from "../core/discord-event";
 
 export const attachedLogger: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
     Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${$.sender.tag}`);
 };
 
+/**
+ * Attach an execution logger for debugging purposes.
+ * @param {CommandRelay[]} relays
+ */
 export function AttachedLogger(...relays: CommandRelay[]): any {
     if (relays.length === 0) {
         relays = [attachedLogger];
@@ -23,7 +26,7 @@ export function AttachedLogger(...relays: CommandRelay[]): any {
 }
 
 /**
- * Methods that will be executed after successful command execution
+ * Methods that will be executed after successful command execution.
  * @param {CommandRelay[]} relays
  * @return {*}
  */
@@ -38,7 +41,7 @@ export function Connect(...relays: CommandRelay[]): any {
 }
 
 /**
- * Specify the required registered services required by this command
+ * Specify the required registered services required by this command.
  * @param {string[]} services
  * @return {*}
  */
@@ -53,7 +56,7 @@ export function DependsOn(...services: string[]): any {
 }
 
 /**
- * Methods that serve as pre-requisites for execution
+ * Methods that serve as pre-requisites for execution.
  * @param {string[]} guards
  * @return {*}
  */

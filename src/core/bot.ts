@@ -39,32 +39,6 @@ import {Action} from "@atlas/automata";
 import BotConnector from "./bot-connector";
 import CommandRegistry from "../commands/command-store";
 
-/**
- * Bot events:
- *
- * - setupStart()
- * - loadInternalFragments()
- * - loadedInternalFragments(Fragment[]?)
- * - loadServices()
- * - loadedServices()
- * - loadCommands()
- * - loadedCommands()
- * - ready()
- * - handleMessageStart()
- * - handleMessageEnd()
- * - handleCommandMessageStart(Discord.Message, string)
- * - handleCommandMessageEnd(Discord.Message, string)
- * - restartStart(boolean)
- * - restartCompleted(boolean)
- * - disconnecting()
- * - disconnected()
- * - clearingTemp()
- * - clearedTemp()
- * - handlingCommand(CommandContext, Command, Arguments Object)
- * - commandError(Error)
- * - commandExecuted(CommandExecutedEvent, command result (any))
- */
-
 // TODO: Should emit an event when state changes
 /**
  * @extends EventEmitter
@@ -151,12 +125,14 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         /**
+         * Stores immutable data and handles events.
          * @type {Store}
          * @readonly
          */
         this.store = new Store<TState, TActionType>(options.initialState, options.reducers);
 
         /**
+         * The current state of connection of the bot.
          * @type {BotState}
          * @readonly
          */
@@ -169,13 +145,15 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.settings = options.settings;
 
         /**
+         * Utility to resolve file and directory paths.
          * @type {PathResolver}
          * @readonly
          */
         this.paths = new PathResolver(this.settings.paths);
 
         /**
-         * @todo Temporary hard-coded user id
+         * Access the bot's temporary file storage.
+         * @todo Temporary hard-coded user ID.
          * @type {Temp}
          * @readonly
          */
@@ -188,12 +166,14 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.client = new Discord.Client();
 
         /**
+         * Provides management of services.
          * @type {ServiceManager}
          * @readonly
          */
         this.services = new ServiceManager(this);
 
         /**
+         * Command storage.
          * @type {CommandRegistry}
          * @readonly
          */
@@ -226,6 +206,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         /**
+         * Intercepts and handles command executions.
          * @type {CommandHandler}
          * @readonly
          */
@@ -236,18 +217,21 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         });
 
         /**
+         * Provides functionality for CLI input.
          * @type {ConsoleInterface}
          * @readonly
          */
         this.console = new ConsoleInterface();
 
         /**
+         * Whether the built-in prefix command should be used.
          * @type {boolean}
          * @readonly
          */
         this.prefixCommand = options.prefixCommand || true;
 
         /**
+         * The internal commands to load.
          * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded?
          * @type {InternalCommand[]}
          * @readonly
@@ -281,38 +265,40 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.userGroups = options.userGroups || [];
 
         /**
+         * The owner of the bot's snowflake ID.
          * @type {Snowflake | undefined}
          * @readonly
          */
         this.owner = options.owner;
 
         /**
-         * Localization
+         * Localization provider.
          * @type {Language | undefined}
          * @readonly
          */
         this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
 
         /**
+         * The languages to be loaded and enabled for localization.
          * @type {string[] | undefined}
          * @readonly
          */
         this.languages = options.languages;
 
         /**
-         * Whether the bot is suspended
+         * Whether the bot is currently suspended.
          * @type {boolean}
          */
         this.suspended = false;
 
         /**
-         * Used for measuring interaction with the bot
+         * Used for measuring interaction with the bot.
          * @type {StatCounter}
          */
         this.statCounter = new StatCounter();
 
         /**
-         * A list of disposable objects
+         * A list that keeps track of disposable objects and classes.
          * @type {IDisposable[]}
          * @protected
          * @readonly
@@ -326,42 +312,42 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.actionInterpreter = new ActionInterpreter(this);
 
         /**
-         * Task manager for managing tasks
+         * Task management class.
          * @type {TaskManager}
          * @readonly
          */
         this.tasks = new TaskManager(this);
 
         /**
-         * A list of attached timeouts
+         * A list of attached timeouts.
          * @type {NodeJS.Timeout[]}
          * @readonly
          */
         this.timeouts = [];
 
         /**
-         * A list of attached intervals
+         * A list of attached intervals.
          * @type {NodeJS.Timeout[]}
          * @readonly
          */
         this.intervals = [];
 
         /**
-         * Optimization engine for large bots
+         * Optimization engine for large bots.
          * @type {Optimizer}
          * @readonly
          */
         this.optimizer = new Optimizer(this);
 
         /**
-         * Fragment manager
+         * Fragment management class.
          * @type {FragmentManager}
          * @readonly
          */
         this.fragments = new FragmentManager(this);
 
         /**
-         * Handles bot connection and setup sequence
+         * Handles bot connection and setup sequence.
          * @type {BotConnector}
          * @readonly
          */
@@ -375,7 +361,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Whether the bot is currently connected
+     * Whether the bot is currently connected.
      * @return {boolean}
      */
     public get connected(): boolean {
@@ -383,7 +369,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Post stats to various bot lists
+     * Post stats to various bot lists.
      */
     public async postStats(): Promise<void> {
         if (!this.client.user || Object.keys(this.settings.keys).length === 0) {
@@ -425,7 +411,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * @param {boolean} suspend
+     * Suspend or unsuspend the bot.
+     * @param {boolean} suspend Whether to suspend the bot.
      * @return {this}
      */
     public suspend(suspend: boolean = true): this {
@@ -441,10 +428,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Trigger a command
+     * Emulate a command invocation.
      * @todo 'args' type on docs (here)
-     * @param {string} base
-     * @param {Message} referer
+     * @param {string} base The base command name.
+     * @param {Message} referer The triggering message.
      * @param {string[]} args
      * @return {Promise<*>}
      */
@@ -484,7 +471,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Set a timeout
+     * Attach a timeout to the bot.
      * @param {Action} action
      * @param {number} time
      * @return {NodeJS.Timeout}
@@ -501,9 +488,9 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Clear a timeout
+     * Clear an attached timeout.
      * @param {NodeJS.Timeout} timeout
-     * @return {boolean} Whether the timeout was cleared
+     * @return {boolean} Whether the timeout was cleared.
      */
     public clearTimeout(timeout: NodeJS.Timeout): boolean {
         const index: number = this.timeouts.indexOf(timeout);
@@ -519,8 +506,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Clear all timeouts
-     * @return {number} The amount of timeouts cleared
+     * Clear all attached timeouts.
+     * @return {number} The amount of timeouts cleared.
      */
     public clearAllTimeouts(): number {
         let cleared: number = 0;
@@ -535,7 +522,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * @param {Action} action
+     * Attach an interval to the bot.
+     * @param {Action} action The callback method to invoke.
      * @param {number} time
      */
     public setInterval(action: any, time: number): NodeJS.Timeout {
@@ -547,6 +535,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
+     * Clear an attached interval.
      * @param {NodeJS.Timeout} interval
      * @return {boolean} Whether the interval was cleared
      */
@@ -564,7 +553,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Clear all attached intervals
+     * Clear all attached intervals.
      * @return {number} The amount of cleared intervals
      */
     public clearAllIntervals(): number {
@@ -580,8 +569,9 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * @param {Message} msg
-     * @param {boolean} [edited=false] Whether the message was edited
+     * Handle an incoming message.
+     * @param {Message} msg The incoming message.
+     * @param {boolean} [edited=false] Whether the message was previously edited.
      * @return {Promise<boolean>}
      */
     public async handleMessage(msg: Message, edited: boolean = false): Promise<boolean> {
@@ -714,7 +704,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Connect the client
+     * Connect the client.
      * @return {Promise<this>}
      */
     public async connect(): Promise<this> {
@@ -739,7 +729,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     /**
      * @todo "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached)
      * @todo Use the reload modules param
-     * Restart the client
+     * Restart the client.
      * @param {boolean} [reloadModules=true] Whether to reload all modules
      * @return {Promise<this>}
      */
@@ -770,7 +760,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Disconnect the client
+     * Disconnect the client.
      * @return {Promise<this>}
      */
     public async disconnect(): Promise<this> {
@@ -790,7 +780,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Clear all the files inside the temp folder
+     * Clear all the files inside the temp folder.
      */
     public clearTemp(): void {
         this.emit(EBotEvents.ClearingTemp);
@@ -810,7 +800,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Dispose the bot's resources
+     * Dispose the bot's resources, attached timeouts and intervals.
      */
     public async dispose(): Promise<void> {
         for (const disposable of this.disposables) {
@@ -835,6 +825,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
+     * Create a linked command context instance.
      * @param {Message} msg
      * @return {Context}
      */

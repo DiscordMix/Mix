@@ -28,7 +28,6 @@ export interface IEmojiMenu extends EventEmitter {
 
 /**
  * @extends EventEmitter
- * @implements {IDisposable}
  */
 export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisposable {
     public readonly messageId: Snowflake;

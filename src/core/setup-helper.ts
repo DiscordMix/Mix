@@ -4,7 +4,7 @@ import Log from "./log";
 import {PromiseOr} from "@atlas/xlib";
 
 /**
- * The type of action performed by a setup helper
+ * The type of action performed by a setup helper.
  */
 export enum SetupHelperActionType {
     Input,

@@ -6,51 +6,51 @@ import Util from "./util";
 
 export interface ISettingsGeneral {
     /**
-     * The token used to login to Discord
+     * The token required to login to Discord.
      */
     readonly token: string;
 
     /**
-     * The prefixes that will trigger commands
+     * The prefixes that will trigger commands.
      */
     readonly prefix: string[];
 }
 
 export interface ISettingsKeys {
     /**
-     * The API key for DiscordBotList.org
+     * The API key for DiscordBotList.org.
      */
     readonly dbl?: string;
 
     /**
-     * The API key for BotsForDiscord.com
+     * The API key for BotsForDiscord.com.
      */
     readonly bfd?: string;
 }
 
 export interface ISettingsPaths {
     /**
-     * The path to the commands directory
+     * The path to the commands directory.
      */
     readonly commands: string;
 
     /**
-     * The path to the plugins directory
+     * The path to the plugins directory.
      */
     readonly plugins: string;
 
     /**
-     * The path to the services directory
+     * The path to the services directory.
      */
     readonly services: string;
 
     /**
-     * The path to the languages directory
+     * The path to the languages directory.
      */
     readonly languages: string;
 
     /**
-     * The path to the tasks directory
+     * The path to the tasks directory.
      */
     readonly tasks: string;
 }

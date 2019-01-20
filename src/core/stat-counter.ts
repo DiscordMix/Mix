@@ -1,3 +1,6 @@
+/**
+ * Recorded stats.
+ */
 export interface IBotStats {
     /**
      * The amount of commands intercepted and handled by the command handler

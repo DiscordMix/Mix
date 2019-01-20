@@ -18,6 +18,9 @@ import {Reducer, IStore} from "../state/store";
 import {ISettings} from "./settings";
 import {PromiseOr} from "@atlas/xlib";
 
+/**
+ * Modules that will be used by the bot.
+ */
 export interface IBotModules {
     readonly store: IStore;
     readonly paths: IPathResolver;
@@ -36,6 +39,9 @@ export interface IBotModules {
 }
 
 // TODO: Already made optional by Partial?
+/**
+ * Options to create a new bot instance.
+ */
 export interface IBotOptions<T> {
     readonly settings: ISettings;
     readonly prefixCommand?: boolean;
@@ -59,7 +65,7 @@ export interface IBotEmojiOptions {
 }
 
 /**
- * Extra options used by the bot
+ * Extra options used by the bot.
  */
 export interface IBotExtraOptions {
     readonly asciiTitle: boolean;
@@ -77,7 +83,7 @@ export interface IBotExtraOptions {
 }
 
 /**
- * Events fired by the bot
+ * Events fired by the bot.
  */
 export enum EBotEvents {
     SetupStart = "setupStart",
@@ -104,7 +110,7 @@ export enum EBotEvents {
 }
 
 /**
- * Possible states of the bot
+ * Possible states of the bot.
  */
 export enum BotState {
     Disconnected,
@@ -114,6 +120,9 @@ export enum BotState {
     Connected
 }
 
+/**
+ * A list of internal, built-in commands.
+ */
 export enum InternalCommand {
     CLI = "cli",
     Eval = "eval",
@@ -126,8 +135,14 @@ export enum InternalCommand {
     Usage = "usage"
 }
 
+/**
+ * Represents a Discord bot token.
+ */
 export type BotToken = string;
 
+/**
+ * Represents a Discord account ID.
+ */
 export type Snowflake = string;
 
 export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDisposable, ITimeoutAttachable {

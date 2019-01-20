@@ -1,13 +1,17 @@
 import "reflect-metadata";
 
 import Log from "../core/log";
-import {DecoratorUtils} from "./decorator-utils";
 
 export interface IBotEvent {
     readonly name: string;
     readonly handler: any;
 }
 
+/**
+ * Deprecate a method. Will display a warning every time such method is invoked.
+ * @param {string | undefined} use The suggested alternative.
+ * @return {*}
+ */
 export function Deprecated(use?: string): any {
     return function (target: any) {
         const functionName: string = Object.keys(target)[0];

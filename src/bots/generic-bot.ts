@@ -3,7 +3,7 @@ import {IBot, IBotExtraOptions, BotState, IBotOptions, BotEvent, Action} from ".
 import {ISettings} from "../core/settings";
 import Temp from "../core/temp";
 import ServiceManager from "../services/service-manager";
-import CommandRegistry from "../commands/command-store";
+import CommandRegistry from "../commands/command-registry";
 import CommandHandler from "../commands/command-handler";
 import ConsoleInterface from "../console/console-interface";
 import Language from "../language/language";
@@ -16,46 +16,48 @@ import Store from "../state/store";
 import StatCounter from "../core/stat-counter";
 import BotConnector from "../core/bot-connector";
 import {IDisposable} from "../core/helpers";
-import {DefaultSettings, ArgResolvers, ArgTypes, DefaultBotOptions} from "../core/constants";
+import {DefaultSettings, ArgResolvers, ArgTypes, DefaultBotExtraOpts} from "../core/constants";
 import {Client as DiscordJsClient, Message, RichEmbed, TextChannel} from "discord.js";
-import DiscordContext from "../commands/command-context";
+import DiscordContext, {IContext} from "../commands/command-context";
 import CommandParser from "../commands/command-parser";
 import Log from "../logging/log";
 import BotMessages from "../core/messages";
 import Util from "../core/util";
 import {EventEmitter} from "events";
+import {IUniversalMessage} from "../universal/universal-message";
 
-export default abstract class GenericBot<TState, TActionType> extends EventEmitter implements IBot {
-    public readonly settings: ISettings;
-    public readonly temp: Temp;
-    public readonly services: ServiceManager;
-    public readonly registry: CommandRegistry;
-    public readonly commandHandler: CommandHandler;
-    public readonly console: ConsoleInterface;
-    public readonly options: IBotExtraOptions;
+export default abstract class GenericBot<TState = any, TActionType = any, TContext extends IContext = IContext> extends EventEmitter implements IBot {
+    public readonly settings!: ISettings;
+    public readonly temp!: Temp;
+    public readonly services!: ServiceManager;
+    public readonly registry!: CommandRegistry;
+    public readonly commandHandler!: CommandHandler;
+    public readonly console!: ConsoleInterface;
+    public readonly extraOpts!: IBotExtraOptions;
     public readonly language?: Language;
-    public readonly argumentResolvers: IArgumentResolver[];
-    public readonly argumentTypes: ICustomArgType[];
-    public readonly disposables: IDisposable[];
-    public readonly tasks: TaskManager;
-    public readonly timeouts: NodeJS.Timeout[];
-    public readonly intervals: NodeJS.Timeout[];
+    public readonly argumentResolvers!: IArgumentResolver[];
+    public readonly argumentTypes!: ICustomArgType[];
+    public readonly disposables!: IDisposable[];
+    public readonly tasks!: TaskManager;
+    public readonly timeouts!: NodeJS.Timeout[];
+    public readonly intervals!: NodeJS.Timeout[];
     public readonly languages?: string[];
-    public readonly state: BotState;
-    public readonly suspended: boolean;
-    public readonly client: IUniversalClient;
-    public readonly fragments: FragmentManager;
-    public readonly paths: PathResolver;
-    public readonly store: Store<TState, TActionType>;
+    public readonly state!: BotState;
+    public readonly suspended!: boolean;
+    public readonly client!: IUniversalClient;
+    public readonly fragments!: FragmentManager;
+    public readonly paths!: PathResolver;
+    public readonly store!: Store<TState, TActionType>;
 
     protected setupStart: number = 0;
+    protected abstract options: IBotOptions;
 
     // TODO: Implement stat counter
-    protected readonly statCounter: StatCounter;
+    protected readonly statCounter!: StatCounter;
 
-    protected readonly connector: BotConnector;
+    protected readonly connector!: BotConnector;
 
-    public constructor(options: Partial<IBotOptions>) {
+    public constructor(options: Partial<IBotOptions<TState>>) {
         super();
 
         this.settings = {
@@ -160,9 +162,9 @@ export default abstract class GenericBot<TState, TActionType> extends EventEmitt
          * @type {IBotExtraOptions}
          * @readonly
          */
-        this.options = {
-            ...DefaultBotOptions,
-            ...options.options,
+        this.extraOpts = {
+            ...DefaultBotExtraOpts,
+            ...options.extra,
         };
 
         /**
@@ -422,7 +424,7 @@ export default abstract class GenericBot<TState, TActionType> extends EventEmitt
 
         this.emit(BotEvent.HandleMessageStart);
 
-        if (this.options.logMessages) {
+        if (this.extraOpts.logMessages) {
             const names: any = {};
 
             if (msg.channel.type === "text" && msg.guild !== undefined) {
@@ -442,8 +444,8 @@ export default abstract class GenericBot<TState, TActionType> extends EventEmitt
         }
 
         // TODO: Cannot do .startsWith with a prefix array
-        if ((!msg.author.bot || (msg.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.registry, this.settings.general.prefix)) {
-            if (this.options.allowCommandChain) {
+        if ((!msg.author.bot || (msg.author.bot && !this.extraOpts.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.registry, this.settings.general.prefix)) {
+            if (this.extraOpts.allowCommandChain) {
                 // TODO: Might split values too
                 const rawChain: string[] = msg.content.split("~");
 
@@ -547,7 +549,10 @@ export default abstract class GenericBot<TState, TActionType> extends EventEmitt
         await this.connector.setup();
         Log.verbose("Starting");
 
-        await this.client.login(this.settings.general.token).catch(async (error: Error) => {
+        await this.client.setup();
+        
+        // TODO: Move this to the Discord bot Client's setup implementation.
+        /*.catch(async (error: Error) => {
             if (error.message === "Incorrect login details were provided.") {
                 Log.error("The provided token is invalid or has been regenerated");
                 await this.disconnect();
@@ -556,7 +561,7 @@ export default abstract class GenericBot<TState, TActionType> extends EventEmitt
             else {
                 throw error;
             }
-        });
+        });*/
 
         return this;
     }
@@ -664,8 +669,14 @@ export default abstract class GenericBot<TState, TActionType> extends EventEmitt
      * @param {Message} msg
      * @return {DiscordContext}
      */
-    protected createCommandContext(msg: Message): DiscordContext {
-        return new DiscordContext({
+    protected createCommandContext(msg: IUniversalMessage): TContext {
+        return {
+            bot: this,
+            msg
+        };
+        
+        // TODO: Use in new DiscordBot implementation
+        /*new DiscordContext({
             bot: this,
             msg,
             // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
@@ -673,6 +684,6 @@ export default abstract class GenericBot<TState, TActionType> extends EventEmitt
             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
 
             label: CommandParser.getCommandBase(msg.content, this.settings.general.prefix)
-        });
+        }); */
     }
 }

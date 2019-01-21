@@ -1,4 +1,4 @@
-import CommandRegistry from "./command-store";
+import CommandRegistry from "./command-registry";
 import Util from "../core/util";
 
 import Command, {
@@ -16,7 +16,7 @@ import {Message} from "discord.js";
 import {FalseDelegates, TrueDelegates} from "../core/constants";
 import Log from "../logging/log";
 import Patterns from "../core/patterns";
-import SwitchParser, {ICommandSwitch} from "./switch-parser";
+import FlagParser, {IFlag} from "./switch-parser";
 
 export interface IResolveArgumentsOptions {
     readonly arguments: RawArguments;
@@ -126,7 +126,7 @@ export default abstract class CommandParser {
             match = Patterns.args.exec(commandString);
         }
 
-        const switches: ICommandSwitch[] = SwitchParser.getSwitches(commandString);
+        const switches: IFlag[] = FlagParser.getSwitches(commandString);
 
         for (const sw of switches) {
             // TODO: Was just left here without being used..

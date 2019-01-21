@@ -1,7 +1,7 @@
 import {RichEmbed} from "discord.js";
 import Command from "../../../commands/command";
 import DiscordContext from "../../../commands/command-context";
-import {ReadonlyCommandMap} from "../../../commands/command-store";
+import {ReadonlyCommandMap} from "../../../commands/command-registry";
 import {Description, Name} from "../../../decorators/general";
 
 @Name("help")
@@ -23,7 +23,7 @@ export default class HelpCommand extends Command {
             .map((command: Command) => `**${command.meta.name}**: ${command.meta.description}`)
             .join("\n");
 
-        if ($.bot.options.dmHelp) {
+        if ($.bot.extraOpts.dmHelp) {
             await (await $.sender.createDM()).send(new RichEmbed()
                 .setColor("GREEN")
                 .setDescription(commandsString)).catch(async (error: Error) => {

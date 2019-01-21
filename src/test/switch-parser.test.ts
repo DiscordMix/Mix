@@ -1,17 +1,17 @@
 import {expect} from "chai";
 import {describe} from "mocha";
-import SwitchParser from "../commands/switch-parser";
+import FlagParser from "../commands/switch-parser";
 import {TestSubjects} from "./test-bot";
 
 describe("Switch Parser", () => {
     describe("getSwitches()", () => {
-        const result1 = SwitchParser.getSwitches(TestSubjects.switches.short);
-        const result2 = SwitchParser.getSwitches(TestSubjects.switches.long);
-        const result3 = SwitchParser.getSwitches(TestSubjects.switches.longValue);
-        const result4 = SwitchParser.getSwitches(TestSubjects.switches.longQuotedValue);
-        const result5 = SwitchParser.getSwitches(TestSubjects.switches.multiple);
-        const result6 = SwitchParser.getSwitches(TestSubjects.switches.multipleValues);
-        const result7 = SwitchParser.getSwitches(TestSubjects.switches.multipleQuotedValues);
+        const result1 = FlagParser.getSwitches(TestSubjects.switches.short);
+        const result2 = FlagParser.getSwitches(TestSubjects.switches.long);
+        const result3 = FlagParser.getSwitches(TestSubjects.switches.longValue);
+        const result4 = FlagParser.getSwitches(TestSubjects.switches.longQuotedValue);
+        const result5 = FlagParser.getSwitches(TestSubjects.switches.multiple);
+        const result6 = FlagParser.getSwitches(TestSubjects.switches.multipleValues);
+        const result7 = FlagParser.getSwitches(TestSubjects.switches.multipleQuotedValues);
 
         it("parse command switches into objects", () => {
             for (const item of result1) {

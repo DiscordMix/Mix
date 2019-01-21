@@ -2,7 +2,7 @@ import chalk from "chalk";
 import {Guild, GuildMember} from "discord.js";
 import {performance} from "perf_hooks";
 import readline from "readline";
-import {ReadonlyCommandMap} from "../commands/command-store";
+import {ReadonlyCommandMap} from "../commands/command-registry";
 import DiscordBot from "../bots/discord-bot";
 import {DebugMode} from "../core/constants";
 import Log from "../logging/log";
@@ -142,7 +142,7 @@ export default class ConsoleInterface {
                     }
                 }
                 else if (args[0] === "config") {
-                    console.log("Using bot options:\n\n", bot.options);
+                    console.log("Using bot options:\n\n", bot.extraOpts);
                 }
                 else if (args[0] === "settings") {
                     console.log("Using settings:\n\n", bot.settings);

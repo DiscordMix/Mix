@@ -1,43 +1,20 @@
-import {Client, Message} from "discord.js";
+import {Message} from "discord.js";
 import {EventEmitter} from "events";
 import {IArgumentResolver, ICustomArgType} from "../commands/command";
 import {ICommandHandler} from "../commands/command-handler";
 import {IFragmentManager} from "../fragments/fragment-manager";
-import Language, {ILanguage} from "../language/language";
-import {IOptimizer} from "../optimization/optimizer";
+import Language from "../language/language";
 import {IServiceManager} from "../services/service-manager";
 import {ITimeoutAttachable, IDisposable} from "./helpers";
 import {IPathResolver} from "./path-resolver";
-import {IStatsCounter} from "./stat-counter";
 import {ITemp} from "./temp";
 import {ICommandRegistry} from "../commands/command-registry";
 import {IConsoleInterface} from "../console/console-interface";
 import {ITaskManager} from "../tasks/task-manager";
-import {IActionInterpreter} from "../actions/action-interpreter";
 import {Reducer, IStore} from "../state/store";
 import {PromiseOr} from "@atlas/xlib";
 import {IUniversalClient} from "../universal/universal-client";
 import {ISettings} from "./settings";
-
-/**
- * Modules that will be used by the bot.
- */
-export interface IBotModules {
-    readonly store: IStore;
-    readonly paths: IPathResolver;
-    readonly temp: ITemp;
-    readonly client: Client;
-    readonly serviceManager: IServiceManager;
-    readonly commandStore: ICommandRegistry;
-    readonly commandHandler: ICommandHandler;
-    readonly consoleInterface: IConsoleInterface;
-    readonly language: ILanguage;
-    readonly statsCounter: IStatsCounter;
-    readonly actionInterpreter: IActionInterpreter;
-    readonly taskManager: ITaskManager;
-    readonly optimizer: IOptimizer;
-    readonly fragmentManager: IFragmentManager;
-}
 
 // TODO: Already made optional by Partial?
 /**
@@ -55,11 +32,6 @@ export interface IBotOptions<T = any> {
 
 export type Action<T = void> = () => T;
 
-export interface IBotEmojiOptions {
-    readonly success: string;
-    readonly error: string;
-}
-
 /**
  * Extra options used by the bot.
  */
@@ -74,7 +46,6 @@ export interface IBotExtraOptions {
     readonly autoResetAuthStore: boolean;
     readonly logMessages: boolean;
     readonly dmHelp: boolean;
-    readonly emojis: IBotEmojiOptions;
     readonly optimizer: boolean;
 }
 

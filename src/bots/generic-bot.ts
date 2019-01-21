@@ -18,7 +18,7 @@ import BotConnector from "../core/bot-connector";
 import {IDisposable} from "../core/helpers";
 import {DefaultSettings, ArgResolvers, ArgTypes, DefaultBotExtraOpts} from "../core/constants";
 import {Client as DiscordJsClient, Message, RichEmbed, TextChannel} from "discord.js";
-import DiscordContext, {IContext} from "../commands/command-context";
+import {IContext} from "../commands/command-context";
 import CommandParser from "../commands/command-parser";
 import Log from "../logging/log";
 import BotMessages from "../core/messages";
@@ -27,27 +27,27 @@ import {EventEmitter} from "events";
 import {IUniversalMessage} from "../universal/universal-message";
 
 export default abstract class GenericBot<TState = any, TActionType = any, TContext extends IContext = IContext> extends EventEmitter implements IBot {
-    public readonly settings!: ISettings;
-    public readonly temp!: Temp;
-    public readonly services!: ServiceManager;
-    public readonly registry!: CommandRegistry;
-    public readonly commandHandler!: CommandHandler;
-    public readonly console!: ConsoleInterface;
-    public readonly extraOpts!: IBotExtraOptions;
+    public readonly settings: ISettings;
+    public readonly temp: Temp;
+    public readonly services: ServiceManager;
+    public readonly registry: CommandRegistry;
+    public readonly commandHandler: CommandHandler;
+    public readonly console: ConsoleInterface;
+    public readonly extraOpts: IBotExtraOptions;
     public readonly language?: Language;
-    public readonly argumentResolvers!: IArgumentResolver[];
-    public readonly argumentTypes!: ICustomArgType[];
-    public readonly disposables!: IDisposable[];
-    public readonly tasks!: TaskManager;
-    public readonly timeouts!: NodeJS.Timeout[];
-    public readonly intervals!: NodeJS.Timeout[];
+    public readonly argumentResolvers: IArgumentResolver[];
+    public readonly argumentTypes: ICustomArgType[];
+    public readonly disposables: IDisposable[];
+    public readonly tasks: TaskManager;
+    public readonly timeouts: NodeJS.Timeout[];
+    public readonly intervals: NodeJS.Timeout[];
     public readonly languages?: string[];
-    public readonly state!: BotState;
-    public readonly suspended!: boolean;
-    public readonly client!: IUniversalClient;
-    public readonly fragments!: FragmentManager;
-    public readonly paths!: PathResolver;
-    public readonly store!: Store<TState, TActionType>;
+    public readonly state: BotState;
+    public readonly suspended: boolean;
+    public readonly client: IUniversalClient;
+    public readonly fragments: FragmentManager;
+    public readonly paths: PathResolver;
+    public readonly store: Store<TState, TActionType>;
 
     protected setupStart: number = 0;
     protected abstract options: IBotOptions;
@@ -95,10 +95,10 @@ export default abstract class GenericBot<TState = any, TActionType = any, TConte
         this.temp = new Temp();
 
         /**
-         * @type {Client}
+         * @type {IUniversalClient}
          * @readonly
          */
-        this.client = new DiscordJsClient();
+        this.client = options.client;
 
         /**
          * Provides management of services.
@@ -666,12 +666,12 @@ export default abstract class GenericBot<TState = any, TActionType = any, TConte
 
     /**
      * Create a linked command context instance.
-     * @param {Message} msg
+     * @param {IUniversalMessage} msg
      * @return {DiscordContext}
      */
     protected createCommandContext(msg: IUniversalMessage): TContext {
         return {
-            bot: this,
+            bot: this as any,
             msg
         };
         

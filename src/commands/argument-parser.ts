@@ -16,6 +16,7 @@ export default class ArgumentParser {
     public resolve(type: string, arg: string, resolvers: object): TemplateStringsArray {
         const keys: string[] = Object.keys(resolvers);
 
+        // TODO: Consider using keys.indexOf() instead
         for (const key of keys) {
             if (key === type) {
                 return resolvers[key](arg);
@@ -29,7 +30,7 @@ export default class ArgumentParser {
      * @param {IArgument[]} schema
      * @return {IArgument[]}
      */
-    public getRequiredArguments(schema: IArgument[]): IArgument[] {
+    public getRequiredArgs(schema: IArgument[]): IArgument[] {
         return schema.filter((arg: IArgument) => arg.required);
     }
 }

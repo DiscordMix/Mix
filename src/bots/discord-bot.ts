@@ -4,9 +4,8 @@ require("dotenv").config();
 import CommandParser from "../commands/command-parser";
 import DiscordContext from "../commands/command-context";
 import Util from "../core/util";
-import DiscordSettings from "../universal/discord/discord-settings";
 import Log from "../logging/log";
-import Discord, {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
+import {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
 import axios from "axios";
 
 import Command, {
@@ -15,20 +14,22 @@ import Command, {
 } from "../commands/command";
 
 import fs from "fs";
-import path from "path";
 import StatCounter from "../core/stat-counter";
 import ActionInterpreter from "../actions/action-interpreter";
 import Optimizer from "../optimization/optimizer";
 import BotMessages from "../core/messages";
-import {InternalCommand, BotState, DiscordBotToken, BotEvent} from "../core/bot-extra";
+import {InternalCommand, BotState, DiscordBotToken, BotEvent, Action} from "../core/bot-extra";
 import BotConnector from "../core/bot-connector";
 import DiscordClient from "../universal/discord/discord-client";
 import {IDiscordBotOpts, IDiscordBot} from "../universal/discord/discord-bot";
 import GenericBot from "./generic-bot";
+import DiscordSettings from "../universal/discord/discord-settings";
+import {DiscordMessage} from "../universal/discord/discord-message";
 
 // TODO: Should emit an event when state changes
 /**
- * @extends EventEmitter
+ * The Discord bot class.
+ * @extends GenericBot
  */
 export default class DiscordBot<TState = any, TActionType = any> extends GenericBot<TState, TActionType> implements IDiscordBot<TState, TActionType> {
     public readonly prefixCommand: boolean;
@@ -41,6 +42,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
 
     protected setupStart: number = 0;
 
+    protected settings: DiscordSettings;
     protected options: IDiscordBotOpts;
 
     // TODO: Implement stat counter
@@ -57,7 +59,8 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
         super();
 
         // Special options for unit tests
-        if (testMode) {
+        // Temporarily disabled/commented out
+        /* if (testMode) {
             (this.options.extra as any) = {
                 ...this.options.extra,
                 asciiTitle: false,
@@ -78,17 +81,19 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
                 internalCommands: [InternalCommand.Help, InternalCommand.Usage, InternalCommand.Ping],
                 languages: ["test-language"],
             };
-        }
+        } */
 
         if (!this.options || !this.options.settings || typeof this.options.settings !== "object") {
             throw Log.error(BotMessages.SETUP_INVALID);
         }
 
+        this.settings = null as any;
+
         /**
-         * @type {Discord.Client}
+         * @type {DiscordClient}
          * @readonly
          */
-        this.client = new Discord.Client();
+        this.client = new DiscordClient();
 
         /**
          * Whether the built-in prefix command should be used.
@@ -127,7 +132,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
          * @type {Snowflake | undefined}
          * @readonly
          */
-        this.owner = options.owner;
+        this.owner = this.options.owner;
 
         /**
          * Used for measuring interaction with the bot.
@@ -514,7 +519,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
 
         await this.client.login(this.settings.general.token).catch(async (error: Error) => {
             if (error.message === "Incorrect login details were provided.") {
-                Log.error("The provided token is invalid or has been regenerated");
+                Log.error(BotMessages.SETUP_TOKEN_INVALID);
                 await this.disconnect();
                 process.exit(0);
             }
@@ -535,7 +540,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
      */
     public async restart(reloadModules: boolean = true): Promise<this> {
         this.emit(BotEvent.Restarting, reloadModules);
-        Log.verbose("Restarting");
+        Log.verbose(BotMessages.RESTARTING);
 
         // Dispose resources
         await this.dispose();
@@ -626,10 +631,10 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
 
     /**
      * Create a linked command context instance.
-     * @param {Message} msg
+     * @param {DiscordMessage} msg
      * @return {DiscordContext}
      */
-    protected createCommandContext(msg: Message): DiscordContext {
+    protected createCommandContext(msg: DiscordMessage): DiscordContext {
         return new DiscordContext({
             bot: this,
             msg,

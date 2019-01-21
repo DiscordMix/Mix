@@ -1,5 +1,5 @@
 import DiscordChatEnv from "../core/discord-chat-env";
-import Context, {IContext} from "./command-context";
+import DiscordContext, {IDiscordContext} from "./command-context";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import DiscordBot from "../bots/discord-bot";
@@ -8,7 +8,7 @@ import {PromiseOr} from "@atlas/xlib";
 
 export type UserGroup = string[];
 
-export type CommandExeHandler<TArgs extends object = object, TReturn = any> = (context: Context, args: TArgs, api: any) => TReturn;
+export type CommandExeHandler<TArgs extends object = object, TReturn = any> = (context: DiscordContext, args: TArgs, api: any) => TReturn;
 
 export enum RestrictGroup {
     ServerOwner,
@@ -98,11 +98,11 @@ export interface ICommandResult {
     readonly status: CommandStatus | number;
 }
 
-export type CommandRunner<T = ICommandResult | any> = (context: IContext, args: any) => T;
+export type CommandRunner<T = ICommandResult | any> = (context: IDiscordContext, args: any) => T;
 
-export type CommandRelay<T = any> = (context: Context, args: T, command: IGenericCommand) => void;
+export type CommandRelay<T = any> = (context: DiscordContext, args: T, command: IGenericCommand) => void;
 
-export type CommandGuard<T = any> = (context: Context, args: T, command: IGenericCommand) => boolean;
+export type CommandGuard<T = any> = (context: DiscordContext, args: T, command: IGenericCommand) => boolean;
 
 export interface IGenericCommand<T extends object = object> extends IFragment, IDisposable {
     readonly minArguments: number;
@@ -119,9 +119,9 @@ export interface IGenericCommand<T extends object = object> extends IFragment, I
     readonly dependsOn: string[];
     readonly guards: CommandGuard[];
 
-    undo(oldContext: Context, message: Message, args: T): PromiseOr<boolean>;
+    undo(oldContext: DiscordContext, message: Message, args: T): PromiseOr<boolean>;
     enabled(): PromiseOr<boolean>;
-    run(context: Context, args: T): ICommandResult | any;
+    run(context: DiscordContext, args: T): ICommandResult | any;
     isExcluded(query: string): boolean;
 }
 
@@ -154,7 +154,7 @@ export abstract class GenericCommand<T extends object = object> implements IGene
     }
 
     // TODO: Implement/shouldn't be negative response?
-    public async undo(oldContext: Context, message: Message, args: T): Promise<boolean> {
+    public async undo(oldContext: DiscordContext, message: Message, args: T): Promise<boolean> {
         await message.reply("That action cannot be undone");
 
         return false;
@@ -171,7 +171,7 @@ export abstract class GenericCommand<T extends object = object> implements IGene
         return true;
     }
 
-    public abstract run(context: Context, args: T): ICommandResult | any;
+    public abstract run(context: DiscordContext, args: T): ICommandResult | any;
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts
@@ -212,10 +212,10 @@ export default abstract class Command<T extends object = object> extends Generic
 
     /**
      * @todo canExecute should default boolean, same concept as Service
-     * @param {Context} context
+     * @param {DiscordContext} context
      * @return {boolean} Whether this command may be executed
      */
-    public canExecute(context: Context): boolean {
+    public canExecute(context: DiscordContext): boolean {
         return true;
     }
 }

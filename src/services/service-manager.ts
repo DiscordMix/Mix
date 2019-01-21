@@ -8,6 +8,7 @@ import Util from "../core/util";
 import {IGenericService, IProcessMsg, IRawProcessMsg, ProcessMsgType} from "./generic-service";
 import SMIS from "./smis";
 import {PromiseOr} from "@atlas/xlib";
+import {IBot} from "../core/bot-extra";
 
 export type ServiceMap = Map<string, IGenericService>;
 export type ReadonlyServiceMap = ReadonlyMap<string, IGenericService>;
@@ -38,7 +39,7 @@ export interface IServiceManager extends EventEmitter {
 export default class ServiceManager extends EventEmitter implements IServiceManager {
     public static heartbeatTimeout: number = 6000;
 
-    protected readonly bot: DiscordBot;
+    protected readonly bot: IBot;
     protected readonly services: ServiceMap;
     protected readonly forkedServices: Map<string, ChildProcess>;
     protected readonly forkHeartbeats: Map<string, NodeJS.Timeout>;
@@ -46,7 +47,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
     /**
      * @param {DiscordBot} bot
      */
-    public constructor(bot: DiscordBot) {
+    public constructor(bot: IBot) {
         super();
 
         /**

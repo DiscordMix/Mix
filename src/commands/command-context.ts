@@ -1,28 +1,33 @@
 import {DMChannel, Guild, Message, Snowflake, TextChannel} from "discord.js";
 import {ChannelType} from "../actions/action-interpreter";
-import DiscordBot from "../bots/discord-bot";
 import Log from "../logging/log";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
 import Util from "../core/util";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import EditableMessage from "../message/editable-message";
-import Store from "../state/store";
+import {IStore} from "../state/store";
 import {PromiseOr} from "@atlas/xlib";
+import {IUniversalMessage} from "../universal/universal-message";
+import {IDiscordBot} from "../universal/discord/discord-bot";
 
-export interface IContextOptions {
+export interface IDiscordContextOpts {
     readonly msg: Message;
-    readonly bot: DiscordBot;
+    readonly bot: IDiscordBot;
     readonly label: string | null;
 }
 
 export type TextBasedChannel = TextChannel | DMChannel;
 
-export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper {
-    readonly bot: DiscordBot;
+export interface IContext<T extends IDiscordBot> {
+    readonly bot: T;
+    readonly msg: IUniversalMessage;
+}
+
+export interface IDiscordContext<T extends TextBasedChannel = TextBasedChannel> extends IContext<IDiscordBot>, ResponseHelper {
     readonly msg: Message;
     readonly label: string | null;
-    readonly store: Store;
+    readonly store: IStore;
     readonly g: Guild;
     readonly c: T;
     readonly triggeringMessageId: Snowflake;
@@ -36,15 +41,15 @@ export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends
     promptDM(message: string, timeout: number): PromiseOr<boolean | null>;
 }
 
-export default class Context<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IContext {
-    public readonly bot: DiscordBot;
+export default class DiscordContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IDiscordContext {
+    public readonly bot: IDiscordBot;
     public readonly msg: Message;
     public readonly label: string | null;
 
     /**
-     * @param {IContextOptions} options
+     * @param {IDiscordContextOpts} options
      */
-    public constructor(options: IContextOptions) {
+    public constructor(options: IDiscordContextOpts) {
         if (options.msg.channel.type !== "text") {
             throw Log.error(BotMessages.CONTEXT_EXPECT_TEXT_CHANNEL);
         }
@@ -58,7 +63,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         this.msg = options.msg;
 
         /**
-         * @type {DiscordBot}
+         * @type {IDiscordBot}
          * @readonly
          */
         this.bot = options.bot;
@@ -72,9 +77,9 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
 
     /**
      * Access the bot's store
-     * @return {Store}
+     * @return {IStore}
      */
-    public get store(): Store {
+    public get store(): IStore {
         return this.bot.store;
     }
 

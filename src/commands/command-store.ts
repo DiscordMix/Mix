@@ -1,16 +1,16 @@
 import Log from "../logging/log";
 import DiscordBot from "../bots/discord-bot";
 import Command, {GenericCommand} from "./command";
-import Context from "./command-context";
+import DiscordContext from "./command-context";
 import {Snowflake} from "discord.js";
 import Loader, {IPackage, ILivePackage} from "../fragments/loader";
 import Util from "../core/util";
 import path from "path";
-import {InternalCommand} from "../core/bot-extra";
+import {InternalCommand, IBot} from "../core/bot-extra";
 import {PromiseOr} from "@atlas/xlib";
 
 export interface ICommandCooldown {
-    readonly context: Context;
+    readonly context: DiscordContext;
     readonly command: Command;
     readonly end: number;
 }
@@ -24,7 +24,7 @@ export type CommandMap = Map<string, CommandPackage>;
 export type ReadonlyCommandMap = ReadonlyMap<string, CommandPackage>;
 
 export interface ICommandRegistry {
-    readonly bot: DiscordBot;
+    readonly bot: IBot;
     readonly cooldowns: Map<Snowflake, Map<string, number>>;
     readonly size: number;
 
@@ -48,7 +48,7 @@ export interface ICommandRegistry {
 }
 
 export default class CommandRegistry implements ICommandRegistry {
-    public readonly bot: DiscordBot;
+    public readonly bot: IBot;
     public readonly cooldowns: Map<Snowflake, Map<string, number>>;
 
     public simpleCommands: Map<string, any>;
@@ -58,11 +58,11 @@ export default class CommandRegistry implements ICommandRegistry {
     protected readonly aliases: Map<string, string>;
 
     /**
-     * @param {DiscordBot} bot
+     * @param {IBot} bot
      */
-    public constructor(bot: DiscordBot) {
+    public constructor(bot: IBot) {
         /**
-         * @type {DiscordBot}
+         * @type {IBot}
          * @protected
          * @readonly
          */

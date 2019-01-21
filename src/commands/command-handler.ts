@@ -5,7 +5,7 @@ import DiscordChatEnv from "../core/discord-chat-env";
 import Log from "../logging/log";
 import Util from "../core/util";
 import Command, {RawArguments, RestrictGroup} from "./command";
-import Context from "./command-context";
+import DiscordContext from "./command-context";
 import CommandParser from "./command-parser";
 import CommandRegistry, {ICommandRegistry} from "./command-store";
 import {PromiseOr} from "@atlas/xlib";
@@ -23,8 +23,8 @@ export enum CmdHandlerEvent {
     UnderCooldown
 }
 
-export interface ICommandHandlerOptions {
-    readonly commandStore: CommandRegistry;
+export interface ICommandHandlerOpts {
+    readonly registry: ICommandRegistry;
     readonly errorHandlers: ICmdErrorHandlerOpt[];
     readonly argumentTypes: any;
 }
@@ -34,31 +34,31 @@ export interface ICmdErrorHandlerOpt {
     readonly handler: CmdErrorHandler;
 }
 
-export type CmdErrorHandler = (context: Context, command: Command, error?: Error) => boolean;
+export type CmdErrorHandler = (context: DiscordContext, command: Command, error?: Error) => boolean;
 
 export interface IUndoAction {
     readonly command: Command;
-    readonly context: Context;
+    readonly context: DiscordContext;
     readonly args?: any;
 }
 
 export interface ICommandHandler {
-    readonly commandStore: ICommandRegistry;
+    readonly registry: ICommandRegistry;
     readonly errorHandlers: Map<CmdHandlerEvent, CmdErrorHandler>;
     readonly argumentTypes: any;
     readonly undoMemory: Map<Snowflake, IUndoAction>;
 
     undoAction(user: Snowflake, message: Message): PromiseOr<boolean>;
-    handle(context: Context, command: Command, rawArgs: RawArguments): PromiseOr<boolean>;
+    handle(context: DiscordContext, command: Command, rawArgs: RawArguments): PromiseOr<boolean>;
 }
 
 export default class CommandHandler implements ICommandHandler {
     /**
      * @param {Command} command
-     * @param {Context} context
+     * @param {DiscordContext} context
      * @return {boolean}
      */
-    public static specificMet(command: Command, context: Context): boolean {
+    public static specificMet(command: Command, context: DiscordContext): boolean {
         let met: boolean = false;
 
         for (const specific of command.constraints.specific) {
@@ -187,20 +187,20 @@ export default class CommandHandler implements ICommandHandler {
         return false;
     }
 
-    public readonly commandStore: CommandRegistry;
+    public readonly registry: ICommandRegistry;
     public readonly errorHandlers: Map<CmdHandlerEvent, CmdErrorHandler>;
     public readonly argumentTypes: any;
     public readonly undoMemory: Map<Snowflake, IUndoAction>;
 
     /**
-     * @param {ICommandHandlerOptions} options
+     * @param {ICommandHandlerOpts} options
      */
-    public constructor(options: ICommandHandlerOptions) {
+    public constructor(options: ICommandHandlerOpts) {
         /**
-         * @type {CommandRegistry}
+         * @type {ICommandRegistry}
          * @readonly
          */
-        this.commandStore = options.commandStore;
+        this.registry = options.registry;
 
         /**
          * @type {Function[]}
@@ -243,12 +243,12 @@ export default class CommandHandler implements ICommandHandler {
     /**
      * @todo Split this method into a class?
      * @todo Since it's returning a Promise, review
-     * @param {Context} context
+     * @param {DiscordContext} context
      * @param {Command} command The command to handle
      * @param {RawArguments} rawArgs
      * @return {Promise<boolean>} Whether the command was successfully executed
      */
-    public async handle(context: Context, command: Command, rawArgs: RawArguments): Promise<boolean> {
+    public async handle(context: DiscordContext, command: Command, rawArgs: RawArguments): Promise<boolean> {
         if (!this.meetsRequirements(context, command, rawArgs)) {
             return false;
         }
@@ -267,7 +267,7 @@ export default class CommandHandler implements ICommandHandler {
             return false;
         }
 
-        this.commandStore.bot.emit("handlingCommand", context, command, resolvedArgs);
+        this.registry.bot.emit("handlingCommand", context, command, resolvedArgs);
 
         try {
             // Process middleware before executing command
@@ -296,16 +296,16 @@ export default class CommandHandler implements ICommandHandler {
             }
 
             const commandCooldown: number = Date.now() + (command.constraints.cooldown * 1000);
-            const lastCooldown: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
+            const lastCooldown: number | null = this.registry.getCooldown(context.sender.id, command.meta.name);
 
             // Delete the last cooldown before adding the new one for this command + user
             if (lastCooldown !== null) {
-                if (!this.commandStore.clearCooldown(context.sender.id, command.meta.name)) {
+                if (!this.registry.clearCooldown(context.sender.id, command.meta.name)) {
                     throw Log.error(`Expecting cooldown of '${context.sender.id} (${context.sender.tag})' to exist for command '${command.meta.name}'`);
                 }
             }
 
-            this.commandStore.setCooldown(context.sender.id, commandCooldown, command.meta.name);
+            this.registry.setCooldown(context.sender.id, commandCooldown, command.meta.name);
 
             // After successfully executing the command, invoke all it's relays
             for (const connection of command.connections) {
@@ -337,7 +337,7 @@ export default class CommandHandler implements ICommandHandler {
             return result;
         }
         catch (error) {
-            this.commandStore.bot.emit("commandError", error);
+            this.registry.bot.emit("commandError", error);
 
             const handler: CmdErrorHandler | undefined = this.errorHandlers.get(CmdHandlerEvent.CommandError);
 
@@ -356,11 +356,11 @@ export default class CommandHandler implements ICommandHandler {
 
     /**
      * @param {CmdHandlerEvent} event
-     * @param {Context} context
+     * @param {DiscordContext} context
      * @param {Command} command
      * @return {boolean}
      */
-    protected handleError(event: CmdHandlerEvent, context: Context, command: Command): boolean {
+    protected handleError(event: CmdHandlerEvent, context: DiscordContext, command: Command): boolean {
         if (this.errorHandlers.has(event)) {
             return (this.errorHandlers.get(event) as CmdErrorHandler)(context, command);
         }
@@ -369,12 +369,12 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {Context} context
+     * @param {DiscordContext} context
      * @param {Command} command
      * @param {IArgument[]} rawArgs
      * @return {boolean}
      */
-    protected meetsRequirements(context: Context, command: Command, rawArgs: RawArguments): boolean {
+    protected meetsRequirements(context: DiscordContext, command: Command, rawArgs: RawArguments): boolean {
         // TODO: Add a check for exclusions including:
         // #channelId, &roleId, @userId, $guildId
 
@@ -443,9 +443,9 @@ export default class CommandHandler implements ICommandHandler {
                 context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
-        else if (command.constraints.cooldown && !this.commandStore.cooldownExpired(context.sender.id, command.meta.name)) {
+        else if (command.constraints.cooldown && !this.registry.cooldownExpired(context.sender.id, command.meta.name)) {
             if (!this.handleError(CmdHandlerEvent.UnderCooldown, context, command)) {
-                const timeLeft: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
+                const timeLeft: number | null = this.registry.getCooldown(context.sender.id, command.meta.name);
 
                 if (timeLeft) {
                     context.fail(`You must wait **${(timeLeft - Date.now()) / 1000}** seconds before using that command again.`);

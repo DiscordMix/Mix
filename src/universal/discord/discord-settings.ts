@@ -1,5 +1,5 @@
 import fs from "fs";
-import {DefaultSettingPaths} from "../../core/constants";
+import {DefaultDiscordSettingPaths} from "../../core/constants";
 import Log from "../../logging/log";
 import BotMessages from "../../core/messages";
 import Util from "../../core/util";
@@ -26,33 +26,6 @@ export interface IDiscordSettingsKeys {
      * The API key for BotsForDiscord.com.
      */
     readonly bfd?: string;
-}
-
-export interface IDiscordSettingsPaths {
-    /**
-     * The path to the commands directory.
-     */
-    readonly commands: string;
-
-    /**
-     * The path to the plugins directory.
-     */
-    readonly plugins: string;
-
-    /**
-     * The path to the services directory.
-     */
-    readonly services: string;
-
-    /**
-     * The path to the languages directory.
-     */
-    readonly languages: string;
-
-    /**
-     * The path to the tasks directory.
-     */
-    readonly tasks: string;
 }
 
 export interface IDiscordSettingsOpts {
@@ -107,7 +80,7 @@ export default class DiscordSettings implements IDiscordSettings {
          * @readonly
          */
         this.paths = {
-            ...DefaultSettingPaths,
+            ...DefaultDiscordSettingPaths,
             ...options.paths
         };
 

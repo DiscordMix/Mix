@@ -47,7 +47,7 @@ export default abstract class CommandParser {
      * @param {string[]} prefixes
      * @return {Command | null}
      */
-    public static async parse(commandString: string, manager: CommandRegistry, prefixes: string[]): Promise<Command | null> {
+    public static async parse(commandString: string, manager: CommandRegistry, prefixes?: string[]): Promise<Command | null> {
         const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
@@ -82,8 +82,18 @@ export default abstract class CommandParser {
      * @param {string[]} prefixes
      * @return {string | null}
      */
-    public static getCommandBase(commandString: string, prefixes: string[]): string | null {
-        for (const prefix of prefixes) {
+    public static getCommandBase(commandString: string, prefixes?: string[]): string | null {
+        let localPrefixes: string[] = []
+
+        // Parse without a prefix
+        if (prefixes === undefined) {
+            localPrefixes.push("");
+        }
+        else {
+            localPrefixes = prefixes;
+        }
+
+        for (const prefix of localPrefixes) {
             const regexResult = new RegExp(`^${Util.escapeRegexString(prefix)}([a-zA-Z]+)`).exec(commandString);
 
             if (regexResult) {

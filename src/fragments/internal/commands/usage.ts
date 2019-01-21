@@ -1,5 +1,5 @@
 import {default as Command, Type} from "../../../commands/command";
-import Context from "../../../commands/command-context";
+import DiscordContext from "../../../commands/command-context";
 import {Name, Description, Arguments} from "../../../decorators/general";
 import {Constraint, MsgBuilder} from "../../..";
 
@@ -22,7 +22,7 @@ const delimiter: string = ", ";
 @Constraint.Cooldown(1)
 export default class UsageCommand extends Command<IArgs> {
     // TODO: Finish implementing
-    public async run($: Context, args: IArgs): Promise<void> {
+    public async run($: DiscordContext, args: IArgs): Promise<void> {
         const targetCommand: Command | null = await $.bot.registry.get(args.command);
 
         if (!targetCommand) {

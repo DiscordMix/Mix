@@ -1,5 +1,5 @@
 import Command from "../../../commands/command";
-import Context from "../../../commands/command-context";
+import DiscordContext from "../../../commands/command-context";
 import {Name, Description} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
 
@@ -7,7 +7,7 @@ import {Constraint} from "../../../decorators/constraints";
 @Description("View the latency and heartbeat of the bot")
 @Constraint.Cooldown(1)
 export default class PingCommand extends Command {
-    public async run($: Context): Promise<void> {
+    public async run($: DiscordContext): Promise<void> {
         // TODO: Missing heartbeat
         await $.ok(`:ping_pong: Beep Boop! ${Math.round($.bot.client.ping)}ms`);
     }

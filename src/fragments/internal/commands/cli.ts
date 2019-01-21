@@ -2,7 +2,7 @@ import {exec} from "child_process";
 import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
 import Command, {Type} from "../../../commands/command";
-import Context from "../../../commands/command-context";
+import DiscordContext from "../../../commands/command-context";
 import Util from "../../../core/util";
 import {Description, Name, Aliases, Arguments} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
@@ -24,7 +24,7 @@ interface IArgs {
 )
 @Constraint.OwnerOnly
 export default class CliCommand extends Command<IArgs> {
-    public async run($: Context, args: IArgs): Promise<void> {
+    public async run($: DiscordContext, args: IArgs): Promise<void> {
         const started: number = Date.now();
 
         // TODO: Consider returning a promise?

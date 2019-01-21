@@ -1,7 +1,6 @@
 import {EventEmitter} from "events";
 import Command, {DefaultCommandRestrict} from "../commands/command";
-import DiscordBot from "../bots/discord-bot";
-import {InternalCommand} from "../core/bot-extra";
+import {InternalCommand, IBot} from "../core/bot-extra";
 import Log from "../logging/log";
 import {IFragment} from "./fragment";
 import Loader, {ILivePackage, IPackage} from "./loader";
@@ -16,9 +15,9 @@ export interface IFragmentManager extends EventEmitter {
 }
 
 export default class FragmentManager extends EventEmitter implements IFragmentManager {
-    protected readonly bot: DiscordBot;
+    protected readonly bot: IBot;
 
-    public constructor(bot: DiscordBot) {
+    public constructor(bot: IBot) {
         super();
 
         this.bot = bot;

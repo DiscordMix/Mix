@@ -63,9 +63,8 @@ export default class EmbedBuilder implements IEmbedBuilder {
     public static sections(sections: any, color: string = ""): EmbedBuilder {
         const result = new EmbedBuilder();
 
-        for (let i: number = 0; i < Object.keys(sections).length; i++) {
-            // TODO: Invoking Object.keys() again
-            result.field(Object.keys(sections)[i], sections[Object.keys(sections)[i]]);
+        for (const section of Object.keys(sections)) {
+            result.field(section, sections[section]);
         }
 
         if (color) {

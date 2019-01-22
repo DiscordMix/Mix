@@ -25,7 +25,7 @@ import MsgBuilder, {IMsgBuilder} from "./builders/msg-builder";
 import CommandParser from "./commands/command-parser";
 import ConsoleCommand from "./console/console-command";
 import ConsoleInterface, {IConsoleInterface} from "./console/console-interface";
-import {BotEvent, IBot} from "./core/bot-extra";
+import {BotEvent, IBot, IDiscordBot} from "./core/bot-extra";
 import DiscordChatEnv from "./core/discord-chat-env";
 import {IDisposable} from "./core/helpers";
 import Log from "./logging/log";
@@ -72,7 +72,6 @@ import {Once, On} from "./decorators/events";
 import BotConnector, {IBotConnector} from "./core/bot-connector";
 import {IUniversalClient} from "./universal/universal-client";
 import LogLevel from "./logging/log-level";
-import {IDiscordBot} from "./universal/discord/discord-bot";
 
 export {
     // Fragments
@@ -83,10 +82,10 @@ export {
     // Commands
     ArgumentParser,
     IArgumentParser,
-    DiscordContext,
-    IDiscordContext,
+    DiscordContext as Context,
+    IDiscordContext as IContext,
     TextBasedChannel,
-    IDiscordContextOpts,
+    IDiscordContextOpts as IContextOptions,
     CommandRegistry,
     ICommandRegistry,
     CmdHandlerEvent,
@@ -132,7 +131,7 @@ export {
     Permission,
     Patterns,
     DiscordEvent,
-    BotEvent,
+    BotEvent as EBotEvents,
     BotConnector,
     IBotConnector,
 

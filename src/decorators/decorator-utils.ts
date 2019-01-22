@@ -1,6 +1,7 @@
 import Command, {IConstraints} from "../commands/command";
 import {IFragmentMeta} from "../fragments/fragment";
 import Log from "../core/log";
+import {DecoratorClassProxy} from "./component";
 
 /**
  * Static utility class for decorators.
@@ -8,7 +9,7 @@ import Log from "../core/log";
 export abstract class DecoratorUtils {
     // TODO: Attempt to merge override methods
     // TODO: Should append instead of override?
-    public static overrideConstraint(target: any, constraint: string, value: any): any {
+    public static overrideConstraint(target: any, constraint: string, value: any): DecoratorClassProxy {
         return class extends target {
             public readonly constraints: IConstraints = {
                 ...this.constraints,
@@ -17,7 +18,7 @@ export abstract class DecoratorUtils {
         };
     }
 
-    public static overrideMeta(target: any, meta: string, value: any): any {
+    public static overrideMeta(target: any, meta: string, value: any): DecoratorClassProxy {
         return class extends target {
             public readonly meta: IFragmentMeta = {
                 ...this.meta,

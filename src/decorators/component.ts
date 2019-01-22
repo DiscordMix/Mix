@@ -3,6 +3,10 @@ import {SpecificConstraints} from "../commands/command";
 import ChatEnv from "../core/chat-env";
 import Log from "../core/log";
 
+export type DecoratorProxy = (target: any, key: string) => any;
+
+export type DecoratorClassProxy = object;
+
 export interface ICommandComponentOpts {
     readonly description: string;
     readonly cooldown: number;
@@ -11,7 +15,7 @@ export interface ICommandComponentOpts {
 }
 
 export default abstract class Component {
-    public static Command(name: string, options?: Partial<ICommandComponentOpts>): any {
+    public static Command(name: string, options?: Partial<ICommandComponentOpts>): DecoratorProxy {
         return function (target: any, key: string) {
             DecoratorUtils.ensureFunc(target);
 
@@ -43,7 +47,7 @@ export default abstract class Component {
         };
     }
 
-    public static Fragment<T = any>(name: string, options?: T): any {
+    public static Fragment<T = any>(name: string, options?: T): DecoratorProxy {
         // TODO: Implement
         throw Log.notImplemented;
     }

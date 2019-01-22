@@ -1,6 +1,6 @@
-import {Client, Message} from "discord.js";
+import {Client, Message, Snowflake} from "discord.js";
 import {EventEmitter} from "events";
-import {IArgumentResolver, ICustomArgType} from "../commands/command";
+import {UserGroup, IArgumentResolver, ICustomArgType} from "../commands/command";
 import {ICommandHandler} from "../commands/command-handler";
 import {IFragmentManager} from "../fragments/fragment-manager";
 import Language, {ILanguage} from "../language/language";
@@ -13,11 +13,12 @@ import {ITemp} from "./temp";
 import {ICommandRegistry} from "../commands/command-store";
 import {IConsoleInterface} from "../console/console-interface";
 import {ITaskManager} from "../tasks/task-manager";
-import {IActionInterpreter} from "../actions/action-interpreter";
+import ActionInterpreter, {IActionInterpreter} from "../actions/action-interpreter";
 import {Reducer, IStore} from "../state/store";
 import {IDiscordSettings} from "../universal/discord/discord-settings";
 import {PromiseOr} from "@atlas/xlib";
 import {IUniversalClient} from "../universal/universal-client";
+import {IDiscordClient} from "../universal/discord/discord-client";
 
 /**
  * Modules that will be used by the bot.
@@ -43,14 +44,19 @@ export interface IBotModules {
 /**
  * Options to create a new bot instance.
  */
-export interface IBotOptions<T = any> {
+export interface IBotOptions<T> {
     readonly settings: IDiscordSettings;
+    readonly prefixCommand?: boolean;
+    readonly internalCommands?: InternalCommand[];
+    readonly userGroups?: UserGroup[];
+    readonly owner?: Snowflake;
     readonly options?: Partial<IBotExtraOptions>;
     readonly argumentResolvers?: IArgumentResolver[];
     readonly argumentTypes?: ICustomArgType[];
     readonly languages?: string[];
     readonly initialState?: T;
     readonly reducers?: Reducer<T>[];
+    readonly modules?: IBotModules;
 }
 
 export type Action<T = void> = () => T;
@@ -81,7 +87,7 @@ export interface IBotExtraOptions {
 /**
  * Events fired by the bot.
  */
-export enum BotEvent {
+export enum EBotEvents {
     SetupStart = "setupStart",
     LoadingInternalFragments = "loadInternalFragments",
     LoadedInternalFragments = "loadedInternalFragments",
@@ -134,12 +140,12 @@ export enum InternalCommand {
 /**
  * Represents a Discord bot token.
  */
-export type DiscordBotToken = string;
+export type BotToken = string;
 
 /**
  * Represents a Discord account ID.
  */
-export type DiscordSnowflake = string;
+export type Snowflake = string;
 
 export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDisposable, ITimeoutAttachable {
     readonly settings: IDiscordSettings;
@@ -148,12 +154,15 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly registry: ICommandRegistry;
     readonly commandHandler: ICommandHandler;
     readonly console: IConsoleInterface;
+    readonly prefixCommand: boolean;
     readonly internalCommands: InternalCommand[];
+    readonly userGroups: UserGroup[];
     readonly options: IBotExtraOptions;
     readonly language?: Language;
     readonly argumentResolvers: IArgumentResolver[];
     readonly argumentTypes: ICustomArgType[];
     readonly disposables: IDisposable[];
+    readonly actionInterpreter: ActionInterpreter;
     readonly tasks: ITaskManager;
     readonly timeouts: NodeJS.Timeout[];
     readonly intervals: NodeJS.Timeout[];
@@ -161,6 +170,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly state: BotState;
     readonly suspended: boolean;
     readonly client: IUniversalClient;
+    readonly optimizer: IOptimizer;
     readonly fragments: IFragmentManager;
     readonly paths: IPathResolver;
     readonly store: IStore<TState, TActionType>;
@@ -178,4 +188,11 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     restart(reloadModules: boolean): PromiseOr<this>;
     disconnect(): PromiseOr<this>;
     clearTemp(): void;
+}
+
+export interface IDiscordBot<TState = any, TActionType = any> extends IBot<TState, TActionType> {
+    readonly owner?: Snowflake;
+    readonly client: IDiscordClient;
+
+    postStats(): PromiseOr<void>;
 }

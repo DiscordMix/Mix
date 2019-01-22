@@ -4,7 +4,7 @@ import EmbedBuilder from "../builders/embed-builder";
 import MsgBuilder from "../builders/msg-builder";
 import EditableMessage from "../message/editable-message";
 import DiscordBot from "../bots/discord-bot";
-import Log from "../logging/log";
+import Log from "./log";
 import Util from "./util";
 
 export interface IResponseHelper {

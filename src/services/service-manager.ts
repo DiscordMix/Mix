@@ -3,7 +3,7 @@ import {EventEmitter} from "events";
 import fs from "fs";
 import path from "path";
 import DiscordBot from "../bots/discord-bot";
-import Log from "../logging/log";
+import Log from "../core/log";
 import Util from "../core/util";
 import {IGenericService, IProcessMsg, IRawProcessMsg, ProcessMsgType} from "./generic-service";
 import SMIS from "./smis";

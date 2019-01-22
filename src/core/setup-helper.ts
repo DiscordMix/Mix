@@ -1,6 +1,6 @@
 import {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
 import Context from "../commands/command-context";
-import Log from "../logging/log";
+import Log from "./log";
 import {PromiseOr} from "@atlas/xlib";
 
 /**

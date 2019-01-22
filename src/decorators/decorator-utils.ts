@@ -1,6 +1,6 @@
 import Command, {IConstraints} from "../commands/command";
 import {IFragmentMeta} from "../fragments/fragment";
-import Log from "../logging/log";
+import Log from "../core/log";
 
 /**
  * Static utility class for decorators.

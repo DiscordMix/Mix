@@ -14,7 +14,7 @@ import fs from "fs";
 import path from "path";
 import DiscordBot from "../bots/discord-bot";
 import Patterns from "./patterns";
-import Log from "../logging/log";
+import Log from "./log";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
@@ -266,10 +266,10 @@ export default abstract class Util {
 
     /**
      * @param {string} directory The directory to scan
-     * @param {boolean} [isAbsolute=false] Whether to return the absolute path of the files
+     * @param {boolean} [absolutePath=false] Whether to return the absolute path of the files
      * @return {Promise<string[] | null>} The list of files or null of the directory does not exist.
      */
-    public static getFiles(directory: string, isAbsolute: boolean = false): Promise<string[] | null> {
+    public static getFiles(directory: string, absolutePath: boolean = false): Promise<string[] | null> {
         return new Promise((resolve) => {
             if (!fs.existsSync(directory)) {
                 resolve(null);
@@ -284,7 +284,7 @@ export default abstract class Util {
 
                 const result: string[] = files;
 
-                if (isAbsolute) {
+                if (absolutePath) {
                     for (let i: number = 0; i < result.length; i++) {
                         result[i] = path.resolve(path.join(directory, result[i]));
                     }

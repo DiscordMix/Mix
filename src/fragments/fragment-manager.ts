@@ -2,7 +2,7 @@ import {EventEmitter} from "events";
 import Command, {DefaultCommandRestrict} from "../commands/command";
 import DiscordBot from "../bots/discord-bot";
 import {InternalCommand} from "../core/bot-extra";
-import Log from "../logging/log";
+import Log from "../core/log";
 import {IFragment} from "./fragment";
 import Loader, {ILivePackage, IPackage} from "./loader";
 import {ForkedService} from "../services/forked-service";

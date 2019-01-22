@@ -1,5 +1,5 @@
 import {default as parseArgs, ParsedArgs} from "minimist";
-import Log from "../logging/log";
+import Log from "../core/log";
 
 export interface IConsoleCommand {
     readonly base: string;

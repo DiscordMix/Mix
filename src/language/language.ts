@@ -3,7 +3,7 @@ import path from "path";
 import BotMessages from "../core/messages";
 import Util from "../core/util";
 import {PromiseOr} from "@atlas/xlib";
-import Log from "../logging/log";
+import Log from "../core/log";
 
 export type LanguageSource = Map<string, any>;
 

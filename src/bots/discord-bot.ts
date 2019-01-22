@@ -6,7 +6,7 @@ import Context from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
 import Util from "../core/util";
 import DiscordSettings from "../universal/discord/discord-settings";
-import Log from "../logging/log";
+import Log from "../core/log";
 import Temp from "../core/temp";
 import Discord, {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
 import ServiceManager from "../services/service-manager";
@@ -34,11 +34,10 @@ import PathResolver from "../core/path-resolver";
 import {ArgResolvers, ArgTypes, DefaultBotOptions} from "../core/constants";
 import Store from "../state/store";
 import BotMessages from "../core/messages";
-import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, DiscordBotToken, BotEvent, IDiscordBot} from "../core/bot-extra";
+import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, EBotEvents, IDiscordBot} from "../core/bot-extra";
 import {Action} from "@atlas/automata";
 import BotConnector from "../core/bot-connector";
 import CommandRegistry from "../commands/command-store";
-import DiscordClient from "../universal/discord/discord-client";
 
 // TODO: Should emit an event when state changes
 /**
@@ -67,7 +66,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
     public readonly languages?: string[];
     public readonly state: BotState;
     public readonly suspended: boolean;
-    public readonly client: DiscordClient;
+    public readonly client: Client;
     public readonly optimizer: Optimizer;
     public readonly fragments: FragmentManager;
     public readonly paths: PathResolver;
@@ -82,10 +81,10 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
 
     /**
      * Setup the bot from an object
-     * @param {Partial<IBotOptions> | DiscordBotToken} botOptionsOrToken
+     * @param {Partial<IBotOptions> | BotToken} botOptionsOrToken
      * @param {boolean} [testMode=false]
      */
-    public constructor(botOptionsOrToken: Partial<IBotOptions<TState>> | DiscordBotToken, testMode: boolean = false) {
+    public constructor(botOptionsOrToken: Partial<IBotOptions<TState>> | BotToken, testMode: boolean = false) {
         super();
 
         let options: Partial<IBotOptions<TState>> = typeof botOptionsOrToken === "object" && botOptionsOrToken !== null && !Array.isArray(botOptionsOrToken) ? Object.assign({}, botOptionsOrToken) : (typeof botOptionsOrToken === "string" ? {
@@ -586,7 +585,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
             return false;
         }
 
-        this.emit(BotEvent.HandleMessageStart);
+        this.emit(EBotEvents.HandleMessageStart);
 
         if (this.options.logMessages) {
             const names: any = {};
@@ -658,7 +657,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
             }
         }
 
-        this.emit(BotEvent.HandleMessageEnd);
+        this.emit(EBotEvents.HandleMessageEnd);
 
         return true;
     }
@@ -671,7 +670,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
      * @return {Promise<void>}
      */
     public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
-        this.emit(BotEvent.HandleCommandMessageStart, message, content);
+        this.emit(EBotEvents.HandleCommandMessageStart, message, content);
 
         const command: Command | null = await CommandParser.parse(
             content,
@@ -701,7 +700,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
             rawArgs
         );
 
-        this.emit(BotEvent.HandleCommandMessageEnd, message, content);
+        this.emit(EBotEvents.HandleCommandMessageEnd, message, content);
     }
 
     /**
@@ -735,7 +734,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
      * @return {Promise<this>}
      */
     public async restart(reloadModules: boolean = true): Promise<this> {
-        this.emit(BotEvent.Restarting, reloadModules);
+        this.emit(EBotEvents.Restarting, reloadModules);
         Log.verbose("Restarting");
 
         // Dispose resources
@@ -755,7 +754,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
         }
 
         await this.connect();
-        this.emit(BotEvent.Restarted, reloadModules);
+        this.emit(EBotEvents.Restarted, reloadModules);
 
         return this;
     }
@@ -765,7 +764,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
      * @return {Promise<this>}
      */
     public async disconnect(): Promise<this> {
-        this.emit(BotEvent.Disconnecting);
+        this.emit(EBotEvents.Disconnecting);
 
         const servicesStopped: number = this.services.size;
 
@@ -775,7 +774,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
         await this.client.destroy();
         (this.client as any) = new Client();
         Log.info("Disconnected");
-        this.emit(BotEvent.Disconnected);
+        this.emit(EBotEvents.Disconnected);
 
         return this;
     }
@@ -784,7 +783,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
      * Clear all the files inside the temp folder.
      */
     public clearTemp(): void {
-        this.emit(BotEvent.ClearingTemp);
+        this.emit(EBotEvents.ClearingTemp);
 
         // TODO: Path may need to be resolved/maybe it wont be relative...
         if (fs.existsSync("./temp")) {
@@ -797,7 +796,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
             });
         }
 
-        this.emit(BotEvent.ClearedTemp);
+        this.emit(EBotEvents.ClearedTemp);
     }
 
     /**

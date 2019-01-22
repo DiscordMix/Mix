@@ -1,7 +1,7 @@
 import Command, {CommandRunner, CommandRelay, IGenericCommand} from "../commands/command";
 import {DecoratorUtils} from "./decorator-utils";
 import Context from "../commands/command-context";
-import Log from "../logging/log";
+import Log from "../core/log";
 
 export const attachedLogger: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
     Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${$.sender.tag}`);

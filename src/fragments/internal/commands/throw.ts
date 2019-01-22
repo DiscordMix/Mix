@@ -2,7 +2,7 @@ import Command from "../../../commands/command";
 import BotMessages from "../../../core/messages";
 import {Name, Description} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
-import Log from "../../../logging/log";
+import Log from "../../../core/log";
 
 @Name("throw")
 @Description("Throw an error")

@@ -13,14 +13,14 @@ export interface IBotBuilder extends IBuilder<IBot> {
 }
 
 export default class BotBuilder implements IBotBuilder {
-    protected readonly botSettings: any;
+    protected readonly _settings: any;
     protected readonly bot: any;
 
     public constructor() {
         /**
          * @type {*}
          */
-        this.botSettings = [];
+        this._settings = [];
     }
 
     /**
@@ -28,7 +28,7 @@ export default class BotBuilder implements IBotBuilder {
      * @return {BotBuilder}
      */
     public token(token: string): this {
-        this.botSettings.general.token = token;
+        this._settings.general.token = token;
 
         return this;
     }
@@ -38,7 +38,7 @@ export default class BotBuilder implements IBotBuilder {
      * @return {BotBuilder}
      */
     public prefixes(prefixes: string | string[]): this {
-        this.botSettings.general.prefixes = Array.isArray(prefixes) ? prefixes : [prefixes];
+        this._settings.general.prefixes = Array.isArray(prefixes) ? prefixes : [prefixes];
 
         return this;
     }

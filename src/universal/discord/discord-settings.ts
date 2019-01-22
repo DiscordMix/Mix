@@ -1,6 +1,6 @@
 import fs from "fs";
 import {DefaultSettingPaths} from "../../core/constants";
-import Log from "../../logging/log";
+import Log from "../../core/log";
 import BotMessages from "../../core/messages";
 import Util from "../../core/util";
 

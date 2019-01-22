@@ -4,7 +4,7 @@ if (!process.send || !process.connected) {
 }
 
 import fs from "fs";
-import Log from "../logging/log";
+import Log from "../core/log";
 import {IForkedService, IRawProcessMsg, ProcessMsgType} from "./generic-service";
 import ServiceManager from "./service-manager";
 

@@ -15,8 +15,8 @@ export function Meta(meta: IFragmentMeta): any {
                 ...this.meta,
                 ...meta
             };
-        };
-    };
+        }
+    }
 }
 
 /**

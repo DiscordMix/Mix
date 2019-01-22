@@ -1,7 +1,7 @@
 import {DMChannel, Guild, Message, Snowflake, TextChannel} from "discord.js";
 import {ChannelType} from "../actions/action-interpreter";
 import DiscordBot from "../bots/discord-bot";
-import Log from "../logging/log";
+import Log from "../core/log";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
 import Util from "../core/util";

@@ -1,5 +1,5 @@
-import {DiscordSnowflake} from "./bot-extra";
-import Log from "../logging/log";
+import {Snowflake} from "./bot-extra";
+import Log from "./log";
 import {PromiseOr} from "@atlas/xlib";
 
 export enum RequestType {
@@ -12,11 +12,11 @@ export interface IRequest {
 }
 
 export interface IAuthenticator {
-    authenticate(issuer: DiscordSnowflake, request: IRequest): PromiseOr<boolean>;
+    authenticate(issuer: Snowflake, request: IRequest): PromiseOr<boolean>;
 }
 
 export default class Authenticator implements IAuthenticator {
-    public authenticate(issuer: DiscordSnowflake, request: IRequest): boolean {
+    public authenticate(issuer: Snowflake, request: IRequest): boolean {
         // TODO: Implement
         throw Log.notImplemented;
     }

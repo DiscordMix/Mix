@@ -1,12 +1,12 @@
 import {DecoratorUtils} from "./decorator-utils";
 import {SpecificConstraints} from "../commands/command";
-import DiscordChatEnv from "../core/discord-chat-env";
-import Log from "../logging/log";
+import ChatEnv from "../core/chat-env";
+import Log from "../core/log";
 
 export interface ICommandComponentOpts {
     readonly description: string;
     readonly cooldown: number;
-    readonly env: DiscordChatEnv;
+    readonly env: ChatEnv;
     readonly specific: SpecificConstraints;
 }
 

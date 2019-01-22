@@ -25,10 +25,10 @@ import MsgBuilder, {IMsgBuilder} from "./builders/msg-builder";
 import CommandParser from "./commands/command-parser";
 import ConsoleCommand from "./console/console-command";
 import ConsoleInterface, {IConsoleInterface} from "./console/console-interface";
-import {BotEvent, IBot, IDiscordBot} from "./core/bot-extra";
-import DiscordChatEnv from "./core/discord-chat-env";
+import {EBotEvents, IBot} from "./core/bot-extra";
+import ChatEnv from "./core/chat-env";
 import {IDisposable} from "./core/helpers";
-import Log from "./logging/log";
+import Log, {LogLevel} from "./core/log";
 import Patterns from "./core/patterns";
 import Permission from "./core/permission";
 import DiscordSettings, {IDiscordSettings} from "./universal/discord/discord-settings";
@@ -70,8 +70,6 @@ import {PromiseOr} from "@atlas/xlib";
 import {CmdHandlerEvent} from "./commands/command-handler";
 import {Once, On} from "./decorators/events";
 import BotConnector, {IBotConnector} from "./core/bot-connector";
-import {IUniversalClient} from "./universal/universal-client";
-import LogLevel from "./logging/log-level";
 
 export {
     // Fragments
@@ -117,6 +115,7 @@ export {
     IBuilder,
 
     // Core
+    DiscordBot as Bot,
     IBot,
     EditableMessage,
     Log,
@@ -129,19 +128,12 @@ export {
     TimeSuffixType,
     Util,
     Permission,
+    ChatEnv,
     Patterns,
     DiscordEvent,
-    BotEvent as EBotEvents,
+    EBotEvents,
     BotConnector,
     IBotConnector,
-
-    // Universal
-    IUniversalClient,
-
-    // Platform -> Discord
-    DiscordBot,
-    IDiscordBot,
-    DiscordChatEnv,
 
     // Collections
     List,

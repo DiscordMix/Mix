@@ -1,5 +1,5 @@
 import Discord, {Message} from "discord.js";
-import Log from "../logging/log";
+import Log from "../core/log";
 
 export interface IMessageEditOptions {
     readonly message: string;

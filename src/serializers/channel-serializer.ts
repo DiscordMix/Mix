@@ -1,7 +1,7 @@
 import {Channel, Snowflake, TextChannel} from "discord.js";
 import {Collection} from "../collections/collection";
 import {ISerializer} from "./serializer";
-import Log from "../logging/log";
+import Log from "../core/log";
 
 /**
  * Serializes Discord.JS channels from strings to channel objects and vise versa

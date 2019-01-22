@@ -5,7 +5,7 @@ import readline from "readline";
 import {ReadonlyCommandMap} from "../commands/command-store";
 import DiscordBot from "../bots/discord-bot";
 import {DebugMode} from "../core/constants";
-import Log from "../logging/log";
+import Log from "../core/log";
 import Util from "../core/util";
 import {ReadonlyServiceMap} from "../services/service-manager";
 

@@ -14,7 +14,7 @@ import Command, {
 
 import {Message} from "discord.js";
 import {FalseDelegates, TrueDelegates} from "../core/constants";
-import Log from "../logging/log";
+import Log from "../core/log";
 import Patterns from "../core/patterns";
 import SwitchParser, {ICommandSwitch} from "./switch-parser";
 

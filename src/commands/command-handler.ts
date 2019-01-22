@@ -5,7 +5,7 @@ import DiscordChatEnv from "../core/discord-chat-env";
 import Log from "../logging/log";
 import Util from "../core/util";
 import Command, {RawArguments, RestrictGroup} from "./command";
-import DiscordContext, {IContext} from "./command-context";
+import DiscordContext from "./command-context";
 import CommandParser from "./command-parser";
 import {ICommandRegistry} from "./command-registry";
 import {PromiseOr} from "@atlas/xlib";
@@ -248,7 +248,11 @@ export default class CommandHandler implements ICommandHandler {
      * @param {RawArguments} rawArgs
      * @return {Promise<boolean>} Whether the command was successfully executed
      */
-    public async handle(context: IContext, command: Command, rawArgs: RawArguments): Promise<boolean> {
+    public async handle(context: DiscordContext, command: Command, rawArgs: RawArguments): Promise<boolean> {
+        if (!this.meetsRequirements(context, command, rawArgs)) {
+            return false;
+        }
+
         const resolvedArgs: any | null = CommandParser.resolveArguments({
             arguments: rawArgs,
             message: context.msg,

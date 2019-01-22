@@ -11,6 +11,7 @@ import Command, {IArgumentResolver, ICustomArgType, RawArguments} from "../comma
 import TaskManager from "../tasks/task-manager";
 import {IUniversalClient} from "../universal/universal-client";
 import FragmentManager from "../fragments/fragment-manager";
+import PathResolver from "../core/path-resolver";
 import Store from "../state/store";
 import StatCounter from "../core/stat-counter";
 import BotConnector from "../core/bot-connector";
@@ -45,6 +46,7 @@ export default abstract class GenericBot<TState = any, TActionType = any, TConte
     public readonly suspended: boolean;
     public readonly client: IUniversalClient;
     public readonly fragments: FragmentManager;
+    public readonly paths: PathResolver;
     public readonly store: Store<TState, TActionType>;
 
     protected setupStart: number = 0;
@@ -55,7 +57,7 @@ export default abstract class GenericBot<TState = any, TActionType = any, TConte
 
     protected readonly connector!: BotConnector;
 
-    public constructor(options: IBotOptions) {
+    public constructor(options: Partial<IBotOptions<TState>>) {
         super();
 
         this.settings = {
@@ -76,6 +78,13 @@ export default abstract class GenericBot<TState = any, TActionType = any, TConte
          * @readonly
          */
         this.state = BotState.Disconnected;
+
+        /**
+         * Utility to resolve file and directory paths.
+         * @type {PathResolver}
+         * @readonly
+         */
+        this.paths = new PathResolver(this.settings.paths);
 
         /**
          * Access the bot's temporary file storage.
@@ -265,7 +274,7 @@ export default abstract class GenericBot<TState = any, TActionType = any, TConte
      * @param {string[]} args
      * @return {Promise<*>}
      */
-    public async invokeCommand(base: string, referer: IUniversalMessage, ...args: string[]): Promise<any> {
+    public async invokeCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
         const content: string = `${base} ${args.join(" ")}`.trim();
 
         let command: Command | null = await CommandParser.parse(
@@ -541,7 +550,7 @@ export default abstract class GenericBot<TState = any, TActionType = any, TConte
         Log.verbose("Starting");
 
         await this.client.setup();
-
+        
         // TODO: Move this to the Discord bot Client's setup implementation.
         /*.catch(async (error: Error) => {
             if (error.message === "Incorrect login details were provided.") {
@@ -665,7 +674,7 @@ export default abstract class GenericBot<TState = any, TActionType = any, TConte
             bot: this as any,
             msg
         };
-
+        
         // TODO: Use in new DiscordBot implementation
         /*new DiscordContext({
             bot: this,

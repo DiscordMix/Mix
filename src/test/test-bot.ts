@@ -7,7 +7,7 @@ import DiscordBot from "../bots/discord-bot";
 import {BotEvent} from "../core/bot-extra";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
-import Settings from "../universal/discord/discord-settings";
+import DiscordSettings from "../universal/discord/discord-settings";
 import Rgb from "../misc/rgb";
 import Rgba from "../misc/rgba";
 import {ITestState, TestStoreActionType} from "../state/store";
@@ -137,7 +137,7 @@ export default class TestBot extends DiscordBot<ITestState, TestStoreActionType>
 }
 
 export let testBot: TestBot = new TestBot({
-    settings: new Settings({
+    settings: new DiscordSettings({
         general: {
             prefix: ["!"],
             token

@@ -1,4 +1,8 @@
-import {ISettings, ISettingsPaths} from "../../core/settings";
+import fs from "fs";
+import {DefaultDiscordSettingPaths} from "../../core/constants";
+import Log from "../../logging/log";
+import BotMessages from "../../core/messages";
+import Util from "../../core/util";
 
 export interface IDiscordSettingsGeneral {
     /**
@@ -16,12 +20,12 @@ export interface IDiscordSettingsKeys {
     /**
      * The API key for DiscordBotList.org.
      */
-    readonly dbl: string;
+    readonly dbl?: string;
 
     /**
      * The API key for BotsForDiscord.com.
      */
-    readonly bfd: string;
+    readonly bfd?: string;
 }
 
 export interface IDiscordSettingsOpts {
@@ -30,25 +34,61 @@ export interface IDiscordSettingsOpts {
     readonly keys?: Partial<IDiscordSettingsKeys>;
 }
 
-export interface IDiscordSettings extends ISettings {
+export interface IDiscordSettings {
     readonly general: IDiscordSettingsGeneral;
     readonly paths: IDiscordSettingsPaths;
-    readonly keys?: IDiscordSettingsKeys;
+    readonly keys: IDiscordSettingsKeys;
 }
 
-export interface IDiscordSettingsPaths extends ISettingsPaths {
+export default class DiscordSettings implements IDiscordSettings {
     /**
-     * The path to the commands directory.
+     * Load bot settings from a file
+     * @param {string} path The file containing the settings
+     * @return {Promise<DiscordSettings>}
      */
-    readonly commands: string;
+    public static async fromFile(path: string): Promise<DiscordSettings> {
+        if (!fs.existsSync(path)) {
+            throw Log.fatal(BotMessages.CFG_FILE_NO_EXIST);
+        }
+
+        const fileSettings: IDiscordSettingsOpts = await Util.readJson(path);
+
+        // TODO: Make sure pure objects work
+        return new DiscordSettings(fileSettings);
+    }
+
+    public general: IDiscordSettingsGeneral;
+    public paths: IDiscordSettingsPaths;
+    public keys: IDiscordSettingsKeys;
 
     /**
-     * The path to the services directory.
+     * @param {Partial<IDiscordSettingsOpts>} options
      */
-    readonly services: string;
+    public constructor(options: Partial<IDiscordSettingsOpts>) {
+        if (!options.general) {
+            throw Log.error(BotMessages.CFG_EXPECT_GENERAL);
+        }
 
-    /**
-     * The path to the tasks directory.
-     */
-    readonly tasks: string;
+        /**
+         * @type {IDiscordSettingsGeneral}
+         * @readonly
+         */
+        this.general = options.general;
+
+        /**
+         * @type {IDiscordSettingsPaths}
+         * @readonly
+         */
+        this.paths = {
+            ...DefaultDiscordSettingPaths,
+            ...options.paths
+        };
+
+        /**
+         * @todo Hotfix default value, it should be OK like this, review anyway
+         * @type {IDiscordSettingsKeys}
+         * @readonly
+         */
+        this.keys = options.keys || {};
+    }
 }

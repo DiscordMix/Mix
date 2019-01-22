@@ -3,7 +3,7 @@ import {Guild, GuildMember} from "discord.js";
 import {performance} from "perf_hooks";
 import readline from "readline";
 import {ReadonlyCommandMap} from "../commands/command-store";
-import DiscordBot from "../bots/discord-bot";
+import Bot from "../core/bot";
 import {DebugMode} from "../core/constants";
 import Log from "../core/log";
 import Util from "../core/util";
@@ -15,7 +15,7 @@ export type ConsoleCommandHandler = (args: string[]) => void;
 export interface IConsoleInterface {
     readonly ready: boolean;
 
-    setup(bot: DiscordBot, registerDefaults: boolean): this;
+    setup(bot: Bot, registerDefaults: boolean): this;
 }
 
 export default class ConsoleInterface {
@@ -39,10 +39,10 @@ export default class ConsoleInterface {
     }
 
     /**
-     * @param {DiscordBot} bot
+     * @param {Bot} bot
      * @return {ConsoleInterface}
      */
-    public setup(bot: DiscordBot, registerDefaults: boolean = true): this {
+    public setup(bot: Bot, registerDefaults: boolean = true): this {
         Log.verbose("Setting up console interface");
 
         const ci = readline.createInterface({
@@ -119,10 +119,10 @@ export default class ConsoleInterface {
     }
 
     /**
-     * @param {DiscordBot} bot
+     * @param {Bot} bot
      * @return {this}
      */
-    protected defaultCommands(bot: DiscordBot): this {
+    protected defaultCommands(bot: Bot): this {
         let using: Guild | null = null;
 
         if (DebugMode) {

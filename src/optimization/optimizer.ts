@@ -1,7 +1,7 @@
 import fs from "fs";
 import Command from "../commands/command";
 import {ReadonlyCommandMap} from "../commands/command-store";
-import DiscordBot from "../bots/discord-bot";
+import Bot from "../core/bot";
 import {EBotEvents} from "../core/bot-extra";
 import {IDisposable} from "../core/helpers";
 import Log from "../core/log";
@@ -17,7 +17,7 @@ export interface IOptimizer extends IDisposable {
  * Used in large bots for memory optimization
  */
 export default class Optimizer implements IOptimizer {
-    protected readonly bot: DiscordBot;
+    protected readonly bot: Bot;
     protected readonly interval: number;
     protected readonly sizeThreshold: number;
 
@@ -25,7 +25,7 @@ export default class Optimizer implements IOptimizer {
     protected processInterval: NodeJS.Timeout | null;
 
     // TODO: Interval should be calculated based on amount of commands
-    public constructor(bot: DiscordBot, interval: number = 10 * 60 * 1000, sizeThreshold: number = 102_400) {
+    public constructor(bot: Bot, interval: number = 10 * 60 * 1000, sizeThreshold: number = 102_400) {
         this.bot = bot;
         this.commandsUsed = [];
         this.interval = interval;

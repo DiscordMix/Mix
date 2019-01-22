@@ -1,5 +1,5 @@
 import Log from "../core/log";
-import DiscordBot from "../bots/discord-bot";
+import Bot from "../core/bot";
 import Command, {GenericCommand} from "./command";
 import Context from "./command-context";
 import {Snowflake} from "discord.js";
@@ -24,7 +24,7 @@ export type CommandMap = Map<string, CommandPackage>;
 export type ReadonlyCommandMap = ReadonlyMap<string, CommandPackage>;
 
 export interface ICommandRegistry {
-    readonly bot: DiscordBot;
+    readonly bot: Bot;
     readonly cooldowns: Map<Snowflake, Map<string, number>>;
     readonly size: number;
 
@@ -48,7 +48,7 @@ export interface ICommandRegistry {
 }
 
 export default class CommandRegistry implements ICommandRegistry {
-    public readonly bot: DiscordBot;
+    public readonly bot: Bot;
     public readonly cooldowns: Map<Snowflake, Map<string, number>>;
 
     public simpleCommands: Map<string, any>;
@@ -58,11 +58,11 @@ export default class CommandRegistry implements ICommandRegistry {
     protected readonly aliases: Map<string, string>;
 
     /**
-     * @param {DiscordBot} bot
+     * @param {Bot} bot
      */
-    public constructor(bot: DiscordBot) {
+    public constructor(bot: Bot) {
         /**
-         * @type {DiscordBot}
+         * @type {Bot}
          * @protected
          * @readonly
          */

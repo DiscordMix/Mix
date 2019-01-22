@@ -1,4 +1,4 @@
-import DiscordBot from "../bots/discord-bot";
+import Bot from "../core/bot";
 import {IDisposable, ISyncable, IVolatile} from "../core/helpers";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 
@@ -23,14 +23,14 @@ export default abstract class Task implements ITask {
     public readonly iterations: number = 0;
     public readonly lastIteration: number = -1;
 
-    protected readonly bot: DiscordBot;
+    protected readonly bot: Bot;
 
     /**
-     * @param {DiscordBot} bot
+     * @param {Bot} bot
      */
-    protected constructor(bot: DiscordBot) {
+    protected constructor(bot: Bot) {
         /**
-         * @type {DiscordBot}
+         * @type {Bot}
          * @protected
          * @readonly
          */

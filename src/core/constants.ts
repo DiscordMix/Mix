@@ -3,7 +3,7 @@ import path from "path";
 import {DefiniteArgument, IArgumentResolver, ICustomArgType, InternalArgType} from "../commands/command";
 import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
 import Patterns from "./patterns";
-import {IDiscordSettingsPaths} from "../universal/discord/discord-settings";
+import {ISettingsPaths} from "./settings";
 import Util from "./util";
 
 // TODO: Not working
@@ -120,7 +120,7 @@ export const DefaultBotOptions: IBotExtraOptions = {
     optimizer: false
 };
 
-export const DefaultSettingPaths: IDiscordSettingsPaths = {
+export const DefaultSettingPaths: ISettingsPaths = {
     commands: "commands",
     plugins: "plugins",
     services: "services",

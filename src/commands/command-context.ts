@@ -1,6 +1,6 @@
 import {DMChannel, Guild, Message, Snowflake, TextChannel} from "discord.js";
 import {ChannelType} from "../actions/action-interpreter";
-import DiscordBot from "../bots/discord-bot";
+import Bot from "../core/bot";
 import Log from "../core/log";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
@@ -12,14 +12,14 @@ import {PromiseOr} from "@atlas/xlib";
 
 export interface IContextOptions {
     readonly msg: Message;
-    readonly bot: DiscordBot;
+    readonly bot: Bot;
     readonly label: string | null;
 }
 
 export type TextBasedChannel = TextChannel | DMChannel;
 
 export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper {
-    readonly bot: DiscordBot;
+    readonly bot: Bot;
     readonly msg: Message;
     readonly label: string | null;
     readonly store: Store;
@@ -37,7 +37,7 @@ export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends
 }
 
 export default class Context<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IContext {
-    public readonly bot: DiscordBot;
+    public readonly bot: Bot;
     public readonly msg: Message;
     public readonly label: string | null;
 
@@ -58,7 +58,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         this.msg = options.msg;
 
         /**
-         * @type {DiscordBot}
+         * @type {Bot}
          * @readonly
          */
         this.bot = options.bot;

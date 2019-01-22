@@ -2,7 +2,7 @@ import {expect} from "chai";
 import {IStateCapsule} from "../state/time-machine";
 import assert = require("assert");
 import {TestStoreActionType, ITestState} from "../state/store";
-import DiscordBot from "../bots/discord-bot";
+import Bot from "../core/bot";
 import {testBot} from "./test-bot";
 
 describe("Time Machine", () => {
@@ -75,7 +75,7 @@ describe("Restart", () => {
 
 describe("Disconnect", () => {
     it("should disconnect", async () => {
-        const result: DiscordBot = await testBot.disconnect();
+        const result: Bot = await testBot.disconnect();
 
         expect(result).to.be.an("object");
         expect(result.client.user).to.be.a("null");

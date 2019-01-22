@@ -1,6 +1,6 @@
 import Log from "./log";
 import DiscordEvent from "./discord-event";
-import DiscordBot from "../bots/discord-bot";
+import Bot from "./bot";
 import {BotState, EBotEvents} from "./bot-extra";
 import {Message} from "discord.js";
 import {Title, DebugMode, InternalFragmentsPath} from "./constants";
@@ -15,10 +15,10 @@ export interface IBotConnector {
 }
 
 export default class BotConnector implements IBotConnector {
-    protected bot: DiscordBot;
+    protected bot: Bot;
     protected setupStart!: number;
 
-    public constructor(bot: DiscordBot) {
+    public constructor(bot: Bot) {
         this.bot = bot;
     }
 

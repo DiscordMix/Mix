@@ -1,4 +1,4 @@
-import DiscordBot from "../bots/discord-bot";
+import Bot from "../core/bot";
 import Log from "../core/log";
 import Util from "../core/util";
 import Loader, {IPackage} from "../fragments/loader";
@@ -21,16 +21,16 @@ export interface ITaskManager {
  * Manages, triggers, and executes tasks
  */
 export default class TaskManager implements ITaskManager {
-    protected readonly bot: DiscordBot;
+    protected readonly bot: Bot;
     protected readonly tasks: Map<string, Task>;
     protected readonly scheduler: Map<string, NodeJS.Timeout>;
 
     /**
-     * @param {DiscordBot} bot
+     * @param {Bot} bot
      */
-    public constructor(bot: DiscordBot) {
+    public constructor(bot: Bot) {
         /**
-         * @type {DiscordBot}
+         * @type {Bot}
          * @protected
          * @readonly
          */

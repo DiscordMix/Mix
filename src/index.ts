@@ -1,7 +1,7 @@
 import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
 import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/command-context";
 import CommandRegistry, {ICommandRegistry} from "./commands/command-store";
-import DiscordBot from "./bots/discord-bot";
+import Bot from "./core/bot";
 
 import Command, {
     ArgumentTypeChecker,
@@ -31,7 +31,7 @@ import {IDisposable} from "./core/helpers";
 import Log, {LogLevel} from "./core/log";
 import Patterns from "./core/patterns";
 import Permission from "./core/permission";
-import DiscordSettings, {IDiscordSettings} from "./universal/discord/discord-settings";
+import Settings, {ISettings} from "./core/settings";
 import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setup-helper";
 import Util from "./core/util";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
@@ -115,15 +115,15 @@ export {
     IBuilder,
 
     // Core
-    DiscordBot as Bot,
+    Bot,
     IBot,
     EditableMessage,
     Log,
     LogLevel,
     Rgb,
     Rgba,
-    DiscordSettings,
-    IDiscordSettings,
+    Settings,
+    ISettings,
     TimeParser,
     TimeSuffixType,
     Util,

@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import DiscordSettings from "../universal/discord/discord-settings";
+import Settings from "../universal/discord/discord-settings";
 import {TestSubjects} from "./test-bot";
 
 describe("Collection", () => {
@@ -60,15 +60,15 @@ describe("Collection", () => {
 
     describe("fromFile()", () => {
         it("should load settings from a file", () => {
-            const settingsPromise: Promise<DiscordSettings> = new Promise(async (resolve) => {
-                resolve(await DiscordSettings.fromFile(TestSubjects.settingsPath));
+            const settingsPromise: Promise<Settings> = new Promise(async (resolve) => {
+                resolve(await Settings.fromFile(TestSubjects.settingsPath));
             });
 
-            const settingsSecondPromise: Promise<DiscordSettings> = new Promise(async (resolve) => {
-                resolve(await DiscordSettings.fromFile(TestSubjects.settingsPathTwo));
+            const settingsSecondPromise: Promise<Settings> = new Promise(async (resolve) => {
+                resolve(await Settings.fromFile(TestSubjects.settingsPathTwo));
             });
 
-            settingsPromise.then((result: DiscordSettings) => {
+            settingsPromise.then((result: Settings) => {
                 expect(result.general.prefix).to.be.an("array");
                 expect(result.general.prefix[0]).to.equal("!");
                 expect(result.general.token).to.be.an("string").and.to.equal("my_secret_token");
@@ -78,7 +78,7 @@ describe("Collection", () => {
                 expect(result.keys.bfd).to.be.an("string").and.to.equal("my_bfd_key");
             });
 
-            return settingsSecondPromise.then((result: DiscordSettings) => {
+            return settingsSecondPromise.then((result: Settings) => {
                 expect(result.general.prefix).to.be.an("array");
                 expect(result.general.prefix[0]).to.equal(".");
                 expect(result.general.token).to.be.an("string").and.to.equal("another_secret_token");

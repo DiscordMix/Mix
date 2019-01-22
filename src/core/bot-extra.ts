@@ -6,7 +6,6 @@ import {IFragmentManager} from "../fragments/fragment-manager";
 import Language from "../language/language";
 import {IServiceManager} from "../services/service-manager";
 import {ITimeoutAttachable, IDisposable} from "./helpers";
-import {IPathResolver} from "./path-resolver";
 import {ITemp} from "./temp";
 import {ICommandRegistry} from "../commands/command-registry";
 import {IConsoleInterface} from "../console/console-interface";
@@ -28,6 +27,7 @@ export interface IBotOptions<T = any> {
     readonly languages?: string[];
     readonly initialState?: T;
     readonly reducers?: Reducer<T>[];
+    readonly client: IUniversalClient;
 }
 
 export type Action<T = void> = () => T;
@@ -132,7 +132,6 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly suspended: boolean;
     readonly client: IUniversalClient;
     readonly fragments: IFragmentManager;
-    readonly paths: IPathResolver;
     readonly store: IStore<TState, TActionType>;
 
     setState(state: BotState): this;

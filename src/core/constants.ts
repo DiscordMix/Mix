@@ -1,10 +1,10 @@
 import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import path from "path";
 import {DefiniteArgument, IArgumentResolver, ICustomArgType, InternalArgType} from "../commands/command";
-import {IBotEmojiOptions, IBotExtraOptions, IBotOptions} from "./bot-extra";
+import {IBotExtraOptions} from "./bot-extra";
 import Patterns from "./patterns";
 import Util from "./util";
-import {ISettings, ISettingsPaths} from "./settings";
+import {ISettings} from "./settings";
 
 // TODO: Not working
 export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";
@@ -100,11 +100,6 @@ export const ArgTypes: ICustomArgType[] = [
     }
 ];
 
-export const DefaultBotEmojiOptions: IBotEmojiOptions = {
-    error: ":thinking:",
-    success: ":white_check_mark:"
-};
-
 export const DefaultBotExtraOpts: IBotExtraOptions = {
     allowCommandChain: true,
     asciiTitle: true,
@@ -115,7 +110,6 @@ export const DefaultBotExtraOpts: IBotExtraOptions = {
     updateOnMessageEdit: false,
     dmHelp: true,
     logMessages: false,
-    emojis: DefaultBotEmojiOptions,
     consoleInterface: true,
     optimizer: false
 };

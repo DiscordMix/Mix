@@ -31,7 +31,7 @@ import {IDisposable} from "./core/helpers";
 import Log from "./logging/log";
 import Patterns from "./core/patterns";
 import Permission from "./core/permission";
-import DiscordSettings, {IDiscordSettings} from "./universal/discord/discord-settings";
+import {IDiscordSettings} from "./universal/discord/discord-settings";
 import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setup-helper";
 import Util from "./core/util";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
@@ -73,6 +73,7 @@ import BotConnector, {IBotConnector} from "./core/bot-connector";
 import {IUniversalClient} from "./universal/universal-client";
 import LogLevel from "./logging/log-level";
 import {IDiscordBot} from "./universal/discord/discord-bot";
+import Settings from "./core/settings";
 
 export {
     // Fragments
@@ -124,7 +125,7 @@ export {
     LogLevel,
     Rgb,
     Rgba,
-    DiscordSettings,
+    Settings,
     IDiscordSettings,
     TimeParser,
     TimeSuffixType,

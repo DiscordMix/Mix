@@ -1,5 +1,5 @@
 import DiscordChatEnv from "../core/discord-chat-env";
-import DiscordContext, {IDiscordContext} from "./command-context";
+import DiscordContext, {IContext} from "./command-context";
 import {IFragment, IFragmentMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import DiscordBot from "../bots/discord-bot";
@@ -98,11 +98,11 @@ export interface ICommandResult {
     readonly status: CommandStatus | number;
 }
 
-export type CommandRunner<T = ICommandResult | any> = (context: IDiscordContext, args: any) => T;
+export type CommandRunner<T = ICommandResult | any> = (context: IContext, args: any) => T;
 
-export type CommandRelay<T = any> = (context: DiscordContext, args: T, command: IGenericCommand) => void;
+export type CommandRelay<T = any> = (context: IContext, args: T, command: IGenericCommand) => void;
 
-export type CommandGuard<T = any> = (context: DiscordContext, args: T, command: IGenericCommand) => boolean;
+export type CommandGuard<T = any> = (context: IContext, args: T, command: IGenericCommand) => boolean;
 
 export interface IGenericCommand<T extends object = object> extends IFragment, IDisposable {
     readonly minArguments: number;
@@ -119,9 +119,9 @@ export interface IGenericCommand<T extends object = object> extends IFragment, I
     readonly dependsOn: string[];
     readonly guards: CommandGuard[];
 
-    undo(oldContext: DiscordContext, message: Message, args: T): PromiseOr<boolean>;
+    undo(oldContext: IContext, message: Message, args: T): PromiseOr<boolean>;
     enabled(): PromiseOr<boolean>;
-    run(context: DiscordContext, args: T): ICommandResult | any;
+    run(context: IContext, args: T): ICommandResult | any;
     isExcluded(query: string): boolean;
 }
 

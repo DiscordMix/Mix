@@ -12,6 +12,7 @@ import DiscordClient from "../universal/discord/discord-client";
 import {IDiscordBotOpts, IDiscordBot} from "../universal/discord/discord-bot";
 import GenericBot from "./generic-bot";
 import {IDiscordSettings} from "../universal/discord/discord-settings";
+import DiscordPathResolver from "../core/path-resolver";
 
 export const DefaultDiscordSettings: IDiscordSettings = {
     general: {
@@ -40,7 +41,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
     public readonly actionInterpreter: ActionInterpreter;
     public readonly client: DiscordClient;
     public readonly optimizer: Optimizer;
-    public readonly paths: PathResolver;
+    public readonly paths: DiscordPathResolver;
 
     protected setupStart: number = 0;
 
@@ -54,20 +55,20 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
 
     /**
      * Setup the bot from an object
-     * @param {Partial<IDiscordBotOpts<TState>> | DiscordBotToken} options
+     * @param {Partial<IDiscordBotOpts> | DiscordBotToken} options
      * @param {boolean} [testMode=false]
      */
-    public constructor(options: Partial<IDiscordBotOpts<TState>> | DiscordBotToken) {
+    public constructor(options: Partial<IDiscordBotOpts> | DiscordBotToken) {
         super({
             ...DefaultDiscordSettings,
-
+            ...options
         });
 
         /**
          * Utility to resolve file and directory paths.
-         * @type {PathResolver}
+         * @type {DiscordPathResolver}
          * @readonly
          */
-        this.paths = new PathResolver(this.settings.paths);
+        this.paths = new DiscordPathResolver(this.settings.paths);
     }
 }

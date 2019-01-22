@@ -10,8 +10,6 @@ import {IStore} from "../state/store";
 import {PromiseOr} from "@atlas/xlib";
 import {IUniversalMessage} from "../universal/universal-message";
 import {IDiscordBot} from "../universal/discord/discord-bot";
-import {DiscordEvent} from "..";
-import {IBot} from "../core/bot-extra";
 
 export interface IDiscordContextOpts {
     readonly msg: Message;
@@ -19,14 +17,11 @@ export interface IDiscordContextOpts {
     readonly label: string | null;
 }
 
-/**
- * Either a guild text channel or dm channel.
- */
 export type TextBasedChannel = TextChannel | DMChannel;
 
-export interface IContext<TBot extends IBot = IBot, TMessage extends IUniversalMessage = IUniversalMessage> {
-    readonly bot: TBot;
-    readonly msg: TMessage;
+export interface IContext<T extends IDiscordBot> {
+    readonly bot: T;
+    readonly msg: IUniversalMessage;
 }
 
 export interface IDiscordContext<T extends TextBasedChannel = TextBasedChannel> extends IContext<IDiscordBot>, ResponseHelper {
@@ -46,9 +41,6 @@ export interface IDiscordContext<T extends TextBasedChannel = TextBasedChannel> 
     promptDM(message: string, timeout: number): PromiseOr<boolean | null>;
 }
 
-/**
- * @extends ResponseHelper
- */
 export default class DiscordContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IDiscordContext {
     public readonly bot: IDiscordBot;
     public readonly msg: Message;
@@ -84,23 +76,17 @@ export default class DiscordContext<T extends TextBasedChannel = TextBasedChanne
     }
 
     /**
-     * Access the bot's store.
+     * Access the bot's store
      * @return {IStore}
      */
     public get store(): IStore {
         return this.bot.store;
     }
 
-    /**
-     * @return {Guild}
-     */
     public get g(): Guild {
         return this.msg.guild;
     }
 
-    /**
-     * @return {T}
-     */
     public get c(): T {
         return this.msg.channel as any;
     }
@@ -154,7 +140,7 @@ export default class DiscordContext<T extends TextBasedChannel = TextBasedChanne
 
         return new Promise<string | null>(async (resolve) => {
             const responseTimeout: NodeJS.Timeout = this.bot.setTimeout(() => {
-                this.bot.client.removeListener(DiscordEvent.Message, listener);
+                this.bot.client.removeListener("message", listener);
                 resolve(null);
             }, timeout);
 
@@ -167,7 +153,7 @@ export default class DiscordContext<T extends TextBasedChannel = TextBasedChanne
                 resolve(msg.content);
             };
 
-            this.bot.client.on(DiscordEvent.Message, listener);
+            this.bot.client.on("message", listener);
             await channel.send(message);
         });
     }

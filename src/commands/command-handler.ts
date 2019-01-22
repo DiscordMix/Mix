@@ -7,7 +7,7 @@ import Util from "../core/util";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import DiscordContext from "./command-context";
 import CommandParser from "./command-parser";
-import {ICommandRegistry} from "./command-registry";
+import CommandRegistry, {ICommandRegistry} from "./command-store";
 import {PromiseOr} from "@atlas/xlib";
 
 export enum CmdHandlerEvent {
@@ -314,10 +314,10 @@ export default class CommandHandler implements ICommandHandler {
 
             context.bot.emit(BotEvent.Command, command, context, result);
 
-            if (context.bot.extraOpts.autoDeleteCommands && context.msg.deletable) {
+            if (context.bot.options.autoDeleteCommands && context.msg.deletable) {
                 await context.msg.delete();
             }
-            else if (context.bot.extraOpts.checkCommands && context.msg.channel instanceof TextChannel) {
+            else if (context.bot.options.checkCommands && context.msg.channel instanceof TextChannel) {
                 // TODO: Check if can add reaction
                 /* if (context.message.channel.permissionsFor(context.message.guild.me).has(Permissions.FLAGS.ADD_REACTIONS)) {
 
@@ -443,7 +443,7 @@ export default class CommandHandler implements ICommandHandler {
                 context.fail(`You need to following permission(s) to execute that command: ${permissions}`);
             }
         }
-        else if (command.constraints.cooldown && !this.registry.hasCooldownExpired(context.sender.id, command.meta.name)) {
+        else if (command.constraints.cooldown && !this.registry.cooldownExpired(context.sender.id, command.meta.name)) {
             if (!this.handleError(CmdHandlerEvent.UnderCooldown, context, command)) {
                 const timeLeft: number | null = this.registry.getCooldown(context.sender.id, command.meta.name);
 

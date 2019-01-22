@@ -8,7 +8,6 @@ import Loader, {IPackage} from "../fragments/loader";
 import {PromiseOr} from "@atlas/xlib";
 import Util from "./util";
 import {performance} from "perf_hooks";
-import DiscordBot from "../bots/discord-bot";
 
 export interface IBotConnector {
     setup(): PromiseOr<this>;
@@ -29,7 +28,7 @@ export default class BotConnector implements IBotConnector {
     public async setup(): Promise<this> {
         this.bot.emit(BotEvent.SetupStart);
 
-        if (this.bot.extraOpts.asciiTitle) {
+        if (this.bot.options.asciiTitle) {
             console.log("\n" + Title.replace("{version}", "beta") + "\n");
         }
 
@@ -163,10 +162,12 @@ export default class BotConnector implements IBotConnector {
 
         this.bot.emit(BotEvent.LoadedCommands);
 
-        // Start optimization engine for Discord Bot
-        if (this.bot instanceof DiscordBot && this.bot.extraOpts.optimizer) {
+        if (this.bot.options.optimizer) {
             Log.verbose(BotMessages.SETUP_START_OPTIMIZER);
+
+            // Start tempo engine
             this.bot.optimizer.start();
+
             Log.success(BotMessages.SETUP_STARTED_OPTIMIZER);
         }
 
@@ -192,7 +193,7 @@ export default class BotConnector implements IBotConnector {
             // Create the temp folder
             await this.bot.temp.create();
 
-            if (this.bot.extraOpts.consoleInterface && !this.bot.console.ready) {
+            if (this.bot.options.consoleInterface && !this.bot.console.ready) {
                 // Setup the console command interface
                 this.bot.console.setup(this.bot);
             }
@@ -210,7 +211,7 @@ export default class BotConnector implements IBotConnector {
         this.bot.client.on(DiscordEvent.Error, (error: Error) => Log.error(error.message));
 
         // If enabled, handle message edits (if valid) as commands
-        if (this.bot.extraOpts.updateOnMessageEdit) {
+        if (this.bot.options.updateOnMessageEdit) {
             this.bot.client.on(DiscordEvent.MessageUpdated, async (oldMessage: Message, newMessage: Message) => {
                 await this.bot.handleMessage(newMessage, true);
             });

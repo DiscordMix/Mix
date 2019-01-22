@@ -23,7 +23,7 @@ export default abstract class Patterns {
      * 3rd Group => Quoted Value
      * 4th Group => Short base
      */
-    public static flag: RegExp = /--?([a-z]{1,})=?(?:([^\s"]+)|"([^"]+)")?/gmi;
+    public static commandSwitch: RegExp = /--?([a-z]{1,})=?(?:([^\s"]+)|"([^"]+)")?/gmi;
 
     public static ipv4: RegExp = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}(1[0-9]{2}|2[0-4][0-9]|25[0-5]|[1-9][0-9]|[0-9])/gm;
 

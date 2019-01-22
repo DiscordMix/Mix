@@ -3,45 +3,78 @@ require("dotenv").config();
 
 import CommandParser from "../commands/command-parser";
 import DiscordContext from "../commands/command-context";
+import ConsoleInterface from "../console/console-interface";
 import Util from "../core/util";
 import DiscordSettings from "../universal/discord/discord-settings";
 import Log from "../logging/log";
+import Temp from "../core/temp";
 import Discord, {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
+import ServiceManager from "../services/service-manager";
 import axios from "axios";
 
 import Command, {
+    IArgumentResolver,
+    ICustomArgType,
     RawArguments,
     UserGroup
 } from "../commands/command";
 
+import CommandHandler from "../commands/command-handler";
 import fs from "fs";
 import path from "path";
+import Language from "../language/language";
 import StatCounter from "../core/stat-counter";
+import {IDisposable} from "../core/helpers";
 import ActionInterpreter from "../actions/action-interpreter";
+import TaskManager from "../tasks/task-manager";
+import {EventEmitter} from "events";
 import Optimizer from "../optimization/optimizer";
+import FragmentManager from "../fragments/fragment-manager";
+import PathResolver from "../core/path-resolver";
+import {ArgResolvers, ArgTypes, DefaultBotOptions} from "../core/constants";
+import Store from "../state/store";
 import BotMessages from "../core/messages";
-import {InternalCommand, BotState, DiscordBotToken, BotEvent} from "../core/bot-extra";
+import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, DiscordBotToken, BotEvent} from "../core/bot-extra";
+import {Action} from "@atlas/automata";
 import BotConnector from "../core/bot-connector";
+import CommandRegistry from "../commands/command-store";
 import DiscordClient from "../universal/discord/discord-client";
 import {IDiscordBotOpts, IDiscordBot} from "../universal/discord/discord-bot";
-import GenericBot from "./generic-bot";
 
 // TODO: Should emit an event when state changes
 /**
  * @extends EventEmitter
  */
-export default class DiscordBot<TState = any, TActionType = any> extends GenericBot<TState, TActionType> implements IDiscordBot<TState, TActionType> {
+export default class DiscordBot<TState = any, TActionType = any> extends EventEmitter implements IDiscordBot<TState, TActionType> {
+    public readonly settings: DiscordSettings;
+    public readonly temp: Temp;
+    public readonly services: ServiceManager;
+    public readonly registry: CommandRegistry;
+    public readonly commandHandler: CommandHandler;
+    public readonly console: ConsoleInterface;
     public readonly prefixCommand: boolean;
     public readonly internalCommands: InternalCommand[];
     public readonly userGroups: UserGroup[];
     public readonly owner?: Snowflake;
+    public readonly options: IBotExtraOptions;
+    public readonly language?: Language;
+    public readonly argumentResolvers: IArgumentResolver[];
+    public readonly argumentTypes: ICustomArgType[];
+    public readonly disposables: IDisposable[];
     public readonly actionInterpreter: ActionInterpreter;
+    public readonly tasks: TaskManager;
+    public readonly timeouts: NodeJS.Timeout[];
+    public readonly intervals: NodeJS.Timeout[];
+    public readonly languages?: string[];
+    public readonly state: BotState;
+    public readonly suspended: boolean;
     public readonly client: DiscordClient;
     public readonly optimizer: Optimizer;
+    public readonly fragments: FragmentManager;
+    public readonly paths: PathResolver;
+    public readonly store: Store<TState, TActionType>;
 
     protected setupStart: number = 0;
-
-    protected options: IDiscordBotOpts;
 
     // TODO: Implement stat counter
     protected readonly statCounter: StatCounter;
@@ -50,21 +83,30 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
 
     /**
      * Setup the bot from an object
-     * @param {Partial<IDiscordBotOpts<TState>> | DiscordBotToken} botOptsOrToken
+     * @param {Partial<IDiscordBotOpts<TState>> | DiscordBotToken} botOptionsOrToken
      * @param {boolean} [testMode=false]
      */
-    public constructor(botOptsOrToken: Partial<IDiscordBotOpts<TState>> | DiscordBotToken, testMode: boolean = false) {
+    public constructor(botOptionsOrToken: Partial<IDiscordBotOpts<TState>> | DiscordBotToken, testMode: boolean = false) {
         super();
+
+        let options: Partial<IBotOptions<TState>> = typeof botOptionsOrToken === "object" && botOptionsOrToken !== null && !Array.isArray(botOptionsOrToken) ? Object.assign({}, botOptionsOrToken) : (typeof botOptionsOrToken === "string" ? {
+            settings: new DiscordSettings({
+                general: {
+                    prefix: ["!"],
+                    token: botOptionsOrToken
+                }
+            })
+        } : undefined as any);
 
         // Special options for unit tests
         if (testMode) {
-            (this.options.extra as any) = {
-                ...this.options.extra,
+            (options.options as any) = {
+                ...options.options,
                 asciiTitle: false,
                 consoleInterface: false
             };
 
-            (this.options.settings as any).paths = {
+            (options.settings as any).paths = {
                 commands: path.resolve(path.join(__dirname, "../", "test", "test-commands")),
                 emojis: path.resolve(path.join(__dirname, "../", "test", "test-emojis")),
                 languages: path.resolve(path.join("src", "test", "test-languages")),
@@ -73,16 +115,51 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
                 tasks: path.resolve(path.join(__dirname, "../", "test", "test-tasks")),
             };
 
-            this.options = {
-                ...this.options,
+            options = {
+                ...options,
                 internalCommands: [InternalCommand.Help, InternalCommand.Usage, InternalCommand.Ping],
                 languages: ["test-language"],
             };
         }
 
-        if (!this.options || !this.options.settings || typeof this.options.settings !== "object") {
+        if (!options || !options.settings || typeof options.settings !== "object") {
             throw Log.error(BotMessages.SETUP_INVALID);
         }
+
+        /**
+         * Stores immutable data and handles events.
+         * @type {Store}
+         * @readonly
+         */
+        this.store = new Store<TState, TActionType>(options.initialState, options.reducers);
+
+        /**
+         * The current state of connection of the bot.
+         * @type {BotState}
+         * @readonly
+         */
+        this.state = BotState.Disconnected;
+
+        /**
+         * @type {DiscordSettings}
+         * @readonly
+         */
+        this.settings = options.settings;
+
+        /**
+         * Utility to resolve file and directory paths.
+         * @type {PathResolver}
+         * @readonly
+         */
+        this.paths = new PathResolver(this.settings.paths);
+
+        /**
+         * Access the bot's temporary file storage.
+         * @todo Temporary hard-coded user ID.
+         * @type {Temp}
+         * @readonly
+         */
+        this.temp = new Temp();
 
         /**
          * @type {Discord.Client}
@@ -91,11 +168,69 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
         this.client = new Discord.Client();
 
         /**
+         * Provides management of services.
+         * @type {ServiceManager}
+         * @readonly
+         */
+        this.services = new ServiceManager(this);
+
+        /**
+         * Command storage.
+         * @type {CommandRegistry}
+         * @readonly
+         */
+        this.registry = new CommandRegistry(this);
+
+        /**
+         * @type {IArgumentResolver[]}
+         * @readonly
+         */
+        this.argumentResolvers = ArgResolvers;
+
+        if (options.argumentResolvers) {
+            this.argumentResolvers = [
+                ...this.argumentResolvers,
+                ...options.argumentResolvers
+            ];
+        }
+
+        /**
+         * @type {ICustomArgType[]}
+         * @readonly
+         */
+        this.argumentTypes = ArgTypes;
+
+        if (options.argumentTypes) {
+            this.argumentTypes = [
+                ...this.argumentTypes,
+                ...options.argumentTypes
+            ];
+        }
+
+        /**
+         * Intercepts and handles command executions.
+         * @type {CommandHandler}
+         * @readonly
+         */
+        this.commandHandler = new CommandHandler({
+            registry: this.registry,
+            errorHandlers: [], // TODO: Is this like it was? Is it ok?
+            argumentTypes: this.argumentTypes
+        });
+
+        /**
+         * Provides functionality for CLI input.
+         * @type {ConsoleInterface}
+         * @readonly
+         */
+        this.console = new ConsoleInterface();
+
+        /**
          * Whether the built-in prefix command should be used.
          * @type {boolean}
          * @readonly
          */
-        this.prefixCommand = this.options.prefixCommand || true;
+        this.prefixCommand = options.prefixCommand || true;
 
         /**
          * The internal commands to load.
@@ -103,7 +238,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
          * @type {InternalCommand[]}
          * @readonly
          */
-        this.internalCommands = this.options.internalCommands || [
+        this.internalCommands = options.internalCommands || [
             InternalCommand.CLI,
             InternalCommand.Eval,
             InternalCommand.Help,
@@ -115,12 +250,21 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
             InternalCommand.Usage
         ];
 
+        /**
+         * @type {IBotExtraOptions}
+         * @readonly
+         */
+        this.options = {
+            ...DefaultBotOptions,
+            ...options.options,
+        };
+
         // TODO: Make use of the userGroups property
         /**
          * @type {UserGroup[]}
          * @readonly
          */
-        this.userGroups = this.options.userGroups || [];
+        this.userGroups = options.userGroups || [];
 
         /**
          * The owner of the bot's snowflake ID.
@@ -130,10 +274,38 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
         this.owner = options.owner;
 
         /**
+         * Localization provider.
+         * @type {Language | undefined}
+         * @readonly
+         */
+        this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
+
+        /**
+         * The languages to be loaded and enabled for localization.
+         * @type {string[] | undefined}
+         * @readonly
+         */
+        this.languages = options.languages;
+
+        /**
+         * Whether the bot is currently suspended.
+         * @type {boolean}
+         */
+        this.suspended = false;
+
+        /**
          * Used for measuring interaction with the bot.
          * @type {StatCounter}
          */
         this.statCounter = new StatCounter();
+
+        /**
+         * A list that keeps track of disposable objects and classes.
+         * @type {IDisposable[]}
+         * @protected
+         * @readonly
+         */
+        this.disposables = [];
 
         /**
          * @type {ActionInterpreter}
@@ -142,11 +314,39 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
         this.actionInterpreter = new ActionInterpreter(this);
 
         /**
+         * Task management class.
+         * @type {TaskManager}
+         * @readonly
+         */
+        this.tasks = new TaskManager(this);
+
+        /**
+         * A list of attached timeouts.
+         * @type {NodeJS.Timeout[]}
+         * @readonly
+         */
+        this.timeouts = [];
+
+        /**
+         * A list of attached intervals.
+         * @type {NodeJS.Timeout[]}
+         * @readonly
+         */
+        this.intervals = [];
+
+        /**
          * Optimization engine for large bots.
          * @type {Optimizer}
          * @readonly
          */
         this.optimizer = new Optimizer(this);
+
+        /**
+         * Fragment management class.
+         * @type {FragmentManager}
+         * @readonly
+         */
+        this.fragments = new FragmentManager(this);
 
         /**
          * Handles bot connection and setup sequence.
@@ -387,7 +587,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
 
         this.emit(BotEvent.HandleMessageStart);
 
-        if (this.extraOpts.logMessages) {
+        if (this.options.logMessages) {
             const names: any = {};
 
             if (msg.channel.type === "text" && msg.guild !== undefined) {
@@ -407,8 +607,8 @@ export default class DiscordBot<TState = any, TActionType = any> extends Generic
         }
 
         // TODO: Cannot do .startsWith with a prefix array
-        if ((!msg.author.bot || (msg.author.bot && !this.extraOpts.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.registry, this.settings.general.prefix)) {
-            if (this.extraOpts.allowCommandChain) {
+        if ((!msg.author.bot || (msg.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.registry, this.settings.general.prefix)) {
+            if (this.options.allowCommandChain) {
                 // TODO: Might split values too
                 const rawChain: string[] = msg.content.split("~");
 

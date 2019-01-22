@@ -10,11 +10,12 @@ import {ITimeoutAttachable, IDisposable} from "./helpers";
 import {IPathResolver} from "./path-resolver";
 import {IStatsCounter} from "./stat-counter";
 import {ITemp} from "./temp";
-import {ICommandRegistry} from "../commands/command-registry";
+import {ICommandRegistry} from "../commands/command-store";
 import {IConsoleInterface} from "../console/console-interface";
 import {ITaskManager} from "../tasks/task-manager";
 import {IActionInterpreter} from "../actions/action-interpreter";
 import {Reducer, IStore} from "../state/store";
+import {IDiscordSettings} from "../universal/discord/discord-settings";
 import {PromiseOr} from "@atlas/xlib";
 import {IUniversalClient} from "../universal/universal-client";
 import {ISettings} from "./settings";
@@ -45,7 +46,7 @@ export interface IBotModules {
  */
 export interface IBotOptions<T = any> {
     readonly settings: ISettings;
-    readonly extra?: Partial<IBotExtraOptions>;
+    readonly options?: Partial<IBotExtraOptions>;
     readonly argumentResolvers?: IArgumentResolver[];
     readonly argumentTypes?: ICustomArgType[];
     readonly languages?: string[];
@@ -148,7 +149,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly registry: ICommandRegistry;
     readonly commandHandler: ICommandHandler;
     readonly console: IConsoleInterface;
-    readonly extraOpts: IBotExtraOptions;
+    readonly options: IBotExtraOptions;
     readonly language?: Language;
     readonly argumentResolvers: IArgumentResolver[];
     readonly argumentTypes: ICustomArgType[];

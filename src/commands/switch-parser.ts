@@ -1,23 +1,23 @@
 import Patterns from "../core/patterns";
 
-export interface IFlag {
+export interface ICommandSwitch {
     readonly key: string;
     readonly value: string | null;
     readonly short: boolean;
 }
 
-export default abstract class FlagParser {
-    public static getSwitches(commandString: string): IFlag[] {
-        const result: IFlag[] = [];
+export default abstract class SwitchParser {
+    public static getSwitches(commandString: string): ICommandSwitch[] {
+        const result: ICommandSwitch[] = [];
 
         let match: RegExpExecArray | null;
 
-        while ((match = Patterns.flag.exec(commandString)) !== null) {
+        while ((match = Patterns.commandSwitch.exec(commandString)) !== null) {
             if (match !== null) {
                 result.push({
-                    key: FlagParser.getFlagKey(match),
-                    short: FlagParser.isShortFlag(match),
-                    value: FlagParser.getFlagValue(match)
+                    key: SwitchParser.getSwitchKey(match),
+                    short: SwitchParser.isShortSwitch(match),
+                    value: SwitchParser.getSwitchValue(match)
                 });
             }
         }
@@ -25,15 +25,15 @@ export default abstract class FlagParser {
         return result;
     }
 
-    protected static isShortFlag(match: RegExpExecArray): boolean {
+    protected static isShortSwitch(match: RegExpExecArray): boolean {
         return !match[0].startsWith("--") && match[0].startsWith("-");
     }
 
-    protected static getFlagKey(match: RegExpExecArray): string {
+    protected static getSwitchKey(match: RegExpExecArray): string {
         return match[1] || match[4];
     }
 
-    protected static getFlagValue(match: RegExpExecArray): string | null {
+    protected static getSwitchValue(match: RegExpExecArray): string | null {
         return match[2] || match[3] || null;
     }
 }

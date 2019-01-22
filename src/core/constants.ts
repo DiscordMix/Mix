@@ -1,10 +1,11 @@
 import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import path from "path";
 import {DefiniteArgument, IArgumentResolver, ICustomArgType, InternalArgType} from "../commands/command";
-import {IBotEmojiOptions, IBotExtraOptions, IBotOptions} from "./bot-extra";
+import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
 import Patterns from "./patterns";
+import {IDiscordSettingsPaths} from "../universal/discord/discord-settings";
 import Util from "./util";
-import {ISettings, ISettingsPaths} from "./settings";
+import {ISettings} from "./settings";
 
 // TODO: Not working
 export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";
@@ -105,7 +106,7 @@ export const DefaultBotEmojiOptions: IBotEmojiOptions = {
     success: ":white_check_mark:"
 };
 
-export const DefaultBotExtraOpts: IBotExtraOptions = {
+export const DefaultBotOptions: IBotExtraOptions = {
     allowCommandChain: true,
     asciiTitle: true,
     autoDeleteCommands: false,
@@ -121,12 +122,15 @@ export const DefaultBotExtraOpts: IBotExtraOptions = {
 };
 
 export const DefaultSettings: ISettings = {
-    paths: {
-        commands: "commands",
-        languages: "languages",
-        services: "services",
-        tasks: "tasks"
-    }
+    //
+};
+
+export const DefaultDiscordSettingPaths: IDiscordSettingsPaths = {
+    commands: "commands",
+    plugins: "plugins",
+    services: "services",
+    languages: "languages",
+    tasks: "tasks"
 };
 
 export const TrueDelegates: string[] = ["true", "1", "yes"];

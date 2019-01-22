@@ -10,8 +10,8 @@ import {IStore} from "../state/store";
 import {PromiseOr} from "@atlas/xlib";
 import {IUniversalMessage} from "../universal/universal-message";
 import {IDiscordBot} from "../universal/discord/discord-bot";
+import {DiscordEvent} from "..";
 import {IBot} from "../core/bot-extra";
-import DiscordEvent from "../core/discord-event";
 
 export interface IDiscordContextOpts {
     readonly msg: Message;

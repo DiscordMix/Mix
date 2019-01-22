@@ -13,7 +13,6 @@ enum BotMessages {
     SETUP_START_OPTIMIZER = "Starting optimization engine",
     SETUP_STARTED_OPTIMIZER = "Started optimization engine",
     SETUP_COMPLETED = "Bot setup completed",
-    SETUP_TOKEN_INVALID = "The provided token is invalid or has been regenerated",
 
     TEST_EXPECT_TOKEN = "Expecting test token",
     TEST_EXPECT_GUILD = "Expecting test guild's ID",
@@ -43,9 +42,7 @@ enum BotMessages {
     UNDO_FAIL = "The action failed to be undone",
 
     INTENTIONAL_ERROR = "Intentionally thrown error",
-    NOT_IMPLEMENTED = "Not yet implemented",
-
-    RESTARTING = "Restarting"
+    NOT_IMPLEMENTED = "Not yet implemented"
 }
 
 export default BotMessages;

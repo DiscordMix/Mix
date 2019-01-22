@@ -1,5 +1,6 @@
 import DiscordEvent from "../core/discord-event";
 import {DecoratorUtils} from "./decorator-utils";
+import {DecoratorProxy} from "./component";
 
 export enum EventListenerType {
     Once,
@@ -19,7 +20,7 @@ export const EventListeners: IEventListener[] = [];
  * Invoke target method once when the specified event occurs.
  * @param {DiscordEvent} event
  */
-export function Once(event: DiscordEvent): any {
+export function Once(event: DiscordEvent): DecoratorProxy {
     return function (target: any, prop: string) {
         DecoratorUtils.ensureFunc(target[prop]);
 
@@ -35,7 +36,7 @@ export function Once(event: DiscordEvent): any {
  * Invoke target method every time the specified event occurs.
  * @param {DiscordEvent} event
  */
-export function On(event: DiscordEvent): any {
+export function On(event: DiscordEvent): DecoratorProxy {
     return function (target: any, prop: string) {
         DecoratorUtils.ensureFunc(target[prop]);
 

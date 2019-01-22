@@ -1,7 +1,7 @@
 import {DecoratorUtils} from "./decorator-utils";
 import {SpecificConstraints, IConstraints, RestrictGroup} from "../commands/command";
 import ChatEnv from "../core/chat-env";
-import {DecoratorProxy, DecoratorClassProxy} from "./component";
+import {DecoratorProxy} from "./component";
 
 export abstract class Constraint {
     /**
@@ -32,7 +32,7 @@ export abstract class Constraint {
      * Disable a command and prevent execution.
      * @param {*} target
      */
-    public static Disabled(target: any): DecoratorClassProxy {
+    public static Disabled(target: any): DecoratorProxy {
         DecoratorUtils.ensureFunc(target);
 
         return class extends target {
@@ -80,7 +80,7 @@ export abstract class Constraint {
      * Limit the command to the bot owner only.
      * @param target
      */
-    public static OwnerOnly(target: any): DecoratorClassProxy {
+    public static OwnerOnly(target: any): DecoratorProxy {
         DecoratorUtils.ensureFunc(target);
 
         return class extends target {
@@ -97,7 +97,7 @@ export abstract class Constraint {
 
 }
 
-export function Constraints(constraints: Partial<IConstraints>): DecoratorClassProxy {
+export function Constraints(constraints: Partial<IConstraints>): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 

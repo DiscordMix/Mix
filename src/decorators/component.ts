@@ -3,9 +3,10 @@ import {SpecificConstraints} from "../commands/command";
 import ChatEnv from "../core/chat-env";
 import Log from "../core/log";
 
-export type DecoratorProxy = (target: any, key: string) => any;
-
-export type DecoratorClassProxy = object;
+/**
+ * Represents a decorator proxy function.
+ */
+export type DecoratorProxy = ((target: any, key: string) => any) | any;
 
 export interface ICommandComponentOpts {
     readonly description: string;

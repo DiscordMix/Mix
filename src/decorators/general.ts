@@ -1,12 +1,13 @@
 import {DecoratorUtils} from "./decorator-utils";
 import Command, {IArgument} from "../commands/command";
 import {IFragmentMeta} from "../fragments/fragment";
+import {DecoratorProxy} from "./component";
 
 /**
  * Set a fragment's meta property.
  * @param {IFragmentMeta} meta
  */
-export function Meta(meta: IFragmentMeta): any {
+export function Meta(meta: IFragmentMeta): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
@@ -23,7 +24,7 @@ export function Meta(meta: IFragmentMeta): any {
  * Set the meta name property of a fragment.
  * @param {string} name
  */
-export function Name(name: string): any {
+export function Name(name: string): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
@@ -35,7 +36,7 @@ export function Name(name: string): any {
  * Set the meta description property of a fragment.
  * @param {string} description
  */
-export function Description(description: string): any {
+export function Description(description: string): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
@@ -47,7 +48,7 @@ export function Description(description: string): any {
  * Append name aliases to a command.
  * @param {string[]} aliases The list of aliases.
  */
-export function Aliases(...aliases: string[]): any {
+export function Aliases(...aliases: string[]): DecoratorProxy {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
@@ -61,7 +62,7 @@ export function Aliases(...aliases: string[]): any {
  * Append arguments to a command.
  * @param {IArgument[]} args The list of arguments.
  */
-export function Arguments(...args: IArgument[]): any {
+export function Arguments(...args: IArgument[]): DecoratorProxy {
     return function (target: any) {
         // TODO: It may not be efficient to create a new instance just to extract default properties
         const instance: Command = DecoratorUtils.createInstance(target);

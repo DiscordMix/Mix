@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 import CommandParser from "../commands/command-parser";
-import DiscordContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
 import Util from "../core/util";
 import DiscordSettings from "../universal/discord/discord-settings";
@@ -34,12 +34,11 @@ import PathResolver from "../core/path-resolver";
 import {ArgResolvers, ArgTypes, DefaultBotOptions} from "../core/constants";
 import Store from "../state/store";
 import BotMessages from "../core/messages";
-import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, DiscordBotToken, BotEvent} from "../core/bot-extra";
+import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, DiscordBotToken, BotEvent, IDiscordBot} from "../core/bot-extra";
 import {Action} from "@atlas/automata";
 import BotConnector from "../core/bot-connector";
 import CommandRegistry from "../commands/command-store";
 import DiscordClient from "../universal/discord/discord-client";
-import {IDiscordBotOpts, IDiscordBot} from "../universal/discord/discord-bot";
 
 // TODO: Should emit an event when state changes
 /**
@@ -83,10 +82,10 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
 
     /**
      * Setup the bot from an object
-     * @param {Partial<IDiscordBotOpts<TState>> | DiscordBotToken} botOptionsOrToken
+     * @param {Partial<IBotOptions> | DiscordBotToken} botOptionsOrToken
      * @param {boolean} [testMode=false]
      */
-    public constructor(botOptionsOrToken: Partial<IDiscordBotOpts<TState>> | DiscordBotToken, testMode: boolean = false) {
+    public constructor(botOptionsOrToken: Partial<IBotOptions<TState>> | DiscordBotToken, testMode: boolean = false) {
         super();
 
         let options: Partial<IBotOptions<TState>> = typeof botOptionsOrToken === "object" && botOptionsOrToken !== null && !Array.isArray(botOptionsOrToken) ? Object.assign({}, botOptionsOrToken) : (typeof botOptionsOrToken === "string" ? {
@@ -213,7 +212,7 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
          * @readonly
          */
         this.commandHandler = new CommandHandler({
-            registry: this.registry,
+            commandStore: this.registry,
             errorHandlers: [], // TODO: Is this like it was? Is it ok?
             argumentTypes: this.argumentTypes
         });
@@ -358,6 +357,8 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
         // Force-bind certain methods
         this.connect = this.connect.bind(this);
         this.disconnect = this.disconnect.bind(this);
+
+        return this;
     }
 
     /**
@@ -827,10 +828,10 @@ export default class DiscordBot<TState = any, TActionType = any> extends EventEm
     /**
      * Create a linked command context instance.
      * @param {Message} msg
-     * @return {DiscordContext}
+     * @return {Context}
      */
-    protected createCommandContext(msg: Message): DiscordContext {
-        return new DiscordContext({
+    protected createCommandContext(msg: Message): Context {
+        return new Context({
             bot: this,
             msg,
             // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),

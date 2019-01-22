@@ -18,7 +18,6 @@ import {Reducer, IStore} from "../state/store";
 import {IDiscordSettings} from "../universal/discord/discord-settings";
 import {PromiseOr} from "@atlas/xlib";
 import {IUniversalClient} from "../universal/universal-client";
-import {ISettings} from "./settings";
 
 /**
  * Modules that will be used by the bot.
@@ -45,7 +44,7 @@ export interface IBotModules {
  * Options to create a new bot instance.
  */
 export interface IBotOptions<T = any> {
-    readonly settings: ISettings;
+    readonly settings: IDiscordSettings;
     readonly options?: Partial<IBotExtraOptions>;
     readonly argumentResolvers?: IArgumentResolver[];
     readonly argumentTypes?: ICustomArgType[];
@@ -143,12 +142,13 @@ export type DiscordBotToken = string;
 export type DiscordSnowflake = string;
 
 export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDisposable, ITimeoutAttachable {
-    readonly settings: ISettings;
+    readonly settings: IDiscordSettings;
     readonly temp: ITemp;
     readonly services: IServiceManager;
     readonly registry: ICommandRegistry;
     readonly commandHandler: ICommandHandler;
     readonly console: IConsoleInterface;
+    readonly internalCommands: InternalCommand[];
     readonly options: IBotExtraOptions;
     readonly language?: Language;
     readonly argumentResolvers: IArgumentResolver[];
@@ -166,7 +166,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly store: IStore<TState, TActionType>;
 
     setState(state: BotState): this;
-    setSuspended(suspend: boolean): this;
+    suspend(suspend: boolean): this;
     invokeCommand(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
     clearTimeout(timeout: NodeJS.Timeout): boolean;
     clearAllTimeouts(): number;

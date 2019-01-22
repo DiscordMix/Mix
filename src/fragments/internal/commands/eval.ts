@@ -1,7 +1,7 @@
 import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
 import Command, {Type} from "../../../commands/command";
-import DiscordContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 import Util from "../../../core/util";
 import {Name, Description, Arguments} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
@@ -29,7 +29,7 @@ interface IArgs {
 )
 @Constraint.OwnerOnly
 export default class EvalCommand extends Command<IArgs> {
-    public async run($: DiscordContext, args: IArgs): Promise<void> {
+    public async run($: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();
 
         let result: string;

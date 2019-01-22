@@ -1,6 +1,6 @@
 import {Message, MessageReaction, Snowflake, User} from "discord.js";
 import {EventEmitter} from "events";
-import DiscordContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import DiscordBot from "../bots/discord-bot";
 import {IDisposable} from "../core/helpers";
 import DiscordEvent from "../core/discord-event";
@@ -23,7 +23,7 @@ export interface IEmojiMenu extends EventEmitter {
     readonly buttons: IEmojiButton[];
 
     add(button: IEmojiButton): this;
-    attach(context: DiscordContext): PromiseOr<this>;
+    attach(context: Context): PromiseOr<this>;
 }
 
 /**
@@ -74,10 +74,10 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
     }
 
     /**
-     * @param {DiscordContext} context
+     * @param {Context} context
      * @return {Promise<this>}
      */
-    public async attach(context: DiscordContext): Promise<this> {
+    public async attach(context: Context): Promise<this> {
         this.bot = context.bot;
         this.bot.client.on(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd.bind(this));
         this.bot.client.on(DiscordEvent.MessageReactionRemoved, this.handleMessageReactionRemove.bind(this));

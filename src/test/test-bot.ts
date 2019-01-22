@@ -2,7 +2,7 @@ require("dotenv").config();
 
 import {Guild, Message, Snowflake, TextChannel} from "discord.js";
 import path from "path";
-import DiscordContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import DiscordBot from "../bots/discord-bot";
 import {BotEvent} from "../core/bot-extra";
 import BotMessages from "../core/messages";
@@ -96,8 +96,8 @@ export default class TestBot extends DiscordBot<ITestState, TestStoreActionType>
         return this.client.user.lastMessage;
     }
 
-    public getContext(): DiscordContext {
-        return new DiscordContext({
+    public getContext(): Context {
+        return new Context({
             bot: this,
             label: "?",
 

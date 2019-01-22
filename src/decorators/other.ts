@@ -1,9 +1,9 @@
 import Command, {CommandRunner, CommandRelay, IGenericCommand} from "../commands/command";
 import {DecoratorUtils} from "./decorator-utils";
-import DiscordContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import Log from "../logging/log";
 
-export const attachedLogger: CommandRelay = ($: DiscordContext, args: any, cmd: IGenericCommand): void => {
+export const attachedLogger: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
     Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${$.sender.tag}`);
 };
 

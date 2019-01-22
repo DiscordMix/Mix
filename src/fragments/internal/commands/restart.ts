@@ -1,5 +1,5 @@
 import Command from "../../../commands/command";
-import DiscordContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 import {Name, Description} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
 
@@ -8,7 +8,7 @@ import {Constraint} from "../../../decorators/constraints";
 @Constraint.Cooldown(5)
 @Constraint.OwnerOnly
 export default class RestartCommand extends Command {
-    public async run($: DiscordContext): Promise<void> {
+    public async run($: Context): Promise<void> {
         await $.ok("Restarting the bot");
         await $.bot.restart();
     }

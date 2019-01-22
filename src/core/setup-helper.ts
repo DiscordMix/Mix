@@ -1,5 +1,5 @@
 import {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
-import DiscordContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import Log from "../logging/log";
 import {PromiseOr} from "@atlas/xlib";
 
@@ -12,7 +12,7 @@ export enum SetupHelperActionType {
 }
 
 export interface IFromContextOptions {
-    readonly context: DiscordContext;
+    readonly context: Context;
     readonly title?: string;
     readonly embed?: boolean;
     readonly timeout?: number;

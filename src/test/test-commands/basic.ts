@@ -1,6 +1,6 @@
 import Command from "../../commands/command";
 import {RestrictGroup} from "../..";
-import DiscordContext from "../../commands/command-context";
+import Context from "../../commands/command-context";
 
 export default class TestCommand extends Command {
     public readonly meta = {
@@ -12,7 +12,7 @@ export default class TestCommand extends Command {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public run(context: DiscordContext): string {
+    public run(context: Context): string {
         // Don't say hi!
         return "don't say hi!";
     }

@@ -2,7 +2,7 @@ import {IMessageActionArgs, Service} from "../../..";
 import {ActionType, IAction} from "../../../actions/action";
 import MsgBuilder from "../../../builders/msg-builder";
 import Command, {RestrictGroup, Type} from "../../../commands/command";
-import DiscordContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 import {Name, Description, Arguments} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
 
@@ -28,7 +28,7 @@ enum ReflectDataType {
 @Constraint.Cooldown(1)
 @Constraint.OwnerOnly
 export default class ReflectCommand extends Command {
-    public run($: DiscordContext, args: IArgs): IAction<IMessageActionArgs> {
+    public run($: Context, args: IArgs): IAction<IMessageActionArgs> {
         switch (args.type) {
             case ReflectDataType.Services: {
                 let services: string = "";

@@ -5,7 +5,6 @@ import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
 import Patterns from "./patterns";
 import {IDiscordSettingsPaths} from "../universal/discord/discord-settings";
 import Util from "./util";
-import {ISettings} from "./settings";
 
 // TODO: Not working
 export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";
@@ -121,11 +120,7 @@ export const DefaultBotOptions: IBotExtraOptions = {
     optimizer: false
 };
 
-export const DefaultSettings: ISettings = {
-    //
-};
-
-export const DefaultDiscordSettingPaths: IDiscordSettingsPaths = {
+export const DefaultSettingPaths: IDiscordSettingsPaths = {
     commands: "commands",
     plugins: "plugins",
     services: "services",

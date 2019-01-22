@@ -1,6 +1,6 @@
 import {Log} from "../../..";
 import Command from "../../../commands/command";
-import DiscordContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 import {Name, Description} from "../../../decorators/general";
 
 @Name("prefix")
@@ -11,7 +11,7 @@ export default class PrefixCommand extends Command {
         prefix: "!string"
     }; */
 
-    public async run($: DiscordContext): Promise<void> {
+    public async run($: Context): Promise<void> {
         // TODO: Implement
 
         throw Log.notImplemented;

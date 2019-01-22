@@ -13,7 +13,6 @@ export interface IDiscordBot<TState = any, TActionType = any> extends IBot<TStat
     readonly optimizer: IOptimizer;
     readonly prefixCommand: boolean;
     readonly userGroups: UserGroup[];
-    readonly internalCommands: InternalCommand[];
 
     postStats(): PromiseOr<void>;
 }

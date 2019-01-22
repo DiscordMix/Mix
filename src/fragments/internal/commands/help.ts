@@ -1,13 +1,13 @@
 import {RichEmbed} from "discord.js";
 import Command from "../../../commands/command";
-import DiscordContext from "../../../commands/command-context";
+import Context from "../../../commands/command-context";
 import {ReadonlyCommandMap} from "../../../commands/command-store";
 import {Description, Name} from "../../../decorators/general";
 
 @Name("help")
 @Description("View available commands and their descriptions")
 export default class HelpCommand extends Command {
-    public async run($: DiscordContext): Promise<void> {
+    public async run($: Context): Promise<void> {
         // TODO: Decorator commands broke it (can't .map through a Map)
 
         const commandMap: ReadonlyCommandMap = $.bot.registry.getAll();

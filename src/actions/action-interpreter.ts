@@ -2,7 +2,7 @@ import DiscordBot from "../bots/discord-bot";
 import {IAction, ActionType} from "./action";
 import {Snowflake, Channel, TextChannel, Guild, User, RichEmbed, Message} from "discord.js";
 import {EventEmitter} from "events";
-import DiscordContext from "../commands/command-context";
+import Context from "../commands/command-context";
 import PaginatedMessage from "../pagination/paginated-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../logging/log";
@@ -38,7 +38,7 @@ export interface IPaginatedActionArgs {
     readonly message: string;
     readonly inputMessage: Message;
     readonly bot: DiscordBot;
-    readonly context: DiscordContext;
+    readonly context: Context;
 }
 
 export enum ChannelType {

@@ -1,5 +1,5 @@
 import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
-import DiscordContext, {IDiscordContext, IDiscordContextOpts, TextBasedChannel} from "./commands/command-context";
+import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/command-context";
 import CommandRegistry, {ICommandRegistry} from "./commands/command-store";
 import DiscordBot from "./bots/discord-bot";
 
@@ -82,10 +82,10 @@ export {
     // Commands
     ArgumentParser,
     IArgumentParser,
-    DiscordContext as Context,
-    IDiscordContext as IContext,
+    Context,
+    IContext,
     TextBasedChannel,
-    IDiscordContextOpts as IContextOptions,
+    IContextOptions,
     CommandRegistry,
     ICommandRegistry,
     CmdHandlerEvent,

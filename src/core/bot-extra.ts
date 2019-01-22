@@ -8,15 +8,16 @@ import {IOptimizer} from "../optimization/optimizer";
 import {IServiceManager} from "../services/service-manager";
 import {ITimeoutAttachable, IDisposable} from "./helpers";
 import {IPathResolver} from "./path-resolver";
-import {IStatsCounter} from "./stat-counter";
+import {IBotAnalytics} from "./bot-analytics";
 import {ITemp} from "./temp";
-import {ICommandRegistry} from "../commands/command-store";
+import {ICommandRegistry} from "../commands/command-registry";
 import {IConsoleInterface} from "../console/console-interface";
 import {ITaskManager} from "../tasks/task-manager";
 import ActionInterpreter, {IActionInterpreter} from "../actions/action-interpreter";
 import {Reducer, IStore} from "../state/store";
 import {ISettings} from "./settings";
 import {PromiseOr} from "@atlas/xlib";
+import {IBotHandler} from "./bot-handler";
 
 /**
  * Modules that will be used by the bot.
@@ -31,7 +32,7 @@ export interface IBotModules {
     readonly commandHandler: ICommandHandler;
     readonly consoleInterface: IConsoleInterface;
     readonly language: ILanguage;
-    readonly statsCounter: IStatsCounter;
+    readonly statsCounter: IBotAnalytics;
     readonly actionInterpreter: IActionInterpreter;
     readonly taskManager: ITaskManager;
     readonly optimizer: IOptimizer;
@@ -42,7 +43,7 @@ export interface IBotModules {
 /**
  * Options to create a new bot instance.
  */
-export interface IBotOptions<T> {
+export interface IBotOptions<T = any> {
     readonly settings: ISettings;
     readonly prefixCommand?: boolean;
     readonly internalCommands?: InternalCommand[];
@@ -85,7 +86,7 @@ export interface IBotExtraOptions {
 /**
  * Events fired by the bot.
  */
-export enum EBotEvents {
+export enum BotEvent {
     SetupStart = "setupStart",
     LoadingInternalFragments = "loadInternalFragments",
     LoadedInternalFragments = "loadedInternalFragments",
@@ -173,17 +174,16 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly fragments: IFragmentManager;
     readonly paths: IPathResolver;
     readonly store: IStore<TState, TActionType>;
+    readonly analytics: IBotAnalytics;
+    readonly handle: IBotHandler;
 
     setState(state: BotState): this;
     postStats(): PromiseOr<void>;
-    suspend(suspend: boolean): this;
-    invokeCommand(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
+    setSuspended(suspend: boolean): this;
     clearTimeout(timeout: NodeJS.Timeout): boolean;
     clearAllTimeouts(): number;
     clearInterval(interval: NodeJS.Timeout): boolean;
     clearAllIntervals(): number;
-    handleMessage(msg: Message, edited: boolean): PromiseOr<boolean>;
-    handleCommandMessage(message: Message, content: string, resolvers: any): PromiseOr<void>;
     connect(): PromiseOr<this>;
     restart(reloadModules: boolean): PromiseOr<this>;
     disconnect(): PromiseOr<this>;

@@ -2,13 +2,11 @@
 require("dotenv").config();
 
 import CommandParser from "../commands/command-parser";
-import Context from "../commands/command-context";
 import ConsoleInterface from "../console/console-interface";
-import Util from "./util";
 import Settings from "./settings";
 import Log from "./log";
 import Temp from "./temp";
-import Discord, {Client, Message, RichEmbed, Snowflake, TextChannel} from "discord.js";
+import Discord, {Client, Message, Snowflake} from "discord.js";
 import ServiceManager from "../services/service-manager";
 import axios from "axios";
 
@@ -23,7 +21,7 @@ import CommandHandler from "../commands/command-handler";
 import fs from "fs";
 import path from "path";
 import Language from "../language/language";
-import StatCounter from "./stat-counter";
+import Analytics from "./bot-analytics";
 import {IDisposable} from "./helpers";
 import ActionInterpreter from "../actions/action-interpreter";
 import TaskManager from "../tasks/task-manager";
@@ -34,10 +32,11 @@ import PathResolver from "./path-resolver";
 import {ArgResolvers, ArgTypes, DefaultBotOptions} from "./constants";
 import Store from "../state/store";
 import BotMessages from "./messages";
-import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, EBotEvents, IBot} from "./bot-extra";
+import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./bot-extra";
 import {Action} from "@atlas/automata";
 import BotConnector from "./bot-connector";
-import CommandRegistry from "../commands/command-store";
+import CommandRegistry from "../commands/command-registry";
+import BotHandler from "./bot-handler";
 
 // TODO: Should emit an event when state changes
 /**
@@ -71,11 +70,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly fragments: FragmentManager;
     public readonly paths: PathResolver;
     public readonly store: Store<TState, TActionType>;
+    public readonly analytics: Analytics;
+    public readonly handle: BotHandler;
 
     protected setupStart: number = 0;
-
-    // TODO: Implement stat counter
-    protected readonly statCounter: StatCounter;
 
     protected readonly connector: BotConnector;
 
@@ -158,6 +156,13 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
          * @readonly
          */
         this.temp = new Temp();
+
+        /**
+         * Handles incoming messages and requests.
+         * @type {BotHandler}
+         * @readonly
+         */
+        this.handle = new BotHandler(this);
 
         /**
          * @type {Discord.Client}
@@ -293,9 +298,9 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
         /**
          * Used for measuring interaction with the bot.
-         * @type {StatCounter}
+         * @type {Analytics}
          */
-        this.statCounter = new StatCounter();
+        this.analytics = new Analytics();
 
         /**
          * A list that keeps track of disposable objects and classes.
@@ -412,62 +417,19 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Suspend or unsuspend the bot.
-     * @param {boolean} suspend Whether to suspend the bot.
+     * @param {boolean} suspended Whether to suspend the bot.
      * @return {this}
      */
-    public suspend(suspend: boolean = true): this {
+    public setSuspended(suspended: boolean = true): this {
         if (this.state !== BotState.Connected) {
             return this;
         }
-        else if (this.suspended !== suspend) {
-            (this.suspended as any) = suspend;
+        else if (this.suspended !== suspended) {
+            (this.suspended as any) = suspended;
             this.setState(this.suspended ? BotState.Suspended : BotState.Connected);
         }
 
         return this;
-    }
-
-    /**
-     * Emulate a command invocation.
-     * @todo 'args' type on docs (here)
-     * @param {string} base The base command name.
-     * @param {Message} referer The triggering message.
-     * @param {string[]} args
-     * @return {Promise<*>}
-     */
-    public async invokeCommand(base: string, referer: Message, ...args: string[]): Promise<any> {
-        // Use any registered prefix, default to index 0
-        const content: string = `${this.settings.general.prefix[0]}${base} ${args.join(" ")}`.trim();
-
-        let command: Command | null = await CommandParser.parse(
-            content,
-            this.registry,
-            this.settings.general.prefix
-        );
-
-        if (command === null) {
-            throw Log.error(BotMessages.CMD_PARSE_FAIL);
-        }
-
-        command = command as Command;
-
-        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
-            arguments: CommandParser.getArguments(content, command.args),
-            command,
-            schema: command.args,
-
-            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
-            message: referer
-        });
-
-        // TODO: Debugging
-        // Log.debug("raw args, ", rawArgs);
-
-        return this.commandHandler.handle(
-            this.createCommandContext(referer),
-            command,
-            rawArgs
-        );
     }
 
     /**
@@ -569,141 +531,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Handle an incoming message.
-     * @param {Message} msg The incoming message.
-     * @param {boolean} [edited=false] Whether the message was previously edited.
-     * @return {Promise<boolean>}
-     */
-    public async handleMessage(msg: Message, edited: boolean = false): Promise<boolean> {
-        if (Util.isEmpty(msg) || typeof msg !== "object" || !(msg instanceof Message) || Array.isArray(msg)) {
-            return false;
-        }
-
-        this.statCounter.stats.messagesSeen++;
-
-        if (this.suspended) {
-            return false;
-        }
-
-        this.emit(EBotEvents.HandleMessageStart);
-
-        if (this.options.logMessages) {
-            const names: any = {};
-
-            if (msg.channel.type === "text" && msg.guild !== undefined) {
-                names.guild = msg.guild.name;
-                names.channel = ` # ${(msg.channel as TextChannel).name}`;
-            }
-            else if (msg.channel.type === "dm" && msg.guild === undefined) {
-                names.guild = "";
-                names.channel = "Direct Messages";
-            }
-            else {
-                names.guild = "Unknown";
-                names.channel = " # Unknown";
-            }
-
-            Log.info(`[${msg.author.tag} @ ${names.guild}${names.channel}] ${Util.cleanMessage(msg)}${edited ? " [Edited]" : ""}`);
-        }
-
-        // TODO: Cannot do .startsWith with a prefix array
-        if ((!msg.author.bot || (msg.author.bot && !this.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.registry, this.settings.general.prefix)) {
-            if (this.options.allowCommandChain) {
-                // TODO: Might split values too
-                const rawChain: string[] = msg.content.split("~");
-
-                // TODO: Should be bot option
-                const maxChainLength: number = 5;
-
-                let allowed: boolean = true;
-
-                if (rawChain.length > maxChainLength) {
-                    allowed = false;
-                    msg.reply(`Maximum allowed chain length is ${maxChainLength} commands. Your commands were not executed.`);
-                }
-
-                if (allowed) {
-                    const chain: string[] = rawChain.slice(0, maxChainLength);
-
-                    // TODO: What if commandChecks is start and the bot tries to react twice or more?
-                    for (const chainItem of chain) {
-                        await this.handleCommandMessage(msg, chainItem.trim(), this.argumentResolvers);
-                    }
-                }
-            }
-            else {
-                await this.handleCommandMessage(msg, msg.content, this.argumentResolvers);
-            }
-        }
-        // TODO: ?prefix should also be chain-able
-        else if (!msg.author.bot && msg.content === "?prefix" && this.prefixCommand) {
-            await msg.channel.send(new RichEmbed()
-                .setDescription(`Command prefix(es): **${this.settings.general.prefix.join(", ")}** | Powered by [The Mix Framework](https://github.com/discord-mix/mix)`)
-                .setColor("GREEN"));
-        }
-        // TODO: There should be an option to disable this
-        // TODO: Use embeds
-        // TODO: Verify that it was done in the same environment and that the user still has perms
-        else if (!msg.author.bot && msg.content === "?undo") {
-            if (!this.commandHandler.undoMemory.has(msg.author.id)) {
-                await msg.reply(BotMessages.UNDO_NO_ACTIONS);
-            }
-            else if (this.commandHandler.undoAction(msg.author.id, msg)) {
-                await msg.reply(BotMessages.UNDO_OK);
-                this.commandHandler.undoMemory.delete(msg.author.id);
-            }
-            else {
-                await msg.reply(BotMessages.UNDO_FAIL);
-            }
-        }
-
-        this.emit(EBotEvents.HandleMessageEnd);
-
-        return true;
-    }
-
-    /**
-     * @todo Investigate the resolvers parameter usage (is it even used or required?)
-     * @param {Message} message
-     * @param {string} content
-     * @param {*} resolvers
-     * @return {Promise<void>}
-     */
-    public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
-        this.emit(EBotEvents.HandleCommandMessageStart, message, content);
-
-        const command: Command | null = await CommandParser.parse(
-            content,
-            this.registry,
-            this.settings.general.prefix
-        );
-
-        if (command === null) {
-            throw Log.error(BotMessages.CMD_PARSE_FAIL);
-        }
-
-        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
-            arguments: CommandParser.getArguments(content, command.args),
-            command,
-            schema: command.args,
-
-            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
-            message
-        });
-
-        // TODO: Debugging
-        Log.debug("Raw arguments are", rawArgs);
-
-        await this.commandHandler.handle(
-            this.createCommandContext(message),
-            command,
-            rawArgs
-        );
-
-        this.emit(EBotEvents.HandleCommandMessageEnd, message, content);
-    }
-
-    /**
      * Connect the client.
      * @return {Promise<this>}
      */
@@ -734,7 +561,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * @return {Promise<this>}
      */
     public async restart(reloadModules: boolean = true): Promise<this> {
-        this.emit(EBotEvents.Restarting, reloadModules);
+        this.emit(BotEvent.Restarting, reloadModules);
         Log.verbose("Restarting");
 
         // Dispose resources
@@ -754,7 +581,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         await this.connect();
-        this.emit(EBotEvents.Restarted, reloadModules);
+        this.emit(BotEvent.Restarted, reloadModules);
 
         return this;
     }
@@ -764,7 +591,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * @return {Promise<this>}
      */
     public async disconnect(): Promise<this> {
-        this.emit(EBotEvents.Disconnecting);
+        this.emit(BotEvent.Disconnecting);
 
         const servicesStopped: number = this.services.size;
 
@@ -774,7 +601,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         await this.client.destroy();
         (this.client as any) = new Client();
         Log.info("Disconnected");
-        this.emit(EBotEvents.Disconnected);
+        this.emit(BotEvent.Disconnected);
 
         return this;
     }
@@ -783,7 +610,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * Clear all the files inside the temp folder.
      */
     public clearTemp(): void {
-        this.emit(EBotEvents.ClearingTemp);
+        this.emit(BotEvent.ClearingTemp);
 
         // TODO: Path may need to be resolved/maybe it wont be relative...
         if (fs.existsSync("./temp")) {
@@ -796,7 +623,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             });
         }
 
-        this.emit(EBotEvents.ClearedTemp);
+        this.emit(BotEvent.ClearedTemp);
     }
 
     /**
@@ -822,22 +649,5 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         (this.state as any) = state;
 
         return this;
-    }
-
-    /**
-     * Create a linked command context instance.
-     * @param {Message} msg
-     * @return {Context}
-     */
-    protected createCommandContext(msg: Message): Context {
-        return new Context({
-            bot: this,
-            msg,
-            // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
-
-            // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
-
-            label: CommandParser.getCommandBase(msg.content, this.settings.general.prefix)
-        });
     }
 }

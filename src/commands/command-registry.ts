@@ -1,13 +1,15 @@
 import Log from "../core/log";
 import Bot from "../core/bot";
-import Command, {GenericCommand} from "./command";
+import Command, {GenericCommand, RawArguments} from "./command";
 import Context from "./command-context";
-import {Snowflake} from "discord.js";
+import {Snowflake, Message} from "discord.js";
 import Loader, {IPackage, ILivePackage} from "../fragments/loader";
 import Util from "../core/util";
 import path from "path";
 import {InternalCommand} from "../core/bot-extra";
 import {PromiseOr} from "@atlas/xlib";
+import CommandParser from "./command-parser";
+import BotMessages from "../core/messages";
 
 export interface ICommandCooldown {
     readonly context: Context;
@@ -45,6 +47,7 @@ export interface ICommandRegistry {
     setCooldown(user: Snowflake, cooldown: number, command: string): this;
     disposeAll(): PromiseOr<this>;
     unloadAll(): PromiseOr<this>;
+    invoke(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
 }
 
 export default class CommandRegistry implements ICommandRegistry {
@@ -415,5 +418,48 @@ export default class CommandRegistry implements ICommandRegistry {
         }
 
         return this;
+    }
+
+    /**
+     * Emulate a command invocation.
+     * @todo 'args' type on docs (here)
+     * @param {string} base The base command name.
+     * @param {Message} referer The triggering message.
+     * @param {string[]} args
+     * @return {Promise<*>}
+     */
+    public async invoke(base: string, referer: Message, ...args: string[]): Promise<any> {
+        // Use any registered prefix, default to index 0
+        const content: string = `${this.bot.settings.general.prefix[0]}${base} ${args.join(" ")}`.trim();
+
+        let command: Command | null = await CommandParser.parse(
+            content,
+            this,
+            this.bot.settings.general.prefix
+        );
+
+        if (command === null) {
+            throw Log.error(BotMessages.CMD_PARSE_FAIL);
+        }
+
+        command = command as Command;
+
+        const rawArgs: RawArguments = CommandParser.resolveDefaultArgs({
+            arguments: CommandParser.getArguments(content, command.args),
+            command,
+            schema: command.args,
+
+            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
+            message: referer
+        });
+
+        // TODO: Debugging
+        // Log.debug("raw args, ", rawArgs);
+
+        return this.bot.commandHandler.handle(
+            this.bot.handle.createContext(referer),
+            command,
+            rawArgs
+        );
     }
 }

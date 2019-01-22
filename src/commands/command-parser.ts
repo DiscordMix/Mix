@@ -1,4 +1,4 @@
-import CommandRegistry from "./command-store";
+import CommandRegistry, {ICommandRegistry} from "./command-registry";
 import Util from "../core/util";
 
 import Command, {
@@ -43,15 +43,15 @@ export interface ICheckArgumentsOptions {
 export default abstract class CommandParser {
     /**
      * @param {string} commandString
-     * @param {CommandRegistry} manager
+     * @param {ICommandRegistry} registry
      * @param {string[]} prefixes
      * @return {Command | null}
      */
-    public static async parse(commandString: string, manager: CommandRegistry, prefixes: string[]): Promise<Command | null> {
+    public static async parse(commandString: string, registry: ICommandRegistry, prefixes: string[]): Promise<Command | null> {
         const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
         if (commandBase) {
-            return await manager.get(commandBase);
+            return await registry.get(commandBase);
         }
 
         return null;
@@ -59,17 +59,17 @@ export default abstract class CommandParser {
 
     /**
      * @param {string} commandString
-     * @param {CommandRegistry} manager
+     * @param {CommandRegistry} registry
      * @param {string} prefixes
      * @return {boolean}
      */
-    public static validate(commandString: string, manager: CommandRegistry, prefixes: string[]): boolean {
+    public static validate(commandString: string, registry: ICommandRegistry, prefixes: string[]): boolean {
         for (const prefix of prefixes) {
             if (commandString.startsWith(prefix)) {
                 const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
                 if (commandBase !== null) {
-                    return manager.contains(commandBase);
+                    return registry.contains(commandBase);
                 }
             }
         }

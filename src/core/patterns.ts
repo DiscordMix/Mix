@@ -33,4 +33,8 @@ export default abstract class Patterns {
      * Matches file names with extension '.js' not starting with '.' or '@'
      */
     public static fragmentFileName: RegExp = /^[^\.@](?:.*?)\.js$/;
+
+    public static typescriptError: RegExp = /^(?<path>[^*]+)\((?<line>[0-9]+),(?<pos>[0-9]+)\): error (?<code>TS[0-9]+):(?<message>[^*]+)$/gm;
+
+    public static tslintWarning: RegExp = /^WARNING: (?<path>[^*]+) - (?<message>[^*]+)$/gm;
 }

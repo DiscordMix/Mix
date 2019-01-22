@@ -7,7 +7,7 @@ import ResponseHelper from "../core/response-helper";
 import Util from "../core/util";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import EditableMessage from "../message/editable-message";
-import Store from "../state/store";
+import {IStore} from "../state/store";
 import {PromiseOr} from "@atlas/xlib";
 
 export interface IContextOptions {
@@ -19,10 +19,9 @@ export interface IContextOptions {
 export type TextBasedChannel = TextChannel | DMChannel;
 
 export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper {
-    readonly bot: Bot;
     readonly msg: Message;
     readonly label: string | null;
-    readonly store: Store;
+    readonly store: IStore;
     readonly g: Guild;
     readonly c: T;
     readonly triggeringMessageId: Snowflake;
@@ -58,7 +57,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         this.msg = options.msg;
 
         /**
-         * @type {Bot}
+         * @type {IBot}
          * @readonly
          */
         this.bot = options.bot;
@@ -72,9 +71,9 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
 
     /**
      * Access the bot's store
-     * @return {Store}
+     * @return {IStore}
      */
-    public get store(): Store {
+    public get store(): IStore {
         return this.bot.store;
     }
 
@@ -134,7 +133,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         }
 
         return new Promise<string | null>(async (resolve) => {
-            const responseTimeout: NodeJS.Timeout = this.bot.setTimeout(() => {
+            const responseTimeout: NodeJS.Timeout = await this.bot.setTimeout(() => {
                 this.bot.client.removeListener("message", listener);
                 resolve(null);
             }, timeout);

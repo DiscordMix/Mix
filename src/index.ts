@@ -1,6 +1,6 @@
 import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
 import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/command-context";
-import CommandRegistry, {ICommandRegistry} from "./commands/command-store";
+import CommandRegistry, {ICommandRegistry} from "./commands/command-registry";
 import Bot from "./core/bot";
 
 import Command, {
@@ -25,7 +25,7 @@ import MsgBuilder, {IMsgBuilder} from "./builders/msg-builder";
 import CommandParser from "./commands/command-parser";
 import ConsoleCommand from "./console/console-command";
 import ConsoleInterface, {IConsoleInterface} from "./console/console-interface";
-import {EBotEvents, IBot} from "./core/bot-extra";
+import {BotEvent, IBot} from "./core/bot-extra";
 import ChatEnv from "./core/chat-env";
 import {IDisposable} from "./core/helpers";
 import Log, {LogLevel} from "./core/log";
@@ -131,7 +131,7 @@ export {
     ChatEnv,
     Patterns,
     DiscordEvent,
-    EBotEvents,
+    BotEvent as EBotEvents,
     BotConnector,
     IBotConnector,
 

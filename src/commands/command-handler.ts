@@ -1,13 +1,13 @@
 import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
 import {IAction} from "../actions/action";
-import {EBotEvents} from "../core/bot-extra";
+import {BotEvent} from "../core/bot-extra";
 import ChatEnv from "../core/chat-env";
 import Log from "../core/log";
 import Util from "../core/util";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./command-context";
 import CommandParser from "./command-parser";
-import CommandRegistry, {ICommandRegistry} from "./command-store";
+import CommandRegistry, {ICommandRegistry} from "./command-registry";
 import {PromiseOr} from "@atlas/xlib";
 
 export enum CmdHandlerEvent {
@@ -312,7 +312,7 @@ export default class CommandHandler implements ICommandHandler {
                 connection(context, resolvedArgs, command);
             }
 
-            context.bot.emit(EBotEvents.Command, command, context, result);
+            context.bot.emit(BotEvent.Command, command, context, result);
 
             if (context.bot.options.autoDeleteCommands && context.msg.deletable) {
                 await context.msg.delete();

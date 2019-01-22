@@ -15,6 +15,7 @@ import path from "path";
 import Bot from "./bot";
 import Patterns from "./patterns";
 import Log from "./log";
+import {IBot} from "./bot-extra";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");
@@ -128,12 +129,12 @@ export default abstract class Util {
     }
 
     // TODO: Needs testing
-    public static createTimedAction<ReturnType = any>(bot: Bot, action: () => ReturnType, timeout: number, timeoutResult: ReturnType | any): Promise<ReturnType> {
+    public static createTimedAction<ReturnType = any>(bot: IBot, action: () => ReturnType, timeout: number, timeoutResult: ReturnType | any): Promise<ReturnType> {
         return new Promise(async (resolve) => {
             // TODO: Is this required?
             let stopFlag: boolean = false;
 
-            const timer: NodeJS.Timeout = bot.setTimeout(() => {
+            const timer: NodeJS.Timeout = await bot.setTimeout(() => {
                 stopFlag = true;
                 resolve(timeoutResult);
             }, timeout);

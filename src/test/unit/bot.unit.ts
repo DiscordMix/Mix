@@ -6,6 +6,9 @@ import {ArgTypes, ArgResolvers} from "../../core/constants";
 default class {
     @Test("should init and login")
     public async initAndLogin(): Promise<void> {
+        // Mock client login
+
+
         await init();
 
         Assert.that(testBot.client.user, Is.type(JsType.Object));

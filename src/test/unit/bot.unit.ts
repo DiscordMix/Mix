@@ -43,7 +43,7 @@ default class {
     @Feed("test")
     @Feed([])
     public async notHandleInvalidMsgs(input: any): Promise<void> {
-        Assert.false(await testBot.handleMessage(input));
+        Assert.false(await testBot.handle.message(input));
     }
 
     @Test("should have correct internal commands")

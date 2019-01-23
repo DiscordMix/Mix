@@ -1,6 +1,6 @@
 import fs from "fs";
 import Command from "../commands/command";
-import {ReadonlyCommandMap} from "../commands/command-store";
+import {ReadonlyCommandMap} from "../commands/command-registry";
 import Bot from "../core/bot";
 import {BotEvent} from "../core/bot-extra";
 import {IDisposable} from "../core/helpers";

@@ -7,7 +7,7 @@ import Util from "../core/util";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./command-context";
 import CommandParser from "./command-parser";
-import CommandRegistry, {ICommandRegistry} from "./command-store";
+import CommandRegistry, {ICommandRegistry} from "./command-registry";
 import {PromiseOr} from "@atlas/xlib";
 
 export enum CmdHandlerEvent {

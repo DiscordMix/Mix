@@ -1,6 +1,6 @@
 import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
 import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/command-context";
-import CommandRegistry, {ICommandRegistry} from "./commands/command-store";
+import CommandRegistry, {ICommandRegistry} from "./commands/command-registry";
 import Bot from "./core/bot";
 
 import Command, {
@@ -131,7 +131,7 @@ export {
     ChatEnv,
     Patterns,
     DiscordEvent,
-    BotEvent as BotEvents,
+    BotEvent,
     BotConnector,
     IBotConnector,
 

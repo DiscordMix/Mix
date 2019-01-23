@@ -48,11 +48,11 @@ describe("Bot", () => {
     });
 
     it("should not handle invalid messages", async () => {
-        expect(await testBot.handleMessage(undefined as any)).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.handleMessage(null as any)).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.handleMessage("" as any)).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.handleMessage("hello" as any)).to.be.a("boolean").and.to.equal(false);
-        expect(await testBot.handleMessage([] as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.handle.message(undefined as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.handle.message(null as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.handle.message("" as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.handle.message("hello" as any)).to.be.a("boolean").and.to.equal(false);
+        expect(await testBot.handle.message([] as any)).to.be.a("boolean").and.to.equal(false);
     });
 
     it("should have correct internal commands", () => {

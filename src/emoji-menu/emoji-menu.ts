@@ -1,10 +1,10 @@
 import {Message, MessageReaction, Snowflake, User} from "discord.js";
 import {EventEmitter} from "events";
 import Context from "../commands/command-context";
-import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
 import DiscordEvent from "../core/discord-event";
 import {PromiseOr} from "@atlas/xlib";
+import {IBot} from "../core/bot-extra";
 
 export type EmojiClickHandler = (reaction: MessageReaction, user: User) => void;
 
@@ -36,7 +36,7 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
     // TODO: Should be more productive if using Map
     public readonly buttons: IEmojiButton[];
 
-    protected bot?: Bot;
+    protected bot?: IBot;
     protected messageAttached?: Message;
 
     /**

@@ -26,7 +26,7 @@ const DefaultBotStats: IBotStats = {
     messagesSeen: 0
 };
 
-export interface IStatsCounter {
+export interface IBotAnalytics {
     readonly stats: IBotStats;
 
     reset(): this;
@@ -36,7 +36,7 @@ export interface IStatsCounter {
 /**
  * Allows detailed tracking of statistics and interactions of the bot
  */
-export default class StatCounter implements IStatsCounter {
+export default class BotAnalytics implements IBotAnalytics {
     public stats: IBotStats;
 
     public constructor() {

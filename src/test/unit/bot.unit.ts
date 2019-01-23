@@ -1,4 +1,4 @@
-import {Unit, Test, Assert, Is, JsType, Does, Feed} from "unit";
+import {Unit, Test, Assert, Is, JsType, Does, Feed, Mock} from "unit";
 import {init, testBot} from "../test-bot";
 import {ArgTypes, ArgResolvers} from "../../core/constants";
 
@@ -7,7 +7,7 @@ default class {
     @Test("should init and login")
     public async initAndLogin(): Promise<void> {
         // Mock client login
-
+        testBot.client.login = Mock.
 
         await init();
 

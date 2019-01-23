@@ -4,7 +4,7 @@ import {Guild, Message, Snowflake, TextChannel} from "discord.js";
 import path from "path";
 import Context from "../commands/command-context";
 import Bot from "../core/bot";
-import {EBotEvents} from "../core/bot-extra";
+import {BotEvent} from "../core/bot-extra";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
 import Settings from "../core/settings";
@@ -147,7 +147,7 @@ export let testBot: TestBot = new TestBot({
 
 export async function init(): Promise<void> {
     return new Promise<void>(async (resolve) => {
-        testBot.once(EBotEvents.Ready, () => {
+        testBot.once(BotEvent.Ready, () => {
             resolve();
         });
 

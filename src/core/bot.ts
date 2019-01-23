@@ -34,7 +34,7 @@ import PathResolver from "./path-resolver";
 import {ArgResolvers, ArgTypes, DefaultBotOptions} from "./constants";
 import Store from "../state/store";
 import BotMessages from "./messages";
-import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, EBotEvents, IBot} from "./bot-extra";
+import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./bot-extra";
 import {Action} from "@atlas/automata";
 import BotConnector from "./bot-connector";
 import CommandRegistry from "../commands/command-store";
@@ -106,9 +106,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
             (options.settings as any).paths = {
                 commands: path.resolve(path.join(__dirname, "../", "test", "test-commands")),
-                emojis: path.resolve(path.join(__dirname, "../", "test", "test-emojis")),
                 languages: path.resolve(path.join("src", "test", "test-languages")),
-                plugins: path.resolve(path.join(__dirname, "../", "test", "test-plugins")),
                 services: path.resolve(path.join(__dirname, "../", "test", "test-services")),
                 tasks: path.resolve(path.join(__dirname, "../", "test", "test-tasks")),
             };
@@ -585,7 +583,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             return false;
         }
 
-        this.emit(EBotEvents.HandleMessageStart);
+        this.emit(BotEvent.HandleMessageStart);
 
         if (this.options.logMessages) {
             const names: any = {};
@@ -657,7 +655,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             }
         }
 
-        this.emit(EBotEvents.HandleMessageEnd);
+        this.emit(BotEvent.HandleMessageEnd);
 
         return true;
     }
@@ -670,7 +668,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * @return {Promise<void>}
      */
     public async handleCommandMessage(message: Message, content: string, resolvers: any): Promise<void> {
-        this.emit(EBotEvents.HandleCommandMessageStart, message, content);
+        this.emit(BotEvent.HandleCommandMessageStart, message, content);
 
         const command: Command | null = await CommandParser.parse(
             content,
@@ -700,7 +698,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             rawArgs
         );
 
-        this.emit(EBotEvents.HandleCommandMessageEnd, message, content);
+        this.emit(BotEvent.HandleCommandMessageEnd, message, content);
     }
 
     /**
@@ -734,7 +732,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * @return {Promise<this>}
      */
     public async restart(reloadModules: boolean = true): Promise<this> {
-        this.emit(EBotEvents.Restarting, reloadModules);
+        this.emit(BotEvent.Restarting, reloadModules);
         Log.verbose("Restarting");
 
         // Dispose resources
@@ -754,7 +752,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         await this.connect();
-        this.emit(EBotEvents.Restarted, reloadModules);
+        this.emit(BotEvent.Restarted, reloadModules);
 
         return this;
     }
@@ -764,7 +762,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * @return {Promise<this>}
      */
     public async disconnect(): Promise<this> {
-        this.emit(EBotEvents.Disconnecting);
+        this.emit(BotEvent.Disconnecting);
 
         const servicesStopped: number = this.services.size;
 
@@ -774,7 +772,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         await this.client.destroy();
         (this.client as any) = new Client();
         Log.info("Disconnected");
-        this.emit(EBotEvents.Disconnected);
+        this.emit(BotEvent.Disconnected);
 
         return this;
     }
@@ -783,7 +781,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * Clear all the files inside the temp folder.
      */
     public clearTemp(): void {
-        this.emit(EBotEvents.ClearingTemp);
+        this.emit(BotEvent.ClearingTemp);
 
         // TODO: Path may need to be resolved/maybe it wont be relative...
         if (fs.existsSync("./temp")) {
@@ -796,7 +794,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             });
         }
 
-        this.emit(EBotEvents.ClearedTemp);
+        this.emit(BotEvent.ClearedTemp);
     }
 
     /**

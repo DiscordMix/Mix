@@ -157,7 +157,7 @@ export default class ResponseHelper implements IResponseHelper {
      */
     public async ok(text: string | MsgBuilder, title: string = "", clean: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
-            text: typeof text === "string" ? `${this.bot.options.emojis.success} ${text}` : text.build(),
+            text: typeof text === "string" ? `:white_check_mark: ${text}` : text.build(),
             title
         });
     }
@@ -189,7 +189,7 @@ export default class ResponseHelper implements IResponseHelper {
      */
     public async fail(text: string, autoDelete: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
-            text: `${this.bot.options.emojis.error} ${text}`,
+            text: `:thinking: ${text}`,
             color: "RED"
         }, autoDelete);
     }

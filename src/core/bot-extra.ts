@@ -78,14 +78,13 @@ export interface IBotExtraOptions {
     readonly autoResetAuthStore: boolean;
     readonly logMessages: boolean;
     readonly dmHelp: boolean;
-    readonly emojis: IBotEmojiOptions;
     readonly optimizer: boolean;
 }
 
 /**
  * Events fired by the bot.
  */
-export enum EBotEvents {
+export enum BotEvent {
     SetupStart = "setupStart",
     LoadingInternalFragments = "loadInternalFragments",
     LoadedInternalFragments = "loadedInternalFragments",

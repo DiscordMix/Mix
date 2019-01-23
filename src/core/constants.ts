@@ -115,7 +115,6 @@ export const DefaultBotOptions: IBotExtraOptions = {
     updateOnMessageEdit: false,
     dmHelp: true,
     logMessages: false,
-    emojis: DefaultBotEmojiOptions,
     consoleInterface: true,
     optimizer: false
 };

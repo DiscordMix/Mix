@@ -1,6 +1,6 @@
 import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
 import {IAction} from "../actions/action";
-import {EBotEvents} from "../core/bot-extra";
+import {BotEvent} from "../core/bot-extra";
 import ChatEnv from "../core/chat-env";
 import Log from "../core/log";
 import Util from "../core/util";
@@ -312,7 +312,7 @@ export default class CommandHandler implements ICommandHandler {
                 connection(context, resolvedArgs, command);
             }
 
-            context.bot.emit(EBotEvents.Command, command, context, result);
+            context.bot.emit(BotEvent.Command, command, context, result);
 
             if (context.bot.options.autoDeleteCommands && context.msg.deletable) {
                 await context.msg.delete();

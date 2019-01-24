@@ -48,7 +48,7 @@ async function build() {
     const state = result.state === CoordinatorState.OK ? "passing" : "failed";
     const color = result.state === CoordinatorState.OK ? colors.green : colors.red;
 
-    console.log(color(`\n  Build ${state} | Took ${result.time}ms (${result.averageTime}ms avg.) | ${result.operationsCompleted}/${result.operations} task(s)`));
+    console.log(color(`\n  Build ${state} | Took ${result.time}ms (${result.averageTime}ms avg.) | ${result.operationsCompleted}/${result.operations} task(s)\n`));
 
     return result.operations === result.operationsCompleted ? 0 : 1;
 }

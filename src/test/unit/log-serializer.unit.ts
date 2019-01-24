@@ -54,7 +54,7 @@ default class {
         const result: ILogMsg = serializer.deserialize(msg) as ILogMsg;
 
         Assert.that(result,
-            Is.type(JsType.Object),
+            Is.object,
             Does.haveProperty("source"),
             Does.haveProperty("message"),
             Does.haveProperty("time")

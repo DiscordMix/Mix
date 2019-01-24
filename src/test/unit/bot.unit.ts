@@ -1,17 +1,28 @@
 import {Unit, Test, Assert, Is, JsType, Does, Feed, Mock} from "unit";
 import {init, testBot} from "../test-bot";
 import {ArgTypes, ArgResolvers} from "../../core/constants";
+import DiscordEvent from "../../core/discord-event";
+import TestData from "./test-data";
 
 @Unit("Bot")
 default class {
     @Test("should init and login")
     public async initAndLogin(): Promise<void> {
         // Mock client login
-        testBot.client.login = Mock.
+        testBot.client.login = Mock.fn(testBot.client.login)
+            .once((): void => {
+                (testBot.client.user as any) = {
+                    id: TestData.id
+                };
+
+                testBot.client.emit(DiscordEvent.Ready);
+            })
+
+            .invoker;
 
         await init();
 
-        Assert.that(testBot.client.user, Is.type(JsType.Object));
+        Assert.that(testBot.client.user, Is.object);
     }
 
     @Test("should not be suspended")
@@ -21,7 +32,7 @@ default class {
 
     @Test("should have no owner")
     public haveNoOwner(): void {
-        Assert.that(testBot.owner, Is.type(JsType.Undefined));
+        Assert.that(testBot.owner, Is.undefined);
     }
 
     @Test("should have no user groups")

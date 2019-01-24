@@ -18,7 +18,9 @@
         "no-var-requires": false,
         "object-literal-key-quotes": false,
         "no-conditional-assignment": false,
-        "space-before-function-paren": false
+        "space-before-function-paren": false,
+        "no-string-literal": false,
+        "no-empty": false
     },
     "rulesDirectory": []
 }

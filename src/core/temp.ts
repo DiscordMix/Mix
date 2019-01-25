@@ -14,6 +14,7 @@ export interface ITemp {
     store(data: any, file: string): PromiseOr<this>;
 }
 
+// TODO: Temp base path should be optionally determined from settings.
 /**
  * Allows management of temporary data storage.
  */
@@ -35,13 +36,6 @@ export default class Temp implements ITemp {
 
     protected id?: string;
     protected resolvedPath?: string;
-
-    /**
-     * @todo Temp base path should be optionally determined from settings
-     */
-    public constructor() {
-        //
-    }
 
     /**
      * @param {Snowflake} id

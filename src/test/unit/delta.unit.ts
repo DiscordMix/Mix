@@ -18,7 +18,7 @@ default class {
 
         Assert.that(result, Is.arrayWithLength(2));
 
-        // Assert results
+        // Assert results.
         Assert.that(result[0], Is.string);
         Assert.that(result[1], Is.string);
     }

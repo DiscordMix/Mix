@@ -9,7 +9,7 @@ describe("Send Messages", () => {
         expect(message).to.be.an("object");
         expect(message.embeds).to.be.an("array");
         expect(message.embeds.length).to.be.a("number").and.to.equal(1);
-        expect(message.embeds[0].color).to.be.a("number").and.to.equal(3066993); // Green
+        expect(message.embeds[0].color).to.be.a("number").and.to.equal(3066993); // Green.
         expect(message.embeds[0].description).to.be.a("string").and.to.equal(":white_check_mark: hello world");
     });
 
@@ -19,7 +19,7 @@ describe("Send Messages", () => {
         expect(message).to.be.an("object");
         expect(message.embeds).to.be.an("array");
         expect(message.embeds.length).to.be.a("number").and.to.equal(1);
-        expect(message.embeds[0].color).to.be.a("number").and.to.equal(15158332); // Red
+        expect(message.embeds[0].color).to.be.a("number").and.to.equal(15158332); // Red.
         expect(message.embeds[0].description).to.be.a("string").and.to.equal(":thinking: failed message");
     });
 

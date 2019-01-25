@@ -7,7 +7,7 @@ import {DecoratorProxy} from "./component";
  * Static utility class for decorators.
  */
 export abstract class DecoratorUtils {
-    // TODO: Attempt to merge override methods
+    // TODO: Attempt to merge override methods.
     // TODO: Should append instead of override?
     public static overrideConstraint(target: any, constraint: string, value: any): DecoratorProxy {
         return class extends target {

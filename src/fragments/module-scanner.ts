@@ -21,7 +21,7 @@ export default class ModuleScanner implements IModuleScanner {
     }
 
     public scan(): string[] {
-        // TODO
+        // TODO.
         throw Log.notImplemented;
     }
 }

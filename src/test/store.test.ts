@@ -53,7 +53,7 @@ describe("Store", () => {
 
     describe("dispatch()", () => {
         it("should throw on invalid parameters", () => {
-            // TODO: Takes 2 arguments
+            // TODO: Takes 2 arguments.
             for (const param of TestUtils.makeParams([ExcludeParam.Number])) {
                 assert.throws(() => testBot.store.dispatch(param));
             }
@@ -86,7 +86,7 @@ describe("Store", () => {
 
     describe("isSubscribed()", () => {
         it("should determine if a handler is subscribed", () => {
-            // TODO
+            // TODO.
         });
 
         it("should throw on invalid parameters", () => {

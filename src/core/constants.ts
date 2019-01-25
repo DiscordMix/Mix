@@ -6,7 +6,7 @@ import Patterns from "./patterns";
 import {ISettingsPaths} from "./settings";
 import Util from "./util";
 
-// TODO: Not working
+// TODO: Not working.
 export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";
 
 export const Title: string =

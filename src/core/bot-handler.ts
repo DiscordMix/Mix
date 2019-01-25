@@ -60,13 +60,13 @@ export default class BotHandler implements IBotHandler {
             Log.info(`[${msg.author.tag} @ ${names.guild}${names.channel}] ${Util.cleanMessage(msg)}${edited ? " [Edited]" : ""}`);
         }
 
-        // TODO: Cannot do .startsWith with a prefix array
+        // TODO: Cannot do .startsWith with a prefix array.
         if ((!msg.author.bot || (msg.author.bot && !this.bot.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.bot.registry, this.bot.settings.general.prefix)) {
             if (this.bot.options.allowCommandChain) {
-                // TODO: Might split values too
+                // TODO: Might split values too.
                 const rawChain: string[] = msg.content.split("~");
 
-                // TODO: Should be bot option
+                // TODO: Should be bot option.
                 const maxChainLength: number = 5;
 
                 let allowed: boolean = true;
@@ -95,9 +95,9 @@ export default class BotHandler implements IBotHandler {
                 .setDescription(`Command prefix(es): **${this.bot.settings.general.prefix.join(", ")}** | Powered by [The Mix Framework](https://github.com/discord-mix/mix)`)
                 .setColor("GREEN"));
         }
-        // TODO: There should be an option to disable this
-        // TODO: Use embeds
-        // TODO: Verify that it was done in the same environment and that the user still has perms
+        // TODO: There should be an option to disable this.
+        // TODO: Use embeds.
+        // TODO: Verify that it was done in the same environment and that the user still has perms.
         else if (!msg.author.bot && msg.content === "?undo") {
             if (!this.bot.commandHandler.undoMemory.has(msg.author.id)) {
                 await msg.reply(BotMessages.UNDO_NO_ACTIONS);
@@ -141,7 +141,7 @@ export default class BotHandler implements IBotHandler {
             command,
             schema: command.args,
 
-            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
+            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun.
             message
         });
 
@@ -168,7 +168,7 @@ export default class BotHandler implements IBotHandler {
             msg,
             // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
 
-            // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review)
+            // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review).
 
             label: CommandParser.getCommandBase(msg.content, this.bot.settings.general.prefix)
         });

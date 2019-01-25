@@ -46,7 +46,7 @@ export default abstract class TestUtils {
             "test",
             "",
 
-            // TODO
+            // TODO.
             // (): void => {}
         ];
 
@@ -58,14 +58,14 @@ export default abstract class TestUtils {
                 else if (typeof item === "number") {
                     switch (item) {
                         case ExcludeParam.Array: {
-                            // Remove 'Array'
+                            // Remove 'Array'.
                             params.splice(0, 1);
 
                             break;
                         }
 
                         case ExcludeParam.Object: {
-                            // Remove 'Object'
+                            // Remove 'Object'.
                             params.splice(1, 1);
 
                             break;
@@ -76,7 +76,7 @@ export default abstract class TestUtils {
                         }
 
                         case ExcludeParam.Number: {
-                            // Remove 'Numbers'
+                            // Remove 'Numbers'.
                             params.splice(2, 2);
 
                             break;

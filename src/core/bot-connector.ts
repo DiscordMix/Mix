@@ -43,7 +43,7 @@ export default class BotConnector implements IBotConnector {
          */
         this.setupStart = performance.now();
 
-        // Load languages
+        // Load languages.
         if (this.bot.language && this.bot.languages) {
             for (const lang of this.bot.languages) {
                 await this.bot.language.load(lang);
@@ -53,7 +53,7 @@ export default class BotConnector implements IBotConnector {
         Log.verbose("Attempting to load internal fragments");
         this.bot.emit(BotEvent.LoadingInternalFragments);
 
-        // Load & enable internal fragments
+        // Load & enable internal fragments.
         const internalFragmentCandidates: string[] | null = await Loader.scan(InternalFragmentsPath);
 
         if (!internalFragmentCandidates) {
@@ -86,7 +86,7 @@ export default class BotConnector implements IBotConnector {
         this.bot.emit(BotEvent.LoadedInternalFragments, internalFragments || []);
         this.bot.emit(BotEvent.LoadingServices);
 
-        // Load & enable services
+        // Load & enable services.
         const consumerServiceCandidates: string[] | null = await Loader.scan(this.bot.settings.paths.services);
 
         if (!consumerServiceCandidates || consumerServiceCandidates.length === 0) {
@@ -106,14 +106,14 @@ export default class BotConnector implements IBotConnector {
             }
         }
 
-        // After loading services, enable all of them
-        // TODO: Returns amount of enabled services
+        // After loading services, enable all of them.
+        // TODO: Returns amount of enabled services.
         await this.bot.services.startAll();
 
         this.bot.emit(BotEvent.LoadedServices);
         this.bot.emit(BotEvent.LoadingCommands);
 
-        // Load & enable consumer command fragments
+        // Load & enable consumer command fragments.
         const consumerCommandCandidates: string[] | null = await Loader.scan(this.bot.settings.paths.commands);
 
         if (!consumerCommandCandidates || consumerCommandCandidates.length === 0) {
@@ -139,7 +139,7 @@ export default class BotConnector implements IBotConnector {
             }
         }
 
-        // Load & enable tasks
+        // Load & enable tasks.
         await this.bot.tasks.unregisterAll();
         Log.verbose(BotMessages.SETUP_LOADING_TASKS);
 
@@ -166,13 +166,13 @@ export default class BotConnector implements IBotConnector {
         if (this.bot.options.optimizer) {
             Log.verbose(BotMessages.SETUP_START_OPTIMIZER);
 
-            // Start tempo engine
+            // Start tempo engine.
             this.bot.optimizer.start();
 
             Log.success(BotMessages.SETUP_STARTED_OPTIMIZER);
         }
 
-        // Setup the Discord client's events
+        // Setup the Discord client's events.
         this.setupEvents();
 
         Log.success(BotMessages.SETUP_COMPLETED);
@@ -186,16 +186,16 @@ export default class BotConnector implements IBotConnector {
     protected setupEvents(): void {
         Log.verbose("Setting up Discord events");
 
-        // Discord client events
+        // Discord client events.
         this.bot.client.on(DiscordEvent.Ready, async () => {
             // Setup temp module
             this.bot.temp.setup(this.bot.client.user.id);
 
-            // Create the temp folder
+            // Create the temp folder.
             await this.bot.temp.create();
 
             if (this.bot.options.consoleInterface && !this.bot.console.ready) {
-                // Setup the console command interface
+                // Setup the console command interface.
                 this.bot.console.setup(this.bot);
             }
 
@@ -211,7 +211,7 @@ export default class BotConnector implements IBotConnector {
         this.bot.client.on(DiscordEvent.Message, this.bot.handle.message.bind(this));
         this.bot.client.on(DiscordEvent.Error, (error: Error) => Log.error(error.message));
 
-        // If enabled, handle message edits (if valid) as commands
+        // If enabled, handle message edits (if valid) as commands.
         if (this.bot.options.updateOnMessageEdit) {
             this.bot.client.on(DiscordEvent.MessageUpdated, async (oldMessage: Message, newMessage: Message) => {
                 await this.bot.handle.message(newMessage, true);

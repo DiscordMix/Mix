@@ -9,7 +9,7 @@ import Log from "../core/log";
 import Util from "../core/util";
 import {PromiseOr} from "@atlas/xlib";
 
-// Arg types
+// Arg types.
 export interface IMessageActionArgs {
     readonly channelId: Snowflake;
     readonly message: string;
@@ -228,7 +228,7 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
 
             default: {
                 if (action.type >= 1000) {
-                    // TODO: Override on() from EventEmitter because emitting converted number
+                    // TODO: Override on() from EventEmitter because emitting converted number.
                     this.emit(action.type.toString());
                 }
                 else {

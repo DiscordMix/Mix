@@ -65,7 +65,7 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
          */
         this.buttons = buttons;
 
-        // Global click
+        // Global click.
         this.on("emojiClick", (reaction: MessageReaction, user: User, emoji: IEmojiButton) => {
             if (emoji.clicked !== undefined && typeof emoji.clicked === "function") {
                 emoji.clicked(reaction, user);

@@ -45,7 +45,7 @@ export default abstract class Log {
 
         let message: any = options.message;
 
-        // TODO: Make sure check is working as intended, seems a bit suspicious
+        // TODO: Make sure check is working as intended, seems a bit suspicious.
         if (Log.level < options.level) {
             if (Log.hiddenItems) {
                 console.log(colors.gray("+ 1 Hidden Item"));
@@ -54,7 +54,7 @@ export default abstract class Log {
             return;
         }
 
-        // Special background for fatal
+        // Special background for fatal.
         if (typeof message === "string" && options.level === LogLevel.Fatal) {
             message = colors.bgRed.white(message);
         }

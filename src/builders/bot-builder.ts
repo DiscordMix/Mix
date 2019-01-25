@@ -87,7 +87,7 @@ export default class BotBuilder implements IBotBuilder {
      * @return {Bot}
      */
     public build(): IBot {
-        // TODO:
+        // TODO.
         return new Bot(this.bot);
     }
 }

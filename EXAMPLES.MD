@@ -125,13 +125,13 @@ export default class MyService extends Service {
     private static messageMemory: Message[] = [];
 
     public start(): void {
-        // Save sent messages
+        // Save sent messages.
         this.on(DiscordEvent.Message, (msg: Message) => {
             MyService.messageMemory.push(msg);
         });
     }
 
-    // Dispose resources upon being stopped
+    // Dispose resources upon being stopped.
     public dispose(): void {
         MyService.messageMemory = [];
     }
@@ -150,11 +150,11 @@ export default class MyService extends ForkedService {
     };
 
     public start(): void {
-        // Code here
+        // Code here.
     }
 
     public onMessage(msg: IProcessMsg, sender: any): IProcessMsg[] | IProcessMsg | void {
-        // Code on message from parent here
+        // Code on message from parent here.
     }
 }
 ```

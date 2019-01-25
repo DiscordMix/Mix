@@ -127,7 +127,7 @@ export interface IGenericCommand<T extends object = object> extends IFragment, I
 
 export abstract class GenericCommand<T extends object = object> implements IGenericCommand<T> {
     public readonly meta: IFragmentMeta = {
-        // Leave empty intentionally so the fragment validator complains
+        // Leave empty intentionally so the fragment validator complains.
         name: ""
     };
 

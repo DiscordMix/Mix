@@ -30,97 +30,97 @@ export default class UserObserver extends EventEmitter {
     }
 
     protected setupEvents(): void {
-        // Message
+        // Message.
         this.client.on("message", (message: Message) => {
             if (message.author.id === this.user.id) {
                 this.emit("message", message);
             }
         });
 
-        // Message Update
+        // Message Update.
         this.client.on("messageUpdate", (oldMessage: Message, newMessage: Message) => {
             if (oldMessage.author.id === this.user.id) {
                 this.emit("messageUpdate", oldMessage, newMessage);
             }
         });
 
-        // Message Delete
+        // Message Delete.
         this.client.on("messageDelete", (message: Message) => {
             if (message.author.id === this.user.id) {
                 this.emit("messageDelete", message);
             }
         });
 
-        // Message Reaction Add
+        // Message Reaction Add.
         this.client.on("messageReactionAdd", (messageReaction: MessageReaction, user: User) => {
             if (user.id === this.user.id) {
                 this.emit("messageReactionAdd", messageReaction, user);
             }
         });
 
-        // Message Reaction Remove
+        // Message Reaction Remove.
         this.client.on("messageReactionRemove", (messageReaction: MessageReaction, user: User) => {
             if (user.id === this.user.id) {
                 this.emit("messageReactionRemove", messageReaction, user);
             }
         });
 
-        // Message Reaction Remove All
+        // Message Reaction Remove All.
         this.client.on("messageReactionRemoveAll", (message: Message) => {
             if (message.author.id === this.user.id) {
                 this.emit("messageReactionRemoveAll", message);
             }
         });
 
-        // User Update
+        // User Update.
         this.client.on("userUpdate", (oldUser: User, newUser: User) => {
             if (oldUser.id === this.user.id) {
                 this.emit("userUpdate", oldUser, newUser);
             }
         });
 
-        // Guild Member Update
+        // Guild Member Update.
         this.client.on("guildMemberUpdate", (oldMember: GuildMember, newMember: GuildMember) => {
             if (oldMember.id === this.user.id) {
                 this.emit("guildMemberUpdate", oldMember, newMember);
             }
         });
 
-        // Guild Member Add
+        // Guild Member Add.
         this.client.on("guildMemberAdd", (member: GuildMember) => {
             if (member.id === this.user.id) {
                 this.emit("guildMemberAdd", member);
             }
         });
 
-        // Guild Member Remove
+        // Guild Member Remove.
         this.client.on("guildMemberRemove", (member: GuildMember) => {
             if (member.id === this.user.id) {
                 this.emit("guildMemberRemove", member);
             }
         });
 
-        // Guild Ban Add
+        // Guild Ban Add.
         this.client.on("guildBanAdd", (guild: Guild, user: User) => {
             if (user.id === this.user.id) {
                 this.emit("guildBanAdd", guild, user);
             }
         });
 
-        // Guild Ban Remove
+        // Guild Ban Remove.
         this.client.on("guildBanRemove", (guild: Guild, user: User) => {
             if (user.id === this.user.id) {
                 this.emit("guildBanRemove", guild, user);
             }
         });
 
-        // Guild Member Available
+        // Guild Member Available.
         this.client.on("guildMemberAvailable", (member: GuildMember) => {
             if (member.id === this.user.id) {
                 this.emit("guildMemberAvailable", member);
             }
         });
 
-        // TODO: Missing Guild Member Speaking and possibly others
+        // TODO: Missing Guild Member Speaking and possibly others.
     }
 }

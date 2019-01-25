@@ -104,12 +104,12 @@ export default class ResponseHelper implements IResponseHelper {
 
         let messageResult = await this.channel.send(embed.build()).catch((error: Error) => {
             if (!Util.botLists.includes(this.channel.guild.id)) {
-                // TODO: Commented out, this.privateReply method was moved
+                // TODO: Commented out, this.privateReply method was moved.
                 // this.privateReply(`Oh no! For some reason, I was unable to reply to you in that channel. (${error.message})`);
             }
         });
 
-        // TODO: Hotfix
+        // TODO: Hotfix.
         if (Array.isArray(messageResult)) {
             messageResult = messageResult[0];
         }
@@ -132,7 +132,7 @@ export default class ResponseHelper implements IResponseHelper {
 
             const timeToLive: number = 4000 + (100 * contentSize);
 
-            // Time depends on length
+            // Time depends on length.
             messageResult.delete(timeToLive);
         }
 

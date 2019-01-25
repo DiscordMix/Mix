@@ -17,7 +17,7 @@ export interface IAuthenticator {
 
 export default class Authenticator implements IAuthenticator {
     public authenticate(issuer: Snowflake, request: IRequest): boolean {
-        // TODO: Implement
+        // TODO: Implement.
         throw Log.notImplemented;
     }
 }

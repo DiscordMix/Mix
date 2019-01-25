@@ -26,8 +26,8 @@ export interface ILivePackage<T extends IFragment> {
 export default abstract class Loader {
     // TODO: Make use of the 'defaultOnly' parameter
     /**
-     * @param {string} filePath The path to the file containing fragment
-     * @param {boolean} [defaultOnly=false] Whether to only load the default exported module
+     * @param {string} filePath The path to the file containing fragment.
+     * @param {boolean} [defaultOnly=false] Whether to only load the default exported module.
      * @return {Promise<IPackage | null>}
      */
     public static async load(filePath: string, defaultOnly: boolean = false): Promise<IPackage | null> {
@@ -46,7 +46,7 @@ export default abstract class Loader {
 
             const validEs6DefaultTypes = ["object", "function"];
 
-            // Support for ES6 default module exports
+            // Support for ES6 default module exports.
             if (module.default !== undefined && validEs6DefaultTypes.includes(typeof module.default)) {
                 module = module.default;
             }
@@ -64,7 +64,7 @@ export default abstract class Loader {
     }
 
     /**
-     * @todo Test and make sure it works
+     * @todo Test and make sure it works.
      * @param {string} file
      * @return {Promise<IPackage | null>}
      */
@@ -76,7 +76,7 @@ export default abstract class Loader {
     }
 
     /**
-     * Determine whether a fragment is valid
+     * Determine whether a fragment is valid.
      * @param {IFragment} fragment
      * @return {boolean}
      */
@@ -90,8 +90,8 @@ export default abstract class Loader {
         else if (!validFragmentNamePattern.test(fragment.meta.name) || !validFragmentDescPattern.test(fragment.meta.name) || fragment.meta.name.length > 100 || (fragment.meta.description !== undefined && fragment.meta.description.length > 100)) {
             return false;
         }
-        // TODO: Implement fragment version & author validation
-        // TODO: Implement description validation (description is optional)
+        // TODO: Implement fragment version & author validation.
+        // TODO: Implement description validation (description is optional).
         else if (typeof fragment.meta !== "object" || typeof fragment.meta.name !== "string" || (fragment.meta.author !== undefined && typeof fragment.meta.author !== "string") || (fragment.meta.version !== undefined && typeof fragment.meta.version !== "string")) {
             return false;
         }
@@ -100,11 +100,11 @@ export default abstract class Loader {
     }
 
     /**
-     * Scan a specific directory for candidate fragments
-     * @param {string} directory The directory to scan
-     * @param {boolean} [recursive=true] Whether to also scan subdirectories
-     * @param {RegExp} pattern The pattern to test files with
-     * @return {Promise<string[] | null>} A promise containing the matching files or null if the specified directory does not exist
+     * Scan a specific directory for candidate fragments.
+     * @param {string} directory The directory to scan.
+     * @param {boolean} [recursive=true] Whether to also scan subdirectories.
+     * @param {RegExp} pattern The pattern to test files with.
+     * @return {Promise<string[] | null>} A promise containing the matching files or null if the specified directory does not exist.
      */
     public static async scan(directory: string, recursive: boolean = true, pattern: RegExp = Patterns.fragmentFileName): Promise<string[] | null> {
         return new Promise<string[] | null>(async (resolve) => {
@@ -144,7 +144,7 @@ export default abstract class Loader {
     }
 
     /**
-     * Load multiple packages
+     * Load multiple packages.
      * @param {string[]} items
      * @return {Promise<IPackage[] | null>}
      */

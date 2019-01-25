@@ -164,14 +164,14 @@ export default class SetupHelper implements ISetupHelper {
         const responses: string[] = [];
 
         for (let i: number = 0; i < this.actionMap.length; i++) {
-            // TODO: Inefficient check position
+            // TODO: Inefficient check position.
             if (this.embed) {
                 this.channel.send(new RichEmbed()
                     .setTitle(this.title)
                     .setColor("GREEN")
                     .setDescription(this.actionMap[i].text)
 
-                    // TODO: Should be username instead of id
+                    // TODO: Should be username instead of id.
                     .setFooter(`Requested by ${this.userId} | Step ${i + 1}/${this.actionMap.length}`));
             }
             else {
@@ -202,7 +202,7 @@ export default class SetupHelper implements ISetupHelper {
      */
     protected awaitResponse(): Promise<string | null> {
         return new Promise((resolve) => {
-            // Timeout after x seconds
+            // Timeout after x seconds.
             const responseTimeout = setTimeout(() => {
                 this.channel.send(new RichEmbed()
                     .setTitle(`${this.title} Expired`)

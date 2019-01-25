@@ -20,7 +20,7 @@ describe("Services", () => {
     });
 
     it("should not enable invalid services", async () => {
-        // TODO: Append another string that is not "test"
+        // TODO: Append another string that is not "test".
         for (const param of TestUtils.makeParams(["test"])) {
             expect(await testBot.services.start(param)).to.be.a("boolean").and.to.equal(false);
         }
@@ -31,7 +31,7 @@ describe("Services", () => {
     });
 
     it("should not be able to retrieve invalid services", () => {
-        // TODO: Append another string that is not "test"
+        // TODO: Append another string that is not "test".
         for (const param of TestUtils.makeParams(["test"])) {
             expect(testBot.services.getService(param)).to.be.a("null");
         }

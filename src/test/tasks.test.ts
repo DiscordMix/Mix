@@ -7,17 +7,17 @@ describe("Tasks", () => {
         const actualTasks: string[] = ["do-nothing"];
         const fakeTasks: string[] = ["doe", "john"];
 
-        // Actual tasks
+        // Actual tasks.
         for (const actualTask of actualTasks) {
             expect(testBot.tasks.contains(actualTask)).to.be.a("boolean").and.to.equal(true);
         }
 
-        // Fake tasks
+        // Fake tasks.
         for (const fakeTask of fakeTasks) {
             expect(testBot.tasks.contains(fakeTask)).to.be.a("boolean").and.to.equal(false);
         }
 
-        // Task properties
+        // Task properties.
         const task: Task = testBot.tasks.get("do-nothing") as Task;
 
         expect(task.meta).to.be.an("object");
@@ -32,7 +32,7 @@ describe("Tasks", () => {
         expect(task.iterations).to.be.a("number");
         expect(task.iterations).to.equal(1);
 
-        // Other tests
+        // Other tests.
         expect(testBot.tasks.contains(undefined as any)).to.be.a("boolean");
         expect(testBot.tasks.contains(undefined as any)).to.equal(false);
 
@@ -49,7 +49,7 @@ describe("Tasks", () => {
         expect(triggerResult).to.be.a("boolean");
         expect(triggerResult).to.equal(true);
 
-        // Other tests
+        // Other tests.
         expect(testBot.tasks.trigger("")).to.be.a("boolean");
         expect(testBot.tasks.trigger("")).to.equal(false);
 

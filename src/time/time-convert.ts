@@ -14,22 +14,22 @@ export default abstract class TimeConvert {
         const minutes: number = seconds / 60;
         const hour: number = minutes / 60;
 
-        // Hour(s)
+        // Hour(s).
         while (format.includes("%h")) {
             format = format.replace("%h", hour.toString());
         }
 
-        // Minute(s)
+        // Minute(s).
         while (format.includes("%m")) {
             format = format.replace("%m", minutes.toString());
         }
 
-        // Second(s)
+        // Second(s).
         while (format.includes("%s")) {
             format = format.replace("%s", seconds.toString());
         }
 
-        // Millisecond(s)
+        // Millisecond(s).
         while (format.includes("%i")) {
             format = format.replace("%i", milliseconds.toString());
         }

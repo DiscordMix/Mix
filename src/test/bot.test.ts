@@ -22,7 +22,7 @@ describe("Bot", () => {
 
         await init();
 
-        // Tests
+        // Tests.
         expect(testBot.client.user).to.be.an("object");
     }); */
 
@@ -71,7 +71,7 @@ describe("Bot", () => {
         it("should set a timeout", () => {
             return new Promise((resolve) => {
                 testBot.setTimeout(() => {
-                    // Tests
+                    // Tests.
                     expect(testBot.timeouts.length).to.be.a("number").and.to.equal(1);
 
                     resolve();
@@ -89,6 +89,6 @@ describe("Bot", () => {
             expect(testBot.intervals.length).to.be.a("number").and.to.equal(0);
         });
 
-        // TODO: More tests
+        // TODO: More tests needed.
     });
 });

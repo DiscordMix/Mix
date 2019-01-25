@@ -35,7 +35,6 @@ export default class EvalCommand extends Command<IArgs> {
         let result: string;
 
         try {
-            // tslint:disable-next-line:no-eval
             result = await eval(args.code);
         } catch (err) {
             // TODO: Should prefix with 'Error: '?

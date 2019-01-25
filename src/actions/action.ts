@@ -1,15 +1,15 @@
 export enum ActionType {
-    // Misc
+    // Misc.
     StartTyping,
     StopTyping,
 
-    // Bot
+    // Bot.
     BotSetUsername,
     BotSetAvatar,
     BotSetState,
     BotSetStatus,
 
-    // Messages
+    // Messages.
     Message,
     MessageUpdate,
     MessageDelete,
@@ -21,20 +21,20 @@ export enum ActionType {
     OkEmbed,
     FailEmbed,
 
-    // Paginated Messages
+    // Paginated Messages.
     PaginatedOkEmbed,
 
-    // Reactions
+    // Reactions.
     ReactionAdd,
     ReactionRemove,
     ReactionRemoveAll,
 
-    // Roles
+    // Roles.
     RoleCreate,
     RoleDelete,
     RoleUpdate,
 
-    // Guild
+    // Guild.
     GuildLeave,
     GuildMemberKick,
     GuildMemberBan,

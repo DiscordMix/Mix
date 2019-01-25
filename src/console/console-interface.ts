@@ -9,7 +9,7 @@ import Log from "../core/log";
 import Util from "../core/util";
 import {ReadonlyServiceMap} from "../services/service-manager";
 
-// TODO: Export in index
+// TODO: Export in index.
 export type ConsoleCommandHandler = (args: string[]) => void;
 
 export interface IConsoleInterface {
@@ -57,7 +57,7 @@ export default class ConsoleInterface {
             this.defaultCommands(bot);
         }
 
-        // Prompt setup
+        // Prompt setup.
         ci.on("line", async (input: string) => {
             if (input.startsWith("#")) {
                 const id: number = parseInt(input.substr(1));
@@ -101,7 +101,7 @@ export default class ConsoleInterface {
             ci.prompt();
         });
 
-        // TODO:
+        // TODO.
         /* ci.on("error", (error: Error) => {
             Log.error(error.message);
         }); */
@@ -111,7 +111,7 @@ export default class ConsoleInterface {
             process.exit(0);
         });
 
-        // TODO: Should log before setting the prompt
+        // TODO: Should log before setting the prompt.
         this.ready = true;
         Log.success("Console interface setup completed");
 
@@ -167,7 +167,7 @@ export default class ConsoleInterface {
         });
 
         this.commands.set("uptime", () => {
-            // TODO: Time is getting capitalized
+            // TODO: Time is getting capitalized.
             console.log(`Started ${Util.timeAgoFromNow(bot.client.uptime)}`);
         });
 
@@ -198,7 +198,7 @@ export default class ConsoleInterface {
         });
 
         this.commands.set("poststats", async () => {
-            // TODO: Some way to check if NO key is set
+            // TODO: Some way to check if NO key is set.
             if (Object.keys(bot.settings.keys).length === 0) {
                 console.log("You haven't set any keys!");
 
@@ -252,7 +252,7 @@ export default class ConsoleInterface {
 
             await bot.restart(true);
 
-            // TODO: New fragment system
+            // TODO: New fragment system.
             // await bot.commandLoader.reloadAll();
 
             const endTime: number = performance.now();
@@ -265,7 +265,7 @@ export default class ConsoleInterface {
         this.commands.set("help", () => {
             console.log("Available Commands\n");
 
-            // TODO: Also show command description
+            // TODO: Also show command description.
             for (const [base, command] of this.commands) {
                 console.log(chalk.white(`\t${base}`));
             }

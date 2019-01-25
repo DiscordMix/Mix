@@ -72,12 +72,12 @@ import {Once, On} from "./decorators/events";
 import BotConnector, {IBotConnector} from "./core/bot-connector";
 
 export {
-    // Fragments
+    // Fragments.
     IFragment,
     IFragmentMeta,
     Loader,
 
-    // Commands
+    // Commands.
     ArgumentParser,
     IArgumentParser,
     Context,
@@ -99,12 +99,12 @@ export {
     RestrictGroup,
     InternalArgType,
 
-    // Console
+    // Console.
     ConsoleInterface,
     IConsoleInterface,
     ConsoleCommand,
 
-    // Builder
+    // Builder.
     BotBuilder,
     IBotBuilder,
     EmbedBuilder,
@@ -114,7 +114,7 @@ export {
     IMsgBuilder,
     IBuilder,
 
-    // Core
+    // Core.
     Bot,
     IBot,
     EditableMessage,
@@ -135,23 +135,23 @@ export {
     BotConnector,
     IBotConnector,
 
-    // Collections
+    // Collections.
     List,
 
-    // Emoji Menu
+    // Emoji Menu.
     IEmojiButton,
     EmojiMenu,
     IEmojiMenu,
 
-    // Events
+    // Events.
     ICommandEvent,
 
-    // Setup Helper
+    // Setup Helper.
     SetupHelper,
     ISetupHelper,
     ISetupHelperResult,
 
-    // Services
+    // Services.
     Service,
     IService,
     IServiceOptions,
@@ -160,7 +160,7 @@ export {
     GenericService,
     IGenericService,
 
-    // Misc
+    // Misc.
     PaginatedMessage,
     ProcessMsgType,
     IProcessMsg,
@@ -169,10 +169,10 @@ export {
     ILogSource,
     PromiseOr,
 
-    // Structures
+    // Structures.
     IDisposable,
 
-    // Decorators
+    // Decorators.
     Name,
     Description,
     Aliases,
@@ -190,13 +190,13 @@ export {
     Deprecated,
     Meta,
 
-    // Tasks
+    // Tasks.
     Task,
     ITask,
     TaskManager,
     ITaskManager,
 
-    // Actions
+    // Actions.
     IAction,
     ActionType,
     IActionInterpreter,
@@ -207,14 +207,14 @@ export {
     IEmbedActionArgs,
     IMessageActionArgs,
 
-    // Serializers
+    // Serializers.
     ISerializer,
     LogSerializer,
     StateSerializer,
     UrlSerializer,
     UserSerializer,
 
-    // Store
+    // Store.
     Store,
     IStore,
     TestStoreActionType,

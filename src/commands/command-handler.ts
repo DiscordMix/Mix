@@ -88,7 +88,7 @@ export default class CommandHandler implements ICommandHandler {
                 }
             }
             else if (typeof specific === "number" && RestrictGroup[specific] !== undefined) {
-                // Override for bot owner
+                // Override for bot owner.
                 if (context.sender.id === context.bot.owner) {
                     met = true;
 
@@ -208,7 +208,7 @@ export default class CommandHandler implements ICommandHandler {
          */
         this.errorHandlers = new Map();
 
-        // Populate error handlers with input
+        // Populate error handlers with input.
         for (const opt of options.errorHandlers) {
             this.errorHandlers.set(opt.event, opt.handler);
         }
@@ -260,30 +260,30 @@ export default class CommandHandler implements ICommandHandler {
             schema: command.args
         });
 
-        // Do not execute command if arguments failed to resolve
+        // Do not execute command if arguments failed to resolve.
         if (resolvedArgs === null) {
             Log.warn(`Command '${command.meta.name}' failed to execute: Failed to resolve arguments`);
 
             return false;
         }
 
-        this.commandStore.bot.emit("handlingCommand", context, command, resolvedArgs);
+        this.commandStore.bot.emit(BotEvent.HandlingCommand, context, command, resolvedArgs);
 
         try {
-            // Process middleware before executing command
+            // Process middleware before executing command.
             for (const guard of command.guards) {
                 if (!guard(context, resolvedArgs, command)) {
-                    // TODO: Upon failure, pass error to the corresponding handler
+                    // TODO: Upon failure, pass error to the corresponding handler.
                     return false;
                 }
             }
 
             // TODO: Only check if result is true, make sure commandStore return booleans or actions?
-            // TODO: Bot should be accessed protected (from this class)
+            // TODO: Bot should be accessed protected (from this class).
             const rawResult: any = command.run(context, resolvedArgs);
             const result: any = rawResult instanceof Promise ? await rawResult : rawResult;
 
-            // Actions
+            // Actions.
             if (typeof result === "object" && result !== null) {
                 const actions: IAction<any> = result;
 
@@ -298,7 +298,7 @@ export default class CommandHandler implements ICommandHandler {
             const commandCooldown: number = Date.now() + (command.constraints.cooldown * 1000);
             const lastCooldown: number | null = this.commandStore.getCooldown(context.sender.id, command.meta.name);
 
-            // Delete the last cooldown before adding the new one for this command + user
+            // Delete the last cooldown before adding the new one for this command + user.
             if (lastCooldown !== null) {
                 if (!this.commandStore.clearCooldown(context.sender.id, command.meta.name)) {
                     throw Log.error(`Expecting cooldown of '${context.sender.id} (${context.sender.tag})' to exist for command '${command.meta.name}'`);
@@ -307,7 +307,7 @@ export default class CommandHandler implements ICommandHandler {
 
             this.commandStore.setCooldown(context.sender.id, commandCooldown, command.meta.name);
 
-            // After successfully executing the command, invoke all it's relays
+            // After successfully executing the command, invoke all it's relays.
             for (const connection of command.connections) {
                 connection(context, resolvedArgs, command);
             }
@@ -318,7 +318,7 @@ export default class CommandHandler implements ICommandHandler {
                 await context.msg.delete();
             }
             else if (context.bot.options.checkCommands && context.msg.channel instanceof TextChannel) {
-                // TODO: Check if can add reaction
+                // TODO: Check if can add reaction.
                 /* if (context.message.channel.permissionsFor(context.message.guild.me).has(Permissions.FLAGS.ADD_REACTIONS)) {
 
                 } */
@@ -337,7 +337,7 @@ export default class CommandHandler implements ICommandHandler {
             return result;
         }
         catch (error) {
-            this.commandStore.bot.emit("commandError", error);
+            this.commandStore.bot.emit(BotEvent.CommandError, error);
 
             const handler: CmdErrorHandler | undefined = this.errorHandlers.get(CmdHandlerEvent.CommandError);
 

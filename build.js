@@ -8,7 +8,7 @@ const buildDir = process.env.BUILD_DIR ? process.env.BUILD_DIR.toLocaleLowerCase
 const buildMode = process.env.BUILD_MODE ? process.env.BUILD_MODE.toLowerCase() : "default";
 const versionLock = [8, 11];
 
-// TODO: Implement different build modes
+// TODO: Implement different build modes.
 async function build() {
     const result = await coordinator
         .then(() => {

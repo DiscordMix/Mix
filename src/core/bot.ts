@@ -1,22 +1,14 @@
 // Setup environment variables
 require("dotenv").config();
 
-import CommandParser from "../commands/command-parser";
 import ConsoleInterface from "../console/console-interface";
 import Settings from "./settings";
 import Log from "./log";
 import Temp from "./temp";
-import Discord, {Client, Message, Snowflake} from "discord.js";
+import Discord, {Client, Snowflake} from "discord.js";
 import ServiceManager from "../services/service-manager";
 import axios from "axios";
-
-import Command, {
-    IArgumentResolver,
-    ICustomArgType,
-    RawArguments,
-    UserGroup
-} from "../commands/command";
-
+import {IArgumentResolver, ICustomArgType, UserGroup} from "../commands/command";
 import CommandHandler from "../commands/command-handler";
 import fs from "fs";
 import path from "path";
@@ -43,38 +35,210 @@ import BotHandler from "./bot-handler";
  * @extends EventEmitter
  */
 export default class Bot<TState = any, TActionType = any> extends EventEmitter implements IBot<TState, TActionType> {
+    /**
+     * @type {Settings}
+     * @readonly
+     */
     public readonly settings: Settings;
+
+    /**
+     * Access the bot's temporary file storage.
+     * @todo Temporary hard-coded user ID.
+     * @type {Temp}
+     * @readonly
+     */
     public readonly temp: Temp;
+
+    /**
+     * Provides management of services.
+     * @type {ServiceManager}
+     * @readonly
+     */
     public readonly services: ServiceManager;
+
+    /**
+     * Command storage.
+     * @type {CommandRegistry}
+     * @readonly
+     */
     public readonly registry: CommandRegistry;
+
+    /**
+     * Intercepts and handles command executions.
+     * @type {CommandHandler}
+     * @readonly
+     */
     public readonly commandHandler: CommandHandler;
+
+    /**
+     * Provides functionality for CLI input.
+     * @type {ConsoleInterface}
+     * @readonly
+     */
     public readonly console: ConsoleInterface;
+
+    /**
+     * Whether the built-in prefix command should be used.
+     * @type {boolean}
+     * @readonly
+     */
     public readonly prefixCommand: boolean;
+
+    /**
+     * The internal commands to load.
+     * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded?
+     * @type {InternalCommand[]}
+     * @readonly
+     */
     public readonly internalCommands: InternalCommand[];
+
+    /**
+     * @type {UserGroup[]}
+     * @readonly
+     */
     public readonly userGroups: UserGroup[];
+
+    /**
+     * The owner of the bot's snowflake ID.
+     * @type {Snowflake | undefined}
+     * @readonly
+     */
     public readonly owner?: Snowflake;
+
+    /**
+     * @type {IBotExtraOptions}
+     * @readonly
+     */
     public readonly options: IBotExtraOptions;
+
+    /**
+     * Localization provider.
+     * @type {Language | undefined}
+     * @readonly
+     */
     public readonly language?: Language;
+
+    /**
+     * @type {IArgumentResolver[]}
+     * @readonly
+     */
     public readonly argumentResolvers: IArgumentResolver[];
+
+    /**
+     * @type {ICustomArgType[]}
+     * @readonly
+     */
     public readonly argumentTypes: ICustomArgType[];
+
+    /**
+     * A list that keeps track of disposable objects and classes.
+     * @type {IDisposable[]}
+     * @protected
+     * @readonly
+     */
     public readonly disposables: IDisposable[];
+
+    /**
+     * @type {ActionInterpreter}
+     * @readonly
+     */
     public readonly actionInterpreter: ActionInterpreter;
+
+    /**
+     * Task management class.
+     * @type {TaskManager}
+     * @readonly
+     */
     public readonly tasks: TaskManager;
+
+    /**
+     * A list of attached timeouts.
+     * @type {NodeJS.Timeout[]}
+     * @readonly
+     */
     public readonly timeouts: NodeJS.Timeout[];
+
+    /**
+     * A list of attached intervals.
+     * @type {NodeJS.Timeout[]}
+     * @readonly
+     */
     public readonly intervals: NodeJS.Timeout[];
+
+    /**
+     * The languages to be loaded and enabled for localization.
+     * @type {string[] | undefined}
+     * @readonly
+     */
     public readonly languages?: string[];
+
+    /**
+     * The current state of connection of the bot.
+     * @type {BotState}
+     * @readonly
+     */
     public readonly state: BotState;
+
+    /**
+     * Whether the bot is currently suspended.
+     * @type {boolean}
+     */
     public readonly suspended: boolean;
+
+    /**
+     * @type {Client}
+     * @readonly
+     */
     public readonly client: Client;
+
+    /**
+     * Optimization engine for large bots.
+     * @type {Optimizer}
+     * @readonly
+     */
     public readonly optimizer: Optimizer;
+
+    /**
+     * Fragment management class.
+     * @type {FragmentManager}
+     * @readonly
+     */
     public readonly fragments: FragmentManager;
+
+    /**
+     * Utility to resolve file and directory paths.
+     * @type {PathResolver}
+     * @readonly
+     */
     public readonly paths: PathResolver;
+
+    /**
+     * Stores immutable data and handles events.
+     * @type {Store}
+     * @readonly
+     */
     public readonly store: Store<TState, TActionType>;
+
+    /**
+     * Used for measuring interaction with the bot.
+     * @type {Analytics}
+     */
     public readonly analytics: Analytics;
+
+    /**
+     * Handles incoming messages and requests.
+     * @type {BotHandler}
+     * @readonly
+     */
     public readonly handle: BotHandler;
 
     protected setupStart: number = 0;
 
+    /**
+     * Handles the bot connection and setup sequence.
+     * @type {BotConnector}
+     * @readonly
+     */
     protected readonly connector: BotConnector;
 
     /**
@@ -94,7 +258,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             })
         } : undefined as any);
 
-        // Special options for unit tests
+        // Special options for unit tests.
         if (testMode) {
             (options.options as any) = {
                 ...options.options,
@@ -120,72 +284,15 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             throw Log.error(BotMessages.SETUP_INVALID);
         }
 
-        /**
-         * Stores immutable data and handles events.
-         * @type {Store}
-         * @readonly
-         */
         this.store = new Store<TState, TActionType>(options.initialState, options.reducers);
-
-        /**
-         * The current state of connection of the bot.
-         * @type {BotState}
-         * @readonly
-         */
         this.state = BotState.Disconnected;
-
-        /**
-         * @type {Settings}
-         * @readonly
-         */
         this.settings = options.settings;
-
-        /**
-         * Utility to resolve file and directory paths.
-         * @type {PathResolver}
-         * @readonly
-         */
         this.paths = new PathResolver(this.settings.paths);
-
-        /**
-         * Access the bot's temporary file storage.
-         * @todo Temporary hard-coded user ID.
-         * @type {Temp}
-         * @readonly
-         */
         this.temp = new Temp();
-
-        /**
-         * Handles incoming messages and requests.
-         * @type {BotHandler}
-         * @readonly
-         */
         this.handle = new BotHandler(this);
-
-        /**
-         * @type {Discord.Client}
-         * @readonly
-         */
-        this.client = new Discord.Client();
-
-        /**
-         * Provides management of services.
-         * @type {ServiceManager}
-         * @readonly
-         */
+        this.client = new Client();
         this.services = new ServiceManager(this);
-
-        /**
-         * Command storage.
-         * @type {CommandRegistry}
-         * @readonly
-         */
         this.registry = new CommandRegistry(this);
-
-        /**
-         * @type {IArgumentResolver[]}
-         * @readonly
-         */
         this.argumentResolvers = ArgResolvers;
 
         if (options.argumentResolvers) {
@@ -195,10 +302,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             ];
         }
 
-        /**
-         * @type {ICustomArgType[]}
-         * @readonly
-         */
         this.argumentTypes = ArgTypes;
 
         if (options.argumentTypes) {
@@ -208,37 +311,15 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             ];
         }
 
-        /**
-         * Intercepts and handles command executions.
-         * @type {CommandHandler}
-         * @readonly
-         */
         this.commandHandler = new CommandHandler({
             commandStore: this.registry,
             errorHandlers: [], // TODO: Is this like it was? Is it ok?
             argumentTypes: this.argumentTypes
         });
 
-        /**
-         * Provides functionality for CLI input.
-         * @type {ConsoleInterface}
-         * @readonly
-         */
         this.console = new ConsoleInterface();
-
-        /**
-         * Whether the built-in prefix command should be used.
-         * @type {boolean}
-         * @readonly
-         */
         this.prefixCommand = options.prefixCommand || true;
 
-        /**
-         * The internal commands to load.
-         * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded?
-         * @type {InternalCommand[]}
-         * @readonly
-         */
         this.internalCommands = options.internalCommands || [
             InternalCommand.CLI,
             InternalCommand.Eval,
@@ -251,112 +332,27 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             InternalCommand.Usage
         ];
 
-        /**
-         * @type {IBotExtraOptions}
-         * @readonly
-         */
         this.options = {
             ...DefaultBotOptions,
             ...options.options,
         };
 
-        // TODO: Make use of the userGroups property
-        /**
-         * @type {UserGroup[]}
-         * @readonly
-         */
-        this.userGroups = options.userGroups || [];
-
-        /**
-         * The owner of the bot's snowflake ID.
-         * @type {Snowflake | undefined}
-         * @readonly
-         */
+        this.userGroups = options.userGroups || []; // TODO: Make use of the userGroups property.
         this.owner = options.owner;
-
-        /**
-         * Localization provider.
-         * @type {Language | undefined}
-         * @readonly
-         */
         this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
-
-        /**
-         * The languages to be loaded and enabled for localization.
-         * @type {string[] | undefined}
-         * @readonly
-         */
         this.languages = options.languages;
-
-        /**
-         * Whether the bot is currently suspended.
-         * @type {boolean}
-         */
         this.suspended = false;
-
-        /**
-         * Used for measuring interaction with the bot.
-         * @type {Analytics}
-         */
         this.analytics = new Analytics();
-
-        /**
-         * A list that keeps track of disposable objects and classes.
-         * @type {IDisposable[]}
-         * @protected
-         * @readonly
-         */
         this.disposables = [];
-
-        /**
-         * @type {ActionInterpreter}
-         * @readonly
-         */
         this.actionInterpreter = new ActionInterpreter(this);
-
-        /**
-         * Task management class.
-         * @type {TaskManager}
-         * @readonly
-         */
         this.tasks = new TaskManager(this);
-
-        /**
-         * A list of attached timeouts.
-         * @type {NodeJS.Timeout[]}
-         * @readonly
-         */
         this.timeouts = [];
-
-        /**
-         * A list of attached intervals.
-         * @type {NodeJS.Timeout[]}
-         * @readonly
-         */
         this.intervals = [];
-
-        /**
-         * Optimization engine for large bots.
-         * @type {Optimizer}
-         * @readonly
-         */
         this.optimizer = new Optimizer(this);
-
-        /**
-         * Fragment management class.
-         * @type {FragmentManager}
-         * @readonly
-         */
         this.fragments = new FragmentManager(this);
-
-        /**
-         * Handles bot connection and setup sequence.
-         * @type {BotConnector}
-         * @readonly
-         */
         this.connector = new BotConnector(this);
 
-        // Force-bind certain methods
+        // Force-bind certain methods.
         this.connect = this.connect.bind(this);
         this.disconnect = this.disconnect.bind(this);
 

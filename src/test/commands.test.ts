@@ -6,17 +6,17 @@ describe("Commands", () => {
         const actualCmds: string[] = ["hi"];
         const fakeCmds: string[] = ["john", "doe"];
 
-        // Actual commands
+        // Actual commands.
         for (const actualCmd of actualCmds) {
             expect(testBot.registry.contains(actualCmd)).to.be.a("boolean").and.to.equal(true);
         }
 
-        // Fake commands
+        // Fake commands.
         for (const fakeCmd of fakeCmds) {
             expect(testBot.registry.contains(fakeCmd)).to.be.a("boolean").and.to.equal(false);
         }
 
-        // Other tests
+        // Other tests.
         expect(testBot.registry.contains(undefined as any)).to.be.a("boolean").and.to.equal(false);
         expect(testBot.registry.contains(null as any)).to.be.a("boolean").and.to.equal(false);
         expect(testBot.registry.contains("" as any)).to.be.a("boolean").and.to.equal(false);

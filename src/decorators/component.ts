@@ -26,12 +26,12 @@ export default abstract class Component {
                 return target;
             }
 
-            // General
+            // General.
             if (typeof options.description === "string") {
                 target = DecoratorUtils.overrideMeta(target, "description", options.description);
             }
 
-            // Constraints
+            // Constraints.
             if (typeof options.cooldown === "number") {
                 target = DecoratorUtils.overrideConstraint(target, "cooldown", options.cooldown);
             }
@@ -49,7 +49,7 @@ export default abstract class Component {
     }
 
     public static Fragment<T = any>(name: string, options?: T): DecoratorProxy {
-        // TODO: Implement
+        // TODO: Implement.
         throw Log.notImplemented;
     }
 }

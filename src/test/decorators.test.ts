@@ -180,7 +180,7 @@ describe("Decorators", () => {
 describe("Utility Decorators", () => {
     describe("Deprecated", () => {
         it("should replace input with a proxy method", () => {
-            // TODO
+            // TODO.
         });
     });
 });

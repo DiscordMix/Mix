@@ -30,7 +30,7 @@ export default abstract class Pattern {
 
     public static typescriptError: RegExp = /^(?<path>[^*]+)\((?<line>[0-9]+),(?<pos>[0-9]+)\): error (?<code>TS[0-9]+):(?<message>[^*]+)$/gm;
 
-    public static tslintWarning: RegExp = /^WARNING: (?<path>[^*]+) - (?<message>[^*]+)$/gm;
+    public static tslintWarning: RegExp = /^WARNING: (?<path>[^*]+):(?<line>[0-9]+):(?<pos>[0-9]+) - (?<message>[^*]+)$/gm;
 
     public static fragmentName: RegExp = /^(?:[a-z]{0,}[a-z0-9-_\S]+){2,50}$/i;
 

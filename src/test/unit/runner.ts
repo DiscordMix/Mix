@@ -7,6 +7,7 @@ Log.level = LogLevel.None;
 // Import units.
 import "./util.unit";
 import "./log-serializer.unit";
+import "./tslint-serializer.unit";
 import "./rgb.unit";
 import "./rgba.unit";
 import "./messages.unit";

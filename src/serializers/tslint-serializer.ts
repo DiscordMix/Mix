@@ -16,6 +16,7 @@ export default class TslintSerializer implements ISerializer<ITslintWarning> {
     public deserialize(data: string): ITslintWarning | null {
         const match: RegExpExecArray | null = Pattern.tslintWarning.exec(data);
 
+        // TODO
         console.log("Groups are:", match !== null ? match.groups : "<null>");
 
         if (match === null || match.groups === undefined) {

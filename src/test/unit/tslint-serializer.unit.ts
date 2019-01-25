@@ -18,7 +18,6 @@ default class {
         path: "/test/path/"
     } as ITslintWarning)
     public deserialize(input: string, expected: ITslintWarning): void {
-        throw new Error("Testing an error intentionally thrown");
         Assert.equal(serializer.deserialize(input), expected);
     }
 }

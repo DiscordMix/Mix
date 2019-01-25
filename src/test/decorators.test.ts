@@ -9,7 +9,7 @@ import Permission from "../core/permission";
 import {Message} from "discord.js";
 import DiscordEvent from "../core/discord-event";
 import {On} from "../decorators/events";
-import {IFragmentMeta} from "../fragments/fragment";
+import {IMeta} from "../fragments/fragment";
 
 const testConnection: CommandRunner = (x, args): void => {
     //
@@ -57,7 +57,7 @@ export class MyCommand extends Command {
     version: "1.0.0"
 })
 class MetaTest {
-    public readonly meta!: IFragmentMeta;
+    public readonly meta!: IMeta;
 }
 
 const instance: MyCommand = new (MyCommand as any)(null as any);

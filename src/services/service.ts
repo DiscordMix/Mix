@@ -1,10 +1,10 @@
 import Bot from "../core/bot";
 import DiscordEvent from "../core/discord-event";
 import {GenericService, IService, IServiceOptions} from "./generic-service";
-import {IFragmentMeta} from "../fragments/fragment";
+import {IMeta} from "../fragments/fragment";
 
 export default abstract class Service extends GenericService implements IService {
-    public readonly meta: IFragmentMeta = {
+    public readonly meta: IMeta = {
         // Leave empty intentionally so the fragment validator complains
         name: ""
     };

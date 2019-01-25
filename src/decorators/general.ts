@@ -1,18 +1,18 @@
 import {DecoratorUtils} from "./decorator-utils";
 import Command, {IArgument} from "../commands/command";
-import {IFragmentMeta} from "../fragments/fragment";
+import {IMeta} from "../fragments/fragment";
 import {DecoratorProxy} from "./component";
 
 /**
  * Set a fragment's meta property.
- * @param {IFragmentMeta} meta
+ * @param {IMeta} meta
  */
-export function Meta(meta: IFragmentMeta): DecoratorProxy {
+export function Meta(meta: IMeta): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
         return class extends target {
-            public readonly meta: IFragmentMeta = {
+            public readonly meta: IMeta = {
                 ...this.meta,
                 ...meta
             };

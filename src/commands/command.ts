@@ -1,6 +1,6 @@
 import ChatEnv from "../core/chat-env";
 import Context, {IContext} from "./command-context";
-import {IFragment, IFragmentMeta} from "../fragments/fragment";
+import {IFragment, IMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
@@ -107,7 +107,7 @@ export type CommandGuard<T = any> = (context: Context, args: T, command: IGeneri
 export interface IGenericCommand<T extends object = object> extends IFragment, IDisposable {
     readonly minArguments: number;
     readonly maxArguments: number;
-    readonly meta: IFragmentMeta;
+    readonly meta: IMeta;
     readonly aliases: string[];
     readonly args: IArgument[];
     readonly constraints: IConstraints;
@@ -126,7 +126,7 @@ export interface IGenericCommand<T extends object = object> extends IFragment, I
 }
 
 export abstract class GenericCommand<T extends object = object> implements IGenericCommand<T> {
-    public readonly meta: IFragmentMeta = {
+    public readonly meta: IMeta = {
         // Leave empty intentionally so the fragment validator complains.
         name: ""
     };

@@ -29,14 +29,14 @@ import {BotEvent, IBot} from "./core/bot-extra";
 import ChatEnv from "./core/chat-env";
 import {IDisposable} from "./core/helpers";
 import Log, {LogLevel} from "./core/log";
-import Patterns from "./core/patterns";
+import Pattern from "./core/pattern";
 import Permission from "./core/permission";
 import Settings, {ISettings} from "./core/settings";
 import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setup-helper";
 import Util from "./core/util";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
 import {ICommandEvent} from "./events/command-event";
-import {IFragment, IFragmentMeta} from "./fragments/fragment";
+import {IFragment, IMeta} from "./fragments/fragment";
 import Loader from "./fragments/loader";
 import EditableMessage from "./message/editable-message";
 import Rgb from "./misc/rgb";
@@ -74,7 +74,7 @@ import BotConnector, {IBotConnector} from "./core/bot-connector";
 export {
     // Fragments.
     IFragment,
-    IFragmentMeta,
+    IMeta,
     Loader,
 
     // Commands.
@@ -129,7 +129,7 @@ export {
     Util,
     Permission,
     ChatEnv,
-    Patterns,
+    Pattern,
     DiscordEvent,
     BotEvent,
     BotConnector,

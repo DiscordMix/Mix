@@ -13,7 +13,7 @@ import {
 import fs from "fs";
 import path from "path";
 import Bot from "./bot";
-import Patterns from "./patterns";
+import Pattern from "./pattern";
 import Log from "./log";
 import {IBot} from "./bot-extra";
 
@@ -389,7 +389,7 @@ export default abstract class Util {
      * @return {boolean} Whether the state string representation was positive
      */
     public static translateState(state: string): boolean {
-        return Patterns.state.test(state);
+        return Pattern.state.test(state);
     }
 
     /**
@@ -655,8 +655,8 @@ export default abstract class Util {
     public static cleanMessage(message: Message): string {
         let filteredMessage: string = message.content;
 
-        while (Patterns.mention.test(filteredMessage)) {
-            filteredMessage = filteredMessage.replace(Patterns.mention, "[Mention]");
+        while (Pattern.mention.test(filteredMessage)) {
+            filteredMessage = filteredMessage.replace(Pattern.mention, "[Mention]");
         }
 
         if (message.embeds.length > 0) {
@@ -683,24 +683,24 @@ export default abstract class Util {
 
         let finalText: string = text;
 
-        while (Patterns.anyMention.test(finalText)) {
-            finalText = finalText.replace(Patterns.anyMention, "[Mention]");
+        while (Pattern.anyMention.test(finalText)) {
+            finalText = finalText.replace(Pattern.anyMention, "[Mention]");
         }
 
-        while (Patterns.token.test(finalText)) {
-            finalText = finalText.replace(Patterns.token, "[Token]");
+        while (Pattern.token.test(finalText)) {
+            finalText = finalText.replace(Pattern.token, "[Token]");
         }
 
         while (finalText.includes(token)) {
             finalText = finalText.replace(token, "[Token]");
         }
 
-        while (Patterns.ipv4.test(finalText)) {
-            finalText = finalText.replace(Patterns.ipv4, "[IPv4]");
+        while (Pattern.ipv4.test(finalText)) {
+            finalText = finalText.replace(Pattern.ipv4, "[IPv4]");
         }
 
-        while (Patterns.ipv6.test(finalText)) {
-            finalText = finalText.replace(Patterns.ipv6, "[IPv6]");
+        while (Pattern.ipv6.test(finalText)) {
+            finalText = finalText.replace(Pattern.ipv6, "[IPv6]");
         }
 
         return finalText;

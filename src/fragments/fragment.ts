@@ -1,4 +1,4 @@
-export interface IFragmentMeta {
+export interface IMeta {
     readonly name: string;
     readonly description?: string;
     readonly author?: string;
@@ -6,5 +6,5 @@ export interface IFragmentMeta {
 }
 
 export interface IFragment {
-    readonly meta: IFragmentMeta;
+    readonly meta: IMeta;
 }

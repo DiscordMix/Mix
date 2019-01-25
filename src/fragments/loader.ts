@@ -2,10 +2,7 @@ import fs from "fs";
 import Log from "../core/log";
 import Util from "../core/util";
 import {IFragment} from "./fragment";
-import Patterns from "../core/patterns";
-
-const validFragmentNamePattern: RegExp = /^(?:[a-z]{0,}[a-z0-9-_\S]+){2,50}$/i;
-const validFragmentDescPattern: RegExp = /^(?:[a-z]{0,}[^\n\r\t\0]+){1,100}$/i;
+import Pattern from "../core/pattern";
 
 export interface IPackage {
     readonly module: IFragment;
@@ -87,7 +84,7 @@ export default abstract class Loader {
         else if (Util.isEmpty(fragment.meta.name)) {
             return false;
         }
-        else if (!validFragmentNamePattern.test(fragment.meta.name) || !validFragmentDescPattern.test(fragment.meta.name) || fragment.meta.name.length > 100 || (fragment.meta.description !== undefined && fragment.meta.description.length > 100)) {
+        else if (!Pattern.fragmentName.test(fragment.meta.name) || !Pattern.fragmentDescription.test(fragment.meta.name) || fragment.meta.name.length > 100 || (fragment.meta.description !== undefined && fragment.meta.description.length > 100)) {
             return false;
         }
         // TODO: Implement fragment version & author validation.
@@ -106,7 +103,7 @@ export default abstract class Loader {
      * @param {RegExp} pattern The pattern to test files with.
      * @return {Promise<string[] | null>} A promise containing the matching files or null if the specified directory does not exist.
      */
-    public static async scan(directory: string, recursive: boolean = true, pattern: RegExp = Patterns.fragmentFileName): Promise<string[] | null> {
+    public static async scan(directory: string, recursive: boolean = true, pattern: RegExp = Pattern.fragmentFileName): Promise<string[] | null> {
         return new Promise<string[] | null>(async (resolve) => {
             if (!fs.existsSync(directory)) {
                 resolve(null);

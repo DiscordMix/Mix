@@ -1,6 +1,6 @@
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
-import {IFragment, IFragmentMeta} from "../fragments/fragment";
+import {IFragment, IMeta} from "../fragments/fragment";
 import DiscordEvent from "../core/discord-event";
 
 // TODO: Move both enum and types elsewhere
@@ -37,7 +37,7 @@ export interface IGenericService extends IFragment, IDisposable {
 }
 
 export abstract class GenericService implements IGenericService {
-    public abstract meta: IFragmentMeta;
+    public abstract meta: IMeta;
     public readonly fork: boolean = false;
 
     public canStart(): boolean {

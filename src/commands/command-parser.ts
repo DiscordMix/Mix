@@ -15,7 +15,7 @@ import Command, {
 import {Message} from "discord.js";
 import {FalseDelegates, TrueDelegates} from "../core/constants";
 import Log from "../core/log";
-import Patterns from "../core/patterns";
+import Pattern from "../core/pattern";
 import SwitchParser, {ICommandSwitch} from "./switch-parser";
 
 export interface IResolveArgumentsOptions {
@@ -103,7 +103,7 @@ export default abstract class CommandParser {
         const result: RawArguments = [];
         const argCleanExpression: RegExp = /(```|`|'|"|)(.+)\1/;
 
-        let match: RegExpExecArray | null = Patterns.args.exec(commandString);
+        let match: RegExpExecArray | null = Pattern.args.exec(commandString);
 
         while (match != null) {
             // TODO: Hotfix/review
@@ -113,7 +113,7 @@ export default abstract class CommandParser {
                 result.push(match1[2] as any);
             }
 
-            match = Patterns.args.exec(commandString);
+            match = Pattern.args.exec(commandString);
         }
 
         const switches: ICommandSwitch[] = SwitchParser.getSwitches(commandString);

@@ -1,4 +1,4 @@
-import Patterns from "../core/patterns";
+import Pattern from "../core/pattern";
 
 export interface ICommandSwitch {
     readonly key: string;
@@ -12,7 +12,7 @@ export default abstract class SwitchParser {
 
         let match: RegExpExecArray | null;
 
-        while ((match = Patterns.commandSwitch.exec(commandString)) !== null) {
+        while ((match = Pattern.commandSwitch.exec(commandString)) !== null) {
             if (match !== null) {
                 result.push({
                     key: SwitchParser.getSwitchKey(match),

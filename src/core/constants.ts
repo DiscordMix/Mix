@@ -2,7 +2,7 @@ import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import path from "path";
 import {DefiniteArgument, IArgumentResolver, ICustomArgType, InternalArgType} from "../commands/command";
 import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
-import Patterns from "./patterns";
+import Pattern from "./pattern";
 import {ISettingsPaths} from "./settings";
 import Util from "./util";
 
@@ -92,11 +92,11 @@ export const ArgTypes: ICustomArgType[] = [
     },
     {
         name: InternalArgType.Snowflake,
-        check: Patterns.mentionOrSnowflake
+        check: Pattern.mentionOrSnowflake
     },
     {
         name: InternalArgType.State,
-        check: Patterns.state
+        check: Pattern.state
     }
 ];
 

@@ -1,5 +1,5 @@
 import {Collection, Snowflake, User} from "discord.js";
-import Patterns from "../core/patterns";
+import Pattern from "../core/pattern";
 import {ISerializer} from "./serializer";
 
 export default class UserSerializer<T extends User = User> implements ISerializer<T> {
@@ -14,7 +14,7 @@ export default class UserSerializer<T extends User = User> implements ISerialize
     }
 
     public deserialize(serializedData: string): T | null {
-        if (!Patterns.mention.test(serializedData)) {
+        if (!Pattern.mention.test(serializedData)) {
             return null;
         }
 

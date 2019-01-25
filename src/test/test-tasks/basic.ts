@@ -1,11 +1,11 @@
-import {IFragmentMeta} from "../../fragments/fragment";
+import {IMeta} from "../../fragments/fragment";
 import Task from "../../tasks/task";
 
 /**
  * @extends Task
  */
 export default class TestTask extends Task {
-    public readonly meta: IFragmentMeta = {
+    public readonly meta: IMeta = {
         name: "do-nothing",
         description: "Does absolutely nothing"
     };

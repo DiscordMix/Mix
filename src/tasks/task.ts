@@ -1,6 +1,6 @@
 import Bot from "../core/bot";
 import {IDisposable, ISyncable, IVolatile} from "../core/helpers";
-import {IFragment, IFragmentMeta} from "../fragments/fragment";
+import {IFragment, IMeta} from "../fragments/fragment";
 
 export interface ITask extends IFragment, IDisposable {
     readonly nextIteration: number;
@@ -16,7 +16,7 @@ export interface ITask extends IFragment, IDisposable {
 
 // TODO: Add ForkedTask class?
 export default abstract class Task implements ITask {
-    public readonly abstract meta: IFragmentMeta;
+    public readonly abstract meta: IMeta;
 
     public readonly interval: number = -1;
     public readonly maxIterations: number = -1;

@@ -1,4 +1,4 @@
-import Patterns from "../core/patterns";
+import Pattern from "../core/pattern";
 import {ISerializer} from "./serializer";
 
 export default class StateSerializer implements ISerializer<boolean, string> {
@@ -7,6 +7,6 @@ export default class StateSerializer implements ISerializer<boolean, string> {
     }
 
     public deserialize(serializedData: string): boolean {
-        return Patterns.state.test(serializedData);
+        return Pattern.state.test(serializedData);
     }
 }

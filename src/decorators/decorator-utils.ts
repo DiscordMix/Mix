@@ -1,5 +1,5 @@
 import Command, {IConstraints} from "../commands/command";
-import {IFragmentMeta} from "../fragments/fragment";
+import {IMeta} from "../fragments/fragment";
 import Log from "../core/log";
 import {DecoratorProxy} from "./component";
 
@@ -20,7 +20,7 @@ export abstract class DecoratorUtils {
 
     public static overrideMeta(target: any, meta: string, value: any): DecoratorProxy {
         return class extends target {
-            public readonly meta: IFragmentMeta = {
+            public readonly meta: IMeta = {
                 ...this.meta,
                 [meta]: value
             };

@@ -7,6 +7,6 @@ export default class StateSerializer implements ISerializer<boolean, string> {
     }
 
     public deserialize(serializedData: string): boolean {
-        return Pattern.state.test(serializedData);
+        return Pattern.positiveState.test(serializedData);
     }
 }

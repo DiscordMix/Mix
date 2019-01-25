@@ -96,7 +96,7 @@ export const ArgTypes: ICustomArgType[] = [
     },
     {
         name: InternalArgType.State,
-        check: Pattern.state
+        check: Pattern.positiveState
     }
 ];
 

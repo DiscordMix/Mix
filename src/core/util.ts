@@ -389,7 +389,7 @@ export default abstract class Util {
      * @return {boolean} Whether the state string representation was positive
      */
     public static translateState(state: string): boolean {
-        return Pattern.state.test(state);
+        return Pattern.positiveState.test(state);
     }
 
     /**

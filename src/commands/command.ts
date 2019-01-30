@@ -8,6 +8,9 @@ import {PromiseOr} from "@atlas/xlib";
 
 export type CommandExeHandler<TArgs extends object = object, TReturn = any> = (context: Context, args: TArgs, api: any) => TReturn;
 
+/**
+ * Restriction to common Discord groups.
+ */
 export enum RestrictGroup {
     ServerOwner,
     ServerModerator,
@@ -35,18 +38,65 @@ export type RawArguments = Array<string | number | boolean>;
 export type DefiniteArgument = string | number | boolean;
 
 export enum Type {
+    /**
+     * Represents a string. Input will not be converted.
+     */
     String,
+
+    /**
+     * Represents an integer number. Input will be (attempted) parsed into an integer.
+     */
     Integer,
+
+    /**
+     * Represents an unsigned integer, or a non-negative integer number. Input will be (attempted) parsed.
+     */
     UnsignedInteger,
+
+    /**
+     * Represents a non-zero integer number. Input will be (attempted) parsed.
+     */
     NonZeroInteger,
+
+    /**
+     * @todo Missing implementation.
+     * Represents a positive integer number. Input will be (attempted) parsed.
+     */
+    PositiveInteger,
+
+    /**
+     * Represents a boolean value. Input will be parsed into a boolean.
+     */
     Boolean
 }
 
+/**
+ * Represents common Discord argument types.
+ */
 export enum InternalArgType {
+    /**
+     * Represents a user ID or a Twitter Snoflake.
+     */
     Snowflake = "snowflake",
+
+    /**
+     * Represents a guild member.
+     */
     Member = "member",
+
+    /**
+     * Represents a boolean value.
+     */
     State = "state",
+
+    /**
+     * Represents a guild channel.
+     */
     Channel = "channel",
+
+    /**
+     * Represents a guild member role.
+     */
     Role = "role"
 }
 
@@ -68,6 +118,9 @@ export interface IArgument {
 
 export type SpecificConstraints = Array<string | RestrictGroup>;
 
+/**
+ * Limitations and restrictions by which the execution environment and the command issuer must abide to.
+ */
 export interface IConstraints {
     selfPermissions: any[];
     issuerPermissions: any[];
@@ -86,9 +139,19 @@ export const DefaultCommandRestrict: IConstraints = {
     specific: []
 };
 
+/**
+ * Represents a command exeuction result status.
+ */
 export enum CommandStatus {
-    OK = 0,
-    Failed = 1
+    /**
+     * The command executed successfully.
+     */
+    OK,
+
+    /**
+     * The command execution failed.
+     */
+    Failed
 }
 
 export interface ICommandResult {
@@ -100,6 +163,9 @@ export type CommandRunner<T = ICommandResult | any> = (context: IContext, args: 
 
 export type CommandRelay<T = any> = (context: Context, args: T, command: IGenericCommand) => void;
 
+/**
+ * Represents a command middleware function that will determine whether the command execution sequence may continue.
+ */
 export type CommandGuard<T = any> = (context: Context, args: T, command: IGenericCommand) => boolean;
 
 export interface IGenericCommand<T extends object = object> extends IFragment, IDisposable {
@@ -163,7 +229,7 @@ export abstract class GenericCommand<T extends object = object> implements IGene
     }
 
     /**
-     * @return {boolean} Whether the command can be enabled
+     * @return {Promise<boolean>} Whether the command can be enabled.
      */
     public async enabled(): Promise<boolean> {
         return true;
@@ -172,14 +238,14 @@ export abstract class GenericCommand<T extends object = object> implements IGene
     public abstract run(context: Context, args: T): ICommandResult | any;
 
     /**
-     * @return {number} The minimum amount of required arguments that this command accepts
+     * @return {number} The minimum amount of required arguments that this command accepts.
      */
     public get minArguments(): number {
         return this.args.filter((arg: IArgument) => arg.required).length;
     }
 
     /**
-     * @return {number} The maximum amount of arguments that this command accepts
+     * @return {number} The maximum amount of arguments that this command accepts.
      */
     public get maxArguments(): number {
         return this.args.length;
@@ -187,7 +253,7 @@ export abstract class GenericCommand<T extends object = object> implements IGene
 
     /**
      * @param {string} query
-     * @return {boolean} Whether the query is excluded
+     * @return {boolean} Whether the query is excluded.
      */
     public isExcluded(query: string): boolean {
         return this.exclude.includes(query);

@@ -19,6 +19,9 @@ export interface ICommandCooldown {
 
 export type CommandPackage = ILivePackage<Command>;
 
+/**
+ * Represents a pattern for valid command names.
+ */
 const validCommandNamePattern: RegExp = /^[a-z_0-9-]{1,40}$/mi;
 
 export type CommandMap = Map<string, CommandPackage>;

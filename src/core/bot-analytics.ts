@@ -3,19 +3,34 @@
  */
 export interface IBotStats {
     /**
-     * The amount of commands intercepted and handled by the command handler
+     * The amount of commands intercepted and handled by the command handler.
      */
     commandsHandled: number;
 
     /**
-     * The amount of commands that failed to be executed
+     * The amount of commands that failed to be executed.
      */
     commandsFailed: number;
 
     /**
-     * The amount of messages that the bot has seen in the current session
+     * The amount of messages that the bot has seen in the current session.
      */
     messagesSeen: number;
+
+    /**
+     * The average amount of handled messages per minute (MPM).
+     */
+    avgMPM: number;
+
+    /**
+     * The average amount of handled commands per minute (CPM).
+     */
+    avgCPM: number;
+
+    /**
+     * The average amount of failed commands per minute (CFP).
+     */
+    avgCFP: number;
 }
 
 export type ReadonlyBotStats = Readonly<IBotStats>;
@@ -23,7 +38,10 @@ export type ReadonlyBotStats = Readonly<IBotStats>;
 const DefaultBotStats: IBotStats = {
     commandsFailed: 0,
     commandsHandled: 0,
-    messagesSeen: 0
+    messagesSeen: 0,
+    avgCFP: 0,
+    avgCPM: 0,
+    avgMPM: 0
 };
 
 export interface IBotAnalytics {

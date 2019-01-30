@@ -16,7 +16,16 @@ import Command, {
 } from "./commands/command";
 
 import {ActionType, IAction} from "./actions/action";
-import ActionInterpreter, {IActionInterpreter, IEmbedActionArgs, IMessageActionArgs, IPaginatedActionArgs, IPrivateMessageActionArgs, IRequestActionArgs} from "./actions/action-interpreter";
+
+import ActionInterpreter, {
+    IActionInterpreter,
+    IEmbedActionArgs,
+    IMessageActionArgs,
+    IPaginatedActionArgs,
+    IPrivateMessageActionArgs,
+    IRequestActionArgs
+} from "./actions/action-interpreter";
+
 import BotBuilder, {IBotBuilder} from "./builders/bot-builder";
 import {IBuilder} from "./builders/builder";
 import ConfigBuilder, {IConfigBuilder} from "./builders/config-builder";
@@ -48,7 +57,17 @@ import StateSerializer from "./serializers/state-serializer";
 import UrlSerializer from "./serializers/url-serializer";
 import UserSerializer from "./serializers/user-serializer";
 import {ForkedService} from "./services/forked-service";
-import {GenericService, IForkedService, IGenericService, IProcessMsg, IService, IServiceOptions, ProcessMsgType} from "./services/generic-service";
+
+import {
+    GenericService,
+    IForkedService,
+    IGenericService,
+    IProcessMsg,
+    IService,
+    IServiceOptions,
+    ProcessMsgType
+} from "./services/generic-service";
+
 import Service from "./services/service";
 import SMIS from "./services/smis";
 import Delta from "./state/delta";

@@ -1,6 +1,6 @@
-import {Client, Message, Snowflake} from "discord.js";
+import {Client, Snowflake} from "discord.js";
 import {EventEmitter} from "events";
-import {UserGroup, IArgumentResolver, ICustomArgType} from "../commands/command";
+import {IArgumentResolver, ICustomArgType} from "../commands/command";
 import {ICommandHandler} from "../commands/command-handler";
 import {IFragmentManager} from "../fragments/fragment-manager";
 import Language, {ILanguage} from "../language/language";
@@ -47,7 +47,6 @@ export interface IBotOptions<T = any> {
     readonly settings: ISettings;
     readonly prefixCommand?: boolean;
     readonly internalCommands?: InternalCommand[];
-    readonly userGroups?: UserGroup[];
     readonly owner?: Snowflake;
     readonly options?: Partial<IBotExtraOptions>;
     readonly argumentResolvers?: IArgumentResolver[];
@@ -154,7 +153,6 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly console: IConsoleInterface;
     readonly prefixCommand: boolean;
     readonly internalCommands: InternalCommand[];
-    readonly userGroups: UserGroup[];
     readonly owner?: Snowflake;
     readonly options: IBotExtraOptions;
     readonly language?: Language;

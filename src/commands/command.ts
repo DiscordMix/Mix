@@ -6,8 +6,6 @@ import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
 import {PromiseOr} from "@atlas/xlib";
 
-export type UserGroup = string[];
-
 export type CommandExeHandler<TArgs extends object = object, TReturn = any> = (context: Context, args: TArgs, api: any) => TReturn;
 
 export enum RestrictGroup {

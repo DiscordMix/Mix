@@ -5,10 +5,10 @@ import ConsoleInterface from "../console/console-interface";
 import Settings from "./settings";
 import Log from "./log";
 import Temp from "./temp";
-import Discord, {Client, Snowflake} from "discord.js";
+import {Client, Snowflake} from "discord.js";
 import ServiceManager from "../services/service-manager";
 import axios from "axios";
-import {IArgumentResolver, ICustomArgType, UserGroup} from "../commands/command";
+import {IArgumentResolver, ICustomArgType} from "../commands/command";
 import CommandHandler from "../commands/command-handler";
 import fs from "fs";
 import path from "path";
@@ -44,200 +44,147 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     /**
      * Access the bot's temporary file storage.
      * @todo Temporary hard-coded user ID.
-     * @type {Temp}
-     * @readonly
      */
     public readonly temp: Temp;
 
     /**
      * Provides management of services.
-     * @type {ServiceManager}
-     * @readonly
      */
     public readonly services: ServiceManager;
 
     /**
      * Command storage.
-     * @type {CommandRegistry}
-     * @readonly
      */
     public readonly registry: CommandRegistry;
 
     /**
      * Intercepts and handles command executions.
-     * @type {CommandHandler}
-     * @readonly
      */
     public readonly commandHandler: CommandHandler;
 
     /**
-     * Provides functionality for CLI input.
-     * @type {ConsoleInterface}
-     * @readonly
+     * Provides functionality for the CLI.
      */
     public readonly console: ConsoleInterface;
 
     /**
      * Whether the built-in prefix command should be used.
-     * @type {boolean}
-     * @readonly
      */
     public readonly prefixCommand: boolean;
 
     /**
      * The internal commands to load.
      * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded?
-     * @type {InternalCommand[]}
-     * @readonly
      */
     public readonly internalCommands: InternalCommand[];
 
     /**
-     * @type {UserGroup[]}
-     * @readonly
-     */
-    public readonly userGroups: UserGroup[];
-
-    /**
      * The owner of the bot's snowflake ID.
-     * @type {Snowflake | undefined}
-     * @readonly
      */
     public readonly owner?: Snowflake;
 
     /**
-     * @type {IBotExtraOptions}
-     * @readonly
+     * The extra provided bot options.
      */
     public readonly options: IBotExtraOptions;
 
     /**
      * Localization provider.
-     * @type {Language | undefined}
-     * @readonly
      */
     public readonly language?: Language;
 
     /**
-     * @type {IArgumentResolver[]}
-     * @readonly
+     * List of custom argument resolvers.
      */
     public readonly argumentResolvers: IArgumentResolver[];
 
     /**
-     * @type {ICustomArgType[]}
-     * @readonly
+     * List of custom argument types.
      */
     public readonly argumentTypes: ICustomArgType[];
 
     /**
      * A list that keeps track of disposable objects and classes.
-     * @type {IDisposable[]}
-     * @protected
-     * @readonly
      */
     public readonly disposables: IDisposable[];
 
     /**
-     * @type {ActionInterpreter}
-     * @readonly
+     * The independent action interpreter.
      */
     public readonly actionInterpreter: ActionInterpreter;
 
     /**
      * Task management class.
-     * @type {TaskManager}
-     * @readonly
      */
     public readonly tasks: TaskManager;
 
     /**
      * A list of attached timeouts.
-     * @type {NodeJS.Timeout[]}
-     * @readonly
      */
     public readonly timeouts: NodeJS.Timeout[];
 
     /**
      * A list of attached intervals.
-     * @type {NodeJS.Timeout[]}
-     * @readonly
      */
     public readonly intervals: NodeJS.Timeout[];
 
     /**
      * The languages to be loaded and enabled for localization.
-     * @type {string[] | undefined}
-     * @readonly
      */
     public readonly languages?: string[];
 
     /**
      * The current state of connection of the bot.
-     * @type {BotState}
-     * @readonly
      */
     public readonly state: BotState;
 
     /**
      * Whether the bot is currently suspended.
-     * @type {boolean}
      */
     public readonly suspended: boolean;
 
     /**
-     * @type {Client}
-     * @readonly
+     * The internal Discord client.
      */
     public readonly client: Client;
 
     /**
      * Optimization engine for large bots.
-     * @type {Optimizer}
-     * @readonly
      */
     public readonly optimizer: Optimizer;
 
     /**
      * Fragment management class.
-     * @type {FragmentManager}
-     * @readonly
      */
     public readonly fragments: FragmentManager;
 
     /**
      * Utility to resolve file and directory paths.
-     * @type {PathResolver}
-     * @readonly
      */
     public readonly paths: PathResolver;
 
     /**
      * Stores immutable data and handles events.
-     * @type {Store}
-     * @readonly
      */
     public readonly store: Store<TState, TActionType>;
 
     /**
      * Used for measuring interaction with the bot.
-     * @type {Analytics}
      */
     public readonly analytics: Analytics;
 
     /**
      * Handles incoming messages and requests.
-     * @type {BotHandler}
-     * @readonly
      */
     public readonly handle: BotHandler;
 
+    /**
+     * The start timestamp of the latest setup sequence.
+     */
     protected setupStart: number = 0;
 
     /**
      * Handles the bot connection and setup sequence.
-     * @type {BotConnector}
-     * @readonly
      */
     protected readonly connector: BotConnector;
 
@@ -337,7 +284,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             ...options.options,
         };
 
-        this.userGroups = options.userGroups || []; // TODO: Make use of the userGroups property.
         this.owner = options.owner;
         this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
         this.languages = options.languages;

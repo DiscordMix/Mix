@@ -18,7 +18,7 @@ export interface ILivePackage<T extends IFragment> {
 }
 
 /**
- * Utility class for loading fragments
+ * Utility class responsible for loading fragments.
  */
 export default abstract class Loader {
     // TODO: Make use of the 'defaultOnly' parameter
@@ -61,6 +61,7 @@ export default abstract class Loader {
     }
 
     /**
+     * Remove and reload a package from Node.js require cache.
      * @todo Test and make sure it works.
      * @param {string} file
      * @return {Promise<IPackage | null>}
@@ -140,10 +141,11 @@ export default abstract class Loader {
         });
     }
 
+    // TODO: Consider throwing instead of accepting 0 items?
     /**
      * Load multiple packages.
      * @param {string[]} items
-     * @return {Promise<IPackage[] | null>}
+     * @return {Promise<IPackage[] | null>} The loaded packages or null if the operation failed.
      */
     public static async loadMultiple(items: string[]): Promise<IPackage[] | null> {
         if (items.length === 0) {

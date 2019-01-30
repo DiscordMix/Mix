@@ -189,9 +189,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     protected readonly connector: BotConnector;
 
     /**
-     * Setup the bot from an object
      * @param {Partial<IBotOptions> | BotToken} botOptionsOrToken
-     * @param {boolean} [testMode=false]
+     * @param {boolean} [testMode=false] Whether the bot is being used in testing. For internal use only.
      */
     public constructor(botOptionsOrToken: Partial<IBotOptions<TState>> | BotToken, testMode: boolean = false) {
         super();
@@ -439,7 +438,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     /**
      * Clear an attached interval.
      * @param {NodeJS.Timeout} interval
-     * @return {boolean} Whether the interval was cleared
+     * @return {boolean} Whether the interval was cleared.
      */
     public clearInterval(interval: NodeJS.Timeout): boolean {
         const index: number = this.timeouts.indexOf(interval);
@@ -456,7 +455,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Clear all attached intervals.
-     * @return {number} The amount of cleared intervals
+     * @return {number} The amount of cleared intervals.
      */
     public clearAllIntervals(): number {
         let cleared: number = 0;
@@ -494,10 +493,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * @todo "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached)
-     * @todo Use the reload modules param
-     * Restart the client.
-     * @param {boolean} [reloadModules=true] Whether to reload all modules
+     * @todo "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached).
+     * @todo Use the reload modules param.
+     * Restart the Discord client.
+     * @param {boolean} [reloadModules=true] Whether to reload all modules.
      * @return {Promise<this>}
      */
     public async restart(reloadModules: boolean = true): Promise<this> {
@@ -527,7 +526,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Disconnect the client.
+     * Disconnect the Discord client.
      * @return {Promise<this>}
      */
     public async disconnect(): Promise<this> {
@@ -574,7 +573,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             await disposable.dispose();
         }
 
-        // Reset the temp folder before shutdown
+        // Reset the temp folder before shutdown.
         await this.temp.reset();
 
         this.clearAllTimeouts();

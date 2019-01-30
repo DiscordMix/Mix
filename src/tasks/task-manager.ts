@@ -18,7 +18,7 @@ export interface ITaskManager {
 }
 
 /**
- * Manages, triggers, and executes tasks
+ * Manages, triggers, and executes tasks.
  */
 export default class TaskManager implements ITaskManager {
     protected readonly bot: Bot;
@@ -29,32 +29,15 @@ export default class TaskManager implements ITaskManager {
      * @param {Bot} bot
      */
     public constructor(bot: Bot) {
-        /**
-         * @type {Bot}
-         * @protected
-         * @readonly
-         */
         this.bot = bot;
-
-        /**
-         * @type {Map<string, Task>}
-         * @protected
-         * @readonly
-         */
         this.tasks = new Map();
-
-        /**
-         * @type {Map<string, NodeJS.Timeout}
-         * @protected
-         * @readonly
-         */
         this.scheduler = new Map();
     }
 
     /**
-     * Register a task
-     * @param {Task} task
-     * @return {boolean}
+     * Register a task.
+     * @param {Task} task The task that will be registered.
+     * @return {boolean} Whether the task was registered.
      */
     public registerTask(task: Task): boolean {
         if (this.tasks.has(task.meta.name)) {
@@ -67,8 +50,9 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
-     * @param {string} name
-     * @return {Task | null}
+     * Retrieve a task by it's name.
+     * @param {string} name The name of the task to search for.
+     * @return {Task | null} The task or null if it was not found.
      */
     public get(name: string): Task | null {
         if (Util.isEmpty(name) || typeof name !== "string") {
@@ -79,9 +63,9 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
-     * Unschedule a task
-     * @param {string} name
-     * @return {boolean}
+     * Unschedule a registered task.
+     * @param {string} name The name of the task to unschedule.
+     * @return {boolean} Whether the task was successfully unscheduled.
      */
     public unschedule(name: string): boolean {
         if (!this.tasks.has(name)) {
@@ -100,9 +84,9 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
-     * Trigger a task
-     * @param {string} name
-     * @return {boolean}
+     * Trigger a registered task.
+     * @param {string} name The name of the task to trigger.
+     * @return {boolean} Whether the specified task was triggered.
      */
     public trigger(name: string): boolean {
         if (Util.isEmpty(name) || typeof name !== "string") {
@@ -142,7 +126,7 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
-     * Disable all registered tasks
+     * Disable all registered tasks.
      * @return {Promise<this>}
      */
     public async unregisterAll(): Promise<this> {
@@ -154,9 +138,9 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
-     * Disable a task
-     * @param {string} name
-     * @return {Promise<boolean>} Whether the task was disabled
+     * Disable a registered task.
+     * @param {string} name The name of the task to disable.
+     * @return {Promise<boolean>} Whether the specified task was disabled.
      */
     public async disable(name: string): Promise<boolean> {
         if (!this.tasks.has(name)) {
@@ -173,7 +157,7 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
-     * Enable all tasks
+     * Enable all registered tasks.
      * @return {number}
      */
     public enableAll(): number {
@@ -189,9 +173,9 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
-     * Determine if a task is registered
-     * @param {string} name
-     * @return {boolean}
+     * Determine if a certain task is registered.
+     * @param {string} name The name of the task to search.
+     * @return {boolean} Whether the specified task is registered.
      */
     public contains(name: string): boolean {
         if (!name) {
@@ -202,9 +186,9 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
-     * Load tasks from a directory
-     * @param {string} path
-     * @return {Promise<number>} The amount of tasks loaded
+     * Load tasks from a directory.
+     * @param {string} path The directory path to scan.
+     * @return {Promise<number>} The amount of tasks successfully loaded.
      */
     public async loadAll(path: string): Promise<number> {
         const candidates: string[] | null = await Loader.scan(path, true);
@@ -227,9 +211,9 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
-     * Run a task
-     * @param {string} name
-     * @return {boolean}
+     * Run a registered task.
+     * @param {string} name The name of the task to run.
+     * @return {boolean} Whether the specified task was executed.
      */
     protected run(name: string): boolean {
         if (!this.tasks.has(name)) {

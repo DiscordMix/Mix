@@ -1,5 +1,5 @@
 /**
- * Allows conversion between two different data types
+ * Allows conversion between two different data types.
  */
 export interface ISerializer<TData, TOutput = string> {
     serialize(data: TData): TOutput | null;

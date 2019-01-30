@@ -12,6 +12,7 @@ export interface ILoadBalancer extends EventEmitter {
 }
 
 /**
+ * Supervises the bot's load and priorities.
  * @extends EventEmitter
  */
 export default class LoadBalancer extends EventEmitter implements ILoadBalancer {

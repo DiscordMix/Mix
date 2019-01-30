@@ -10,16 +10,58 @@ import CommandParser from "./command-parser";
 import CommandRegistry, {ICommandRegistry} from "./command-registry";
 import {PromiseOr} from "@atlas/xlib";
 
+/**
+ * Represents events fired by the command handler.
+ */
 export enum CmdHandlerEvent {
+    /**
+     * The environment in which the command was executed was not allowed.
+     */
     DisallowedEnvironment,
+
+    /**
+     * The command being executed is explicitly disabled.
+     */
     DisabledCommand,
+
+    /**
+     * An invalid amount of arguments was provided.
+     */
     ArgumentAmountMismatch,
+
+    /**
+     * The command's middlewares have determined that execution is not allowed.
+     */
     CommandMayNotExecute,
+
+    /**
+     * The provided arguments were invalid.
+     */
     InvalidArguments,
+
+    /**
+     * The bot is missing certain required permissions to continue command execution.
+     */
     MissingSelfPermissions,
+
+    /**
+     * The command issuer is missing certain required permissions to continue command execution.
+     */
     MissingIssuerPermissions,
+
+    /**
+     * There was an error while executing the command.
+     */
     CommandError,
+
+    /**
+     * The command issuer does not have minimum required authority to execute the command.
+     */
     NoAuthority,
+
+    /**
+     * The command issuer has not yet met the command's cooldown requirements.
+     */
     UnderCooldown
 }
 
@@ -52,6 +94,9 @@ export interface ICommandHandler {
     handle(context: Context, command: Command, rawArgs: RawArguments): PromiseOr<boolean>;
 }
 
+/**
+ * Handles incoming command requests.
+ */
 export default class CommandHandler implements ICommandHandler {
     /**
      * @param {Command} command
@@ -144,10 +189,11 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
+     * Validates a channel's environment.
      * @param {ChatEnv} environment
      * @param {string} type
      * @param {boolean} nsfw
-     * @return {boolean}
+     * @return {boolean} Whether the environment is valid.
      */
     public static validateChannelTypeEnv(environment: ChatEnv, type: string, nsfw: boolean): boolean {
         if (environment === ChatEnv.Anywhere) {
@@ -167,9 +213,10 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
+     * Validates the execution environment.
      * @param {ChatEnv|ChatEnv[]} environment
      * @param {string} channelType
-     * @return {boolean}
+     * @return {boolean} Whether the environment is valid.
      */
     public static validateEnv(environment: ChatEnv, channelType: string, nsfw: boolean): boolean {
         if (Array.isArray(environment)) {
@@ -227,7 +274,8 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {Snowflake} user
+     * Trigger a command's undo sequence.
+     * @param {Snowflake} user The command issuer's ID.
      * @param {Message} message
      */
     public async undoAction(user: Snowflake, message: Message): Promise<boolean> {
@@ -358,7 +406,7 @@ export default class CommandHandler implements ICommandHandler {
      * @param {CmdHandlerEvent} event
      * @param {Context} context
      * @param {Command} command
-     * @return {boolean}
+     * @return {boolean} Whether the error was handled.
      */
     protected handleError(event: CmdHandlerEvent, context: Context, command: Command): boolean {
         if (this.errorHandlers.has(event)) {
@@ -372,7 +420,7 @@ export default class CommandHandler implements ICommandHandler {
      * @param {Context} context
      * @param {Command} command
      * @param {IArgument[]} rawArgs
-     * @return {boolean}
+     * @return {boolean} Whether the environment and command issuer meet the command's requirements.
      */
     protected meetsRequirements(context: Context, command: Command, rawArgs: RawArguments): boolean {
         // TODO: Add a check for exclusions including:

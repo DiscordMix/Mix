@@ -40,6 +40,9 @@ export interface ICheckArgumentsOptions {
     readonly command: Command;
 }
 
+/**
+ * Utility class for command parsing and validation.
+ */
 export default abstract class CommandParser {
     /**
      * @param {string} commandString

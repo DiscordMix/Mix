@@ -35,11 +35,6 @@ default class {
         Assert.that(testBot.owner, Is.undefined);
     }
 
-    @Test("should have no user groups")
-    public haveNoUserGroups(): void {
-        Assert.that(testBot.userGroups, Is.array, Does.haveLength(0));
-    }
-
     @Test("should have default argument types")
     public defaultArgTypes(): void {
         Assert.equal(testBot.argumentTypes, ArgTypes);

@@ -6,6 +6,9 @@ export interface IArgumentParser {
     getRequiredArguments(schema: IArgument[]): IArgument[];
 }
 
+/**
+ * Utility class for parsing command arguments.
+ */
 export default class ArgumentParser {
     /**
      * @param {string} type

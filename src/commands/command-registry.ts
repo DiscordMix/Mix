@@ -50,6 +50,9 @@ export interface ICommandRegistry {
     invoke(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
 }
 
+/**
+ * Provides storage and retrieval of commands.
+ */
 export default class CommandRegistry implements ICommandRegistry {
     public readonly bot: Bot;
     public readonly cooldowns: Map<Snowflake, Map<string, number>>;
@@ -103,6 +106,7 @@ export default class CommandRegistry implements ICommandRegistry {
     }
 
     /**
+     * Reload a certain command's module from the Node.js cache.
      * @param {string} commandName
      * @return {Promise<boolean>}
      */
@@ -136,6 +140,10 @@ export default class CommandRegistry implements ICommandRegistry {
         return true;
     }
 
+    /**
+     * The amount of registered commands.
+     * @return {number}
+     */
     public get size(): number {
         return this.commands.size;
     }
@@ -184,8 +192,9 @@ export default class CommandRegistry implements ICommandRegistry {
     }
 
     /**
-     * Register a command
+     * Register a command.
      * @param {CommandPackage} commandPackage
+     * @return {Promise<boolean>}
      */
     public async register(commandPackage: CommandPackage): Promise<boolean> {
         if (Util.isEmpty(commandPackage) || typeof commandPackage !== "object") {
@@ -231,8 +240,8 @@ export default class CommandRegistry implements ICommandRegistry {
 
     // TODO: Accepting aliases as an argument for a hot-fix of an infinite loop (looks like this.get(commandBase) calls back .remove() somehow or something similar)
     /**
-     * @param {string} name
-     * @return {boolean} Whether the command was removed
+     * @param {string} name The name of the command to remove.
+     * @return {Promise<boolean>} Whether the command was removed.
      */
     public async remove(name: string, aliases: string[]): Promise<boolean> {
         // TODO: Release resources when removing too (delete require.cache)
@@ -253,8 +262,9 @@ export default class CommandRegistry implements ICommandRegistry {
     }
 
     /**
-     * @param {string} name
-     * @return {boolean}
+     * Determine whether a certain command is stored.
+     * @param {string} name The name of the command to search for.
+     * @return {boolean} Whether the specified command is registered.
      */
     public contains(name: string): boolean {
         if (!name || typeof name !== "string") {
@@ -267,7 +277,7 @@ export default class CommandRegistry implements ICommandRegistry {
     /**
      * @todo Should release/reload not when accessing, but when actually executing
      * @param {string} name
-     * @return {Command | null}
+     * @return {Promise<Command | null>}
      */
     public async get(name: string): Promise<Command | null> {
         // TODO: CRITICAL: Will probably error since property may be undefined (Trying to access .module of undefined)
@@ -320,7 +330,7 @@ export default class CommandRegistry implements ICommandRegistry {
     }
 
     /**
-     * Get all the registered commands
+     * Retrieve all the registered commands.
      * @return {ReadonlyCommandMap}
      */
     public getAll(): ReadonlyCommandMap {
@@ -330,7 +340,7 @@ export default class CommandRegistry implements ICommandRegistry {
     /**
      * @param {Snowflake} user
      * @param {string} command
-     * @return {number | null} The cooldown
+     * @return {number | null} The cooldown or null if there is none.
      */
     public getCooldown(user: Snowflake, command: string): number | null {
         const issuerCooldowns: Map<string, number> | null = this.cooldowns.get(user) || null;
@@ -354,6 +364,7 @@ export default class CommandRegistry implements ICommandRegistry {
     }
 
     /**
+     * Removes a cooldown from a command.
      * @param {Snowflake} user
      * @param {string} command
      * @return {boolean}
@@ -394,6 +405,7 @@ export default class CommandRegistry implements ICommandRegistry {
     }
 
     /**
+     * Dispose all resources used by this class instance.
      * @return {Promise<void>}
      */
     public async disposeAll(): Promise<this> {
@@ -407,7 +419,8 @@ export default class CommandRegistry implements ICommandRegistry {
     }
 
     /**
-     * Unload all commandStore
+     * Unload all registered commands.
+     * @return {this}
      */
     public unloadAll(): this {
         if (this.commands.size > 0) {

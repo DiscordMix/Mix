@@ -3,6 +3,11 @@
     "extends": [
         "tslint:recommended"
     ],
+    "linterOptions": {
+        "exclude": [
+            "build.js"
+        ]
+    },
     "jsRules": {},
     "rules": {
         "one-line": false,

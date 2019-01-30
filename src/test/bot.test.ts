@@ -34,11 +34,6 @@ describe("Bot", () => {
         expect(testBot.owner).to.be.a("undefined");
     });
 
-    it("should have no user groups", () => {
-        expect(testBot.userGroups).to.be.an("array");
-        expect(testBot.userGroups.length).to.be.a("number").and.to.equal(0);
-    });
-
     it("should have default argument types", () => {
         expect(testBot.argumentTypes).to.be.an("array").and.to.equal(ArgTypes);
     });

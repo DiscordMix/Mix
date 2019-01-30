@@ -35,6 +35,9 @@ export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends
     promptDM(message: string, timeout: number): PromiseOr<boolean | null>;
 }
 
+/**
+ * Represents the environment in which a command was executed.
+ */
 export default class Context<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IContext {
     public readonly bot: Bot;
     public readonly msg: Message;
@@ -70,22 +73,29 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
     }
 
     /**
-     * Access the bot's store
+     * Access the bot's store.
      * @return {IStore}
      */
     public get store(): IStore {
         return this.bot.store;
     }
 
+    /**
+     * The guild in which the command was triggered.
+     */
     public get g(): Guild {
         return this.msg.guild;
     }
 
+    /**
+     * The channel in which the command was triggered.
+     */
     public get c(): T {
         return this.msg.channel as any;
     }
 
     /**
+     * The ID of the triggering message.
      * @return {Snowflake}
      */
     public get triggeringMessageId(): Snowflake {
@@ -93,7 +103,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
     }
 
     /**
-     * Join all command arguments into a single string
+     * Join all command arguments into a single string.
      * @return {string}
      */
     public joinArguments(): string {
@@ -113,6 +123,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
     }
 
     /**
+     * Reply to the command issuer through DMs.
      * @param {string} message
      * @return {Promise<Message | Message[]>}
      */
@@ -121,10 +132,10 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
     }
 
     /**
-     * Request an input from the user
-     * @param {string} message The message to send
-     * @param {Snowflake} from The user to expect response from
-     * @param {number} [timeout=7500] The time to wait until automatic cancellation
+     * Request an input from the user.
+     * @param {string} message The message to send.
+     * @param {Snowflake} from The user to expect response from.
+     * @param {number} [timeout=7500] The time to wait until automatic cancellation.
      * @return {Promise<string | null>}
      */
     public async createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number = 7500): Promise<string | null> {

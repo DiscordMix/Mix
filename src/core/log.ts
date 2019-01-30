@@ -22,14 +22,38 @@ export interface IComposeOptions {
 }
 
 export default abstract class Log {
+    /**
+     * Whether hidden log items should be shown.
+     */
     public static hiddenItems: boolean = false;
+
+    /**
+     * The level to limit logging.
+     */
     public static level: LogLevel = LogLevel.Success;
+
+    /**
+     * The output file to which logs will be written.
+     */
     public static file: string = "bot.log";
+
+    /**
+     * Whether to log messages.
+     */
     public static write: boolean = true;
+
+    /**
+     * Contains the previous sent messages or empty if not recording messages.
+     */
     public static history: IComposeOptions[] = [];
+
+    /**
+     * Whether to record messages.
+     */
     public static record: boolean = true;
 
     /**
+     * Compose a message to be shown in the console.
      * @param {IComposeOptions} options
      */
     public static compose(options: IComposeOptions): void {

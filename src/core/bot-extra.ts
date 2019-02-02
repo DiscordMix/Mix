@@ -157,7 +157,6 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly options: IBotExtraOptions;
     readonly language?: Language;
     readonly argumentResolvers: IArgumentResolver[];
-    readonly argumentTypes: ICustomArgType[];
     readonly disposables: IDisposable[];
     readonly actionInterpreter: ActionInterpreter;
     readonly tasks: ITaskManager;

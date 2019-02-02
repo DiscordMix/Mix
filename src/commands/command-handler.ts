@@ -68,7 +68,6 @@ export enum CmdHandlerEvent {
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandRegistry;
     readonly errorHandlers: ICmdErrorHandlerOpt[];
-    readonly argumentTypes: any;
 }
 
 export interface ICmdErrorHandlerOpt {
@@ -261,12 +260,6 @@ export default class CommandHandler implements ICommandHandler {
         }
 
         /**
-         * @type {*}
-         * @readonly
-         */
-        this.argumentTypes = options.argumentTypes;
-
-        /**
          * @type {Map<Snowflake, IUndoAction>}
          * @readonly
          */
@@ -447,7 +440,6 @@ export default class CommandHandler implements ICommandHandler {
             schema: command.args,
             arguments: rawArgs,
             message: context.msg,
-            types: context.bot.argumentTypes,
             command
         })) {
             if (this.errorHandlers.has(CmdHandlerEvent.ArgumentAmountMismatch)) {

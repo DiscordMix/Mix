@@ -5,6 +5,7 @@ import {Message, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
 import {IDisposable} from "../core/helpers";
 import {PromiseOr} from "@atlas/xlib";
+import {TypeChecker, ArgumentType} from "./type";
 
 export type CommandExeHandler<TArgs extends object = object, TReturn = any> = (context: Context, args: TArgs, api: any) => TReturn;
 
@@ -19,86 +20,14 @@ export enum RestrictGroup {
 
 export type DefaultValueResolver = (message: Message) => string;
 
-export type ArgumentTypeChecker = (argument: string, message: Message) => boolean;
-
-/**
- * Type                 : Internal check
- * RegExp               : Inline check
- * IArgumentTypeChecker : Provided type check by method
- */
-export type ArgumentType = Type | ArgumentTypeChecker | RegExp | string;
-
 export interface ICustomArgType {
     readonly name: string;
-    readonly check: ArgumentTypeChecker | RegExp;
+    readonly check: TypeChecker | RegExp;
 }
 
 export type RawArguments = Array<string | number | boolean>;
 
 export type DefiniteArgument = string | number | boolean;
-
-export enum Type {
-    /**
-     * Represents a string. Input will not be converted.
-     */
-    String,
-
-    /**
-     * Represents an integer number. Input will be (attempted) parsed into an integer.
-     */
-    Integer,
-
-    /**
-     * Represents an unsigned integer, or a non-negative integer number. Input will be (attempted) parsed.
-     */
-    UnsignedInteger,
-
-    /**
-     * Represents a non-zero integer number. Input will be (attempted) parsed.
-     */
-    NonZeroInteger,
-
-    /**
-     * @todo Missing implementation.
-     * Represents a positive integer number. Input will be (attempted) parsed.
-     */
-    PositiveInteger,
-
-    /**
-     * Represents a boolean value. Input will be parsed into a boolean.
-     */
-    Boolean
-}
-
-/**
- * Represents common Discord argument types.
- */
-export enum InternalArgType {
-    /**
-     * Represents a user ID or a Twitter Snoflake.
-     */
-    Snowflake = "snowflake",
-
-    /**
-     * Represents a guild member.
-     */
-    Member = "member",
-
-    /**
-     * Represents a boolean value.
-     */
-    State = "state",
-
-    /**
-     * Represents a guild channel.
-     */
-    Channel = "channel",
-
-    /**
-     * Represents a guild member role.
-     */
-    Role = "role"
-}
 
 export interface IArgumentResolver {
     readonly name: string;

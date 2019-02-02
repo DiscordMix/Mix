@@ -1,8 +1,7 @@
 import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import path from "path";
-import {DefiniteArgument, IArgumentResolver, ICustomArgType, InternalArgType} from "../commands/command";
+import {DefiniteArgument, IArgumentResolver} from "../commands/command";
 import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
-import Pattern from "./pattern";
 import {ISettingsPaths} from "./settings";
 import Util from "./util";
 
@@ -22,11 +21,10 @@ export const BasePath: string = path.resolve(path.join(".."));
 
 export const InternalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
 
-// TODO: Merge this resolvers with the (if provided) provided
-// ones by the user.
+// TODO: No longer required/used. Implement in the new Type rework system.
 export const ArgResolvers: IArgumentResolver[] = [
     {
-        name: InternalArgType.Member,
+        name: "member",
 
         resolve(arg: DefiniteArgument, message: Message): GuildMember | null {
             const resolvedMember: GuildMember = message.guild.member(Util.resolveId(arg.toString()));
@@ -39,7 +37,7 @@ export const ArgResolvers: IArgumentResolver[] = [
         }
     },
     {
-        name: InternalArgType.Role,
+        name: "role",
 
         resolve(arg: DefiniteArgument, message: Message): Role | null {
             const resolvedRole: Role | undefined = message.guild.roles.get(Util.resolveId(arg.toString()));
@@ -52,51 +50,18 @@ export const ArgResolvers: IArgumentResolver[] = [
         }
     },
     {
-        name: InternalArgType.State,
+        name: "state",
 
         resolve(arg: DefiniteArgument): boolean {
             return Util.translateState(arg.toString());
         }
     },
     {
-        name: InternalArgType.Snowflake,
+        name: "snowflake",
 
         resolve(arg: DefiniteArgument): Snowflake {
             return Util.resolveId(arg.toString());
         }
-    }
-];
-
-// TODO: Message type and resolver
-export const ArgTypes: ICustomArgType[] = [
-    {
-        name: InternalArgType.Channel,
-
-        check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.channels.has(Util.resolveId(arg));
-        }
-    },
-    {
-        name: InternalArgType.Member,
-
-        check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.member(Util.resolveId(arg)) !== undefined;
-        }
-    },
-    {
-        name: InternalArgType.Role,
-
-        check(arg: string, message: Message): boolean {
-            return message.guild && message.guild.roles.has(Util.resolveId(arg));
-        }
-    },
-    {
-        name: InternalArgType.Snowflake,
-        check: Pattern.mentionOrSnowflake
-    },
-    {
-        name: InternalArgType.State,
-        check: Pattern.positiveState
     }
 ];
 

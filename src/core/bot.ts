@@ -21,7 +21,7 @@ import {EventEmitter} from "events";
 import Optimizer from "../optimization/optimizer";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
-import {ArgResolvers, ArgTypes, DefaultBotOptions} from "./constants";
+import {ArgResolvers, DefaultBotOptions} from "./constants";
 import Store from "../state/store";
 import BotMessages from "./messages";
 import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./bot-extra";
@@ -97,11 +97,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * List of custom argument resolvers.
      */
     public readonly argumentResolvers: IArgumentResolver[];
-
-    /**
-     * List of custom argument types.
-     */
-    public readonly argumentTypes: ICustomArgType[];
 
     /**
      * A list that keeps track of disposable objects and classes.
@@ -248,19 +243,9 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             ];
         }
 
-        this.argumentTypes = ArgTypes;
-
-        if (options.argumentTypes) {
-            this.argumentTypes = [
-                ...this.argumentTypes,
-                ...options.argumentTypes
-            ];
-        }
-
         this.commandHandler = new CommandHandler({
             commandStore: this.registry,
-            errorHandlers: [], // TODO: Is this like it was? Is it ok?
-            argumentTypes: this.argumentTypes
+            errorHandlers: [] // TODO: Is this like it was? Is it ok?
         });
 
         this.console = new ConsoleInterface();

@@ -1,15 +1,12 @@
-import CommandRegistry, {ICommandRegistry} from "./command-registry";
+import {ICommandRegistry} from "./command-registry";
 import Util from "../core/util";
 
 import Command, {
-    ArgumentType,
-    ArgumentTypeChecker,
     DefaultValueResolver,
     IArgument,
     IArgumentResolver,
     ICustomArgType,
-    RawArguments,
-    Type
+    RawArguments
 } from "./command";
 
 import {Message} from "discord.js";
@@ -17,6 +14,7 @@ import {FalseDelegates, TrueDelegates} from "../core/constants";
 import Log from "../core/log";
 import Pattern from "../core/pattern";
 import FlagParser, {ICommandFlag} from "./flag-parser";
+import {Type, TypeChecker, ArgumentType} from "./type";
 
 export interface IResolveArgumentsOptions {
     readonly arguments: RawArguments;
@@ -35,7 +33,6 @@ export interface IResolveDefaultArgsOptions {
 export interface ICheckArgumentsOptions {
     readonly arguments: RawArguments;
     readonly schema: IArgument[];
-    readonly types: ICustomArgType[];
     readonly message: Message;
     readonly command: Command;
 }
@@ -168,44 +165,7 @@ export default abstract class CommandParser {
      * @return {*} The resolved arguments
      */
     public static resolveArguments(options: IResolveArgumentsOptions): any {
-        const result: any = {};
-
-        // If the command accept no arguments, return an empty object
-        if (options.schema.length === 0) {
-            return result;
-        }
-
-        for (let a: number = 0; a < options.arguments.length; a++) {
-            const schemaEntry: any = options.schema[a];
-
-            let typeFound: boolean = false;
-
-            // Ignore the type if it's not a string
-            if (CommandParser.isTypeValid(schemaEntry.type)) {
-                throw Log.error(`Expecting type of schema entry '${schemaEntry.name}' to be either a string or a trivial type`);
-            }
-
-            for (const resolver of options.resolvers) {
-                // If a resolver exists for this schema type, resolve the value
-                if (resolver.name === schemaEntry.type) {
-                    typeFound = true;
-                    result[options.schema[a].name] = resolver.resolve(options.arguments[a] as any, options.message);
-
-                    break;
-                }
-            }
-
-            // Leave the value as-is if the resolver does not exist
-            if (!typeFound) {
-                // Don't add an 'undefined' spot
-                if (options.arguments[a] !== undefined) {
-                    result[options.schema[a].name] = options.arguments[a];
-                }
-            }
-        }
-
-        // Return the resolved arguments to be passed to the command executed() method
-        return result;
+        throw Log.error("resolveArguments() needs to be reworked");
     }
 
     /**
@@ -258,99 +218,13 @@ export default abstract class CommandParser {
 
         // TODO: Will this work with optional args?
         for (let i: number = 0; i < options.arguments.length; i++) {
-            // In-command trivial type
-            if (CommandParser.isTypeTrivial(options.schema[i].type)) {
-                if (options.schema[i].type === Type.String) {
-                    if (typeof (options.arguments[i]) !== "string") {
-                        return false;
-                    }
-                }
-                else if (options.schema[i].type === Type.Boolean) {
-                    if (CommandParser.parseBoolean(options.arguments[i] as any) === null) {
-                        return false;
-                    }
-                }
-                else {
-                    const value: number = parseInt(options.arguments[i] as any);
-
-                    // Value must be a number at this point
-                    if (isNaN(value)) {
-                        return false;
-                    }
-
-                    switch (options.schema[i].type) {
-                        case Type.Integer: {
-                            // Integer covers all numbers
-
-                            break;
-                        }
-
-                        case Type.UnsignedInteger: {
-                            // Value must be higher or equal to zero
-                            if (value < 0) {
-                                return false;
-                            }
-
-                            break;
-                        }
-
-                        case Type.NonZeroInteger: {
-                            // Value must be one or higher
-                            if (value < 1) {
-                                return false;
-                            }
-
-                            break;
-                        }
-
-                        default: {
-                            // Shouldn't reach this point in code
-                            Log.warn(`You should not be able to reach this point in code under any circumstances while checking type: ${options.schema[i].name}`);
-
-                            return false;
-                        }
-                    }
-                }
-            }
-            // User-defined type (argumentTypes)
-            else if (typeof (options.schema[i].type) === "string") {
-                let found = false;
-
-                for (const type of options.types) {
-                    if (type.name === options.schema[i].type) {
-                        found = true;
-
-                        if (type.check instanceof RegExp && !(type.check as RegExp).test(options.arguments[i] as any)) {
-                            return false;
-                        }
-                        else if (typeof (type.check) === "function") {
-                            if (!(type.check as ArgumentTypeChecker)(options.arguments[i] as any, options.message)) {
-                                return false;
-                            }
-                        }
-                    }
-                }
-
-                if (!found) {
-                    Log.warn(`Missing user-defined type check for type: ${options.schema[i].type}`);
-
-                    return false;
-                }
-            }
-            // In-command regex expression
-            else if (options.schema[i].type instanceof RegExp) {
-                if (!(options.schema[i].type as RegExp).test(options.arguments[i] as any)) {
-                    return false;
-                }
-            }
-            // In-command method check
-            else if (typeof (options.schema[i].type) === "function") {
-                if (!(options.schema[i].type as ArgumentTypeChecker)(options.arguments[i] as any, options.message)) {
+            if (typeof (options.schema[i].type) === "function") {
+                if (!(options.schema[i].type as TypeChecker)(options.arguments[i] as any, options.message)) {
                     return false;
                 }
             }
             else {
-                throw Log.fatal(`Invalid argument type type, expected either a function or a regex expression: ${options.schema[i].name}`);
+                throw Log.fatal(`Invalid argument type type, expected a function that returns a boolean: ${options.schema[i].name}`);
             }
         }
 
@@ -375,18 +249,10 @@ export default abstract class CommandParser {
 
     /**
      * @param {ArgumentType} type
-     * @return {boolean}
-     */
-    protected static isTypeTrivial(type: ArgumentType): boolean {
-        return typeof (type) === "number" && Type[type] !== undefined;
-    }
-
-    /**
-     * @param {ArgumentType} type
      * @return {boolean} Whether the provided type is valid
      */
     protected static isTypeValid(type: ArgumentType): boolean {
-        return typeof type !== "string" && !CommandParser.isTypeTrivial(type);
+        return typeof type === "function";
     }
 
     /**

@@ -1,6 +1,6 @@
-import {Unit, Test, Assert, Is, JsType, Does, Feed, Mock} from "unit";
+import {Unit, Test, Assert, Is, Does, Feed, Mock} from "unit";
 import {init, testBot} from "../test-bot";
-import {ArgTypes, ArgResolvers} from "../../core/constants";
+import {ArgResolvers} from "../../core/constants";
 import DiscordEvent from "../../core/discord-event";
 import TestData from "./test-data";
 
@@ -33,11 +33,6 @@ default class {
     @Test("should have no owner")
     public haveNoOwner(): void {
         Assert.that(testBot.owner, Is.undefined);
-    }
-
-    @Test("should have default argument types")
-    public defaultArgTypes(): void {
-        Assert.equal(testBot.argumentTypes, ArgTypes);
     }
 
     @Test("should have default argument resolvers")

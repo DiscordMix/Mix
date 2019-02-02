@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {ArgResolvers, ArgTypes} from "../core/constants";
+import {ArgResolvers} from "../core/constants";
 import {init, testBot} from "./test-bot";
 
 describe("Bot", () => {
@@ -32,10 +32,6 @@ describe("Bot", () => {
 
     it("should have no owner", () => {
         expect(testBot.owner).to.be.a("undefined");
-    });
-
-    it("should have default argument types", () => {
-        expect(testBot.argumentTypes).to.be.an("array").and.to.equal(ArgTypes);
     });
 
     it("should have default argument resolvers", () => {

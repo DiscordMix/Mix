@@ -1,7 +1,7 @@
-import {default as Command, Type} from "../../../commands/command";
+import {default as Command} from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import {Name, Description, Arguments} from "../../../decorators/general";
-import {Constraint, MsgBuilder} from "../../..";
+import {Constraint, MsgBuilder, Type} from "../../..";
 
 interface IArgs {
     readonly command: string;

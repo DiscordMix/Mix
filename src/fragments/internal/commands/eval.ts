@@ -1,10 +1,11 @@
 import EmbedBuilder from "../../../builders/embed-builder";
 import MsgBuilder from "../../../builders/msg-builder";
-import Command, {Type} from "../../../commands/command";
+import Command from "../../../commands/command";
 import Context from "../../../commands/command-context";
 import Util from "../../../core/util";
 import {Name, Description, Arguments} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
+import {Type} from "../../../commands/type";
 
 interface IArgs {
     readonly code: string;

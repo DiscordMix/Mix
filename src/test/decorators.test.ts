@@ -1,4 +1,4 @@
-import Command, {CommandRunner, Type, RestrictGroup} from "../commands/command";
+import Command, {CommandRunner, RestrictGroup} from "../commands/command";
 import {Name, Arguments, Description, Meta} from "../decorators/general";
 import {AttachedLogger, Guard, Connect, DependsOn, attachedLogger} from "../decorators/other";
 import {expect} from "chai";
@@ -10,6 +10,7 @@ import {Message} from "discord.js";
 import DiscordEvent from "../core/discord-event";
 import {On} from "../decorators/events";
 import {IMeta} from "../fragments/fragment";
+import {Type} from "../commands/type";
 
 const testConnection: CommandRunner = (x, args): void => {
     //

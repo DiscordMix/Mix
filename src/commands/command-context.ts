@@ -16,6 +16,9 @@ export interface IContextOptions {
     readonly label: string | null;
 }
 
+/**
+ * Represents a channel exclusive to text messages.
+ */
 export type TextBasedChannel = TextChannel | DMChannel;
 
 export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper {
@@ -132,10 +135,10 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
     }
 
     /**
-     * Request an input from the user.
-     * @param {string} message The message to send.
-     * @param {Snowflake} from The user to expect response from.
-     * @param {number} [timeout=7500] The time to wait until automatic cancellation.
+     * Request input from the user.
+     * @param {string} message The message or prompt to send.
+     * @param {Snowflake} from The user to expect a response from.
+     * @param {number} [timeout=7500] Time to wait until automatic cancellation or timeout.
      * @return {Promise<string | null>}
      */
     public async createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number = 7500): Promise<string | null> {

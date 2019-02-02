@@ -12,7 +12,6 @@ import {
 
 import fs from "fs";
 import path from "path";
-import Bot from "./bot";
 import Pattern from "./pattern";
 import Log from "./log";
 import {IBot} from "./bot-extra";

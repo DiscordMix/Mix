@@ -9,7 +9,7 @@ export interface ITaskManager {
     registerTask(task: Task): boolean;
     get(name: string): Task | null;
     unschedule(name: string): boolean;
-    trigger(name: string): boolean;
+    trigger(name: string): PromiseOr<boolean>;
     unregisterAll(): PromiseOr<this>;
     disable(name: string): PromiseOr<boolean>;
     enableAll(): number;
@@ -95,9 +95,9 @@ export default class TaskManager implements ITaskManager {
     /**
      * Trigger a registered task.
      * @param {string} name The name of the task to trigger.
-     * @return {boolean} Whether the specified task was triggered.
+     * @return {Promise<boolean>} Whether the specified task was triggered.
      */
-    public trigger(name: string): boolean {
+    public async trigger(name: string): Promise<boolean> {
         if (Util.isEmpty(name) || typeof name !== "string") {
             return false;
         }
@@ -108,7 +108,7 @@ export default class TaskManager implements ITaskManager {
             this.unschedule(task.meta.name);
 
             if (task.interval === -1) {
-                this.run(name);
+                await this.run(name);
 
                 return true;
             }

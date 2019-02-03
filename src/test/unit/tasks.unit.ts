@@ -4,8 +4,8 @@ import Task from "../../tasks/task";
 
 @Unit("Tasks")
 default class {
-    @Test("should register tasks")
-    public register() {
+    @Test("should contain registered tasks")
+    public containRegistered() {
         const actualTasks: string[] = ["do-nothing"];
         const fakeTasks: string[] = ["doe", "john"];
 
@@ -21,12 +21,14 @@ default class {
 
         // Task properties.
         const task: Task = testBot.tasks.forceGet("do-nothing");
+        const now: number = Date.now();
 
         Assert.that(task.meta, Is.object);
         Assert.equal(task.meta.name, "do-nothing");
         Assert.equal(task.meta.description, "Does absolutely nothing");
         Assert.equal(task.maxIterations, -1);
-        Assert.equal(task.lastIteration, -1);
+        Assert.true(task.lastIteration !== -1);
+        Assert.that(task.lastIteration, Is.lessOrEqual(now));
         Assert.equal(task.iterations, 1);
 
         // Other tests.
@@ -36,26 +38,28 @@ default class {
     }
 
     @Test("should trigger tasks")
-    public trigger() {
-        const triggerResult: boolean = testBot.tasks.trigger("do-nothing");
+    public async trigger() {
+        const triggerResult: boolean = await testBot.tasks.trigger("do-nothing");
 
         Assert.true(triggerResult);
 
         // Other tests.
-        Assert.false(testBot.tasks.trigger(""));
-        Assert.false(testBot.tasks.trigger(undefined as any));
-        Assert.false(testBot.tasks.trigger(null as any));
-        Assert.false(testBot.tasks.trigger(1 as any));
-        Assert.false(testBot.tasks.trigger({} as any));
-        Assert.false(testBot.tasks.trigger([] as any));
+        Assert.false(await testBot.tasks.trigger(""));
+        Assert.false(await testBot.tasks.trigger(undefined as any));
+        Assert.false(await testBot.tasks.trigger(null as any));
+        Assert.false(await testBot.tasks.trigger(1 as any));
+        Assert.false(await testBot.tasks.trigger({} as any));
+        Assert.false(await testBot.tasks.trigger([] as any));
     }
 
     @Test("should update tasks after triggering")
     public updateAfterTrigger() {
         const task: Task = testBot.tasks.get("do-nothing") as Task;
+        const now: number = Date.now();
 
         Assert.that(task, Is.object);
-        Assert.equal(task.lastIteration, -1);
+        Assert.true(task.lastIteration !== -1);
+        Assert.that(task.lastIteration, Is.lessOrEqual(now));
         Assert.equal(task.iterations, 2);
     }
 }

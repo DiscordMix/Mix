@@ -39,7 +39,7 @@ export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
         const result: IStateCapsule<TState>[] = [];
 
         for (const capsule of this.capsules) {
-            if (capsule.time < time) {
+            if (capsule.time <= time) {
                 result.push(capsule);
             }
         }
@@ -51,7 +51,7 @@ export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
         const result: IStateCapsule<TState>[] = [];
 
         for (const capsule of this.capsules) {
-            if (capsule.time > time) {
+            if (capsule.time >= time) {
                 result.push(capsule);
             }
         }

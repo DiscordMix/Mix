@@ -1,12 +1,12 @@
 import {exec} from "child_process";
-import EmbedBuilder from "../../../builders/embed-builder";
-import MsgBuilder from "../../../builders/msg-builder";
-import Command from "../../../commands/command";
-import Context from "../../../commands/command-context";
-import Util from "../../../core/util";
-import {Description, Name, Aliases, Arguments} from "../../../decorators/general";
-import {Constraint} from "../../../decorators/constraints";
-import {Type} from "../../../commands/type";
+import {Name, Description, Aliases, Arguments} from "../../decorators/general";
+import {Constraint} from "../../decorators/constraints";
+import {Type} from "../../commands/type";
+import Command from "../../commands/command";
+import Context from "../../commands/command-context";
+import EmbedBuilder from "../../builders/embed-builder";
+import MsgBuilder from "../../builders/msg-builder";
+import Util from "../../core/util";
 
 interface IArgs {
     readonly command: string;

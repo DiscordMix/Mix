@@ -1,11 +1,11 @@
-import {Log} from "../../..";
-import Command from "../../../commands/command";
-import Context from "../../../commands/command-context";
-import {Name, Description} from "../../../decorators/general";
+import Command from "../../commands/command";
+import Context from "../../commands/command-context";
+import {Name, Description} from "../../decorators/general";
+import Log from "../../core/log";
 
 @Name("prefix")
 @Description("Manage bot prefixes")
-export default class PrefixCommand extends Command {
+export default class extends Command {
     // TODO: Update
     /* readonly args = {
         prefix: "!string"
@@ -16,4 +16,4 @@ export default class PrefixCommand extends Command {
 
         throw Log.notImplemented;
     }
-};
+}

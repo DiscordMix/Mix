@@ -1,10 +1,12 @@
-import {IMessageActionArgs, Service, Type} from "../../..";
-import {ActionType, IAction} from "../../../actions/action";
-import MsgBuilder from "../../../builders/msg-builder";
-import Command from "../../../commands/command";
-import Context from "../../../commands/command-context";
-import {Name, Description, Arguments} from "../../../decorators/general";
-import {Constraint} from "../../../decorators/constraints";
+import {ActionType, IAction} from "../../actions/action";
+import MsgBuilder from "../../builders/msg-builder";
+import Command from "../../commands/command";
+import Context from "../../commands/command-context";
+import {Name, Description, Arguments} from "../../decorators/general";
+import {Constraint} from "../../decorators/constraints";
+import {IMessageActionArgs} from "../../actions/action-interpreter";
+import Service from "../../services/service";
+import {Type} from "../../commands/type";
 
 interface IArgs {
     readonly type: ReflectDataType;
@@ -27,7 +29,7 @@ enum ReflectDataType {
 )
 @Constraint.Cooldown(1)
 @Constraint.OwnerOnly
-export default class ReflectCommand extends Command {
+export default class extends Command {
     public run($: Context, args: IArgs): IAction<IMessageActionArgs> {
         switch (args.type) {
             case ReflectDataType.Services: {

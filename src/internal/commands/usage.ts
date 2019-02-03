@@ -1,7 +1,9 @@
-import {default as Command} from "../../../commands/command";
-import Context from "../../../commands/command-context";
-import {Name, Description, Arguments} from "../../../decorators/general";
-import {Constraint, MsgBuilder, Type} from "../../..";
+import {default as Command} from "../../commands/command";
+import Context from "../../commands/command-context";
+import {Name, Description, Arguments} from "../../decorators/general";
+import MsgBuilder from "../../builders/msg-builder";
+import {Constraint} from "../../decorators/constraints";
+import {Type} from "../../commands/type";
 
 interface IArgs {
     readonly command: string;
@@ -20,7 +22,7 @@ const delimiter: string = ", ";
     }
 )
 @Constraint.Cooldown(1)
-export default class UsageCommand extends Command<IArgs> {
+export default class extends Command<IArgs> {
     // TODO: Finish implementing
     public async run($: Context, args: IArgs): Promise<void> {
         const targetCommand: Command | null = await $.bot.registry.get(args.command);

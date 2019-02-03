@@ -20,7 +20,7 @@ default class {
         }
 
         // Task properties.
-        const task: Task = testBot.tasks.get("do-nothing") as Task;
+        const task: Task = testBot.tasks.forceGet("do-nothing");
 
         Assert.that(task.meta, Is.object);
         Assert.equal(task.meta.name, "do-nothing");

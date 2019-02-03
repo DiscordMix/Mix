@@ -63,6 +63,15 @@ export default class TaskManager implements ITaskManager {
     }
 
     /**
+     * Retrieve a task by it's name.
+     * @param name The name of the task to search for
+     * @return {Task} The task found.
+     */
+    public forceGet(name: string): Task {
+        return this.get(name) as Task;
+    }
+
+    /**
      * Unschedule a registered task.
      * @param {string} name The name of the task to unschedule.
      * @return {boolean} Whether the task was successfully unscheduled.

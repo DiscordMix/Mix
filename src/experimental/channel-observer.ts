@@ -16,20 +16,10 @@ export default class ChannelObserver extends EventEmitter {
     public constructor(client: Client, channel: TextChannel) {
         super();
 
-        /**
-         * @type {Client}
-         * @protected
-         * @readonly
-         */
         this.client = client;
-
-        /**
-         * @type {TextChannel}
-         * @protected
-         * @readonly
-         */
         this.channel = channel;
 
+        // Setup events.
         this.setupListeners();
     }
 

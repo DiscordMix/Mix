@@ -32,13 +32,8 @@ export default class extends Command<IArgs> {
 
             return;
         }
-        else if (targetCommand.args.length === 0) {
-            await $.fail("That command doesn't accept any arguments.");
 
-            return;
-        }
-
-        const usage: MsgBuilder = new MsgBuilder().block().append(`Usage: ${targetCommand.meta.name}`);
+        const usage: MsgBuilder = new MsgBuilder().block().append(`# Usage\n${targetCommand.meta.name}`);
 
         for (const arg of targetCommand.args) {
             usage.append(" ").append(arg.required ? arg.name : `[${arg.name}]`);
@@ -48,29 +43,45 @@ export default class extends Command<IArgs> {
         const cooldown: string = targetCommand.constraints.cooldown !== 0 ? `${targetCommand.constraints.cooldown} second(s)` : "None";
         const aliases: string = targetCommand.aliases.length > 0 ? targetCommand.aliases.join(delimiter) : "None";
 
-        const additional: string[] = [
-            !targetCommand.isEnabled ? "Disabled" : "",
-            targetCommand.undoable ? "Undoable" : "",
-            targetCommand.singleArg ? "Single-argument" : ""
-        ];
+        const additional: string[] = [];
+
+        if (!targetCommand.isEnabled) {
+            additional.push("Disabled");
+        }
+
+        if (targetCommand.undoable) {
+            additional.push("Undo-able");
+        }
+
+        if (targetCommand.singleArg) {
+            additional.push("Single-argument");
+        }
 
         usage.line()
-            .add(`Name: ${targetCommand.meta.name}`)
-            .add(`Description: ${targetCommand.meta.description}`)
-            .add(`Aliases: ${aliases}`)
-            .add(`Dependencies: ${dependencies}`)
-            .add(`Cooldown: ${cooldown}`)
-            .add(`Additional notes: ${additional.join(delimiter)}`)
+            .add(`# Name\n${targetCommand.meta.name}`)
             .line()
-            .add("Argument details:")
-            .line();
+            .add(`# Description\n${targetCommand.meta.description}`)
+            .line()
+            .add(`# Aliases\n${aliases}`)
+            .line()
+            .add(`# Dependencies\n${dependencies}`)
+            .line()
+            .add(`# Cooldown\n${cooldown}`)
+            .line()
+            .add(`# Additional notes\n${additional.join(delimiter)}`);
 
-        for (const arg of targetCommand.args) {
-            const def: string = arg.defaultValue ? ` (default: ${arg.defaultValue})` : "";
-            const flag: string = arg.switchShortName ? ` {-${arg.switchShortName}}` : "";
+        if (targetCommand.args.length > 0) {
+            usage.line()
+                .add("# Argument details\n")
+                .line();
 
-            // TODO: Missing argument's type
-            usage.add(`${arg.name}${arg.required ? "!" : "?"}${flag}${def} : ${arg.description}`);
+            for (const arg of targetCommand.args) {
+                const def: string = arg.defaultValue ? ` (default: '${arg.defaultValue}')` : "";
+                const flag: string = arg.switchShortName ? ` {-${arg.switchShortName}}` : "";
+
+                // TODO: Missing argument's type
+                usage.add(`${arg.name}${arg.required ? "!" : "?"}${flag}${def} : ${arg.description}`);
+            }
         }
 
         await $.send(usage.block().build());

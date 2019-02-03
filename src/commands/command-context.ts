@@ -199,7 +199,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         return await Util.createTimedAction<Promise<boolean>>(this.bot, (): Promise<boolean> => {
             return new Promise<boolean>((resolve) => {
                 // TODO: Debugging?
-                new EmojiMenu(response.msg.id, this.msg.author.id, [
+                /* new EmojiMenu(response.msg.id, this.msg.author.id, [
                     {
                         emoji: "white_check_mark",
 
@@ -216,7 +216,7 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
                             resolve(false);
                         }
                     }
-                ]);
+            ]); */
             });
         }, timeout, null);
     }

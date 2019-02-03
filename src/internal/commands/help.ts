@@ -6,7 +6,7 @@ import {Description, Name} from "../../decorators/general";
 
 @Name("help")
 @Description("View available commands and their descriptions")
-export default class HelpCommand extends Command {
+export default class extends Command {
     public async run($: Context): Promise<void> {
         // TODO: Decorator commands broke it (can't .map through a Map)
 
@@ -40,4 +40,4 @@ export default class HelpCommand extends Command {
             await $.ok(commandsString, "Help - Available Commands");
         }
     }
-};
+}

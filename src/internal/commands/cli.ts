@@ -24,7 +24,7 @@ interface IArgs {
     }
 )
 @Constraint.OwnerOnly
-export default class CliCommand extends Command<IArgs> {
+export default class extends Command<IArgs> {
     public async run($: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();
 

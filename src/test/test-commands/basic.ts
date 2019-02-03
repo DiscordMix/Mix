@@ -2,7 +2,7 @@ import Command from "../../commands/command";
 import {RestrictGroup} from "../..";
 import Context from "../../commands/command-context";
 
-export default class TestCommand extends Command {
+export default class extends Command {
     public readonly meta = {
         name: "hi",
         description: "Don't say hi"
@@ -12,8 +12,8 @@ export default class TestCommand extends Command {
         specific: [RestrictGroup.BotOwner]
     };
 
-    public run(context: Context): string {
+    public run($: Context): string {
         // Don't say hi!
         return "don't say hi!";
     }
-};
+}

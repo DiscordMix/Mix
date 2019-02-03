@@ -29,13 +29,14 @@ interface IArgs {
     }
 )
 @Constraint.OwnerOnly
-export default class EvalCommand extends Command<IArgs> {
+export default class extends Command<IArgs> {
     public async run($: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();
 
         let result: string;
 
         try {
+            // tslint:disable-next-line:no-eval
             result = await eval(args.code);
         } catch (err) {
             // TODO: Should prefix with 'Error: '?

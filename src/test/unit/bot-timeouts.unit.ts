@@ -3,12 +3,12 @@ import {testBot} from "../test-bot";
 
 @Unit("Bot Timeouts & Intervals")
 default class {
-    @Test("have no attached timeouts")
+    @Test("should have no attached timeouts")
     public noTimeoutsSet() {
         Assert.that(testBot.timeouts, Is.emptyArray);
     }
 
-    @Test("set timeouts")
+    @Test("should set timeouts")
     public setTimeouts() {
         return new Promise((resolve) => {
             testBot.setTimeout(() => {
@@ -19,12 +19,12 @@ default class {
         });
     }
 
-    @Test("clear timeouts after executing")
+    @Test("should clear timeouts after executing")
     public clearTimeouts() {
         Assert.that(testBot.timeouts, Is.emptyArray);
     }
 
-    @Test("have no attached intervals")
+    @Test("should have no attached intervals")
     public noIntervalsSet() {
         Assert.that(testBot.intervals, Is.emptyArray);
     }

@@ -3,7 +3,7 @@ import Util from "../../core/util";
 
 @Unit("Util")
 default class {
-    @Test("percentOf: should determine the percentage")
+    @Test("percentOf(): should determine the percentage")
     @Feed(5, 10, 50)
     @Feed(10, 10, 100)
     @Feed(0, 0, 100)
@@ -12,7 +12,7 @@ default class {
         Assert.equal(expected, Util.percentOf(amount, max));
     }
 
-    @Test("percentOf: should throw on invalid parameters")
+    @Test("percentOf(): should throw on invalid parameters")
     @Feed(-1, 1)
     @Feed(-1, -1)
     @Feed(1, -1)
@@ -20,7 +20,7 @@ default class {
         Assert.throws(() => Util.percentOf(amount, max));
     }
 
-    @Test("isEmpty: should determine whether empty")
+    @Test("isEmpty(): should determine whether empty")
     @Feed("")
     @Feed(null)
     @Feed(undefined)
@@ -30,7 +30,7 @@ default class {
         Assert.true(Util.isEmpty(input));
     }
 
-    @Test("escapeText: should determine if text is escaped")
+    @Test("escapeText(): should determine if text is escaped")
     @Feed("john doe", "john doe")
     public escapeText(input: string, expected: string): void {
         Assert.equal(input, expected);

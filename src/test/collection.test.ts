@@ -3,61 +3,6 @@ import Settings from "../core/settings";
 import {TestSubjects} from "./test-bot";
 
 describe("Collection", () => {
-    describe("at()", () => {
-        it("should return the item located in the specified index", () => {
-            expect(TestSubjects.collection.at(0)).to.be.an("string").and.to.equal("hello");
-            expect(TestSubjects.collection.at(1)).to.be.an("string").and.to.equal("it's me");
-        });
-    });
-
-    describe("removeAt()", () => {
-        it("should remove the item located in the specified index", () => {
-            const result1 = TestSubjects.collection.removeAt(0);
-            const result2 = TestSubjects.collection.removeAt(5);
-
-            // Result 1
-            expect(result1).to.be.an("boolean");
-            expect(result1).to.equal(true);
-            expect(TestSubjects.collection.at(0)).to.be.an("string");
-            expect(TestSubjects.collection.at(0)).to.equal("it's me");
-
-            // Result 2
-            expect(result2).to.be.an("boolean");
-            expect(result2).to.equal(false);
-        });
-    });
-
-    describe("add()", () => {
-        it("should add an item to the collection", () => {
-            TestSubjects.collection.add("john doe");
-            expect(TestSubjects.collection.at(0)).to.be.an("string").and.to.equal("it's me");
-            expect(TestSubjects.collection.at(1)).to.be.an("object");
-        });
-    });
-
-    describe("addUnique()", () => {
-        it("should add an unique item", () => {
-            expect(TestSubjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(true);
-            expect(TestSubjects.collection.addUnique("doe")).to.be.an("boolean").and.to.equal(false);
-        });
-    });
-
-    describe("contains()", () => {
-        it("should determine whether the collection contains an item", () => {
-            expect(TestSubjects.collection.contains("john doe")).to.be.an("boolean").and.to.equal(true);
-            expect(TestSubjects.collection.contains("nope")).to.be.an("boolean").and.to.equal(false);
-        });
-    });
-
-    describe("find()", () => {
-        it("should find an item by its property", () => {
-            const result: any = TestSubjects.collection.find("name", "John Doe") as any;
-
-            expect(result).to.be.an("object");
-            expect(result.name).to.be.an("string").and.to.equal("John Doe");
-        });
-    });
-
     describe("fromFile()", () => {
         it("should load settings from a file", () => {
             const settingsPromise: Promise<Settings> = new Promise(async (resolve) => {

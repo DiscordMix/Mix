@@ -1,7 +1,3 @@
-import {expect} from "chai";
-import {ArgResolvers} from "../core/constants";
-import {init, testBot} from "./test-bot";
-
 describe("Bot", () => {
     // TODO:
     /* it("should disconnect", async () => {

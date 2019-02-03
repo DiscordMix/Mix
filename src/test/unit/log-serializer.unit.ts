@@ -3,7 +3,7 @@ import LogSerializer, {ILogMsg} from "../../serializers/log-serializer";
 
 @Unit("Log Serializer")
 default class {
-    @Test("should serialize log messages")
+    @Test("should should serialize log messages")
     @Feed({
         message: "Hello world",
         time: "Today",
@@ -28,7 +28,7 @@ default class {
         Assert.equal(serializer.serialize(msg), expected);
     }
 
-    @Test("should deserialize serialized log messages")
+    @Test("should should deserialize serialized log messages")
     @Feed("{Today} [Some.where] Hello world")
     public deserialize(msg: string): void {
         const serializer: LogSerializer = new LogSerializer();

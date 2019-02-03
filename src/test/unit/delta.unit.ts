@@ -1,4 +1,4 @@
-import {Unit, Test, Assert, Is, Does, JsType} from "unit";
+import {Unit, Test, Assert, Is} from "unit";
 import Delta from "../../state/delta";
 
 @Unit("Delta")

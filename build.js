@@ -1,5 +1,5 @@
 const automata = require("@atlas/automata");
-const CoordinatorState = automata.CoordinatorState;
+const RunState = automata.RunState;
 const colors = require("colors");
 const os = require("os");
 
@@ -34,19 +34,19 @@ async function build() {
             console.log("Building project");
         })
 
-        .then(() => automata.FileSystemOperations.forceRemove(buildDir), true)
-        .then(() => automata.ScriptOperations.execute("tsc", undefined, true))
-        .then(() => automata.ScriptOperations.execute("tslint", ["-c", "tslint.json", "'src/**/*.ts'"], true))
+        .then(() => automata.FileOps.forceRemove(buildDir), true)
+        .then(() => automata.ScriptOps.execute("tsc", undefined, true))
+        .then(() => automata.ScriptOps.execute("tslint", ["-c", "tslint.json", "'src/**/*.ts'"], true))
 
         .fallback(async () => {
             console.log("Running fallback sequence");
-            await automata.FileSystemOperations.forceRemove(buildDir);
+            await automata.FileOps.forceRemove(buildDir);
         })
 
         .run();
 
-    const state = result.state === CoordinatorState.OK ? "passing" : "failed";
-    const color = result.state === CoordinatorState.OK ? colors.green : colors.red;
+    const state = result.state === RunState.OK ? "passing" : "failed";
+    const color = result.state === RunState.OK ? colors.green : colors.red;
 
     console.log(color(`\n  Build ${state} | Took ${result.time}ms (${result.averageTime}ms avg.) | ${result.operationsCompleted}/${result.operations} task(s)\n`));
 

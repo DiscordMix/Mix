@@ -1,4 +1,4 @@
-import {FileSystemOperations} from "@atlas/automata";
+import {FileOps} from "@atlas/automata";
 import {Snowflake} from "discord.js";
 import fs from "fs";
 import path from "path";
@@ -98,7 +98,7 @@ export default class Temp implements ITemp {
             return this;
         }
         else if (fs.existsSync(this.resolvedPath)) {
-            FileSystemOperations.forceRemoveSync(this.resolvedPath);
+            FileOps.forceRemoveSync(this.resolvedPath);
         }
 
         return this;

@@ -1,4 +1,4 @@
-import {FileSystemOperations, Coordinator, GitOperations, ScriptOperations, GithubEvent, ICoordinatorRunResult, CoordinatorState} from "@atlas/automata";
+import {FileOps, Coordinator, GitOps, ScriptOps, GithubEvent, ITaskResult, RunState} from "@atlas/automata";
 import Util from "../core/util";
 import Log from "../core/log";
 import colors from "colors";
@@ -21,28 +21,28 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         return;
     }
 
-    const result: ICoordinatorRunResult = await coordinator
-        .then(() => GitOperations.branch(masterBranch))
-        .then(() => GitOperations.deleteBranch(deployBranch), true)
-        .then(() => GitOperations.createBranch(deployBranch), true)
-        .then(() => GitOperations.branch(deployBranch))
-        .then(() => GitOperations.setUpstream(masterBranch))
-        .then(GitOperations.pull)
-        .then(() => FileSystemOperations.forceRemove(buildDir), true)
-        .then(ScriptOperations.npmInstall)
-        .then(ScriptOperations.npmBuild)
-        .then(ScriptOperations.npmTest)
+    const result: ITaskResult = await coordinator
+        .then(() => GitOps.branch(masterBranch))
+        .then(() => GitOps.deleteBranch(deployBranch), true)
+        .then(() => GitOps.createBranch(deployBranch), true)
+        .then(() => GitOps.branch(deployBranch))
+        .then(() => GitOps.setUpstream(masterBranch))
+        .then(GitOps.pull)
+        .then(() => FileOps.forceRemove(buildDir), true)
+        .then(ScriptOps.npmInstall)
+        .then(ScriptOps.npmBuild)
+        .then(ScriptOps.npmTest)
 
         .fallback(async () => {
             Log.verbose("Github | Fallback sequence initiated");
 
-            const fallbackResult: ICoordinatorRunResult = await coordinator
-                .then(() => GitOperations.branch(masterBranch))
-                .then(() => GitOperations.deleteBranch(deployBranch), true)
+            const fallbackResult: ITaskResult = await coordinator
+                .then(() => GitOps.branch(masterBranch))
+                .then(() => GitOps.deleteBranch(deployBranch), true)
 
                 .run();
 
-            Log.verbose(`Github | Fallback sequence completed | Result is '${fallbackResult.state === CoordinatorState.OK ? colors.green("OK") : colors.red("FAIL")}'`);
+            Log.verbose(`Github | Fallback sequence completed | Result is '${fallbackResult.state === RunState.OK ? colors.green("OK") : colors.red("FAIL")}'`);
         })
 
         .run((current: number, left: number, total: number, percentage: number) => {
@@ -52,7 +52,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
     const time: string = Util.spreadTime(result.time);
     const avgTime: string = Util.spreadTime(result.averageTime);
 
-    Log.verbose(`Github | Process completed in ${time}ms (${avgTime}ms avg.) | Result is '${result.state === CoordinatorState.OK ? "OK" : "Failed"}'`);
+    Log.verbose(`Github | Process completed in ${time}ms (${avgTime}ms avg.) | Result is '${result.state === RunState.OK ? "OK" : "Failed"}'`);
 });
 
 const normalPort: number = coordinator.webhook((body: any) => {

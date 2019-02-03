@@ -36,7 +36,7 @@
     "author": "Atlas <cloudrex@outlook.com>",
     "license": "MIT",
     "dependencies": {
-        "@atlas/automata": "^1.0.0-alpha.4",
+        "@atlas/automata": "^1.1.1",
         "@atlas/xlib": "^1.0.0-alpha.3",
         "axios": "^0.18.0",
         "babel-polyfill": "^6.26.0",

@@ -86,7 +86,7 @@ export default class EmbedBuilder implements IEmbedBuilder {
     }
 
     /**
-     * Set the color of the embed
+     * Set the color of the embed.
      * @param {string} color
      * @return {this}
      */
@@ -97,7 +97,7 @@ export default class EmbedBuilder implements IEmbedBuilder {
     }
 
     /**
-     * Set the title of the embed
+     * Set the title of the embed.
      * @param {string} title
      * @return {this}
      */
@@ -118,7 +118,7 @@ export default class EmbedBuilder implements IEmbedBuilder {
     }
 
     /**
-     * Set the thumbnail image of the embed
+     * Set the thumbnail image of the embed.
      * @param {string} url
      * @return {this}
      */
@@ -129,7 +129,7 @@ export default class EmbedBuilder implements IEmbedBuilder {
     }
 
     /**
-     * Set the footer text of the embed
+     * Set the footer text of the embed.
      * @param {string} text
      * @param {string} icon
      * @return {this}
@@ -141,7 +141,7 @@ export default class EmbedBuilder implements IEmbedBuilder {
     }
 
     /**
-     * Set the image of the embed
+     * Set the image of the embed.
      * @param {string} url
      * @return {this}
      */
@@ -152,8 +152,8 @@ export default class EmbedBuilder implements IEmbedBuilder {
     }
 
     /**
-     * Set the text of the embed
-     * @todo Limit text to Discord's embed char limit (done, needs testing)
+     * Set the text of the embed.
+     * @todo Limit text to Discord's embed char limit (done, needs testing).
      * @param {string} text
      * @return {this}
      */
@@ -164,7 +164,7 @@ export default class EmbedBuilder implements IEmbedBuilder {
     }
 
     /**
-     * Add a field to the embed
+     * Add a field to the embed.
      * @param {string} title
      * @param {string} value
      * @return {this}

@@ -12,6 +12,7 @@ import "./rgb.unit";
 import "./rgba.unit";
 import "./messages.unit";
 import "./bot.unit";
+import "./tasks.unit";
 import "./store.unit";
 import "./store-reducers.unit";
 import "./languages.unit";

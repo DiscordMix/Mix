@@ -5,7 +5,7 @@ Log.level = LogLevel.None;
 Log.write = false;
 
 // Import tests
-import "./switch-parser.test";
+import "./flag-parser.test";
 import "./rgb.test";
 import "./rgba.test";
 import "./util";

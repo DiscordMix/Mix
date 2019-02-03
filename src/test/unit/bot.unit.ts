@@ -7,7 +7,7 @@ import TestData from "./test-data";
 @Unit("Bot")
 default class {
     @Test("should init and login")
-    public async initAndLogin(): Promise<void> {
+    public async initAndLogin() {
         // Mock client login
         testBot.client.login = Mock.fn(testBot.client.login)
             .once((): void => {
@@ -26,17 +26,17 @@ default class {
     }
 
     @Test("should not be suspended")
-    public notBeSuspended(): void {
+    public notBeSuspended() {
         Assert.false(testBot.suspended);
     }
 
     @Test("should have no owner")
-    public haveNoOwner(): void {
+    public haveNoOwner() {
         Assert.that(testBot.owner, Is.undefined);
     }
 
     @Test("should have default argument resolvers")
-    public defaultArgResolvers(): void {
+    public defaultArgResolvers() {
         Assert.equal(testBot.argumentResolvers, ArgResolvers);
     }
 
@@ -46,12 +46,12 @@ default class {
     @Feed("")
     @Feed("test")
     @Feed([])
-    public async notHandleInvalidMsgs(input: any): Promise<void> {
+    public async notHandleInvalidMsgs(input: any) {
         Assert.false(await testBot.handle.message(input));
     }
 
     @Test("should have correct internal commands")
-    public haveCorrectInternalCmds(): void {
+    public haveCorrectInternalCmds() {
         Assert.that(testBot.internalCommands,
             Is.array,
             Does.haveLength(3)

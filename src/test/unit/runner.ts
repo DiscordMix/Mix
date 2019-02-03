@@ -19,6 +19,8 @@ import "./languages.unit";
 import "./commands.unit";
 import "./collection.unit";
 import "./services.unit";
+import "./time-machine.unit";
+import "./bot-dispose.unit";
 
 // Run tests.
 Runner.test();

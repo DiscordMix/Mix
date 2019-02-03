@@ -1,6 +1,6 @@
 import Util, {IBinarySearchResult} from "../core/util";
 import {expect, assert} from "chai";
-import {TestSubjects} from "./test-bot";
+import {TestSubjects} from "./unit/test-bot";
 
 describe("Util", () => {
     describe("isEmpty()", () => {

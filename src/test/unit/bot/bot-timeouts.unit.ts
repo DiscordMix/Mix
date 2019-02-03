@@ -1,5 +1,5 @@
 import {Unit, Test, Assert, Is} from "unit";
-import {testBot} from "../../test-bot";
+import {testBot} from "../test-bot";
 
 @Unit("Bot Timeouts & Intervals")
 default class {

@@ -20,6 +20,7 @@ import "./uncategorized/commands.unit";
 import "./uncategorized/collection.unit";
 import "./uncategorized/services.unit";
 import "./uncategorized/time-machine.unit";
+import "./uncategorized/time-convert.unit";
 import "./bot/bot-dispose.unit";
 
 // Run tests.

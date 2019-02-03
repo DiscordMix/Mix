@@ -1,5 +1,5 @@
 import {Unit, Test, Assert, Is, Mock} from "unit";
-import TestBot, {testBot} from "../../test-bot";
+import TestBot, {testBot} from "../test-bot";
 
 @Unit("Bot Dispose")
 default class {

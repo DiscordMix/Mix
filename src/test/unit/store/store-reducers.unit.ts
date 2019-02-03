@@ -1,5 +1,5 @@
 import {Unit, Test, Assert} from "unit";
-import {testBot} from "../../test-bot";
+import {testBot} from "../test-bot";
 import {ITestState, Reducer, IStoreAction, TestStoreActionType} from "../../../state/store";
 import TestUtils, {ExcludeParam} from "../../test-utils";
 

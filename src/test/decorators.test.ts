@@ -2,7 +2,7 @@ import Command, {CommandRunner, RestrictGroup} from "../commands/command";
 import {Name, Arguments, Description, Meta} from "../decorators/general";
 import {AttachedLogger, Guard, Connect, DependsOn, attachedLogger} from "../decorators/other";
 import {expect} from "chai";
-import {testBot} from "./test-bot";
+import {testBot} from "./unit/test-bot";
 import {Deprecated} from "../decorators/utility";
 import {Constraint} from "../decorators/constraints";
 import Permission from "../core/permission";

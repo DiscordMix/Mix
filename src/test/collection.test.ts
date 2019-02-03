@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import Settings from "../core/settings";
-import {TestSubjects} from "./test-bot";
+import {TestSubjects} from "./unit/test-bot";
 
 describe("Collection", () => {
     describe("fromFile()", () => {

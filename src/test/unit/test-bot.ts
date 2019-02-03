@@ -2,17 +2,17 @@ require("dotenv").config();
 
 import {Guild, Message, Snowflake, TextChannel} from "discord.js";
 import path from "path";
-import Context from "../commands/command-context";
-import Bot from "../core/bot";
-import {BotEvent} from "../core/bot-extra";
-import BotMessages from "../core/messages";
-import ResponseHelper from "../core/response-helper";
-import Settings from "../core/settings";
-import Rgb from "../misc/rgb";
-import Rgba from "../misc/rgba";
-import {ITestState, TestStoreActionType} from "../state/store";
-import List from "../collections/list";
-import Log from "../core/log";
+import Context from "../../commands/command-context";
+import Bot from "../../core/bot";
+import {BotEvent} from "../../core/bot-extra";
+import BotMessages from "../../core/messages";
+import ResponseHelper from "../../core/response-helper";
+import Settings from "../../core/settings";
+import Rgb from "../../misc/rgb";
+import Rgba from "../../misc/rgba";
+import {ITestState, TestStoreActionType} from "../../state/store";
+import List from "../../collections/list";
+import Log from "../../core/log";
 
 export const TestSubjects = {
     ids: [

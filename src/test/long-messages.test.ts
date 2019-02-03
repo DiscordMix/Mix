@@ -1,6 +1,6 @@
 import {Message} from "discord.js";
 import {expect} from "chai";
-import {testBot} from "./test-bot";
+import {testBot} from "./unit/test-bot";
 import TestUtils from "./test-utils";
 
 describe("Long Messages", () => {

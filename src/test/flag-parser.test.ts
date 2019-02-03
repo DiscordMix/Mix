@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {describe} from "mocha";
 import FlagParser from "../commands/flag-parser";
-import {TestSubjects} from "./test-bot";
+import {TestSubjects} from "./unit/test-bot";
 
 describe("Switch Parser", () => {
     describe("getSwitches()", () => {

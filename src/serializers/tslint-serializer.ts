@@ -13,11 +13,9 @@ export default class TslintSerializer implements ISerializer<ITslintWarning> {
         return JSON.stringify(data);
     }
 
+    // TODO: Needs to parse numbers, (line, pos, etc.).
     public deserialize(data: string): ITslintWarning | null {
         const match: RegExpExecArray | null = Pattern.tslintWarning.exec(data);
-
-        // TODO
-        console.log("Groups are:", match !== null ? match.groups : "<null>");
 
         if (match === null || match.groups === undefined) {
             return null;

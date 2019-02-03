@@ -19,7 +19,7 @@ export const Title: string =
 
 export const BasePath: string = path.resolve(path.join(".."));
 
-export const InternalFragmentsPath: string = path.resolve(path.join(__dirname, "../fragments/internal"));
+export const InternalFragmentsPath: string = path.resolve(path.join(__dirname, "..", "internal"));
 
 // TODO: No longer required/used. Implement in the new Type rework system.
 export const ArgResolvers: IArgumentResolver[] = [

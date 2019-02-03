@@ -10,12 +10,15 @@ default class {
     public async initAndLogin() {
         // Mock client login
         testBot.client.login = Mock.fn(testBot.client.login)
-            .once((): void => {
+            .once((): Promise<void> => {
                 (testBot.client.user as any) = {
                     id: TestData.id
                 };
 
                 testBot.client.emit(DiscordEvent.Ready);
+
+                // Return a promise because internally (bot.connect) .catch is used.
+                return new Promise(() => {});
             })
 
             .invoker;

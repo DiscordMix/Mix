@@ -5,22 +5,22 @@ import Log, {LogLevel} from "../../core/log";
 Log.level = LogLevel.None;
 
 // Import units.
-import "./util.unit";
-import "./log-serializer.unit";
-import "./tslint-serializer.unit";
-import "./rgb.unit";
-import "./rgba.unit";
-import "./messages.unit";
-import "./bot.unit";
-import "./tasks.unit";
-import "./store.unit";
-import "./store-reducers.unit";
-import "./languages.unit";
-import "./commands.unit";
-import "./collection.unit";
-import "./services.unit";
-import "./time-machine.unit";
-import "./bot-dispose.unit";
+import "./uncategorized/util.unit";
+import "./uncategorized/log-serializer.unit";
+import "./uncategorized/tslint-serializer.unit";
+import "./colors/rgb.unit";
+import "./colors/rgba.unit";
+import "./uncategorized/messages.unit";
+import "./bot/bot.unit";
+import "./uncategorized/tasks.unit";
+import "./store/store.unit";
+import "./store/store-reducers.unit";
+import "./uncategorized/languages.unit";
+import "./uncategorized/commands.unit";
+import "./uncategorized/collection.unit";
+import "./uncategorized/services.unit";
+import "./uncategorized/time-machine.unit";
+import "./bot/bot-dispose.unit";
 
 // Run tests.
 Runner.test();

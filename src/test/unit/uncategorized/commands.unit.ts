@@ -1,5 +1,5 @@
 import {Unit, Test, Assert} from "unit";
-import {testBot} from "../test-bot";
+import {testBot} from "../../test-bot";
 
 @Unit("Commands")
 default class {

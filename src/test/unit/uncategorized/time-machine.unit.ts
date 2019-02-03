@@ -1,7 +1,7 @@
 import {Unit, Test, Assert, Is, JsType} from "unit";
-import {testBot} from "../test-bot";
-import {TestStoreActionType, ITestState} from "../../state/store";
-import {IStateCapsule} from "../../state/time-machine";
+import {testBot} from "../../test-bot";
+import {TestStoreActionType, ITestState} from "../../../state/store";
+import {IStateCapsule} from "../../../state/time-machine";
 
 @Unit("Time Machine")
 default class {

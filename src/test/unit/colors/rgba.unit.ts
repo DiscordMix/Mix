@@ -1,5 +1,5 @@
 import {Unit, Test, Assert} from "unit";
-import {TestSubjects} from "../test-bot";
+import {TestSubjects} from "../../test-bot";
 
 @Unit("RGBA")
 default class {

@@ -1,5 +1,5 @@
 import {Unit, Test, Feed, Assert, Is, JsType, Does} from "unit";
-import LogSerializer, {ILogMsg} from "../../serializers/log-serializer";
+import LogSerializer, {ILogMsg} from "../../../serializers/log-serializer";
 
 @Unit("Log Serializer")
 default class {

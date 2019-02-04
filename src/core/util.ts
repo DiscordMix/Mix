@@ -384,14 +384,6 @@ export default abstract class Util {
     }
 
     /**
-     * @param {string} state
-     * @return {boolean} Whether the state string representation was positive
-     */
-    public static translateState(state: string): boolean {
-        return Pattern.positiveState.test(state);
-    }
-
-    /**
      * Write data into a JSON file.
      * @param {string} filePath
      * @param {*} data

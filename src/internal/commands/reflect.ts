@@ -24,7 +24,7 @@ enum ReflectDataType {
         description: "The data to inspect",
         required: true,
         switchShortName: "t",
-        type: Type.String
+        type: Type.string
     }
 )
 @Constraint.Cooldown(1)

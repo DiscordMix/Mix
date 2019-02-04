@@ -19,7 +19,7 @@ interface IArgs {
     {
         name: "command",
         description: "The command to execute",
-        type: Type.String,
+        type: Type.string,
         required: true
     }
 )

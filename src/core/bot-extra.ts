@@ -1,6 +1,6 @@
 import {Client, Snowflake} from "discord.js";
 import {EventEmitter} from "events";
-import {IArgumentResolver, ICustomArgType} from "../commands/command";
+import {ICustomArgType} from "../commands/command";
 import {ICommandHandler} from "../commands/command-handler";
 import {IFragmentManager} from "../fragments/fragment-manager";
 import Language, {ILanguage} from "../language/language";
@@ -18,6 +18,7 @@ import {Reducer, IStore} from "../state/store";
 import {ISettings} from "./settings";
 import {PromiseOr} from "@atlas/xlib";
 import {IBotHandler} from "./bot-handler";
+import {ArgumentType, ArgumentResolver} from "../commands/type";
 
 /**
  * Modules that will be used by the bot.
@@ -49,7 +50,7 @@ export interface IBotOptions<T = any> {
     readonly internalCommands?: InternalCommand[];
     readonly owner?: Snowflake;
     readonly options?: Partial<IBotExtraOptions>;
-    readonly argumentResolvers?: IArgumentResolver[];
+    readonly argumentResolvers?: Map<ArgumentType, ArgumentResolver>;
     readonly argumentTypes?: ICustomArgType[];
     readonly languages?: string[];
     readonly initialState?: T;
@@ -156,7 +157,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly owner?: Snowflake;
     readonly options: IBotExtraOptions;
     readonly language?: Language;
-    readonly argumentResolvers: IArgumentResolver[];
+    readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
     readonly disposables: IDisposable[];
     readonly actionInterpreter: ActionInterpreter;
     readonly tasks: ITaskManager;

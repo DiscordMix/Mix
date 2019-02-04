@@ -8,7 +8,6 @@ import Temp from "./temp";
 import {Client, Snowflake} from "discord.js";
 import ServiceManager from "../services/service-manager";
 import axios from "axios";
-import {IArgumentResolver} from "../commands/command";
 import CommandHandler from "../commands/command-handler";
 import fs from "fs";
 import path from "path";
@@ -21,7 +20,7 @@ import {EventEmitter} from "events";
 import Optimizer from "../optimization/optimizer";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
-import {ArgResolvers, DefaultBotOptions} from "./constants";
+import {DefaultArgResolvers, DefaultBotOptions} from "./constants";
 import Store from "../state/store";
 import BotMessages from "./messages";
 import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./bot-extra";
@@ -29,6 +28,7 @@ import {Action} from "@atlas/automata";
 import BotConnector from "./bot-connector";
 import CommandRegistry from "../commands/command-registry";
 import BotHandler from "./bot-handler";
+import {ArgumentType, ArgumentResolver} from "../commands/type";
 
 // TODO: Should emit an event when state changes.
 /**
@@ -53,7 +53,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly services: ServiceManager;
 
     /**
-     * Command storage.
+     * Command storage and retrival class.
      */
     public readonly registry: CommandRegistry;
 
@@ -92,11 +92,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * Localization provider.
      */
     public readonly language?: Language;
-
-    /**
-     * List of custom argument resolvers.
-     */
-    public readonly argumentResolvers: IArgumentResolver[];
 
     /**
      * A list that keeps track of disposable objects and classes.
@@ -174,6 +169,11 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly handle: BotHandler;
 
     /**
+     * Stores argument resolvers which resolve input argument values into corresponding data.
+     */
+    public readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
+
+    /**
      * The start timestamp of the latest setup sequence.
      */
     protected setupStart: number = 0;
@@ -234,14 +234,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.client = new Client();
         this.services = new ServiceManager(this);
         this.registry = new CommandRegistry(this);
-        this.argumentResolvers = ArgResolvers;
 
-        if (options.argumentResolvers) {
-            this.argumentResolvers = [
-                ...this.argumentResolvers,
-                ...options.argumentResolvers
-            ];
-        }
+        this.argumentResolvers = options.argumentResolvers
+            ? new Map([...DefaultArgResolvers, ...options.argumentResolvers])
+            : DefaultArgResolvers;
 
         this.commandHandler = new CommandHandler({
             commandStore: this.registry,

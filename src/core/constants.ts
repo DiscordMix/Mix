@@ -1,9 +1,10 @@
 import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import path from "path";
-import {DefiniteArgument, IArgumentResolver} from "../commands/command";
 import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
 import {ISettingsPaths} from "./settings";
 import Util from "./util";
+import {ArgumentResolver, ArgumentType, Type} from "../commands/type";
+import Pattern from "./pattern";
 
 // TODO: Not working.
 export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";
@@ -22,48 +23,36 @@ export const BasePath: string = path.resolve(path.join(".."));
 export const InternalFragmentsPath: string = path.resolve(path.join(__dirname, "..", "internal"));
 
 // TODO: No longer required/used. Implement in the new Type rework system.
-export const ArgResolvers: IArgumentResolver[] = [
-    {
-        name: "member",
+export const DefaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map([
+    [Type.member, (input: string, msg: Message): GuildMember | null => {
+        const resolvedMember: GuildMember = msg.guild.member(Util.resolveId(input.toString()));
 
-        resolve(arg: DefiniteArgument, message: Message): GuildMember | null {
-            const resolvedMember: GuildMember = message.guild.member(Util.resolveId(arg.toString()));
-
-            if (resolvedMember) {
-                return resolvedMember;
-            }
-
-            return null;
+        if (resolvedMember) {
+            return resolvedMember;
         }
-    },
-    {
-        name: "role",
 
-        resolve(arg: DefiniteArgument, message: Message): Role | null {
-            const resolvedRole: Role | undefined = message.guild.roles.get(Util.resolveId(arg.toString()));
+        return null;
+    }],
+    // TODO: Complaining without the ending '| any'.
+    [Type.role, (input: string, msg: Message): Role | null | any => {
+        const resolvedRole: Role | undefined = msg.guild.roles.get(Util.resolveId(input.toString()));
 
-            if (resolvedRole) {
-                return resolvedRole;
-            }
-
-            return null;
+        return resolvedRole || null;
+    }],
+    [Type.boolean, (input: string): boolean | null => {
+        if (Pattern.positiveState.test(input)) {
+            return true;
         }
-    },
-    {
-        name: "state",
-
-        resolve(arg: DefiniteArgument): boolean {
-            return Util.translateState(arg.toString());
+        else if (Pattern.negativeState.test(input)) {
+            return false;
         }
-    },
-    {
-        name: "snowflake",
 
-        resolve(arg: DefiniteArgument): Snowflake {
-            return Util.resolveId(arg.toString());
-        }
-    }
-];
+        return null;
+    }],
+    [Type.snowflake, (input: string): Snowflake => {
+        return Util.resolveId(input);
+    }]
+]);
 
 export const DefaultBotEmojiOptions: IBotEmojiOptions = {
     error: ":thinking:",

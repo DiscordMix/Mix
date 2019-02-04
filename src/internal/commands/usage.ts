@@ -16,7 +16,7 @@ const delimiter: string = ", ";
 @Arguments(
     {
         name: "command",
-        type: Type.String,
+        type: Type.string,
         required: true,
         description: "The command to inspect"
     }

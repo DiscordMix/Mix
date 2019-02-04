@@ -74,22 +74,6 @@ describe("Util", () => {
         });
     });
 
-    describe("translateState()", () => {
-        it("should return the translated state", () => {
-            const subjects: any[] = [
-                true,
-                1,
-                "y",
-                "yes",
-                "on"
-            ];
-
-            for (const subject of subjects) {
-                expect(Util.translateState(subject.toString())).to.be.an("boolean").and.to.equal(true);
-            }
-        });
-    });
-
     describe("timeFromNow()", () => {
         it("should return the time from now in milliseconds", () => {
             const result = Util.timeFromNow(0, 0, 50);

@@ -22,7 +22,7 @@ const testConnection: CommandRunner = (x, args): void => {
 @Arguments(
     {
         name: "name",
-        type: Type.String
+        type: Type.string
     }
 )
 @Connect(testConnection)

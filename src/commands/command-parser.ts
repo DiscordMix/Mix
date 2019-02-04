@@ -1,25 +1,17 @@
 import {ICommandRegistry} from "./command-registry";
 import Util from "../core/util";
-
-import Command, {
-    DefaultValueResolver,
-    IArgument,
-    IArgumentResolver,
-    ICustomArgType,
-    RawArguments
-} from "./command";
-
+import Command, {DefaultValueResolver, IArgument, RawArguments} from "./command";
 import {Message} from "discord.js";
 import {FalseDelegates, TrueDelegates} from "../core/constants";
 import Log from "../core/log";
 import Pattern from "../core/pattern";
 import FlagParser, {ICommandFlag} from "./flag-parser";
-import {Type, TypeChecker, ArgumentType} from "./type";
+import {TypeChecker, ArgumentType, ArgumentResolver} from "./type";
 
 export interface IResolveArgumentsOptions {
     readonly arguments: RawArguments;
     readonly schema: IArgument[];
-    readonly resolvers: IArgumentResolver[];
+    readonly resolvers: Map<ArgumentType, ArgumentResolver>;
     readonly message: Message;
 }
 

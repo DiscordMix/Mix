@@ -29,11 +29,6 @@ export type RawArguments = Array<string | number | boolean>;
 
 export type DefiniteArgument = string | number | boolean;
 
-export interface IArgumentResolver {
-    readonly name: string;
-    readonly resolve: (argument: DefiniteArgument, message: Message) => any;
-}
-
 export interface IArgument {
     readonly name: string;
     readonly type: ArgumentType;

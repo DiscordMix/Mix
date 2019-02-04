@@ -18,13 +18,13 @@ interface IArgs {
     {
         name: "code",
         description: "The code to evaluate",
-        type: Type.String,
+        type: Type.string,
         required: true
     },
     {
         name: "silent",
         description: "Send result or not",
-        type: Type.Boolean,
+        type: Type.boolean,
         required: false
     }
 )

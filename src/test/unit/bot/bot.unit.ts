@@ -1,6 +1,6 @@
 import {Unit, Test, Assert, Is, Does, Feed, Mock} from "unit";
 import {init, testBot} from "../test-bot";
-import {ArgResolvers} from "../../../core/constants";
+import {DefaultArgResolvers} from "../../../core/constants";
 import DiscordEvent from "../../../core/discord-event";
 import TestData from "../test-data";
 
@@ -40,7 +40,7 @@ default class {
 
     @Test("should have default argument resolvers")
     public defaultArgResolvers() {
-        Assert.equal(testBot.argumentResolvers, ArgResolvers);
+        Assert.equal(testBot.argumentResolvers, DefaultArgResolvers);
     }
 
     @Test("should not handle invalid messages")

@@ -1,4 +1,4 @@
-// TODO: Disabled for future fix
+// TODO: Disabled for future fix.
 /* describe("Pagination.next()", () => {
     it("should return the valid next page", () => {
         const pagination: PaginatedMessage = new PaginatedMessage("hello world", 1);

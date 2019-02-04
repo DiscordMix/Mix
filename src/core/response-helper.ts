@@ -22,27 +22,27 @@ export interface IResponseHelper {
 }
 
 export default class ResponseHelper implements IResponseHelper {
+    /**
+     * @type {TextChannel}
+     * @readonly
+     */
     public readonly channel: TextChannel;
+
+    /**
+     * @type {IBot}
+     * @readonly
+     */
     public readonly bot: IBot;
+
+    /**
+     * @type {User}
+     * @readonly
+     */
     public readonly sender: User;
 
     public constructor(channel: TextChannel, bot: IBot, sender: User) {
-        /**
-         * @type {TextChannel}
-         * @readonly
-         */
         this.channel = channel;
-
-        /**
-         * @type {IBot}
-         * @readonly
-         */
         this.bot = bot;
-
-        /**
-         * @type {User}
-         * @readonly
-         */
         this.sender = sender;
     }
 
@@ -56,7 +56,7 @@ export default class ResponseHelper implements IResponseHelper {
     }
 
     /**
-     * @todo Content parameter type
+     * @todo Content parameter type.
      * @param {EmbedBuilder | *} content
      * @param {boolean} [autoDelete=false]
      * @return {Promise<EditableMessage> | null}
@@ -75,7 +75,7 @@ export default class ResponseHelper implements IResponseHelper {
                     finalContent.text = finalContent.text.substring(0, 1021) + "```";
                 }
 
-                // TODO: ... not being added at the end
+                // TODO: ... not being added at the end.
                 finalContent.text = finalContent.text.substring(0, 1020) + " ...";
 
                 Log.warn("Attempted to send a message with more than 1024 characters (Discord limit); The message was automatically trimmed");

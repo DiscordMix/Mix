@@ -1,5 +1,8 @@
 import {Permissions as DiscordPermission} from "discord.js";
 
+/**
+ * Abstraction of possible Discord permissions.
+ */
 const Permission = {
     CreateInstantInvite: {
         name: "Create Instant Invites",

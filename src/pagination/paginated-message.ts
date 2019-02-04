@@ -8,7 +8,7 @@ export enum PaginationEvent {
     PageChanged = "pageChanged"
 }
 
-// TODO: Implement break lines code
+// TODO: Implement break lines code.
 /**
  * @extends EventEmitter
  */

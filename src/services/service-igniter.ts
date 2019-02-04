@@ -74,7 +74,7 @@ process.on("beforeExit", stop);
 // Heartbeat loop
 let interval: number = ServiceManager.heartbeatTimeout - 1000;
 
-// TODO: Limit in ServiceManager too
+// TODO: Limit in ServiceManager too.
 if (interval < 1000) {
     interval = 1000;
 }

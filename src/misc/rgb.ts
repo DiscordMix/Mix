@@ -29,7 +29,7 @@ export default class Rgb {
     }
 
     /**
-     * @return {string} The string equivalent
+     * @return {string} The string equivalent.
      */
     public toString(): string {
         return `${this.red}, ${this.green}, ${this.blue}`;

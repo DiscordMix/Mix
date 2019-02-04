@@ -52,7 +52,7 @@ export interface IActionInterpreter extends EventEmitter {
     interpretMany(actions: IAction[]): PromiseOr<this>;
 }
 
-// TODO: Possibly consider attaching ActionInterpreter into commands' "this" so it's easier to return and ActionInterpreter can auto-determine some stuff...
+// TODO: Possibly consider attaching ActionInterpreter into commands' "this" so it's easier to return and ActionInterpreter can auto-determine some stuff.
 /**
  * @extends EventEmitter
  */

@@ -14,7 +14,7 @@ export interface ILogSource {
     readonly extra?: string;
 }
 
-// TODO: Add support for custom patterns
+// TODO: Add support for custom patterns.
 /**
  * Serializes log messages from strings into objects and vise versa.
  */

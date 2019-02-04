@@ -31,9 +31,9 @@ export interface IServiceManager extends EventEmitter {
     contains(name: string): boolean;
 }
 
-// TODO: Emit events through bot instead
+// TODO: Emit events through bot instead.
 /**
- * Manages service states
+ * Manages service states.
  */
 export default class ServiceManager extends EventEmitter implements IServiceManager {
     public static heartbeatTimeout: number = 6000;

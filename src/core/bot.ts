@@ -30,7 +30,7 @@ import BotConnector from "./bot-connector";
 import CommandRegistry from "../commands/command-registry";
 import BotHandler from "./bot-handler";
 
-// TODO: Should emit an event when state changes
+// TODO: Should emit an event when state changes.
 /**
  * @extends EventEmitter
  */

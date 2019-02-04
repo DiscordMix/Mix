@@ -56,5 +56,4 @@ async function build() {
     return result.operations === result.operationsCompleted ? 0 : 1;
 }
 
-build()
-    .then((code) => process.exit(code));
+build().then((code) => process.exit(code));

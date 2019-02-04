@@ -15,9 +15,12 @@ async function build() {
             const nodeJsVersion = process.version.substr(1).split(".")[0];
             const nodeJsMajor = parseInt(nodeJsVersion);
 
-            console.log(`Platform: ${os.platform()} | ${os.arch()}`);
-            console.log(`Mix v${process.env.npm_package_version}`);
-            console.log(`NodeJS ${process.version}`);
+            console.log(colors.gray("  Platform"));
+            console.log(colors.cyan(`  ${os.platform()} | ${os.arch()}\n`));
+            console.log("  " + colors.gray(process.env.npm_package_name));
+            console.log(colors.cyan(`  v${process.env.npm_package_version}\n`));
+            console.log(colors.gray("  NodeJS"));
+            console.log(colors.cyan("  " + process.version));
 
             if (nodeJsMajor < versionLock[0] || nodeJsMajor > versionLock[1]) {
                 console.log(`This script requires NodeJS >=v${versionLock[0]} and <=v${versionLock[1]}`);
@@ -30,8 +33,8 @@ async function build() {
                 return false;
             }
 
-            console.log(`\nUsing mode: ${buildMode}`)
-            console.log("Building project");
+            console.log(colors.gray("\n  Build mode"));
+            console.log("  " + colors.cyan(buildMode));
         })
 
         .then(() => automata.FileOps.forceRemove(buildDir), true)
@@ -48,7 +51,7 @@ async function build() {
     const state = result.state === RunState.OK ? "passing" : "failed";
     const color = result.state === RunState.OK ? colors.green : colors.red;
 
-    console.log(color(`\n  Build ${state} | Took ${result.time}ms (${result.averageTime}ms avg.) | ${result.operationsCompleted}/${result.operations} task(s)\n`));
+    console.log(color(`\n  Build ${state} | Took ${result.time}ms(${result.averageTime}ms avg.) | ${result.operationsCompleted} / ${result.operations} task(s) \n`));
 
     return result.operations === result.operationsCompleted ? 0 : 1;
 }

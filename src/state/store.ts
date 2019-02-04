@@ -31,9 +31,12 @@ export interface IStore<TState = any, TActionType = any> {
     addReducer(reducer: Reducer<TState>): boolean;
 }
 
+/**
+ * Provides state and data management for bots.
+ */
 export default class Store<TState = any, TActionType = any> {
     /**
-     * Combine multiple reducers into a single method
+     * Combine multiple reducers into a single method.
      * @param {Reducer<T>[]} reducers
      * @return {Reducer<T>}
      */
@@ -104,14 +107,14 @@ export default class Store<TState = any, TActionType = any> {
     }
 
     /**
-     * Retrieve the current state of the store
+     * Retrieve the current state of the store.
      */
     public getState(): TState | undefined {
         return this.state;
     }
 
     /**
-     * Subscribe a event handler to listen for state changes
+     * Subscribe a event handler to listen for state changes.
      * @param handler
      */
     public subscribe(handler: StoreActionHandler<TState>): boolean {

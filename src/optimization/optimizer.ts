@@ -14,7 +14,7 @@ export interface IOptimizer extends IDisposable {
 }
 
 /**
- * Used in large bots for memory optimization
+ * Used in large bots for memory optimization.
  */
 export default class Optimizer implements IOptimizer {
     protected readonly bot: Bot;
@@ -24,7 +24,7 @@ export default class Optimizer implements IOptimizer {
     protected commandsUsed: string[];
     protected processInterval: NodeJS.Timeout | null;
 
-    // TODO: Interval should be calculated based on amount of commands
+    // TODO: Interval should be calculated based on amount of commands.
     public constructor(bot: Bot, interval: number = 10 * 60 * 1000, sizeThreshold: number = 102_400) {
         this.bot = bot;
         this.commandsUsed = [];
@@ -58,7 +58,7 @@ export default class Optimizer implements IOptimizer {
             this.commandsUsed.push(command.meta.name);
         });
 
-        // Determine if Optimizer should be used
+        // Determine if Optimizer should be used.
         const commandPackages: ReadonlyCommandMap = this.bot.registry.getAll();
 
         let avg: number = 0;
@@ -75,7 +75,7 @@ export default class Optimizer implements IOptimizer {
             return this;
         }
 
-        // Start the interval
+        // Start the interval.
         this.processInterval = this.bot.setInterval(this.process.bind(this), this.interval);
 
         return this;
@@ -92,7 +92,7 @@ export default class Optimizer implements IOptimizer {
     }
 
     /**
-     * Dispose allocated resources
+     * Dispose allocated resources.
      */
     public dispose(): void {
         this.bot.removeListener(BotEvent.Command, this.start);
@@ -103,7 +103,7 @@ export default class Optimizer implements IOptimizer {
     }
 
     /**
-     * Handle performance optimization iteration
+     * Handle performance optimization iterations.
      * @return {Promise<number>}
      */
     protected async process(): Promise<number> {

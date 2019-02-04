@@ -17,13 +17,6 @@ enum BotMessages {
     SETUP_STARTED_OPTIMIZER = "Started optimization engine",
     SETUP_COMPLETED = "Bot setup completed",
 
-    TEST_EXPECT_TOKEN = "Expecting test token",
-    TEST_EXPECT_GUILD = "Expecting test guild's ID",
-    TEST_EXPECT_CHANNEL = "Expecting test guild's channel",
-    TEST_CHANNEL_NOT_TEXT = "Test channel is not a text channel",
-    TEST_CHANNEL_NO_EXIST = "Test guild does not have test channel",
-    TEST_NO_GUILD = "Bot is not in the test guild",
-
     CONTEXT_EXPECT_TEXT_CHANNEL = "Expecting message's channel to be a text channel",
 
     LANG_NO_DEFAULT = "No language source has been set as default",

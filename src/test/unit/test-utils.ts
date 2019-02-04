@@ -1,4 +1,4 @@
-import Log from "../core/log";
+import Log from "../../core/log";
 
 export enum ExcludeParam {
     Object,

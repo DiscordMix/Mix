@@ -2,7 +2,6 @@ import Util from "../core/util";
 import Pattern from "../core/pattern";
 import {Message} from "discord.js";
 import {PromiseOr} from "@atlas/xlib";
-import Log from "../core/log";
 
 export type ArgumentType = TypeChecker | TypeCheckerGen;
 

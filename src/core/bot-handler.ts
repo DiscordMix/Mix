@@ -1,6 +1,6 @@
 import {Message, TextChannel, RichEmbed} from "discord.js";
 import Util from "./util";
-import {IBot, BotEvent} from "./bot-extra";
+import {BotEvent} from "./bot-extra";
 import Log from "./log";
 import BotMessages from "./messages";
 import CommandParser from "../commands/command-parser";

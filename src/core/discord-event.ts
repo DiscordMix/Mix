@@ -1,3 +1,6 @@
+/**
+ * Possible events dispatched by the Discord.JS client.
+ */
 enum DiscordEvent {
     Message = "message",
     ChannelCreated = "channelCreate",

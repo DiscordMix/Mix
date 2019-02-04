@@ -13,6 +13,9 @@ export interface ITimeMachine<T> {
     after(time: number): IStateCapsule<T>[];
 }
 
+/**
+ * Provides functionality to capture and traverse previous store state(s).
+ */
 export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
     protected store: Store<TState, TActionType>;
     protected capsules: IStateCapsule<TState>[];

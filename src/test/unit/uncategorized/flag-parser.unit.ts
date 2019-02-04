@@ -12,7 +12,7 @@ const result7 = FlagParser.getSwitches(TestSubjects.flags.multipleQuotedValues);
 
 @Unit("Flag Parser")
 default class {
-    @Test("parse command flags into objects")
+    @Test("should parse command flags into objects")
     public getSwitches_parseIntoObjs() {
         for (const item of result1) {
             Assert.that(item, Is.object);

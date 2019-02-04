@@ -3,48 +3,7 @@ import {expect, assert} from "chai";
 import {TestSubjects} from "./unit/test-bot";
 
 describe("Util", () => {
-    describe("isEmpty()", () => {
-        it("should return whether the input is empty", () => {
-            expect(Util.isEmpty("")).to.equal(true);
-            expect(Util.isEmpty(undefined)).to.equal(true);
-            expect(Util.isEmpty("     ")).to.equal(true);
-            expect(Util.isEmpty("   hello world   ")).to.equal(false);
-            expect(Util.isEmpty(null)).to.equal(true);
-            expect(Util.isEmpty(0)).to.equal(false);
-            expect(Util.isEmpty(false)).to.equal(false);
-            expect(Util.isEmpty([])).to.equal(true);
-            expect(Util.isEmpty(["hello"])).to.equal(false);
-        });
-    });
-
-    describe("hasMentionPrefix()", () => {
-        it("should return whether the text provided start with a mention", () => {
-            expect(Util.hasMentionPrefix(`<@${TestSubjects.ids[0]}> hello world`, TestSubjects.ids[0])).to.equal(true);
-            expect(Util.hasMentionPrefix(`hello world <@${TestSubjects.ids[0]}>`, TestSubjects.ids[0])).to.equal(false);
-        });
-
-        it("should throw an error when provided invalid input", () => {
-            assert.throws(() => Util.hasMentionPrefix(undefined as any, undefined as any));
-            assert.throws(() => Util.hasMentionPrefix(null as any, null as any));
-            assert.throws(() => Util.hasMentionPrefix(4 as any, 543 as any));
-            assert.throws(() => Util.hasMentionPrefix({} as any, "hello world"));
-        });
-    });
-
     describe("escapeText()", () => {
-        it("should escape tokens", () => {
-            expect(Util.escapeText(TestSubjects.token, TestSubjects.token)).to.equal("[Token]");
-            expect(Util.escapeText("hi world, hello world, john doe", "hello world")).to.equal("hi world, [Token], john doe");
-            expect(Util.escapeText(`hi world, ${TestSubjects.token}, john doe`, "hello world")).to.equal("hi world, [Token], john doe");
-            expect(Util.escapeText(`hi world, ${TestSubjects.token}, john doe, hello world, hi`, "hello world")).to.equal("hi world, [Token], john doe, [Token], hi");
-        });
-
-        it("should escape IPv4s", () => {
-            expect(Util.escapeText("192.168.0.1", "empty")).to.equal("[IPv4]");
-            expect(Util.escapeText("53.32.53.252", "empty")).to.equal("[IPv4]");
-            expect(Util.escapeText("hello 192.168.0.1 world", "empty")).to.equal("hello [IPv4] world");
-        });
-
         it("should escape mentions", () => {
             expect(Util.escapeText("@everyone hello world", "empty")).to.equal("[Mention] hello world");
             expect(Util.escapeText("hello @everyone world", "empty")).to.equal("hello [Mention] world");
@@ -87,12 +46,6 @@ describe("Util", () => {
             assert.throws(() => Util.resolveId(true as any));
             assert.throws(() => Util.resolveId({} as any));
             assert.throws(() => Util.resolveId([] as any));
-        });
-    });
-
-    describe("timeAgo()", () => {
-        it("should return a string", () => {
-            expect(Util.timeAgo(Date.now())).to.be.an("string");
         });
     });
 
@@ -264,43 +217,6 @@ describe("Util", () => {
             assert.throws(() => Util.binaryInsert(1, "" as any));
             assert.throws(() => Util.binaryInsert(1, true as any));
             assert.throws(() => Util.binaryInsert(1, false as any));
-        });
-    });
-
-    describe("spreadTime()", () => {
-        it("should return spread time", () => {
-            expect(Util.spreadTime(1000)).to.be.a("string").and.to.equal("1 000");
-            expect(Util.spreadTime(10_000)).to.be.a("string").and.to.equal("10 000");
-            expect(Util.spreadTime(531_352)).to.be.a("string").and.to.equal("531 352");
-            expect(Util.spreadTime(1)).to.be.a("string").and.to.equal("1");
-            expect(Util.spreadTime(10)).to.be.a("string").and.to.equal("10");
-            // expect(Utils.spreadTime(-15_050_050)).to.be.a("string").and.to.equal("-15 050 050"); // TODO: Not working
-            expect(Util.spreadTime(-+-15)).to.be.a("string").and.to.equal("15");
-        });
-
-        it("should use delimiters", () => {
-            expect(Util.spreadTime(1000, ",")).to.be.a("string").and.to.equal("1,000");
-            expect(Util.spreadTime(1, ",")).to.be.a("string").and.to.equal("1");
-            expect(Util.spreadTime(100_000, ",")).to.be.a("string").and.to.equal("100,000");
-            expect(Util.spreadTime(-1000, ",")).to.be.a("string").and.to.equal("-1,000");
-        });
-
-        it("should throw on invalid parameters", () => {
-            assert.throws(() => Util.spreadTime("hello" as any));
-            assert.throws(() => Util.spreadTime("" as any));
-            assert.throws(() => Util.spreadTime(undefined as any));
-            assert.throws(() => Util.spreadTime(null as any));
-            assert.throws(() => Util.spreadTime([] as any));
-            assert.throws(() => Util.spreadTime({} as any));
-            assert.throws(() => Util.spreadTime(false as any));
-            assert.throws(() => Util.spreadTime(true as any));
-        });
-    });
-
-    describe("hash()", () => {
-        it("should hash a snowflake", () => {
-            expect(Util.hash("285578743324606482", 100)).to.be.a("number").and.to.equal(78);
-            expect(Util.hash("531932528131702785", 100)).to.be.a("number").and.to.equal(32);
         });
     });
 });

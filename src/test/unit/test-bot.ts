@@ -42,7 +42,7 @@ export const TestSubjects = {
 
     settingsPathTwo: path.resolve(path.join(__dirname, "./../../src/test/test-settings-2.json")),
 
-    switches: {
+    flags: {
         short: "base arg -h",
         long: "base arg --help",
         longValue: "base --help=hello",

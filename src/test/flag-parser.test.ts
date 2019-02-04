@@ -5,13 +5,13 @@ import {TestSubjects} from "./unit/test-bot";
 
 describe("Switch Parser", () => {
     describe("getSwitches()", () => {
-        const result1 = FlagParser.getSwitches(TestSubjects.switches.short);
-        const result2 = FlagParser.getSwitches(TestSubjects.switches.long);
-        const result3 = FlagParser.getSwitches(TestSubjects.switches.longValue);
-        const result4 = FlagParser.getSwitches(TestSubjects.switches.longQuotedValue);
-        const result5 = FlagParser.getSwitches(TestSubjects.switches.multiple);
-        const result6 = FlagParser.getSwitches(TestSubjects.switches.multipleValues);
-        const result7 = FlagParser.getSwitches(TestSubjects.switches.multipleQuotedValues);
+        const result1 = FlagParser.getSwitches(TestSubjects.flags.short);
+        const result2 = FlagParser.getSwitches(TestSubjects.flags.long);
+        const result3 = FlagParser.getSwitches(TestSubjects.flags.longValue);
+        const result4 = FlagParser.getSwitches(TestSubjects.flags.longQuotedValue);
+        const result5 = FlagParser.getSwitches(TestSubjects.flags.multiple);
+        const result6 = FlagParser.getSwitches(TestSubjects.flags.multipleValues);
+        const result7 = FlagParser.getSwitches(TestSubjects.flags.multipleQuotedValues);
 
         it("parse command switches into objects", () => {
             for (const item of result1) {

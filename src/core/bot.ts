@@ -8,7 +8,7 @@ import Temp from "./temp";
 import {Client, Snowflake} from "discord.js";
 import ServiceManager from "../services/service-manager";
 import axios from "axios";
-import {IArgumentResolver, ICustomArgType} from "../commands/command";
+import {IArgumentResolver} from "../commands/command";
 import CommandHandler from "../commands/command-handler";
 import fs from "fs";
 import path from "path";
@@ -455,7 +455,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Connect the client.
+     * Connect the Discord client.
      * @return {Promise<this>}
      */
     public async connect(): Promise<this> {
@@ -569,6 +569,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.clearTemp();
     }
 
+    /**
+     * @param {BotState} state
+     * @return {this}
+     */
     public setState(state: BotState): this {
         (this.state as any) = state;
 

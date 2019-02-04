@@ -1,12 +1,30 @@
+/**
+ * Collection of useful regular expression patterns used throught the project.
+ */
 export default abstract class Pattern {
+    /**
+     * Matches Discord guild invite links.
+     */
     public static invite: RegExp = /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/[^\s.]+[a-z]/gmi;
 
+    /**
+     * Matches web URLs.
+     */
     public static url: RegExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
 
+    /**
+     * Matches Discord bot tokens.
+     */
     public static token: RegExp = /ND[a-z0-9]{22}\.D[a-z]{2}[a-z0-9-]{3}\.[-a-z0-9_]{27}/gmi;
 
+    /**
+     * Matches Discord user mention strings.
+     */
     public static mention: RegExp = /<@!?[0-9]{18}>/gm;
 
+    /**
+     * Matches a Discord user ID or Twitter Snowflake.
+     */
     public static snowflake: RegExp = /[0-9]{18}/gm;
 
     public static mentionOrSnowflake: RegExp = /<@!?[0-9]{18}>|[0-9]{18}/gm;
@@ -15,8 +33,14 @@ export default abstract class Pattern {
 
     public static args: RegExp = / (```((?!```).)*```|"[^"]+"|'[^']+'|`[^`]+`|[^ ]+|[^ ]+(;|^))/g;
 
+    /**
+     * Matches the string representation of the 'true' state.
+     */
     public static positiveState: RegExp = /(1|true|on|y|yes)/i;
 
+    /**
+     * Matches the string representation of the 'false' state.
+     */
     public static negativeState: RegExp = /(0|false|off|n|no)/i;
 
     public static flag: RegExp = /--?(?<long_base>[a-z]{1,})=?(?:(?<unquoted_val>[^\s"]+)|"(?<short_base>[^"]+)")?/gmi;
@@ -30,11 +54,23 @@ export default abstract class Pattern {
      */
     public static fragmentFileName: RegExp = /^[^\.@](?:.*?)\.js$/;
 
+    /**
+     * Matches error messages emitted by the TypeScript compiler.
+     */
     public static typescriptError: RegExp = /^(?<path>[^*]+)\((?<line>[0-9]+),(?<pos>[0-9]+)\): error (?<code>TS[0-9]+):(?<message>[^*]+)$/gm;
 
+    /**
+     * Matches warning messages emitted by the TSLint linter.
+     */
     public static tslintWarning: RegExp = /^WARNING: (?<path>[^*]+):(?<line>[0-9]+):(?<pos>[0-9]+) - (?<message>[^*]+)$/gm;
 
+    /**
+     * Matches valid fragment names.
+     */
     public static fragmentName: RegExp = /^(?:[a-z]{0,}[a-z0-9-_\S]+){2,50}$/i;
 
+    /**
+     * Matches valid fragment descriptions.
+     */
     public static fragmentDescription: RegExp = /^(?:[a-z]{0,}[^\n\r\t\0]+){1,100}$/i;
 }

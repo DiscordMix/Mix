@@ -1,3 +1,6 @@
+/**
+ * Constant message strings used by the bot to provide feedback.
+ */
 enum BotMessages {
     SETUP_INVALID = "Missing or invalid settings options",
     SETUP_FAIL_LOAD_FRAGMENTS = "Failed to load internal fragments",

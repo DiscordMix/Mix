@@ -21,6 +21,9 @@ export interface IComposeOptions {
     readonly prefix?: string;
 }
 
+/**
+ * Utility class for logging output into the console.
+ */
 export default abstract class Log {
     /**
      * Whether hidden log items should be shown.
@@ -104,7 +107,7 @@ export default abstract class Log {
     }
 
     /**
-     * Attempt to log a set of messages.
+     * Attempt to log a set of messages to the console.
      * @param {IComposeOptions[]} history
      */
     public static playback(history: IComposeOptions[]): void {
@@ -114,7 +117,7 @@ export default abstract class Log {
     }
 
     /**
-     * Display an information message.
+     * Display an information message in the console.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -131,7 +134,7 @@ export default abstract class Log {
     }
 
     /**
-     * Display a success message.
+     * Display a success message in the console.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -148,7 +151,7 @@ export default abstract class Log {
     }
 
     /**
-     * Display a warning message.
+     * Display a warning message in the console.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -165,7 +168,7 @@ export default abstract class Log {
     }
 
     /**
-     * Display an error message. Program will not break.
+     * Display an error message in the console. Program will not break.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -184,7 +187,7 @@ export default abstract class Log {
     }
 
     /**
-     * Display a fatal error message. Process will be stopped.
+     * Display a fatal error message in the console. Process will be stopped.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -204,7 +207,7 @@ export default abstract class Log {
     }
 
     /**
-     * Display a verbose message.
+     * Display a verbose message in the console.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -221,7 +224,7 @@ export default abstract class Log {
     }
 
     /**
-     * Display a debug message. Log level must be set to debug.
+     * Display a debug message in the console. Log level must be set to debug.
      * @param {*} message
      * @param {Array<*>} params
      */
@@ -238,7 +241,7 @@ export default abstract class Log {
     }
 
     /**
-     * Create a not implemented error.
+     * Create an error signaling lack of implementation.
      * @return {Error}
      */
     public static get notImplemented(): Error {

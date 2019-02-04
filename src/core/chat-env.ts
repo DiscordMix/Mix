@@ -1,3 +1,6 @@
+/**
+ * Different possible environments where command execution can take place.
+ */
 enum ChatEnv {
     /**
      * Represents DMs only.

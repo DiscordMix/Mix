@@ -28,33 +28,34 @@ export interface IDataCollector {
 
 // TODO: Should also be able to call a callback function every X iterations
 export default class DataCollector implements IDataCollector {
+    /**
+     * @type {Guild}
+     * @protected
+     * @readonly
+     */
     protected readonly guild: Guild;
+
+    /**
+     * @type {MemberDataType}
+     * @protected
+     */
     protected readonly collectionType: MemberDataType;
 
+    /**
+     * @type {MemberType}
+     * @protected
+     */
     protected fromType: MemberType;
+
     protected whereCondition?: ConditionCallback;
 
     /**
      * @param {Guild} guild
      */
     public constructor(guild: Guild) {
-        /**
-         * @type {Guild}
-         * @protected
-         * @readonly
-         */
+
         this.guild = guild;
-
-        /**
-         * @type {MemberDataType}
-         * @protected
-         */
         this.collectionType = MemberDataType.Everything;
-
-        /**
-         * @type {MemberType}
-         * @protected
-         */
         this.fromType = MemberType.Everyone;
     }
 
@@ -79,7 +80,7 @@ export default class DataCollector implements IDataCollector {
     }
 
     /**
-     * @param {(GuildMember) => boolean} condition
+     * @param {ConditionCallback} condition
      * @return {this}
      */
     public where(condition: ConditionCallback): this {

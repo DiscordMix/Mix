@@ -115,6 +115,27 @@ export const Type: ITypeDef = {
     },
 
     /**
+     * Represents a Discord bot token.
+     */
+    BotToken: (input: string): boolean => {
+        return typeof input === "string" && Pattern.token.test(input);
+    },
+
+    /**
+     * Represents a date in the format dd/mm/yyyy.
+     */
+    Date: (input: string): boolean => {
+        return typeof input === "string" && Pattern.date.test(input);
+    },
+
+    /**
+     * Represents a time string measurement unit along with the value.
+     */
+    Time: (input: string): boolean => {
+        return typeof input === "string" && Pattern.time.test(input);
+    },
+
+    /**
      * Argument must match all provided patterns.
      * @param {RegExp[]} patterns The patterns to test.
      * @return {TypeChecker}

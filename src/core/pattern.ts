@@ -73,4 +73,14 @@ export default abstract class Pattern {
      * Matches valid fragment descriptions.
      */
     public static fragmentDescription: RegExp = /^(?:[a-z]{0,}[^\n\r\t\0]+){1,100}$/i;
+
+    /**
+     * Matches a time string representation.
+     */
+    public static time: RegExp = /^([0-9]+)(ms|h|d|s|m|mo|y|w|ns)$/;
+
+    /**
+     * Matches a date string in the format of dd/mm/yyyy.
+     */
+    public static date: RegExp = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
 }

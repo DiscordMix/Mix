@@ -110,12 +110,12 @@ default class {
     // Multiple quoted values short.
     @Test("should parse multiple short flags' quoted values")
     public getSwitches_multipleQuotedValuesShort() {
-        // Multiple Quoted Values -> -h
+        // Multiple Quoted Values -> -h.
         Assert.equal(result7[0].key, "h");
         Assert.true(result7[0].short);
         Assert.that(result7[0].value, Is.null);
 
-        // Multiple Quoted Values -> -q
+        // Multiple Quoted Values -> -q.
         Assert.equal(result7[1].key, "q");
         Assert.true(result7[1].short);
         Assert.that(result7[1].value, Is.null);

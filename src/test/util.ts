@@ -71,8 +71,8 @@ describe("Util", () => {
     describe("resolveId()", () => {
         it("should return the resolved ids", () => {
             // TODO: Review?
-            for (let i: number = 0; i < TestSubjects.ids.length; i++) {
-                const result: any = Util.resolveId(TestSubjects.ids[i]);
+            for (const id of TestSubjects.ids) {
+                const result: any = Util.resolveId(id);
 
                 expect(result).to.be.an("string");
                 expect(result).to.have.lengthOf(18);
@@ -131,8 +131,8 @@ describe("Util", () => {
                 "on"
             ];
 
-            for (let i: number = 0; i < subjects.length; i++) {
-                expect(Util.translateState(subjects[i].toString())).to.be.an("boolean").and.to.equal(true);
+            for (const subject of subjects) {
+                expect(Util.translateState(subject.toString())).to.be.an("boolean").and.to.equal(true);
             }
         });
     });
@@ -153,7 +153,7 @@ describe("Util", () => {
         });
 
         it("should throw on invalid parameters", () => {
-            assert.throws(() => Util.shuffle(undefined as any))
+            assert.throws(() => Util.shuffle(undefined as any));
             assert.throws(() => Util.shuffle(null as any));
             assert.throws(() => Util.shuffle("" as any));
             assert.throws(() => Util.shuffle("hello world" as any));

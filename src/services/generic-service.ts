@@ -16,7 +16,7 @@ export enum ProcessMsgType {
 export interface IProcessMsg<T = any> {
     readonly type: ProcessMsgType;
     readonly data: T;
-};
+}
 
 export interface IRawProcessMsg<T = any> {
     readonly _d: T;

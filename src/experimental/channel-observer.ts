@@ -9,7 +9,6 @@ export default class ChannelObserver extends EventEmitter {
     protected readonly channel: TextChannel;
 
     /**
-     * 
      * @param {Client} client
      * @param {TextChannel} channel
      */

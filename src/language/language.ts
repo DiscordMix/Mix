@@ -100,7 +100,7 @@ export default class Language implements ILanguage {
 
         const data: LanguageSource = await Util.readJson(filePath);
 
-        if (typeof data != "object" || Object.keys(data).length === 0) {
+        if (typeof data !== "object" || Object.keys(data).length === 0) {
             throw Log.error(`Language file is either not an object or empty: ${name}`);
         }
 

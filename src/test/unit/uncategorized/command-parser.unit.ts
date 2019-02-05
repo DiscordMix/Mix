@@ -1,4 +1,4 @@
-import {Unit, Test, Assert} from "unit";
+import {Unit, Test, Assert, Feed} from "unit";
 import CommandParser from "../../../commands/command-parser";
 import {Type} from "../../../commands/type";
 import {RawArguments} from "../../../commands/command";
@@ -113,6 +113,17 @@ default class {
         Assert.equal(result[0], "sir john doe");
         Assert.equal(result[1], "delicious apples");
         Assert.equal(result[2], "more than 100");
+    }
+
+    @Test("getArguments(): should throw when provided invalid arguments")
+    @Feed(null, null)
+    @Feed(undefined, undefined)
+    @Feed(0, 1)
+    @Feed(1, 0)
+    @Feed(true, false)
+    @Feed(false, true)
+    public getArguments_throwOnInvalidParams(comamndString: any, schema: any) {
+        Assert.throws(() => CommandParser.getArguments(comamndString, schema));
     }
 
     // TODO: More tests required.

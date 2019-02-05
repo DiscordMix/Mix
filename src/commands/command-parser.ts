@@ -99,6 +99,13 @@ export default abstract class CommandParser {
 
         // TODO: Rewrite/update this function with the new Type system.
 
+        if (typeof commandString !== "string") {
+            throw Log.error("Expected input command string to be a string");
+        }
+        else if (!Array.isArray(schema)) {
+            throw Log.error("Expected schema to be an argument array");
+        }
+
         const result: RawArguments = [];
         const argCleanExpression: RegExp = /(```|`|'|"|)(.+)\1/;
 

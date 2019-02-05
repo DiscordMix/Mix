@@ -16,7 +16,7 @@ export interface ICommandComponentOpts {
 }
 
 export default abstract class Component {
-    public static Command(name: string, options?: Partial<ICommandComponentOpts>): DecoratorProxy {
+    public static command(name: string, options?: Partial<ICommandComponentOpts>): DecoratorProxy {
         return function (target: any, key: string) {
             DecoratorUtils.ensureFunc(target);
 
@@ -48,7 +48,7 @@ export default abstract class Component {
         };
     }
 
-    public static Fragment<T = any>(name: string, options?: T): DecoratorProxy {
+    public static fragment<T = any>(name: string, options?: T): DecoratorProxy {
         // TODO: Implement.
         throw Log.notImplemented;
     }

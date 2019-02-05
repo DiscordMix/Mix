@@ -3,7 +3,7 @@ import {DecoratorUtils} from "./decorator-utils";
 import Context from "../commands/command-context";
 import Log from "../core/log";
 
-export const attachedLogger: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
+export const attachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
     Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${$.sender.tag}`);
 };
 
@@ -11,9 +11,9 @@ export const attachedLogger: CommandRelay = ($: Context, args: any, cmd: IGeneri
  * Attach an execution logger for debugging purposes.
  * @param {CommandRelay[]} relays
  */
-export function AttachedLogger(...relays: CommandRelay[]): any {
+export function attachedLogger(...relays: CommandRelay[]): any {
     if (relays.length === 0) {
-        relays = [attachedLogger];
+        relays = [attachedLoggerFn];
     }
 
     return function (target: any) {
@@ -30,7 +30,7 @@ export function AttachedLogger(...relays: CommandRelay[]): any {
  * @param {CommandRelay[]} relays
  * @return {*}
  */
-export function Connect(...relays: CommandRelay[]): any {
+export function connect(...relays: CommandRelay[]): any {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
@@ -45,7 +45,7 @@ export function Connect(...relays: CommandRelay[]): any {
  * @param {string[]} services
  * @return {*}
  */
-export function DependsOn(...services: string[]): any {
+export function dependsOn(...services: string[]): any {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
@@ -60,7 +60,7 @@ export function DependsOn(...services: string[]): any {
  * @param {string[]} guards
  * @return {*}
  */
-export function Guard(...guards: string[]): any {
+export function guard(...guards: string[]): any {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 

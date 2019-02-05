@@ -2,7 +2,7 @@ import {ActionType, IAction} from "../../actions/action";
 import MsgBuilder from "../../builders/msg-builder";
 import Command from "../../commands/command";
 import Context from "../../commands/command-context";
-import {Name, Description, Arguments} from "../../decorators/general";
+import {name, description, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraints";
 import {IMessageActionArgs} from "../../actions/action-interpreter";
 import Service from "../../services/service";
@@ -16,9 +16,9 @@ enum ReflectDataType {
     Services = "services"
 }
 
-@Name("reflect")
-@Description("Access the bot's internal state")
-@Arguments(
+@name("reflect")
+@description("Access the bot's internal state")
+@args(
     {
         name: "type",
         description: "The data to inspect",
@@ -27,8 +27,8 @@ enum ReflectDataType {
         type: Type.string
     }
 )
-@Constraint.Cooldown(1)
-@Constraint.OwnerOnly
+@Constraint.cooldown(1)
+@Constraint.ownerOnly
 export default class extends Command {
     public run($: Context, args: IArgs): IAction<IMessageActionArgs> {
         switch (args.type) {

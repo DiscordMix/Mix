@@ -8,7 +8,7 @@ export abstract class Constraint {
      * Restrict command execution to a certain environment.
      * @param env The command execution environment.
      */
-    public static Env(env: ChatEnv): DecoratorProxy {
+    public static environment(env: ChatEnv): DecoratorProxy {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
@@ -20,7 +20,7 @@ export abstract class Constraint {
      * Rate-limit command execution per user.
      * @param time The time between command executions in seconds.
      */
-    public static Cooldown(time: number): DecoratorProxy {
+    public static cooldown(time: number): DecoratorProxy {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
@@ -32,7 +32,7 @@ export abstract class Constraint {
      * Disable a command and prevent execution.
      * @param {*} target
      */
-    public static Disabled(target: any): DecoratorProxy {
+    public static disabled(target: any): DecoratorProxy {
         DecoratorUtils.ensureFunc(target);
 
         return class extends target {
@@ -44,7 +44,7 @@ export abstract class Constraint {
      * Limit command execution to specific users, channels, or guilds.
      * @param {SpecificConstraints} constraints
      */
-    public static Specific(constraints: SpecificConstraints): DecoratorProxy {
+    public static specific(constraints: SpecificConstraints): DecoratorProxy {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
@@ -56,7 +56,7 @@ export abstract class Constraint {
      * Require certain permission(s) from the issuer.
      * @param {any[]} permissions The permission(s) required.
      */
-    public static IssuerPermissions(...permissions: any[]): DecoratorProxy {
+    public static issuerPermissions(...permissions: any[]): DecoratorProxy {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
@@ -68,7 +68,7 @@ export abstract class Constraint {
      * Require certain permission(s) from the bot.
      * @param {any[]} permissions The permission(s) required.
      */
-    public static SelfPermissions(...permissions: any[]): DecoratorProxy {
+    public static selfPermissions(...permissions: any[]): DecoratorProxy {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
@@ -80,7 +80,7 @@ export abstract class Constraint {
      * Limit the command to the bot owner only.
      * @param target
      */
-    public static OwnerOnly(target: any): DecoratorProxy {
+    public static ownerOnly(target: any): DecoratorProxy {
         DecoratorUtils.ensureFunc(target);
 
         return class extends target {

@@ -3,7 +3,7 @@ import MsgBuilder from "../../builders/msg-builder";
 import Command from "../../commands/command";
 import Context from "../../commands/command-context";
 import Util from "../../core/util";
-import {Name, Description, Arguments} from "../../decorators/general";
+import {name, description, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraints";
 import {Type} from "../../commands/type";
 
@@ -12,9 +12,9 @@ interface IArgs {
     readonly silent: boolean;
 }
 
-@Name("eval")
-@Description("Evaluate code")
-@Arguments(
+@name("eval")
+@description("Evaluate code")
+@args(
     {
         name: "code",
         description: "The code to evaluate",
@@ -28,7 +28,7 @@ interface IArgs {
         required: false
     }
 )
-@Constraint.OwnerOnly
+@Constraint.ownerOnly
 export default class extends Command<IArgs> {
     public async run($: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();

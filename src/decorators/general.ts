@@ -7,7 +7,7 @@ import {DecoratorProxy} from "./component";
  * Set a fragment's meta property.
  * @param {IMeta} meta
  */
-export function Meta(meta: IMeta): DecoratorProxy {
+export function meta(meta: IMeta): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
@@ -24,7 +24,7 @@ export function Meta(meta: IMeta): DecoratorProxy {
  * Set the meta name property of a fragment.
  * @param {string} name
  */
-export function Name(name: string): DecoratorProxy {
+export function name(name: string): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
@@ -36,7 +36,7 @@ export function Name(name: string): DecoratorProxy {
  * Set the meta description property of a fragment.
  * @param {string} description
  */
-export function Description(description: string): DecoratorProxy {
+export function description(description: string): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
@@ -48,7 +48,7 @@ export function Description(description: string): DecoratorProxy {
  * Append name aliases to a command.
  * @param {string[]} aliases The list of aliases.
  */
-export function Aliases(...aliases: string[]): DecoratorProxy {
+export function aliases(...aliases: string[]): DecoratorProxy {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
@@ -62,7 +62,7 @@ export function Aliases(...aliases: string[]): DecoratorProxy {
  * Append arguments to a command.
  * @param {IArgument[]} args The list of arguments.
  */
-export function Arguments(...args: IArgument[]): DecoratorProxy {
+export function args(...args: IArgument[]): DecoratorProxy {
     return function (target: any) {
         // TODO: It may not be efficient to create a new instance just to extract default properties
         const instance: Command = DecoratorUtils.createInstance(target);

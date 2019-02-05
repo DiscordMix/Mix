@@ -1,7 +1,7 @@
 import {Command} from "../..";
 import Component from "../../decorators/component";
 
-@Component.Command("test-component-command", {
+@Component.command("test-component-command", {
     description: "A test component command"
 })
 export default class TestComponentCommand extends Command {

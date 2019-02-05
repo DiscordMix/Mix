@@ -1,6 +1,6 @@
 import {default as Command} from "../../commands/command";
 import Context from "../../commands/command-context";
-import {Name, Description, Arguments} from "../../decorators/general";
+import {name, description, args} from "../../decorators/general";
 import MsgBuilder from "../../builders/msg-builder";
 import {Constraint} from "../../decorators/constraints";
 import {Type} from "../../commands/type";
@@ -11,9 +11,9 @@ interface IArgs {
 
 const delimiter: string = ", ";
 
-@Name("usage")
-@Description("View the usage of a command")
-@Arguments(
+@name("usage")
+@description("View the usage of a command")
+@args(
     {
         name: "command",
         type: Type.string,
@@ -21,7 +21,7 @@ const delimiter: string = ", ";
         description: "The command to inspect"
     }
 )
-@Constraint.Cooldown(1)
+@Constraint.cooldown(1)
 export default class extends Command<IArgs> {
     // TODO: Finish implementing
     public async run($: Context, args: IArgs): Promise<void> {

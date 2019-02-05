@@ -1,12 +1,12 @@
-import {Unit, Test, Assert, Is, Does} from "unit";
+import {Unit, Test, Assert, Is} from "unit";
 import Command, {CommandRunner, RestrictGroup} from "../../../commands/command";
 import {Message} from "discord.js";
 import Permission from "../../../core/permission";
-import {DependsOn, Guard, Connect, AttachedLogger, attachedLogger} from "../../../decorators/other";
-import {Arguments, Description, Name, Meta} from "../../../decorators/general";
+import {dependsOn, guard, connect, attachedLoggerFn, attachedLogger} from "../../../decorators/other";
+import {args, description, name, meta} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
 import {Type} from "../../../commands/type";
-import {Deprecated} from "../../../decorators/utility";
+import {deprecated} from "../../../decorators/utility";
 import DiscordEvent from "../../../core/discord-event";
 import {On} from "../../../decorators/events";
 import {IMeta} from "../../../fragments/fragment";
@@ -16,25 +16,25 @@ const testConnection: CommandRunner = (x, args): void => {
     //
 };
 
-@Name("mycmd")
-@Description("Used for testing")
-@AttachedLogger()
-@Arguments(
+@name("mycmd")
+@description("Used for testing")
+@attachedLogger()
+@args(
     {
         name: "name",
         type: Type.string
     }
 )
-@Connect(testConnection)
-@Guard("testGuard")
-@DependsOn("service-name-1", "service-name-2")
-@Constraint.Cooldown(5)
-@Constraint.OwnerOnly
-@Constraint.IssuerPermissions(Permission.AddReactions)
-@Constraint.SelfPermissions(Permission.Admin, Permission.BanMembers)
-@Constraint.Specific([RestrictGroup.ServerModerator])
+@connect(testConnection)
+@guard("testGuard")
+@dependsOn("service-name-1", "service-name-2")
+@Constraint.cooldown(5)
+@Constraint.ownerOnly
+@Constraint.issuerPermissions(Permission.AddReactions)
+@Constraint.selfPermissions(Permission.Admin, Permission.BanMembers)
+@Constraint.specific([RestrictGroup.ServerModerator])
 export class MyCommand extends Command {
-    @Deprecated()
+    @deprecated()
     public testGuard(): boolean {
         //
 
@@ -51,7 +51,7 @@ export class MyCommand extends Command {
     }
 }
 
-@Meta({
+@meta({
     name: "meta-test",
     description: "Testing meta",
     author: "John Doe",
@@ -96,22 +96,22 @@ default class {
         Assert.that(instance.connections, Is.arrayWithLength(2));
     }
 
-    @Test("@Name: should bind command name")
+    @Test("@name: should bind command name")
     public name_bind() {
         Assert.equal(instance.meta.name, "mycmd");
     }
 
-    @Test("@Description: should bind command description")
+    @Test("@description: should bind command description")
     public description_bind() {
         Assert.equal(instance.meta.description, "Used for testing");
     }
 
-    @Test("@Arguments: should bind command arguments")
-    public arguments_bind() {
+    @Test("@args: should bind command arguments")
+    public args_bind() {
         Assert.that(instance.args, Is.arrayWithLength(1));
     }
 
-    @Test("@Meta: should bind fragment meta")
+    @Test("@meta: should bind fragment meta")
     public meta_bind() {
         Assert.that(metaInstance.meta, Is.object);
         Assert.equal(Object.keys(metaInstance.meta).length, 4);
@@ -121,53 +121,53 @@ default class {
         Assert.equal(metaInstance.meta.author, "John Doe");
     }
 
-    @Test("@OwnerOnly: should bind the specific bot owner only constraint")
+    @Test("@ownerOnly: should bind the specific bot owner only constraint")
     public ownerOnly_bind() {
         Assert.equal(instance.constraints.specific.includes(RestrictGroup.BotOwner), true);
     }
 
-    @Test("@Specific: should bind specific constraint")
+    @Test("@specific: should bind specific constraint")
     public specific_bind() {
         Assert.equal(instance.constraints.specific.includes(RestrictGroup.ServerModerator), true);
     }
 
-    @Test("@Guard: should bind command guards")
+    @Test("@guard: should bind command guards")
     public guard_bind() {
         Assert.that(instance.guards, Is.arrayWithLength(1));
         Assert.equal(instance.guards[0], instance.testGuard);
     }
 
-    @Test("@IssuerPermissions: should bind required issuer permissions")
+    @Test("@issuerPermissions: should bind required issuer permissions")
     public issuerPermissions_bind() {
         Assert.that(instance.constraints.issuerPermissions, Is.arrayWithLength(1));
         Assert.equal(instance.constraints.issuerPermissions[0], Permission.AddReactions);
     }
 
-    @Test("@SelfPermissions: should bind required self permissions")
+    @Test("@selfPermissions: should bind required self permissions")
     public selfPermissions_bind() {
         Assert.that(instance.constraints.selfPermissions, Is.arrayWithLength(2));
         Assert.equal(instance.constraints.selfPermissions[0], Permission.Admin);
         Assert.equal(instance.constraints.selfPermissions[1], Permission.BanMembers);
     }
 
-    @Test("@DependsOn: should append command dependencies")
+    @Test("@dependsOn: should append command dependencies")
     public dependsOn_bind() {
         Assert.that(instance.dependsOn, Is.arrayWithLength(2));
         Assert.equal(instance.dependsOn[0], "service-name-1");
         Assert.equal(instance.dependsOn[1], "service-name-2");
     }
 
-    @Test("@Connect: should append command connections")
+    @Test("@connect: should append command connections")
     public connect_bind() {
         Assert.equal(instance.connections[0], testConnection);
     }
 
-    @Test("@AttachedLogger: should append the attached logger connection")
+    @Test("@attachedLogger: should append the attached logger connection")
     public attachedLogger_bind() {
-        Assert.equal(instance.connections[1], attachedLogger);
+        Assert.equal(instance.connections[1], attachedLoggerFn);
     }
 
-    @Test("@Deprecated: should replace input with a proxy method")
+    @Test("@deprecated: should replace input with a proxy method")
     public deprecated_replace() {
         // TODO.
     }

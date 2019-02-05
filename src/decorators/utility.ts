@@ -12,7 +12,7 @@ export interface IBotEvent {
  * @param {string | undefined} use The suggested alternative.
  * @return {*}
  */
-export function Deprecated(use?: string): any {
+export function deprecated(use?: string): any {
     return function (target: any) {
         const functionName: string = Object.keys(target)[0];
         const className: string = target.constructor.name;

@@ -1,5 +1,5 @@
 import {exec} from "child_process";
-import {Name, Description, Aliases, Arguments} from "../../decorators/general";
+import {name, description, aliases, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraints";
 import {Type} from "../../commands/type";
 import Command from "../../commands/command";
@@ -12,10 +12,10 @@ interface IArgs {
     readonly command: string;
 }
 
-@Name("cli")
-@Description("Access the local machine's CLI")
-@Aliases("exec", "exe")
-@Arguments(
+@name("cli")
+@description("Access the local machine's CLI")
+@aliases("exec", "exe")
+@args(
     {
         name: "command",
         description: "The command to execute",
@@ -23,7 +23,7 @@ interface IArgs {
         required: true
     }
 )
-@Constraint.OwnerOnly
+@Constraint.ownerOnly
 export default class extends Command<IArgs> {
     public async run($: Context, args: IArgs): Promise<void> {
         const started: number = Date.now();

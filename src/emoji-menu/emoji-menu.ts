@@ -47,22 +47,8 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
     public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: IEmojiButton[] = []) {
         super();
 
-        /**
-         * @type {Snowflake}
-         * @readonly
-         */
         this.messageId = messageId;
-
-        /**
-         * @type {Snowflake}
-         * @readonly
-         */
         this.ownerId = ownerId;
-
-        /**
-         * @type {IEmojiButton[]}
-         * @readonly
-         */
         this.buttons = buttons;
 
         // Global click.

@@ -22,7 +22,7 @@ export function meta(meta: IMeta): DecoratorProxy {
 
 /**
  * Set the meta name property of a fragment.
- * @param {string} name
+ * @param {string} name The name of the fragment.
  */
 export function name(name: string): DecoratorProxy {
     return function (target: any) {
@@ -34,7 +34,7 @@ export function name(name: string): DecoratorProxy {
 
 /**
  * Set the meta description property of a fragment.
- * @param {string} description
+ * @param {string} description The description of the fragment.
  */
 export function description(description: string): DecoratorProxy {
     return function (target: any) {
@@ -46,7 +46,7 @@ export function description(description: string): DecoratorProxy {
 
 /**
  * Append name aliases to a command.
- * @param {string[]} aliases The list of aliases.
+ * @param {string[]} aliases The list of aliases that represent the command.
  */
 export function aliases(...aliases: string[]): DecoratorProxy {
     return function (target: any) {
@@ -60,7 +60,7 @@ export function aliases(...aliases: string[]): DecoratorProxy {
 
 /**
  * Append arguments to a command.
- * @param {IArgument[]} args The list of arguments.
+ * @param {IArgument[]} args The list of arguments accepted by the command.
  */
 export function args(...args: IArgument[]): DecoratorProxy {
     return function (target: any) {

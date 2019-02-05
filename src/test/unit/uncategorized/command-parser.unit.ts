@@ -71,7 +71,7 @@ default class {
         Assert.equal(result[2], "100");
     }
 
-    @Test("getArguments(): should parse command strings with multi-quote usage")
+    @Test("getArguments(): should parse command strings with backquote usage")
     public getArguments_parseWithBackQuotes() {
         const result: RawArguments = CommandParser.getArguments("[prefix] \`sir john doe\` apples 100", [
             {

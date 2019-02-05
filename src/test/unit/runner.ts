@@ -22,6 +22,7 @@ import "./uncategorized/services.unit";
 import "./uncategorized/time-machine.unit";
 import "./uncategorized/time-convert.unit";
 import "./uncategorized/flag-parser.unit";
+import "./uncategorized/command-parser.unit";
 import "./bot/bot-dispose.unit";
 
 // Run tests.

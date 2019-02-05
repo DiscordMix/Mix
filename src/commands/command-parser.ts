@@ -88,6 +88,10 @@ export default abstract class CommandParser {
 
     // TODO: CRITICAL: %say -s=true -> would receive arguments as [ '-s=true', 'true' ].
     /**
+     * Retrieve the arguments from a supplied command string and schema.
+     * Omits the first argument (the prefix) from the result.
+     * Does not perform any conversions on the found argument values,
+     * except for default 'true' boolean value which represents empty flags (flags without values).
      * @param {string} commandString
      * @return {string[]}
      */
@@ -111,15 +115,16 @@ export default abstract class CommandParser {
             match = Pattern.args.exec(commandString);
         }
 
-        const switches: ICommandFlag[] = FlagParser.getSwitches(commandString);
+        // Assemble and apply flags.
+        const flags: ICommandFlag[] = FlagParser.getFlags(commandString);
 
-        for (const sw of switches) {
-            // TODO: Was just left here without being used..
-            const switchString: string = `${sw.key}${sw.value ? "=" : ""}${sw.value || ""}`;
+        for (const fl of flags) {
+            // TODO: Was just left here without being used.
+            const flagString: string = `${fl.key}${fl.value ? "=" : ""}${fl.value || ""}`;
 
             for (let i: number = 0; i < schema.length; i++) {
-                if (!sw.short && sw.key === schema[i].name) {
-                    result[i] = sw.value || true;
+                if (!fl.short && fl.key === schema[i].name) {
+                    result[i] = fl.value || true;
 
                     if (result[i].toString().indexOf(" ") !== -1) {
                         const spaces: number = result[i].toString().split(" ").length - 1;
@@ -129,12 +134,12 @@ export default abstract class CommandParser {
                         }
                     }
 
-                    // result.splice(result.indexOf(switchString), 1);
+                    // result.splice(result.indexOf(flagString), 1);
 
                     break;
                 }
-                else if (schema[i].switchShortName && sw.short && sw.key === schema[i].switchShortName) {
-                    result[i] = sw.value || true;
+                else if (schema[i].flagShortName && fl.short && fl.key === schema[i].flagShortName) {
+                    result[i] = fl.value || true;
 
                     if (result[i].toString().indexOf(" ") !== -1) {
                         const spaces: number = result[i].toString().split(" ").length - 1;
@@ -144,7 +149,7 @@ export default abstract class CommandParser {
                         }
                     }
 
-                    // result.splice(result.indexOf(switchString), 1);
+                    // result.splice(result.indexOf(flagString), 1);
 
                     break;
                 }

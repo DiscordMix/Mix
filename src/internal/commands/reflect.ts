@@ -23,7 +23,7 @@ enum ReflectDataType {
         name: "type",
         description: "The data to inspect",
         required: true,
-        switchShortName: "t",
+        flagShortName: "t",
         type: Type.string
     }
 )

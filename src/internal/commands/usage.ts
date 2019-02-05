@@ -77,7 +77,7 @@ export default class extends Command<IArgs> {
 
             for (const arg of targetCommand.args) {
                 const def: string = arg.defaultValue ? ` (default: '${arg.defaultValue}')` : "";
-                const flag: string = arg.switchShortName ? ` {-${arg.switchShortName}}` : "";
+                const flag: string = arg.flagShortName ? ` {-${arg.flagShortName}}` : "";
 
                 // TODO: Missing argument's type
                 usage.add(`${arg.name}${arg.required ? "!" : "?"}${flag}${def} : ${arg.description}`);

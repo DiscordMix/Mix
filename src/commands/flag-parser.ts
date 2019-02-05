@@ -7,7 +7,7 @@ export interface ICommandFlag {
 }
 
 export default abstract class FlagParser {
-    public static getSwitches(commandString: string): ICommandFlag[] {
+    public static getFlags(commandString: string): ICommandFlag[] {
         const result: ICommandFlag[] = [];
 
         let match: RegExpExecArray | null;

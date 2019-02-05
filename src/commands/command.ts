@@ -43,7 +43,7 @@ export interface IArgument {
     readonly required?: boolean;
 
     // TODO: CRTICAL: X2 : Must verify that the same short switch isn't already being used by another argument of the same command.
-    readonly switchShortName?: string;
+    readonly flagShortName?: string;
 }
 
 export type SpecificConstraints = Array<string | RestrictGroup>;

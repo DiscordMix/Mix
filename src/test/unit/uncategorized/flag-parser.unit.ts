@@ -2,13 +2,13 @@ import {Unit, Test, Assert, Is} from "unit";
 import FlagParser from "../../../commands/flag-parser";
 import {TestSubjects} from "../test-bot";
 
-const result1 = FlagParser.getSwitches(TestSubjects.flags.short);
-const result2 = FlagParser.getSwitches(TestSubjects.flags.long);
-const result3 = FlagParser.getSwitches(TestSubjects.flags.longValue);
-const result4 = FlagParser.getSwitches(TestSubjects.flags.longQuotedValue);
-const result5 = FlagParser.getSwitches(TestSubjects.flags.multiple);
-const result6 = FlagParser.getSwitches(TestSubjects.flags.multipleValues);
-const result7 = FlagParser.getSwitches(TestSubjects.flags.multipleQuotedValues);
+const result1 = FlagParser.getFlags(TestSubjects.flags.short);
+const result2 = FlagParser.getFlags(TestSubjects.flags.long);
+const result3 = FlagParser.getFlags(TestSubjects.flags.longValue);
+const result4 = FlagParser.getFlags(TestSubjects.flags.longQuotedValue);
+const result5 = FlagParser.getFlags(TestSubjects.flags.multiple);
+const result6 = FlagParser.getFlags(TestSubjects.flags.multipleValues);
+const result7 = FlagParser.getFlags(TestSubjects.flags.multipleQuotedValues);
 
 @Unit("Flag Parser")
 default class {

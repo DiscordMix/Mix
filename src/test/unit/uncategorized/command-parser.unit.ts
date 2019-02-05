@@ -260,7 +260,14 @@ default class {
     @Feed(false)
     @Feed(true)
     public resolveArguments_throwOnInvalidParams(opts: any) {
-        Assert.throws(async () => await CommandParser.resolveArguments(opts));
+        // TODO: Publish Unit and use .throwsAsync()
+        let resultError: Error | null = null;
+
+        CommandParser.resolveArguments(opts).catch((error: Error) => {
+            resultError = error;
+        })
+
+        Assert.that(resultError, Is.null);
     }
 
     // TODO: More tests required.

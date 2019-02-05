@@ -25,7 +25,7 @@ export interface ICustomArgType {
     readonly check: TypeChecker | RegExp;
 }
 
-export type RawArguments = Array<string | number | boolean>;
+export type RawArguments = string[];
 
 export type DefiniteArgument = string | number | boolean;
 

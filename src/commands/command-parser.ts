@@ -152,12 +152,32 @@ export default abstract class CommandParser {
     }
 
     /**
-     * Resolve the command arguments' values
-     * @param {IResolveArgumentsOptions} options
-     * @return {*} The resolved arguments
+     * Resolve the command arguments' values.
+     * @param {IResolveArgumentsOptions} opts
+     * @return {Promise<*>} An object containing the resolved arguments.
      */
-    public static resolveArguments(options: IResolveArgumentsOptions): any {
-        throw Log.error("resolveArguments() needs to be reworked");
+    public static async resolveArguments(opts: IResolveArgumentsOptions): Promise<any> {
+
+        // TODO: Pending re-write. (Re-write has started but not completed, entire function).
+
+        const args: any = {};
+
+        let argPosCounter: number = 0;
+
+        for (const arg of opts.schema) {
+            // Invoke the corresponding resolver and set the returned value.
+            if (opts.resolvers.has(arg.type)) {
+                args[arg.name] = await opts.resolvers.get(arg.type)!(opts.arguments[argPosCounter], opts.message);
+            }
+            // There was no resolver, copy the existing value.
+            else {
+                args[arg.name] = opts.arguments[argPosCounter];
+            }
+
+            argPosCounter++;
+        }
+
+        return args;
     }
 
     /**

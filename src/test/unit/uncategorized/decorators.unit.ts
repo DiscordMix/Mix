@@ -2,7 +2,7 @@ import {Unit, Test, Assert, Is, Does} from "unit";
 import Command, {CommandRunner, RestrictGroup} from "../../../commands/command";
 import {Message} from "discord.js";
 import Permission from "../../../core/permission";
-import {DependsOn, Guard, Connect, AttachedLogger} from "../../../decorators/other";
+import {DependsOn, Guard, Connect, AttachedLogger, attachedLogger} from "../../../decorators/other";
 import {Arguments, Description, Name, Meta} from "../../../decorators/general";
 import {Constraint} from "../../../decorators/constraints";
 import {Type} from "../../../commands/type";
@@ -119,5 +119,56 @@ default class {
         Assert.equal(metaInstance.meta.description, "Testing meta");
         Assert.equal(metaInstance.meta.version, "1.0.0");
         Assert.equal(metaInstance.meta.author, "John Doe");
+    }
+
+    @Test("@OwnerOnly: should bind the specific bot owner only constraint")
+    public ownerOnly_bind() {
+        Assert.equal(instance.constraints.specific.includes(RestrictGroup.BotOwner), true);
+    }
+
+    @Test("@Specific: should bind specific constraint")
+    public specific_bind() {
+        Assert.equal(instance.constraints.specific.includes(RestrictGroup.ServerModerator), true);
+    }
+
+    @Test("@Guard: should bind command guards")
+    public guard_bind() {
+        Assert.that(instance.guards, Is.arrayWithLength(1));
+        Assert.equal(instance.guards[0], instance.testGuard);
+    }
+
+    @Test("@IssuerPermissions: should bind required issuer permissions")
+    public issuerPermissions_bind() {
+        Assert.that(instance.constraints.issuerPermissions, Is.arrayWithLength(1));
+        Assert.equal(instance.constraints.issuerPermissions[0], Permission.AddReactions);
+    }
+
+    @Test("@SelfPermissions: should bind required self permissions")
+    public selfPermissions_bind() {
+        Assert.that(instance.constraints.selfPermissions, Is.arrayWithLength(2));
+        Assert.equal(instance.constraints.selfPermissions[0], Permission.Admin);
+        Assert.equal(instance.constraints.selfPermissions[1], Permission.BanMembers);
+    }
+
+    @Test("@DependsOn: should append command dependencies")
+    public dependsOn_bind() {
+        Assert.that(instance.dependsOn, Is.arrayWithLength(2));
+        Assert.equal(instance.dependsOn[0], "service-name-1");
+        Assert.equal(instance.dependsOn[1], "service-name-2");
+    }
+
+    @Test("@Connect: should append command connections")
+    public connect_bind() {
+        Assert.equal(instance.connections[0], testConnection);
+    }
+
+    @Test("@AttachedLogger: should append the attached logger connection")
+    public attachedLogger_bind() {
+        Assert.equal(instance.connections[1], attachedLogger);
+    }
+
+    @Test("@Deprecated: should replace input with a proxy method")
+    public deprecated_replace() {
+        // TODO.
     }
 }

@@ -73,6 +73,24 @@ export const DefaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map(
         }
 
         return Util.resolveId(input);
+    }],
+    [Type.integer, (input: InputArgument): number | null => {
+        if (typeof input !== "string") {
+            return null;
+        }
+
+        const result: number = parseInt(input);
+
+        return isNaN(result) ? null : result;
+    }],
+    [Type.decimal, (input: InputArgument): number | null => {
+        if (typeof input !== "string") {
+            return null;
+        }
+
+        const result: number = parseFloat(input);
+
+        return isNaN(result) ? null : result;
     }]
 ]);
 

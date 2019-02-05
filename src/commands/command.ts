@@ -28,7 +28,7 @@ export interface ICustomArgType {
 /**
  * An array of input arguments.
  */
-export type RawArguments = Array<InputArgument>;
+export type RawArguments = string[];
 
 /**
  * Represents a simple argument with an unresolved value.

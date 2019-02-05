@@ -10,7 +10,6 @@ import "./uncategorized/log-serializer.unit";
 import "./uncategorized/tslint-serializer.unit";
 import "./colors/rgb.unit";
 import "./colors/rgba.unit";
-import "./uncategorized/messages.unit";
 import "./bot/bot.unit";
 import "./uncategorized/tasks.unit";
 import "./store/store.unit";

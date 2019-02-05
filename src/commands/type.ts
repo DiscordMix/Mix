@@ -47,6 +47,11 @@ export interface ITypeDef {
     readonly positiveInteger: ArgumentType;
 
     /**
+     * Represents a decimal number.
+     */
+    readonly decimal: ArgumentType;
+
+    /**
      * Represents a boolean value. Input will be parsed into a boolean.
      */
     readonly boolean: ArgumentType;
@@ -119,9 +124,7 @@ export const Type: ITypeDef = {
     },
 
     integer: (input: string): boolean => {
-        const num: number = parseInt(input);
-
-        return !isNaN(num);
+        return !isNaN(parseInt(input));
     },
 
     unsignedInteger: (input: string): boolean => {
@@ -140,6 +143,10 @@ export const Type: ITypeDef = {
         const num: number = parseInt(input);
 
         return !isNaN(num) && num >= 1;
+    },
+
+    decimal: (input: string): boolean => {
+        return !isNaN(parseFloat(input));
     },
 
     boolean: (input: string): boolean => {

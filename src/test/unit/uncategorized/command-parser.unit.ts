@@ -2,6 +2,7 @@ import {Unit, Test, Assert, Feed, Is, JsType, Does} from "unit";
 import CommandParser from "../../../commands/command-parser";
 import {Type} from "../../../commands/type";
 import {RawArguments, InputArgument} from "../../../commands/command";
+import {DefaultArgResolvers} from "../../../core/constants";
 
 @Unit("Command Parser")
 default class {
@@ -121,7 +122,7 @@ default class {
             },
             {
                 name: "favoriteNumber",
-                type: Type.integer
+                type: Type.string
             }
         ]);
 
@@ -149,12 +150,12 @@ default class {
         ]);
 
         Assert.that(result,
-            Is.arrayOf(JsType.Boolean),
+            Is.arrayOf(JsType.String),
             Does.haveLength(2)
         );
 
-        Assert.equal(result[0], true);
-        Assert.equal(result[1], true);
+        Assert.equal(result[0], "true");
+        Assert.equal(result[1], "true");
     }
 
     @Test("getArguments(): should parse command strings' long flags with explicit values")
@@ -175,13 +176,13 @@ default class {
         ]);
 
         Assert.that(result,
-            Is.arrayOf(JsType.Boolean),
+            Is.arrayOf(JsType.String),
             Does.haveLength(3)
         );
 
-        Assert.equal(result[0], false);
-        Assert.equal(result[1], true);
-        Assert.equal(result[2], false);
+        Assert.equal(result[0], "false");
+        Assert.equal(result[1], "true");
+        Assert.equal(result[2], "false");
     }
 
     @Test("getArguments(): should parse command strings with empty short flags")
@@ -200,12 +201,12 @@ default class {
         ]);
 
         Assert.that(result,
-            Is.arrayOf(JsType.Boolean),
+            Is.arrayOf(JsType.String),
             Does.haveLength(2)
         );
 
-        Assert.equal(result[0], true);
-        Assert.equal(result[1], true);
+        Assert.equal(result[0], "true");
+        Assert.equal(result[1], "true");
     }
 
     @Test("getArguments(): should parse command strings' short flags with explicit values")
@@ -229,13 +230,13 @@ default class {
         ]);
 
         Assert.that(result,
-            Is.arrayOf(JsType.Boolean),
+            Is.arrayOf(JsType.String),
             Does.haveLength(3)
         );
 
-        Assert.equal(result[0], false);
-        Assert.equal(result[1], true);
-        Assert.equal(result[2], false);
+        Assert.equal(result[0], "false");
+        Assert.equal(result[1], "true");
+        Assert.equal(result[2], "false");
     }
 
     @Test("getArguments(): should throw when provided invalid arguments")
@@ -265,9 +266,149 @@ default class {
 
         CommandParser.resolveArguments(opts).catch((error: Error) => {
             resultError = error;
-        })
+        });
 
         Assert.that(resultError, Is.null);
+    }
+
+    @Test("resolveArguments(): should not resolve strings")
+    public async resolveArguments_notResolveStrings() {
+        const result: any = await CommandParser.resolveArguments({
+            arguments: ["john doe", "anonymous"],
+            message: null as any,
+            resolvers: DefaultArgResolvers,
+
+            schema: [
+                {
+                    name: "name",
+                    type: Type.string
+                },
+                {
+                    name: "aka",
+                    type: Type.string
+                }
+            ]
+        });
+
+        Assert.that(result,
+            Is.object,
+            Does.haveProperty("name"),
+            Does.haveProperty("aka")
+        );
+
+        Assert.equal(result.name, "john doe");
+        Assert.equal(result.aka, "anonymous");
+    }
+
+    @Test("resolveArguments(): should resolve integer values")
+    public async resolveArguments_resolveIntegers() {
+        const result: any = await CommandParser.resolveArguments({
+            arguments: ["100", "-13"],
+            message: null as any,
+            resolvers: DefaultArgResolvers,
+
+            schema: [
+                {
+                    name: "favoriteNumber",
+                    type: Type.integer
+                },
+                {
+                    name: "leastFavoriteNumber",
+                    type: Type.integer
+                }
+            ]
+        });
+
+        Assert.that(result,
+            Is.object,
+            Does.haveProperty("favoriteNumber"),
+            Does.haveProperty("leastFavoriteNumber")
+        );
+
+        Assert.equal(result.favoriteNumber, 100);
+        Assert.equal(result.leastFavoriteNumber, -13);
+    }
+
+    @Test("resolveArguments(): should resolve decimal values")
+    public async resolveArguments_resolveDecimals() {
+        const result: any = await CommandParser.resolveArguments({
+            arguments: ["1.1", "1.0", "3.14", "-6.7890"],
+            message: null as any,
+            resolvers: DefaultArgResolvers,
+
+            schema: [
+                {
+                    name: "first",
+                    type: Type.decimal
+                },
+                {
+                    name: "second",
+                    type: Type.decimal
+                },
+                {
+                    name: "third",
+                    type: Type.decimal
+                },
+                {
+                    name: "forth",
+                    type: Type.decimal
+                }
+            ]
+        });
+
+        Assert.that(result,
+            Is.object,
+            Does.haveProperty("first"),
+            Does.haveProperty("second"),
+            Does.haveProperty("third"),
+            Does.haveProperty("forth")
+        );
+
+        Assert.equal(result.first, 1.1);
+        Assert.equal(result.second, 1.0);
+        Assert.equal(result.third, 3.14);
+        Assert.equal(result.forth, -6.7890);
+    }
+
+    @Test("resolveArguments(): should resolve boolean values")
+    public async resolveArguments_resolveBooleans() {
+        const result: any = await CommandParser.resolveArguments({
+            arguments: ["false", "true", "false", "true"],
+            message: null as any,
+            resolvers: DefaultArgResolvers,
+
+            schema: [
+                {
+                    name: "cool",
+                    type: Type.boolean
+                },
+                {
+                    name: "hungry",
+                    type: Type.boolean
+                },
+                {
+                    name: "full",
+                    type: Type.boolean
+                },
+                {
+                    name: "funny",
+                    type: Type.boolean
+                }
+            ]
+        });
+
+        Assert.that(result,
+            Is.object,
+            Does.haveProperty("cool"),
+            Does.haveProperty("hungry"),
+            Does.haveProperty("full"),
+            Does.haveProperty("funny")
+        );
+
+        Assert.equal(result.cool, false);
+        Assert.equal(result.hungry, true);
+        Assert.equal(result.full, false);
+        Assert.equal(result.funny, true);
     }
 
     // TODO: More tests required.

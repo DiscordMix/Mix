@@ -1,7 +1,7 @@
-import {Unit, Test, Assert, Feed} from "unit";
+import {Unit, Test, Assert, Feed, Is, JsType, Does} from "unit";
 import CommandParser from "../../../commands/command-parser";
 import {Type} from "../../../commands/type";
-import {RawArguments} from "../../../commands/command";
+import {RawArguments, InputArgument} from "../../../commands/command";
 
 @Unit("Command Parser")
 default class {
@@ -110,9 +110,63 @@ default class {
             }
         ]);
 
+        Assert.that(result,
+            Is.arrayOf(JsType.String),
+            Does.haveLength(3)
+        );
+
         Assert.equal(result[0], "sir john doe");
         Assert.equal(result[1], "delicious apples");
         Assert.equal(result[2], "more than 100");
+    }
+
+    @Test("getArguments(): should parse command strings with empty flags")
+    public getArguments_flags() {
+        const result: InputArgument[] = CommandParser.getArguments("[prefix] --verbose --inspect", [
+            {
+                name: "verbose",
+                type: Type.boolean
+            },
+            {
+                name: "inspect",
+                type: Type.boolean
+            }
+        ]);
+
+        Assert.that(result,
+            Is.arrayOf(JsType.Boolean),
+            Does.haveLength(2)
+        );
+
+        Assert.equal(result[0], true);
+        Assert.equal(result[1], true);
+    }
+
+    @Test("getArguments(): should parse command strings with flags with explicit values")
+    public getArguments_flagsExplicitValues() {
+        const result: InputArgument[] = CommandParser.getArguments("[prefix] --verbose=false --inspect=true --continue=false", [
+            {
+                name: "verbose",
+                type: Type.boolean
+            },
+            {
+                name: "inspect",
+                type: Type.boolean
+            },
+            {
+                name: "continue",
+                type: Type.boolean
+            }
+        ]);
+
+        Assert.that(result,
+            Is.arrayOf(JsType.Boolean),
+            Does.haveLength(3)
+        );
+
+        Assert.equal(result[0], false);
+        Assert.equal(result[1], true);
+        Assert.equal(result[2], false);
     }
 
     @Test("getArguments(): should throw when provided invalid arguments")

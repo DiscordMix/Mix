@@ -122,7 +122,7 @@ export default abstract class CommandParser {
             match = Pattern.args.exec(commandString);
         }
 
-        // Assemble and apply flags.
+        // Assemble and apply flags to the result.
         const flags: ICommandFlag[] = FlagParser.getFlags(commandString);
 
         for (const fl of flags) {
@@ -132,6 +132,14 @@ export default abstract class CommandParser {
             for (let i: number = 0; i < schema.length; i++) {
                 if (!fl.short && fl.key === schema[i].name) {
                     result[i] = fl.value || true;
+
+                    // Override the value with explicit boolean if it is 'true' or 'false'.
+                    if (fl.value === "true") {
+                        result[i] = true;
+                    }
+                    else if (fl.value === "false") {
+                        result[i] = false;
+                    }
 
                     if (result[i].toString().indexOf(" ") !== -1) {
                         const spaces: number = result[i].toString().split(" ").length - 1;
@@ -147,6 +155,14 @@ export default abstract class CommandParser {
                 }
                 else if (schema[i].flagShortName && fl.short && fl.key === schema[i].flagShortName) {
                     result[i] = fl.value || true;
+
+                    // Override the value with explicit boolean if it is 'true' or 'false'.
+                    if (fl.value === "true") {
+                        result[i] = true;
+                    }
+                    else if (fl.value === "false") {
+                        result[i] = false;
+                    }
 
                     if (result[i].toString().indexOf(" ") !== -1) {
                         const spaces: number = result[i].toString().split(" ").length - 1;

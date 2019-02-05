@@ -10,7 +10,7 @@ default class {
     @Feed(10, 10, 100)
     @Feed(0, 0, 100)
     @Feed(1, 0, 0)
-    public percentOf_determineThePercentage(amount: number, max: number, expected: number): void {
+    public percentOf_determineThePercentage(amount: number, max: number, expected: number) {
         Assert.equal(expected, Util.percentOf(amount, max));
     }
 
@@ -18,7 +18,7 @@ default class {
     @Feed(-1, 1)
     @Feed(-1, -1)
     @Feed(1, -1)
-    public percentOf_throwsOnInvalidParams(amount: number, max: number): void {
+    public percentOf_throwsOnInvalidParams(amount: number, max: number) {
         Assert.throws(() => Util.percentOf(amount, max));
     }
 
@@ -35,7 +35,7 @@ default class {
     // TODO: This is wrong?
     @Test("escapeText(): should determine if text is escaped")
     @Feed("john doe", "john doe")
-    public escapeText_determineIfEscaped(input: string, expected: string): void {
+    public escapeText_determineIfEscaped(input: string, expected: string) {
         Assert.equal(input, expected);
     }
 

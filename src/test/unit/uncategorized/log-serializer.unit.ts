@@ -22,7 +22,7 @@ default class {
             extra: "[Doe's world]"
         }
     }, "{{Tomorrow}} [It's a.[Doe's world]] {[Hello world]}")
-    public serialize(msg: ILogMsg, expected: string): void {
+    public serialize(msg: ILogMsg, expected: string) {
         const serializer: LogSerializer = new LogSerializer();
 
         Assert.equal(serializer.serialize(msg), expected);
@@ -30,7 +30,7 @@ default class {
 
     @Test("should should deserialize serialized log messages")
     @Feed("{Today} [Some.where] Hello world")
-    public deserialize(msg: string): void {
+    public deserialize(msg: string) {
         const serializer: LogSerializer = new LogSerializer();
         const result: ILogMsg = serializer.deserialize(msg) as ILogMsg;
 
@@ -49,7 +49,7 @@ default class {
 
     @Test("should deserialize serialized log messages with one source")
     @Feed("{Today} [Some] Hello world")
-    public deserializeOneSource(msg: string): void {
+    public deserializeOneSource(msg: string) {
         const serializer: LogSerializer = new LogSerializer();
         const result: ILogMsg = serializer.deserialize(msg) as ILogMsg;
 

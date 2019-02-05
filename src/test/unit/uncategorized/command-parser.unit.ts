@@ -249,5 +249,19 @@ default class {
         Assert.throws(() => CommandParser.getArguments(comamndString, schema));
     }
 
+    @Test("resolveArguments(): should throw when provided invalid arguments")
+    @Feed(undefined)
+    @Feed(null)
+    @Feed([])
+    @Feed("")
+    @Feed("test")
+    @Feed(1)
+    @Feed(0)
+    @Feed(false)
+    @Feed(true)
+    public resolveArguments_throwOnInvalidParams(opts: any) {
+        Assert.throws(async () => await CommandParser.resolveArguments(opts));
+    }
+
     // TODO: More tests required.
 }

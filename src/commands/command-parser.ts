@@ -188,6 +188,9 @@ export default abstract class CommandParser {
      * @return {Promise<*>} An object containing the resolved arguments.
      */
     public static async resolveArguments(opts: IResolveArgumentsOptions): Promise<any> {
+        if (typeof opts !== "object" || opts === null || Array.isArray(opts)) {
+            throw Log.error("Expected options parameter to be an object");
+        }
 
         // TODO: Pending re-write. (Re-write has started but not completed, entire function).
 

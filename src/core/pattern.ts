@@ -15,7 +15,7 @@ export default abstract class Pattern {
     /**
      * Matches Discord bot tokens.
      */
-    public static token: RegExp = /ND[a-z0-9]{22}\.D[a-z]{2}[a-z0-9-]{3}\.[-a-z0-9_]{27}/gmi;
+    public static token: RegExp = /[a-z0-9]{24}\.D[a-z]{2}[a-z0-9-]{3}\.[-a-z0-9_]{27}/gmi;
 
     /**
      * Matches Discord user mention strings.

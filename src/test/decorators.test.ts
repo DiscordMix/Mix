@@ -65,60 +65,6 @@ const instance: MyCommand = new (MyCommand as any)(null as any);
 const metaInstance: MetaTest = new MetaTest();
 
 describe("Decorators", () => {
-    it("instance should be an object", () => {
-        expect(typeof instance === "object").to.be.a("boolean").and.to.equal(true);
-        expect(instance instanceof MyCommand).to.be.a("boolean").and.to.equal(true);
-    });
-
-    it("should register commands with helper decorators", () => {
-        expect(testBot.registry.contains("test-decorator-command")).to.be.a("boolean").and.to.equal(true);
-    });
-
-    it("should have a meta property", () => {
-        expect(instance.meta).to.be.an("object");
-        expect(Object.keys(instance.meta).length).to.be.a("number").and.to.equal(2);
-    });
-
-    it("should have a constraints property", () => {
-        expect(instance.constraints).to.be.an("object");
-        expect(instance.constraints.specific).to.be.an("array");
-    });
-
-    it("should have a connections property", () => {
-        expect(instance.connections).to.be.a("array").and.to.have.length(2);
-    });
-
-    describe("General", () => {
-        describe("Name", () => {
-            it("should bind command name", () => {
-                expect(instance.meta.name).to.be.a("string").and.to.equal("mycmd");
-            });
-        });
-
-        describe("Description", () => {
-            it("should bind command description", () => {
-                expect(instance.meta.description).to.be.a("string").and.to.equal("Used for testing");
-            });
-        });
-
-        describe("Arguments", () => {
-            it("should bind command arguments", () => {
-                expect(instance.args).to.be.a("array").and.to.have.length(1);
-            });
-        });
-
-        describe("Meta", () => {
-            it("should bind fragment meta", () => {
-                expect(metaInstance.meta).to.be.an("object");
-                expect(Object.keys(metaInstance.meta).length).to.be.a("number").and.to.equal(4);
-                expect(metaInstance.meta.name).to.be.a("string").and.to.equal("meta-test");
-                expect(metaInstance.meta.description).to.be.a("string").and.to.equal("Testing meta");
-                expect(metaInstance.meta.version).to.be.a("string").and.to.equal("1.0.0");
-                expect(metaInstance.meta.author).to.be.a("string").and.to.equal("John Doe");
-            });
-        });
-    });
-
     describe("Commands -> Constraints", () => {
         describe("OwnerOnly", () => {
             it("should bind the specific bot owner only constraint", () => {

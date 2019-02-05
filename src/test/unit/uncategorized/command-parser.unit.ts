@@ -44,6 +44,11 @@ default class {
             }
         ]);
 
+        Assert.that(result,
+            Is.arrayOf(JsType.String),
+            Does.haveLength(3)
+        );
+
         Assert.equal(result[0], "sir john doe");
         Assert.equal(result[1], "apples");
         Assert.equal(result[2], "100");
@@ -66,6 +71,11 @@ default class {
             }
         ]);
 
+        Assert.that(result,
+            Is.arrayOf(JsType.String),
+            Does.haveLength(3)
+        );
+
         Assert.equal(result[0], "sir john doe");
         Assert.equal(result[1], "apples");
         Assert.equal(result[2], "100");
@@ -87,6 +97,11 @@ default class {
                 type: Type.integer
             }
         ]);
+
+        Assert.that(result,
+            Is.arrayOf(JsType.String),
+            Does.haveLength(3)
+        );
 
         Assert.equal(result[0], "sir john doe");
         Assert.equal(result[1], "apples");

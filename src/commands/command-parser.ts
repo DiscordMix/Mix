@@ -92,6 +92,9 @@ export default abstract class CommandParser {
      * @return {string[]}
      */
     public static getArguments(commandString: string, schema: IArgument[]): RawArguments {
+
+        // TODO: Rewrite/update this function with the new Type system.
+
         const result: RawArguments = [];
         const argCleanExpression: RegExp = /(```|`|'|"|)(.+)\1/;
 

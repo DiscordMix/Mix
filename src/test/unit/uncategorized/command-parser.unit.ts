@@ -135,8 +135,8 @@ default class {
         Assert.equal(result[2], "more than 100");
     }
 
-    @Test("getArguments(): should parse command strings with empty flags")
-    public getArguments_flags() {
+    @Test("getArguments(): should parse command strings with empty long flags")
+    public getArguments_longEmptyFlags() {
         const result: InputArgument[] = CommandParser.getArguments("[prefix] --verbose --inspect", [
             {
                 name: "verbose",
@@ -157,8 +157,8 @@ default class {
         Assert.equal(result[1], true);
     }
 
-    @Test("getArguments(): should parse command strings with flags with explicit values")
-    public getArguments_flagsExplicitValues() {
+    @Test("getArguments(): should parse command strings' long flags with explicit values")
+    public getArguments_longFlagsExplicitValues() {
         const result: InputArgument[] = CommandParser.getArguments("[prefix] --verbose=false --inspect=true --continue=false", [
             {
                 name: "verbose",
@@ -171,6 +171,60 @@ default class {
             {
                 name: "continue",
                 type: Type.boolean
+            }
+        ]);
+
+        Assert.that(result,
+            Is.arrayOf(JsType.Boolean),
+            Does.haveLength(3)
+        );
+
+        Assert.equal(result[0], false);
+        Assert.equal(result[1], true);
+        Assert.equal(result[2], false);
+    }
+
+    @Test("getArguments(): should parse command strings with empty short flags")
+    public getArguments_shortEmptyFlags() {
+        const result: InputArgument[] = CommandParser.getArguments("[prefix] -v -i", [
+            {
+                name: "verbose",
+                type: Type.boolean,
+                flagShortName: "v"
+            },
+            {
+                name: "inspect",
+                type: Type.boolean,
+                flagShortName: "i"
+            }
+        ]);
+
+        Assert.that(result,
+            Is.arrayOf(JsType.Boolean),
+            Does.haveLength(2)
+        );
+
+        Assert.equal(result[0], true);
+        Assert.equal(result[1], true);
+    }
+
+    @Test("getArguments(): should parse command strings' short flags with explicit values")
+    public getArguments_shortFlagsExplicitValues() {
+        const result: InputArgument[] = CommandParser.getArguments("[prefix] -v=false -i=true -c=false", [
+            {
+                name: "verbose",
+                type: Type.boolean,
+                flagShortName: "v"
+            },
+            {
+                name: "inspect",
+                type: Type.boolean,
+                flagShortName: "i"
+            },
+            {
+                name: "continue",
+                type: Type.boolean,
+                flagShortName: "c"
             }
         ]);
 

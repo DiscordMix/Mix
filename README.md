@@ -53,7 +53,7 @@ To incorporate Mix into an existing project, simply issue the following command:
 $ npm install --save d.mix
 ```
 
-Then you may proceed to import/require Mix's classes:
+This will add Mix to your project's dependencies. You may now proceed to import/require Mix's classes and utilities:
 
 ```ts
 import {Bot, Util, Store} from "d.mix";
@@ -74,7 +74,7 @@ Make sure that you have installed the project dependencies (`npm install` or `ya
     * Dependency management (commands, services, etc.)
     * Fully modular (through interfaces)
         * Implement custom command handling
-        * Basically everything is modular
+        * *Virtually everything is modular*
     * Support for Hot-reloading any module(s) and/or fragment(s)
     * Automatic advanced optimization for large bots
     * Tested codebase

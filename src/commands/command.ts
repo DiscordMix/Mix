@@ -25,15 +25,21 @@ export interface ICustomArgType {
     readonly check: TypeChecker | RegExp;
 }
 
-export type RawArguments = string[];
+/**
+ * An array of input arguments.
+ */
+export type RawArguments = Array<InputArgument>;
 
-export type DefiniteArgument = string | number | boolean;
+/**
+ * Represents a simple argument with an unresolved value.
+ */
+export type InputArgument = string | number | boolean;
 
 export interface IArgument {
     readonly name: string;
     readonly type: ArgumentType;
     readonly description?: string;
-    readonly defaultValue?: DefiniteArgument | DefaultValueResolver;
+    readonly defaultValue?: InputArgument | DefaultValueResolver;
     readonly required?: boolean;
 
     // TODO: CRTICAL: X2 : Must verify that the same short switch isn't already being used by another argument of the same command.

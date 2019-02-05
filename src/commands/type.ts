@@ -2,11 +2,12 @@ import Util from "../core/util";
 import Pattern from "../core/pattern";
 import {Message} from "discord.js";
 import {PromiseOr} from "@atlas/xlib";
+import {InputArgument} from "./command";
 
 /**
  * Represents an argument resolver. Returns 'null' if processing failed.
  */
-export type ArgumentResolver<T = any> = (input: string, message: Message) => PromiseOr<T | null>;
+export type ArgumentResolver<T = any> = (input: InputArgument, message: Message) => PromiseOr<T | null>;
 
 export type ArgumentType = TypeChecker | TypeCheckerGen;
 

@@ -86,7 +86,7 @@ export default abstract class CommandParser {
         return null;
     }
 
-    // TODO: CRITICAL: %say -s=true -> would receive arguments as [ '-s=true', 'true' ]
+    // TODO: CRITICAL: %say -s=true -> would receive arguments as [ '-s=true', 'true' ].
     /**
      * @param {string} commandString
      * @return {string[]}
@@ -101,7 +101,7 @@ export default abstract class CommandParser {
         let match: RegExpExecArray | null = Pattern.args.exec(commandString);
 
         while (match != null) {
-            // TODO: Hotfix/review
+            // TODO: Hotfix/review | May need reset exec point.
             const match1: RegExpExecArray | null = argCleanExpression.exec(match[1]);
 
             if (match1) {

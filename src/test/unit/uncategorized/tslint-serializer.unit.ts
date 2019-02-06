@@ -1,18 +1,18 @@
-import {Unit, Test, Assert, Feed} from "unit";
+import {unit, test, Assert, feed} from "unit";
 import TslintSerializer, {ITslintWarning} from "../../../serializers/tslint-serializer";
 
 const serializer: TslintSerializer = new TslintSerializer();
 
-@Unit("Tslint Serializer")
+@unit("Tslint Serializer")
 default class {
     // TODO: Feed data.
-    @Test("should serialize tslint warning messages")
+    @test("should serialize tslint warning messages")
     public serialize(input: ITslintWarning) {
         Assert.equal(serializer.serialize(input), JSON.stringify(input));
     }
 
-    @Test("should deserialize tslint warning objects")
-    @Feed("WARNING: /test/path/:15:5 - hello world", {
+    @test("should deserialize tslint warning objects")
+    @feed("WARNING: /test/path/:15:5 - hello world", {
         message: "hello world",
         line: 15,
         pos: 5,

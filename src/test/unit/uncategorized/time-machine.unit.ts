@@ -1,21 +1,21 @@
-import {Unit, Test, Assert, Is, JsType} from "unit";
+import {unit, test, Assert, Is, JsType} from "unit";
 import {testBot} from "../test-bot";
 import {TestStoreActionType, ITestState} from "../../../state/store";
 import {IStateCapsule} from "../../../state/time-machine";
 
-@Unit("Time Machine")
+@unit("Time Machine")
 default class {
-    @Test("should have no initial state recorded")
+    @test("should have no initial state recorded")
     public noInitialState() {
         Assert.that(testBot.store.timeMachine.present(), Is.null);
     }
 
-    @Test("should return null when there are no records")
+    @test("should return null when there are no records")
     public present_returnNullWhenNoRecords() {
         Assert.that(testBot.store.timeMachine.present(), Is.null);
     }
 
-    @Test("should return expected state capsule")
+    @test("should return expected state capsule")
     public present_returnExpected() {
         testBot.store.dispatch<string>(TestStoreActionType.$$Test, "hello");
 
@@ -27,7 +27,7 @@ default class {
         Assert.equal(capsule.state.$$test, "hello");
     }
 
-    @Test("should aggregate capsules before specified time")
+    @test("should aggregate capsules before specified time")
     public before_aggregateBeforeTime() {
         const now: number = Date.now();
         const beforeNow1: IStateCapsule<ITestState>[] = testBot.store.timeMachine.before(now);
@@ -50,7 +50,7 @@ default class {
         Assert.that(beforeNow2[0].time, Is.lessOrEqual(now));
     }
 
-    @Test("should aggregate capsules after specified time")
+    @test("should aggregate capsules after specified time")
     public after_aggregateAfterTime() {
         const firstTime: number = (testBot.store.timeMachine.wayback() as IStateCapsule<ITestState>).time;
         const afterNow: IStateCapsule<ITestState>[] = testBot.store.timeMachine.after(firstTime);

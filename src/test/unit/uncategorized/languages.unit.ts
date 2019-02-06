@@ -1,10 +1,10 @@
-import {Unit, Test, Assert, Is} from "unit";
+import {unit, test, Assert, Is} from "unit";
 import {testBot} from "../test-bot";
 import Language, {LanguageSource} from "../../../language/language";
 
-@Unit("Languages")
+@unit("Languages")
 default class {
-    @Test("should register languages")
+    @test("should register languages")
     public register() {
         Assert.that(testBot.language, Is.object);
 
@@ -16,7 +16,7 @@ default class {
         Assert.that((language as any).default, Is.object);
     }
 
-    @Test("should retrieve language values")
+    @test("should retrieve language values")
     public retrieveValues() {
         const language: Language = testBot.language as Language;
 
@@ -24,7 +24,7 @@ default class {
         Assert.equal(language.get("occupation"), "tester");
     }
 
-    @Test("should not retrieve invalid language keys")
+    @test("should not retrieve invalid language keys")
     public notRetrieveInvalid() {
         const language: Language = testBot.language as Language;
 
@@ -37,7 +37,7 @@ default class {
         Assert.that(language.get(3 as any), Is.null);
     }
 
-    @Test("should not set invalid default languages")
+    @test("should not set invalid default languages")
     public notSetInvalid() {
         const language: Language = testBot.language as Language;
 

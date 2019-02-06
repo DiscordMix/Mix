@@ -1,12 +1,12 @@
-import {Unit, Test, Assert, Is, Does, Feed, Mock} from "unit";
+import {unit, test, Assert, Is, Does, feed, Mock} from "unit";
 import {init, testBot} from "../test-bot";
 import {DefaultArgResolvers} from "../../../core/constants";
 import DiscordEvent from "../../../core/discord-event";
 import TestData from "../test-data";
 
-@Unit("Bot")
+@unit("Bot")
 default class {
-    @Test("should init and login")
+    @test("should init and login")
     public async initAndLogin() {
         // Mock client login
         testBot.client.login = Mock.fn(testBot.client.login)
@@ -21,39 +21,39 @@ default class {
                 return new Promise(() => {});
             })
 
-            .invoker;
+            .proxy;
 
         await init();
 
         Assert.that(testBot.client.user, Is.object);
     }
 
-    @Test("should not be suspended")
+    @test("should not be suspended")
     public notBeSuspended() {
         Assert.false(testBot.suspended);
     }
 
-    @Test("should have no owner")
+    @test("should have no owner")
     public haveNoOwner() {
         Assert.that(testBot.owner, Is.undefined);
     }
 
-    @Test("should have default argument resolvers")
+    @test("should have default argument resolvers")
     public defaultArgResolvers() {
         Assert.equal(testBot.argumentResolvers, DefaultArgResolvers);
     }
 
-    @Test("should not handle invalid messages")
-    @Feed(undefined)
-    @Feed(null)
-    @Feed("")
-    @Feed("test")
-    @Feed([])
+    @test("should not handle invalid messages")
+    @feed(undefined)
+    @feed(null)
+    @feed("")
+    @feed("test")
+    @feed([])
     public async notHandleInvalidMsgs(input: any) {
         Assert.false(await testBot.handle.message(input));
     }
 
-    @Test("should have correct internal commands")
+    @test("should have correct internal commands")
     public haveCorrectInternalCmds() {
         Assert.that(testBot.internalCommands,
             Is.array,

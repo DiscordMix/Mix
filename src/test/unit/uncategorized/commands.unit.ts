@@ -1,9 +1,9 @@
-import {Unit, Test, Assert} from "unit";
+import {unit, test, Assert} from "unit";
 import {testBot} from "../test-bot";
 
-@Unit("Commands")
+@unit("Commands")
 default class {
-    @Test("should register commands")
+    @test("should register commands")
     public register() {
         const actualCmds: string[] = ["hi"];
         const fakeCmds: string[] = ["john", "doe"];
@@ -24,7 +24,7 @@ default class {
         Assert.false(testBot.registry.contains("" as any));
     }
 
-    @Test("should not register invalid commands")
+    @test("should not register invalid commands")
     public async notRegisterInvalid() {
         const subjects: any[] = [true, false, null, undefined, "hello", "", "    ", 1, 0, -1, []];
 

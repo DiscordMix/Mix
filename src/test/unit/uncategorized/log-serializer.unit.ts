@@ -1,10 +1,10 @@
-import {Unit, Test, Feed, Assert, Is, JsType, Does} from "unit";
+import {unit, test, feed, Assert, Is, JsType, Does} from "unit";
 import LogSerializer, {ILogMsg} from "../../../serializers/log-serializer";
 
-@Unit("Log Serializer")
+@unit("Log Serializer")
 default class {
-    @Test("should should serialize log messages")
-    @Feed({
+    @test("should should serialize log messages")
+    @feed({
         message: "Hello world",
         time: "Today",
 
@@ -13,7 +13,7 @@ default class {
             extra: "doe"
         }
     }, "{Today} [World.doe] Hello world")
-    @Feed({
+    @feed({
         message: "{[Hello world]}",
         time: "{Tomorrow}",
 
@@ -28,8 +28,8 @@ default class {
         Assert.equal(serializer.serialize(msg), expected);
     }
 
-    @Test("should should deserialize serialized log messages")
-    @Feed("{Today} [Some.where] Hello world")
+    @test("should should deserialize serialized log messages")
+    @feed("{Today} [Some.where] Hello world")
     public deserialize(msg: string) {
         const serializer: LogSerializer = new LogSerializer();
         const result: ILogMsg = serializer.deserialize(msg) as ILogMsg;
@@ -47,8 +47,8 @@ default class {
         Assert.equal(result.time, "Today");
     }
 
-    @Test("should deserialize serialized log messages with one source")
-    @Feed("{Today} [Some] Hello world")
+    @test("should deserialize serialized log messages with one source")
+    @feed("{Today} [Some] Hello world")
     public deserializeOneSource(msg: string) {
         const serializer: LogSerializer = new LogSerializer();
         const result: ILogMsg = serializer.deserialize(msg) as ILogMsg;

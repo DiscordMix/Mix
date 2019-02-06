@@ -1,9 +1,9 @@
-import {Unit, Test, Assert} from "unit";
+import {unit, test, Assert} from "unit";
 import {TestSubjects} from "../test-bot";
 
-@Unit("RGB")
+@unit("RGB")
 default class {
-    @Test("toString(): should return the Rgb in string format")
+    @test("toString(): should return the Rgb in string format")
     public toString(): void {
         Assert.equal(TestSubjects.rgb.toString(), "5, 10, 15");
     }

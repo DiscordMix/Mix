@@ -1,9 +1,9 @@
-import {Assert, Test, Unit} from "unit";
+import {Assert, test, unit} from "unit";
 import TimeConvert from "../../../time/time-convert";
 
-@Unit("Time Convert")
+@unit("Time Convert")
 default class {
-    @Test("should format specified time")
+    @test("should format specified time")
     public format_shouldFormat() {
         Assert.equal(TimeConvert.format(1000, "%i"), "1000");
         Assert.equal(TimeConvert.format(1000, "%s"), "1");
@@ -15,7 +15,7 @@ default class {
         Assert.equal(TimeConvert.format(1000, "ms: %i (%i), seconds: %s (%s)"), "ms: 1000 (1000), seconds: 1 (1)");
     }
 
-    @Test("should throw on invalid parameters")
+    @test("should throw on invalid parameters")
     public format_throwsOnInvalidParams() {
         Assert.throws(() => TimeConvert.format(undefined as any, "test"));
         Assert.throws(() => TimeConvert.format("test" as any, undefined as any));

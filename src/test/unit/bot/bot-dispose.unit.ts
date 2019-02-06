@@ -1,9 +1,9 @@
-import {Unit, Test, Assert, Is, Mock} from "unit";
+import {unit, test, Assert, Is, Mock} from "unit";
 import TestBot, {testBot} from "../test-bot";
 
-@Unit("Bot Dispose")
+@unit("Bot Dispose")
 default class {
-    @Test("should restart the bot without throwing")
+    @test("should restart the bot without throwing")
     public restart_doesNotThrow() {
         return new Promise(async (resolve) => {
             const error: Error | null = null;
@@ -11,7 +11,7 @@ default class {
             // Mock the destroy() Discord.js client method.
             testBot.client.destroy = Mock.fn(testBot.client.destroy)
                 .returnOnce(undefined)
-                .invoker;
+                .proxy;
 
             try {
                 await testBot.restart(false);
@@ -26,7 +26,7 @@ default class {
         });
     }
 
-    @Test("should disconnect the bot")
+    @test("should disconnect the bot")
     public async disconnect_shouldDisconnect() {
         const result: TestBot = await testBot.disconnect();
 

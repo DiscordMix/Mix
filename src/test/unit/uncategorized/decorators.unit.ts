@@ -8,7 +8,7 @@ import {Constraint} from "../../../decorators/constraints";
 import {Type} from "../../../commands/type";
 import {deprecated} from "../../../decorators/utility";
 import DiscordEvent from "../../../core/discord-event";
-import {On} from "../../../decorators/events";
+import {on} from "../../../decorators/events";
 import {IMeta} from "../../../fragments/fragment";
 import {testBot} from "../test-bot";
 
@@ -41,7 +41,7 @@ export class MyCommand extends Command {
         return false;
     }
 
-    @On(DiscordEvent.Message)
+    @on(DiscordEvent.Message)
     public onMessage(msg: Message): void {
         //
     }

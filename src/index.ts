@@ -83,7 +83,7 @@ import {guard, dependsOn, connect, attachedLoggerFn} from "./decorators/other";
 import {deprecated} from "./decorators/utility";
 import {PromiseOr} from "@atlas/xlib";
 import {CmdHandlerEvent} from "./commands/command-handler";
-import {Once, On} from "./decorators/events";
+import {once, on} from "./decorators/events";
 import BotConnector, {IBotConnector} from "./core/bot-connector";
 import {TypeChecker, Type, ArgumentResolver} from "./commands/type";
 
@@ -195,8 +195,8 @@ export {
     Constraint,
     constraints,
     guard,
-    On,
-    Once,
+    on,
+    once,
     dependsOn,
     connect,
     attachedLoggerFn,

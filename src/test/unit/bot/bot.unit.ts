@@ -8,7 +8,7 @@ import TestData from "../test-data";
 default class {
     @test("should init and login")
     public async initAndLogin() {
-        // Mock client login.
+        // Mock Discord.JS' client login.
         testBot.client.login = Mock.fn(testBot.client.login)
             .once((): Promise<void> => {
                 (testBot.client.user as any) = {

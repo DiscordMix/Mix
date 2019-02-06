@@ -3,7 +3,7 @@ import TestBot, {testBot} from "../test-bot";
 
 @unit("Bot Dispose")
 default class {
-    @test("should restart the bot without throwing")
+    @test("restart(): should restart the bot without throwing")
     public restart_doesNotThrow() {
         return new Promise(async (resolve) => {
             const error: Error | null = null;
@@ -26,7 +26,29 @@ default class {
         });
     }
 
-    @test("should disconnect the bot")
+    @test("restart(): should restart and reload modules")
+    public async restart_modules() {
+        // Mock the disconnect() bot method to avoid creating a new client and using it's login method.
+        testBot.disconnect = Mock.fn(testBot.disconnect)
+            .returnOnce(new Promise((resolve) => {
+                resolve();
+            }))
+
+            .proxy;
+
+        // Mock Discord.JS' client login.
+        testBot.client.login = Mock.fn(testBot.client.login)
+            // Return a promise because internally (bot.connect) .catch is used.
+            .returnOnce(new Promise((resolve) => {
+                resolve();
+            }))
+
+            .proxy;
+
+        await testBot.restart(true);
+    }
+
+    @test("disconnect(): should disconnect the bot")
     public async disconnect_shouldDisconnect() {
         const result: TestBot = await testBot.disconnect();
 

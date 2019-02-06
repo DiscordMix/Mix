@@ -125,8 +125,8 @@ export default class CommandRegistry implements ICommandRegistry {
             return false;
         }
 
-        // Delete current command
-        this.commands.delete(commandName);
+        // Delete current existing command and it's aliases.
+        await this.remove(commandName, packg.instance.aliases);
 
         const cmdPackg: CommandPackage | null = await this.bot.fragments.prepare<Command>(reloadedPackage);
 
@@ -185,7 +185,10 @@ export default class CommandRegistry implements ICommandRegistry {
     public async reloadAll(): Promise<number> {
         let reloaded: number = 0;
 
-        for (const [base, command] of this.commands) {
+        // Clone command to avoid infinite loop.
+        const commands: Map<string, ILivePackage<Command<object>>> = new Map(this.commands);
+
+        for (const [base, command] of commands) {
             if (await this.reload(base)) {
                 reloaded++;
             }
@@ -243,6 +246,7 @@ export default class CommandRegistry implements ICommandRegistry {
 
     // TODO: Accepting aliases as an argument for a hot-fix of an infinite loop (looks like this.get(commandBase) calls back .remove() somehow or something similar)
     /**
+     * Remove a command from the registry along with it's registered aliases.
      * @param {string} name The name of the command to remove.
      * @return {Promise<boolean>} Whether the command was removed.
      */

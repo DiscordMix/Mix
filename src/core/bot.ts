@@ -484,10 +484,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.emit(BotEvent.Restarting, reloadModules);
         Log.verbose("Restarting");
 
-        // Dispose resources
-        await this.dispose();
-
-        // Disconnect the bot
+        // Disconnect the bot which also disposes resources.
         await this.disconnect();
 
         if (reloadModules) {

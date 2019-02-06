@@ -2,7 +2,7 @@ import Bot from "../core/bot";
 import {IAction, ActionType} from "./action";
 import {Snowflake, Channel, TextChannel, Guild, User, RichEmbed, Message} from "discord.js";
 import {EventEmitter} from "events";
-import Context from "../commands/command-context";
+import Context from "../commands/context";
 import PaginatedMessage from "../pagination/paginated-message";
 import EmojiMenu from "../emoji-menu/emoji-menu";
 import Log from "../core/log";

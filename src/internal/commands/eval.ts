@@ -1,7 +1,7 @@
 import EmbedBuilder from "../../builders/embed-builder";
 import MsgBuilder from "../../builders/msg-builder";
 import Command from "../../commands/command";
-import Context from "../../commands/command-context";
+import Context from "../../commands/context";
 import Util from "../../core/util";
 import {name, description, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraints";

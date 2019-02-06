@@ -1,5 +1,5 @@
 import {default as Command} from "../../commands/command";
-import Context from "../../commands/command-context";
+import Context from "../../commands/context";
 import {name, description, args} from "../../decorators/general";
 import MsgBuilder from "../../builders/msg-builder";
 import {Constraint} from "../../decorators/constraints";

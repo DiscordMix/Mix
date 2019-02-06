@@ -1,5 +1,5 @@
 import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
-import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/command-context";
+import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/context";
 import CommandRegistry, {ICommandRegistry} from "./commands/command-registry";
 import Bot from "./core/bot";
 

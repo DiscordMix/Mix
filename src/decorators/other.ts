@@ -1,6 +1,6 @@
 import Command, {CommandRunner, CommandRelay, IGenericCommand} from "../commands/command";
 import {DecoratorUtils} from "./decorator-utils";
-import Context from "../commands/command-context";
+import Context from "../commands/context";
 import Log from "../core/log";
 
 export const attachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {

@@ -38,4 +38,4 @@
 
 * uptime Console command shows time capitalized
 
-* Command switches need to be passed into the command executed() function in a similar form of args in order to access value, shorthand, etc.
+* Command flags need to be passed into the command executed() function in a similar form of args in order to access value, shorthand, etc.

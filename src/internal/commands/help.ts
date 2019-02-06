@@ -1,6 +1,6 @@
 import {RichEmbed} from "discord.js";
 import Command from "../../commands/command";
-import Context from "../../commands/command-context";
+import Context from "../../commands/context";
 import {ReadonlyCommandMap} from "../../commands/command-registry";
 import {description, name} from "../../decorators/general";
 

@@ -5,7 +5,7 @@ import ChatEnv from "../core/chat-env";
 import Log from "../core/log";
 import Util from "../core/util";
 import Command, {RawArguments, RestrictGroup} from "./command";
-import Context from "./command-context";
+import Context from "./context";
 import CommandParser from "./command-parser";
 import CommandRegistry, {ICommandRegistry} from "./command-registry";
 import {PromiseOr} from "@atlas/xlib";

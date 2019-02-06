@@ -1,7 +1,7 @@
 import Log from "../core/log";
 import Bot from "../core/bot";
 import Command, {GenericCommand, RawArguments} from "./command";
-import Context from "./command-context";
+import Context from "./context";
 import {Snowflake, Message} from "discord.js";
 import Loader, {IPackage, ILivePackage} from "../fragments/loader";
 import Util from "../core/util";

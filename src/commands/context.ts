@@ -5,7 +5,6 @@ import Log from "../core/log";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/response-helper";
 import Util from "../core/util";
-import EmojiMenu from "../emoji-menu/emoji-menu";
 import EditableMessage from "../message/editable-message";
 import {IStore} from "../state/store";
 import {PromiseOr} from "@atlas/xlib";
@@ -39,7 +38,7 @@ export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends
 }
 
 /**
- * Represents the environment in which a command was executed.
+ * Represents the environment in which a command was executed. Contains useful utility methods for quicker data access and responses.
  */
 export default class Context<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IContext {
     public readonly bot: Bot;

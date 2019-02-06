@@ -1,5 +1,5 @@
 import ChatEnv from "../core/chat-env";
-import Context, {IContext} from "./command-context";
+import Context, {IContext} from "./context";
 import {IFragment, IMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
@@ -42,7 +42,7 @@ export interface IArgument {
     readonly defaultValue?: InputArgument | DefaultValueResolver;
     readonly required?: boolean;
 
-    // TODO: CRTICAL: X2 : Must verify that the same short switch isn't already being used by another argument of the same command.
+    // TODO: CRTICAL: X2 : Must verify that the same short flag isn't already being used by another argument of the same command.
     readonly flagShortName?: string;
 }
 

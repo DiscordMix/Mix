@@ -1,7 +1,7 @@
 import {ActionType, IAction} from "../../actions/action";
 import MsgBuilder from "../../builders/msg-builder";
 import Command from "../../commands/command";
-import Context from "../../commands/command-context";
+import Context from "../../commands/context";
 import {name, description, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraints";
 import {IMessageActionArgs} from "../../actions/action-interpreter";

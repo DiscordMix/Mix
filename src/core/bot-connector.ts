@@ -186,7 +186,7 @@ export default class BotConnector implements IBotConnector {
 
         // Discord client events.
         this.bot.client.on(DiscordEvent.Ready, async () => {
-            // Setup temp module
+            // Setup temp module.
             this.bot.temp.setup(this.bot.client.user.id);
 
             // Create the temp folder.

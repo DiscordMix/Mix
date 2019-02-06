@@ -1,6 +1,6 @@
 import {Message, MessageReaction, Snowflake, User} from "discord.js";
 import {EventEmitter} from "events";
-import Context from "../commands/command-context";
+import Context from "../commands/context";
 import {IDisposable} from "../core/helpers";
 import DiscordEvent from "../core/discord-event";
 import {PromiseOr} from "@atlas/xlib";

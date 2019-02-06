@@ -5,7 +5,7 @@ import Log from "./log";
 import BotMessages from "./messages";
 import CommandParser from "../commands/command-parser";
 import Command, {RawArguments} from "../commands/command";
-import Context from "../commands/command-context";
+import Context from "../commands/context";
 import {PromiseOr} from "@atlas/xlib";
 import Bot from "./bot";
 

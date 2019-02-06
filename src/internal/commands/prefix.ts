@@ -1,5 +1,5 @@
 import Command from "../../commands/command";
-import Context from "../../commands/command-context";
+import Context from "../../commands/context";
 import {name, description} from "../../decorators/general";
 import Log from "../../core/log";
 

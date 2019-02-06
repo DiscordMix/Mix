@@ -17,7 +17,7 @@ export interface ICommandComponentOpts {
 
 export default abstract class Component {
     public static command(name: string, options?: Partial<ICommandComponentOpts>): DecoratorProxy {
-        return function (target: any, key: string) {
+        return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
             target = DecoratorUtils.overrideMeta(target, "name", name);

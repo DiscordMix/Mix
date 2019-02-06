@@ -12,7 +12,7 @@ import {on} from "../../../decorators/events";
 import {IMeta} from "../../../fragments/fragment";
 import {testBot} from "../test-bot";
 
-const testConnection: CommandRunner = (x, args): void => {
+const testConnection: CommandRunner = (): void => {
     //
 };
 

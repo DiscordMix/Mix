@@ -5,16 +5,16 @@ import {DecoratorProxy} from "./component";
 
 /**
  * Set a fragment's meta property.
- * @param {IMeta} meta
+ * @param {IMeta} value
  */
-export function meta(meta: IMeta): DecoratorProxy {
+export function meta(value: IMeta): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
         return class extends target {
             public readonly meta: IMeta = {
                 ...this.meta,
-                ...meta
+                ...value
             };
         };
     };
@@ -22,53 +22,53 @@ export function meta(meta: IMeta): DecoratorProxy {
 
 /**
  * Set the meta name property of a fragment.
- * @param {string} name The name of the fragment.
+ * @param {string} value The name of the fragment.
  */
-export function name(name: string): DecoratorProxy {
+export function name(value: string): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
-        return DecoratorUtils.overrideMeta(target, "name", name);
+        return DecoratorUtils.overrideMeta(target, "name", value);
     };
 }
 
 /**
  * Set the meta description property of a fragment.
- * @param {string} description The description of the fragment.
+ * @param {string} value The description of the fragment.
  */
-export function description(description: string): DecoratorProxy {
+export function description(value: string): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
-        return DecoratorUtils.overrideMeta(target, "description", description);
+        return DecoratorUtils.overrideMeta(target, "description", value);
     };
 }
 
 /**
  * Append name aliases to a command.
- * @param {string[]} aliases The list of aliases that represent the command.
+ * @param {string[]} values The list of aliases that represent the command.
  */
-export function aliases(...aliases: string[]): DecoratorProxy {
+export function aliases(...values: string[]): DecoratorProxy {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
         return class extends target {
-            public readonly aliases: string[] = [...instance.aliases, ...aliases];
+            public readonly aliases: string[] = [...instance.aliases, ...values];
         };
     };
 }
 
 /**
  * Append arguments to a command.
- * @param {IArgument[]} args The list of arguments accepted by the command.
+ * @param {IArgument[]} values The list of arguments accepted by the command.
  */
-export function args(...args: IArgument[]): DecoratorProxy {
+export function args(...values: IArgument[]): DecoratorProxy {
     return function (target: any) {
         // TODO: It may not be efficient to create a new instance just to extract default properties
         const instance: Command = DecoratorUtils.createInstance(target);
 
         return class extends target {
-            public readonly args: IArgument[] = [...instance.args, ...args];
+            public readonly args: IArgument[] = [...instance.args, ...values];
         };
     };
 }

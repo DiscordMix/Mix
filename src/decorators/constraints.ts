@@ -42,13 +42,13 @@ export abstract class Constraint {
 
     /**
      * Limit command execution to specific users, channels, or guilds.
-     * @param {SpecificConstraints} constraints
+     * @param {SpecificConstraints} values
      */
-    public static specific(constraints: SpecificConstraints): DecoratorProxy {
+    public static specific(values: SpecificConstraints): DecoratorProxy {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
-            return DecoratorUtils.overrideConstraint(target, "specific", constraints);
+            return DecoratorUtils.overrideConstraint(target, "specific", values);
         };
     }
 
@@ -97,14 +97,14 @@ export abstract class Constraint {
 
 }
 
-export function constraints(constraints: Partial<IConstraints>): DecoratorProxy {
+export function constraints(values: Partial<IConstraints>): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 
         return class extends target {
             public readonly constraints: IConstraints = {
                 ...this.constraints,
-                ...constraints
+                ...values
             };
         };
     };

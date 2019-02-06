@@ -20,6 +20,9 @@ export default class BotHandler implements IBotHandler {
 
     public constructor(bot: Bot) {
         this.bot = bot;
+
+        // Bind message handler because it is directly bound on the 'message' event, thus losing context.
+        this.message = this.message.bind(this);
     }
 
     /**

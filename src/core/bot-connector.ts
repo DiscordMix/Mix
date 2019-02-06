@@ -208,7 +208,7 @@ export default class BotConnector implements IBotConnector {
             this.bot.emit(BotEvent.Ready);
         });
 
-        this.bot.client.on(DiscordEvent.Message, this.bot.handle.message.bind(this));
+        this.bot.client.on(DiscordEvent.Message, this.bot.handle.message);
         this.bot.client.on(DiscordEvent.Error, (error: Error) => Log.error(error.message));
 
         // If enabled, handle message edits (if valid) as commands.

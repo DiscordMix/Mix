@@ -129,11 +129,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly state: BotState;
 
     /**
-     * Whether the bot is currently suspended.
-     */
-    public readonly suspended: boolean;
-
-    /**
      * The internal Discord client.
      */
     public readonly client: Client;
@@ -172,6 +167,11 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * Stores argument resolvers which resolve input argument values into corresponding data.
      */
     public readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
+
+    /**
+     * Whether the bot is currently suspended and ignoring all user input.
+     */
+    protected isSuspended: boolean;
 
     /**
      * The start timestamp of the latest setup sequence.
@@ -225,6 +225,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             throw Log.error(BotMessages.SETUP_INVALID);
         }
 
+        this.isSuspended = true;
         this.store = new Store<TState, TActionType>(options.initialState, options.reducers);
         this.state = BotState.Disconnected;
         this.settings = options.settings;
@@ -267,7 +268,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.owner = options.owner;
         this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
         this.languages = options.languages;
-        this.suspended = false;
         this.analytics = new Analytics();
         this.disposables = [];
         this.actionInterpreter = new ActionInterpreter(this);
@@ -291,6 +291,26 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      */
     public get connected(): boolean {
         return this.state === BotState.Connected;
+    }
+
+    /**
+     * Whether the bot is currently suspended and ignoring all user input.
+     * @return {boolean}
+     */
+    public get suspended(): boolean {
+        return this.isSuspended;
+    }
+
+    /**
+     * Suspend or unsuspend the bot.
+     * @param {boolean} suspended Whether to suspend the bot.
+     * @return {this}
+     */
+    public setSuspended(suspended: boolean): this {
+        this.isSuspended = suspended;
+        this.emit(BotEvent.SuspensionStateChanged, suspended);
+
+        return this;
     }
 
     /**
@@ -333,23 +353,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                     Log.warn(`Could not post stats to botsfordiscord.com (${error.message})`);
                 });
         }
-    }
-
-    /**
-     * Suspend or unsuspend the bot.
-     * @param {boolean} suspended Whether to suspend the bot.
-     * @return {this}
-     */
-    public setSuspended(suspended: boolean = true): this {
-        if (this.state !== BotState.Connected) {
-            return this;
-        }
-        else if (this.suspended !== suspended) {
-            (this.suspended as any) = suspended;
-            this.setState(this.suspended ? BotState.Suspended : BotState.Connected);
-        }
-
-        return this;
     }
 
     /**
@@ -474,31 +477,36 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * @todo "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached).
-     * @todo Use the reload modules param.
+     * @todo "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached)?
      * Restart the Discord client.
-     * @param {boolean} [reloadModules=true] Whether to reload all modules.
      * @return {Promise<this>}
      */
-    public async restart(reloadModules: boolean = true): Promise<this> {
-        this.emit(BotEvent.Restarting, reloadModules);
+    public async reconnect(): Promise<this> {
+        this.emit(BotEvent.Restarting);
         Log.verbose("Restarting");
 
         // Disconnect the bot which also disposes resources.
         await this.disconnect();
 
-        if (reloadModules) {
-            const commands: number = this.registry.getAll().size;
-
-            Log.verbose(`Reloading ${commands} command(s)`);
-
-            const reloaded: number = await this.registry.reloadAll();
-
-            Log.success(`Reloaded ${reloaded}/${commands} command(s)`);
-        }
-
+        // Reconnect the bot.
         await this.connect();
-        this.emit(BotEvent.Restarted, reloadModules);
+        this.emit(BotEvent.Restarted);
+
+        return this;
+    }
+
+    /**
+     * Reload the bot's fragments, modules, commands, tasks and services.
+     * @return {Promise<this>}
+     */
+    public async reload(): Promise<this> {
+        const commands: number = this.registry.getAll().size;
+
+        Log.verbose(`Reloading ${commands} command(s)`);
+
+        const reloaded: number = await this.registry.reloadAll();
+
+        Log.success(`Reloaded ${reloaded}/${commands} command(s)`);
 
         return this;
     }
@@ -529,7 +537,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public clearTemp(): void {
         this.emit(BotEvent.ClearingTemp);
 
-        // TODO: Path may need to be resolved/maybe it wont be relative...
+        // TODO: Path may need to be resolved/maybe it won't be relative.
         if (fs.existsSync("./temp")) {
             fs.readdir("./temp", (error: any, files: any) => {
                 for (const file of files) {

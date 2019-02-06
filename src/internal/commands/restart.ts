@@ -10,6 +10,6 @@ import {Constraint} from "../../decorators/constraints";
 export default class extends Command {
     public async run($: Context): Promise<void> {
         await $.ok("Restarting the bot");
-        await $.bot.restart();
+        await $.bot.reconnect();
     }
 }

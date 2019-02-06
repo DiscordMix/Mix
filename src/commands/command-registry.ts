@@ -179,8 +179,8 @@ export default class CommandRegistry implements ICommandRegistry {
     }
 
     /**
-     * Reload all commands
-     * @return {Promise<number>} The amount of commands that were reloaded
+     * Reload all commands.
+     * @return {Promise<number>} The amount of commands that were reloaded.
      */
     public async reloadAll(): Promise<number> {
         let reloaded: number = 0;

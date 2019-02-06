@@ -106,7 +106,8 @@ export enum BotEvent {
     ClearedTemp = "clearedTemp",
     HandlingCommand = "handlingCommand",
     CommandError = "commandError",
-    Command = "command"
+    Command = "command",
+    SuspensionStateChanged = "suspensionStateChanged"
 }
 
 /**
@@ -116,7 +117,6 @@ export enum BotState {
     Disconnected,
     Connecting,
     Restarting,
-    Suspended,
     Connected
 }
 
@@ -182,7 +182,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     clearInterval(interval: NodeJS.Timeout): boolean;
     clearAllIntervals(): number;
     connect(): PromiseOr<this>;
-    restart(reloadModules: boolean): PromiseOr<this>;
+    reconnect(reloadModules: boolean): PromiseOr<this>;
     disconnect(): PromiseOr<this>;
     clearTemp(): void;
 }

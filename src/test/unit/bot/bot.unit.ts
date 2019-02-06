@@ -28,9 +28,9 @@ default class {
         Assert.that(testBot.client.user, Is.object);
     }
 
-    @test("should not be suspended")
-    public notBeSuspended() {
-        Assert.false(testBot.suspended);
+    @test("should be initially suspended")
+    public beSuspended() {
+        Assert.true(testBot.suspended);
     }
 
     @test("should have no owner")

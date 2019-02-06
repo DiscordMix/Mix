@@ -3,54 +3,46 @@ import TestBot, {testBot} from "../test-bot";
 
 @unit("Bot Dispose")
 default class {
-    @test("restart(): should restart the bot without throwing")
-    public restart_doesNotThrow() {
+    @test("reconnect(): should reconnect the bot without throwing")
+    public reconnect_doesNotThrow() {
         return new Promise(async (resolve) => {
-            const error: Error | null = null;
+            let resultError: Error | null = null;
 
-            // Mock the destroy() Discord.js client method.
+            // Mock the destroy() Discord.JS client method.
             testBot.client.destroy = Mock.fn(testBot.client.destroy)
                 .returnOnce(undefined)
                 .proxy;
 
+            // Mock the login() Discord.JS client method.
+            testBot.client.login = Mock.fn(testBot.client.login)
+                .returnOnce(new Promise(() => {}))
+                .proxy;
+
             try {
-                await testBot.restart(false);
+                await testBot.reconnect();
             }
             catch (error) {
-                error = error;
+                resultError = error;
             }
 
-            Assert.that(error, Is.null);
+            Assert.that(resultError, Is.null);
 
             resolve();
         });
     }
 
-    @test("restart(): should restart and reload modules")
-    public async restart_modules() {
-        // Mock the disconnect() bot method to avoid creating a new client and using it's login method.
-        testBot.disconnect = Mock.fn(testBot.disconnect)
-            .returnOnce(new Promise((resolve) => {
-                resolve();
-            }))
+    @test("reload(): should reload modules")
+    public async reload_reloadModules() {
+        await testBot.reload();
 
-            .proxy;
-
-        // Mock Discord.JS' client login.
-        testBot.client.login = Mock.fn(testBot.client.login)
-            // Return a promise because internally (bot.connect) .catch is used.
-            .returnOnce(new Promise((resolve) => {
-                resolve();
-            }))
-
-            .proxy;
-
-        await testBot.restart(true);
+        // TODO: Verify modules were re-loaded.
     }
 
     @test("disconnect(): should disconnect the bot")
     public async disconnect_shouldDisconnect() {
         const result: TestBot = await testBot.disconnect();
+
+        // TODO: Additional verification that the bot disconnected (was dispose called?).
 
         Assert.that(result, Is.object);
         Assert.that(result.client.user, Is.null);

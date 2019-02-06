@@ -8,6 +8,7 @@ import {DebugMode} from "../core/constants";
 import Log from "../core/log";
 import Util from "../core/util";
 import {ReadonlyServiceMap} from "../services/service-manager";
+import {Loader} from "..";
 
 // TODO: Export in index.
 export type ConsoleCommandHandler = (args: string[]) => void;
@@ -158,7 +159,7 @@ export default class ConsoleInterface {
         });
 
         this.commands.set("restart", async () => {
-            await bot.restart();
+            await bot.reconnect();
         });
 
         this.commands.set("stop", async () => {
@@ -250,7 +251,7 @@ export default class ConsoleInterface {
         this.commands.set("reload", async () => {
             const startTime: number = performance.now();
 
-            await bot.restart(true);
+            await bot.reload();
 
             // TODO: New fragment system.
             // await bot.commandLoader.reloadAll();

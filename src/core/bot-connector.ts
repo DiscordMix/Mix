@@ -163,12 +163,10 @@ export default class BotConnector implements IBotConnector {
 
         this.bot.emit(BotEvent.LoadedCommands);
 
+        // Start optimizer if applicable.
         if (this.bot.options.optimizer) {
             Log.verbose(BotMessages.SETUP_START_OPTIMIZER);
-
-            // Start tempo engine.
             this.bot.optimizer.start();
-
             Log.success(BotMessages.SETUP_STARTED_OPTIMIZER);
         }
 
@@ -205,6 +203,7 @@ export default class BotConnector implements IBotConnector {
 
             Log.success(`Ready | Took ${took}ms | PID ${process.pid}`);
             this.bot.setState(BotState.Connected);
+            this.bot.setSuspended(false);
             this.bot.emit(BotEvent.Ready);
         });
 

@@ -75,7 +75,7 @@ import TimeParser from "./time/time-parser";
 import TimeSuffixType from "./time/time-suffix-type";
 import List from "./collections/list";
 import DiscordEvent from "./core/discord-event";
-import {Constraint, Constraints} from "./decorators/constraints";
+import {Constraint, constraints} from "./decorators/constraints";
 import {description, name, aliases, args, meta} from "./decorators/general";
 import Component from "./decorators/component";
 import {DecoratorUtils} from "./decorators/decorator-utils";
@@ -193,7 +193,7 @@ export {
     aliases,
     args,
     Constraint,
-    Constraints,
+    constraints,
     guard,
     On,
     Once,

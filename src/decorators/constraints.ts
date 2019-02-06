@@ -97,7 +97,7 @@ export abstract class Constraint {
 
 }
 
-export function Constraints(constraints: Partial<IConstraints>): DecoratorProxy {
+export function constraints(constraints: Partial<IConstraints>): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 

@@ -1,5 +1,6 @@
-import {unit, test, Assert, Is, Mock} from "unit";
+import {unit, test, Assert, Is, Mock, Does} from "unit";
 import TestBot, {testBot} from "../test-bot";
+import TestData from "../test-data";
 
 @unit("Bot Dispose")
 default class {
@@ -7,16 +8,6 @@ default class {
     public reconnect_doesNotThrow() {
         return new Promise(async (resolve) => {
             let resultError: Error | null = null;
-
-            // Mock the destroy() Discord.JS client method.
-            testBot.client.destroy = Mock.fn(testBot.client.destroy)
-                .returnOnce(undefined)
-                .proxy;
-
-            // Mock the login() Discord.JS client method.
-            testBot.client.login = Mock.fn(testBot.client.login)
-                .returnOnce(new Promise(() => {}))
-                .proxy;
 
             try {
                 await testBot.reconnect();
@@ -38,13 +29,19 @@ default class {
         // TODO: Verify modules were re-loaded.
     }
 
-    @test("disconnect(): should disconnect the bot")
+    @test("disconnect(): should disconnect the bot and dispose resources")
     public async disconnect_shouldDisconnect() {
         const result: TestBot = await testBot.disconnect();
 
         // TODO: Additional verification that the bot disconnected (was dispose called?).
 
         Assert.that(result, Is.object);
-        Assert.that(result.client.user, Is.null);
+
+        Assert.that(result.client.user,
+            Is.object,
+            Does.haveProperty("id")
+        );
+
+        Assert.equal(result.client.user.id, TestData.id);
     }
 }

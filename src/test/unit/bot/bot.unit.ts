@@ -6,6 +6,11 @@ import TestData from "../test-data";
 
 @unit("Bot")
 default class {
+    @test("should be initially suspended")
+    public beSuspended() {
+        Assert.true(testBot.suspended);
+    }
+
     @test("should init and login")
     public async initAndLogin() {
         // Mock Discord.JS' client login.
@@ -26,11 +31,6 @@ default class {
         await init();
 
         Assert.that(testBot.client.user, Is.object);
-    }
-
-    @test("should be initially suspended")
-    public beSuspended() {
-        Assert.true(testBot.suspended);
     }
 
     @test("should have no owner")

@@ -4,6 +4,9 @@ import Log, {LogLevel} from "../../core/log";
 // Supress log messages.
 Log.level = LogLevel.None;
 
+// Run preparation stage.
+import "./prepare";
+
 // Import units.
 import "./uncategorized/util.unit";
 import "./uncategorized/log-serializer.unit";

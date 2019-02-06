@@ -1,6 +1,6 @@
 {
     "name": "d.mix",
-    "version": "1.5.1-0",
+    "version": "1.5.2-0",
     "description": "The elegant bot framework",
     "main": "./dist/index.js",
     "keywords": [

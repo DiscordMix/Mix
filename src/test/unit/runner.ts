@@ -4,6 +4,9 @@ import Log, {LogLevel} from "../../core/log";
 // Supress log messages.
 Log.level = LogLevel.None;
 
+// Don't write logs for tests.
+Log.write = false;
+
 // Run preparation stage.
 import "./prepare";
 

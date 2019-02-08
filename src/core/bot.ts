@@ -323,7 +323,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
         const serverCount: number = this.client.guilds.size;
 
-        // Discord Bot List.org
+        // Discord Bot List.org.
         if (this.settings.keys.dbl) {
             const dblUrl: string = "https://discordbots.org/api/bots/{botId}/stats";
 
@@ -338,7 +338,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
                 });
         }
 
-        // Bots for Discord.com
+        // Bots for Discord.com.
         if (this.settings.keys.bfd) {
             const bfdUrl: string = "https://botsfordiscord.com/api/bot/{botId}";
 

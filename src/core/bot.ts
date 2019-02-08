@@ -321,14 +321,14 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             return;
         }
 
-        const serverCoun: number = this.client.guilds.size;
+        const serverCount: number = this.client.guilds.size;
 
         // Discord Bot List.org
         if (this.settings.keys.dbl) {
             const dblUrl: string = "https://discordbots.org/api/bots/{botId}/stats";
 
             await axios.post(dblUrl.replace("{botId}", this.client.user.id), {
-                server_count: serverCoun
+                server_count: serverCount
             }, {
                     headers: {
                         Authorization: this.settings.keys.dbl
@@ -343,7 +343,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             const bfdUrl: string = "https://botsfordiscord.com/api/bot/{botId}";
 
             await axios.post(bfdUrl.replace("{botId}", this.client.user.id), {
-                server_count: serverCoun
+                server_count: serverCount
             }, {
                     headers: {
                         Authorization: this.settings.keys.bfd,

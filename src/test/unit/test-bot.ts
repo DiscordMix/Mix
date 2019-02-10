@@ -3,11 +3,9 @@ require("dotenv").config();
 import path from "path";
 import Bot from "../../core/bot";
 import {BotEvent} from "../../core/bot-extra";
-import Settings from "../../core/settings";
-import Rgb from "../../misc/rgb";
 import Rgba from "../../misc/rgba";
-import {ITestState, TestStoreActionType} from "../../state/store";
 import List from "../../collections/list";
+import Rgb from "../../misc/rgb";
 
 export const TestSubjects = {
     ids: [
@@ -54,18 +52,7 @@ export const TestSubjects = {
     Hotfixed by disabling optimizer in tests.
 */
 
-export default class TestBot extends Bot<ITestState, TestStoreActionType> {
-    // TODO.
-}
-
-export let testBot: TestBot = new TestBot({
-    settings: new Settings({
-        general: {
-            prefix: ["!"],
-            token: null as any
-        }
-    })
-}, true);
+export let testBot: Bot = new Bot(null as any, undefined as any, true);
 
 export async function init(): Promise<void> {
     return new Promise<void>(async (resolve) => {

@@ -184,20 +184,11 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     protected readonly connector: BotConnector;
 
     /**
-     * @param {Partial<IBotOptions> | BotToken} botOptionsOrToken
+     * @param {Partial<IBotOptions> | BotToken} options
      * @param {boolean} [testMode=false] Whether the bot is being used in testing. For internal use only.
      */
-    public constructor(botOptionsOrToken: Partial<IBotOptions<TState>> | BotToken, testMode: boolean = false) {
+    public constructor(token: BotToken, options: Partial<IBotOptions<TState>>, testMode: boolean = false) {
         super();
-
-        let options: Partial<IBotOptions<TState>> = typeof botOptionsOrToken === "object" && botOptionsOrToken !== null && !Array.isArray(botOptionsOrToken) ? Object.assign({}, botOptionsOrToken) : (typeof botOptionsOrToken === "string" ? {
-            settings: new Settings({
-                general: {
-                    prefix: ["!"],
-                    token: botOptionsOrToken
-                }
-            })
-        } : undefined as any);
 
         // Special options for unit tests.
         if (testMode) {
@@ -228,7 +219,14 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.isSuspended = true;
         this.store = new Store<TState, TActionType>(options.initialState, options.reducers);
         this.state = BotState.Disconnected;
-        this.settings = options.settings;
+
+        this.settings = options.settings !== undefined ? options.settings : new Settings({
+            general: {
+                token,
+                prefix: ["!"]
+            }
+        });
+
         this.paths = new PathResolver(this.settings.paths);
         this.temp = new Temp();
         this.handle = new BotHandler(this);

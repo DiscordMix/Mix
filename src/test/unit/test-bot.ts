@@ -52,7 +52,7 @@ export const TestSubjects = {
     Hotfixed by disabling optimizer in tests.
 */
 
-export let testBot: Bot = new Bot(null as any, undefined as any, true);
+export let testBot: Bot = new Bot(null as any, {}, true);
 
 export async function init(): Promise<void> {
     return new Promise<void>(async (resolve) => {

@@ -79,7 +79,7 @@ enum DiscordEvent {
      * A new member joined a guild.
      */
     GuildMemberJoined = "guildMemberAdd",
-    
+
     GuildMemberAvailable = "guildMemberAvailable",
 
     /**
@@ -103,7 +103,7 @@ enum DiscordEvent {
      * A guild became unavailable. May be due to outages or Discord limits.
      */
     GuildUnavailable = "guildUnavailable",
-    
+
     /**
      * A guild's settings were updated.
      */
@@ -203,7 +203,7 @@ enum DiscordEvent {
      * A voice state of a member was updated.
      */
     VoiceStateUpdated = "voiceStateUpdate",
-    
+
     Warn = "warn"
 }
 

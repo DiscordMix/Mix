@@ -1,6 +1,7 @@
-import {unit, test, Assert, Is, Mock, Does} from "unit";
-import TestBot, {testBot} from "../test-bot";
+import {unit, test, Assert, Is, Does} from "unit";
+import {testBot} from "../test-bot";
 import TestData from "../test-data";
+import {Bot} from "../../..";
 
 @unit("Bot Dispose")
 default class {
@@ -31,7 +32,7 @@ default class {
 
     @test("disconnect(): should disconnect the bot and dispose resources")
     public async disconnect_shouldDisconnect() {
-        const result: TestBot = await testBot.disconnect();
+        const result: Bot = await testBot.disconnect();
 
         // TODO: Additional verification that the bot disconnected (was dispose called?).
 

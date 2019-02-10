@@ -1,7 +1,7 @@
-import Bot from "../core/bot";
 import {IBot} from "../core/bot-extra";
 import Settings from "../core/settings";
 import {IBuilder} from "./builder";
+import Log from "../core/log";
 
 export interface IBotBuilder extends IBuilder<IBot> {
     token(token: string): this;
@@ -88,6 +88,7 @@ export default class BotBuilder implements IBotBuilder {
      */
     public build(): IBot {
         // TODO.
-        return new Bot(this.bot);
+        // return new Bot(this.bot);
+        throw Log.notImplemented;
     }
 }

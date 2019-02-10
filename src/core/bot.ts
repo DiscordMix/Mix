@@ -20,7 +20,7 @@ import {EventEmitter} from "events";
 import Optimizer from "../optimization/optimizer";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
-import {DefaultArgResolvers, DefaultBotOptions} from "./constants";
+import {DefaultArgResolvers, DefaultBotOptions, DefaultSettingPaths} from "./constants";
 import Store from "../state/store";
 import BotMessages from "./messages";
 import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./bot-extra";
@@ -190,6 +190,22 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public constructor(token: BotToken, options: Partial<IBotOptions<TState>>, testMode: boolean = false) {
         super();
 
+        options = {
+            ...DefaultBotOptions,
+            ...options
+        };
+
+        this.settings = options.settings !== undefined ? options.settings : new Settings({
+            general: {
+                token,
+                prefix: ["!"]
+            },
+
+            paths: {
+                ...DefaultSettingPaths
+            }
+        });
+
         // Special options for unit tests.
         if (testMode) {
             (options.options as any) = {
@@ -219,14 +235,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.isSuspended = true;
         this.store = new Store<TState, TActionType>(options.initialState, options.reducers);
         this.state = BotState.Disconnected;
-
-        this.settings = options.settings !== undefined ? options.settings : new Settings({
-            general: {
-                token,
-                prefix: ["!"]
-            }
-        });
-
         this.paths = new PathResolver(this.settings.paths);
         this.temp = new Temp();
         this.handle = new BotHandler(this);

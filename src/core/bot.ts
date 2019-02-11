@@ -532,7 +532,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         Log.verbose(`Stopped ${servicesStopped} service(s)`);
         await this.dispose();
         await this.client.destroy();
+
+        // Re-create the client for complete reset.
         (this.client as any) = new Client();
+
         Log.info("Disconnected");
         this.emit(BotEvent.Disconnected);
 

@@ -273,7 +273,7 @@ export default class CommandHandler implements ICommandHandler {
      */
     public async undoAction(user: Snowflake, message: Message): Promise<boolean> {
         if (this.undoMemory.has(user)) {
-            const action: IUndoAction = this.undoMemory.get(user) as IUndoAction;
+            const action: IUndoAction = this.undoMemory.get(user)!;
 
             return await action.command.undo(action.context, message, action.args);
         }
@@ -403,7 +403,7 @@ export default class CommandHandler implements ICommandHandler {
      */
     protected handleError(event: CmdHandlerEvent, context: Context, command: Command): boolean {
         if (this.errorHandlers.has(event)) {
-            return (this.errorHandlers.get(event) as CmdErrorHandler)(context, command);
+            return this.errorHandlers.get(event)!(context, command);
         }
 
         return false;
@@ -443,7 +443,7 @@ export default class CommandHandler implements ICommandHandler {
             command
         })) {
             if (this.errorHandlers.has(CmdHandlerEvent.ArgumentAmountMismatch)) {
-                (this.errorHandlers.get(CmdHandlerEvent.ArgumentAmountMismatch) as CmdErrorHandler)(context, command);
+                this.errorHandlers.get(CmdHandlerEvent.ArgumentAmountMismatch)!(context, command);
             }
             else if (command.maxArguments === command.minArguments) {
                 context.fail(`That command only accepts **${command.maxArguments}** arguments.`);
@@ -463,7 +463,7 @@ export default class CommandHandler implements ICommandHandler {
         // TODO: CRITICAL Project no longer uses Typer. Is this already handled by checkArguments()?
         else if (false/* !command.singleArg /* && (!typer.validate(command.args, CommandHandler.assembleArguments(Object.keys(command.args), context.arguments), this.argumentTypes)) */) {
             if (this.errorHandlers.has(CmdHandlerEvent.InvalidArguments)) {
-                (this.errorHandlers.get(CmdHandlerEvent.InvalidArguments) as CmdErrorHandler)(context, command);
+                this.errorHandlers.get(CmdHandlerEvent.InvalidArguments)!(context, command);
             }
             else {
                 context.fail("Invalid argument usage. Please use the `usage` command.");

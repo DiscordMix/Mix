@@ -93,7 +93,7 @@ export default class ConsoleInterface {
             }
 
             if (this.commands.has(base)) {
-                await (this.commands.get(base) as ConsoleCommandHandler)(args);
+                await this.commands.get(base)!(args);
             }
             else {
                 console.log(chalk.white(`Unknown command: ${input}`));

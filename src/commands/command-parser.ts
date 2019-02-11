@@ -116,7 +116,7 @@ export default abstract class CommandParser {
             const match1: RegExpExecArray | null = argCleanExpression.exec(match[1]);
 
             if (match1) {
-                result.push(match1[2] as any);
+                result.push(match1[2]);
             }
 
             match = Pattern.args.exec(commandString);
@@ -219,7 +219,7 @@ export default abstract class CommandParser {
                     value = (options.schema[i].defaultValue as DefaultValueResolver)(options.message);
                 }
                 else if (type === "string" || type === "number" || type === "boolean") {
-                    value = options.schema[i].defaultValue as any;
+                    value = options.schema[i].defaultValue;
                 }
                 else {
                     throw Log.error(`Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
@@ -249,7 +249,7 @@ export default abstract class CommandParser {
         // TODO: Will this work with optional args?
         for (let i: number = 0; i < options.arguments.length; i++) {
             if (typeof (options.schema[i].type) === "function") {
-                if (!(options.schema[i].type as TypeChecker)(options.arguments[i] as any, options.message)) {
+                if (!(options.schema[i].type as TypeChecker)(options.arguments[i], options.message)) {
                     return false;
                 }
             }

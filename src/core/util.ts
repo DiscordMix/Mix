@@ -426,7 +426,7 @@ export default abstract class Util {
                     return;
                 }
 
-                resolve(parsed as ReturnType);
+                resolve(parsed);
             });
         });
     }

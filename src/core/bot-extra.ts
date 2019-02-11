@@ -46,16 +46,16 @@ export interface IBotModules {
  */
 export interface IBotOptions<T = any> {
     readonly settings: ISettings;
-    readonly prefixCommand?: boolean;
-    readonly internalCommands?: InternalCommand[];
-    readonly owner?: Snowflake;
-    readonly options?: Partial<IBotExtraOptions>;
-    readonly argumentResolvers?: Map<ArgumentType, ArgumentResolver>;
-    readonly argumentTypes?: ICustomArgType[];
-    readonly languages?: string[];
-    readonly initialState?: T;
-    readonly reducers?: Reducer<T>[];
-    readonly modules?: IBotModules;
+    readonly prefixCommand: boolean;
+    readonly internalCommands: InternalCommand[];
+    readonly owner: Snowflake;
+    readonly options: Partial<IBotExtraOptions>;
+    readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
+    readonly argumentTypes: ICustomArgType[];
+    readonly languages: string[];
+    readonly initialState: T;
+    readonly reducers: Reducer<T>[];
+    readonly modules: IBotModules;
 }
 
 export type Action<T = void> = () => T;

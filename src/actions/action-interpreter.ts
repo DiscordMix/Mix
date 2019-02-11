@@ -84,7 +84,7 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
                     return this;
                 }
 
-                await (channel as TextChannel).send(act.args.message);
+                await channel.send(act.args.message);
 
                 break;
             }
@@ -97,7 +97,7 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
                     return this;
                 }
 
-                await (channel as TextChannel).send(act.args.embed);
+                await channel.send(act.args.embed);
 
                 break;
             }
@@ -111,7 +111,7 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
                     return this;
                 }
 
-                await (this.bot.client.guilds.get(act.args.guildId) as Guild).leave();
+                await this.bot.client.guilds.get(act.args.guildId)!.leave();
 
                 break;
             }
@@ -125,7 +125,7 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
                     return this;
                 }
 
-                const user: User = this.bot.client.users.get(act.args.userId) as User;
+                const user: User = this.bot.client.users.get(act.args.userId)!;
 
                 await (await user.createDM()).send(act.args.message);
 
@@ -140,7 +140,7 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
                     return this;
                 }
 
-                await (channel as TextChannel).send(act.args.message);
+                await channel.send(act.args.message);
 
                 break;
             }
@@ -253,13 +253,13 @@ export default class ActionInterpreter extends EventEmitter implements IActionIn
             this.error(actionType, `Unknown channel '${channelId}'`);
         }
 
-        const channel: Channel = this.bot.client.channels.get(channelId) as Channel;
+        const channel: Channel = this.bot.client.channels.get(channelId)!;
 
         if (channel.type !== "text") {
             this.error(actionType, `Channel '${channelId}' does not match required channel type: ${type}`);
         }
 
-        return channel as any;
+        return channel as T;
     }
 
     protected error(type: ActionType, message: string): void {

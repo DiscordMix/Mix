@@ -266,7 +266,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
             return false;
         }
 
-        const child: ChildProcess = this.forkedServices.get(name) as ChildProcess;
+        const child: ChildProcess = this.forkedServices.get(name)!;
 
         return new Promise<boolean>((resolve) => {
             child.send({
@@ -353,10 +353,10 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
             return false;
         }
 
-        const child: ChildProcess = this.forkedServices.get(name) as ChildProcess;
+        const child: ChildProcess = this.forkedServices.get(name)!;
 
         if (this.forkHeartbeats.has(name)) {
-            clearTimeout(this.forkHeartbeats.get(name) as NodeJS.Timeout);
+            clearTimeout(this.forkHeartbeats.get(name)!);
         }
 
         // TODO: Auto-restart on timeout

@@ -192,19 +192,21 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
         options = {
             ...DefaultBotOptions,
+
+            settings: new Settings({
+                general: {
+                    token,
+                    prefix: ["!"]
+                },
+
+                paths: DefaultSettingPaths,
+                ...options.settings,
+            }),
+
             ...options
         };
 
-        this.settings = options.settings !== undefined ? options.settings : new Settings({
-            general: {
-                token,
-                prefix: ["!"]
-            },
-
-            paths: {
-                ...DefaultSettingPaths
-            }
-        });
+        this.settings = options.settings!;
 
         // Special options for unit tests.
         if (testMode) {

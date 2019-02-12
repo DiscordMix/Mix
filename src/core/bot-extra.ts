@@ -3,7 +3,7 @@ import {EventEmitter} from "events";
 import {ICustomArgType} from "../commands/command";
 import {ICommandHandler} from "../commands/command-handler";
 import {IFragmentManager} from "../fragments/fragment-manager";
-import Language, {ILanguage} from "../language/language";
+import Language from "../language/language";
 import {IOptimizer} from "../optimization/optimizer";
 import {IServiceManager} from "../services/service-manager";
 import {ITimeoutAttachable, IDisposable} from "./helpers";
@@ -13,74 +13,127 @@ import {ITemp} from "./temp";
 import {ICommandRegistry} from "../commands/command-registry";
 import {IConsoleInterface} from "../console/console-interface";
 import {ITaskManager} from "../tasks/task-manager";
-import ActionInterpreter, {IActionInterpreter} from "../actions/action-interpreter";
+import ActionInterpreter from "../actions/action-interpreter";
 import {Reducer, IStore} from "../state/store";
-import {ISettings} from "./settings";
 import {PromiseOr} from "@atlas/xlib";
 import {IBotHandler} from "./bot-handler";
 import {ArgumentType, ArgumentResolver} from "../commands/type";
 
 /**
- * Modules that will be used by the bot.
- */
-export interface IBotModules {
-    readonly store: IStore;
-    readonly paths: IPathResolver;
-    readonly temp: ITemp;
-    readonly client: Client;
-    readonly serviceManager: IServiceManager;
-    readonly commandStore: ICommandRegistry;
-    readonly commandHandler: ICommandHandler;
-    readonly consoleInterface: IConsoleInterface;
-    readonly language: ILanguage;
-    readonly statsCounter: IBotAnalytics;
-    readonly actionInterpreter: IActionInterpreter;
-    readonly taskManager: ITaskManager;
-    readonly optimizer: IOptimizer;
-    readonly fragmentManager: IFragmentManager;
-}
-
-// TODO: Already made optional by Partial?
-/**
  * Options to create a new bot instance.
  */
 export interface IBotOptions<T = any> {
-    readonly settings: ISettings;
-    readonly prefixCommand: boolean;
+    /**
+     * The prefix(es) that will trigger commands.
+     */
+    readonly prefixes: string[];
+
+    /**
+     * Whether to use the internal '?prefix' command.
+     */
+    readonly usePrefixCommand: boolean;
+
+    /**
+     * Specify the internal commands to be loaded and enabled.
+     */
     readonly internalCommands: InternalCommand[];
-    readonly owner: Snowflake;
-    readonly options: Partial<IBotExtraOptions>;
+
+    /**
+     * The owner of the bot. Used internally.
+     */
+    readonly owner?: Snowflake;
+
+    /**
+     * Whether to ignore all input from bots.
+     */
+    readonly ignoreBots: boolean;
+
+    /**
+     * Whether to log messages to the console.
+     */
+    readonly logMessages: boolean;
+
+    /**
+     * Whether to send a DM (direct message) when the help command is invoked.
+     */
+    readonly dmHelp: boolean;
+
+    /**
+     * Whether to use the internal bot optimization module.
+     */
+    readonly useOptimizer: boolean;
+
+    /**
+     * Whether to use the console interface module.
+     */
+    readonly useConsoleInterface: boolean;
+
+    /**
+     * Whether to attempt to apply a green checkmark emoji on successfull commands.
+     */
+    readonly checkCommands: boolean;
+
+    /**
+     * The directory location(s) to scan for various modules used by the bot, such as commands and services.
+     */
+    readonly paths: IBotPaths;
+
+    /**
+     * Various API keys to bot lists for automtic stat posting.
+     */
+    readonly keys: IBotKeys;
+
+    readonly showAsciiTitle: boolean;
+    readonly allowCommandChain: boolean;
+    readonly updateOnMessageEdit: boolean;
+    readonly autoDeleteCommands: boolean;
     readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
     readonly argumentTypes: ICustomArgType[];
     readonly languages: string[];
     readonly initialState: T;
     readonly reducers: Reducer<T>[];
-    readonly modules: IBotModules;
+}
+
+export interface IBotKeys {
+    /**
+     * The API key for DiscordBotList.org.
+     */
+    readonly dbl?: string;
+
+    /**
+     * The API key for BotsForDiscord.com.
+     */
+    readonly bfd?: string;
+}
+
+export interface IBotPaths {
+    /**
+     * The path to the commands directory.
+     */
+    readonly commands: string;
+
+    /**
+     * The path to the plugins directory.
+     */
+    readonly plugins: string;
+
+    /**
+     * The path to the services directory.
+     */
+    readonly services: string;
+
+    /**
+     * The path to the languages directory.
+     */
+    readonly languages: string;
+
+    /**
+     * The path to the tasks directory.
+     */
+    readonly tasks: string;
 }
 
 export type Action<T = void> = () => T;
-
-export interface IBotEmojiOptions {
-    readonly success: string;
-    readonly error: string;
-}
-
-/**
- * Extra options used by the bot.
- */
-export interface IBotExtraOptions {
-    readonly asciiTitle: boolean;
-    readonly consoleInterface: boolean;
-    readonly allowCommandChain: boolean;
-    readonly updateOnMessageEdit: boolean;
-    readonly checkCommands: boolean;
-    readonly autoDeleteCommands: boolean;
-    readonly ignoreBots: boolean;
-    readonly autoResetAuthStore: boolean;
-    readonly logMessages: boolean;
-    readonly dmHelp: boolean;
-    readonly optimizer: boolean;
-}
 
 /**
  * Events fired by the bot.
@@ -146,7 +199,7 @@ export type BotToken = string;
 export type Snowflake = string;
 
 export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDisposable, ITimeoutAttachable {
-    readonly settings: ISettings;
+    readonly options: IBotOptions;
     readonly temp: ITemp;
     readonly services: IServiceManager;
     readonly registry: ICommandRegistry;
@@ -155,7 +208,6 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly prefixCommand: boolean;
     readonly internalCommands: InternalCommand[];
     readonly owner?: Snowflake;
-    readonly options: IBotExtraOptions;
     readonly language?: Language;
     readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
     readonly disposables: IDisposable[];

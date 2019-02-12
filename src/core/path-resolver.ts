@@ -1,5 +1,5 @@
 import path from "path";
-import {ISettingsPaths} from "./settings";
+import {IBotPaths} from "./settings";
 
 export interface IPathResolver {
     command(name: string): string;
@@ -16,9 +16,9 @@ export default class PathResolver implements IPathResolver {
         return path.resolve(path.join(...paths));
     }
 
-    protected paths: ISettingsPaths;
+    protected paths: IBotPaths;
 
-    public constructor(paths: ISettingsPaths) {
+    public constructor(paths: IBotPaths) {
         this.paths = paths;
     }
 

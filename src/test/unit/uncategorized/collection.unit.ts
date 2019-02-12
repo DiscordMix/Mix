@@ -75,7 +75,7 @@ default class {
         Assert.equal(result1.general.prefix[0], ".");
         Assert.equal(result1.general.token, "another_secret_token");
 
-        // TODO: Use default paths reference instead of being hard-coded
+        // TODO: Use default paths reference instead of being hard-coded.
         Assert.equal(result1.paths.commands, "commands");
         Assert.equal(result1.paths.plugins, "plugins");
     }

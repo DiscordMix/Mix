@@ -1,11 +1,10 @@
 import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import path from "path";
-import {IBotEmojiOptions, IBotExtraOptions} from "./bot-extra";
-import {ISettingsPaths} from "./settings";
 import Util from "./util";
 import {ArgumentResolver, ArgumentType, Type} from "../commands/type";
 import Pattern from "./pattern";
 import {InputArgument} from "../commands/command";
+import {IBotOptions} from "./bot-extra";
 
 // TODO: Not working.
 export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";
@@ -94,31 +93,35 @@ export const DefaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map(
     }]
 ]);
 
-export const DefaultBotEmojiOptions: IBotEmojiOptions = {
-    error: ":thinking:",
-    success: ":white_check_mark:"
-};
-
-export const DefaultBotOptions: IBotExtraOptions = {
+export const DefaultBotOptions: IBotOptions = {
     allowCommandChain: true,
-    asciiTitle: true,
+    showAsciiTitle: true,
     autoDeleteCommands: false,
-    autoResetAuthStore: false,
     checkCommands: true,
     ignoreBots: true,
     updateOnMessageEdit: false,
     dmHelp: true,
     logMessages: false,
-    consoleInterface: true,
-    optimizer: false
-};
+    useConsoleInterface: true,
+    useOptimizer: false,
+    keys: {},
+    argumentResolvers: new Map(),
+    argumentTypes: [],
+    initialState: undefined,
+    internalCommands: [],
+    languages: [],
+    owner: undefined,
+    prefixes: ["!"],
+    reducers: [],
+    usePrefixCommand: true,
 
-export const DefaultSettingPaths: ISettingsPaths = {
-    commands: "commands",
-    plugins: "plugins",
-    services: "services",
-    languages: "languages",
-    tasks: "tasks"
+    paths: {
+        commands: "commands",
+        plugins: "plugins",
+        services: "services",
+        languages: "languages",
+        tasks: "tasks"
+    }
 };
 
 export const TrueDelegates: string[] = ["true", "1", "yes"];

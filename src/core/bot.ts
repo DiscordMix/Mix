@@ -2,7 +2,6 @@
 require("dotenv").config();
 
 import ConsoleInterface from "../console/console-interface";
-import Settings from "./settings";
 import Log from "./log";
 import Temp from "./temp";
 import {Client, Snowflake} from "discord.js";
@@ -20,10 +19,9 @@ import {EventEmitter} from "events";
 import Optimizer from "../optimization/optimizer";
 import FragmentManager from "../fragments/fragment-manager";
 import PathResolver from "./path-resolver";
-import {DefaultArgResolvers, DefaultBotOptions, DefaultSettingPaths} from "./constants";
+import {DefaultArgResolvers, DefaultBotOptions} from "./constants";
 import Store from "../state/store";
-import BotMessages from "./messages";
-import {InternalCommand, IBotExtraOptions, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./bot-extra";
+import {InternalCommand, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./bot-extra";
 import {Action} from "@atlas/automata";
 import BotConnector from "./bot-connector";
 import CommandRegistry from "../commands/command-registry";
@@ -35,15 +33,9 @@ import {ArgumentType, ArgumentResolver} from "../commands/type";
  * @extends EventEmitter
  */
 export default class Bot<TState = any, TActionType = any> extends EventEmitter implements IBot<TState, TActionType> {
-    /**
-     * @type {Settings}
-     * @readonly
-     */
-    public readonly settings: Settings;
-
+    // TODO: Temporary hard-coded user ID.
     /**
      * Access the bot's temporary file storage.
-     * @todo Temporary hard-coded user ID.
      */
     public readonly temp: Temp;
 
@@ -72,9 +64,9 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      */
     public readonly prefixCommand: boolean;
 
+    // TODO: Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded?
     /**
      * The internal commands to load.
-     * @todo Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded?
      */
     public readonly internalCommands: InternalCommand[];
 
@@ -86,7 +78,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     /**
      * The extra provided bot options.
      */
-    public readonly options: IBotExtraOptions;
+    public readonly options: IBotOptions;
 
     /**
      * Localization provider.
@@ -184,39 +176,27 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     protected readonly connector: BotConnector;
 
     /**
-     * @param {Partial<IBotOptions> | BotToken} options
+     * @param {BotToken} The bot token required to login to Discord.
+     * @param {Partial<IBotOptions>} options
      * @param {boolean} [testMode=false] Whether the bot is being used in testing. For internal use only.
      */
     public constructor(token: BotToken, options: Partial<IBotOptions<TState>>, testMode: boolean = false) {
         super();
 
-        options = {
+        this.options = {
             ...DefaultBotOptions,
-
-            settings: new Settings({
-                general: {
-                    token,
-                    prefix: ["!"]
-                },
-
-                paths: DefaultSettingPaths,
-                ...options.settings,
-            }),
-
             ...options
         };
 
-        this.settings = options.settings!;
-
         // Special options for unit tests.
         if (testMode) {
-            (options.options as any) = {
-                ...options.options,
+            (this.options as any) = {
+                ...this.options,
                 asciiTitle: false,
                 consoleInterface: false
             };
 
-            (options.settings as any).paths = {
+            (this.options as any).paths = {
                 commands: path.resolve(path.join(__dirname, "../", "test", "test-commands")),
                 languages: path.resolve(path.join("src", "test", "test-languages")),
                 services: path.resolve(path.join(__dirname, "../", "test", "test-services")),
@@ -230,14 +210,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             };
         }
 
-        if (!options || !options.settings || typeof options.settings !== "object") {
-            throw Log.error(BotMessages.SETUP_INVALID);
-        }
-
         this.isSuspended = true;
-        this.store = new Store<TState, TActionType>(options.initialState, options.reducers);
+        this.store = new Store<TState, TActionType>(this.options.initialState, this.options.reducers);
         this.state = BotState.Disconnected;
-        this.paths = new PathResolver(this.settings.paths);
+        this.paths = new PathResolver(this.options.paths);
         this.temp = new Temp();
         this.handle = new BotHandler(this);
         this.client = new Client();
@@ -254,7 +230,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         });
 
         this.console = new ConsoleInterface();
-        this.prefixCommand = options.prefixCommand || true;
+        this.prefixCommand = options.usePrefixCommand || true;
 
         this.internalCommands = options.internalCommands || [
             InternalCommand.CLI,
@@ -268,13 +244,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             InternalCommand.Usage
         ];
 
-        this.options = {
-            ...DefaultBotOptions,
-            ...options.options,
-        };
-
-        this.owner = options.owner;
-        this.language = this.settings.paths.languages ? new Language(this.settings.paths.languages) : undefined;
+        this.owner = this.options.owner;
+        this.language = this.options.paths.languages ? new Language(this.options.paths.languages) : undefined;
         this.languages = options.languages;
         this.analytics = new Analytics();
         this.disposables = [];
@@ -325,21 +296,21 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * Post stats to various bot lists.
      */
     public async postStats(): Promise<void> {
-        if (!this.client.user || Object.keys(this.settings.keys).length === 0) {
+        if (!this.client.user || Object.keys(this.options.keys).length === 0) {
             return;
         }
 
         const serverCount: number = this.client.guilds.size;
 
         // Discord Bot List.org.
-        if (this.settings.keys.dbl) {
+        if (this.options.keys.dbl) {
             const dblUrl: string = "https://discordbots.org/api/bots/{botId}/stats";
 
             await axios.post(dblUrl.replace("{botId}", this.client.user.id), {
                 server_count: serverCount
             }, {
                     headers: {
-                        Authorization: this.settings.keys.dbl
+                        Authorization: this.options.keys.dbl
                     }
                 }).catch((error: Error) => {
                     Log.warn(`Could not post stats to discordbots.org (${error.message})`);
@@ -347,14 +318,14 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         // Bots for Discord.com.
-        if (this.settings.keys.bfd) {
+        if (this.options.keys.bfd) {
             const bfdUrl: string = "https://botsfordiscord.com/api/bot/{botId}";
 
             await axios.post(bfdUrl.replace("{botId}", this.client.user.id), {
                 server_count: serverCount
             }, {
                     headers: {
-                        Authorization: this.settings.keys.bfd,
+                        Authorization: this.options.keys.bfd,
                         "Content-Type": "application/json"
                     }
                 }).catch((error: Error) => {
@@ -470,7 +441,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         await this.connector.setup();
         Log.verbose("Starting");
 
-        await this.client.login(this.settings.general.token).catch(async (error: Error) => {
+        await this.client.login(this.options.general.token).catch(async (error: Error) => {
             if (error.message === "Incorrect login details were provided.") {
                 Log.error("The provided token is invalid or has been regenerated");
                 await this.disconnect();

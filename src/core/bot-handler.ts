@@ -122,7 +122,7 @@ export default class BotHandler implements IBotHandler {
     }
 
     /**
-     * @todo Investigate the resolvers parameter usage (is it even used or required?)
+     * @todo Investigate the resolvers parameter usage (is it even used or required?).
      * @param {Message} message
      * @param {string} content
      * @param {*} resolvers

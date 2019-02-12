@@ -18,6 +18,9 @@ export default class BotConnector implements IBotConnector {
     protected bot: Bot;
     protected setupStart!: number;
 
+    /**
+     * @param {Bot} bot
+     */
     public constructor(bot: Bot) {
         this.bot = bot;
     }

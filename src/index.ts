@@ -36,7 +36,6 @@ import {IDisposable} from "./core/helpers";
 import Log, {LogLevel} from "./core/log";
 import Pattern from "./core/pattern";
 import Permission from "./core/permission";
-import Settings, {ISettings} from "./core/settings";
 import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setup-helper";
 import Util from "./core/util";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
@@ -137,8 +136,6 @@ export {
     LogLevel,
     Rgb,
     Rgba,
-    Settings,
-    ISettings,
     TimeParser,
     TimeSuffixType,
     Util,

@@ -106,7 +106,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
 
     /**
      * @param {GenericService[]} multipleServices
-     * @return {number}
+     * @return {number} The actual number of registered services.
      */
     public registerMultiple(multipleServices: IGenericService[]): number {
         let registered: number = 0;
@@ -122,7 +122,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
 
     /**
      * @param {string} name
-     * @return {Promise<boolean>} Whether the service was started
+     * @return {Promise<boolean>} Whether the service was started.
      */
     public async start(name: string): Promise<boolean> {
         if (typeof name !== "string" || Util.isEmpty(name) || Array.isArray(name)) {
@@ -157,8 +157,8 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
                 if (!this.ignite(service.meta.name)) {
                     Log.warn(`Failed to ignite forked service '${name}'`);
                 }
-                // TODO: CRITICAL: Below will ONLY work LOCALLY! Remember forked services are ignited
-                // TODO: as ForkedService gives syntax error highlight
+                // TODO: CRITICAL: Below will ONLY work LOCALLY! Remember forked services are ignited.
+                // TODO: as ForkedService gives syntax error highlight.
                 else if ((service as any).useSMIS) {
                     const child: ChildProcess | null = this.getFork(service.meta.name);
 
@@ -234,7 +234,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
                         break;
                     }
 
-                    // TODO: Add a way to restrict this (whitelistEnabled + whitelist?)
+                    // TODO: Add a way to restrict this (whitelistEnabled + whitelist?).
                     console.log(msg.data);
 
                     break;
@@ -259,7 +259,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         this.emit("ignite", name);
         this.heartbeatFork(name);
 
-        // TODO: Debugging
+        // TODO: Debugging.
         Log.debug(`Spawned forked service '${name}' @ ${child.pid}`);
 
         return true;

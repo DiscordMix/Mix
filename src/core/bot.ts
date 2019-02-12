@@ -161,6 +161,11 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
 
     /**
+     * The bot token required to login to Discord.
+     */
+    public readonly token: BotToken;
+
+    /**
      * Whether the bot is currently suspended and ignoring all user input.
      */
     protected isSuspended: boolean;
@@ -182,6 +187,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      */
     public constructor(token: BotToken, options: Partial<IBotOptions<TState>>, testMode: boolean = false) {
         super();
+
+        this.token = token;
 
         this.options = {
             ...DefaultBotOptions,
@@ -441,7 +448,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         await this.connector.setup();
         Log.verbose("Starting");
 
-        await this.client.login(this.options.general.token).catch(async (error: Error) => {
+        await this.client.login(this.token).catch(async (error: Error) => {
             if (error.message === "Incorrect login details were provided.") {
                 Log.error("The provided token is invalid or has been regenerated");
                 await this.disconnect();

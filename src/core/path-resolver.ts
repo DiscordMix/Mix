@@ -1,5 +1,5 @@
 import path from "path";
-import {IBotPaths} from "./settings";
+import {IBotPaths} from "./bot-extra";
 
 export interface IPathResolver {
     command(name: string): string;

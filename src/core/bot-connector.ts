@@ -29,7 +29,7 @@ export default class BotConnector implements IBotConnector {
     public async setup(): Promise<this> {
         this.bot.emit(BotEvent.SetupStart);
 
-        if (this.bot.options.asciiTitle) {
+        if (this.bot.options.showAsciiTitle) {
             console.log("\n" + Title.replace("{version}", "beta") + "\n");
         }
 
@@ -87,10 +87,10 @@ export default class BotConnector implements IBotConnector {
         this.bot.emit(BotEvent.LoadingServices);
 
         // Load & enable services.
-        const consumerServiceCandidates: string[] | null = await Loader.scan(this.bot.settings.paths.services);
+        const consumerServiceCandidates: string[] | null = await Loader.scan(this.bot.options.paths.services);
 
         if (!consumerServiceCandidates || consumerServiceCandidates.length === 0) {
-            Log.verbose(`No services were detected under '${this.bot.settings.paths.services}'`);
+            Log.verbose(`No services were detected under '${this.bot.options.paths.services}'`);
         }
         else {
             Log.verbose(`Loading ${consumerServiceCandidates.length} service(s)`);
@@ -114,10 +114,10 @@ export default class BotConnector implements IBotConnector {
         this.bot.emit(BotEvent.LoadingCommands);
 
         // Load & enable consumer command fragments.
-        const consumerCommandCandidates: string[] | null = await Loader.scan(this.bot.settings.paths.commands);
+        const consumerCommandCandidates: string[] | null = await Loader.scan(this.bot.options.paths.commands);
 
         if (!consumerCommandCandidates || consumerCommandCandidates.length === 0) {
-            Log.warn(`No commands were detected under '${this.bot.settings.paths.commands}'`);
+            Log.warn(`No commands were detected under '${this.bot.options.paths.commands}'`);
         }
         else {
             Log.verbose(`Loading ${consumerCommandCandidates.length} command(s)`);
@@ -143,7 +143,7 @@ export default class BotConnector implements IBotConnector {
         await this.bot.tasks.unregisterAll();
         Log.verbose(BotMessages.SETUP_LOADING_TASKS);
 
-        const loaded: number = await this.bot.tasks.loadAll(this.bot.settings.paths.tasks);
+        const loaded: number = await this.bot.tasks.loadAll(this.bot.options.paths.tasks);
 
         if (loaded > 0) {
             Log.success(`Loaded ${loaded} task(s)`);
@@ -164,7 +164,7 @@ export default class BotConnector implements IBotConnector {
         this.bot.emit(BotEvent.LoadedCommands);
 
         // Start optimizer if applicable.
-        if (this.bot.options.optimizer) {
+        if (this.bot.options.useOptimizer) {
             Log.verbose(BotMessages.SETUP_START_OPTIMIZER);
             this.bot.optimizer.start();
             Log.success(BotMessages.SETUP_STARTED_OPTIMIZER);
@@ -192,7 +192,7 @@ export default class BotConnector implements IBotConnector {
             // Create the temp folder.
             await this.bot.temp.create();
 
-            if (this.bot.options.consoleInterface && !this.bot.console.ready) {
+            if (this.bot.options.useConsoleInterface && !this.bot.console.ready) {
                 // Setup the console command interface.
                 this.bot.console.setup(this.bot);
             }

@@ -27,8 +27,14 @@ export default abstract class Pattern {
      */
     public static snowflake: RegExp = /[0-9]{18}/gm;
 
+    /**
+     * Matches either Discord user mentions or Snowflakes.
+     */
     public static mentionOrSnowflake: RegExp = /<@!?[0-9]{18}>|[0-9]{18}/gm;
 
+    /**
+     * Matches all possible Discord mentions, including '@everyone' and '@here'.
+     */
     public static anyMention: RegExp = /<(?:\@|\#|\&)[0-9]{18}>|@(?:everyone|here)/gm;
 
     /**

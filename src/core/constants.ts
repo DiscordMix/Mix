@@ -93,6 +93,9 @@ export const DefaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map(
     }]
 ]);
 
+/**
+ * Default bot options which may be overriden by the user.
+ */
 export const DefaultBotOptions: IBotOptions = {
     allowCommandChain: true,
     showAsciiTitle: true,
@@ -124,6 +127,12 @@ export const DefaultBotOptions: IBotOptions = {
     }
 };
 
+/**
+ * Entities representing the 'true' state.
+ */
 export const TrueDelegates: string[] = ["true", "1", "yes"];
 
+/**
+ * Entities representing the 'false' state.
+ */
 export const FalseDelegates: string[] = ["false", "0", "no"];

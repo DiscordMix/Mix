@@ -22,22 +22,8 @@ export interface IResponseHelper {
 }
 
 export default class ResponseHelper implements IResponseHelper {
-    /**
-     * @type {TextChannel}
-     * @readonly
-     */
     public readonly channel: TextChannel;
-
-    /**
-     * @type {IBot}
-     * @readonly
-     */
     public readonly bot: IBot;
-
-    /**
-     * @type {User}
-     * @readonly
-     */
     public readonly sender: User;
 
     public constructor(channel: TextChannel, bot: IBot, sender: User) {
@@ -55,12 +41,7 @@ export default class ResponseHelper implements IResponseHelper {
         return new EditableMessage(await this.channel.send(new Discord.Attachment(stream, name)));
     }
 
-    /**
-     * @todo Content parameter type.
-     * @param {EmbedBuilder | *} content
-     * @param {boolean} [autoDelete=false]
-     * @return {Promise<EditableMessage> | null}
-     */
+    // TODO: Content parameter type.
     public async respond(content: EmbedBuilder | any, autoDelete: boolean = false): Promise<EditableMessage | null> {
         let embed: EmbedBuilder | null = null;
 
@@ -139,21 +120,13 @@ export default class ResponseHelper implements IResponseHelper {
         return (!!messageResult ? new EditableMessage(messageResult) : null);
     }
 
-    /**
-     * @todo For some reason not having 'Requested by' footer
-     * @param {*} sections
-     * @param {string} color
-     * @return {Promise<EditableMessage | null>}
-     */
+    // TODO: For some reason not having 'Requested by' footer.
     public async sections(sections: any, color: string = "GREEN"): Promise<EditableMessage | null> {
         return await this.respond(EmbedBuilder.sections(sections, color));
     }
 
     /**
-     * @param {string} text
-     * @param {string} [title=""]
-     * @param {boolean} [clean=true] Whether to filter the message
-     * @return {Promise<EditableMessage | null>}
+     * @param {boolean} [clean=true] Whether to filter the message.
      */
     public async ok(text: string | MsgBuilder, title: string = "", clean: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
@@ -162,18 +135,10 @@ export default class ResponseHelper implements IResponseHelper {
         });
     }
 
-    /**
-     * @param {string} text
-     * @return {Promise<EditableMessage | null>}
-     */
     public async send(text: string | RichEmbed | Message): Promise<EditableMessage | null> {
         return new EditableMessage(await this.channel.send(text));
     }
 
-    /**
-     * @param {string} text
-     * @return {Promise<EditableMessage | null>}
-     */
     public async loading(text: string): Promise<EditableMessage | null> {
         return await this.respond({
             // TODO: Isn't the emoji missing?
@@ -182,11 +147,6 @@ export default class ResponseHelper implements IResponseHelper {
         });
     }
 
-    /**
-     * @param {string} text
-     * @param {boolean} [autoDelete=true]
-     * @return {Promise<EditableMessage | null>}
-     */
     public async fail(text: string, autoDelete: boolean = true): Promise<EditableMessage | null> {
         return await this.respond({
             text: `:thinking: ${text}`,

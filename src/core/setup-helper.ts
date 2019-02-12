@@ -46,10 +46,6 @@ export interface ISetupHelper {
 }
 
 export default class SetupHelper implements ISetupHelper {
-    /**
-     * @param {IFromContextOptions} options
-     * @return {SetupHelper | null}
-     */
     public static fromContext(options: IFromContextOptions): SetupHelper | null {
         if (options.context.msg.channel instanceof TextChannel) {
             // context.bot.client, context.message.channel, context.sender.id, title, timeout, embed
@@ -76,64 +72,16 @@ export default class SetupHelper implements ISetupHelper {
     protected readonly embed: boolean;
     protected readonly actionMap: ISetupHelperAction[];
 
-    /**
-     * @param {ISetupHelperOptions} options
-     */
     public constructor(options: ISetupHelperOptions) {
-        /**
-         * @type {*}
-         * @protected
-         * @readonly
-         */
         this.client = options.client;
-
-        /**
-         * @type {TextChannel}
-         * @protected
-         * @readonly
-         */
         this.channel = options.channel;
-
-        /**
-         * @type {Snowflake}
-         * @protected
-         * @readonly
-         */
         this.userId = options.userId;
-
-        /**
-         * @type {string | undefined}
-         * @protected
-         * @readonly
-         */
         this.title = options.title;
-
-        /**
-         * @type {number}
-         * @protected
-         * @readonly
-         */
         this.timeout = options.timeout || 60;
-
-        /**
-         * @type {boolean}
-         * @protected
-         * @readonly
-         */
         this.embed = options.embed !== undefined ? options.embed : true;
-
-        /**
-         * @type {ISetupHelperAction[]}
-         * @protected
-         * @readonly
-         */
         this.actionMap = [];
     }
 
-    /**
-     * @param {string} text
-     * @return {this}
-     */
     public input(text: string): this {
         this.actionMap.push({
             type: SetupHelperActionType.Input,
@@ -143,10 +91,6 @@ export default class SetupHelper implements ISetupHelper {
         return this;
     }
 
-    /**
-     * @param {string} text
-     * @return {this}
-     */
     public question(text: string): this {
         this.actionMap.push({
             type: SetupHelperActionType.Question,
@@ -156,10 +100,6 @@ export default class SetupHelper implements ISetupHelper {
         return this;
     }
 
-    /**
-     * @param {ResponseHandler} responseHandler
-     * @return {Promise<ISetupHelperResult>}
-     */
     public async finish(responseHandler?: ResponseHandler): Promise<ISetupHelperResult> {
         const responses: string[] = [];
 
@@ -197,9 +137,6 @@ export default class SetupHelper implements ISetupHelper {
         };
     }
 
-    /**
-     * @return {Promise<string | null>}
-     */
     protected awaitResponse(): Promise<string | null> {
         return new Promise((resolve) => {
             // Timeout after x seconds.

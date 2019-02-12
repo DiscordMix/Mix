@@ -62,7 +62,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     /**
      * Whether the built-in prefix command should be used.
      */
-    public readonly prefixCommand: boolean;
+    public readonly usePrefixCommand: boolean;
 
     // TODO: Even if it's not specified here, the throw command was loaded, verify that ONLY specific trivials can be loaded?
     /**
@@ -237,7 +237,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         });
 
         this.console = new ConsoleInterface();
-        this.prefixCommand = options.usePrefixCommand || true;
+        this.usePrefixCommand = options.usePrefixCommand || true;
 
         this.internalCommands = options.internalCommands || [
             InternalCommand.CLI,

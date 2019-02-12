@@ -28,25 +28,10 @@ export interface IDataCollector {
 
 // TODO: Should also be able to call a callback function every X iterations.
 export default class DataCollector implements IDataCollector {
-    /**
-     * @type {Guild}
-     * @protected
-     * @readonly
-     */
     protected readonly guild: Guild;
-
-    /**
-     * @type {MemberDataType}
-     * @protected
-     */
     protected readonly collectionType: MemberDataType;
 
-    /**
-     * @type {MemberType}
-     * @protected
-     */
     protected fromType: MemberType;
-
     protected whereCondition?: ConditionCallback;
 
     /**
@@ -61,7 +46,6 @@ export default class DataCollector implements IDataCollector {
 
     /**
      * @param {MemberDataType} dataType
-     * @return {this}
      */
     public collect(dataType: MemberDataType): this {
         // TODO:
@@ -71,7 +55,6 @@ export default class DataCollector implements IDataCollector {
 
     /**
      * @param {MemberType} memberType
-     * @return {this}
      */
     public from(memberType: MemberType): this {
         this.fromType = memberType;
@@ -81,7 +64,6 @@ export default class DataCollector implements IDataCollector {
 
     /**
      * @param {ConditionCallback} condition
-     * @return {this}
      */
     public where(condition: ConditionCallback): this {
         this.whereCondition = condition;
@@ -90,7 +72,7 @@ export default class DataCollector implements IDataCollector {
     }
 
     /**
-     * @return {GuildMember[]}
+     * Collect accomulated data.
      */
     public finish(): GuildMember[] {
         const members: GuildMember[] = this.guild.members.array();

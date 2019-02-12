@@ -107,7 +107,7 @@ export default abstract class Log {
     }
 
     /**
-     * Attempt to log a set of messages to the console.
+     * Attempt to log a set of recorded messages to the console.
      * @param {IComposeOptions[]} history
      */
     public static playback(history: IComposeOptions[]): void {
@@ -118,7 +118,7 @@ export default abstract class Log {
 
     /**
      * Display an information message in the console.
-     * @param {*} message
+     * @param {*} message The message to display.
      * @param {Array<*>} params
      */
     public static info(message: any, ...params: any[]): void {
@@ -135,7 +135,7 @@ export default abstract class Log {
 
     /**
      * Display a success message in the console.
-     * @param {*} message
+     * @param {*} message The message to display.
      * @param {Array<*>} params
      */
     public static success(message: any, ...params: any[]): void {
@@ -152,7 +152,7 @@ export default abstract class Log {
 
     /**
      * Display a warning message in the console.
-     * @param {*} message
+     * @param {*} message The message to display.
      * @param {Array<*>} params
      */
     public static warn(message: any, ...params: any[]): void {

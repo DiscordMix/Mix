@@ -242,7 +242,6 @@ export default abstract class Log {
 
     /**
      * Create an error signaling lack of implementation.
-     * @return {Error}
      */
     public static get notImplemented(): Error {
         return new Error(BotMessages.NOT_IMPLEMENTED);

@@ -18,6 +18,9 @@ export interface IBotHandler {
 export default class BotHandler implements IBotHandler {
     protected readonly bot: Bot;
 
+    /**
+     * @param bot
+     */
     public constructor(bot: Bot) {
         this.bot = bot;
 
@@ -29,7 +32,6 @@ export default class BotHandler implements IBotHandler {
      * Handle an incoming message.
      * @param {Message} msg The incoming message.
      * @param {boolean} [edited=false] Whether the message was previously edited.
-     * @return {Promise<boolean>}
      */
     public async message(msg: Message, edited: boolean = false): Promise<boolean> {
         if (Util.isEmpty(msg) || typeof msg !== "object" || !(msg instanceof Message) || Array.isArray(msg)) {
@@ -64,7 +66,7 @@ export default class BotHandler implements IBotHandler {
         }
 
         // TODO: Cannot do .startsWith with a prefix array.
-        if ((!msg.author.bot || (msg.author.bot && !this.bot.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.bot.registry, this.bot.settings.general.prefix)) {
+        if ((!msg.author.bot || (msg.author.bot && !this.bot.options.ignoreBots)) /*&& message.content.startsWith(this.settings.general.prefix)*/ && CommandParser.validate(msg.content, this.bot.registry, this.bot.options.prefixes)) {
             if (this.bot.options.allowCommandChain) {
                 // TODO: Might split values too.
                 const rawChain: string[] = msg.content.split("~");
@@ -95,7 +97,7 @@ export default class BotHandler implements IBotHandler {
         // TODO: ?prefix should also be chain-able
         else if (!msg.author.bot && msg.content === "?prefix" && this.bot.prefixCommand) {
             await msg.channel.send(new RichEmbed()
-                .setDescription(`Command prefix(es): **${this.bot.settings.general.prefix.join(", ")}** | Powered by [The Mix Framework](https://github.com/discord-mix/mix)`)
+                .setDescription(`Command prefix(es): **${this.bot.options.prefixes.join(", ")}** | Powered by [The Mix Framework](https://github.com/discord-mix/mix)`)
                 .setColor("GREEN"));
         }
         // TODO: There should be an option to disable this.
@@ -132,7 +134,7 @@ export default class BotHandler implements IBotHandler {
         const command: Command | null = await CommandParser.parse(
             content,
             this.bot.registry,
-            this.bot.settings.general.prefix
+            this.bot.options.prefixes
         );
 
         if (command === null) {
@@ -173,7 +175,7 @@ export default class BotHandler implements IBotHandler {
 
             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review).
 
-            label: CommandParser.getCommandBase(msg.content, this.bot.settings.general.prefix)
+            label: CommandParser.getCommandBase(msg.content, this.bot.options.prefixes)
         });
     }
 }

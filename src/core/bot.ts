@@ -273,7 +273,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Whether the bot is currently connected.
-     * @return {boolean}
      */
     public get connected(): boolean {
         return this.state === BotState.Connected;
@@ -281,7 +280,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Whether the bot is currently suspended and ignoring all user input.
-     * @return {boolean}
      */
     public get suspended(): boolean {
         return this.isSuspended;
@@ -290,7 +288,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     /**
      * Suspend or unsuspend the bot.
      * @param {boolean} suspended Whether to suspend the bot.
-     * @return {this}
      */
     public setSuspended(suspended: boolean): this {
         this.isSuspended = suspended;
@@ -345,7 +342,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * Attach a timeout to the bot.
      * @param {Action} action
      * @param {number} time
-     * @return {NodeJS.Timeout}
      */
     public setTimeout(action: Action, time: number): NodeJS.Timeout {
         const timeout: NodeJS.Timeout = setTimeout(() => {
@@ -441,7 +437,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Connect the Discord client.
-     * @return {Promise<this>}
      */
     public async connect(): Promise<this> {
         this.setState(BotState.Connecting);
@@ -462,10 +457,9 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         return this;
     }
 
+    // TODO: "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached)?
     /**
-     * @todo "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached)?
      * Restart the Discord client.
-     * @return {Promise<this>}
      */
     public async reconnect(): Promise<this> {
         this.emit(BotEvent.Restarting);
@@ -483,7 +477,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Reload the bot's fragments, modules, commands, tasks and services.
-     * @return {Promise<this>}
      */
     public async reload(): Promise<this> {
         const commands: number = this.registry.getAll().size;
@@ -499,7 +492,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Disconnect the Discord client.
-     * @return {Promise<this>}
      */
     public async disconnect(): Promise<this> {
         this.emit(BotEvent.Disconnecting);
@@ -561,7 +553,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * @param {BotState} state
-     * @return {this}
      */
     public setState(state: BotState): this {
         (this.state as any) = state;

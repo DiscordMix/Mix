@@ -450,12 +450,12 @@ export default class CommandRegistry implements ICommandRegistry {
      */
     public async invoke(base: string, referer: Message, ...args: string[]): Promise<any> {
         // Use any registered prefix, default to index 0
-        const content: string = `${this.bot.settings.general.prefix[0]}${base} ${args.join(" ")}`.trim();
+        const content: string = `${this.bot.options.prefixes[0]}${base} ${args.join(" ")}`.trim();
 
         let command: Command | null = await CommandParser.parse(
             content,
             this,
-            this.bot.settings.general.prefix
+            this.bot.options.prefixes
         );
 
         if (command === null) {

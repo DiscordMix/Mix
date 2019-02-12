@@ -142,11 +142,8 @@ export default class ConsoleInterface {
                         console.log(`\n\nService: ${name}\n\n`, service);
                     }
                 }
-                else if (args[0] === "config") {
+                else if (args[0] === "opts") {
                     console.log("Using bot options:\n\n", bot.options);
-                }
-                else if (args[0] === "settings") {
-                    console.log("Using settings:\n\n", bot.settings);
                 }
                 else {
                     console.log("Unknown subcommand");
@@ -200,7 +197,7 @@ export default class ConsoleInterface {
 
         this.commands.set("poststats", async () => {
             // TODO: Some way to check if NO key is set.
-            if (Object.keys(bot.settings.keys).length === 0) {
+            if (Object.keys(bot.options.keys).length === 0) {
                 console.log("You haven't set any keys!");
 
                 return;

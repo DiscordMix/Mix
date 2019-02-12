@@ -186,8 +186,8 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
     }
 
     /**
-     * Enable all services
-     * @return {Promise<number>} The amount of successfully enabled services
+     * Enable all services.
+     * @return {Promise<number>} The amount of successfully enabled services.
      */
     public async startAll(): Promise<number> {
         let enabled: number = 0;
@@ -201,8 +201,12 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         return enabled;
     }
 
+    /**
+     * @param {string} name The name of the service to start.
+     * @return {boolean} Whether the service was successfully ignited.
+     */
     public ignite(name: string): boolean {
-        const absPath: string = path.resolve(path.join(this.bot.settings.paths.services, `${name}.js`));
+        const absPath: string = path.resolve(path.join(this.bot.options.paths.services, `${name}.js`));
 
         if (!fs.existsSync(absPath)) {
             return false;
@@ -261,6 +265,10 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         return true;
     }
 
+    /**
+     * @param {string} name The name of the forked service.
+     * @return {boolean} Whether the operation was successfully completed.
+     */
     public async stopFork(name: string): Promise<boolean> {
         if (!this.forkedServices.has(name)) {
             return false;
@@ -282,6 +290,10 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         });
     }
 
+    /**
+     * Stop all attached forked services.
+     * @return {Promise<number>} The amount of stopped services.
+     */
     public async stopAllForks(): Promise<number> {
         let stopped: number = 0;
 
@@ -296,7 +308,6 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
 
     /**
      * @param {string} name
-     * @return {Readonly<GenericService> | null}
      */
     public getService(name: string): Readonly<IGenericService> | null {
         if (typeof name !== "string" || Util.isEmpty(name) || Array.isArray(name)) {
@@ -307,7 +318,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
     }
 
     /**
-     * Dispose all services
+     * Dispose all registered services.
      */
     public async disposeAll(): Promise<void> {
         for (const [name, service] of this.services) {
@@ -322,8 +333,10 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         return this.services as ReadonlyServiceMap;
     }
 
-    // TODO: .stop()
-
+    // TODO: Use .stop()?
+    /**
+     * Stop all running services.
+     */
     public async stopAll(): Promise<this> {
         for (const [name, service] of this.services) {
             await service.stop();
@@ -333,8 +346,8 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
     }
 
     /**
-     * @param {string} name The unique identifier of the service
-     * @return {boolean}
+     * @param {string} name The unique identifier of the service.
+     * @return {boolean} Whether the service exists and is registered.
      */
     public contains(name: string): boolean {
         if (typeof name !== "string" || Util.isEmpty(name)) {
@@ -344,10 +357,17 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         return this.services.has(name);
     }
 
+    /**
+     * The amount of registered services.
+     */
     public get size(): number {
         return this.services.size;
     }
 
+    /**
+     * Emit a heartbeat to a forked service.
+     * @param {string} name The name of the forked service.
+     */
     protected heartbeatFork(name: string): boolean {
         if (!this.forkedServices.has(name)) {
             return false;
@@ -359,7 +379,7 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
             clearTimeout(this.forkHeartbeats.get(name)!);
         }
 
-        // TODO: Auto-restart on timeout
+        // TODO: Auto-restart on timeout.
         this.forkHeartbeats.set(name, setTimeout(() => {
             if (!child.killed) {
                 child.kill("timeout");

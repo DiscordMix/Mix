@@ -1,5 +1,4 @@
 import {IBot} from "../core/bot-extra";
-import Settings from "../core/settings";
 import {IBuilder} from "./builder";
 import Log from "../core/log";
 
@@ -9,7 +8,6 @@ export interface IBotBuilder extends IBuilder<IBot> {
     internalCommands(internalCommands: string[]): this;
     argumentTypes(argumentTypes: any): this;
     prefixCommand(prefixCommand: boolean): this;
-    settings(settings: Settings): this;
 }
 
 export default class BotBuilder implements IBotBuilder {
@@ -69,16 +67,6 @@ export default class BotBuilder implements IBotBuilder {
      */
     public prefixCommand(prefixCommand: boolean): this {
         this.bot.prefixCommand = prefixCommand;
-
-        return this;
-    }
-
-    /**
-     * @param {Settings} settings
-     * @return {BotBuilder}
-     */
-    public settings(settings: Settings): this {
-        this.bot.settings = settings;
 
         return this;
     }

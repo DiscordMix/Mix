@@ -5,7 +5,6 @@ import {DecoratorProxy} from "./component";
 
 /**
  * Set a fragment's meta property.
- * @param {IMeta} value
  */
 export function meta(value: IMeta): DecoratorProxy {
     return function (target: any) {
@@ -64,7 +63,7 @@ export function aliases(...values: string[]): DecoratorProxy {
  */
 export function args(...values: IArgument[]): DecoratorProxy {
     return function (target: any) {
-        // TODO: It may not be efficient to create a new instance just to extract default properties
+        // TODO: It may not be efficient to create a new instance just to extract default properties.
         const instance: Command = DecoratorUtils.createInstance(target);
 
         return class extends target {

@@ -6,7 +6,7 @@ import {DecoratorProxy} from "./component";
 export abstract class Constraint {
     /**
      * Restrict command execution to a certain environment.
-     * @param env The command execution environment.
+     * @param {ChatEnv} env The command execution environment.
      */
     public static environment(env: ChatEnv): DecoratorProxy {
         return function (target: any) {
@@ -18,7 +18,7 @@ export abstract class Constraint {
 
     /**
      * Rate-limit command execution per user.
-     * @param time The time between command executions in seconds.
+     * @param {number} time The time between command executions in seconds.
      */
     public static cooldown(time: number): DecoratorProxy {
         return function (target: any) {
@@ -30,7 +30,6 @@ export abstract class Constraint {
 
     /**
      * Disable a command and prevent execution.
-     * @param {*} target
      */
     public static disabled(target: any): DecoratorProxy {
         DecoratorUtils.ensureFunc(target);
@@ -42,7 +41,6 @@ export abstract class Constraint {
 
     /**
      * Limit command execution to specific users, channels, or guilds.
-     * @param {SpecificConstraints} values
      */
     public static specific(values: SpecificConstraints): DecoratorProxy {
         return function (target: any) {
@@ -78,7 +76,6 @@ export abstract class Constraint {
 
     /**
      * Limit the command to the bot owner only.
-     * @param target
      */
     public static ownerOnly(target: any): DecoratorProxy {
         DecoratorUtils.ensureFunc(target);

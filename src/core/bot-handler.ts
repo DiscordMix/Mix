@@ -18,9 +18,6 @@ export interface IBotHandler {
 export default class BotHandler implements IBotHandler {
     protected readonly bot: Bot;
 
-    /**
-     * @param bot
-     */
     public constructor(bot: Bot) {
         this.bot = bot;
 
@@ -94,7 +91,7 @@ export default class BotHandler implements IBotHandler {
                 await this.command(msg, msg.content, this.bot.argumentResolvers);
             }
         }
-        // TODO: ?prefix should also be chain-able
+        // TODO: ?prefix should also be chain-able.
         else if (!msg.author.bot && msg.content === "?prefix" && this.bot.usePrefixCommand) {
             await msg.channel.send(new RichEmbed()
                 .setDescription(`Command prefix(es): **${this.bot.options.prefixes.join(", ")}** | Powered by [The Mix Framework](https://github.com/discord-mix/mix)`)
@@ -121,13 +118,7 @@ export default class BotHandler implements IBotHandler {
         return true;
     }
 
-    /**
-     * @todo Investigate the resolvers parameter usage (is it even used or required?).
-     * @param {Message} message
-     * @param {string} content
-     * @param {*} resolvers
-     * @return {Promise<void>}
-     */
+    // TODO: Investigate the resolvers parameter usage (is it even used or required?).
     public async command(message: Message, content: string, resolvers: any): Promise<void> {
         this.bot.emit(BotEvent.HandleCommandMessageStart, message, content);
 
@@ -150,7 +141,7 @@ export default class BotHandler implements IBotHandler {
             message
         });
 
-        // TODO: Debugging
+        // TODO: Debugging.
         Log.debug("Raw arguments are", rawArgs);
 
         await this.bot.commandHandler.handle(
@@ -164,8 +155,6 @@ export default class BotHandler implements IBotHandler {
 
     /**
      * Create a linked command context instance.
-     * @param {Message} msg
-     * @return {Context}
      */
     public createContext(msg: Message): Context {
         return new Context({

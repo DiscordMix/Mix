@@ -1,9 +1,6 @@
 import {GenericService, IForkedService, IProcessMsg, ProcessMsgType} from "./generic-service";
 import SMIS from "./smis";
 
-/**
- * @extends GenericService
- */
 export abstract class ForkedService extends GenericService implements IForkedService {
     public readonly useSMIS: boolean = false;
 

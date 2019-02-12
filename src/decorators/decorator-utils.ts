@@ -29,7 +29,6 @@ export abstract class DecoratorUtils {
 
     /**
      * Ensure input is a function, otherwise throw an error.
-     * @param {*} target
      */
     public static ensureFunc(target: any): void {
         if (typeof target !== "function") {
@@ -39,7 +38,6 @@ export abstract class DecoratorUtils {
 
     /**
      * Ensure input is an object, otherwise throw an error.
-     * @param {*} target
      */
     public static ensureObj(target: any): void {
         if (typeof target !== "object") {
@@ -49,8 +47,6 @@ export abstract class DecoratorUtils {
 
     /**
      * Extract all methods from a class into an array.
-     * @param {*} source
-     * @param {string[]} keys
      */
     public static extractMethods<T = any>(source: any, keys: string[]): T[] {
         const result: T[] = [];
@@ -68,7 +64,6 @@ export abstract class DecoratorUtils {
 
     /**
      * Ensure input is a function and create an instance of it.
-     * @param target
      */
     public static createInstance<T = Command>(target: any): T {
         DecoratorUtils.ensureFunc(target);

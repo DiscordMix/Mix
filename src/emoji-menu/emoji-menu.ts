@@ -33,17 +33,12 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
     public readonly messageId: Snowflake;
     public readonly ownerId: Snowflake;
 
-    // TODO: Should be more productive if using Map
+    // TODO: Should be more productive if using Map.
     public readonly buttons: IEmojiButton[];
 
     protected bot?: IBot;
     protected messageAttached?: Message;
 
-    /**
-     * @param {Snowflake} messageId
-     * @param {Snowflake} ownerId
-     * @param {IEmojiButton[]} [buttons=[]]
-     */
     public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: IEmojiButton[] = []) {
         super();
 
@@ -59,10 +54,6 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
         });
     }
 
-    /**
-     * @param {Context} context
-     * @return {Promise<this>}
-     */
     public async attach(context: Context): Promise<this> {
         this.bot = context.bot;
         this.bot.client.on(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd.bind(this));
@@ -74,9 +65,6 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
         return this;
     }
 
-    /**
-     * @return {this}
-     */
     public dispose(): this {
         if (this.bot !== undefined) {
             this.bot.client.removeListener(DiscordEvent.MessageReactionAdded, this.handleMessageReactionAdd);
@@ -86,10 +74,6 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
         return this;
     }
 
-    /**
-     * @param {IEmojiButton} button
-     * @return {this}
-     */
     public add(button: IEmojiButton): this {
         this.buttons.push(button);
 
@@ -101,7 +85,7 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
             return;
         }
 
-        const message: Message = await this.messageAttached.channel.fetchMessage(this.messageId) as Message;
+        const message: Message = await this.messageAttached.channel.fetchMessage(this.messageId);
 
         for (const btn of this.buttons) {
             if (btn.add === false) {
@@ -112,10 +96,6 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
         }
     }
 
-    /**
-     * @param {MessageReaction} reaction
-     * @param {User} user
-     */
     protected async handleMessageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.message.id !== this.messageId || (this.bot && this.bot.client.user.id === user.id)) {
             return;
@@ -136,10 +116,6 @@ export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisp
         }
     }
 
-    /**
-     * @param {MessageReaction} reaction
-     * @param {User} user
-     */
     protected async handleMessageReactionRemove(reaction: MessageReaction, user: User): Promise<void> {
         if (reaction.message.id !== this.messageId) {
             return;

@@ -13,7 +13,6 @@ export interface ILoadBalancer extends EventEmitter {
 
 /**
  * Supervises the bot's load and priorities.
- * @extends EventEmitter
  */
 export default class LoadBalancer extends EventEmitter implements ILoadBalancer {
     public readonly threshold: number;
@@ -34,7 +33,7 @@ export default class LoadBalancer extends EventEmitter implements ILoadBalancer 
     }
 
     protected async process(): Promise<this> {
-        // TODO: Finish implementing
+        // TODO: Finish implementing.
         /* for (const action of this.queue) {
             await action();
         } */

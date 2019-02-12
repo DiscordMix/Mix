@@ -16,8 +16,6 @@ export default class ModuleScanner implements IModuleScanner {
 
     /**
      * Specify the pattern(s) which the file names must match.
-     * @param {RegExp[]} patterns
-     * @return {this}
      */
     public match(...patterns: RegExp[]): this {
         this.patterns = patterns;

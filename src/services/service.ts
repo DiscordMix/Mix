@@ -5,7 +5,7 @@ import {IMeta} from "../fragments/fragment";
 
 export default abstract class Service extends GenericService implements IService {
     public readonly meta: IMeta = {
-        // Leave empty intentionally so the fragment validator complains
+        // Leave empty intentionally so the fragment validator complains.
         name: ""
     };
 
@@ -13,23 +13,11 @@ export default abstract class Service extends GenericService implements IService
 
     protected readonly bot: Bot;
 
-    /**
-     * @todo Just accept bot and api, no need for Options obj
-     * @param {IServiceOptions} options
-     */
+    // TODO: Just accept bot and api, no need for Options obj.
     protected constructor(options: IServiceOptions) {
         super();
 
-        /**
-         * @type {Bot}
-         * @readonly
-         */
         this.bot = options.bot;
-
-        /**
-         * @type {Map<DiscordEvent, *>}
-         * @readonly
-         */
         this.listeners = new Map();
     }
 
@@ -40,20 +28,14 @@ export default abstract class Service extends GenericService implements IService
     }
 
     /**
-     * Whether the service is running
-     * @return {boolean}
+     * Whether the service is running.
      */
     public get running(): boolean {
-        // TODO: This is just template-future-code (does NOT work!)
-        // ... Need someway to check if the service is actually running (not just saved + stopped)
+        // TODO: This is just template-future-code (does NOT work!).
+        // ... Need someway to check if the service is actually running (not just saved + stopped).
         return this.bot.services.contains(this.meta.name);
     }
 
-    /**
-     * @param {DiscordEvent} event
-     * @param {*} handler
-     * @return {this}
-     */
     protected on(event: DiscordEvent, handler: any): this {
         this.bot.client.on(event, handler);
         this.listeners.set(event, handler);

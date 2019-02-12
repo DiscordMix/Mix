@@ -51,11 +51,11 @@ export interface IBinarySearchResult {
 
 export default abstract class Util {
     public static readonly botLists: Snowflake[] = [
-        "374071874222686211", // Bots for Discord (BFD)
-        "264445053596991498", // Discord Bot List (DBL)
-        "110373943822540800", // Discord Bots
-        "387812458661937152", // Botlist.space
-        "450100127256936458"  // Discord Bot List (2)
+        "374071874222686211", // Bots for Discord (BFD).
+        "264445053596991498", // Discord Bot List (DBL).
+        "110373943822540800", // Discord Bots.
+        "387812458661937152", // Botlist.space.
+        "450100127256936458"  // Discord Bot List (2).
     ];
 
     /**
@@ -350,10 +350,6 @@ export default abstract class Util {
         return time;
     }
 
-    /**
-     * @param {number} timestamp
-     * @return {string}
-     */
     public static timeAgoFromNow(timestamp: number): string {
         return Util.timeAgo(Date.now() - timestamp);
     }

@@ -340,8 +340,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Attach a timeout to the bot.
-     * @param {Action} action
-     * @param {number} time
      */
     public setTimeout(action: Action, time: number): NodeJS.Timeout {
         const timeout: NodeJS.Timeout = setTimeout(() => {
@@ -356,7 +354,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Clear an attached timeout.
-     * @param {NodeJS.Timeout} timeout
      * @return {boolean} Whether the timeout was cleared.
      */
     public clearTimeout(timeout: NodeJS.Timeout): boolean {
@@ -391,7 +388,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     /**
      * Attach an interval to the bot.
      * @param {Action} action The callback method to invoke.
-     * @param {number} time
      */
     public setInterval(action: any, time: number): NodeJS.Timeout {
         const interval: any = setInterval(action, time);
@@ -403,7 +399,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
     /**
      * Clear an attached interval.
-     * @param {NodeJS.Timeout} interval
      * @return {boolean} Whether the interval was cleared.
      */
     public clearInterval(interval: NodeJS.Timeout): boolean {
@@ -551,9 +546,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.clearTemp();
     }
 
-    /**
-     * @param {BotState} state
-     */
     public setState(state: BotState): this {
         (this.state as any) = state;
 

@@ -18,29 +18,19 @@ export interface IEditableMessage {
 export default class EditableMessage implements IEditableMessage {
     public readonly msg: Message;
 
-    /**
-     * @todo Verify param "message"'s type
-     * @param {Message | Message[]} msg
-     */
+    // TODO: Verify param "message"'s type.
     public constructor(msg: Message | Message[]) {
-        // TODO: Hotfix
+        // TODO: Hotfix.
         if (Array.isArray(msg)) {
             Log.warn("Arrays are not supported as the message parameter, choosing the first element");
             msg = msg[0];
         }
 
-        /**
-         * @type {Message}
-         * @protected
-         * @readonly
-         */
         this.msg = msg;
     }
 
     /**
-     * Edit an already sent message
-     * @param {IMessageEditOptions} options
-     * @return {Promise<Message>}
+     * Edit an already sent message.
      */
     public async edit(options: IMessageEditOptions): Promise<Message> {
         // TODO: Default values?

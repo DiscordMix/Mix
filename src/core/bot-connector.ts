@@ -18,16 +18,12 @@ export default class BotConnector implements IBotConnector {
     protected bot: Bot;
     protected setupStart!: number;
 
-    /**
-     * @param {Bot} bot
-     */
     public constructor(bot: Bot) {
         this.bot = bot;
     }
 
     /**
-     * Setup the bot
-     * @return {Promise<this>}
+     * Setup the bot.
      */
     public async setup(): Promise<this> {
         this.bot.emit(BotEvent.SetupStart);
@@ -40,10 +36,6 @@ export default class BotConnector implements IBotConnector {
             Log.info("Debug mode is enabled");
         }
 
-        /**
-         * @type {number}
-         * @protected
-         */
         this.setupStart = performance.now();
 
         // Load languages.
@@ -182,7 +174,7 @@ export default class BotConnector implements IBotConnector {
     }
 
     /**
-     * Setup the client's events
+     * Setup the client's events.
      */
     protected setupEvents(): void {
         Log.verbose("Setting up Discord events");

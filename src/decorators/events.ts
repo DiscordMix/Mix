@@ -18,7 +18,6 @@ export const EventListeners: IEventListener[] = [];
 
 /**
  * Invoke target method once when the specified event occurs.
- * @param {DiscordEvent} event
  */
 export function once(event: DiscordEvent): DecoratorProxy {
     return function (target: any, prop: string) {
@@ -34,7 +33,6 @@ export function once(event: DiscordEvent): DecoratorProxy {
 
 /**
  * Invoke target method every time the specified event occurs.
- * @param {DiscordEvent} event
  */
 export function on(event: DiscordEvent): DecoratorProxy {
     return function (target: any, prop: string) {

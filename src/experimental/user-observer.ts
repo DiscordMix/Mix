@@ -12,20 +12,10 @@ export default class UserObserver extends EventEmitter {
     public constructor(client: Client, user: User) {
         super();
 
-        /**
-         * @type {Client}
-         * @protected
-         * @readonly
-         */
         this.client = client;
-
-        /**
-         * @type {User}
-         * @protected
-         * @readonly
-         */
         this.user = user;
 
+        // Setup events.
         this.setupEvents();
     }
 
@@ -37,84 +27,84 @@ export default class UserObserver extends EventEmitter {
             }
         });
 
-        // Message Update.
+        // Message update.
         this.client.on("messageUpdate", (oldMessage: Message, newMessage: Message) => {
             if (oldMessage.author.id === this.user.id) {
                 this.emit("messageUpdate", oldMessage, newMessage);
             }
         });
 
-        // Message Delete.
+        // Message delete.
         this.client.on("messageDelete", (message: Message) => {
             if (message.author.id === this.user.id) {
                 this.emit("messageDelete", message);
             }
         });
 
-        // Message Reaction Add.
+        // Message reaction add.
         this.client.on("messageReactionAdd", (messageReaction: MessageReaction, user: User) => {
             if (user.id === this.user.id) {
                 this.emit("messageReactionAdd", messageReaction, user);
             }
         });
 
-        // Message Reaction Remove.
+        // Message reaction remove.
         this.client.on("messageReactionRemove", (messageReaction: MessageReaction, user: User) => {
             if (user.id === this.user.id) {
                 this.emit("messageReactionRemove", messageReaction, user);
             }
         });
 
-        // Message Reaction Remove All.
+        // Message reaction remove All.
         this.client.on("messageReactionRemoveAll", (message: Message) => {
             if (message.author.id === this.user.id) {
                 this.emit("messageReactionRemoveAll", message);
             }
         });
 
-        // User Update.
+        // User update.
         this.client.on("userUpdate", (oldUser: User, newUser: User) => {
             if (oldUser.id === this.user.id) {
                 this.emit("userUpdate", oldUser, newUser);
             }
         });
 
-        // Guild Member Update.
+        // Guild member update.
         this.client.on("guildMemberUpdate", (oldMember: GuildMember, newMember: GuildMember) => {
             if (oldMember.id === this.user.id) {
                 this.emit("guildMemberUpdate", oldMember, newMember);
             }
         });
 
-        // Guild Member Add.
+        // Guild member add.
         this.client.on("guildMemberAdd", (member: GuildMember) => {
             if (member.id === this.user.id) {
                 this.emit("guildMemberAdd", member);
             }
         });
 
-        // Guild Member Remove.
+        // Guild member remove.
         this.client.on("guildMemberRemove", (member: GuildMember) => {
             if (member.id === this.user.id) {
                 this.emit("guildMemberRemove", member);
             }
         });
 
-        // Guild Ban Add.
+        // Guild ban add.
         this.client.on("guildBanAdd", (guild: Guild, user: User) => {
             if (user.id === this.user.id) {
                 this.emit("guildBanAdd", guild, user);
             }
         });
 
-        // Guild Ban Remove.
+        // Guild ban remove.
         this.client.on("guildBanRemove", (guild: Guild, user: User) => {
             if (user.id === this.user.id) {
                 this.emit("guildBanRemove", guild, user);
             }
         });
 
-        // Guild Member Available.
+        // Guild member available.
         this.client.on("guildMemberAvailable", (member: GuildMember) => {
             if (member.id === this.user.id) {
                 this.emit("guildMemberAvailable", member);

@@ -52,21 +52,17 @@ export interface IBotAnalytics {
 }
 
 /**
- * Allows detailed tracking of statistics and interactions of the bot
+ * Allows detailed tracking of statistics and interactions of the bot.
  */
 export default class BotAnalytics implements IBotAnalytics {
     public stats: IBotStats;
 
     public constructor() {
-        /**
-         * @type {IBotStats}
-         */
         this.stats = DefaultBotStats;
     }
 
     /**
-     * Reset recorded stats
-     * @return {this}
+     * Reset recorded stats.
      */
     public reset(): this {
         this.stats = DefaultBotStats;
@@ -74,9 +70,6 @@ export default class BotAnalytics implements IBotAnalytics {
         return this;
     }
 
-    /**
-     * @return {ReadonlyBotStats}
-     */
     public getAsReadonly(): ReadonlyBotStats {
         return this.stats;
     }

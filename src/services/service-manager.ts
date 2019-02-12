@@ -48,33 +48,10 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
      */
     public constructor(bot: Bot) {
         super();
-
-        /**
-         * @type {Bot}
-         * @protected
-         * @readonly
-         */
+        
         this.bot = bot;
-
-        /**
-         * @type {ServiceMap}
-         * @protected
-         * @readonly
-         */
         this.services = new Map();
-
-        /**
-         * @type {Map<string, Service>}
-         * @protected
-         * @readonly
-         */
         this.forkedServices = new Map();
-
-        /**
-         * @type {Map<string, NodeJS.Timeout>}
-         * @protected
-         * @readonly
-         */
         this.forkHeartbeats = new Map();
     }
 

@@ -10,7 +10,7 @@ export interface IPackage {
 }
 
 /**
- * An instantiated package
+ * An instantiated package.
  */
 export interface ILivePackage<T extends IFragment> {
     readonly instance: T;
@@ -21,7 +21,7 @@ export interface ILivePackage<T extends IFragment> {
  * Utility class responsible for loading fragments.
  */
 export default abstract class Loader {
-    // TODO: Make use of the 'defaultOnly' parameter
+    // TODO: Make use of the 'defaultOnly' parameter.
     /**
      * @param {string} filePath The path to the file containing fragment.
      * @param {boolean} [defaultOnly=false] Whether to only load the default exported module.
@@ -63,8 +63,6 @@ export default abstract class Loader {
     /**
      * Remove and reload a package from Node.js require cache.
      * @todo Test and make sure it works.
-     * @param {string} file
-     * @return {Promise<IPackage | null>}
      */
     public static async reload(file: string): Promise<IPackage | null> {
         // Delete path from Node's require cache
@@ -75,8 +73,6 @@ export default abstract class Loader {
 
     /**
      * Determine whether a fragment is valid.
-     * @param {IFragment} fragment
-     * @return {boolean}
      */
     public static validate(fragment: IFragment): boolean {
         if (!fragment.meta) {
@@ -144,7 +140,6 @@ export default abstract class Loader {
     // TODO: Consider throwing instead of accepting 0 items?
     /**
      * Load multiple packages.
-     * @param {string[]} items
      * @return {Promise<IPackage[] | null>} The loaded packages or null if the operation failed.
      */
     public static async loadMultiple(items: string[]): Promise<IPackage[] | null> {

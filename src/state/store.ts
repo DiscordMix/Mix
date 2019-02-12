@@ -37,8 +37,6 @@ export interface IStore<TState = any, TActionType = any> {
 export default class Store<TState = any, TActionType = any> {
     /**
      * Combine multiple reducers into a single method.
-     * @param {Reducer<T>[]} reducers
-     * @return {Reducer<T>}
      */
     public static mergeReducers<T = any>(...reducers: Reducer<T>[]): Reducer<T> {
         return (action: IStoreAction, state?: T): T | null => {
@@ -71,10 +69,7 @@ export default class Store<TState = any, TActionType = any> {
     }
 
     /**
-     * Dispatch a store event
-     * @param {TActionType} type
-     * @param {T} payload
-     * @return {this}
+     * Dispatch a store event.
      */
     public dispatch<T = any>(type: TActionType, payload?: T): this {
         if (typeof type !== "number" && typeof type !== "string") {
@@ -115,7 +110,6 @@ export default class Store<TState = any, TActionType = any> {
 
     /**
      * Subscribe a event handler to listen for state changes.
-     * @param handler
      */
     public subscribe(handler: StoreActionHandler<TState>): boolean {
         if (typeof handler !== "function") {

@@ -23,35 +23,15 @@ export default class Language implements ILanguage {
 
     protected default?: LanguageSource;
 
-    /**
-     * @param {string} directory
-     */
     public constructor(directory: string) {
-        /**
-         * @type {LanguageSource | undefined}
-         * @protected
-         */
         this.directory = directory;
-
-        /**
-         * @type {Map<string, LanguageSource>}
-         * @protected
-         * @readonly
-         */
         this.languages = new Map();
     }
 
-    /**
-     * @return {ReadonlyMap<string, LanguageSource>}
-     */
     public getLanguages(): ReadonlyMap<string, LanguageSource> {
         return this.languages as ReadonlyMap<string, any>;
     }
 
-    /**
-     * @param {string} name
-     * @return {boolean}
-     */
     public setDefault(name: string): boolean {
         if (typeof name !== "string" || Util.isEmpty(name)) {
             return false;
@@ -65,10 +45,6 @@ export default class Language implements ILanguage {
         return true;
     }
 
-    /**
-     * @param {string} key
-     * @return {string | null}
-     */
     public get(key: string): string | null {
         if (typeof key !== "string" || Util.isEmpty(key)) {
             return null;
@@ -80,10 +56,6 @@ export default class Language implements ILanguage {
         return this.default[key] || null;
     }
 
-    /**
-     * @param {string} name
-     * @return {Promise<this>}
-     */
     public async load(name: string): Promise<this> {
         if (!this.directory) {
             throw Log.error(BotMessages.LANG_NO_BASE_DIR);

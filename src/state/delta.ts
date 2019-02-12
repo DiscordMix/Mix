@@ -7,9 +7,7 @@ const ComparableEntities: string[] = ["string", "object", "number"];
 export default abstract class Delta {
     /**
      * Compare two objects' properties without recursion (top-level properties).
-     * @param {object} entity1
-     * @param {object} entity2
-     * @return {string[]} The changes
+     * @return {string[]} The changes.
      */
     public static compare(entity1: object, entity2: object): string[] {
         const deltas: string[] = [];
@@ -33,9 +31,6 @@ export default abstract class Delta {
 
     /**
      * Compare two objects' properties using recursion.
-     * @param {object} entity1
-     * @param {object} entity2
-     * @return {*}
      */
     public static deepCompare(entity1: object, entity2: object): any {
         // TODO
@@ -44,8 +39,6 @@ export default abstract class Delta {
 
     /**
      * Determine if two entities are different.
-     * @param {ComparableEntity} entity1
-     * @param {ComparableEntity} entity2
      * @return {boolean} Whether the provided entities are different.
      */
     public static different(entity1: ComparableEntity, entity2: ComparableEntity): boolean {

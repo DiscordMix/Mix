@@ -19,17 +19,10 @@ export interface ITemp {
  * Allows management of temporary data storage.
  */
 export default class Temp implements ITemp {
-    /**
-     * @param {string} id
-     * @return {string}
-     */
     public static resolvePath(id: string): string {
         return path.join(Temp.resolveRootPath(), `u${id}`);
     }
 
-    /**
-     * @return {string}
-     */
     public static resolveRootPath(): string {
         return path.join(path.dirname(main()), "tmp");
     }

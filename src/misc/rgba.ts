@@ -7,14 +7,7 @@ export interface IRgbaOptions {
     readonly alpha: number;
 }
 
-/**
- * @extends Rgb
- */
 export default class Rgba extends Rgb {
-    /**
-     * @param {string} hex
-     * @return {Rgba | null}
-     */
     public static fromHex(hex: string): Rgba | null {
         const result: RegExpExecArray | null = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
@@ -35,29 +28,16 @@ export default class Rgba extends Rgb {
 
     public readonly alpha: number;
 
-    /**
-     * @param {IRgbaOptions} options
-     */
     public constructor(options: IRgbaOptions) {
         super(options.red, options.green, options.blue);
 
-        /**
-         * @type {number}
-         * @readonly
-         */
         this.alpha = options.alpha;
     }
 
-    /**
-     * @return {string}
-     */
     public toString(): string {
         return `${this.red}, ${this.green}, ${this.blue}, ${this.alpha}`;
     }
 
-    /**
-     * @return {*}
-     */
     public toObject(): any {
         return {
             red: this.red,
@@ -67,7 +47,7 @@ export default class Rgba extends Rgb {
         };
     }
 
-    // TODO: Support for shorthand hex:
+    // TODO: Support for shorthand hex.
     /* function hexToRgb(hex) {
         // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
         var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;

@@ -9,7 +9,6 @@ export const attachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGene
 
 /**
  * Attach an execution logger for debugging purposes.
- * @param {CommandRelay[]} relays
  */
 export function attachedLogger(...relays: CommandRelay[]): any {
     if (relays.length === 0) {
@@ -27,8 +26,6 @@ export function attachedLogger(...relays: CommandRelay[]): any {
 
 /**
  * Methods that will be executed after successful command execution.
- * @param {CommandRelay[]} relays
- * @return {*}
  */
 export function connect(...relays: CommandRelay[]): any {
     return function (target: any) {
@@ -42,8 +39,6 @@ export function connect(...relays: CommandRelay[]): any {
 
 /**
  * Specify the required registered services required by this command.
- * @param {string[]} services
- * @return {*}
  */
 export function dependsOn(...services: string[]): any {
     return function (target: any) {
@@ -57,8 +52,6 @@ export function dependsOn(...services: string[]): any {
 
 /**
  * Methods that serve as pre-requisites for execution.
- * @param {string[]} guards
- * @return {*}
  */
 export function guard(...guards: string[]): any {
     return function (target: any) {

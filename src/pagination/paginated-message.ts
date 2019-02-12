@@ -37,9 +37,6 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
         return this;
     }
 
-    /**
-     * @return {number}
-     */
     public get maxPages(): number {
         if (this.content.length > this.maxLength) {
             return 1;
@@ -48,12 +45,6 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
         return this.content.length / this.maxLength;
     }
 
-    /**
-     * @param {Bot} bot
-     * @param {Message} message
-     * @param {string} [placeholder="*"]
-     * @return {this}
-     */
     public attach(bot: Bot, message: Message, placeholder: string = "*"): this {
         if (message.author.id !== bot.client.user.id) {
             Log.warn("Refusing to attach to foreign message");
@@ -74,33 +65,20 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
         return this;
     }
 
-    /**
-     * @return {this}
-     */
     public dispose(): this {
         // TODO: Implement.
 
         throw Log.notImplemented;
     }
 
-    /**
-     * @param {number} [pages=1]
-     * @return {this}
-     */
     public previous(pages: number = 1): this {
         return this.next(pages * -1);
     }
 
-    /**
-     * @return {number}
-     */
     public get currentPage(): number {
         return this.current + 1;
     }
 
-    /**
-     * @return {string}
-     */
     public getPage(): string {
         return this.content.substring(this.current * this.maxLength, (this.current * this.maxLength) + this.maxLength);
     }

@@ -25,10 +25,9 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
     }
 
     /**
-     * Enable and register fragments
-     * @param {IFragment[]} packages
-     * @param {boolean} [internal=false] Whether the fragments are internal
-     * @return {Promise<number>} The amount of enabled fragments
+     * Enable and register fragments.
+     * @param {boolean} [internal=false] Whether the fragments are internal.
+     * @return {Promise<number>} The amount of enabled fragments.
      */
     public async enableMultiple(packages: IPackage[], internal: boolean = false): Promise<number> {
         let enabled: number = 0;
@@ -48,7 +47,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
         if (mod instanceof Command) {
             const command: any = new (packg.module as any)();
 
-            // Overwrite command restrict with default values
+            // Overwrite command restrict with default values.
             command.restrict = {
                 ...DefaultCommandRestrict,
                 ...command.restrict
@@ -74,7 +73,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
         return null;
     }
 
-    // TODO: Use .prepare instead of repeating-preparation step here
+    // TODO: Use .prepare instead of repeating-preparation step here.
     public async enable(packg: IPackage, internal: boolean = false, overwrite: boolean = true): Promise<boolean> {
         const mod: IFragment = (packg.module as any).prototype;
 
@@ -88,24 +87,24 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
                 return false;
             }
 
-            // Command is not registered in internal commands
+            // Command is not registered in internal commands.
             if (internal && !this.bot.internalCommands.includes(command.meta.name as InternalCommand)) {
                 return false;
             }
 
-            // Dependency not met (missing required service)
+            // Dependency not met (missing required service).
             for (const dependency of command.dependsOn) {
                 if (!this.bot.services.contains(dependency)) {
                     return false;
                 }
             }
 
-            // TODO: Add a way to disable the warning
+            // TODO: Add a way to disable the warning.
             if (!internal && command.meta.name === "eval") {
                 Log.warn("Please beware that your eval command may be used in malicious ways and may lead to a full compromise of the local machine. To prevent this from happening, please use the default eval command included with Mix.");
             }
 
-            // Overwrite command restrict with default values
+            // Overwrite command restrict with default values.
             (command.constraints as any) = {
                 ...DefaultCommandRestrict,
                 ...command.constraints
@@ -151,7 +150,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
             return true;
         }
         else {
-            // TODO: Also add someway to identify the fragment
+            // TODO: Also add someway to identify the fragment.
             Log.warn("Unknown fragment instance, ignoring");
         }
 

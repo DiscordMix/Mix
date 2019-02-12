@@ -42,16 +42,12 @@ export default class Optimizer implements IOptimizer {
         this.processInterval = null;
     }
 
-    /**
-     * @return {boolean}
-     */
     public get running(): boolean {
         return this.processInterval !== null;
     }
 
     /**
-     * Start the engine
-     * @return {this}
+     * Start the engine.
      */
     public start(): this {
         this.bot.on(BotEvent.Command, (command: Command) => {
@@ -82,8 +78,7 @@ export default class Optimizer implements IOptimizer {
     }
 
     /**
-     * Stop the engine
-     * @return {this}
+     * Stop the engine.
      */
     public stop(): this {
         this.dispose();

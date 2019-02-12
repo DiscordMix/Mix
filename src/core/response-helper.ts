@@ -32,11 +32,6 @@ export default class ResponseHelper implements IResponseHelper {
         this.sender = sender;
     }
 
-    /**
-     * @param {*} stream
-     * @param {string} name
-     * @return {Promise<EditableMessage | null>}
-     */
     public async fileStream(stream: any, name: string): Promise<EditableMessage | null> {
         return new EditableMessage(await this.channel.send(new Discord.Attachment(stream, name)));
     }

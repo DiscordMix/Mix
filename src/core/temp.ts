@@ -37,21 +37,8 @@ export default class Temp implements ITemp {
     protected id?: string;
     protected resolvedPath?: string;
 
-    /**
-     * @param {Snowflake} id
-     * @return {this}
-     */
     public setup(id: Snowflake): this {
-        /**
-         * @type {string | undefined}
-         * @protected
-         */
         this.id = id;
-
-        /**
-         * @type {string | undefined}
-         * @protected
-         */
         this.resolvedPath = Temp.resolvePath(this.id);
 
         return this;
@@ -59,7 +46,6 @@ export default class Temp implements ITemp {
 
     /**
      * Create the temp folder for the bot.
-     * @return {Promise<this>}
      */
     public async create(): Promise<this> {
         return new Promise<this>((resolve) => {
@@ -90,8 +76,6 @@ export default class Temp implements ITemp {
 
     /**
      * Clear all files and folders until the temp directory.
-     * @todo: Return type
-     * @return {Promise<this>}
      */
     public async reset(): Promise<this> {
         if (!this.resolvedPath) {
@@ -106,9 +90,7 @@ export default class Temp implements ITemp {
 
     /**
      * Write data in JSON into a file in the temp folder for the bot.
-     * @param {*} data
      * @param {string} file The file in which to store the data.
-     * @return {Promise<void>}
      */
     public async store(data: any, file: string): Promise<this> {
         if (!this.resolvedPath) {

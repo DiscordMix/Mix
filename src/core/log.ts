@@ -57,7 +57,6 @@ export default abstract class Log {
 
     /**
      * Compose a message to be shown in the console.
-     * @param {IComposeOptions} options
      */
     public static compose(options: IComposeOptions): void {
         if (Log.record) {
@@ -108,7 +107,6 @@ export default abstract class Log {
 
     /**
      * Attempt to log a set of recorded messages to the console.
-     * @param {IComposeOptions[]} history
      */
     public static playback(history: IComposeOptions[]): void {
         for (const options of history) {
@@ -119,7 +117,6 @@ export default abstract class Log {
     /**
      * Display an information message in the console.
      * @param {*} message The message to display.
-     * @param {Array<*>} params
      */
     public static info(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
@@ -136,7 +133,6 @@ export default abstract class Log {
     /**
      * Display a success message in the console.
      * @param {*} message The message to display.
-     * @param {Array<*>} params
      */
     public static success(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
@@ -153,7 +149,6 @@ export default abstract class Log {
     /**
      * Display a warning message in the console.
      * @param {*} message The message to display.
-     * @param {Array<*>} params
      */
     public static warn(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
@@ -169,8 +164,6 @@ export default abstract class Log {
 
     /**
      * Display an error message in the console. Program will not break.
-     * @param {*} message
-     * @param {Array<*>} params
      */
     public static error(message: any, ...params: any[]): Error {
         const options: IComposeOptions = {
@@ -188,8 +181,6 @@ export default abstract class Log {
 
     /**
      * Display a fatal error message in the console. Process will be stopped.
-     * @param {*} message
-     * @param {Array<*>} params
      */
     public static fatal(message: any, ...params: any[]): Error {
         const options: IComposeOptions = {
@@ -208,8 +199,6 @@ export default abstract class Log {
 
     /**
      * Display a verbose message in the console.
-     * @param {*} message
-     * @param {Array<*>} params
      */
     public static verbose(message: any, ...params: any[]): void {
         const options: IComposeOptions = {
@@ -225,8 +214,6 @@ export default abstract class Log {
 
     /**
      * Display a debug message in the console. Log level must be set to debug.
-     * @param {*} message
-     * @param {Array<*>} params
      */
     public static debug(message: any, ...params: any[]): void {
         const options: IComposeOptions = {

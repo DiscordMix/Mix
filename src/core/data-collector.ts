@@ -34,9 +34,6 @@ export default class DataCollector implements IDataCollector {
     protected fromType: MemberType;
     protected whereCondition?: ConditionCallback;
 
-    /**
-     * @param {Guild} guild
-     */
     public constructor(guild: Guild) {
 
         this.guild = guild;
@@ -44,27 +41,18 @@ export default class DataCollector implements IDataCollector {
         this.fromType = MemberType.Everyone;
     }
 
-    /**
-     * @param {MemberDataType} dataType
-     */
     public collect(dataType: MemberDataType): this {
         // TODO:
 
         return this;
     }
 
-    /**
-     * @param {MemberType} memberType
-     */
     public from(memberType: MemberType): this {
         this.fromType = memberType;
 
         return this;
     }
 
-    /**
-     * @param {ConditionCallback} condition
-     */
     public where(condition: ConditionCallback): this {
         this.whereCondition = condition;
 

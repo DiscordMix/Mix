@@ -60,8 +60,6 @@ export default abstract class Util {
 
     /**
      * Strip a snowflake into it's bare ID.
-     * @param {string} mention
-     * @return {string}
      */
     public static resolveId(mention: string): string {
         if (typeof mention !== "string") {
@@ -77,11 +75,6 @@ export default abstract class Util {
             .replace("#", "");
     }
 
-    /**
-     * @param {number} time
-     * @param {string} [delimiter=" "]
-     * @return {string}
-     */
     public static spreadTime(time: number, delimiter: string = " "): string {
         if (typeof time !== "number" || typeof delimiter !== "string") {
             throw Log.error("Expecting time parameter to be a number and delimiter parameter to be a string");
@@ -107,9 +100,7 @@ export default abstract class Util {
 
     /**
      * Determine the percentage of the input value compared to its max value.
-     * @param amount
-     * @param max
-     * @return {number} The percentage.
+     * @return {number} The computed percentage.
      */
     public static percentOf(amount: number, max: number): number {
         if (amount < 0 || max < 0) {
@@ -127,7 +118,7 @@ export default abstract class Util {
         return Math.round(amount / max * 100);
     }
 
-    // TODO: Needs testing
+    // TODO: Needs testing.
     public static createTimedAction<ReturnType = any>(bot: IBot, action: () => ReturnType, timeout: number, timeoutResult: ReturnType | any): Promise<ReturnType> {
         return new Promise(async (resolve) => {
             // TODO: Is this required?
@@ -162,8 +153,6 @@ export default abstract class Util {
 
     /**
      * Performs the binary search algorithm on the host array.
-     * @param {number[]} subject
-     * @param {number[]} host
      * @return {IBinarySearchResult} An object containing the results of the operation.
      */
     public static binarySearch(subject: number, host: number[]): IBinarySearchResult {
@@ -228,7 +217,7 @@ export default abstract class Util {
             }
         }
 
-        // TODO: Might fail if the host contains multiple of such elements
+        // TODO: Might fail if the host contains multiple of such elements.
         return host.indexOf(pool[0]);
     }
 
@@ -252,8 +241,7 @@ export default abstract class Util {
     }
 
     /**
-     * Determine whether an object or string is empty or missing value
-     * @param {*} input
+     * Determine whether an object or string is empty or missing value.
      * @return {boolean} Whether the input is empty.
      */
     public static isEmpty(input: any): boolean {
@@ -265,8 +253,8 @@ export default abstract class Util {
     }
 
     /**
-     * @param {string} directory The directory to scan
-     * @param {boolean} [absolutePath=false] Whether to return the absolute path of the files
+     * @param {string} directory The directory to scan.
+     * @param {boolean} [absolutePath=false] Whether to return the absolute path of the files.
      * @return {Promise<string[] | null>} The list of files or null of the directory does not exist.
      */
     public static getFiles(directory: string, absolutePath: boolean = false): Promise<string[] | null> {
@@ -312,15 +300,15 @@ export default abstract class Util {
 
         let counter: number = array.length;
 
-        // While there are elements in the array
+        // While there are elements in the array.
         while (counter > 0) {
-            // Pick a random index
+            // Pick a random index.
             const index = Math.floor(Math.random() * counter);
 
-            // Decrease counter by 1
+            // Decrease counter by 1.
             counter--;
 
-            // And swap the last element with it
+            // And swap the last element with it.
             const temp: any = array[counter];
 
             array[counter] = array[index];
@@ -332,8 +320,7 @@ export default abstract class Util {
 
     /**
      * Send a formatted embed message to the specified channel.
-     * @param {ISendOptions} options
-     * @return {Promise<Message>} The message sent
+     * @return {Promise<Message>} The message sent.
      */
     public static async send(options: ISendOptions): Promise<Message> {
         return await options.channel.send(new RichEmbed()
@@ -343,16 +330,6 @@ export default abstract class Util {
             .setDescription(options.message)) as Message;
     }
 
-    /**
-     * @param {number} milliseconds
-     * @param {number} [seconds=0]
-     * @param {number} [minutes=0]
-     * @param {number} [hours=0]
-     * @param {number} [days=0]
-     * @param {number} [months=0]
-     * @param {number} [years=0]
-     * @return {number}
-     */
     public static timeFromNow(milliseconds: number, seconds: number = 0, minutes: number = 0, hours: number = 0, days: number = 0, months: number = 0, years: number = 0): number {
         const now: Date = new Date();
 
@@ -361,9 +338,7 @@ export default abstract class Util {
 
     /**
      * Compute the string representation of the provided past timestamp.
-     * @param {number} timestamp
-     * @param {boolean} [capitalize=true] Whether to capitalize the time
-     * @return {string}
+     * @param {boolean} [capitalize=true] Whether to capitalize the time.
      */
     public static timeAgo(timestamp: number, capitalize: boolean = true): string {
         let time: string = timeAgo.format(timestamp);
@@ -385,9 +360,6 @@ export default abstract class Util {
 
     /**
      * Write data into a JSON file.
-     * @param {string} filePath
-     * @param {*} data
-     * @return {Promise<void>}
      */
     public static async writeJson(filePath: string, data: any): Promise<void> {
         return new Promise<void>((resolve) => {
@@ -403,8 +375,7 @@ export default abstract class Util {
 
     /**
      * Read data from a JSON file.
-     * @param {string} filePath
-     * @return {Promise<ReturnType>} The data from the specified path
+     * @return {Promise<ReturnType>} The data from the specified path.
      */
     public static async readJson<ReturnType = any>(filePath: string): Promise<ReturnType> {
         return new Promise<ReturnType>((resolve, reject) => {
@@ -433,9 +404,6 @@ export default abstract class Util {
 
     /**
      * Write data into a JSON file synchronously.
-     * @param {string} filePath
-     * @param {*} data
-     * @return {boolean}
      */
     public static writeJsonSync(filePath: string, data: any): boolean {
         if (!fs.existsSync(filePath)) {
@@ -447,19 +415,17 @@ export default abstract class Util {
         return true;
     }
 
+    // TODO: Check for errors.
     /**
-     * @todo Check for errors
      * Read data from a JSON file synchronously.
-     * @param {string} filePath
-     * @return {ReturnType | null}
      */
     public static readJsonSync<ReturnType = any>(filePath: string): ReturnType | null {
         return JSON.parse(fs.readFileSync(filePath).toString()) as ReturnType || null;
     }
 
     /**
-     * @param {string} str The string to escape regex of
-     * @return {string} The escaped string
+     * @param {string} str The string to escape regex of.
+     * @return {string} The escaped string.
      */
     public static escapeRegexString(str: string): string {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
@@ -467,7 +433,6 @@ export default abstract class Util {
 
     /**
      * Retrive Mix's current package version.
-     * @return {Promise<string>}
      */
     public static async getMixVersion(): Promise<string> {
         // TODO:
@@ -479,9 +444,6 @@ export default abstract class Util {
 
     /**
      * Determine if input text mentions input snowflake.
-     * @param {string} text
-     * @param {Snowflake} userId
-     * @return {boolean}
      */
     public static hasMentionPrefix(text: string, userId: Snowflake): boolean {
         if (!text || !userId || typeof text !== "string" || typeof userId !== "string") {
@@ -491,11 +453,6 @@ export default abstract class Util {
         return text.startsWith(`<@${userId}>`) || text.startsWith(`<@!${userId}>`);
     }
 
-    /**
-     * @param {Message} message
-     * @param {string[]} strings
-     * @return {boolean}
-     */
     public static hasStringsPrefix(message: Message, strings: string[]): boolean {
         for (const str of strings) {
             if (message.content.startsWith(str)) {
@@ -508,8 +465,6 @@ export default abstract class Util {
 
     /**
      * Uses random number generation to assert chance.
-     * @param {number} range
-     * @return {boolean}
      */
     public static chance(range: number): boolean {
         if (typeof range !== "number" || range <= 0) {
@@ -521,8 +476,6 @@ export default abstract class Util {
 
     /**
      * Determine if a guild member has moderation powers such as managing messages and/or kicking members.
-     * @param {GuildMember} member
-     * @return {boolean}
      */
     public static hasModerationPowers(member: GuildMember): boolean {
         for (const perm of moderationPermissions) {
@@ -536,11 +489,6 @@ export default abstract class Util {
 
     /**
      * Attempt to find a guild channel by name.
-     * @param {Guild} guild
-     * @param {string} name
-     * @param {boolean} [textChannel=true]
-     * @param {boolean} [caseSensitive=false]
-     * @returns {GuildChannel | null}
      */
     public static findChannelByName(guild: Guild, name: string, textChannel: boolean = true, caseSensitive: boolean = false): GuildChannel | null {
         const channels: GuildChannel[] = guild.channels.array();
@@ -567,8 +515,6 @@ export default abstract class Util {
 
     /**
      * Attempt to find a default or general channel in the specified guild.
-     * @param {Guild} guild
-     * @returns {TextChannel | null}
      */
     public static findDefaultChannel(guild: Guild): TextChannel | null {
         let channel: TextChannel | null = guild.defaultChannel || null;
@@ -584,10 +530,6 @@ export default abstract class Util {
         return channel;
     }
 
-    /**
-     * @param {Guild} guild
-     * @return {TextChannel | null}
-     */
     public static findDefaultChannelOrAny(guild: Guild): TextChannel | null {
         const defaultChannel: TextChannel | null = Util.findDefaultChannel(guild);
 
@@ -606,10 +548,7 @@ export default abstract class Util {
 
     /**
      * Trim a string.
-     * @param {string} text
-     * @param {number} [maxLength=30]
-     * @param {string} [suffix=" ..."]
-     * @return {string} The trimmed message
+     * @return {string} The trimmed message.
      */
     public static trim(text: string, maxLength: number = 30, suffix: string = " ..."): string {
         if (text.length > maxLength) {
@@ -620,9 +559,8 @@ export default abstract class Util {
     }
 
     /**
-     * Determine the guild owners by searching for members with the MANAGE_GUILD permission.
-     * @param {Guild} guild
-     * @return {GuildMember[]} The owners of the guild
+     * Determine the guild owner(s) by searching for members with the 'MANAGE_GUILD' permission.
+     * @return {GuildMember[]} An array containing the owner(s) of the guild.
      */
     public static getOwners(guild: Guild): GuildMember[] {
         return guild.members.filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).array();
@@ -630,8 +568,6 @@ export default abstract class Util {
 
     /**
      * Extract the object keys of a TypeScript enum.
-     * @param {*} enumerator
-     * @return {string[]}
      */
     public static getEnumKeys(enumerator: any): string[] {
         return Object.keys(enumerator).filter((key: string) => isNaN(key as any));
@@ -639,9 +575,6 @@ export default abstract class Util {
 
     /**
      * Filter mentions and embeds from a message.
-     * @param {Message} message
-     * @param {string} token
-     * @return {string}
      */
     public static cleanMessage(message: Message): string {
         let filteredMessage: string = message.content;
@@ -663,8 +596,6 @@ export default abstract class Util {
 
     /**
      * Clean a string from mentions and tokens.
-     * @param {string} text
-     * @param {string} token
      * @return {string} The escaped text.
      */
     public static escapeText(text: string, token: string): string {
@@ -697,10 +628,6 @@ export default abstract class Util {
         return finalText;
     }
 
-    /**
-     * @param {User} user
-     * @return {string}
-     */
     public static getUserIdentifier(user: User): string {
         if (!user || typeof user !== "object" || !user.id || !user.tag || typeof user.id !== "string" || typeof user.tag !== "string") {
             throw Log.error("Invalid input; Expecting User object");
@@ -709,19 +636,12 @@ export default abstract class Util {
         return `<@${user.id}> (${user.tag}:${user.id})`;
     }
 
-    /**
-     * @param {GuildMember} member
-     * @return {string}
-     */
     public static getMemberIdentifier(member: GuildMember): string {
         return Util.getUserIdentifier(member.user);
     }
 
     /**
      * Hash a snowflake into a unique, persistent number.
-     * @param {Snowflake} id
-     * @param {number} max
-     * @param {number} [precision=6]
      * @return {number} A number lower or equal to the max.
      */
     public static hash(id: Snowflake, max: number, precision: number = 6): number {

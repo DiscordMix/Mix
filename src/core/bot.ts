@@ -1,4 +1,4 @@
-// Setup environment variables
+// Load and apply environment variables.
 require("dotenv").config();
 
 import ConsoleInterface from "../console/console-interface";

@@ -1,4 +1,4 @@
-// Only start if process was spawned
+// Only start if process was spawned.
 if (!process.send || !process.connected) {
     process.exit(0);
 }
@@ -20,13 +20,13 @@ if (!fs.existsSync(target)) {
     throw Log.error("Target file path does not exist");
 }
 
-// Start service
+// Start service.
 const service: IForkedService = new (require(target).default)();
 const logPrefix: string = `[ServiceIgniter.${service.meta.name}@${process.pid.toString()}]`;
 
 let smisProtocol: boolean = false;
 
-// Setup process message handler
+// Setup process message handler.
 process.on("message", async (msg: IRawProcessMsg, sender: any) => {
     if (typeof msg !== "object") {
         Log.warn(`${logPrefix} Ignoring message containing non-object as data`);
@@ -71,7 +71,7 @@ process.on("message", async (msg: IRawProcessMsg, sender: any) => {
 process.on("disconnect", stop);
 process.on("beforeExit", stop);
 
-// Heartbeat loop
+// Heartbeat loop.
 let interval: number = ServiceManager.heartbeatTimeout - 1000;
 
 // TODO: Limit in ServiceManager too.

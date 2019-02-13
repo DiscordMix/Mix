@@ -2,6 +2,7 @@ import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
 import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/context";
 import CommandRegistry, {ICommandRegistry} from "./commands/command-registry";
 import Bot from "./core/bot";
+import {ActionType, IAction} from "./actions/action";
 
 import Command, {
     GenericCommand,
@@ -10,8 +11,6 @@ import Command, {
     IGenericCommand,
     RestrictGroup
 } from "./commands/command";
-
-import {ActionType, IAction} from "./actions/action";
 
 import ActionInterpreter, {
     IActionInterpreter,

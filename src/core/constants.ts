@@ -120,7 +120,6 @@ export const DefaultBotOptions: IBotOptions = {
 
     paths: {
         commands: "commands",
-        plugins: "plugins",
         services: "services",
         languages: "languages",
         tasks: "tasks"

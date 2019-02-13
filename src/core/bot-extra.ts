@@ -113,11 +113,6 @@ export interface IBotPaths {
     readonly commands: string;
 
     /**
-     * The path to the plugins directory.
-     */
-    readonly plugins: string;
-
-    /**
      * The path to the services directory.
      */
     readonly services: string;

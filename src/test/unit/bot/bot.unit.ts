@@ -33,6 +33,14 @@ default class {
         Assert.that(testBot.client.user, Is.object);
     }
 
+    @test("should have correct options")
+    public haveCorrectOptions() {
+        Assert.false(testBot.options.showAsciiTitle);
+        Assert.false(testBot.options.useConsoleInterface);
+
+        // TODO: Add more.
+    }
+
     @test("should have no owner")
     public haveNoOwner() {
         Assert.that(testBot.owner, Is.undefined);

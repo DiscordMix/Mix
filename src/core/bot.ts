@@ -29,9 +29,6 @@ import BotHandler from "./bot-handler";
 import {ArgumentType, ArgumentResolver} from "../commands/type";
 
 // TODO: Should emit an event when state changes.
-/**
- * @extends EventEmitter
- */
 export default class Bot<TState = any, TActionType = any> extends EventEmitter implements IBot<TState, TActionType> {
     // TODO: Temporary hard-coded user ID.
     /**
@@ -181,8 +178,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     protected readonly connector: BotConnector;
 
     /**
-     * @param {BotToken} The bot token required to login to Discord.
-     * @param {Partial<IBotOptions>} options
+     * @param {BotToken} token The bot token required to login to Discord.
      * @param {boolean} [testMode=false] Whether the bot is being used in testing. For internal use only.
      */
     public constructor(token: BotToken, options: Partial<IBotOptions<TState>>, testMode: boolean = false) {
@@ -197,24 +193,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
         // Special options for unit tests.
         if (testMode) {
-            (this.options as any) = {
-                ...this.options,
-                asciiTitle: false,
-                consoleInterface: false
-            };
-
-            (this.options as any).paths = {
-                commands: path.resolve(path.join(__dirname, "../", "test", "test-commands")),
-                languages: path.resolve(path.join("src", "test", "test-languages")),
-                services: path.resolve(path.join(__dirname, "../", "test", "test-services")),
-                tasks: path.resolve(path.join(__dirname, "../", "test", "test-tasks")),
-            };
-
-            options = {
-                ...options,
-                internalCommands: [InternalCommand.Help, InternalCommand.Usage, InternalCommand.Ping],
-                languages: ["test-language"],
-            };
+            this.applyTestMode();
         }
 
         this.isSuspended = true;
@@ -227,8 +206,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.services = new ServiceManager(this);
         this.registry = new CommandRegistry(this);
 
-        this.argumentResolvers = options.argumentResolvers
-            ? new Map([...DefaultArgResolvers, ...options.argumentResolvers])
+        this.argumentResolvers = this.options.argumentResolvers
+            ? new Map([...DefaultArgResolvers, ...this.options.argumentResolvers])
             : DefaultArgResolvers;
 
         this.commandHandler = new CommandHandler({
@@ -237,9 +216,9 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         });
 
         this.console = new ConsoleInterface();
-        this.usePrefixCommand = options.usePrefixCommand || true;
+        this.usePrefixCommand = this.options.usePrefixCommand || true;
 
-        this.internalCommands = options.internalCommands || [
+        this.internalCommands = this.options.internalCommands || [
             InternalCommand.CLI,
             InternalCommand.Eval,
             InternalCommand.Help,
@@ -253,7 +232,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
 
         this.owner = this.options.owner;
         this.language = this.options.paths.languages ? new Language(this.options.paths.languages) : undefined;
-        this.languages = options.languages;
+        this.languages = this.options.languages;
         this.analytics = new Analytics();
         this.disposables = [];
         this.actionInterpreter = new ActionInterpreter(this);
@@ -547,8 +526,25 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     public setState(state: BotState): this {
-        (this.state as any) = state;
+        (this.state as BotState) = state;
 
         return this;
+    }
+
+    protected applyTestMode() {
+        (this.options as IBotOptions) = {
+            ...this.options,
+            useConsoleInterface: false,
+            showAsciiTitle: false,
+            internalCommands: [InternalCommand.Help, InternalCommand.Usage, InternalCommand.Ping],
+            languages: ["test-language"],
+
+            paths: {
+                commands: path.resolve(path.join(__dirname, "../", "test", "test-commands")),
+                languages: path.resolve(path.join("src", "test", "test-languages")),
+                services: path.resolve(path.join(__dirname, "../", "test", "test-services")),
+                tasks: path.resolve(path.join(__dirname, "../", "test", "test-tasks")),
+            }
+        };
     }
 }

@@ -8,7 +8,7 @@ export interface IBotEvent {
 }
 
 /**
- * Deprecate a method. Will display a warning every time such method is invoked.
+ * Deprecate a function. Will display a warning every time target function is invoked.
  * @param {string | undefined} use The suggested alternative.
  */
 export function deprecated(use?: string): any {

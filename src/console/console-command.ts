@@ -7,10 +7,6 @@ export interface IConsoleCommand {
 }
 
 export default abstract class ConsoleCommand {
-    /**
-     * @param {string} consoleCommandString
-     * @return {ConsoleCommand}
-     */
     public static parse(consoleCommandString: string): IConsoleCommand {
         const split: string[] = consoleCommandString.split(" ");
 

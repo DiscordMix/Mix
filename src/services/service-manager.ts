@@ -43,12 +43,9 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
     protected readonly forkedServices: Map<string, ChildProcess>;
     protected readonly forkHeartbeats: Map<string, NodeJS.Timeout>;
 
-    /**
-     * @param {Bot} bot
-     */
     public constructor(bot: Bot) {
         super();
-        
+
         this.bot = bot;
         this.services = new Map();
         this.forkedServices = new Map();
@@ -63,10 +60,6 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         return this.forkedServices.get(name) || null;
     }
 
-    /**
-     * @param {GenericService} service
-     * @return {boolean}
-     */
     public register(service: IGenericService): boolean {
         if (!service || typeof service !== "object" || Array.isArray(service)) {
             return false;
@@ -82,7 +75,6 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
     }
 
     /**
-     * @param {GenericService[]} multipleServices
      * @return {number} The actual number of registered services.
      */
     public registerMultiple(multipleServices: IGenericService[]): number {
@@ -98,7 +90,6 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
     }
 
     /**
-     * @param {string} name
      * @return {Promise<boolean>} Whether the service was started.
      */
     public async start(name: string): Promise<boolean> {
@@ -283,9 +274,6 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         return stopped;
     }
 
-    /**
-     * @param {string} name
-     */
     public getService(name: string): Readonly<IGenericService> | null {
         if (typeof name !== "string" || Util.isEmpty(name) || Array.isArray(name)) {
             return null;
@@ -303,9 +291,6 @@ export default class ServiceManager extends EventEmitter implements IServiceMana
         }
     }
 
-    /**
-     * @return {ReadonlyServiceMap}
-     */
     public getAll(): ReadonlyServiceMap {
         return this.services as ReadonlyServiceMap;
     }

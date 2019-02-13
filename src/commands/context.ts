@@ -38,7 +38,8 @@ export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends
 }
 
 /**
- * Represents the environment in which a command was executed. Contains useful utility methods for quicker data access and responses.
+ * Represents the environment in which a command was executed.
+ * Contains useful utility methods for quicker data access and responses.
  */
 export default class Context<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IContext {
     public readonly bot: Bot;
@@ -76,7 +77,6 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
 
     /**
      * Access the bot's store.
-     * @return {IStore}
      */
     public get store(): IStore {
         return this.bot.store;
@@ -98,7 +98,6 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
 
     /**
      * The ID of the triggering message.
-     * @return {Snowflake}
      */
     public get triggeringMessageId(): Snowflake {
         return this.msg.id;
@@ -106,7 +105,6 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
 
     /**
      * Join all command arguments into a single string.
-     * @return {string}
      */
     public joinArguments(): string {
         if (!this.label) {
@@ -116,18 +114,12 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         return this.msg.content.substr(this.label.length + 1);
     }
 
-    /**
-     * @param {string} message
-     * @return {Promise<Message | Message[] | null>}
-     */
     public async reply(message: string): Promise<Message | Message[] | null> {
         return await this.msg.reply(Util.escapeText(message, this.bot.client.token));
     }
 
     /**
      * Reply to the command issuer through DMs.
-     * @param {string} message
-     * @return {Promise<Message | Message[]>}
      */
     public async privateReply(message: string): Promise<Message | Message[]> {
         return await this.msg.author.send(Util.escapeText(message, this.bot.client.token));
@@ -138,7 +130,6 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
      * @param {string} message The message or prompt to send.
      * @param {Snowflake} from The user to expect a response from.
      * @param {number} [timeout=7500] Time to wait until automatic cancellation or timeout.
-     * @return {Promise<string | null>}
      */
     public async createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number = 7500): Promise<string | null> {
         if (channel.type !== ChannelType.DM && channel.type !== ChannelType.Text) {
@@ -165,29 +156,14 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         });
     }
 
-    /**
-     * @param {string} message
-     * @param {Promise<number | undefined>} timeout
-     * @return {Promise<string | null>}
-     */
     public async request(message: string, timeout?: number): Promise<string | null> {
         return this.createRequest(this.msg.channel as TextChannel | DMChannel, message, this.msg.author.id, timeout);
     }
 
-    /**
-     * @param {string} message
-     * @param {number | undefined} timeout
-     * @return {Promise<string | null>}
-     */
     public async requestDM(message: string, timeout?: number): Promise<string | null> {
         return this.createRequest(await this.msg.author.createDM(), message, this.msg.author.id, timeout);
     }
 
-    /**
-     * @param {string} message
-     * @param {number} [timeout=7500]
-     * @return {Promise<boolean | null>}
-     */
     public async promptDM(message: string, timeout: number = 7500): Promise<boolean | null> {
         const response: EditableMessage | null = await this.send(message);
 

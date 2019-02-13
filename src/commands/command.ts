@@ -49,7 +49,8 @@ export interface IArgument {
 export type SpecificConstraints = Array<string | RestrictGroup>;
 
 /**
- * Limitations and restrictions by which the execution environment and the command issuer must abide to.
+ * Limitations and restrictions by which the execution environment
+ * and the command issuer must abide to.
  */
 export interface IConstraints {
     selfPermissions: any[];
@@ -182,7 +183,6 @@ export abstract class GenericCommand<T extends object = object> implements IGene
     }
 
     /**
-     * @param {string} query
      * @return {boolean} Whether the query is excluded.
      */
     public isExcluded(query: string): boolean {
@@ -190,16 +190,12 @@ export abstract class GenericCommand<T extends object = object> implements IGene
     }
 }
 
-/**
- * @extends GenericCommand
- */
 export abstract class Subcommand<T extends object = object> extends GenericCommand<T> {
     //
 }
 
 /**
  * Base command class. The 'meta.name' property must be set.
- * @extends GenericCommand
  */
 export default abstract class Command<T extends object = object> extends GenericCommand<T> {
     public readonly subcommands: Subcommand<T>[] = [];

@@ -66,52 +66,17 @@ export default class CommandRegistry implements ICommandRegistry {
     protected readonly released: Map<string, string>;
     protected readonly aliases: Map<string, string>;
 
-    /**
-     * @param {Bot} bot
-     */
     public constructor(bot: Bot) {
-        /**
-         * @type {Bot}
-         * @protected
-         * @readonly
-         */
         this.bot = bot;
-
-        /**
-         * @type {CommandMap}
-         * @protected
-         */
         this.commands = new Map();
-
-        /**
-         * @type {string[]}
-         * @readonly
-         */
         this.released = new Map();
-
-        /**
-         * @type {Map<string, string>}
-         * @protected
-         */
         this.aliases = new Map();
-
-        /**
-         * @type {ICommandCooldown[]}
-         * @protected
-         * @readonly
-         */
         this.cooldowns = new Map();
-
-        /**
-         * @type {Map<string, any>}
-         */
         this.simpleCommands = new Map();
     }
 
     /**
      * Reload a certain command's module from the Node.js cache.
-     * @param {string} commandName
-     * @return {Promise<boolean>}
      */
     public async reload(commandName: string): Promise<boolean> {
         if (!this.commands.has(commandName)) {
@@ -134,7 +99,7 @@ export default class CommandRegistry implements ICommandRegistry {
             return false;
         }
 
-        // Register new one
+        // Register new one.
         await this.register({
             instance: cmdPackg.instance,
             path: reloadedPackage.path
@@ -145,7 +110,6 @@ export default class CommandRegistry implements ICommandRegistry {
 
     /**
      * The amount of registered commands.
-     * @return {number}
      */
     public get size(): number {
         return this.commands.size;
@@ -199,8 +163,6 @@ export default class CommandRegistry implements ICommandRegistry {
 
     /**
      * Register a command.
-     * @param {CommandPackage} commandPackage
-     * @return {Promise<boolean>}
      */
     public async register(commandPackage: CommandPackage): Promise<boolean> {
         if (Util.isEmpty(commandPackage) || typeof commandPackage !== "object") {
@@ -244,7 +206,7 @@ export default class CommandRegistry implements ICommandRegistry {
         return true;
     }
 
-    // TODO: Accepting aliases as an argument for a hot-fix of an infinite loop (looks like this.get(commandBase) calls back .remove() somehow or something similar)
+    // TODO: Accepting aliases as an argument for a hot-fix of an infinite loop (looks like this.get(commandBase) calls back .remove() somehow or something similar).
     /**
      * Remove a command from the registry along with it's registered aliases.
      * @param {string} name The name of the command to remove.
@@ -281,20 +243,16 @@ export default class CommandRegistry implements ICommandRegistry {
         return this.commands.has(name) || this.aliases.has(name) || this.isReleased(name);
     }
 
-    /**
-     * @todo Should release/reload not when accessing, but when actually executing
-     * @param {string} name
-     * @return {Promise<Command | null>}
-     */
+    // TODO: Should release/reload not when accessing, but when actually executing.
     public async get(name: string): Promise<Command | null> {
-        // TODO: CRITICAL: Will probably error since property may be undefined (Trying to access .module of undefined)
+        // TODO: CRITICAL: Will probably error since property may be undefined (Trying to access .module of undefined).
         if (this.aliases.get(name) !== undefined) {
             const commandPackg: CommandPackage | null = (this.commands.get(this.aliases.get(name) as string) as CommandPackage) || null;
 
             return commandPackg === null ? null : commandPackg.instance;
         }
         else if (this.isReleased(name)) {
-            // TODO: Re-load command here
+            // TODO: Re-load command here.
 
             const packg: IPackage | null = await Loader.load(this.released.get(name) as string);
 
@@ -319,11 +277,7 @@ export default class CommandRegistry implements ICommandRegistry {
         return command === null ? null : command.instance;
     }
 
-    // TODO: Return amount registered instead
-    /**
-     * @param {CommandPackage[]} commands
-     * @return {Promise<number>}
-     */
+    // TODO: Return amount registered instead.
     public async registerMultiple(commands: CommandPackage[]): Promise<number> {
         let registered: number = 0;
 
@@ -338,15 +292,12 @@ export default class CommandRegistry implements ICommandRegistry {
 
     /**
      * Retrieve all the registered commands.
-     * @return {ReadonlyCommandMap}
      */
     public getAll(): ReadonlyCommandMap {
         return this.commands as ReadonlyCommandMap;
     }
 
     /**
-     * @param {Snowflake} user
-     * @param {string} command
      * @return {number | null} The cooldown or null if there is none.
      */
     public getCooldown(user: Snowflake, command: string): number | null {
@@ -359,11 +310,6 @@ export default class CommandRegistry implements ICommandRegistry {
         return issuerCooldowns.get(command) || null;
     }
 
-    /**
-     * @param {Snowflake} user
-     * @param {string} command
-     * @return {boolean}
-     */
     public cooldownExpired(user: Snowflake, command: string): boolean {
         const cooldown: number | null = this.getCooldown(user, command);
 
@@ -372,9 +318,6 @@ export default class CommandRegistry implements ICommandRegistry {
 
     /**
      * Removes a cooldown from a command.
-     * @param {Snowflake} user
-     * @param {string} command
-     * @return {boolean}
      */
     public clearCooldown(user: Snowflake, command: string): boolean {
         const issuerCooldowns: Map<string, number> | null = this.cooldowns.get(user) || null;
@@ -388,17 +331,12 @@ export default class CommandRegistry implements ICommandRegistry {
         return false;
     }
 
-    /**
-     * @param {Snowflake} user
-     * @param {number} cooldown
-     * @param {string} command
-     */
     public setCooldown(user: Snowflake, cooldown: number, command: string): this {
         const currentCooldown: number | null = this.getCooldown(user, command);
 
         if (currentCooldown !== null) {
-            // Must exist at this point
-            (this.cooldowns.get(user) as Map<string, number>).set(command, cooldown);
+            // Must exist at this point.
+            this.cooldowns.get(user)!.set(command, cooldown);
 
             return this;
         }
@@ -413,7 +351,6 @@ export default class CommandRegistry implements ICommandRegistry {
 
     /**
      * Dispose all resources used by this class instance.
-     * @return {Promise<void>}
      */
     public async disposeAll(): Promise<this> {
         for (const [base, command] of this.commands) {
@@ -427,7 +364,6 @@ export default class CommandRegistry implements ICommandRegistry {
 
     /**
      * Unload all registered commands.
-     * @return {this}
      */
     public unloadAll(): this {
         if (this.commands.size > 0) {
@@ -445,11 +381,9 @@ export default class CommandRegistry implements ICommandRegistry {
      * @todo 'args' type on docs (here)
      * @param {string} base The base command name.
      * @param {Message} referer The triggering message.
-     * @param {string[]} args
-     * @return {Promise<*>}
      */
     public async invoke(base: string, referer: Message, ...args: string[]): Promise<any> {
-        // Use any registered prefix, default to index 0
+        // Use any registered prefix, default to index 0.
         const content: string = `${this.bot.options.prefixes[0]}${base} ${args.join(" ")}`.trim();
 
         let command: Command | null = await CommandParser.parse(
@@ -469,11 +403,11 @@ export default class CommandRegistry implements ICommandRegistry {
             command,
             schema: command.args,
 
-            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun
+            // TODO: Should pass context instead of just message for more flexibility from defaultValue fun.
             message: referer
         });
 
-        // TODO: Debugging
+        // TODO: Debugging.
         // Log.debug("raw args, ", rawArgs);
 
         return this.bot.commandHandler.handle(

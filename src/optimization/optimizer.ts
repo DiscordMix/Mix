@@ -99,7 +99,6 @@ export default class Optimizer implements IOptimizer {
 
     /**
      * Handle performance optimization iterations.
-     * @return {Promise<number>}
      */
     protected async process(): Promise<number> {
         const commands: ReadonlyCommandMap = this.bot.registry.getAll();

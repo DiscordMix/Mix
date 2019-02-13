@@ -14,10 +14,6 @@ export interface IEmbedBuilder extends IBuilder<RichEmbed> {
 }
 
 export default class EmbedBuilder implements IEmbedBuilder {
-    /**
-     * @param {object} obj
-     * @return {EmbedBuilder}
-     */
     public static fromObject(obj: any): EmbedBuilder {
         const result = new EmbedBuilder();
 
@@ -55,11 +51,6 @@ export default class EmbedBuilder implements IEmbedBuilder {
         return result;
     }
 
-    /**
-     * @param {*} sections
-     * @param {string} color
-     * @return {EmbedBuilder}
-     */
     public static sections(sections: any, color: string = ""): EmbedBuilder {
         const result = new EmbedBuilder();
 
@@ -77,18 +68,11 @@ export default class EmbedBuilder implements IEmbedBuilder {
     protected readonly embed: RichEmbed;
 
     public constructor() {
-        /**
-         * @type {Discord.RichEmbed}
-         * @protected
-         * @readonly
-         */
         this.embed = new Discord.RichEmbed();
     }
 
     /**
      * Set the color of the embed.
-     * @param {string} color
-     * @return {this}
      */
     public color(color: string): this {
         this.embed.setColor(color);
@@ -98,8 +82,6 @@ export default class EmbedBuilder implements IEmbedBuilder {
 
     /**
      * Set the title of the embed.
-     * @param {string} title
-     * @return {this}
      */
     public title(title: string): this {
         this.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : "");
@@ -107,10 +89,6 @@ export default class EmbedBuilder implements IEmbedBuilder {
         return this;
     }
 
-    /**
-     * @param {string} url
-     * @return {this}
-     */
     public titleIcon(url: string): this {
         this.embed.setAuthor(this.embed.author ? this.embed.author.name : null, url);
 
@@ -119,8 +97,6 @@ export default class EmbedBuilder implements IEmbedBuilder {
 
     /**
      * Set the thumbnail image of the embed.
-     * @param {string} url
-     * @return {this}
      */
     public thumbnail(url: string): this {
         this.embed.setThumbnail(url);
@@ -130,9 +106,6 @@ export default class EmbedBuilder implements IEmbedBuilder {
 
     /**
      * Set the footer text of the embed.
-     * @param {string} text
-     * @param {string} icon
-     * @return {this}
      */
     public footer(text: string, icon?: string): this {
         this.embed.setFooter(text.substr(0, 2048), icon);
@@ -142,8 +115,6 @@ export default class EmbedBuilder implements IEmbedBuilder {
 
     /**
      * Set the image of the embed.
-     * @param {string} url
-     * @return {this}
      */
     public image(url: string): this {
         this.embed.setImage(url);
@@ -154,8 +125,6 @@ export default class EmbedBuilder implements IEmbedBuilder {
     /**
      * Set the text of the embed.
      * @todo Limit text to Discord's embed char limit (done, needs testing).
-     * @param {string} text
-     * @return {this}
      */
     public text(text: string): this {
         this.embed.setDescription(text.substr(0, 1024));
@@ -165,9 +134,6 @@ export default class EmbedBuilder implements IEmbedBuilder {
 
     /**
      * Add a field to the embed.
-     * @param {string} title
-     * @param {string} value
-     * @return {this}
      */
     public field(title: string, value: string): this {
         this.embed.addField(title.substr(0, 256), value.substr(0, 1024));
@@ -176,8 +142,7 @@ export default class EmbedBuilder implements IEmbedBuilder {
     }
 
     /**
-     * Convert the embed to a RichEmbed
-     * @return {Discord.RichEmbed}
+     * Convert the embed to a RichEmbed.
      */
     public build(): RichEmbed {
         return this.embed;

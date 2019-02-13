@@ -33,12 +33,6 @@ export interface ICheckArgumentsOptions {
  * Utility class for command parsing and validation.
  */
 export default abstract class CommandParser {
-    /**
-     * @param {string} commandString
-     * @param {ICommandRegistry} registry
-     * @param {string[]} prefixes
-     * @return {Command | null}
-     */
     public static async parse(commandString: string, registry: ICommandRegistry, prefixes: string[]): Promise<Command | null> {
         const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
@@ -49,12 +43,6 @@ export default abstract class CommandParser {
         return null;
     }
 
-    /**
-     * @param {string} commandString
-     * @param {CommandRegistry} registry
-     * @param {string} prefixes
-     * @return {boolean}
-     */
     public static validate(commandString: string, registry: ICommandRegistry, prefixes: string[]): boolean {
         for (const prefix of prefixes) {
             if (commandString.startsWith(prefix)) {
@@ -69,11 +57,6 @@ export default abstract class CommandParser {
         return false;
     }
 
-    /**
-     * @param {string} commandString
-     * @param {string[]} prefixes
-     * @return {string | null}
-     */
     public static getCommandBase(commandString: string, prefixes: string[]): string | null {
         for (const prefix of prefixes) {
             const regexResult = new RegExp(`^${Util.escapeRegexString(prefix)}([a-zA-Z]+)`).exec(commandString);
@@ -90,10 +73,9 @@ export default abstract class CommandParser {
     /**
      * Retrieve the arguments from a supplied command string and schema.
      * Omits the first argument (the prefix) from the result.
+     *
      * Does not perform any conversions on the found argument values,
      * except for default 'true' boolean value which represents empty flags (flags without values).
-     * @param {string} commandString
-     * @return {string[]}
      */
     public static getArguments(commandString: string, schema: IArgument[]): RawArguments {
 
@@ -168,7 +150,6 @@ export default abstract class CommandParser {
 
     /**
      * Resolve the command arguments' values.
-     * @param {IResolveArgumentsOptions} opts
      * @return {Promise<*>} An object containing the resolved arguments.
      */
     public static async resolveArguments(opts: IResolveArgumentsOptions): Promise<any> {
@@ -198,10 +179,6 @@ export default abstract class CommandParser {
         return args;
     }
 
-    /**
-     * @param {IResolveDefaultArgsOptions} options
-     * @return {RawArguments}
-     */
     public static resolveDefaultArgs(options: IResolveDefaultArgsOptions): RawArguments {
         const result: RawArguments = [];
 
@@ -236,12 +213,8 @@ export default abstract class CommandParser {
         return result;
     }
 
-    /**
-     * @param {ICheckArgumentsOptions} options
-     * @return {boolean}
-     */
     public static checkArguments(options: ICheckArgumentsOptions): boolean {
-        // Invalid amount of arguments
+        // Invalid amount of arguments.
         if (!CommandParser.validateArgumentCount(options.command, options.arguments)) {
             return false;
         }
@@ -262,9 +235,7 @@ export default abstract class CommandParser {
     }
 
     /**
-     * @param {Command} command
-     * @param {RawArguments} args
-     * @return {boolean} Whether the argument count is valid
+     * @return {boolean} Whether the argument count is valid.
      */
     protected static validateArgumentCount(command: Command, args: RawArguments): boolean {
         if (command.singleArg && (args.length < command.maxArguments || args.length > command.minArguments)) {
@@ -278,17 +249,12 @@ export default abstract class CommandParser {
     }
 
     /**
-     * @param {ArgumentType} type
-     * @return {boolean} Whether the provided type is valid
+     * @return {boolean} Whether the provided type is valid.
      */
     protected static isTypeValid(type: ArgumentType): boolean {
         return typeof type === "function";
     }
 
-    /**
-     * @param {string} value
-     * @return {boolean | null}
-     */
     protected static parseBoolean(value: string): boolean | null {
         value = value.toString().toLowerCase();
 

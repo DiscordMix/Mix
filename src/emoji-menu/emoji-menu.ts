@@ -26,9 +26,6 @@ export interface IEmojiMenu extends EventEmitter {
     attach(context: Context): PromiseOr<this>;
 }
 
-/**
- * @extends EventEmitter
- */
 export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisposable {
     public readonly messageId: Snowflake;
     public readonly ownerId: Snowflake;

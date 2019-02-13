@@ -25,9 +25,6 @@ export default class TaskManager implements ITaskManager {
     protected readonly tasks: Map<string, Task>;
     protected readonly scheduler: Map<string, NodeJS.Timeout>;
 
-    /**
-     * @param {Bot} bot
-     */
     public constructor(bot: Bot) {
         this.bot = bot;
         this.tasks = new Map();
@@ -136,7 +133,6 @@ export default class TaskManager implements ITaskManager {
 
     /**
      * Disable all registered tasks.
-     * @return {Promise<this>}
      */
     public async unregisterAll(): Promise<this> {
         for (const [name, task] of this.tasks) {
@@ -167,7 +163,6 @@ export default class TaskManager implements ITaskManager {
 
     /**
      * Enable all registered tasks.
-     * @return {number}
      */
     public enableAll(): number {
         let enabled: number = 0;

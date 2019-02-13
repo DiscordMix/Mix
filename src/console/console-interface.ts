@@ -20,29 +20,18 @@ export interface IConsoleInterface {
 }
 
 export default class ConsoleInterface {
+    /**
+     * Whether the console interface has been successfully setup.
+     */
     public ready: boolean;
 
     protected readonly commands: Map<string, ConsoleCommandHandler>;
 
     public constructor() {
-        /**
-         * Whether the console interface has been successfully setup
-         * @type {boolean}
-         */
         this.ready = false;
-
-        /**
-         * @type {Map<string, ConsoleCommandHandler}
-         * @protected
-         * @readonly
-         */
         this.commands = new Map();
     }
 
-    /**
-     * @param {Bot} bot
-     * @return {ConsoleInterface}
-     */
     public setup(bot: Bot, registerDefaults: boolean = true): this {
         Log.verbose("Setting up console interface");
 
@@ -119,10 +108,6 @@ export default class ConsoleInterface {
         return this;
     }
 
-    /**
-     * @param {Bot} bot
-     * @return {this}
-     */
     protected defaultCommands(bot: Bot): this {
         let using: Guild | null = null;
 

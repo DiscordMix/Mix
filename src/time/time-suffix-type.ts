@@ -1,8 +1,5 @@
 import Log from "../core/log";
 
-/**
- * @enum {number}
- */
 const TimeSuffixType = {
     Millisecond: 0,
     Second: 1,
@@ -12,10 +9,9 @@ const TimeSuffixType = {
     Month: 5,
     Year: 6,
 
+    // TODO: Return type.
     /**
-     * @todo Return type
      * @param {string} short The short suffix
-     * @return {TimeSuffixType}
      */
     fromShort(short: string): any {
         switch (short) {

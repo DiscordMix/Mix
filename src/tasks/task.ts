@@ -25,44 +25,27 @@ export default abstract class Task implements ITask {
 
     protected readonly bot: Bot;
 
-    /**
-     * @param {Bot} bot
-     */
     protected constructor(bot: Bot) {
-        /**
-         * @type {Bot}
-         * @protected
-         * @readonly
-         */
         this.bot = bot;
     }
 
     public abstract run(): void;
 
-    /**
-     * @return {boolean}
-     */
     public canRun(): boolean {
         return true;
     }
 
     /**
-     * Dispose resources used by this task
+     * Dispose resources used by this task.
      */
     public dispose(): void {
         //
     }
 
-    /**
-     * @return {number}
-     */
     public get lastIterationDifference(): number {
         return Date.now() - this.lastIteration;
     }
 
-    /**
-     * @return {number}
-     */
     public get nextIteration(): number {
         if (this.interval === -1) {
             return -1;

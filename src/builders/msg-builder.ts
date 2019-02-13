@@ -22,31 +22,16 @@ export default class MsgBuilder<T = any> implements IMsgBuilder<T> {
     protected message: string;
     protected formatter?: FormatterCallback<T>;
 
-    /**
-     * @param {string} [value=""]
-     */
     public constructor(value = "") {
-        /**
-         * @type {string}
-         * @protected
-         */
         this.message = value;
     }
 
-    /**
-     * @param {string} text
-     * @return {MsgBuilder}
-     */
     public append(text: string): this {
         this.message += text;
 
         return this;
     }
 
-    /**
-     * @param {string} text
-     * @return {MsgBuilder}
-     */
     public add(text: string): this {
         this.append(text);
         this.line();
@@ -54,10 +39,6 @@ export default class MsgBuilder<T = any> implements IMsgBuilder<T> {
         return this;
     }
 
-    /**
-     * @param {string | undefined} language
-     * @return {MsgBuilder}
-     */
     public block(language?: string): this {
         let result = "```";
 
@@ -68,50 +49,26 @@ export default class MsgBuilder<T = any> implements IMsgBuilder<T> {
         return this.append(result);
     }
 
-    /**
-     * @param {string} code
-     * @return {MsgBuilder}
-     */
     public code(code: string): this {
         return this.append(`\`${code}\``);
     }
 
-    /**
-     * @param {string} text
-     * @return {MsgBuilder}
-     */
     public italic(text: string): this {
         return this.append(`*${text}*`);
     }
 
-    /**
-     * @param {string} text
-     * @return {MsgBuilder}
-     */
     public bold(text: string): this {
         return this.append(`**${text}**`);
     }
 
-    /**
-     * @param {string} text
-     * @return {MsgBuilder}
-     */
     public underline(text: string): this {
         return this.append(`__${text}__`);
     }
 
-    /**
-     * @param {string} text
-     * @return {MsgBuilder}
-     */
     public strike(text: string): this {
         return this.append(`~~${text}~~`);
     }
 
-    /**
-     * @param {number} amount
-     * @return {MsgBuilder}
-     */
     public line(amount: number = 1): this {
         let counter = 0;
 
@@ -123,10 +80,6 @@ export default class MsgBuilder<T = any> implements IMsgBuilder<T> {
         return this;
     }
 
-    /**
-     * @param {string} emoji
-     * @return {MsgBuilder}
-     */
     public emoji(emoji: string): this {
         return this.append(`:${emoji}:`);
     }
@@ -147,9 +100,6 @@ export default class MsgBuilder<T = any> implements IMsgBuilder<T> {
         return this;
     }
 
-    /**
-     * @return {string}
-     */
     public build(): string {
         return this.message;
     }

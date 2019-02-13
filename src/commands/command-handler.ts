@@ -97,11 +97,6 @@ export interface ICommandHandler {
  * Handles incoming command requests.
  */
 export default class CommandHandler implements ICommandHandler {
-    /**
-     * @param {Command} command
-     * @param {Context} context
-     * @return {boolean}
-     */
     public static specificMet(command: Command, context: Context): boolean {
         let met: boolean = false;
 
@@ -189,9 +184,6 @@ export default class CommandHandler implements ICommandHandler {
 
     /**
      * Validates a channel's environment.
-     * @param {ChatEnv} environment
-     * @param {string} type
-     * @param {boolean} nsfw
      * @return {boolean} Whether the environment is valid.
      */
     public static validateChannelTypeEnv(environment: ChatEnv, type: string, nsfw: boolean): boolean {
@@ -213,8 +205,6 @@ export default class CommandHandler implements ICommandHandler {
 
     /**
      * Validates the execution environment.
-     * @param {ChatEnv|ChatEnv[]} environment
-     * @param {string} channelType
      * @return {boolean} Whether the environment is valid.
      */
     public static validateEnv(environment: ChatEnv, channelType: string, nsfw: boolean): boolean {
@@ -238,20 +228,8 @@ export default class CommandHandler implements ICommandHandler {
     public readonly argumentTypes: any;
     public readonly undoMemory: Map<Snowflake, IUndoAction>;
 
-    /**
-     * @param {ICommandHandlerOptions} options
-     */
     public constructor(options: ICommandHandlerOptions) {
-        /**
-         * @type {CommandRegistry}
-         * @readonly
-         */
         this.commandStore = options.commandStore;
-
-        /**
-         * @type {Function[]}
-         * @readonly
-         */
         this.errorHandlers = new Map();
 
         // Populate error handlers with input.
@@ -259,17 +237,12 @@ export default class CommandHandler implements ICommandHandler {
             this.errorHandlers.set(opt.event, opt.handler);
         }
 
-        /**
-         * @type {Map<Snowflake, IUndoAction>}
-         * @readonly
-         */
         this.undoMemory = new Map();
     }
 
     /**
      * Trigger a command's undo sequence.
      * @param {Snowflake} user The command issuer's ID.
-     * @param {Message} message
      */
     public async undoAction(user: Snowflake, message: Message): Promise<boolean> {
         if (this.undoMemory.has(user)) {
@@ -281,13 +254,11 @@ export default class CommandHandler implements ICommandHandler {
         return false;
     }
 
+    // TODO: Split this method into a class?
+    // TODO: Since it's returning a Promise, review.
     /**
-     * @todo Split this method into a class?
-     * @todo Since it's returning a Promise, review
-     * @param {Context} context
-     * @param {Command} command The command to handle
-     * @param {RawArguments} rawArgs
-     * @return {Promise<boolean>} Whether the command was successfully executed
+     * @param {Command} command The command to handle.
+     * @return {Promise<boolean>} Whether the command was successfully executed.
      */
     public async handle(context: Context, command: Command, rawArgs: RawArguments): Promise<boolean> {
         if (!this.meetsRequirements(context, command, rawArgs)) {
@@ -386,7 +357,7 @@ export default class CommandHandler implements ICommandHandler {
                 handler(context, command, error);
             }
             else {
-                // TODO: Include stack trace
+                // TODO: Include stack trace.
                 Log.error(`There was an error while executing the '${command.meta.name}' command: ${error.message}`);
                 context.fail(`There was an error executing that command. (${error.message})`);
             }
@@ -396,9 +367,6 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {CmdHandlerEvent} event
-     * @param {Context} context
-     * @param {Command} command
      * @return {boolean} Whether the error was handled.
      */
     protected handleError(event: CmdHandlerEvent, context: Context, command: Command): boolean {

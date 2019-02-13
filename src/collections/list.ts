@@ -1,38 +1,25 @@
 import {EventEmitter} from "events";
 import _ from "lodash";
 
-/**
- * @extends EventEmitter
- */
 export default class List<DataType> extends EventEmitter {
     protected readonly items: DataType[];
 
-    /**
-     * @param {Array} items
-     */
     public constructor(items: DataType[] = []) {
         super();
 
-        /**
-         * @type {Array<*>}
-         * @protected
-         */
         this.items = items;
     }
 
     /**
-     * Get an item in this collection by its index
-     * @param {number} index
-     * @return {*}
+     * Get an item in this collection by its index.
      */
     public at(index: number): DataType | null {
         return this.items[index] || null;
     }
 
     /**
-     * Remove an item from this collection by its index
-     * @param {number} index
-     * @return {boolean} Whether the item was removed
+     * Remove an item from this collection by its index.
+     * @return {boolean} Whether the item was removed.
      */
     public removeAt(index: number): boolean {
         if (this.items[index] !== null && this.items[index] !== undefined) {
@@ -46,8 +33,7 @@ export default class List<DataType> extends EventEmitter {
     }
 
     /**
-     * Add an item to this collection
-     * @param {DataType} item
+     * Add an item to this collection.
      */
     public add(item: DataType): this {
         this.items.push(item);
@@ -57,9 +43,8 @@ export default class List<DataType> extends EventEmitter {
     }
 
     /**
-     * Add an item to this collection only if it doesn't already exist
-     * @param {DataType} item
-     * @return {boolean} Whether the item was added
+     * Add an item to this collection only if it doesn't already exist.
+     * @return {boolean} Whether the item was added.
      */
     public addUnique(item: DataType): boolean {
         if (!this.contains(item)) {
@@ -72,9 +57,7 @@ export default class List<DataType> extends EventEmitter {
     }
 
     /**
-     * Determine whether this collection contains an item
-     * @param {DataType} item
-     * @return {boolean}
+     * Determine whether this collection contains an item.
      */
     public contains(item: DataType): boolean {
         for (const search of this.items) {
@@ -87,10 +70,7 @@ export default class List<DataType> extends EventEmitter {
     }
 
     /**
-     * Find an item in this collection
-     * @param {string} path
-     * @param {*} value
-     * @return {DataType | null}
+     * Find an item in this collection.
      */
     public find(path: string, value: any): DataType | null {
         for (const item of this.items) {

@@ -60,7 +60,6 @@ export interface ITypeDef {
      * Represents an integer within a range.
      * @param {number} min The minimum value.
      * @param {number} max The maximum value.
-     * @return {TypeChecker}
      */
     readonly minMax: ArgumentType;
 
@@ -102,14 +101,11 @@ export interface ITypeDef {
     /**
      * Argument must match all provided patterns.
      * @param {RegExp[]} patterns The patterns to test.
-     * @return {TypeChecker}
      */
     readonly pattern: ArgumentType;
 
     /**
      * Implement custom type checker(s). All provided type checkers must return true in order for this rule to be met.
-     * @param {TypeChecker[]} checkers
-     * @return {TypeChecker}
      */
     readonly custom: ArgumentType;
 }

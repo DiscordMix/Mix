@@ -53,27 +53,15 @@ export interface IActionInterpreter extends EventEmitter {
 }
 
 // TODO: Possibly consider attaching ActionInterpreter into commands' "this" so it's easier to return and ActionInterpreter can auto-determine some stuff.
-/**
- * @extends EventEmitter
- */
 export default class ActionInterpreter extends EventEmitter implements IActionInterpreter {
     protected readonly bot: Bot;
 
     public constructor(bot: Bot) {
         super();
 
-        /**
-         * @type {Bot}
-         * @protected
-         * @readonly
-         */
         this.bot = bot;
     }
 
-    /**
-     * @param {IAction} action
-     * @return {Promise<this>}
-     */
     public async interpret(action: IAction): Promise<this> {
         switch (action.type) {
             case ActionType.Message: {

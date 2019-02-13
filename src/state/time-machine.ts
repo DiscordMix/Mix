@@ -82,7 +82,7 @@ export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
             if (newState === undefined) {
                 return;
             }
-            // TODO: Should not force cast
+            // TODO: Should not force cast.
             else if (previousState === undefined || Delta.different(previousState as any, newState as any) && newState !== undefined) {
                 this.insert(newState);
             }

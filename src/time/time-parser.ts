@@ -5,28 +5,14 @@ import Log from "../core/log";
 export default class TimeParser {
     public readonly timeString: string;
 
-    /**
-     * @param {string} timeString
-     */
     public constructor(timeString: string) {
-        /**
-         * @type {string}
-         * @protected
-         * @readonly
-         */
         this.timeString = timeString;
     }
 
-    /**
-     * @return {*}
-     */
     public getMatch(): any {
         return /^([0-9]+)(ms|s|m|h|d|mo|y)$/.exec(this.timeString);
     }
 
-    /**
-     * @return {number}
-     */
     public getTimeFromNow(): number {
         switch (this.suffix) {
             case TimeSuffixType.Millisecond: {
@@ -63,17 +49,11 @@ export default class TimeParser {
         }
     }
 
-    /**
-     * @todo Return type
-     * @return {TimeSuffixType}
-     */
+    // TODO: Return type.
     public get suffix(): any {
         return TimeSuffixType.fromShort(this.getMatch()[2]);
     }
 
-    /**
-     * @return {number}
-     */
     public get amount(): number {
         return parseInt(this.getMatch()[1]);
     }

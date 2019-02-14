@@ -91,7 +91,7 @@ export default class ConsoleInterface {
             ci.prompt();
         });
 
-        // TODO.
+        // TODO
         /* ci.on("error", (error: Error) => {
             Log.error(error.message);
         }); */

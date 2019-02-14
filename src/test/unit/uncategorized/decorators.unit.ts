@@ -19,12 +19,10 @@ const testConnection: CommandRunner = (): void => {
 @name("mycmd")
 @description("Used for testing")
 @attachedLogger()
-@args(
-    {
-        name: "name",
-        type: Type.string
-    }
-)
+@args({
+    name: "name",
+    type: Type.string
+})
 @connect(testConnection)
 @guard("testGuard")
 @dependsOn("service-name-1", "service-name-2")
@@ -169,6 +167,6 @@ default class {
 
     @test("@deprecated: should replace input with a proxy method")
     public deprecated_replace() {
-        // TODO.
+        // TODO
     }
 }

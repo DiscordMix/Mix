@@ -49,7 +49,7 @@ export default class BotBuilder implements IBotBuilder {
     }
 
     public build(): IBot {
-        // TODO.
+        // TODO
         // return new Bot(this.bot);
         throw Log.notImplemented;
     }

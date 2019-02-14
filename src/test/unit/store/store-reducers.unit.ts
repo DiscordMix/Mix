@@ -67,7 +67,7 @@ default class {
 
     @test("isSubscribed(): should determine if a handler is subscribed")
     public isSubscribed_determineIfSubscribed() {
-        // TODO.
+        // TODO
     }
 
     @test("isSubscribed(): should throw on invalid parameters")

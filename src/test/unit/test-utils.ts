@@ -46,7 +46,7 @@ export default abstract class TestUtils {
             "test",
             "",
 
-            // TODO.
+            // TODO
             // (): void => {}
         ];
 

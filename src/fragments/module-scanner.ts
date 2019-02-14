@@ -28,7 +28,7 @@ export default class ModuleScanner implements IModuleScanner {
      * @return {string[]} The matching files found.
      */
     public scan(): string[] {
-        // TODO.
+        // TODO
         throw Log.notImplemented;
     }
 }

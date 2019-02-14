@@ -57,7 +57,7 @@ export interface IConstraints {
     issuerPermissions: any[];
     environment: ChatEnv;
     auth: number;
-    specific: SpecificConstraints;
+    userGroups: SpecificConstraints;
     cooldown: number;
 }
 
@@ -67,7 +67,7 @@ export const DefaultCommandRestrict: IConstraints = {
     environment: ChatEnv.Anywhere,
     issuerPermissions: [],
     selfPermissions: [],
-    specific: []
+    userGroups: []
 };
 
 /**

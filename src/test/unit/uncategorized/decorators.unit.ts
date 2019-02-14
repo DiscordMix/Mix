@@ -88,7 +88,7 @@ default class {
     @test("should have a constraints property")
     public haveConstraints() {
         Assert.that(instance.constraints, Is.object);
-        Assert.that(instance.constraints.specific, Is.array);
+        Assert.that(instance.constraints.userGroups, Is.array);
     }
 
     @test("should have a connections property")
@@ -123,12 +123,12 @@ default class {
 
     @test("@ownerOnly: should bind the specific bot owner only constraint")
     public ownerOnly_bind() {
-        Assert.equal(instance.constraints.specific.includes(RestrictGroup.BotOwner), true);
+        Assert.equal(instance.constraints.userGroups.includes(RestrictGroup.BotOwner), true);
     }
 
-    @test("@specific: should bind specific constraint")
-    public specific_bind() {
-        Assert.equal(instance.constraints.specific.includes(RestrictGroup.ServerModerator), true);
+    @test("@userGroups: should bind specific constraint")
+    public userGroups_bind() {
+        Assert.equal(instance.constraints.userGroups.includes(RestrictGroup.ServerModerator), true);
     }
 
     @test("@guard: should bind command guards")

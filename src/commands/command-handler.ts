@@ -100,7 +100,7 @@ export default class CommandHandler implements ICommandHandler {
     public static specificMet(command: Command, context: Context): boolean {
         let met: boolean = false;
 
-        for (const specific of command.constraints.specific) {
+        for (const specific of command.constraints.userGroups) {
             let valid: boolean = true;
 
             if (typeof specific === "string" && (specific.startsWith("@") || specific.startsWith("&"))) {
@@ -397,7 +397,7 @@ export default class CommandHandler implements ICommandHandler {
                 context.fail("That command is disabled and may not be used.");
             }
         }
-        else if (command.constraints.specific.length > 0 && !CommandHandler.specificMet(command, context)) {
+        else if (command.constraints.userGroups.length > 0 && !CommandHandler.specificMet(command, context)) {
             context.fail("You're not allowed to use that command");
         }
         else if (!CommandParser.checkArguments({

@@ -96,8 +96,8 @@ export abstract class Constraint {
             public readonly constraints: IConstraints = {
                 ...this.constraints,
 
-                specific: [
-                    ...this.constraints.specific,
+                userGroups: [
+                    ...this.constraints.userGroups,
                     RestrictGroup.BotOwner
                 ]
             };

@@ -4,7 +4,7 @@ import {Message} from "discord.js";
 import Permission from "../../../core/permission";
 import {dependsOn, guard, connect, attachedLoggerFn, attachedLogger} from "../../../decorators/other";
 import {args, description, name, meta} from "../../../decorators/general";
-import {Constraint} from "../../../decorators/constraints";
+import {Constraint} from "../../../decorators/constraint";
 import {Type} from "../../../commands/type";
 import {deprecated} from "../../../decorators/utility";
 import DiscordEvent from "../../../core/discord-event";
@@ -32,7 +32,7 @@ const testConnection: CommandRunner = (): void => {
 @Constraint.ownerOnly
 @Constraint.issuerPermissions(Permission.AddReactions)
 @Constraint.selfPermissions(Permission.Admin, Permission.BanMembers)
-@Constraint.specific([RestrictGroup.ServerModerator])
+@Constraint.userGroup(RestrictGroup.ServerModerator)
 export class MyCommand extends Command {
     @deprecated()
     public testGuard(): boolean {

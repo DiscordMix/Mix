@@ -1,7 +1,7 @@
 import Command from "../../commands/command";
 import Context from "../../commands/context";
 import {name, description} from "../../decorators/general";
-import {Constraint} from "../../decorators/constraints";
+import {Constraint} from "../../decorators/constraint";
 
 @name("restart")
 @description("Restart the bot and reload modules")

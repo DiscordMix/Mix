@@ -39,9 +39,9 @@ export default class BotConnector implements IBotConnector {
         this.setupStart = performance.now();
 
         // Load languages.
-        if (this.bot.language && this.bot.languages) {
+        if (this.bot.i18n && this.bot.languages) {
             for (const lang of this.bot.languages) {
-                await this.bot.language.load(lang);
+                await this.bot.i18n.load(lang);
             }
         }
 

@@ -1,6 +1,6 @@
 import {exec} from "child_process";
 import {name, description, aliases, args} from "../../decorators/general";
-import {Constraint} from "../../decorators/constraints";
+import {Constraint} from "../../decorators/constraint";
 import {Type} from "../../commands/type";
 import Command from "../../commands/command";
 import Context from "../../commands/context";

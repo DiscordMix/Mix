@@ -173,8 +173,7 @@ export default class CommandHandler implements ICommandHandler {
             if (!valid) {
                 throw Log.error(`Invalid restrict group or prefix: ${specific}`);
             }
-
-            if (met) {
+            else if (met) {
                 break;
             }
         }
@@ -378,9 +377,6 @@ export default class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * @param {Context} context
-     * @param {Command} command
-     * @param {IArgument[]} rawArgs
      * @return {boolean} Whether the environment and command issuer meet the command's requirements.
      */
     protected meetsRequirements(context: Context, command: Command, rawArgs: RawArguments): boolean {

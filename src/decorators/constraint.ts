@@ -2,6 +2,7 @@ import {DecoratorUtils} from "./decorator-utils";
 import {SpecificConstraints, IConstraints, RestrictGroup} from "../commands/command";
 import ChatEnv from "../core/chat-env";
 import {DecoratorProxy} from "./component";
+import {ExclusiveConstraintDelegate} from "./exclusive-constraint";
 
 export abstract class Constraint {
     /**
@@ -40,14 +41,25 @@ export abstract class Constraint {
     }
 
     /**
-     * Limit command execution to specific users, channels, or guilds.
+     * Limit command execution to specific groups of users.
      */
-    public static specific(values: SpecificConstraints): DecoratorProxy {
+    public static userGroup(...groups: RestrictGroup[]): DecoratorProxy {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
-            return DecoratorUtils.overrideConstraint(target, "specific", values);
+            return DecoratorUtils.overrideConstraint(target, "userGroups", groups);
         };
+    }
+
+    /**
+     * Limit command execution to specific users, channels, or guilds.
+     */
+    public static exclusive(...exclusive: ExclusiveConstraintDelegate[]): DecoratorProxy {
+        return function (target: any) {
+            DecoratorUtils.ensureFunc(target);
+
+            return DecoratorUtils.overrideConstraint(target, "exclusive", exclusive);
+        }
     }
 
     /**

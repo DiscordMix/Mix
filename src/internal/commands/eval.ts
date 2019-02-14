@@ -4,7 +4,7 @@ import Command from "../../commands/command";
 import Context from "../../commands/context";
 import Util from "../../core/util";
 import {name, description, args} from "../../decorators/general";
-import {Constraint} from "../../decorators/constraints";
+import {Constraint} from "../../decorators/constraint";
 import {Type} from "../../commands/type";
 
 interface IArgs {

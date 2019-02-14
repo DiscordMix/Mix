@@ -6,9 +6,9 @@ import Language, {LanguageSource} from "../../../language/language";
 default class {
     @test("should register languages")
     public register() {
-        Assert.that(testBot.language, Is.object);
+        Assert.that(testBot.i18n, Is.object);
 
-        const language: Language = testBot.language as Language;
+        const language: Language = testBot.i18n as Language;
         const languages: ReadonlyMap<string, LanguageSource> = language.getLanguages();
 
         Assert.equal(languages.size, 1);
@@ -18,7 +18,7 @@ default class {
 
     @test("should retrieve language values")
     public retrieveValues() {
-        const language: Language = testBot.language as Language;
+        const language: Language = testBot.i18n as Language;
 
         Assert.equal(language.get("name"), "john doe");
         Assert.equal(language.get("occupation"), "tester");
@@ -26,7 +26,7 @@ default class {
 
     @test("should not retrieve invalid language keys")
     public notRetrieveInvalid() {
-        const language: Language = testBot.language as Language;
+        const language: Language = testBot.i18n as Language;
 
         Assert.that(language.get("fake"), Is.null);
         Assert.that(language.get(""), Is.null);
@@ -39,7 +39,7 @@ default class {
 
     @test("should not set invalid default languages")
     public notSetInvalid() {
-        const language: Language = testBot.language as Language;
+        const language: Language = testBot.i18n as Language;
 
         Assert.false(language.setDefault("f"));
         Assert.false(language.setDefault(""));

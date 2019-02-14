@@ -1,6 +1,11 @@
 import {PromiseOr} from "@atlas/xlib";
 
 /**
+ * Represents a generic callback delegate function.
+ */
+export type Delegate<T = void> = (...args: any[]) => T;
+
+/**
  * Represents a class with disposable resources.
  */
 export interface IDisposable<T = any> {

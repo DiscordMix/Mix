@@ -3,7 +3,7 @@ import MsgBuilder from "../../builders/msg-builder";
 import Command from "../../commands/command";
 import Context from "../../commands/context";
 import {name, description, args} from "../../decorators/general";
-import {Constraint} from "../../decorators/constraints";
+import {Constraint} from "../../decorators/constraint";
 import {IMessageActionArgs} from "../../actions/action-interpreter";
 import Service from "../../services/service";
 import {Type} from "../../commands/type";

@@ -10,7 +10,7 @@ import axios from "axios";
 import CommandHandler from "../commands/command-handler";
 import fs from "fs";
 import path from "path";
-import Language from "../language/language";
+import Translation from "../language/language";
 import Analytics from "./bot-analytics";
 import {IDisposable} from "./helpers";
 import ActionInterpreter from "../actions/action-interpreter";
@@ -80,7 +80,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     /**
      * Localization provider.
      */
-    public readonly language?: Language;
+    public readonly i18n?: Translation;
 
     /**
      * A list that keeps track of disposable objects and classes.
@@ -231,7 +231,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         ];
 
         this.owner = this.options.owner;
-        this.language = this.options.paths.languages ? new Language(this.options.paths.languages) : undefined;
+        this.i18n = this.options.paths.languages ? new Translation(this.options.paths.languages) : undefined;
         this.languages = this.options.languages;
         this.analytics = new Analytics();
         this.disposables = [];

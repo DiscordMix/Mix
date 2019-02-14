@@ -73,7 +73,7 @@ import TimeParser from "./time/time-parser";
 import TimeSuffixType from "./time/time-suffix-type";
 import List from "./collections/list";
 import DiscordEvent from "./core/discord-event";
-import {Constraint, constraints} from "./decorators/constraints";
+import {Constraint, constraints} from "./decorators/constraint";
 import {description, name, aliases, args, meta} from "./decorators/general";
 import Component from "./decorators/component";
 import {DecoratorUtils} from "./decorators/decorator-utils";
@@ -84,6 +84,7 @@ import {CmdHandlerEvent} from "./commands/command-handler";
 import {once, on} from "./decorators/events";
 import BotConnector, {IBotConnector} from "./core/bot-connector";
 import {TypeChecker, Type, ArgumentResolver} from "./commands/type";
+import ExclusiveConstraint from "./decorators/exclusive-constraint";
 
 export {
     // Fragments.
@@ -200,6 +201,7 @@ export {
     DecoratorUtils,
     deprecated,
     meta,
+    ExclusiveConstraint,
 
     // Tasks.
     Task,

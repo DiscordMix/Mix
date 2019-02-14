@@ -203,7 +203,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly usePrefixCommand: boolean;
     readonly internalCommands: InternalCommand[];
     readonly owner?: Snowflake;
-    readonly language?: Language;
+    readonly i18n?: Language;
     readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
     readonly disposables: IDisposable[];
     readonly actionInterpreter: ActionInterpreter;

@@ -97,84 +97,47 @@ export interface ICommandHandler {
  * Handles incoming command requests.
  */
 export default class CommandHandler implements ICommandHandler {
-    public static specificMet(command: Command, context: Context): boolean {
+    public static meetsGroupConstraint(command: Command, context: Context): boolean {
         let met: boolean = false;
 
-        for (const specific of command.constraints.userGroups) {
-            let valid: boolean = true;
-
-            if (typeof specific === "string" && (specific.startsWith("@") || specific.startsWith("&"))) {
-                switch (specific[0]) {
-                    case "@": {
-                        if (context.sender.id === specific.substring(1)) {
-                            met = true;
-                        }
-
-                        break;
-                    }
-
-                    case "&": {
-                        if (context.msg.member.roles.find("id", specific.substr(1, specific.length))) {
-                            met = true;
-                        }
-
-                        break;
-                    }
-
-                    default: {
-                        valid = false;
-                    }
-                }
+        for (const group of command.constraints.userGroups) {
+            if (typeof group !== "number" || RestrictGroup[group] === undefined) {
+                throw Log.error(`Invalid restrict group or prefix: ${group}`);
             }
-            else if (typeof specific === "number" && RestrictGroup[specific] !== undefined) {
-                // Override for bot owner.
-                if (context.sender.id === context.bot.owner) {
-                    met = true;
+
+            // Override for bot owner.
+            if (context.sender.id === context.bot.owner) {
+                met = true;
+
+                break;
+            }
+
+            switch (group) {
+                case RestrictGroup.ServerOwner: {
+                    const owners: Snowflake[] = context.msg.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
+
+                    if (owners.includes(context.sender.id)) {
+                        met = true;
+                    }
 
                     break;
                 }
 
-                switch (specific) {
-                    case RestrictGroup.ServerOwner: {
-                        const owners: Snowflake[] = context.msg.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_GUILD")).map((member: GuildMember) => member.id);
+                case RestrictGroup.ServerModerator: {
+                    const moderators: Snowflake[] = context.msg.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
 
-                        if (owners.includes(context.sender.id)) {
-                            met = true;
-                        }
-
-                        break;
+                    if (moderators.includes(context.sender.id)) {
+                        met = true;
                     }
 
-                    case RestrictGroup.ServerModerator: {
-                        const moderators: Snowflake[] = context.msg.guild.members.array().filter((member: GuildMember) => member.hasPermission("MANAGE_ROLES")).map((member: GuildMember) => member.id);
-
-                        if (moderators.includes(context.sender.id)) {
-                            met = true;
-                        }
-
-                        break;
-                    }
-
-                    case RestrictGroup.BotOwner: {
-                        met = !Util.isEmpty(context.bot.owner) && context.sender.id === context.bot.owner;
-
-                        break;
-                    }
-
-                    default: {
-                        valid = false;
-                    }
+                    break;
                 }
-            }
-            else {
-                valid = false;
-            }
 
-            if (!valid) {
-                throw Log.error(`Invalid restrict group or prefix: ${specific}`);
-            }
-            else if (met) {
-                break;
+                case RestrictGroup.BotOwner: {
+                    met = !Util.isEmpty(context.bot.owner) && context.sender.id === context.bot.owner;
+
+                    break;
+                }
             }
         }
 
@@ -397,7 +360,7 @@ export default class CommandHandler implements ICommandHandler {
                 context.fail("That command is disabled and may not be used.");
             }
         }
-        else if (command.constraints.userGroups.length > 0 && !CommandHandler.specificMet(command, context)) {
+        else if (command.constraints.userGroups.length > 0 && !CommandHandler.meetsGroupConstraint(command, context)) {
             context.fail("You're not allowed to use that command");
         }
         else if (!CommandParser.checkArguments({

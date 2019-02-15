@@ -46,8 +46,6 @@ export interface IArgument {
     readonly flagShortName?: string;
 }
 
-export type SpecificConstraints = Array<string | RestrictGroup>;
-
 /**
  * Limitations and restrictions by which the execution environment
  * and the command issuer must abide to.
@@ -57,7 +55,7 @@ export interface IConstraints {
     issuerPermissions: any[];
     environment: ChatEnv;
     auth: number;
-    userGroups: SpecificConstraints;
+    userGroups: RestrictGroup[];
     cooldown: number;
 }
 

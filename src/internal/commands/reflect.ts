@@ -3,6 +3,7 @@ import Context from "../../commands/context";
 import {name, description, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraint";
 import {Type} from "../../commands/type";
+import {notImplemented} from "../../decorators/other";
 
 interface IArgs {
     readonly type: ReflectDataType;
@@ -25,6 +26,7 @@ enum ReflectDataType {
 )
 @Constraint.cooldown(1)
 @Constraint.ownerOnly
+@notImplemented()
 export default class extends Command {
     public run($: Context, args: IArgs) {
         // TODO: Require re-write.

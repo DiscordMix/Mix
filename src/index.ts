@@ -67,7 +67,7 @@ import {Constraint, constraints} from "./decorators/constraint";
 import {description, name, aliases, args, meta} from "./decorators/general";
 import Component from "./decorators/component";
 import {DecoratorUtils} from "./decorators/decorator-utils";
-import {guard, dependsOn, connect, attachedLoggerFn} from "./decorators/other";
+import {guard, dependsOn, connect, attachedLoggerFn, notImplemented} from "./decorators/other";
 import {deprecated} from "./decorators/utility";
 import {PromiseOr} from "@atlas/xlib";
 import {CmdHandlerEvent} from "./commands/command-handler";
@@ -192,6 +192,7 @@ export {
     deprecated,
     meta,
     ExclusiveConstraint,
+    notImplemented,
 
     // Tasks.
     Task,

@@ -1,5 +1,5 @@
 import {DecoratorUtils} from "./decorator-utils";
-import {SpecificConstraints, IConstraints, RestrictGroup} from "../commands/command";
+import {IConstraints, RestrictGroup} from "../commands/command";
 import ChatEnv from "../core/chat-env";
 import {DecoratorProxy} from "./component";
 import {ExclusiveConstraintDelegate} from "./exclusive-constraint";

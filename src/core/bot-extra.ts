@@ -13,11 +13,16 @@ import {ITemp} from "./temp";
 import {ICommandRegistry} from "../commands/command-registry";
 import {IConsoleInterface} from "../console/console-interface";
 import {ITaskManager} from "../tasks/task-manager";
-import ActionInterpreter from "../actions/action-interpreter";
 import {Reducer, IStore} from "../state/store";
 import {PromiseOr} from "@atlas/xlib";
 import {IBotHandler} from "./bot-handler";
 import {ArgumentType, ArgumentResolver} from "../commands/type";
+
+export enum ChannelType {
+    Text = "text",
+    DM = "dm",
+    Group = "group"
+}
 
 /**
  * Options to create a new bot instance.
@@ -206,7 +211,6 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly i18n?: Language;
     readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
     readonly disposables: IDisposable[];
-    readonly actionInterpreter: ActionInterpreter;
     readonly tasks: ITaskManager;
     readonly timeouts: NodeJS.Timeout[];
     readonly intervals: NodeJS.Timeout[];

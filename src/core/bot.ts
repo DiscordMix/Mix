@@ -13,7 +13,6 @@ import path from "path";
 import Translation from "../language/language";
 import Analytics from "./bot-analytics";
 import {IDisposable} from "./helpers";
-import ActionInterpreter from "../actions/action-interpreter";
 import TaskManager from "../tasks/task-manager";
 import {EventEmitter} from "events";
 import Optimizer from "../optimization/optimizer";
@@ -86,11 +85,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * A list that keeps track of disposable objects and classes.
      */
     public readonly disposables: IDisposable[];
-
-    /**
-     * The independent action interpreter.
-     */
-    public readonly actionInterpreter: ActionInterpreter;
 
     /**
      * Task management class.
@@ -235,7 +229,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.languages = this.options.languages;
         this.analytics = new Analytics();
         this.disposables = [];
-        this.actionInterpreter = new ActionInterpreter(this);
         this.tasks = new TaskManager(this);
         this.timeouts = [];
         this.intervals = [];

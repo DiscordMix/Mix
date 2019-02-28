@@ -1,5 +1,4 @@
 import {DecoratorUtils} from "./decorator-utils";
-import {SpecificConstraints} from "../commands/command";
 import ChatEnv from "../core/chat-env";
 import Log from "../core/log";
 
@@ -12,7 +11,6 @@ export interface ICommandComponentOpts {
     readonly description: string;
     readonly cooldown: number;
     readonly env: ChatEnv;
-    readonly specific: SpecificConstraints;
 }
 
 export default abstract class Component {
@@ -38,10 +36,6 @@ export default abstract class Component {
 
             if (typeof options.env === "number") {
                 target = DecoratorUtils.overrideConstraint(target, "env", options.env);
-            }
-
-            if (typeof options.specific === "object") {
-                target = DecoratorUtils.overrideConstraint(target, "specific", options.specific);
             }
 
             return target;

@@ -1,5 +1,4 @@
 import {DMChannel, Guild, Message, Snowflake, TextChannel} from "discord.js";
-import {ChannelType} from "../actions/action-interpreter";
 import Bot from "../core/bot";
 import Log from "../core/log";
 import BotMessages from "../core/messages";
@@ -8,6 +7,7 @@ import Util from "../core/util";
 import EditableMessage from "../message/editable-message";
 import {IStore} from "../state/store";
 import {PromiseOr} from "@atlas/xlib";
+import {ChannelType} from "../core/bot-extra";
 
 export interface IContextOptions {
     readonly msg: Message;

@@ -1,7 +1,7 @@
-import Command from "../../commands/command";
-import Context from "../../commands/context";
-import {name, description} from "../../decorators/general";
-import Log from "../../core/log";
+import Command from "../../commands/Command";
+import Context from "../../commands/Context";
+import {name, description} from "../../Decorators/General";
+import Log from "../../core/Log";
 
 @name("prefix")
 @description("Manage bot prefixes")

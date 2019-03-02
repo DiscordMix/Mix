@@ -1,5 +1,5 @@
 import {Runner} from "unit";
-import Log, {LogLevel} from "../../core/log";
+import Log, {LogLevel} from "../../core/Log";
 
 // Supress log messages.
 Log.level = LogLevel.None;

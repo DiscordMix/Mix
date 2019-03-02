@@ -1,8 +1,8 @@
-import Command from "../../commands/command";
-import BotMessages from "../../core/messages";
-import {name, description} from "../../decorators/general";
-import {Constraint} from "../../decorators/constraint";
-import Log from "../../core/log";
+import Command from "../../commands/Command";
+import BotMessages from "../../core/Messages";
+import {name, description} from "../../Decorators/General";
+import {Constraint} from "../../Decorators/Constraint";
+import Log from "../../core/Log";
 
 @name("throw")
 @description("Throw an error")

@@ -1,7 +1,7 @@
 import {unit, test, Assert, Is, Does} from "unit";
 import {testBot} from "../test-bot";
 import TestData from "../test-data";
-import {Bot} from "../../..";
+import {Bot} from "../../../Index";
 
 @unit("Bot Dispose")
 default class {

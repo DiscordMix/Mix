@@ -1,5 +1,5 @@
-import {Snowflake} from "./bot-extra";
-import Log from "./log";
+import {Snowflake} from "./BotExtra";
+import Log from "./Log";
 import {PromiseOr} from "@atlas/xlib";
 
 export enum RequestType {

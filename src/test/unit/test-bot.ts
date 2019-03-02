@@ -1,11 +1,11 @@
 require("dotenv").config();
 
 import path from "path";
-import Bot from "../../core/bot";
-import {BotEvent} from "../../core/bot-extra";
-import Rgba from "../../misc/rgba";
-import List from "../../collections/list";
-import Rgb from "../../misc/rgb";
+import Bot from "../../core/Bot";
+import {BotEvent} from "../../core/BotExtra";
+import Rgba from "../../Misc/RGBA";
+import List from "../../collections/List";
+import Rgb from "../../Misc/RGB";
 
 export const TestSubjects = {
     ids: [

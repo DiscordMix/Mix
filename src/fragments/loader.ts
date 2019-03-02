@@ -1,8 +1,8 @@
 import fs from "fs";
-import Log from "../core/log";
-import Util from "../core/util";
-import {IFragment} from "./fragment";
-import Pattern from "../core/pattern";
+import Log from "../core/Log";
+import Util from "../core/Util";
+import {IFragment} from "./Fragment";
+import Pattern from "../core/Pattern";
 
 export interface IPackage {
     readonly module: IFragment;

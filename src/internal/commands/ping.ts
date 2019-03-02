@@ -1,7 +1,7 @@
-import Command from "../../commands/command";
-import Context from "../../commands/context";
-import {name, description} from "../../decorators/general";
-import {Constraint} from "../../decorators/constraint";
+import Command from "../../commands/Command";
+import Context from "../../commands/Context";
+import {name, description} from "../../Decorators/General";
+import {Constraint} from "../../Decorators/Constraint";
 
 @name("ping")
 @description("View the latency and heartbeat of the bot")

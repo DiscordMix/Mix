@@ -1,8 +1,8 @@
 import {RichEmbed} from "discord.js";
-import Command from "../../commands/command";
-import Context from "../../commands/context";
-import {ReadonlyCommandMap} from "../../commands/command-registry";
-import {description, name} from "../../decorators/general";
+import Command from "../../commands/Command";
+import Context from "../../commands/Context";
+import {ReadonlyCommandMap} from "../../commands/CommandRegistry";
+import {description, name} from "../../Decorators/General";
 
 @name("help")
 @description("View available commands and their descriptions")

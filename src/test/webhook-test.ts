@@ -1,6 +1,6 @@
 import {FileOps, Coordinator, GitOps, ScriptOps, GithubEvent, ITaskResult, RunState} from "@atlas/automata";
-import Util from "../core/util";
-import Log from "../core/log";
+import Util from "../core/Util";
+import Log from "../core/Log";
 import colors from "colors";
 
 const coordinator: Coordinator = new Coordinator();

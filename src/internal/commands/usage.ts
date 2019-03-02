@@ -1,9 +1,9 @@
-import {default as Command} from "../../commands/command";
-import Context from "../../commands/context";
-import {name, description, args} from "../../decorators/general";
-import MsgBuilder from "../../builders/msg-builder";
-import {Constraint} from "../../decorators/constraint";
-import {Type} from "../../commands/type";
+import {default as Command} from "../../commands/Command";
+import Context from "../../commands/Context";
+import {name, description, args} from "../../Decorators/General";
+import MsgBuilder from "../../builders/MsgBuilder";
+import {Constraint} from "../../Decorators/Constraint";
+import {Type} from "../../commands/Type";
 
 interface IArgs {
     readonly command: string;

@@ -1,10 +1,10 @@
 import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import path from "path";
-import Util from "./util";
-import {ArgumentResolver, ArgumentType, Type} from "../commands/type";
-import Pattern from "./pattern";
-import {InputArgument} from "../commands/command";
-import {IBotOptions} from "./bot-extra";
+import Util from "./Util";
+import {ArgumentResolver, ArgumentType, Type} from "../commands/Type";
+import Pattern from "./Pattern";
+import {InputArgument} from "../commands/Command";
+import {IBotOptions} from "./BotExtra";
 
 // TODO: Not working.
 export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";

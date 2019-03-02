@@ -1,8 +1,8 @@
-import {DecoratorUtils} from "./decorator-utils";
-import {IConstraints, RestrictGroup} from "../commands/command";
-import ChatEnv from "../core/chat-env";
-import {DecoratorProxy} from "./component";
-import {ExclusiveConstraintDelegate} from "./exclusive-constraint";
+import {DecoratorUtils} from "./DecoratorUtils";
+import {IConstraints, RestrictGroup} from "../commands/Command";
+import ChatEnv from "../core/ChatEnv";
+import {DecoratorProxy} from "./Component";
+import {ExclusiveConstraintDelegate} from "./ExclusiveConstraint";
 
 export abstract class Constraint {
     /**

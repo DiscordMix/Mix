@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import Log from "../core/log";
+import Log from "../core/Log";
 
 export interface IBotEvent {
     readonly name: string;

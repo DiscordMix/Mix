@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
-import BotMessages from "../core/messages";
-import Util from "../core/util";
+import BotMessages from "../core/Messages";
+import Util from "../core/Util";
 import {PromiseOr} from "@atlas/xlib";
-import Log from "../core/log";
+import Log from "../core/Log";
 
 export type LanguageSource = Map<string, any>;
 

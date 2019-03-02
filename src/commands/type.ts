@@ -1,8 +1,8 @@
-import Util from "../core/util";
-import Pattern from "../core/pattern";
+import Util from "../core/Util";
+import Pattern from "../core/Pattern";
 import {Message} from "discord.js";
 import {PromiseOr} from "@atlas/xlib";
-import {InputArgument} from "./command";
+import {InputArgument} from "./Command";
 
 /**
  * Represents an argument resolver. Returns 'null' if processing failed.

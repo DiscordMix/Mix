@@ -12,9 +12,9 @@ import {
 
 import fs from "fs";
 import path from "path";
-import Pattern from "./pattern";
-import Log from "./log";
-import {IBot} from "./bot-extra";
+import Pattern from "./Pattern";
+import Log from "./Log";
+import {IBot} from "./BotExtra";
 
 const TimeAgo: any = require("javascript-time-ago");
 const en: any = require("javascript-time-ago/locale/en");

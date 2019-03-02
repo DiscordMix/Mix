@@ -1,6 +1,6 @@
-import DiscordEvent from "../core/discord-event";
-import {DecoratorUtils} from "./decorator-utils";
-import {DecoratorProxy} from "./component";
+import DiscordEvent from "../core/DiscordEvent";
+import {DecoratorUtils} from "./DecoratorUtils";
+import {DecoratorProxy} from "./Component";
 
 export enum EventListenerType {
     Once,

@@ -1,6 +1,6 @@
-import {DecoratorUtils} from "./decorator-utils";
-import ChatEnv from "../core/chat-env";
-import Log from "../core/log";
+import {DecoratorUtils} from "./DecoratorUtils";
+import ChatEnv from "../core/ChatEnv";
+import Log from "../core/Log";
 
 /**
  * Represents a decorator proxy function.

@@ -1,8 +1,8 @@
 import {Message} from "discord.js";
 import {EventEmitter} from "events";
-import Bot from "../core/bot";
-import {IDisposable} from "../core/helpers";
-import Log from "../core/log";
+import Bot from "../core/Bot";
+import {IDisposable} from "../core/Helpers";
+import Log from "../core/Log";
 
 export enum PaginationEvent {
     PageChanged = "pageChanged"

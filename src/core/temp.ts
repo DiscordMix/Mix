@@ -3,8 +3,8 @@ import {Snowflake} from "discord.js";
 import fs from "fs";
 import path from "path";
 import {default as main} from "require-main-filename";
-import Log from "./log";
-import Util from "./util";
+import Log from "./Log";
+import Util from "./Util";
 import {PromiseOr} from "@atlas/xlib";
 
 export interface ITemp {

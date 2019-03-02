@@ -1,7 +1,7 @@
-import {DecoratorUtils} from "./decorator-utils";
-import Command, {IArgument} from "../commands/command";
-import {IMeta} from "../fragments/fragment";
-import {DecoratorProxy} from "./component";
+import {DecoratorUtils} from "./DecoratorUtils";
+import Command, {IArgument} from "../commands/Command";
+import {IMeta} from "../Fragments/Fragment";
+import {DecoratorProxy} from "./Component";
 
 /**
  * Set a fragment's meta property.

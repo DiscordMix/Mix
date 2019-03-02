@@ -1,11 +1,11 @@
-import ChatEnv from "../core/chat-env";
-import Context, {IContext} from "./context";
-import {IFragment, IMeta} from "../fragments/fragment";
+import ChatEnv from "../core/ChatEnv";
+import Context, {IContext} from "./Context";
+import {IFragment, IMeta} from "../Fragments/Fragment";
 import {Message, RichEmbed} from "discord.js";
-import Bot from "../core/bot";
-import {IDisposable} from "../core/helpers";
+import Bot from "../core/Bot";
+import {IDisposable} from "../core/Helpers";
 import {PromiseOr} from "@atlas/xlib";
-import {TypeChecker, ArgumentType} from "./type";
+import {TypeChecker, ArgumentType} from "./Type";
 
 export type CommandExeHandler<TArgs extends object = object, TReturn = any> = (context: Context, args: TArgs, api: any) => TReturn;
 

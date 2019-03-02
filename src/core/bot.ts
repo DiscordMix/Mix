@@ -1,31 +1,31 @@
 // Load and apply environment variables.
 require("dotenv").config();
 
-import ConsoleInterface from "../console/console-interface";
-import Log from "./log";
-import Temp from "./temp";
+import ConsoleInterface from "../console/ConsoleInterface";
+import Log from "./Log";
+import Temp from "./Temp";
 import {Client, Snowflake} from "discord.js";
 import ServiceManager from "../services/service-manager";
 import axios from "axios";
-import CommandHandler from "../commands/command-handler";
+import CommandHandler from "../commands/CommandHandler";
 import fs from "fs";
 import path from "path";
-import Translation from "../language/language";
-import Analytics from "./bot-analytics";
-import {IDisposable} from "./helpers";
+import Translation from "../Language/Language";
+import Analytics from "./BotAnalytics";
+import {IDisposable} from "./Helpers";
 import TaskManager from "../tasks/task-manager";
 import {EventEmitter} from "events";
 import Optimizer from "../optimization/optimizer";
-import FragmentManager from "../fragments/fragment-manager";
-import PathResolver from "./path-resolver";
-import {DefaultArgResolvers, DefaultBotOptions} from "./constants";
+import FragmentManager from "../Fragments/FragmentManager";
+import PathResolver from "./PathResolver";
+import {DefaultArgResolvers, DefaultBotOptions} from "./Constants";
 import Store from "../state/store";
-import {InternalCommand, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./bot-extra";
+import {InternalCommand, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./BotExtra";
 import {Action} from "@atlas/automata";
-import BotConnector from "./bot-connector";
-import CommandRegistry from "../commands/command-registry";
-import BotHandler from "./bot-handler";
-import {ArgumentType, ArgumentResolver} from "../commands/type";
+import BotConnector from "./BotConnector";
+import CommandRegistry from "../commands/CommandRegistry";
+import BotHandler from "./BotHandler";
+import {ArgumentType, ArgumentResolver} from "../commands/Type";
 
 // TODO: Should emit an event when state changes.
 export default class Bot<TState = any, TActionType = any> extends EventEmitter implements IBot<TState, TActionType> {

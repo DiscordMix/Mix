@@ -1,4 +1,4 @@
-import Rgb from "./rgb";
+import Rgb from "./RGB";
 
 export interface IRgbaOptions {
     readonly red: number;

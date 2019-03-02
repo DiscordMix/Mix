@@ -1,6 +1,6 @@
 import colors from "colors";
 import fs from "fs";
-import BotMessages from "./messages";
+import BotMessages from "./Messages";
 
 export enum LogLevel {
     None = -1,

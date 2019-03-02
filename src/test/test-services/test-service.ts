@@ -1,4 +1,4 @@
-import {IMeta} from "../../fragments/fragment";
+import {IMeta} from "../../Fragments/Fragment";
 import Service from "../../services/service";
 
 export default class extends Service {

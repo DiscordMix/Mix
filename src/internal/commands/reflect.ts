@@ -1,9 +1,9 @@
-import Command from "../../commands/command";
-import Context from "../../commands/context";
-import {name, description, args} from "../../decorators/general";
-import {Constraint} from "../../decorators/constraint";
-import {Type} from "../../commands/type";
-import {notImplemented} from "../../decorators/other";
+import Command from "../../commands/Command";
+import Context from "../../commands/Context";
+import {name, description, args} from "../../Decorators/General";
+import {Constraint} from "../../Decorators/Constraint";
+import {Type} from "../../commands/Type";
+import {notImplemented} from "../../Decorators/Other";
 
 interface IArgs {
     readonly type: ReflectDataType;

@@ -1,7 +1,7 @@
-import Bot from "../core/bot";
-import DiscordEvent from "../core/discord-event";
+import Bot from "../core/Bot";
+import DiscordEvent from "../core/DiscordEvent";
 import {GenericService, IService, IServiceOptions} from "./generic-service";
-import {IMeta} from "../fragments/fragment";
+import {IMeta} from "../Fragments/Fragment";
 
 export default abstract class Service extends GenericService implements IService {
     public readonly meta: IMeta = {

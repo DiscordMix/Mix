@@ -1,4 +1,4 @@
-import {IMeta} from "../../fragments/fragment";
+import {IMeta} from "../../Fragments/Fragment";
 import Task from "../../tasks/task";
 
 export default class extends Task {

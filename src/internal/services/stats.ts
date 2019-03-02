@@ -1,4 +1,4 @@
-import {name, description} from "../../decorators/general";
+import {name, description} from "../../Decorators/General";
 import Service from "../../services/service";
 
 @name("stats")

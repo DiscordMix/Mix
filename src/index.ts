@@ -1,7 +1,7 @@
-import ArgumentParser, {IArgumentParser} from "./commands/argument-parser";
-import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/context";
-import CommandRegistry, {ICommandRegistry} from "./commands/command-registry";
-import Bot from "./core/bot";
+import ArgumentParser, {IArgumentParser} from "./commands/ArgumentParser";
+import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/Context";
+import CommandRegistry, {ICommandRegistry} from "./commands/CommandRegistry";
+import Bot from "./core/Bot";
 
 import Command, {
     GenericCommand,
@@ -9,31 +9,31 @@ import Command, {
     ICustomArgType,
     IGenericCommand,
     RestrictGroup
-} from "./commands/command";
+} from "./commands/Command";
 
-import BotBuilder, {IBotBuilder} from "./builders/bot-builder";
-import {IBuilder} from "./builders/builder";
-import ConfigBuilder, {IConfigBuilder} from "./builders/config-builder";
-import EmbedBuilder from "./builders/embed-builder";
-import MsgBuilder, {IMsgBuilder} from "./builders/msg-builder";
-import CommandParser from "./commands/command-parser";
-import ConsoleCommand from "./console/console-command";
-import ConsoleInterface, {IConsoleInterface} from "./console/console-interface";
-import {BotEvent, IBot} from "./core/bot-extra";
-import ChatEnv from "./core/chat-env";
-import {IDisposable} from "./core/helpers";
-import Log, {LogLevel} from "./core/log";
-import Pattern from "./core/pattern";
-import Permission from "./core/permission";
-import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setup-helper";
-import Util from "./core/util";
-import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/emoji-menu";
-import {ICommandEvent} from "./events/command-event";
-import {IFragment, IMeta} from "./fragments/fragment";
-import Loader from "./fragments/loader";
-import EditableMessage from "./message/editable-message";
-import Rgb from "./misc/rgb";
-import Rgba from "./misc/rgba";
+import BotBuilder, {IBotBuilder} from "./builders/BotBuilder";
+import {IBuilder} from "./builders/Builder";
+import ConfigBuilder, {IConfigBuilder} from "./builders/ConfigBuilder";
+import EmbedBuilder from "./builders/EmbedBuilder";
+import MsgBuilder, {IMsgBuilder} from "./builders/MsgBuilder";
+import CommandParser from "./commands/CommandParser";
+import ConsoleCommand from "./console/ConsoleCommand";
+import ConsoleInterface, {IConsoleInterface} from "./console/ConsoleInterface";
+import {BotEvent, IBot} from "./core/BotExtra";
+import ChatEnv from "./core/ChatEnv";
+import {IDisposable} from "./core/Helpers";
+import Log, {LogLevel} from "./core/Log";
+import Pattern from "./core/Pattern";
+import Permission from "./core/Permission";
+import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/SetupHelper";
+import Util from "./core/Util";
+import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/EmojiMenu";
+import {ICommandEvent} from "./Events/CommandEvent";
+import {IFragment, IMeta} from "./Fragments/Fragment";
+import Loader from "./Fragments/Loader";
+import EditableMessage from "./Message/EditableMessage";
+import Rgb from "./Misc/RGB";
+import Rgba from "./Misc/RGBA";
 import PaginatedMessage from "./pagination/paginated-message";
 import LogSerializer, {ILogMsg, ILogSource} from "./serializers/log-serializer";
 import {ISerializer} from "./serializers/serializer";
@@ -61,20 +61,20 @@ import Task, {ITask} from "./tasks/task";
 import TaskManager, {ITaskManager} from "./tasks/task-manager";
 import TimeParser from "./time/time-parser";
 import TimeSuffixType from "./time/time-suffix-type";
-import List from "./collections/list";
-import DiscordEvent from "./core/discord-event";
-import {Constraint, constraints} from "./decorators/constraint";
-import {description, name, aliases, args, meta} from "./decorators/general";
-import Component from "./decorators/component";
-import {DecoratorUtils} from "./decorators/decorator-utils";
-import {guard, dependsOn, connect, attachedLoggerFn, notImplemented} from "./decorators/other";
-import {deprecated} from "./decorators/utility";
+import List from "./collections/List";
+import DiscordEvent from "./core/DiscordEvent";
+import {Constraint, constraints} from "./Decorators/Constraint";
+import {description, name, aliases, args, meta} from "./Decorators/General";
+import Component from "./Decorators/Component";
+import {DecoratorUtils} from "./Decorators/DecoratorUtils";
+import {guard, dependsOn, connect, attachedLoggerFn, notImplemented} from "./Decorators/Other";
+import {deprecated} from "./Decorators/Utility";
 import {PromiseOr} from "@atlas/xlib";
-import {CmdHandlerEvent} from "./commands/command-handler";
-import {once, on} from "./decorators/events";
-import BotConnector, {IBotConnector} from "./core/bot-connector";
-import {TypeChecker, Type, ArgumentResolver} from "./commands/type";
-import ExclusiveConstraint from "./decorators/exclusive-constraint";
+import {CmdHandlerEvent} from "./commands/CommandHandler";
+import {once, on} from "./Decorators/Events";
+import BotConnector, {IBotConnector} from "./core/BotConnector";
+import {TypeChecker, Type, ArgumentResolver} from "./commands/Type";
+import ExclusiveConstraint from "./Decorators/ExclusiveConstraint";
 
 export {
     // Fragments.

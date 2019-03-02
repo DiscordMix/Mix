@@ -1,5 +1,5 @@
 import {unit, test, Assert, Is, JsType} from "unit";
-import {testBot} from "../test-bot";
+import {testBot} from "../TestBot";
 import {TestStoreActionType, ITestState} from "../../../State/Store";
 import {IStateCapsule} from "../../../State/TimeMachine";
 

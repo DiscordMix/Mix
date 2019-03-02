@@ -1,5 +1,5 @@
 import {unit, test, Assert, Is} from "unit";
-import {testBot} from "../test-bot";
+import {testBot} from "../TestBot";
 import Task from "../../../Tasks/Task";
 
 @unit("Tasks")

@@ -1,5 +1,5 @@
 import {unit, test, Assert, Is} from "unit";
-import {testBot} from "../test-bot";
+import {testBot} from "../TestBot";
 import Language, {LanguageSource} from "../../../Language/Language";
 
 @unit("Languages")

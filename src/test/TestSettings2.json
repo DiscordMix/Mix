@@ -1,0 +1,8 @@
+{
+    "general": {
+        "token": "another_secret_token",
+        "prefix": [
+            "."
+        ]
+    }
+}

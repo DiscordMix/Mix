@@ -1,5 +1,5 @@
 import {unit, test, Assert} from "unit";
-import {TestSubjects} from "../test-bot";
+import {TestSubjects} from "../TestBot";
 
 @unit("RGB")
 default class {

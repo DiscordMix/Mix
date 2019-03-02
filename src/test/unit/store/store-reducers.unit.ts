@@ -1,7 +1,7 @@
 import {unit, test, Assert} from "unit";
-import {testBot} from "../test-bot";
+import {testBot} from "../TestBot";
 import {ITestState, Reducer, IStoreAction, TestStoreActionType} from "../../../State/Store";
-import TestUtils, {ExcludeParam} from "../test-utils";
+import TestUtils, {ExcludeParam} from "../TestUtils";
 
 const testReducer: Reducer<ITestState> = (action: IStoreAction, state?: ITestState): ITestState | null => {
     if (action.type === TestStoreActionType.$$Test && action.payload !== undefined && typeof action.payload === "string") {

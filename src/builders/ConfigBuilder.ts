@@ -1,37 +1,39 @@
 import {IBuilder} from "./Builder";
 
-export interface IConfigBuilder extends IBuilder<object> {
-    commandsPath(path: string): this;
-    settingsPath(path: string): this;
-    argumentTypes(argumentTypes: object): this;
-}
-
-export default class ConfigBuilder implements IConfigBuilder {
-    protected readonly properties: any;
-
-    public constructor() {
-        this.properties = [];
+namespace Builders {
+    export interface IConfigBuilder extends IBuilder<object> {
+        commandsPath(path: string): this;
+        settingsPath(path: string): this;
+        argumentTypes(argumentTypes: object): this;
     }
 
-    public commandsPath(path: string): this {
-        this.properties.paths.commandStore = path;
+    export class ConfigBuilder implements IConfigBuilder {
+        protected readonly properties: any;
 
-        return this;
-    }
+        public constructor() {
+            this.properties = [];
+        }
 
-    public settingsPath(path: string): this {
-        this.properties.paths.settings = path;
+        public commandsPath(path: string): this {
+            this.properties.paths.commandStore = path;
 
-        return this;
-    }
+            return this;
+        }
 
-    public argumentTypes(argumentTypes: object): this {
-        this.properties.argumentTypes = argumentTypes;
+        public settingsPath(path: string): this {
+            this.properties.paths.settings = path;
 
-        return this;
-    }
+            return this;
+        }
 
-    public build(): object {
-        return this.properties;
+        public argumentTypes(argumentTypes: object): this {
+            this.properties.argumentTypes = argumentTypes;
+
+            return this;
+        }
+
+        public build(): object {
+            return this.properties;
+        }
     }
 }

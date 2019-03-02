@@ -1,56 +1,54 @@
-import {IBot} from "../core/BotExtra";
-import {IBuilder} from "./Builder";
-import Log from "../core/Log";
-
-export interface IBotBuilder extends IBuilder<IBot> {
-    token(token: string): this;
-    prefixes(prefixes: string | string[]): this;
-    internalCommands(internalCommands: string[]): this;
-    argumentTypes(argumentTypes: any): this;
-    prefixCommand(prefixCommand: boolean): this;
-}
-
-export default class BotBuilder implements IBotBuilder {
-    protected readonly settingsBuffer: any;
-    protected readonly bot: any;
-
-    public constructor() {
-        this.settingsBuffer = [];
+namespace Builders {
+    export interface IBotBuilder extends IBuilder<IBot> {
+        token(token: string): this;
+        prefixes(prefixes: string | string[]): this;
+        internalCommands(internalCommands: string[]): this;
+        argumentTypes(argumentTypes: any): this;
+        prefixCommand(prefixCommand: boolean): this;
     }
 
-    public token(token: string): this {
-        this.settingsBuffer.general.token = token;
+    export class BotBuilder implements IBotBuilder {
+        protected readonly settingsBuffer: any;
+        protected readonly bot: any;
 
-        return this;
-    }
+        public constructor() {
+            this.settingsBuffer = [];
+        }
 
-    public prefixes(prefixes: string | string[]): this {
-        this.settingsBuffer.general.prefixes = Array.isArray(prefixes) ? prefixes : [prefixes];
+        public token(token: string): this {
+            this.settingsBuffer.general.token = token;
 
-        return this;
-    }
+            return this;
+        }
 
-    public internalCommands(internalCommands: string[]): this {
-        this.bot.internalCommands = internalCommands;
+        public prefixes(prefixes: string | string[]): this {
+            this.settingsBuffer.general.prefixes = Array.isArray(prefixes) ? prefixes : [prefixes];
 
-        return this;
-    }
+            return this;
+        }
 
-    public argumentTypes(argumentTypes: any): this {
-        this.bot.argumentTypes = argumentTypes;
+        public internalCommands(internalCommands: string[]): this {
+            this.bot.internalCommands = internalCommands;
 
-        return this;
-    }
+            return this;
+        }
 
-    public prefixCommand(prefixCommand: boolean): this {
-        this.bot.prefixCommand = prefixCommand;
+        public argumentTypes(argumentTypes: any): this {
+            this.bot.argumentTypes = argumentTypes;
 
-        return this;
-    }
+            return this;
+        }
 
-    public build(): IBot {
-        // TODO
-        // return new Bot(this.bot);
-        throw Log.notImplemented;
+        public prefixCommand(prefixCommand: boolean): this {
+            this.bot.prefixCommand = prefixCommand;
+
+            return this;
+        }
+
+        public build(): IBot {
+            // TODO
+            // return new Bot(this.bot);
+            throw Log.notImplemented;
+        }
     }
 }

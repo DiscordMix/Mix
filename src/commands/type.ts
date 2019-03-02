@@ -1,211 +1,211 @@
-import Util from "../core/Util";
-import Pattern from "../core/Pattern";
 import {Message} from "discord.js";
 import {PromiseOr} from "@atlas/xlib";
 import {InputArgument} from "./Command";
 
-/**
- * Represents an argument resolver. Returns 'null' if processing failed.
- */
-export type ArgumentResolver<T = any> = (input: InputArgument, message: Message) => PromiseOr<T | null>;
-
-export type ArgumentType = TypeChecker | TypeCheckerGen;
-
-export type TypeChecker = (input: string, message: Message) => PromiseOr<boolean>;
-
-export type TypeCheckerGen = (...args: any[]) => TypeChecker;
-
-export interface ITypeDef {
+namespace Commands {
     /**
-     * Represents a string.
+     * Represents an argument resolver. Returns 'null' if processing failed.
      */
-    readonly string: ArgumentType;
+    export type ArgumentResolver<T = any> = (input: InputArgument, message: Message) => PromiseOr<T | null>;
 
-    /**
-     * Represents a non-empty string.
-     */
-    readonly nonEmptyString: ArgumentType;
+    export type ArgumentType = TypeChecker | TypeCheckerGen;
 
-    /**
-     * Represents an integer number. [-Infinity, Infinity].
-     */
-    readonly integer: ArgumentType;
+    export type TypeChecker = (input: string, message: Message) => PromiseOr<boolean>;
 
-    /**
-     * Represents an unsigned integer, or a non-negative integer number. [0, Infinity].
-     */
-    readonly unsignedInteger: ArgumentType;
+    export type TypeCheckerGen = (...args: any[]) => TypeChecker;
 
-    /**
-     * Represents a non-zero integer number. [-Infinity, -1, 1, Infinity].
-     */
-    readonly nonZeroInteger: ArgumentType;
+    export interface ITypeDef {
+        /**
+         * Represents a string.
+         */
+        readonly string: ArgumentType;
 
-    /**
-     * Represents a positive integer number. [1, Infinity].
-     */
-    readonly positiveInteger: ArgumentType;
+        /**
+         * Represents a non-empty string.
+         */
+        readonly nonEmptyString: ArgumentType;
 
-    /**
-     * Represents a decimal number.
-     */
-    readonly decimal: ArgumentType;
+        /**
+         * Represents an integer number. [-Infinity, Infinity].
+         */
+        readonly integer: ArgumentType;
 
-    /**
-     * Represents a boolean value. Input will be parsed into a boolean.
-     */
-    readonly boolean: ArgumentType;
+        /**
+         * Represents an unsigned integer, or a non-negative integer number. [0, Infinity].
+         */
+        readonly unsignedInteger: ArgumentType;
 
-    /**
-     * Represents an integer within a range.
-     * @param {number} min The minimum value.
-     * @param {number} max The maximum value.
-     */
-    readonly minMax: ArgumentType;
+        /**
+         * Represents a non-zero integer number. [-Infinity, -1, 1, Infinity].
+         */
+        readonly nonZeroInteger: ArgumentType;
 
-    /**
-     * Represents a Discord user ID or a Twitter Snoflake.
-     */
-    readonly snowflake: ArgumentType;
+        /**
+         * Represents a positive integer number. [1, Infinity].
+         */
+        readonly positiveInteger: ArgumentType;
 
-    /**
-     * Represents a Discord guild member.
-     */
-    readonly member: ArgumentType;
+        /**
+         * Represents a decimal number.
+         */
+        readonly decimal: ArgumentType;
 
-    /**
-     * Represents a Discord guild channel.
-     */
-    readonly channel: ArgumentType;
+        /**
+         * Represents a boolean value. Input will be parsed into a boolean.
+         */
+        readonly boolean: ArgumentType;
 
-    /**
-     * Represents a Discord guild member role.
-     */
-    readonly role: ArgumentType;
+        /**
+         * Represents an integer within a range.
+         * @param {number} min The minimum value.
+         * @param {number} max The maximum value.
+         */
+        readonly minMax: ArgumentType;
 
-    /**
-     * Represents a Discord bot token.
-     */
-    readonly botToken: ArgumentType;
+        /**
+         * Represents a Discord user ID or a Twitter Snoflake.
+         */
+        readonly snowflake: ArgumentType;
 
-    /**
-     * Represents a date in the format dd/mm/yyyy.
-     */
-    readonly date: ArgumentType;
+        /**
+         * Represents a Discord guild member.
+         */
+        readonly member: ArgumentType;
 
-    /**
-     * Represents a time string measurement unit along with the value.
-     */
-    readonly time: ArgumentType;
+        /**
+         * Represents a Discord guild channel.
+         */
+        readonly channel: ArgumentType;
 
-    /**
-     * Argument must match all provided patterns.
-     * @param {RegExp[]} patterns The patterns to test.
-     */
-    readonly pattern: ArgumentType;
+        /**
+         * Represents a Discord guild member role.
+         */
+        readonly role: ArgumentType;
 
-    /**
-     * Implement custom type checker(s). All provided type checkers must return true in order for this rule to be met.
-     */
-    readonly custom: ArgumentType;
-}
+        /**
+         * Represents a Discord bot token.
+         */
+        readonly botToken: ArgumentType;
 
-export const Type: ITypeDef = {
-    string: (input: string): boolean => {
-        return typeof input === "string";
-    },
+        /**
+         * Represents a date in the format dd/mm/yyyy.
+         */
+        readonly date: ArgumentType;
 
-    nonEmptyString: (input: string): boolean => {
-        return typeof input === "string" && !Util.isEmpty(input);
-    },
+        /**
+         * Represents a time string measurement unit along with the value.
+         */
+        readonly time: ArgumentType;
 
-    integer: (input: string): boolean => {
-        return !isNaN(parseInt(input));
-    },
+        /**
+         * Argument must match all provided patterns.
+         * @param {RegExp[]} patterns The patterns to test.
+         */
+        readonly pattern: ArgumentType;
 
-    unsignedInteger: (input: string): boolean => {
-        const num: number = parseInt(input);
+        /**
+         * Implement custom type checker(s). All provided type checkers must return true in order for this rule to be met.
+         */
+        readonly custom: ArgumentType;
+    }
 
-        return !isNaN(num) && num >= 0;
-    },
+    export const Type: ITypeDef = {
+        string: (input: string): boolean => {
+            return typeof input === "string";
+        },
 
-    nonZeroInteger: (input: string): boolean => {
-        const num: number = parseInt(input);
+        nonEmptyString: (input: string): boolean => {
+            return typeof input === "string" && !Util.isEmpty(input);
+        },
 
-        return !isNaN(num) && num !== 0;
-    },
+        integer: (input: string): boolean => {
+            return !isNaN(parseInt(input));
+        },
 
-    positiveInteger: (input: string): boolean => {
-        const num: number = parseInt(input);
-
-        return !isNaN(num) && num >= 1;
-    },
-
-    decimal: (input: string): boolean => {
-        return !isNaN(parseFloat(input));
-    },
-
-    boolean: (input: string): boolean => {
-        return Pattern.positiveState.test(input) || Pattern.negativeState.test(input);
-    },
-
-    minMax(min: number, max: number): TypeChecker {
-        return (input: string): boolean => {
+        unsignedInteger: (input: string): boolean => {
             const num: number = parseInt(input);
 
-            return !isNaN(num) && num >= min && num <= max;
-        };
-    },
+            return !isNaN(num) && num >= 0;
+        },
 
-    snowflake: (input: string): boolean => {
-        return typeof input === "string" && Pattern.snowflake.test(input);
-    },
+        nonZeroInteger: (input: string): boolean => {
+            const num: number = parseInt(input);
 
-    member: (input: string, msg: Message): boolean => {
-        return typeof input === "string" && msg.guild && msg.guild.member(Util.resolveId(input)) !== undefined;
-    },
+            return !isNaN(num) && num !== 0;
+        },
 
-    channel: (input: string, msg: Message): boolean => {
-        return typeof input === "string" && msg.guild && msg.guild.channels.has(Util.resolveId(input));
-    },
+        positiveInteger: (input: string): boolean => {
+            const num: number = parseInt(input);
 
-    role: (input: string, msg: Message): boolean => {
-        return typeof input === "string" && msg.guild && msg.guild.roles.has(Util.resolveId(input));
-    },
+            return !isNaN(num) && num >= 1;
+        },
 
-    botToken: (input: string): boolean => {
-        return typeof input === "string" && Pattern.token.test(input);
-    },
+        decimal: (input: string): boolean => {
+            return !isNaN(parseFloat(input));
+        },
 
-    date: (input: string): boolean => {
-        return typeof input === "string" && Pattern.date.test(input);
-    },
+        boolean: (input: string): boolean => {
+            return Pattern.positiveState.test(input) || Pattern.negativeState.test(input);
+        },
 
-    time: (input: string): boolean => {
-        return typeof input === "string" && Pattern.time.test(input);
-    },
+        minMax(min: number, max: number): TypeChecker {
+            return (input: string): boolean => {
+                const num: number = parseInt(input);
 
-    pattern(...patterns: RegExp[]): TypeChecker {
-        return (input: string): boolean => {
-            for (const pattern of patterns) {
-                if (!pattern.test(input)) {
-                    return false;
+                return !isNaN(num) && num >= min && num <= max;
+            };
+        },
+
+        snowflake: (input: string): boolean => {
+            return typeof input === "string" && Pattern.snowflake.test(input);
+        },
+
+        member: (input: string, msg: Message): boolean => {
+            return typeof input === "string" && msg.guild && msg.guild.member(Util.resolveId(input)) !== undefined;
+        },
+
+        channel: (input: string, msg: Message): boolean => {
+            return typeof input === "string" && msg.guild && msg.guild.channels.has(Util.resolveId(input));
+        },
+
+        role: (input: string, msg: Message): boolean => {
+            return typeof input === "string" && msg.guild && msg.guild.roles.has(Util.resolveId(input));
+        },
+
+        botToken: (input: string): boolean => {
+            return typeof input === "string" && Pattern.token.test(input);
+        },
+
+        date: (input: string): boolean => {
+            return typeof input === "string" && Pattern.date.test(input);
+        },
+
+        time: (input: string): boolean => {
+            return typeof input === "string" && Pattern.time.test(input);
+        },
+
+        pattern(...patterns: RegExp[]): TypeChecker {
+            return (input: string): boolean => {
+                for (const pattern of patterns) {
+                    if (!pattern.test(input)) {
+                        return false;
+                    }
                 }
-            }
 
-            return true;
-        };
-    },
+                return true;
+            };
+        },
 
-    custom(...checkers: TypeChecker[]): TypeChecker {
-        return async (input: string, msg: Message): Promise<boolean> => {
-            for (const checker of checkers) {
-                if (!(await checker(input, msg))) {
-                    return false;
+        custom(...checkers: TypeChecker[]): TypeChecker {
+            return async (input: string, msg: Message): Promise<boolean> => {
+                for (const checker of checkers) {
+                    if (!(await checker(input, msg))) {
+                        return false;
+                    }
                 }
-            }
 
-            return true;
-        };
-    }
-};
+                return true;
+            };
+        }
+    };
+}

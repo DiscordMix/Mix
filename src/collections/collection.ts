@@ -1,69 +1,71 @@
 import _ from "lodash";
 
-export class Collection<KeyType, ValueType> extends Map<KeyType, ValueType> {
-    protected cachedValueArray: ValueType[] | null;
-    protected cachedKeyArray: KeyType[] | null;
+namespace Collections {
+    export class Collection<KeyType, ValueType> extends Map<KeyType, ValueType> {
+        protected cachedValueArray: ValueType[] | null;
+        protected cachedKeyArray: KeyType[] | null;
 
-    public constructor(iterable?: any) {
-        super(iterable);
+        public constructor(iterable?: any) {
+            super(iterable);
 
-        this.cachedValueArray = null;
-        this.cachedKeyArray = null;
-    }
-
-    public set(key: KeyType, value: ValueType): this {
-        this.resetCache();
-        super.set(key, value);
-
-        return this;
-    }
-
-    public delete(key: KeyType): boolean {
-        this.resetCache();
-
-        return super.delete(key);
-    }
-
-    public array(): ValueType[] {
-        if (this.cachedValueArray !== null) {
-            return this.cachedValueArray;
+            this.cachedValueArray = null;
+            this.cachedKeyArray = null;
         }
 
-        const result: ValueType[] = [...this.values()];
+        public set(key: KeyType, value: ValueType): this {
+            this.resetCache();
+            super.set(key, value);
 
-        if (this.cachedValueArray === null) {
-            this.cachedValueArray = result;
+            return this;
         }
 
-        return result;
-    }
+        public delete(key: KeyType): boolean {
+            this.resetCache();
 
-    public keysArray(): KeyType[] {
-        if (this.cachedKeyArray !== null) {
-            return this.cachedKeyArray;
+            return super.delete(key);
         }
 
-        const result: KeyType[] = [...this.keys()];
+        public array(): ValueType[] {
+            if (this.cachedValueArray !== null) {
+                return this.cachedValueArray;
+            }
 
-        if (this.cachedKeyArray === null) {
-            this.cachedKeyArray = result;
+            const result: ValueType[] = [...this.values()];
+
+            if (this.cachedValueArray === null) {
+                this.cachedValueArray = result;
+            }
+
+            return result;
         }
 
-        return result;
-    }
+        public keysArray(): KeyType[] {
+            if (this.cachedKeyArray !== null) {
+                return this.cachedKeyArray;
+            }
 
-    public first(): ValueType | null {
-        return this.values().next().value || null;
-    }
+            const result: KeyType[] = [...this.keys()];
 
-    public firstKey(): KeyType | null {
-        return this.keys().next().value || null;
-    }
+            if (this.cachedKeyArray === null) {
+                this.cachedKeyArray = result;
+            }
 
-    protected resetCache(): this {
-        this.cachedKeyArray = null;
-        this.cachedValueArray = null;
+            return result;
+        }
 
-        return this;
+        public first(): ValueType | null {
+            return this.values().next().value || null;
+        }
+
+        public firstKey(): KeyType | null {
+            return this.keys().next().value || null;
+        }
+
+        protected resetCache(): this {
+            this.cachedKeyArray = null;
+            this.cachedValueArray = null;
+
+            return this;
+        }
     }
 }

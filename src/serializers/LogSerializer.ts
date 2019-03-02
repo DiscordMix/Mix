@@ -1,4 +1,4 @@
-import {ISerializer} from "./serializer";
+import {ISerializer} from "./Serializer";
 
 // TODO: This should be under Patterns?
 const logMsgPattern: RegExp = /{([^}]+)} (?:\[([^\]]+)\.([^\]]+)\]|\[([^\]]+)\]) ([\S\s]+)$/gmi;

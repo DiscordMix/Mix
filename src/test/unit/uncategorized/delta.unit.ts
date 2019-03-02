@@ -1,5 +1,5 @@
 import {unit, test, Assert, Is} from "unit";
-import Delta from "../../../state/delta";
+import Delta from "../../../State/Delta";
 
 @unit("Delta")
 default class {

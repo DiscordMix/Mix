@@ -34,13 +34,13 @@ import Loader from "./Fragments/Loader";
 import EditableMessage from "./Message/EditableMessage";
 import Rgb from "./Misc/RGB";
 import Rgba from "./Misc/RGBA";
-import PaginatedMessage from "./pagination/paginated-message";
-import LogSerializer, {ILogMsg, ILogSource} from "./serializers/log-serializer";
-import {ISerializer} from "./serializers/serializer";
-import StateSerializer from "./serializers/state-serializer";
-import UrlSerializer from "./serializers/url-serializer";
-import UserSerializer from "./serializers/user-serializer";
-import {ForkedService} from "./services/forked-service";
+import PaginatedMessage from "./Pagination/PaginatedMessage";
+import LogSerializer, {ILogMsg, ILogSource} from "./Serializers/LogSerializer";
+import {ISerializer} from "./Serializers/Serializer";
+import StateSerializer from "./Serializers/StateSerializer";
+import UrlSerializer from "./Serializers/UrlSerializer";
+import UserSerializer from "./Serializers/UserSerializer";
+import {ForkedService} from "./Services/ForkedService";
 
 import {
     GenericService,
@@ -50,17 +50,17 @@ import {
     IService,
     IServiceOptions,
     ProcessMsgType
-} from "./services/generic-service";
+} from "./Services/GenericService";
 
 import Service from "./services/service";
-import SMIS from "./services/smis";
-import Delta from "./state/delta";
-import Store, {IStore, IStoreAction, ITestState, Reducer, TestStoreActionType} from "./state/store";
-import {ITimeMachine, TimeMachine} from "./state/time-machine";
-import Task, {ITask} from "./tasks/task";
-import TaskManager, {ITaskManager} from "./tasks/task-manager";
-import TimeParser from "./time/time-parser";
-import TimeSuffixType from "./time/time-suffix-type";
+import SMIS from "./Services/SMIS";
+import Delta from "./State/Delta";
+import Store, {IStore, IStoreAction, ITestState, Reducer, TestStoreActionType} from "./State/Store";
+import {ITimeMachine, TimeMachine} from "./State/TimeMachine";
+import Task, {ITask} from "./Tasks/Task";
+import TaskManager, {ITaskManager} from "./Tasks/TaskManager";
+import TimeParser from "./Time/TimeParser";
+import TimeSuffixType from "./Time/TimeSuffixType";
 import List from "./collections/List";
 import DiscordEvent from "./core/DiscordEvent";
 import {Constraint, constraints} from "./Decorators/Constraint";

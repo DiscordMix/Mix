@@ -5,7 +5,7 @@ import BotMessages from "../core/Messages";
 import ResponseHelper from "../core/ResponseHelper";
 import Util from "../core/Util";
 import EditableMessage from "../Message/EditableMessage";
-import {IStore} from "../state/store";
+import {IStore} from "../State/Store";
 import {PromiseOr} from "@atlas/xlib";
 import {ChannelType} from "../core/BotExtra";
 

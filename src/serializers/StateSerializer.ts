@@ -1,5 +1,5 @@
 import Pattern from "../core/Pattern";
-import {ISerializer} from "./serializer";
+import {ISerializer} from "./Serializer";
 
 export default class StateSerializer implements ISerializer<boolean, string> {
     public serialize(data: boolean): string {

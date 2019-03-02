@@ -1,5 +1,5 @@
-import Store, {IStoreAction} from "./store";
-import Delta from "./delta";
+import Store, {IStoreAction} from "./Store";
+import Delta from "./Delta";
 
 export interface IStateCapsule<T> {
     readonly state: T;

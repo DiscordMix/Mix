@@ -1,4 +1,4 @@
-import {ISerializer} from "./serializer";
+import {ISerializer} from "./Serializer";
 import Pattern from "../core/Pattern";
 
 export interface ITslintWarning {

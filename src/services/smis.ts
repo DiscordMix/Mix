@@ -1,7 +1,7 @@
 import {ChildProcess} from "child_process";
 import {EventEmitter} from "events";
 import Log from "../core/Log";
-import {IProcessMsg, ProcessMsgType} from "./generic-service";
+import {IProcessMsg, ProcessMsgType} from "./GenericService";
 
 /**
  * Service Messages Interchange System

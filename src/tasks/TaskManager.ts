@@ -2,7 +2,7 @@ import Bot from "../core/Bot";
 import Log from "../core/Log";
 import Util from "../core/Util";
 import Loader, {IPackage} from "../Fragments/Loader";
-import Task from "./task";
+import Task from "./Task";
 import {PromiseOr} from "@atlas/xlib";
 
 export interface ITaskManager {

@@ -1,4 +1,4 @@
-import {ISerializer} from "./serializer";
+import {ISerializer} from "./Serializer";
 import Log from "../core/Log";
 
 export enum CommonUrlProtocols {

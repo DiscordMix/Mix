@@ -5,7 +5,7 @@ import {InternalCommand} from "../core/BotExtra";
 import Log from "../core/Log";
 import {IFragment} from "./Fragment";
 import Loader, {ILivePackage, IPackage} from "./Loader";
-import {ForkedService} from "../services/forked-service";
+import {ForkedService} from "../Services/ForkedService";
 import Service from "../services/service";
 import {PromiseOr} from "@atlas/xlib";
 

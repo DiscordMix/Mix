@@ -1,6 +1,6 @@
 import Bot from "../core/Bot";
 import DiscordEvent from "../core/DiscordEvent";
-import {GenericService, IService, IServiceOptions} from "./generic-service";
+import {GenericService, IService, IServiceOptions} from "./GenericService";
 import {IMeta} from "../Fragments/Fragment";
 
 export default abstract class Service extends GenericService implements IService {

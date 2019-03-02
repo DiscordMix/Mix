@@ -1,5 +1,5 @@
 import {unit, test, Assert, feed} from "unit";
-import TslintSerializer, {ITslintWarning} from "../../../serializers/tslint-serializer";
+import TslintSerializer, {ITslintWarning} from "../../../Serializers/TslintSerializer";
 
 const serializer: TslintSerializer = new TslintSerializer();
 

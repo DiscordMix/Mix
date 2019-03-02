@@ -1,4 +1,4 @@
-import Task, {IPersistentTask} from "./task";
+import Task, {IPersistentTask} from "./Task";
 
 // TODO: Implement mechanism to handle persistent tasks.
 export abstract class PeristentTask extends Task implements IPersistentTask {

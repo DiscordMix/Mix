@@ -1,6 +1,6 @@
 import {unit, test, Assert} from "unit";
 import {testBot} from "../test-bot";
-import {ITestState, Reducer, IStoreAction, TestStoreActionType} from "../../../state/store";
+import {ITestState, Reducer, IStoreAction, TestStoreActionType} from "../../../State/Store";
 import TestUtils, {ExcludeParam} from "../test-utils";
 
 const testReducer: Reducer<ITestState> = (action: IStoreAction, state?: ITestState): ITestState | null => {

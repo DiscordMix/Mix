@@ -1,5 +1,5 @@
 import BotMessages from "../core/Messages";
-import {ITimeMachine, TimeMachine} from "./time-machine";
+import {ITimeMachine, TimeMachine} from "./TimeMachine";
 import Log from "../core/Log";
 
 export interface IStoreAction<T = any> {

@@ -1,5 +1,5 @@
-import {GenericService, IForkedService, IProcessMsg, ProcessMsgType} from "./generic-service";
-import SMIS from "./smis";
+import {GenericService, IForkedService, IProcessMsg, ProcessMsgType} from "./GenericService";
+import SMIS from "./SMIS";
 
 export abstract class ForkedService extends GenericService implements IForkedService {
     public readonly useSMIS: boolean = false;

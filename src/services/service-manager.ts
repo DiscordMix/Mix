@@ -5,8 +5,8 @@ import path from "path";
 import Bot from "../core/Bot";
 import Log from "../core/Log";
 import Util from "../core/Util";
-import {IGenericService, IProcessMsg, IRawProcessMsg, ProcessMsgType} from "./generic-service";
-import SMIS from "./smis";
+import {IGenericService, IProcessMsg, IRawProcessMsg, ProcessMsgType} from "./GenericService";
+import SMIS from "./SMIS";
 import {PromiseOr} from "@atlas/xlib";
 
 export type ServiceMap = Map<string, IGenericService>;

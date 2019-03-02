@@ -1,6 +1,4 @@
 import {FileOps, Coordinator, GitOps, ScriptOps, GithubEvent, ITaskResult, RunState} from "@atlas/automata";
-import Util from "../core/Util";
-import Log from "../core/Log";
 import colors from "colors";
 
 const coordinator: Coordinator = new Coordinator();
@@ -12,11 +10,11 @@ const buildDir: string = "./dist";
 const githubPort: number = coordinator.githubWebhook(secret, async (event: GithubEvent, body: any) => {
     const ref: string = body.ref as string;
 
-    Log.verbose(`Github | Processing webhook trigger to ref '${ref}' | Event is '${event}'`);
+    Core.Log.verbose(`Github | Processing webhook trigger to ref '${ref}' | Event is '${event}'`);
 
     // Verify that action is being performed to desired branch(es)
     if (event !== GithubEvent.Push || !ref || !ref.endsWith(`/${masterBranch}`)) {
-        Log.verbose("Github | Ignoring event");
+        Core.Log.verbose("Github | Ignoring event");
 
         return;
     }
@@ -34,7 +32,7 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
         .then(ScriptOps.npmTest)
 
         .fallback(async () => {
-            Log.verbose("Github | Fallback sequence initiated");
+            Core.Log.verbose("Github | Fallback sequence initiated");
 
             const fallbackResult: ITaskResult = await coordinator
                 .then(() => GitOps.branch(masterBranch))
@@ -42,22 +40,22 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
 
                 .run();
 
-            Log.verbose(`Github | Fallback sequence completed | Result is '${fallbackResult.state === RunState.OK ? colors.green("OK") : colors.red("FAIL")}'`);
+            Core.Log.verbose(`Github | Fallback sequence completed | Result is '${fallbackResult.state === RunState.OK ? colors.green("OK") : colors.red("FAIL")}'`);
         })
 
         .run((current: number, left: number, total: number, percentage: number) => {
-            Log.verbose(`Github | Processing action ${current}/${total} : ${percentage}% (${left} left)`);
+            Core.Log.verbose(`Github | Processing action ${current}/${total} : ${percentage}% (${left} left)`);
         });
 
-    const time: string = Util.spreadTime(result.time);
-    const avgTime: string = Util.spreadTime(result.averageTime);
+    const time: string = Core.Util.spreadTime(result.time);
+    const avgTime: string = Core.Util.spreadTime(result.averageTime);
 
-    Log.verbose(`Github | Process completed in ${time}ms (${avgTime}ms avg.) | Result is '${result.state === RunState.OK ? "OK" : "Failed"}'`);
+    Core.Log.verbose(`Github | Process completed in ${time}ms (${avgTime}ms avg.) | Result is '${result.state === RunState.OK ? "OK" : "Failed"}'`);
 });
 
 const normalPort: number = coordinator.webhook((body: any) => {
-    Log.verbose("Normal | Received webhook trigger with body", body);
+    Core.Log.verbose("Normal | Received webhook trigger with body", body);
 }, secret);
 
-Log.verbose(`Github webhook ready | Port ${githubPort}`);
-Log.verbose(`Normal webhook ready | Port ${normalPort}`);
+Core.Log.verbose(`Github webhook ready | Port ${githubPort}`);
+Core.Log.verbose(`Normal webhook ready | Port ${normalPort}`);

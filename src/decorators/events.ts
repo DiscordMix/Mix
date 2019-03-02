@@ -1,47 +1,47 @@
 import DiscordEvent from "../core/DiscordEvent";
-import {DecoratorUtils} from "./DecoratorUtils";
-import {DecoratorProxy} from "./Component";
 
-export enum EventListenerType {
-    Once,
-    On
-}
+namespace Decorators {
+    export enum EventListenerType {
+        Once,
+        On
+    }
 
-export interface IEventListener {
-    readonly type: EventListenerType;
-    readonly event: DiscordEvent;
+    export interface IEventListener {
+        readonly type: EventListenerType;
+        readonly event: DiscordEvent;
 
-    invoker(...args: any): void;
-}
+        invoker(...args: any): void;
+    }
 
-export const EventListeners: IEventListener[] = [];
+    export const EventListeners: IEventListener[] = [];
 
-/**
- * Invoke target method once when the specified event occurs.
- */
-export function once(event: DiscordEvent): DecoratorProxy {
-    return function (target: any, prop: string) {
-        DecoratorUtils.ensureFunc(target[prop]);
+    /**
+     * Invoke target method once when the specified event occurs.
+     */
+    export function once(event: DiscordEvent): DecoratorProxy {
+        return function (target: any, prop: string) {
+            DecoratorUtils.ensureFunc(target[prop]);
 
-        EventListeners.push({
-            invoker: target[prop],
-            type: EventListenerType.Once,
-            event
-        });
-    };
-}
+            EventListeners.push({
+                invoker: target[prop],
+                type: EventListenerType.Once,
+                event
+            });
+        };
+    }
 
-/**
- * Invoke target method every time the specified event occurs.
- */
-export function on(event: DiscordEvent): DecoratorProxy {
-    return function (target: any, prop: string) {
-        DecoratorUtils.ensureFunc(target[prop]);
+    /**
+     * Invoke target method every time the specified event occurs.
+     */
+    export function on(event: DiscordEvent): DecoratorProxy {
+        return function (target: any, prop: string) {
+            DecoratorUtils.ensureFunc(target[prop]);
 
-        EventListeners.push({
-            invoker: target[prop],
-            type: EventListenerType.Once,
-            event
-        });
-    };
+            EventListeners.push({
+                invoker: target[prop],
+                type: EventListenerType.Once,
+                event
+            });
+        };
+    }
 }

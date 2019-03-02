@@ -4,82 +4,84 @@ import Bot from "../core/Bot";
 import {IDisposable} from "../core/Helpers";
 import Log from "../core/Log";
 
-export enum PaginationEvent {
-    PageChanged = "pageChanged"
-}
-
-// TODO: Implement break lines code.
-/**
- * @extends EventEmitter
- */
-export default class PaginatedMessage extends EventEmitter implements IDisposable {
-    public readonly content: string;
-    public readonly maxLength: number;
-    public readonly breakLines: boolean;
-
-    protected current: number;
-
-    public constructor(content: string, maxLength: number = 2000, breakLines: boolean = true, currentPage: number = 0) {
-        super();
-
-        this.content = content;
-        this.maxLength = maxLength;
-        this.breakLines = breakLines;
-        this.current = currentPage;
+namespace Pagination {
+    export enum PaginationEvent {
+        PageChanged = "pageChanged"
     }
 
-    public next(pages: number = 1): this {
-        if (this.current + pages >= 0 && this.current + pages <= this.maxPages) {
-            this.current += pages;
-            this.emit(PaginationEvent.PageChanged, this.current);
+    // TODO: Implement break lines code.
+    /**
+     * @extends EventEmitter
+     */
+    export class PaginatedMessage extends EventEmitter implements IDisposable {
+        public readonly content: string;
+        public readonly maxLength: number;
+        public readonly breakLines: boolean;
+
+        protected current: number;
+
+        public constructor(content: string, maxLength: number = 2000, breakLines: boolean = true, currentPage: number = 0) {
+            super();
+
+            this.content = content;
+            this.maxLength = maxLength;
+            this.breakLines = breakLines;
+            this.current = currentPage;
         }
 
-        return this;
-    }
-
-    public get maxPages(): number {
-        if (this.content.length > this.maxLength) {
-            return 1;
-        }
-
-        return this.content.length / this.maxLength;
-    }
-
-    public attach(bot: Bot, message: Message, placeholder: string = "*"): this {
-        if (message.author.id !== bot.client.user.id) {
-            Log.warn("Refusing to attach to foreign message");
+        public next(pages: number = 1): this {
+            if (this.current + pages >= 0 && this.current + pages <= this.maxPages) {
+                this.current += pages;
+                this.emit(PaginationEvent.PageChanged, this.current);
+            }
 
             return this;
         }
 
-        this.on(PaginationEvent.PageChanged, async () => {
-            if (!message.editable) {
-                Log.warn("Message is un-editable");
-
-                return;
+        public get maxPages(): number {
+            if (this.content.length > this.maxLength) {
+                return 1;
             }
 
-            await message.edit(placeholder === "*" ? this.getPage() : message.content.replace(placeholder, this.getPage));
-        });
+            return this.content.length / this.maxLength;
+        }
 
-        return this;
-    }
+        public attach(bot: Bot, message: Message, placeholder: string = "*"): this {
+            if (message.author.id !== bot.client.user.id) {
+                Log.warn("Refusing to attach to foreign message");
 
-    public dispose(): this {
-        // TODO: Implement.
+                return this;
+            }
 
-        throw Log.notImplemented;
-    }
+            this.on(PaginationEvent.PageChanged, async () => {
+                if (!message.editable) {
+                    Log.warn("Message is un-editable");
 
-    public previous(pages: number = 1): this {
-        return this.next(pages * -1);
-    }
+                    return;
+                }
 
-    public get currentPage(): number {
-        return this.current + 1;
-    }
+                await message.edit(placeholder === "*" ? this.getPage() : message.content.replace(placeholder, this.getPage));
+            });
 
-    public getPage(): string {
-        return this.content.substring(this.current * this.maxLength, (this.current * this.maxLength) + this.maxLength);
+            return this;
+        }
+
+        public dispose(): this {
+            // TODO: Implement.
+
+            throw Log.notImplemented;
+        }
+
+        public previous(pages: number = 1): this {
+            return this.next(pages * -1);
+        }
+
+        public get currentPage(): number {
+            return this.current + 1;
+        }
+
+        public getPage(): string {
+            return this.content.substring(this.current * this.maxLength, (this.current * this.maxLength) + this.maxLength);
+        }
     }
 }

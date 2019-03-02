@@ -1,91 +1,93 @@
 import Store, {IStoreAction} from "./Store";
 import Delta from "./Delta";
 
-export interface IStateCapsule<T> {
-    readonly state: T;
-    readonly time: number;
-}
-
-export interface ITimeMachine<T> {
-    wayback(): IStateCapsule<T> | null;
-    present(): IStateCapsule<T> | null;
-    before(time: number): IStateCapsule<T>[];
-    after(time: number): IStateCapsule<T>[];
-}
-
-/**
- * Provides functionality to capture and traverse previous store state(s).
- */
-export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
-    protected store: Store<TState, TActionType>;
-    protected capsules: IStateCapsule<TState>[];
-
-    public constructor(store: Store<TState, TActionType>) {
-        this.store = store;
-        this.capsules = [];
-        this.setup();
+namespace State {
+    export interface IStateCapsule<T> {
+        readonly state: T;
+        readonly time: number;
     }
 
-    public wayback(): IStateCapsule<TState> | null {
-        return this.capsules[0] || null;
+    export interface ITimeMachine<T> {
+        wayback(): IStateCapsule<T> | null;
+        present(): IStateCapsule<T> | null;
+        before(time: number): IStateCapsule<T>[];
+        after(time: number): IStateCapsule<T>[];
     }
 
-    public present(): IStateCapsule<TState> | null {
-        if (this.capsules.length > 0) {
-            return this.capsules[this.capsules.length - 1] || null;
+    /**
+     * Provides functionality to capture and traverse previous store state(s).
+     */
+    export class TimeMachine<TState, TActionType> implements ITimeMachine<TState> {
+        protected store: Store<TState, TActionType>;
+        protected capsules: IStateCapsule<TState>[];
+
+        public constructor(store: Store<TState, TActionType>) {
+            this.store = store;
+            this.capsules = [];
+            this.setup();
         }
 
-        return null;
-    }
-
-    public before(time: number): IStateCapsule<TState>[] {
-        const result: IStateCapsule<TState>[] = [];
-
-        for (const capsule of this.capsules) {
-            if (capsule.time <= time) {
-                result.push(capsule);
-            }
+        public wayback(): IStateCapsule<TState> | null {
+            return this.capsules[0] || null;
         }
 
-        return result;
-    }
-
-    public after(time: number): IStateCapsule<TState>[] {
-        const result: IStateCapsule<TState>[] = [];
-
-        for (const capsule of this.capsules) {
-            if (capsule.time >= time) {
-                result.push(capsule);
+        public present(): IStateCapsule<TState> | null {
+            if (this.capsules.length > 0) {
+                return this.capsules[this.capsules.length - 1] || null;
             }
+
+            return null;
         }
 
-        return result;
-    }
+        public before(time: number): IStateCapsule<TState>[] {
+            const result: IStateCapsule<TState>[] = [];
 
-    protected insert(state: TState): this {
-        this.capsules.push({
-            state,
-            time: Date.now()
-        });
+            for (const capsule of this.capsules) {
+                if (capsule.time <= time) {
+                    result.push(capsule);
+                }
+            }
 
-        return this;
-    }
-
-    protected setup(): void {
-        const currentState: TState | undefined = this.store.getState();
-
-        if (currentState !== undefined) {
-            this.insert(currentState);
+            return result;
         }
 
-        this.store.subscribe((action: IStoreAction, previousState?: TState, newState?: TState) => {
-            if (newState === undefined) {
-                return;
+        public after(time: number): IStateCapsule<TState>[] {
+            const result: IStateCapsule<TState>[] = [];
+
+            for (const capsule of this.capsules) {
+                if (capsule.time >= time) {
+                    result.push(capsule);
+                }
             }
-            // TODO: Should not force cast.
-            else if (previousState === undefined || Delta.different(previousState as any, newState as any) && newState !== undefined) {
-                this.insert(newState);
+
+            return result;
+        }
+
+        protected insert(state: TState): this {
+            this.capsules.push({
+                state,
+                time: Date.now()
+            });
+
+            return this;
+        }
+
+        protected setup(): void {
+            const currentState: TState | undefined = this.store.getState();
+
+            if (currentState !== undefined) {
+                this.insert(currentState);
             }
-        });
+
+            this.store.subscribe((action: IStoreAction, previousState?: TState, newState?: TState) => {
+                if (newState === undefined) {
+                    return;
+                }
+                // TODO: Should not force cast.
+                else if (previousState === undefined || Delta.different(previousState as any, newState as any) && newState !== undefined) {
+                    this.insert(newState);
+                }
+            });
+        }
     }
 }

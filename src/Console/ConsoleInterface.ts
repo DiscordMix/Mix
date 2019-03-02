@@ -7,7 +7,7 @@ import Bot from "../core/Bot";
 import {DebugMode} from "../core/Constants";
 import Log from "../core/Log";
 import Util from "../core/Util";
-import {ReadonlyServiceMap} from "../services/service-manager";
+import {ReadonlyServiceMap} from "../Services/ServiceManager";
 import {Loader} from "../Index";
 
 // TODO: Export in index.

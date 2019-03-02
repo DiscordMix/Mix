@@ -1,54 +1,54 @@
-import {ISerializer} from "./Serializer";
+namespace Serializers {
+    // TODO: This should be under Patterns?
+    const logMsgPattern: RegExp = /{([^}]+)} (?:\[([^\]]+)\.([^\]]+)\]|\[([^\]]+)\]) ([\S\s]+)$/gmi;
 
-// TODO: This should be under Patterns?
-const logMsgPattern: RegExp = /{([^}]+)} (?:\[([^\]]+)\.([^\]]+)\]|\[([^\]]+)\]) ([\S\s]+)$/gmi;
-
-export interface ILogMsg {
-    readonly source: ILogSource;
-    readonly message: string;
-    readonly time: string;
-}
-
-export interface ILogSource {
-    readonly main: string;
-    readonly extra?: string;
-}
-
-// TODO: Add support for custom patterns.
-/**
- * Serializes log messages from strings into objects and vise versa.
- */
-export default class LogSerializer implements ISerializer<ILogMsg> {
-    public serialize(msg: ILogMsg): string | null {
-        if (!msg || typeof msg !== "object" || Array.isArray(msg)) {
-            return null;
-        }
-
-        return `{${msg.time}} [${msg.source.main ? msg.source.main + "." : ""}${msg.source.extra}] ${msg.message}`;
+    export interface ILogMsg {
+        readonly source: ILogSource;
+        readonly message: string;
+        readonly time: string;
     }
 
-    public deserialize(msgString: string): ILogMsg | null {
-        if (!msgString || typeof msgString !== "string") {
-            return null;
+    export interface ILogSource {
+        readonly main: string;
+        readonly extra?: string;
+    }
+
+    // TODO: Add support for custom patterns.
+    /**
+     * Serializes log messages from strings into objects and vise versa.
+     */
+    export class LogSerializer implements ISerializer<ILogMsg> {
+        public serialize(msg: ILogMsg): string | null {
+            if (!msg || typeof msg !== "object" || Array.isArray(msg)) {
+                return null;
+            }
+
+            return `{${msg.time}} [${msg.source.main ? msg.source.main + "." : ""}${msg.source.extra}] ${msg.message}`;
         }
 
-        logMsgPattern.lastIndex = 0;
+        public deserialize(msgString: string): ILogMsg | null {
+            if (!msgString || typeof msgString !== "string") {
+                return null;
+            }
 
-        const match: RegExpExecArray | null = logMsgPattern.exec(msgString);
+            logMsgPattern.lastIndex = 0;
 
-        if (match === null) {
-            return null;
+            const match: RegExpExecArray | null = logMsgPattern.exec(msgString);
+
+            if (match === null) {
+                return null;
+            }
+
+            return {
+                time: match[1],
+
+                source: {
+                    main: match[2] || match[4],
+                    extra: match[3]
+                },
+
+                message: match[5]
+            };
         }
-
-        return {
-            time: match[1],
-
-            source: {
-                main: match[2] || match[4],
-                extra: match[3]
-            },
-
-            message: match[5]
-        };
     }
 }

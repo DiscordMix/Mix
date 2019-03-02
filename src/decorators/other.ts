@@ -1,80 +1,81 @@
 import Command, {CommandRunner, CommandRelay, IGenericCommand} from "../commands/Command";
-import {DecoratorUtils} from "./DecoratorUtils";
 import Context from "../commands/Context";
 import Log from "../core/Log";
 
-export const attachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
-    Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${$.sender.tag}`);
-};
+namespace Decorators {
+    export const attachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
+        Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${$.sender.tag}`);
+    };
 
-/**
- * Attach an execution logger for debugging purposes.
- */
-export function attachedLogger(...relays: CommandRelay[]): any {
-    if (relays.length === 0) {
-        relays = [attachedLoggerFn];
+    /**
+     * Attach an execution logger for debugging purposes.
+     */
+    export function attachedLogger(...relays: CommandRelay[]): any {
+        if (relays.length === 0) {
+            relays = [attachedLoggerFn];
+        }
+
+        return function (target: any) {
+            const instance: Command = DecoratorUtils.createInstance(target);
+
+            return class extends target {
+                public readonly connections: CommandRelay[] = [...instance.connections, ...relays];
+            };
+        };
     }
 
-    return function (target: any) {
-        const instance: Command = DecoratorUtils.createInstance(target);
+    /**
+     * Methods that will be executed after successful command execution.
+     */
+    export function connect(...relays: CommandRelay[]): any {
+        return function (target: any) {
+            const instance: Command = DecoratorUtils.createInstance(target);
 
-        return class extends target {
-            public readonly connections: CommandRelay[] = [...instance.connections, ...relays];
+            return class extends target {
+                public readonly connections: CommandRelay<void>[] = [...instance.connections, ...relays];
+            };
         };
-    };
-}
+    }
 
-/**
- * Methods that will be executed after successful command execution.
- */
-export function connect(...relays: CommandRelay[]): any {
-    return function (target: any) {
-        const instance: Command = DecoratorUtils.createInstance(target);
+    /**
+     * Specify the required registered services required by this command.
+     */
+    export function dependsOn(...services: string[]): any {
+        return function (target: any) {
+            const instance: Command = DecoratorUtils.createInstance(target);
 
-        return class extends target {
-            public readonly connections: CommandRelay<void>[] = [...instance.connections, ...relays];
+            return class extends target {
+                public readonly dependsOn: string[] = [...instance.dependsOn, ...services];
+            };
         };
-    };
-}
+    }
 
-/**
- * Specify the required registered services required by this command.
- */
-export function dependsOn(...services: string[]): any {
-    return function (target: any) {
-        const instance: Command = DecoratorUtils.createInstance(target);
+    /**
+     * Methods that serve as pre-requisites for execution.
+     */
+    export function guard(...guards: string[]): any {
+        return function (target: any) {
+            const instance: Command = DecoratorUtils.createInstance(target);
 
-        return class extends target {
-            public readonly dependsOn: string[] = [...instance.dependsOn, ...services];
+            return class extends target {
+                public readonly guards: CommandRunner[] = [
+                    ...instance.guards,
+                    ...DecoratorUtils.extractMethods(instance, [...guards])
+                ];
+            };
         };
-    };
-}
+    }
 
-/**
- * Methods that serve as pre-requisites for execution.
- */
-export function guard(...guards: string[]): any {
-    return function (target: any) {
-        const instance: Command = DecoratorUtils.createInstance(target);
-
-        return class extends target {
-            public readonly guards: CommandRunner[] = [
-                ...instance.guards,
-                ...DecoratorUtils.extractMethods(instance, [...guards])
-            ];
+    /**
+     * Informs the user that the requested command is not yet implemented. The run method will not be executed.
+     */
+    export function notImplemented(): any {
+        return function (target: any) {
+            return class extends target {
+                public async run($: Context) {
+                    await $.send("Requested functionality is not yet implemented.");
+                }
+            };
         };
-    };
-}
-
-/**
- * Informs the user that the requested command is not yet implemented. The run method will not be executed.
- */
-export function notImplemented(): any {
-    return function (target: any) {
-        return class extends target {
-            public async run($: Context) {
-                await $.send("Requested functionality is not yet implemented.");
-            }
-        };
-    };
+    }
 }

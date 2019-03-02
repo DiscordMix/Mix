@@ -1,26 +1,26 @@
-/**
- * Different possible environments where command execution can take place.
- */
-enum ChatEnv {
+namespace Core {
     /**
-     * Represents DMs only.
+     * Different possible environments where command execution can take place.
      */
-    Private,
+    export enum ChatEnv {
+        /**
+         * Represents DMs only.
+         */
+        Private,
 
-    /**
-     * Represents anywhere in a guild.
-     */
-    Guild,
+        /**
+         * Represents anywhere in a guild.
+         */
+        Guild,
 
-    /**
-     * Represents any environment.
-     */
-    Anywhere,
+        /**
+         * Represents any environment.
+         */
+        Anywhere,
 
-    /**
-     * Represents NSFW guild text channel(s).
-     */
-    NSFW
+        /**
+         * Represents NSFW guild text channel(s).
+         */
+        NSFW
+    }
 }
-
-export default ChatEnv;

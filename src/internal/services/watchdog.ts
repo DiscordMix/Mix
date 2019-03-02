@@ -1,5 +1,5 @@
 import {name, description} from "../../Decorators/General";
-import Service from "../../services/service";
+import Service from "../../Services/Service";
 
 @name("watchdog")
 @description("Bot state supervision service")

@@ -16,7 +16,7 @@ namespace Commands {
     export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper {
         readonly msg: Message;
         readonly label: string | null;
-        readonly store: IStore;
+        readonly store: State.IStore;
         readonly g: Guild;
         readonly c: T;
         readonly triggeringMessageId: Snowflake;
@@ -34,7 +34,7 @@ namespace Commands {
      * Represents the environment in which a command was executed.
      * Contains useful utility methods for quicker data access and responses.
      */
-    export default class Context<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IContext {
+    export class Context<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IContext {
         public readonly bot: Bot;
         public readonly msg: Message;
         public readonly label: string | null;
@@ -44,7 +44,7 @@ namespace Commands {
          */
         public constructor(options: IContextOptions) {
             if (options.msg.channel.type !== "text") {
-                throw Log.error(BotMessages.CONTEXT_EXPECT_TEXT_CHANNEL);
+                throw Core.Log.error(Core.BotMessages.CONTEXT_EXPECT_TEXT_CHANNEL);
             }
 
             super(options.msg.channel as TextChannel, options.bot, options.msg.author);
@@ -71,7 +71,7 @@ namespace Commands {
         /**
          * Access the bot's store.
          */
-        public get store(): IStore {
+        public get store(): State.IStore {
             return this.bot.store;
         }
 
@@ -108,14 +108,14 @@ namespace Commands {
         }
 
         public async reply(message: string): Promise<Message | Message[] | null> {
-            return await this.msg.reply(Util.escapeText(message, this.bot.client.token));
+            return await this.msg.reply(Core.Util.escapeText(message, this.bot.client.token));
         }
 
         /**
          * Reply to the command issuer through DMs.
          */
         public async privateReply(message: string): Promise<Message | Message[]> {
-            return await this.msg.author.send(Util.escapeText(message, this.bot.client.token));
+            return await this.msg.author.send(Core.Util.escapeText(message, this.bot.client.token));
         }
 
         /**
@@ -126,7 +126,7 @@ namespace Commands {
          */
         public async createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number = 7500): Promise<string | null> {
             if (channel.type !== ChannelType.DM && channel.type !== ChannelType.Text) {
-                throw Log.error(`Expecting channel '${channel.id}' to be either DMs or text-based`);
+                throw Core.Log.error(`Expecting channel '${channel.id}' to be either DMs or text-based`);
             }
 
             return new Promise<string | null>(async (resolve) => {
@@ -164,13 +164,13 @@ namespace Commands {
                 return false;
             }
 
-            return await Util.createTimedAction<Promise<boolean>>(this.bot, (): Promise<boolean> => {
+            return await Core.Util.createTimedAction<Promise<boolean>>(this.bot, (): Promise<boolean> => {
                 return new Promise<boolean>((resolve) => {
                     // TODO: Debugging?
                     /* new EmojiMenu(response.msg.id, this.msg.author.id, [
                         {
                             emoji: "white_check_mark",
-    
+
                             clicked: () => {
                                 Log.debug("Check clicked!");
                                 resolve(true);
@@ -178,7 +178,7 @@ namespace Commands {
                         },
                         {
                             emoji: "regional_indicator_x",
-    
+
                             clicked: () => {
                                 Log.debug("X clicked!");
                                 resolve(false);

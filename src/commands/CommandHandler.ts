@@ -88,13 +88,13 @@ namespace Commands {
     /**
      * Handles incoming command requests.
      */
-    export default class CommandHandler implements ICommandHandler {
+    export class CommandHandler implements ICommandHandler {
         public static meetsGroupConstraint(command: Command, context: Context): boolean {
             let met: boolean = false;
 
             for (const group of command.constraints.userGroups) {
                 if (typeof group !== "number" || RestrictGroup[group] === undefined) {
-                    throw Log.error(`Invalid restrict group or prefix: ${group}`);
+                    throw Core.Log.error(`Invalid restrict group or prefix: ${group}`);
                 }
 
                 // Override for bot owner.
@@ -140,17 +140,17 @@ namespace Commands {
          * Validates a channel's environment.
          * @return {boolean} Whether the environment is valid.
          */
-        public static validateChannelTypeEnv(environment: ChatEnv, type: string, nsfw: boolean): boolean {
-            if (environment === ChatEnv.Anywhere) {
+        public static validateChannelTypeEnv(environment: Core.ChatEnv, type: string, nsfw: boolean): boolean {
+            if (environment === Core.ChatEnv.Anywhere) {
                 return true;
             }
-            else if (environment === ChatEnv.Private && type === "dm") {
+            else if (environment === Core.ChatEnv.Private && type === "dm") {
                 return true;
             }
-            else if (environment === ChatEnv.NSFW && type === "text") {
+            else if (environment === Core.ChatEnv.NSFW && type === "text") {
                 return true;
             }
-            else if (environment === ChatEnv.Guild && type === "text") {
+            else if (environment === Core.ChatEnv.Guild && type === "text") {
                 return true;
             }
 
@@ -161,7 +161,7 @@ namespace Commands {
          * Validates the execution environment.
          * @return {boolean} Whether the environment is valid.
          */
-        public static validateEnv(environment: ChatEnv, channelType: string, nsfw: boolean): boolean {
+        public static validateEnv(environment: Core.ChatEnv, channelType: string, nsfw: boolean): boolean {
             if (Array.isArray(environment)) {
                 // TODO: CRITICAL: Pointless loop?
                 for (const env of environment) {
@@ -228,12 +228,12 @@ namespace Commands {
 
             // Do not execute command if arguments failed to resolve.
             if (resolvedArgs === null) {
-                Log.warn(`Command '${command.meta.name}' failed to execute: Failed to resolve arguments`);
+                Core.Log.warn(`Command '${command.meta.name}' failed to execute: Failed to resolve arguments`);
 
                 return false;
             }
 
-            this.commandStore.bot.emit(BotEvent.HandlingCommand, context, command, resolvedArgs);
+            this.commandStore.bot.emit(Core.BotEvent.HandlingCommand, context, command, resolvedArgs);
 
             try {
                 // Process middleware before executing command.
@@ -254,7 +254,7 @@ namespace Commands {
                 // Delete the last cooldown before adding the new one for this command + user.
                 if (lastCooldown !== null) {
                     if (!this.commandStore.clearCooldown(context.sender.id, command.meta.name)) {
-                        throw Log.error(`Expecting cooldown of '${context.sender.id} (${context.sender.tag})' to exist for command '${command.meta.name}'`);
+                        throw Core.Log.error(`Expecting cooldown of '${context.sender.id} (${context.sender.tag})' to exist for command '${command.meta.name}'`);
                     }
                 }
 
@@ -265,7 +265,7 @@ namespace Commands {
                     connection(context, resolvedArgs, command);
                 }
 
-                context.bot.emit(BotEvent.Command, command, context, result);
+                context.bot.emit(Core.BotEvent.Command, command, context, result);
 
                 if (context.bot.options.autoDeleteCommands && context.msg.deletable) {
                     await context.msg.delete();
@@ -273,7 +273,6 @@ namespace Commands {
                 else if (context.bot.options.checkCommands && context.msg.channel instanceof TextChannel) {
                     // TODO: Check if can add reaction.
                     /* if (context.message.channel.permissionsFor(context.message.guild.me).has(Permissions.FLAGS.ADD_REACTIONS)) {
-    
                     } */
 
                     context.msg.react("✅");
@@ -290,7 +289,7 @@ namespace Commands {
                 return result;
             }
             catch (error) {
-                this.commandStore.bot.emit(BotEvent.CommandError, error);
+                this.commandStore.bot.emit(Core.BotEvent.CommandError, error);
 
                 const handler: CmdErrorHandler | undefined = this.errorHandlers.get(CmdHandlerEvent.CommandError);
 
@@ -299,7 +298,7 @@ namespace Commands {
                 }
                 else {
                     // TODO: Include stack trace.
-                    Log.error(`There was an error while executing the '${command.meta.name}' command: ${error.message}`);
+                    Core.Log.error(`There was an error while executing the '${command.meta.name}' command: ${error.message}`);
                     context.fail(`There was an error executing that command. (${error.message})`);
                 }
             }
@@ -397,7 +396,7 @@ namespace Commands {
                         context.fail(`You must wait **${(timeLeft - Date.now()) / 1000}** seconds before using that command again.`);
                     }
                     else {
-                        Log.warn("Command cooldown returned null or undefined, this shouldn't happen");
+                        Core.Log.warn("Command cooldown returned null or undefined, this shouldn't happen");
                         context.fail("That command is under cooldown.");
                     }
                 }

@@ -49,7 +49,7 @@ namespace Commands {
     /**
      * Provides storage and retrieval of commands.
      */
-    export default class CommandRegistry implements ICommandRegistry {
+    export class CommandRegistry implements ICommandRegistry {
         public readonly bot: Bot;
         public readonly cooldowns: Map<Snowflake, Map<string, number>>;
 
@@ -158,19 +158,19 @@ namespace Commands {
          * Register a command.
          */
         public async register(commandPackage: CommandPackage): Promise<boolean> {
-            if (Util.isEmpty(commandPackage) || typeof commandPackage !== "object") {
+            if (Core.Util.isEmpty(commandPackage) || typeof commandPackage !== "object") {
                 return false;
             }
 
             const commandName: string = commandPackage.instance.meta.name.trim();
 
             if (validCommandNamePattern.test(commandName) === false) {
-                Log.warn(`Failed to register command '${commandName}' (Invalid name)`);
+                Core.Log.warn(`Failed to register command '${commandName}' (Invalid name)`);
 
                 return false;
             }
             else if (this.contains(commandName) && !this.isReleased(commandName)) {
-                Log.warn(`Failed to register command '${commandName}' (Already registered)`);
+                Core.Log.warn(`Failed to register command '${commandName}' (Already registered)`);
 
                 return false;
             }
@@ -185,7 +185,7 @@ namespace Commands {
                             this.aliases.delete(commandPackage.instance.aliases[undoIdx]);
                         }
 
-                        Log.warn(`Failed to register command '${commandName}' (A command with the same alias already exists)`);
+                        Core.Log.warn(`Failed to register command '${commandName}' (A command with the same alias already exists)`);
 
                         return false;
                     }
@@ -251,7 +251,7 @@ namespace Commands {
 
                 if (packg !== null && (packg.module as any).prototype instanceof Command) {
                     if (!await this.bot.fragments.enable(packg)) {
-                        Log.warn(`Failed to re-load released command '${name}'`);
+                        Core.Log.warn(`Failed to re-load released command '${name}'`);
 
                         return null;
                     }
@@ -259,7 +259,7 @@ namespace Commands {
                     return await this.get(name);
                 }
                 else {
-                    Log.warn(`Expecting released command '${name}' to exist for re-load and to be a command`);
+                    Core.Log.warn(`Expecting released command '${name}' to exist for re-load and to be a command`);
 
                     return null;
                 }
@@ -363,7 +363,7 @@ namespace Commands {
                 const count: number = this.commands.size;
 
                 this.commands.clear();
-                Log.success(`Unloaded ${count} command(s)`);
+                Core.Log.success(`Unloaded ${count} command(s)`);
             }
 
             return this;
@@ -386,7 +386,7 @@ namespace Commands {
             );
 
             if (command === null) {
-                throw Log.error(BotMessages.CMD_PARSE_FAIL);
+                throw Core.Log.error(Core.BotMessages.CMD_PARSE_FAIL);
             }
 
             command = command as Command;

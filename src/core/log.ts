@@ -24,7 +24,7 @@ namespace Core {
     /**
      * Utility class for logging output into the console.
      */
-    export default abstract class Log {
+    export abstract class Log {
         /**
          * Whether hidden log items should be shown.
          */

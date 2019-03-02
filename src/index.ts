@@ -27,7 +27,7 @@ import Pattern from "./core/Pattern";
 import Permission from "./core/Permission";
 import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/SetupHelper";
 import Util from "./core/Util";
-import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./emoji-menu/EmojiMenu";
+import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./EmojiMenu/EmojiMenu";
 import {ICommandEvent} from "./Events/CommandEvent";
 import {IFragment, IMeta} from "./Fragments/Fragment";
 import Loader from "./Fragments/Loader";

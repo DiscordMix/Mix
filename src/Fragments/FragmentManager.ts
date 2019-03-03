@@ -6,7 +6,7 @@ import Log from "../Core/Log";
 import {IFragment} from "./Fragment";
 import Loader, {ILivePackage, IPackage} from "./Loader";
 import {ForkedService} from "../Services/ForkedService";
-import Service from "../services/service";
+import Service from "../Services/Service";
 import {PromiseOr} from "@atlas/xlib";
 
 export interface IFragmentManager extends EventEmitter {

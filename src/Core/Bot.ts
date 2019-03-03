@@ -1,16 +1,16 @@
 // Load and apply environment variables.
 require("dotenv").config();
 
-import ConsoleInterface from "../console/ConsoleInterface";
+import ConsoleInterface from "../Console/ConsoleInterface";
 import Log from "./Log";
 import Temp from "./Temp";
 import {Client, Snowflake} from "discord.js";
-import ServiceManager from "../services/service-manager";
+import ServiceManager from "../Services/ServiceManager";
 import axios from "axios";
 import CommandHandler from "../Commands/CommandHandler";
 import fs from "fs";
 import path from "path";
-import Translation from "../Language/Language";
+import Translation from "../Localization/Language";
 import Analytics from "./BotAnalytics";
 import {IDisposable} from "./Helpers";
 import TaskManager from "../Tasks/TaskManager";

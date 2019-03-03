@@ -10,7 +10,7 @@ export const AttachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGene
 /**
  * Attach an execution logger for debugging purposes.
  */
-export function attachedLogger(...relays: CommandRelay[]): any {
+export function AttachedLogger(...relays: CommandRelay[]): any {
     if (relays.length === 0) {
         relays = [AttachedLoggerFn];
     }
@@ -27,7 +27,7 @@ export function attachedLogger(...relays: CommandRelay[]): any {
 /**
  * Methods that will be executed after successful command execution.
  */
-export function connect(...relays: CommandRelay[]): any {
+export function Connect(...relays: CommandRelay[]): any {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
@@ -40,7 +40,7 @@ export function connect(...relays: CommandRelay[]): any {
 /**
  * Specify the required registered services required by this command.
  */
-export function dependsOn(...services: string[]): any {
+export function DependsOn(...services: string[]): any {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
@@ -53,7 +53,7 @@ export function dependsOn(...services: string[]): any {
 /**
  * Methods that serve as pre-requisites for execution.
  */
-export function guard(...guards: string[]): any {
+export function Guard(...guards: string[]): any {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
@@ -69,7 +69,7 @@ export function guard(...guards: string[]): any {
 /**
  * Informs the user that the requested command is not yet implemented. The run method will not be executed.
  */
-export function notImplemented(): any {
+export function NotImplemented(): any {
     return function (target: any) {
         return class extends target {
             public async run($: Context) {

@@ -2,13 +2,13 @@ import {unit, test, Assert, Is} from "unit";
 import Command, {CommandRunner, RestrictGroup} from "../../../Commands/Command";
 import {Message} from "discord.js";
 import Permission from "../../../Core/Permission";
-import {dependsOn, guard, connect, AttachedLoggerFn, attachedLogger} from "../../../Decorators/Other";
+import {DependsOn, Guard, Connect, AttachedLoggerFn, AttachedLogger} from "../../../Decorators/Other";
 import {Args, Description, Name, Meta} from "../../../Decorators/General";
 import {Constraint} from "../../../Decorators/Constraint";
 import {Type} from "../../../Commands/Type";
-import {deprecated} from "../../../Decorators/Utility";
+import {Deprecated} from "../../../Decorators/Utility";
 import DiscordEvent from "../../../Core/DiscordEvent";
-import {on} from "../../../Decorators/Events";
+import {On} from "../../../Decorators/Events";
 import {IMeta} from "../../../Fragments/Fragment";
 import {testBot} from "../TestBot";
 
@@ -18,28 +18,28 @@ const testConnection: CommandRunner = (): void => {
 
 @Name("mycmd")
 @Description("Used for testing")
-@attachedLogger()
+@AttachedLogger()
 @Args({
     name: "name",
     type: Type.string
 })
-@connect(testConnection)
-@guard("testGuard")
-@dependsOn("service-name-1", "service-name-2")
+@Connect(testConnection)
+@Guard("testGuard")
+@DependsOn("service-name-1", "service-name-2")
 @Constraint.cooldown(5)
 @Constraint.ownerOnly
 @Constraint.issuerPermissions(Permission.AddReactions)
 @Constraint.selfPermissions(Permission.Admin, Permission.BanMembers)
 @Constraint.userGroup(RestrictGroup.ServerModerator)
 export class MyCommand extends Command {
-    @deprecated()
+    @Deprecated()
     public testGuard(): boolean {
         //
 
         return false;
     }
 
-    @on(DiscordEvent.Message)
+    @On(DiscordEvent.Message)
     public onMessage(msg: Message): void {
         //
     }

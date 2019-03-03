@@ -52,7 +52,7 @@ import {
     ProcessMsgType
 } from "./Services/GenericService";
 
-import Service from "./Services/service";
+import Service from "./Services/Service";
 import SMIS from "./Services/SMIS";
 import Delta from "./State/Delta";
 import Store, {IStore, IStoreAction, ITestState, Reducer, TestStoreActionType} from "./State/Store";
@@ -67,11 +67,11 @@ import {Constraint, constraints} from "./Decorators/Constraint";
 import {Description, Name, Aliases, Args, Meta} from "./Decorators/General";
 import Component from "./Decorators/Component";
 import {DecoratorUtils} from "./Decorators/DecoratorUtils";
-import {guard, dependsOn, connect, AttachedLoggerFn, notImplemented} from "./Decorators/Other";
-import {deprecated} from "./Decorators/Utility";
+import {Guard, DependsOn, Connect, AttachedLoggerFn, NotImplemented} from "./Decorators/Other";
+import {Deprecated} from "./Decorators/Utility";
 import {PromiseOr} from "@atlas/xlib";
 import {CmdHandlerEvent} from "./Commands/CommandHandler";
-import {once, on} from "./Decorators/Events";
+import {Once, On} from "./Decorators/Events";
 import BotConnector, {IBotConnector} from "./Core/BotConnector";
 import {TypeChecker, Type, ArgumentResolver} from "./Commands/Type";
 import ExclusiveConstraint from "./Decorators/ExclusiveConstraint";
@@ -175,24 +175,24 @@ export {
     IDisposable,
 
     // Decorators.
-    Name as name,
-    Description as description,
-    Aliases as aliases,
-    Args as args,
+    Name,
+    Description,
+    Aliases,
+    Args,
     Constraint,
     constraints,
-    guard,
-    on,
-    once,
-    dependsOn,
-    connect,
-    AttachedLoggerFn as attachedLoggerFn,
+    Guard,
+    On,
+    Once,
+    DependsOn,
+    Connect,
+    AttachedLoggerFn,
     Component,
     DecoratorUtils,
-    deprecated,
-    Meta as meta,
+    Deprecated,
+    Meta,
     ExclusiveConstraint,
-    notImplemented,
+    NotImplemented,
 
     // Tasks.
     Task,

@@ -1,4 +1,4 @@
-import Rgb from "./RGB";
+import RGB from "./RGB";
 
 export interface IRgbaOptions {
     readonly red: number;
@@ -7,8 +7,8 @@ export interface IRgbaOptions {
     readonly alpha: number;
 }
 
-export default class Rgba extends Rgb {
-    public static fromHex(hex: string): Rgba | null {
+export default class RGBA extends RGB {
+    public static fromHex(hex: string): RGBA | null {
         const result: RegExpExecArray | null = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
         if (result === null) {
@@ -23,7 +23,7 @@ export default class Rgba extends Rgb {
         };
 
         // TODO: Also get the Alpha value (instead of being hardcoded).
-        return result ? new Rgba(options) : null;
+        return result ? new RGBA(options) : null;
     }
 
     public readonly alpha: number;

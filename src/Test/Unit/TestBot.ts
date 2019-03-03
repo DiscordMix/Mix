@@ -3,7 +3,7 @@ require("dotenv").config();
 import path from "path";
 import Bot from "../../Core/Bot";
 import {BotEvent} from "../../Core/BotExtra";
-import Rgba from "../../Misc/RGBA";
+import RGBA from "../../Misc/RGBA";
 import List from "../../collections/List";
 import Rgb from "../../Misc/RGB";
 
@@ -20,7 +20,7 @@ export const TestSubjects = {
 
     rgb: new Rgb(5, 10, 15),
 
-    rgba: new Rgba({
+    rgba: new RGBA({
         red: 5,
         green: 10,
         blue: 15,

@@ -33,7 +33,7 @@ import {IFragment, IMeta} from "./Fragments/Fragment";
 import Loader from "./Fragments/Loader";
 import EditableMessage from "./Message/EditableMessage";
 import Rgb from "./Misc/RGB";
-import Rgba from "./Misc/RGBA";
+import RGBA from "./Misc/RGBA";
 import PaginatedMessage from "./Pagination/PaginatedMessage";
 import LogSerializer, {ILogMsg, ILogSource} from "./Serializers/LogSerializer";
 import {ISerializer} from "./Serializers/Serializer";
@@ -125,7 +125,7 @@ export {
     Log,
     LogLevel,
     Rgb,
-    Rgba,
+    RGBA as Rgba,
     TimeParser,
     TimeSuffixType,
     Util,

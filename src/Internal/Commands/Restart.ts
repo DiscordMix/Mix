@@ -1,10 +1,10 @@
-import Command from "../../commands/Command";
-import Context from "../../commands/Context";
-import {name, description} from "../../Decorators/General";
+import Command from "../../Commands/Command";
+import Context from "../../Commands/Context";
+import {Name, Description} from "../../Decorators/General";
 import {Constraint} from "../../Decorators/Constraint";
 
-@name("restart")
-@description("Restart the bot and reload modules")
+@Name("restart")
+@Description("Restart the bot and reload modules")
 @Constraint.cooldown(5)
 @Constraint.ownerOnly
 export default class extends Command {

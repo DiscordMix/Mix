@@ -1,9 +1,9 @@
 import {exec} from "child_process";
-import {name, description, aliases, args} from "../../Decorators/General";
+import {Name, Description, Aliases, Args} from "../../Decorators/General";
 import {Constraint} from "../../Decorators/Constraint";
-import {Type} from "../../commands/Type";
-import Command from "../../commands/Command";
-import Context from "../../commands/Context";
+import {Type} from "../../Commands/Type";
+import Command from "../../Commands/Command";
+import Context from "../../Commands/Context";
 import EmbedBuilder from "../../builders/EmbedBuilder";
 import MsgBuilder from "../../builders/MsgBuilder";
 import Util from "../../Core/Util";
@@ -12,10 +12,10 @@ interface IArgs {
     readonly command: string;
 }
 
-@name("cli")
-@description("Access the local machine's CLI")
-@aliases("exec", "exe")
-@args(
+@Name("cli")
+@Description("Access the local machine's CLI")
+@Aliases("exec", "exe")
+@Args(
     {
         name: "command",
         description: "The command to execute",

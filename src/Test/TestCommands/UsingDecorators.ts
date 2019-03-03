@@ -1,8 +1,8 @@
-import {name, description} from "../../Decorators/General";
-import Command from "../../commands/Command";
+import {Name, Description} from "../../Decorators/General";
+import Command from "../../Commands/Command";
 
-@name("test-decorator-command")
-@description("A command for testing decorators")
+@Name("test-decorator-command")
+@Description("A command for testing decorators")
 export default class TestDecoratorCommand extends Command {
     public run(): void {
         //

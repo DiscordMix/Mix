@@ -1,9 +1,9 @@
-import Command, {CommandRunner, CommandRelay, IGenericCommand} from "../commands/Command";
+import Command, {CommandRunner, CommandRelay, IGenericCommand} from "../Commands/Command";
 import {DecoratorUtils} from "./DecoratorUtils";
-import Context from "../commands/Context";
+import Context from "../Commands/Context";
 import Log from "../Core/Log";
 
-export const attachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
+export const AttachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
     Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${$.sender.tag}`);
 };
 
@@ -12,7 +12,7 @@ export const attachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGene
  */
 export function attachedLogger(...relays: CommandRelay[]): any {
     if (relays.length === 0) {
-        relays = [attachedLoggerFn];
+        relays = [AttachedLoggerFn];
     }
 
     return function (target: any) {

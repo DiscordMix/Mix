@@ -1,10 +1,10 @@
-import Command from "../../commands/Command";
-import Context from "../../commands/Context";
-import {name, description} from "../../Decorators/General";
+import Command from "../../Commands/Command";
+import Context from "../../Commands/Context";
+import {Name, Description} from "../../Decorators/General";
 import Log from "../../Core/Log";
 
-@name("prefix")
-@description("Manage bot prefixes")
+@Name("prefix")
+@Description("Manage bot prefixes")
 export default class extends Command {
     // TODO: Update
     /* readonly args = {

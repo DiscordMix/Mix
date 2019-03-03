@@ -3,9 +3,9 @@ import Util from "./Util";
 import {BotEvent} from "./BotExtra";
 import Log from "./Log";
 import BotMessages from "./Messages";
-import CommandParser from "../commands/CommandParser";
-import Command, {RawArguments} from "../commands/Command";
-import Context from "../commands/Context";
+import CommandParser from "../Commands/CommandParser";
+import Command, {RawArguments} from "../Commands/Command";
+import Context from "../Commands/Context";
 import {PromiseOr} from "@atlas/xlib";
 import Bot from "./Bot";
 

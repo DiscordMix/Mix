@@ -1,9 +1,9 @@
 import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import path from "path";
 import Util from "./Util";
-import {ArgumentResolver, ArgumentType, Type} from "../commands/Type";
+import {ArgumentResolver, ArgumentType, Type} from "../Commands/Type";
 import Pattern from "./Pattern";
-import {InputArgument} from "../commands/Command";
+import {InputArgument} from "../Commands/Command";
 import {IBotOptions} from "./BotExtra";
 
 // TODO: Not working.

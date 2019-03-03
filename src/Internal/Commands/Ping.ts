@@ -1,10 +1,10 @@
-import Command from "../../commands/Command";
-import Context from "../../commands/Context";
-import {name, description} from "../../Decorators/General";
+import Command from "../../Commands/Command";
+import Context from "../../Commands/Context";
+import {Name, Description} from "../../Decorators/General";
 import {Constraint} from "../../Decorators/Constraint";
 
-@name("ping")
-@description("View the latency and heartbeat of the bot")
+@Name("ping")
+@Description("View the latency and heartbeat of the bot")
 @Constraint.cooldown(1)
 export default class extends Command {
     public async run($: Context): Promise<void> {

@@ -1,11 +1,11 @@
 import {RichEmbed} from "discord.js";
-import Command from "../../commands/Command";
-import Context from "../../commands/Context";
-import {ReadonlyCommandMap} from "../../commands/CommandRegistry";
-import {description, name} from "../../Decorators/General";
+import Command from "../../Commands/Command";
+import Context from "../../Commands/Context";
+import {ReadonlyCommandMap} from "../../Commands/CommandRegistry";
+import {Description, Name} from "../../Decorators/General";
 
-@name("help")
-@description("View available commands and their descriptions")
+@Name("help")
+@Description("View available commands and their descriptions")
 export default class extends Command {
     public async run($: Context): Promise<void> {
         // TODO: Decorator commands broke it (can't .map through a Map)

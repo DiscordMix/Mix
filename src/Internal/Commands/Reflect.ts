@@ -1,8 +1,8 @@
-import Command from "../../commands/Command";
-import Context from "../../commands/Context";
-import {name, description, args} from "../../Decorators/General";
+import Command from "../../Commands/Command";
+import Context from "../../Commands/Context";
+import {Name, Description, Args} from "../../Decorators/General";
 import {Constraint} from "../../Decorators/Constraint";
-import {Type} from "../../commands/Type";
+import {Type} from "../../Commands/Type";
 import {notImplemented} from "../../Decorators/Other";
 
 interface IArgs {
@@ -13,9 +13,9 @@ enum ReflectDataType {
     Services = "services"
 }
 
-@name("reflect")
-@description("Access the bot's internal state")
-@args(
+@Name("reflect")
+@Description("Access the bot's internal state")
+@Args(
     {
         name: "type",
         description: "The data to inspect",

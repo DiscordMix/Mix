@@ -1,7 +1,7 @@
 import {unit, test, Assert, feed, Is, JsType, Does} from "unit";
-import CommandParser from "../../../commands/CommandParser";
-import {Type} from "../../../commands/Type";
-import {RawArguments, InputArgument} from "../../../commands/Command";
+import CommandParser from "../../../Commands/CommandParser";
+import {Type} from "../../../Commands/Type";
+import {RawArguments, InputArgument} from "../../../Commands/Command";
 import {DefaultArgResolvers} from "../../../Core/Constants";
 
 @unit("Command Parser")

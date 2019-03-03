@@ -1,11 +1,11 @@
 import {unit, test, Assert, Is} from "unit";
-import Command, {CommandRunner, RestrictGroup} from "../../../commands/Command";
+import Command, {CommandRunner, RestrictGroup} from "../../../Commands/Command";
 import {Message} from "discord.js";
 import Permission from "../../../Core/Permission";
-import {dependsOn, guard, connect, attachedLoggerFn, attachedLogger} from "../../../Decorators/Other";
-import {args, description, name, meta} from "../../../Decorators/General";
+import {dependsOn, guard, connect, AttachedLoggerFn, attachedLogger} from "../../../Decorators/Other";
+import {Args, Description, Name, Meta} from "../../../Decorators/General";
 import {Constraint} from "../../../Decorators/Constraint";
-import {Type} from "../../../commands/Type";
+import {Type} from "../../../Commands/Type";
 import {deprecated} from "../../../Decorators/Utility";
 import DiscordEvent from "../../../Core/DiscordEvent";
 import {on} from "../../../Decorators/Events";
@@ -16,10 +16,10 @@ const testConnection: CommandRunner = (): void => {
     //
 };
 
-@name("mycmd")
-@description("Used for testing")
+@Name("mycmd")
+@Description("Used for testing")
 @attachedLogger()
-@args({
+@Args({
     name: "name",
     type: Type.string
 })
@@ -49,7 +49,7 @@ export class MyCommand extends Command {
     }
 }
 
-@meta({
+@Meta({
     name: "meta-test",
     description: "Testing meta",
     author: "John Doe",
@@ -162,7 +162,7 @@ default class {
 
     @test("@attachedLogger: should append the attached logger connection")
     public attachedLogger_bind() {
-        Assert.equal(instance.connections[1], attachedLoggerFn);
+        Assert.equal(instance.connections[1], AttachedLoggerFn);
     }
 
     @test("@deprecated: should replace input with a proxy method")

@@ -1,7 +1,7 @@
 import {Client, Snowflake} from "discord.js";
 import {EventEmitter} from "events";
-import {ICustomArgType} from "../commands/Command";
-import {ICommandHandler} from "../commands/CommandHandler";
+import {ICustomArgType} from "../Commands/Command";
+import {ICommandHandler} from "../Commands/CommandHandler";
 import {IFragmentManager} from "../Fragments/FragmentManager";
 import Language from "../Language/Language";
 import {IOptimizer} from "../Optimization/Optimizer";
@@ -10,13 +10,13 @@ import {ITimeoutAttachable, IDisposable} from "./Helpers";
 import {IPathResolver} from "./PathResolver";
 import {IBotAnalytics} from "./BotAnalytics";
 import {ITemp} from "./Temp";
-import {ICommandRegistry} from "../commands/CommandRegistry";
+import {ICommandRegistry} from "../Commands/CommandRegistry";
 import {IConsoleInterface} from "../console/ConsoleInterface";
 import {ITaskManager} from "../Tasks/TaskManager";
 import {Reducer, IStore} from "../State/Store";
 import {PromiseOr} from "@atlas/xlib";
 import {IBotHandler} from "./BotHandler";
-import {ArgumentType, ArgumentResolver} from "../commands/Type";
+import {ArgumentType, ArgumentResolver} from "../Commands/Type";
 
 export enum ChannelType {
     Text = "text",

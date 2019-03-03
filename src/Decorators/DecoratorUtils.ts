@@ -1,4 +1,4 @@
-import Command, {IConstraints} from "../commands/Command";
+import Command, {IConstraints} from "../Commands/Command";
 import {IMeta} from "../Fragments/Fragment";
 import Log from "../Core/Log";
 import {DecoratorProxy} from "./Component";

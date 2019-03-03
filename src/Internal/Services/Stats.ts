@@ -1,8 +1,8 @@
-import {name, description} from "../../Decorators/General";
+import {Name, Description} from "../../Decorators/General";
 import Service from "../../services/service";
 
-@name("stats")
-@description("Bot analytics collection service")
+@Name("stats")
+@Description("Bot analytics collection service")
 export default class extends Service {
     public start() {
         // TODO: Implement

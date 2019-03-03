@@ -1,4 +1,4 @@
-import Context from "../commands/Context";
+import Context from "../Commands/Context";
 
 export interface ICommandEvent {
     readonly context: Context;

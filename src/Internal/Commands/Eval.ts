@@ -1,20 +1,20 @@
 import EmbedBuilder from "../../builders/EmbedBuilder";
 import MsgBuilder from "../../builders/MsgBuilder";
-import Command from "../../commands/Command";
-import Context from "../../commands/Context";
+import Command from "../../Commands/Command";
+import Context from "../../Commands/Context";
 import Util from "../../Core/Util";
-import {name, description, args} from "../../Decorators/General";
+import {Name, Description, Args} from "../../Decorators/General";
 import {Constraint} from "../../Decorators/Constraint";
-import {Type} from "../../commands/Type";
+import {Type} from "../../Commands/Type";
 
 interface IArgs {
     readonly code: string;
     readonly silent: boolean;
 }
 
-@name("eval")
-@description("Evaluate code")
-@args(
+@Name("eval")
+@Description("Evaluate code")
+@Args(
     {
         name: "code",
         description: "The code to evaluate",

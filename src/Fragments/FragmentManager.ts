@@ -1,5 +1,5 @@
 import {EventEmitter} from "events";
-import Command, {DefaultCommandRestrict} from "../commands/Command";
+import Command, {DefaultCommandRestrict} from "../Commands/Command";
 import Bot from "../Core/Bot";
 import {InternalCommand} from "../Core/BotExtra";
 import Log from "../Core/Log";

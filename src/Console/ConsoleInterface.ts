@@ -2,7 +2,7 @@ import chalk from "chalk";
 import {Guild, GuildMember} from "discord.js";
 import {performance} from "perf_hooks";
 import readline from "readline";
-import {ReadonlyCommandMap} from "../commands/CommandRegistry";
+import {ReadonlyCommandMap} from "../Commands/CommandRegistry";
 import Bot from "../Core/Bot";
 import {DebugMode} from "../Core/Constants";
 import Log from "../Core/Log";

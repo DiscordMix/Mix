@@ -1,9 +1,9 @@
-import {default as Command} from "../../commands/Command";
-import Context from "../../commands/Context";
-import {name, description, args} from "../../Decorators/General";
+import {default as Command} from "../../Commands/Command";
+import Context from "../../Commands/Context";
+import {Name, Description, Args} from "../../Decorators/General";
 import MsgBuilder from "../../builders/MsgBuilder";
 import {Constraint} from "../../Decorators/Constraint";
-import {Type} from "../../commands/Type";
+import {Type} from "../../Commands/Type";
 
 interface IArgs {
     readonly command: string;
@@ -11,9 +11,9 @@ interface IArgs {
 
 const delimiter: string = ", ";
 
-@name("usage")
-@description("View the usage of a command")
-@args(
+@Name("usage")
+@Description("View the usage of a command")
+@Args(
     {
         name: "command",
         type: Type.string,

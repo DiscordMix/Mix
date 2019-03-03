@@ -7,7 +7,7 @@ import Temp from "./Temp";
 import {Client, Snowflake} from "discord.js";
 import ServiceManager from "../services/service-manager";
 import axios from "axios";
-import CommandHandler from "../commands/CommandHandler";
+import CommandHandler from "../Commands/CommandHandler";
 import fs from "fs";
 import path from "path";
 import Translation from "../Language/Language";
@@ -23,9 +23,9 @@ import Store from "../State/Store";
 import {InternalCommand, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./BotExtra";
 import {Action} from "@atlas/automata";
 import BotConnector from "./BotConnector";
-import CommandRegistry from "../commands/CommandRegistry";
+import CommandRegistry from "../Commands/CommandRegistry";
 import BotHandler from "./BotHandler";
-import {ArgumentType, ArgumentResolver} from "../commands/Type";
+import {ArgumentType, ArgumentResolver} from "../Commands/Type";
 
 // TODO: Should emit an event when state changes.
 export default class Bot<TState = any, TActionType = any> extends EventEmitter implements IBot<TState, TActionType> {

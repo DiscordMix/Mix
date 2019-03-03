@@ -1,6 +1,6 @@
 import {unit, test, Assert, Is} from "unit";
 import {TestSubjects} from "../TestBot";
-import FlagParser from "../../../commands/FlagParser";
+import FlagParser from "../../../Commands/FlagParser";
 
 const result1 = FlagParser.getFlags(TestSubjects.flags.short);
 const result2 = FlagParser.getFlags(TestSubjects.flags.long);

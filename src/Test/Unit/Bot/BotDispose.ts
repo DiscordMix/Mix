@@ -1,6 +1,6 @@
 import {unit, test, Assert, Is, Does} from "unit";
-import {testBot} from "../test-bot";
-import TestData from "../test-data";
+import {testBot} from "../TestBot";
+import TestData from "../TestData";
 import {Bot} from "../../../Index";
 
 @unit("Bot Dispose")

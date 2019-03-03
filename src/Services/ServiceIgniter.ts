@@ -6,7 +6,7 @@ if (!process.send || !process.connected) {
 import fs from "fs";
 import Log from "../Core/Log";
 import {IForkedService, IRawProcessMsg, ProcessMsgType} from "./GenericService";
-import ServiceManager from "./service-manager";
+import ServiceManager from "./ServiceManager";
 
 const args: string[] = process.argv.splice(2);
 

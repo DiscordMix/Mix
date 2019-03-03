@@ -8,14 +8,14 @@ Log.level = LogLevel.None;
 Log.write = false;
 
 // Run preparation stage.
-import "./prepare";
+import "./Prepare";
 
 // Import units.
 import "./uncategorized/util.unit";
 import "./uncategorized/log-serializer.unit";
 import "./uncategorized/tslint-serializer.unit";
-import "./colors/rgb.unit";
-import "./colors/rgba.unit";
+import "./colors/RGB";
+import "./colors/RGBA";
 import "./bot/bot.unit";
 import "./uncategorized/tasks.unit";
 import "./store/store.unit";

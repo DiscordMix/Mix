@@ -7,7 +7,7 @@ import Bot from "../Core/Bot";
 import {DebugMode} from "../Core/Constants";
 import Log from "../Core/Log";
 import Util from "../Core/Util";
-import {ReadonlyServiceMap} from "../Services/service-manager";
+import {ReadonlyServiceMap} from "../Services/ServiceManager";
 
 // TODO: Export in index.
 export type ConsoleCommandHandler = (args: string[]) => void;

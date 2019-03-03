@@ -1,39 +1,39 @@
-namespace Commands {
-    export interface ICommandFlag {
-        readonly key: string;
-        readonly value: string | null;
-        readonly short: boolean;
+import Pattern from "../core/Pattern";
+
+export interface ICommandFlag {
+    readonly key: string;
+    readonly value: string | null;
+    readonly short: boolean;
+}
+
+export default abstract class FlagParser {
+    public static getFlags(commandString: string): ICommandFlag[] {
+        const result: ICommandFlag[] = [];
+
+        let match: RegExpExecArray | null;
+
+        while ((match = Pattern.flag.exec(commandString)) !== null) {
+            if (match !== null) {
+                result.push({
+                    key: FlagParser.getKey(match),
+                    short: FlagParser.isShort(match),
+                    value: FlagParser.getValue(match)
+                });
+            }
+        }
+
+        return result;
     }
 
-    export abstract class FlagParser {
-        public static getFlags(commandString: string): ICommandFlag[] {
-            const result: ICommandFlag[] = [];
+    protected static isShort(match: RegExpExecArray): boolean {
+        return !match[0].startsWith("--") && match[0].startsWith("-");
+    }
 
-            let match: RegExpExecArray | null;
+    protected static getKey(match: RegExpExecArray): string {
+        return match[1] || match[4];
+    }
 
-            while ((match = Core.Pattern.flag.exec(commandString)) !== null) {
-                if (match !== null) {
-                    result.push({
-                        key: FlagParser.getKey(match),
-                        short: FlagParser.isShort(match),
-                        value: FlagParser.getValue(match)
-                    });
-                }
-            }
-
-            return result;
-        }
-
-        protected static isShort(match: RegExpExecArray): boolean {
-            return !match[0].startsWith("--") && match[0].startsWith("-");
-        }
-
-        protected static getKey(match: RegExpExecArray): string {
-            return match[1] || match[4];
-        }
-
-        protected static getValue(match: RegExpExecArray): string | null {
-            return match[2] || match[3] || null;
-        }
+    protected static getValue(match: RegExpExecArray): string | null {
+        return match[2] || match[3] || null;
     }
 }

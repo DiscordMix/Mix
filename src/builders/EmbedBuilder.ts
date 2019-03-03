@@ -1,151 +1,150 @@
 import Discord, {RichEmbed} from "discord.js";
 import {IBuilder} from "./Builder";
+import Log from "../core/Log";
 
-namespace Builders {
-    export interface IEmbedBuilder extends IBuilder<RichEmbed> {
-        color(color: string): this;
-        title(title: string): this;
-        titleIcon(url: string): this;
-        thumbnail(url: string): this;
-        footer(text: string, icon?: string): this;
-        image(url: string): this;
-        text(text: string): this;
-        field(title: string, value: string): this;
+export interface IEmbedBuilder extends IBuilder<RichEmbed> {
+    color(color: string): this;
+    title(title: string): this;
+    titleIcon(url: string): this;
+    thumbnail(url: string): this;
+    footer(text: string, icon?: string): this;
+    image(url: string): this;
+    text(text: string): this;
+    field(title: string, value: string): this;
+}
+
+export default class EmbedBuilder implements IEmbedBuilder {
+    public static fromObject(obj: any): EmbedBuilder {
+        const result = new EmbedBuilder();
+
+        if (!obj.text) {
+            throw Log.error("Text cannot be empty or null");
+        }
+        else {
+            result.text(obj.text);
+        }
+
+        if (obj.image) {
+            result.image(obj.image);
+        }
+
+        if (obj.color) {
+            result.color(obj.color);
+        }
+
+        if (obj.title) {
+            result.title(obj.title);
+        }
+
+        if (obj.titleIcon) {
+            result.titleIcon(obj.titleIcon);
+        }
+
+        if (obj.footer) {
+            result.footer(obj.footer.text, obj.footer.icon);
+        }
+
+        if (obj.thumbnail) {
+            result.thumbnail(obj.thumbnail);
+        }
+
+        return result;
     }
 
-    export class EmbedBuilder implements IEmbedBuilder {
-        public static fromObject(obj: any): EmbedBuilder {
-            const result = new EmbedBuilder();
+    public static sections(sections: any, color: string = ""): EmbedBuilder {
+        const result = new EmbedBuilder();
 
-            if (!obj.text) {
-                throw Core.Log.error("Text cannot be empty or null");
-            }
-            else {
-                result.text(obj.text);
-            }
-
-            if (obj.image) {
-                result.image(obj.image);
-            }
-
-            if (obj.color) {
-                result.color(obj.color);
-            }
-
-            if (obj.title) {
-                result.title(obj.title);
-            }
-
-            if (obj.titleIcon) {
-                result.titleIcon(obj.titleIcon);
-            }
-
-            if (obj.footer) {
-                result.footer(obj.footer.text, obj.footer.icon);
-            }
-
-            if (obj.thumbnail) {
-                result.thumbnail(obj.thumbnail);
-            }
-
-            return result;
+        for (const section of Object.keys(sections)) {
+            result.field(section, sections[section]);
         }
 
-        public static sections(sections: any, color: string = ""): EmbedBuilder {
-            const result = new EmbedBuilder();
-
-            for (const section of Object.keys(sections)) {
-                result.field(section, sections[section]);
-            }
-
-            if (color) {
-                result.color(color);
-            }
-
-            return result;
+        if (color) {
+            result.color(color);
         }
 
-        protected readonly embed: RichEmbed;
+        return result;
+    }
 
-        public constructor() {
-            this.embed = new Discord.RichEmbed();
-        }
+    protected readonly embed: RichEmbed;
 
-        /**
-         * Set the color of the embed.
-         */
-        public color(color: string): this {
-            this.embed.setColor(color);
+    public constructor() {
+        this.embed = new Discord.RichEmbed();
+    }
 
-            return this;
-        }
+    /**
+     * Set the color of the embed.
+     */
+    public color(color: string): this {
+        this.embed.setColor(color);
 
-        /**
-         * Set the title of the embed.
-         */
-        public title(title: string): this {
-            this.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : "");
+        return this;
+    }
 
-            return this;
-        }
+    /**
+     * Set the title of the embed.
+     */
+    public title(title: string): this {
+        this.embed.setAuthor(title, this.embed.author ? this.embed.author.icon_url : "");
 
-        public titleIcon(url: string): this {
-            this.embed.setAuthor(this.embed.author ? this.embed.author.name : null, url);
+        return this;
+    }
 
-            return this;
-        }
+    public titleIcon(url: string): this {
+        this.embed.setAuthor(this.embed.author ? this.embed.author.name : null, url);
 
-        /**
-         * Set the thumbnail image of the embed.
-         */
-        public thumbnail(url: string): this {
-            this.embed.setThumbnail(url);
+        return this;
+    }
 
-            return this;
-        }
+    /**
+     * Set the thumbnail image of the embed.
+     */
+    public thumbnail(url: string): this {
+        this.embed.setThumbnail(url);
 
-        /**
-         * Set the footer text of the embed.
-         */
-        public footer(text: string, icon?: string): this {
-            this.embed.setFooter(text.substr(0, 2048), icon);
+        return this;
+    }
 
-            return this;
-        }
+    /**
+     * Set the footer text of the embed.
+     */
+    public footer(text: string, icon?: string): this {
+        this.embed.setFooter(text.substr(0, 2048), icon);
 
-        /**
-         * Set the image of the embed.
-         */
-        public image(url: string): this {
-            this.embed.setImage(url);
+        return this;
+    }
 
-            return this;
-        }
+    /**
+     * Set the image of the embed.
+     */
+    public image(url: string): this {
+        this.embed.setImage(url);
 
-        /**
-         * Set the text of the embed.
-         * @todo Limit text to Discord's embed char limit (done, needs testing).
-         */
-        public text(text: string): this {
-            this.embed.setDescription(text.substr(0, 1024));
+        return this;
+    }
 
-            return this;
-        }
+    /**
+     * Set the text of the embed.
+     * @todo Limit text to Discord's embed char limit (done, needs testing).
+     */
+    public text(text: string): this {
+        this.embed.setDescription(text.substr(0, 1024));
 
-        /**
-         * Add a field to the embed.
-         */
-        public field(title: string, value: string): this {
-            this.embed.addField(title.substr(0, 256), value.substr(0, 1024));
+        return this;
+    }
 
-            return this;
-        }
+    /**
+     * Add a field to the embed.
+     */
+    public field(title: string, value: string): this {
+        this.embed.addField(title.substr(0, 256), value.substr(0, 1024));
 
-        /**
-         * Convert the embed to a RichEmbed.
-         */
-        public build(): RichEmbed {
-            return this.embed;
-        }
+        return this;
+    }
+
+    /**
+     * Convert the embed to a RichEmbed.
+     */
+    public build(): RichEmbed {
+        return this.embed;
     }
 }

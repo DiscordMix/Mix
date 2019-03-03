@@ -1,5 +1,5 @@
 import {IMeta} from "../../Fragments/Fragment";
-import Service from "../../Services/Service";
+import Service from "../../services/service";
 
 export default class extends Service {
     public readonly meta: IMeta = {

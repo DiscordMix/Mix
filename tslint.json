@@ -25,8 +25,7 @@
         "no-conditional-assignment": false,
         "space-before-function-paren": false,
         "no-string-literal": false,
-        "no-empty": false,
-        "no-namespace": false
+        "no-empty": false
     },
     "rulesDirectory": []
 }

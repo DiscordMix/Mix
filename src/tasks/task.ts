@@ -55,6 +55,6 @@ export default abstract class Task implements ITask {
     }
 }
 
-export interface IPersistent extends ITask, IVolatile, ISyncable {
+export interface IPersistentTask extends ITask, IVolatile, ISyncable {
     //
 }

@@ -52,15 +52,15 @@ import {
     ProcessMsgType
 } from "./Services/GenericService";
 
-import Service from "./Services/Service";
+import Service from "./services/service";
 import SMIS from "./Services/SMIS";
 import Delta from "./State/Delta";
 import Store, {IStore, IStoreAction, ITestState, Reducer, TestStoreActionType} from "./State/Store";
 import {ITimeMachine, TimeMachine} from "./State/TimeMachine";
 import Task, {ITask} from "./Tasks/Task";
 import TaskManager, {ITaskManager} from "./Tasks/TaskManager";
-import TimeParser from "./Time/Parser";
-import TimeSuffixType from "./Time/SuffixType";
+import TimeParser from "./Time/TimeParser";
+import TimeSuffixType from "./Time/TimeSuffixType";
 import List from "./collections/List";
 import DiscordEvent from "./core/DiscordEvent";
 import {Constraint, constraints} from "./Decorators/Constraint";

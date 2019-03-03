@@ -1,24 +1,25 @@
-namespace Services {
-    export abstract class ForkedService extends GenericService implements IForkedService {
-        public readonly useSMIS: boolean = false;
+import {GenericService, IForkedService, IProcessMsg, ProcessMsgType} from "./GenericService";
+import SMIS from "./SMIS";
 
-        protected readonly smis?: SMIS;
+export abstract class ForkedService extends GenericService implements IForkedService {
+    public readonly useSMIS: boolean = false;
 
-        public onMessage(msg: IProcessMsg, sender: any): IProcessMsg[] | IProcessMsg | void {
-            //
+    protected readonly smis?: SMIS;
+
+    public onMessage(msg: IProcessMsg, sender: any): IProcessMsg[] | IProcessMsg | void {
+        //
+    }
+
+    protected send(type: ProcessMsgType, data?: any): boolean {
+        if (!process.send) {
+            return false;
         }
 
-        protected send(type: ProcessMsgType, data?: any): boolean {
-            if (!process.send) {
-                return false;
-            }
+        process.send({
+            _t: type,
+            _d: data
+        });
 
-            process.send({
-                _t: type,
-                _d: data
-            });
-
-            return true;
-        }
+        return true;
     }
 }

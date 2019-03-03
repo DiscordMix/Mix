@@ -1,5 +1,5 @@
 import {unit, test, Assert, Is} from "unit";
-import {TestSubjects} from "../TestBot";
+import {TestSubjects} from "../test-bot";
 
 @unit("Collection")
 default class {

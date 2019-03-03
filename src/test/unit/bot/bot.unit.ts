@@ -1,8 +1,8 @@
 import {unit, test, Assert, Is, Does, feed, Mock} from "unit";
-import {init, testBot} from "../TestBot";
+import {init, testBot} from "../test-bot";
 import {DefaultArgResolvers} from "../../../core/Constants";
 import DiscordEvent from "../../../core/DiscordEvent";
-import TestData from "../TestData";
+import TestData from "../test-data";
 
 @unit("Bot")
 default class {

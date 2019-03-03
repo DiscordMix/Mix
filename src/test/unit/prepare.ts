@@ -1,4 +1,4 @@
-import {testBot} from "./TestBot";
+import {testBot} from "./test-bot";
 import {Mock} from "unit";
 
 /**

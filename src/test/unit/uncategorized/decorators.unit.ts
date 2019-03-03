@@ -10,7 +10,7 @@ import {deprecated} from "../../../Decorators/Utility";
 import DiscordEvent from "../../../core/DiscordEvent";
 import {on} from "../../../Decorators/Events";
 import {IMeta} from "../../../Fragments/Fragment";
-import {testBot} from "../TestBot";
+import {testBot} from "../test-bot";
 
 const testConnection: CommandRunner = (): void => {
     //

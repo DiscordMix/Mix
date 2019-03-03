@@ -1,6 +1,6 @@
 import {unit, test, Assert, Is} from "unit";
-import {testBot} from "../TestBot";
-import TestUtils, {ExcludeParam} from "../TestUtils";
+import {testBot} from "../test-bot";
+import TestUtils, {ExcludeParam} from "../test-utils";
 
 @unit("Services")
 default class {

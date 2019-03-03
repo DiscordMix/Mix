@@ -8,7 +8,7 @@ Log.level = LogLevel.None;
 Log.write = false;
 
 // Run preparation stage.
-import "./Prepare";
+import "./prepare";
 
 // Import units.
 import "./uncategorized/util.unit";

@@ -1,4 +1,4 @@
-import {Snowflake} from "../core/BotExtra";
+import {Snowflake} from "../Core/BotExtra";
 import Context from "../commands/Context";
 
 export type ExclusiveConstraintDelegate = (context: Context) => boolean;

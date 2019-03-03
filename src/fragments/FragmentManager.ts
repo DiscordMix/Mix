@@ -1,8 +1,8 @@
 import {EventEmitter} from "events";
 import Command, {DefaultCommandRestrict} from "../commands/Command";
-import Bot from "../core/Bot";
-import {InternalCommand} from "../core/BotExtra";
-import Log from "../core/Log";
+import Bot from "../Core/Bot";
+import {InternalCommand} from "../Core/BotExtra";
+import Log from "../Core/Log";
 import {IFragment} from "./Fragment";
 import Loader, {ILivePackage, IPackage} from "./Loader";
 import {ForkedService} from "../Services/ForkedService";

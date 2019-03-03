@@ -1,5 +1,5 @@
-import Bot from "../core/Bot";
-import DiscordEvent from "../core/DiscordEvent";
+import Bot from "../Core/Bot";
+import DiscordEvent from "../Core/DiscordEvent";
 import {GenericService, IService, IServiceOptions} from "./GenericService";
 import {IMeta} from "../Fragments/Fragment";
 

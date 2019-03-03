@@ -1,15 +1,15 @@
-import Log from "../core/Log";
-import Bot from "../core/Bot";
+import Log from "../Core/Log";
+import Bot from "../Core/Bot";
 import Command, {GenericCommand, RawArguments} from "./Command";
 import Context from "./Context";
 import {Snowflake, Message} from "discord.js";
 import Loader, {IPackage, ILivePackage} from "../Fragments/Loader";
-import Util from "../core/Util";
+import Util from "../Core/Util";
 import path from "path";
-import {InternalCommand} from "../core/BotExtra";
+import {InternalCommand} from "../Core/BotExtra";
 import {PromiseOr} from "@atlas/xlib";
 import CommandParser from "./CommandParser";
-import BotMessages from "../core/Messages";
+import BotMessages from "../Core/Messages";
 
 export interface ICommandCooldown {
     readonly context: Context;

@@ -1,4 +1,4 @@
-import Log from "../core/Log";
+import Log from "../Core/Log";
 
 export interface IModuleScanner {
     match(...patterns: RegExp[]): this;

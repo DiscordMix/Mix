@@ -1,7 +1,7 @@
-import Bot from "../core/Bot";
-import {IDisposable} from "../core/Helpers";
+import Bot from "../Core/Bot";
+import {IDisposable} from "../Core/Helpers";
 import {IFragment, IMeta} from "../Fragments/Fragment";
-import DiscordEvent from "../core/DiscordEvent";
+import DiscordEvent from "../Core/DiscordEvent";
 
 // TODO: Move both enum and types elsewhere.
 export enum ProcessMsgType {

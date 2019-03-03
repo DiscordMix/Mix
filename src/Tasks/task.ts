@@ -1,5 +1,5 @@
-import Bot from "../core/Bot";
-import {IDisposable, ISyncable, IVolatile} from "../core/Helpers";
+import Bot from "../Core/Bot";
+import {IDisposable, ISyncable, IVolatile} from "../Core/Helpers";
 import {IFragment, IMeta} from "../Fragments/Fragment";
 
 export interface ITask extends IFragment, IDisposable {

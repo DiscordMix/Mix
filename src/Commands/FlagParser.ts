@@ -1,4 +1,4 @@
-import Pattern from "../core/Pattern";
+import Pattern from "../Core/Pattern";
 
 export interface ICommandFlag {
     readonly key: string;

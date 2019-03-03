@@ -1,5 +1,5 @@
 import {ISerializer} from "./Serializer";
-import Pattern from "../core/Pattern";
+import Pattern from "../Core/Pattern";
 
 export interface ITslintWarning {
     readonly path: string;

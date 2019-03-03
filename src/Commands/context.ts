@@ -1,13 +1,13 @@
 import {DMChannel, Guild, Message, Snowflake, TextChannel} from "discord.js";
-import Bot from "../core/Bot";
-import Log from "../core/Log";
-import BotMessages from "../core/Messages";
-import ResponseHelper from "../core/ResponseHelper";
-import Util from "../core/Util";
+import Bot from "../Core/Bot";
+import Log from "../Core/Log";
+import BotMessages from "../Core/Messages";
+import ResponseHelper from "../Core/ResponseHelper";
+import Util from "../Core/Util";
 import EditableMessage from "../Message/EditableMessage";
 import {IStore} from "../State/Store";
 import {PromiseOr} from "@atlas/xlib";
-import {ChannelType} from "../core/BotExtra";
+import {ChannelType} from "../Core/BotExtra";
 
 export interface IContextOptions {
     readonly msg: Message;

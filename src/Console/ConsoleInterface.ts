@@ -3,12 +3,11 @@ import {Guild, GuildMember} from "discord.js";
 import {performance} from "perf_hooks";
 import readline from "readline";
 import {ReadonlyCommandMap} from "../commands/CommandRegistry";
-import Bot from "../core/Bot";
-import {DebugMode} from "../core/Constants";
-import Log from "../core/Log";
-import Util from "../core/Util";
-import {ReadonlyServiceMap} from "../services/service-manager";
-import {Loader} from "../Index";
+import Bot from "../Core/Bot";
+import {DebugMode} from "../Core/Constants";
+import Log from "../Core/Log";
+import Util from "../Core/Util";
+import {ReadonlyServiceMap} from "../Services/service-manager";
 
 // TODO: Export in index.
 export type ConsoleCommandHandler = (args: string[]) => void;

@@ -1,4 +1,4 @@
-import Log from "../core/Log";
+import Log from "../Core/Log";
 import {IArgument} from "./Command";
 
 export interface IArgumentParser {

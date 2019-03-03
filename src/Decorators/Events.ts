@@ -1,4 +1,4 @@
-import DiscordEvent from "../core/DiscordEvent";
+import DiscordEvent from "../Core/DiscordEvent";
 import {DecoratorUtils} from "./DecoratorUtils";
 import {DecoratorProxy} from "./Component";
 

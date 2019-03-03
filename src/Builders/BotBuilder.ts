@@ -1,6 +1,6 @@
-import {IBot} from "../core/BotExtra";
+import {IBot} from "../Core/BotExtra";
 import {IBuilder} from "./Builder";
-import Log from "../core/Log";
+import Log from "../Core/Log";
 
 export interface IBotBuilder extends IBuilder<IBot> {
     token(token: string): this;

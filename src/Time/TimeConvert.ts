@@ -1,4 +1,4 @@
-import Log from "../core/Log";
+import Log from "../Core/Log";
 
 export default abstract class TimeConvert {
     public static format(time: number, format: string): string {

@@ -1,10 +1,10 @@
 import {ICommandRegistry} from "./CommandRegistry";
-import Util from "../core/Util";
+import Util from "../Core/Util";
 import Command, {DefaultValueResolver, IArgument, RawArguments} from "./Command";
 import {Message} from "discord.js";
-import {FalseDelegates, TrueDelegates} from "../core/Constants";
-import Log from "../core/Log";
-import Pattern from "../core/Pattern";
+import {FalseDelegates, TrueDelegates} from "../Core/Constants";
+import Log from "../Core/Log";
+import Pattern from "../Core/Pattern";
 import FlagParser, {ICommandFlag} from "./FlagParser";
 import {TypeChecker, ArgumentType, ArgumentResolver} from "./Type";
 

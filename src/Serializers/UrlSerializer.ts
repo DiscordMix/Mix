@@ -1,5 +1,5 @@
 import {ISerializer} from "./Serializer";
-import Log from "../core/Log";
+import Log from "../Core/Log";
 
 export enum CommonUrlProtocols {
     Http = "http",

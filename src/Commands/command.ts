@@ -1,9 +1,9 @@
-import ChatEnv from "../core/ChatEnv";
+import ChatEnv from "../Core/ChatEnv";
 import Context, {IContext} from "./Context";
 import {IFragment, IMeta} from "../Fragments/Fragment";
 import {Message, RichEmbed} from "discord.js";
-import Bot from "../core/Bot";
-import {IDisposable} from "../core/Helpers";
+import Bot from "../Core/Bot";
+import {IDisposable} from "../Core/Helpers";
 import {PromiseOr} from "@atlas/xlib";
 import {TypeChecker, ArgumentType} from "./Type";
 

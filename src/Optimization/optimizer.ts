@@ -1,10 +1,10 @@
 import fs from "fs";
 import Command from "../commands/Command";
 import {ReadonlyCommandMap} from "../commands/CommandRegistry";
-import Bot from "../core/Bot";
-import {BotEvent} from "../core/BotExtra";
-import {IDisposable} from "../core/Helpers";
-import Log from "../core/Log";
+import Bot from "../Core/Bot";
+import {BotEvent} from "../Core/BotExtra";
+import {IDisposable} from "../Core/Helpers";
+import Log from "../Core/Log";
 
 export interface IOptimizer extends IDisposable {
     readonly running: boolean;

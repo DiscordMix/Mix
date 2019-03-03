@@ -1,13 +1,13 @@
 import {unit, test, Assert, Is} from "unit";
 import Command, {CommandRunner, RestrictGroup} from "../../../commands/Command";
 import {Message} from "discord.js";
-import Permission from "../../../core/Permission";
+import Permission from "../../../Core/Permission";
 import {dependsOn, guard, connect, attachedLoggerFn, attachedLogger} from "../../../Decorators/Other";
 import {args, description, name, meta} from "../../../Decorators/General";
 import {Constraint} from "../../../Decorators/Constraint";
 import {Type} from "../../../commands/Type";
 import {deprecated} from "../../../Decorators/Utility";
-import DiscordEvent from "../../../core/DiscordEvent";
+import DiscordEvent from "../../../Core/DiscordEvent";
 import {on} from "../../../Decorators/Events";
 import {IMeta} from "../../../Fragments/Fragment";
 import {testBot} from "../test-bot";

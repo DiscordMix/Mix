@@ -1,8 +1,8 @@
 require("dotenv").config();
 
 import path from "path";
-import Bot from "../../core/Bot";
-import {BotEvent} from "../../core/BotExtra";
+import Bot from "../../Core/Bot";
+import {BotEvent} from "../../Core/BotExtra";
 import Rgba from "../../Misc/RGBA";
 import List from "../../collections/List";
 import Rgb from "../../Misc/RGB";

@@ -1,5 +1,5 @@
-import Util from "../core/Util";
-import Pattern from "../core/Pattern";
+import Util from "../Core/Util";
+import Pattern from "../Core/Pattern";
 import {Message} from "discord.js";
 import {PromiseOr} from "@atlas/xlib";
 import {InputArgument} from "./Command";

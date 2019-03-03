@@ -1,6 +1,6 @@
 import {PriorityQueue} from "@atlas/xlib";
 import {EventEmitter} from "events";
-import {Action} from "../core/BotExtra";
+import {Action} from "../Core/BotExtra";
 
 export interface ILoadBalancer extends EventEmitter {
     readonly threshold: number;

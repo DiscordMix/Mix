@@ -11,25 +11,25 @@ Log.write = false;
 import "./Prepare";
 
 // Import units.
-import "./uncategorized/util.unit";
-import "./uncategorized/log-serializer.unit";
-import "./uncategorized/tslint-serializer.unit";
-import "./colors/RGB";
-import "./colors/RGBA";
-import "./bot/bot.unit";
-import "./uncategorized/tasks.unit";
-import "./store/store.unit";
-import "./store/store-reducers.unit";
-import "./uncategorized/languages.unit";
-import "./uncategorized/commands.unit";
-import "./uncategorized/collection.unit";
-import "./uncategorized/services.unit";
-import "./uncategorized/time-machine.unit";
-import "./uncategorized/time-convert.unit";
-import "./uncategorized/flag-parser.unit";
-import "./uncategorized/command-parser.unit";
-import "./uncategorized/decorators.unit";
-import "./bot/bot-dispose.unit";
+import "./Uncategorized/Util";
+import "./Uncategorized/LogSerializer";
+import "./Uncategorized/TslintSerializer";
+import "./Colors/RGB";
+import "./Colors/RGBA";
+import "./Bot/Bot";
+import "./Uncategorized/Tasks";
+import "./Store/Store";
+import "./Store/StoreReducers";
+import "./Uncategorized/Languages";
+import "./Uncategorized/Commands";
+import "./Uncategorized/Collection";
+import "./Uncategorized/Services";
+import "./Uncategorized/TimeMachine";
+import "./Uncategorized/TimeConvert";
+import "./Uncategorized/FlagParser";
+import "./Uncategorized/CommandParser";
+import "./Uncategorized/Decorators";
+import "./Bot/BotDispose";
 
 // Run tests.
 Runner.test();

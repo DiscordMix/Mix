@@ -1,3 +1,4 @@
+import Command, {DefaultValueResolver, IArgument, RawArguments} from "./Command";
 import {Message} from "discord.js";
 
 namespace Commands {
@@ -25,7 +26,7 @@ namespace Commands {
     /**
      * Utility class for command parsing and validation.
      */
-    export abstract class CommandParser {
+    export default abstract class CommandParser {
         public static async parse(commandString: string, registry: ICommandRegistry, prefixes: string[]): Promise<Command | null> {
             const commandBase: string | null = this.getCommandBase(commandString, prefixes);
 
@@ -75,16 +76,16 @@ namespace Commands {
             // TODO: Rewrite/update this function with the new Type system.
 
             if (typeof commandString !== "string") {
-                throw Core.Log.error("Expected input command string to be a string");
+                throw Log.error("Expected input command string to be a string");
             }
             else if (!Array.isArray(schema)) {
-                throw Core.Log.error("Expected schema to be an argument array");
+                throw Log.error("Expected schema to be an argument array");
             }
 
             const result: RawArguments = [];
             const argCleanExpression: RegExp = /(```|`|'|"|)(.+)\1/;
 
-            let match: RegExpExecArray | null = Core.Pattern.args.exec(commandString);
+            let match: RegExpExecArray | null = Pattern.args.exec(commandString);
 
             while (match != null) {
                 // TODO: Hotfix/review | May need reset exec point.
@@ -94,7 +95,7 @@ namespace Commands {
                     result.push(match1[2]);
                 }
 
-                match = Core.Pattern.args.exec(commandString);
+                match = Pattern.args.exec(commandString);
             }
 
             // Assemble and apply flags to the result.
@@ -147,7 +148,7 @@ namespace Commands {
          */
         public static async resolveArguments(opts: IResolveArgumentsOptions): Promise<any> {
             if (typeof opts !== "object" || opts === null || Array.isArray(opts)) {
-                throw Core.og.error("Expected options parameter to be an object");
+                throw Log.error("Expected options parameter to be an object");
             }
 
             // TODO: Pending re-write. (Re-write has started but not completed, entire function).
@@ -180,7 +181,7 @@ namespace Commands {
 
                 if (!options.schema[i].required && options.arguments[i] === undefined && options.schema[i].defaultValue !== undefined) {
                     if (options.schema[i].defaultValue === undefined) {
-                        throw Core.Log.error(`Expecting default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'`);
+                        throw Log.error(`Expecting default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'`);
                     }
 
                     const type: string = typeof options.schema[i].defaultValue;
@@ -192,7 +193,7 @@ namespace Commands {
                         value = options.schema[i].defaultValue;
                     }
                     else {
-                        throw Core.Log.error(`Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
+                        throw Log.error(`Invalid default value for command '${options.command.meta.name}' argument '${options.schema[i].name}'; Expecting either string, number or function`);
                     }
                 }
                 else if (!options.schema[i].required && options.arguments[i] === undefined && options.schema[i].defaultValue === undefined) {
@@ -220,7 +221,7 @@ namespace Commands {
                     }
                 }
                 else {
-                    throw Core.Log.fatal(`Invalid argument type type, expected a function that returns a boolean: ${options.schema[i].name}`);
+                    throw Log.fatal(`Invalid argument type type, expected a function that returns a boolean: ${options.schema[i].name}`);
                 }
             }
 

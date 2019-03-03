@@ -1,3 +1,5 @@
+import Log from "../core/Log";
+
 namespace State {
     export type ComparableEntity = object | string | number;
 
@@ -33,7 +35,7 @@ namespace State {
          */
         public static deepCompare(entity1: object, entity2: object): any {
             // TODO
-            throw Core.Log.notImplemented;
+            throw Log.notImplemented;
         }
 
         /**
@@ -42,10 +44,10 @@ namespace State {
          */
         public static different(entity1: ComparableEntity, entity2: ComparableEntity): boolean {
             if (typeof entity1 !== typeof entity2) {
-                throw Core.Log.error("Unable to compare different types");
+                throw Log.error("Unable to compare different types");
             }
             else if (!ComparableEntities.includes(typeof entity1)) {
-                throw Core.Log.error("Entity type is not comparable");
+                throw Log.error("Entity type is not comparable");
             }
             else if (typeof entity1 === "string") {
                 return entity1 === entity2;
@@ -54,7 +56,7 @@ namespace State {
                 return Object.keys(Delta.compare(entity1, entity2 as object)).length !== 0;
             }
             else {
-                throw Core.Log.error("Unable to compare unexpected type of entity");
+                throw Log.error("Unable to compare unexpected type of entity");
             }
         }
     }

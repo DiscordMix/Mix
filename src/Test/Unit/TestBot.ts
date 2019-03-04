@@ -31,8 +31,8 @@ export const TestSubjects = {
         name: "John Doe"
     }]),
 
-    settingsPath: path.resolve(path.join(__dirname, "../../../src/test/test-settings.json")),
-    settingsPathTwo: path.resolve(path.join(__dirname, "../../../src/test/test-settings-2.json")),
+    settingsPath: path.resolve(path.join(__dirname, "../../../src/Test/TestSettings.json")),
+    settingsPathTwo: path.resolve(path.join(__dirname, "../../../src/Test/TestSettings2.json")),
 
     flags: {
         short: "base arg -h",

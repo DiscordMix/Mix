@@ -1,12 +1,12 @@
-import {unit, test, Assert, feed, Is, JsType, Does} from "unit";
+import {Unit, Test, Assert, Feed, Is, JsType, Does} from "unit";
 import CommandParser from "../../../Commands/CommandParser";
 import {Type} from "../../../Commands/Type";
 import {RawArguments, InputArgument} from "../../../Commands/Command";
 import {DefaultArgResolvers} from "../../../Core/Constants";
 
-@unit("Command Parser")
+@Unit("Command Parser")
 default class {
-    @test("getArguments(): should return valid arguments")
+    @Test("getArguments(): should return valid arguments")
     public getArguments_returnValidArgs() {
         const result: RawArguments = CommandParser.getArguments("[prefix] john_doe apples 100", [
             {
@@ -28,7 +28,7 @@ default class {
         Assert.equal(result[2], "100");
     }
 
-    @test("getArguments(): should parse command strings with double quote usage")
+    @Test("getArguments(): should parse command strings with double quote usage")
     public getArguments_parseWithDoubleQuotes() {
         const result: RawArguments = CommandParser.getArguments("[prefix] \"sir john doe\" apples 100", [
             {
@@ -55,7 +55,7 @@ default class {
         Assert.equal(result[2], "100");
     }
 
-    @test("getArguments(): should parse command strings with single quote usage")
+    @Test("getArguments(): should parse command strings with single quote usage")
     public getArguments_parseWithSingleQuotes() {
         const result: RawArguments = CommandParser.getArguments("[prefix] \'sir john doe\' apples 100", [
             {
@@ -82,7 +82,7 @@ default class {
         Assert.equal(result[2], "100");
     }
 
-    @test("getArguments(): should parse command strings with backquote usage")
+    @Test("getArguments(): should parse command strings with backquote usage")
     public getArguments_parseWithBackQuotes() {
         const result: RawArguments = CommandParser.getArguments("[prefix] \`sir john doe\` apples 100", [
             {
@@ -109,7 +109,7 @@ default class {
         Assert.equal(result[2], "100");
     }
 
-    @test("getArguments(): should parse command strings with multi-quote usage")
+    @Test("getArguments(): should parse command strings with multi-quote usage")
     public getArguments_parseWithMultiQuotes() {
         const result: RawArguments = CommandParser.getArguments("[prefix] \'sir john doe\' \"delicious apples\" \`more than 100\`", [
             {
@@ -136,7 +136,7 @@ default class {
         Assert.equal(result[2], "more than 100");
     }
 
-    @test("getArguments(): should parse command strings with empty long flags")
+    @Test("getArguments(): should parse command strings with empty long flags")
     public getArguments_longEmptyFlags() {
         const result: InputArgument[] = CommandParser.getArguments("[prefix] --verbose --inspect", [
             {
@@ -158,7 +158,7 @@ default class {
         Assert.equal(result[1], "true");
     }
 
-    @test("getArguments(): should parse command strings' long flags with explicit values")
+    @Test("getArguments(): should parse command strings' long flags with explicit values")
     public getArguments_longFlagsExplicitValues() {
         const result: InputArgument[] = CommandParser.getArguments("[prefix] --verbose=false --inspect=true --continue=false", [
             {
@@ -185,7 +185,7 @@ default class {
         Assert.equal(result[2], "false");
     }
 
-    @test("getArguments(): should parse command strings with empty short flags")
+    @Test("getArguments(): should parse command strings with empty short flags")
     public getArguments_shortEmptyFlags() {
         const result: InputArgument[] = CommandParser.getArguments("[prefix] -v -i", [
             {
@@ -209,7 +209,7 @@ default class {
         Assert.equal(result[1], "true");
     }
 
-    @test("getArguments(): should parse command strings' short flags with explicit values")
+    @Test("getArguments(): should parse command strings' short flags with explicit values")
     public getArguments_shortFlagsExplicitValues() {
         const result: InputArgument[] = CommandParser.getArguments("[prefix] -v=false -i=true -c=false", [
             {
@@ -239,27 +239,27 @@ default class {
         Assert.equal(result[2], "false");
     }
 
-    @test("getArguments(): should throw when provided invalid arguments")
-    @feed(null, null)
-    @feed(undefined, undefined)
-    @feed(0, 1)
-    @feed(1, 0)
-    @feed(true, false)
-    @feed(false, true)
+    @Test("getArguments(): should throw when provided invalid arguments")
+    @Feed(null, null)
+    @Feed(undefined, undefined)
+    @Feed(0, 1)
+    @Feed(1, 0)
+    @Feed(true, false)
+    @Feed(false, true)
     public getArguments_throwOnInvalidParams(comamndString: any, schema: any) {
         Assert.throws(() => CommandParser.getArguments(comamndString, schema));
     }
 
-    @test("resolveArguments(): should throw when provided invalid arguments")
-    @feed(undefined)
-    @feed(null)
-    @feed([])
-    @feed("")
-    @feed("test")
-    @feed(1)
-    @feed(0)
-    @feed(false)
-    @feed(true)
+    @Test("resolveArguments(): should throw when provided invalid arguments")
+    @Feed(undefined)
+    @Feed(null)
+    @Feed([])
+    @Feed("")
+    @Feed("test")
+    @Feed(1)
+    @Feed(0)
+    @Feed(false)
+    @Feed(true)
     public resolveArguments_throwOnInvalidParams(opts: any) {
         // TODO: Publish Unit and use .throwsAsync()
         let resultError: Error | null = null;
@@ -271,7 +271,7 @@ default class {
         Assert.that(resultError, Is.null);
     }
 
-    @test("resolveArguments(): should not resolve strings")
+    @Test("resolveArguments(): should not resolve strings")
     public async resolveArguments_notResolveStrings() {
         const result: any = await CommandParser.resolveArguments({
             arguments: ["john doe", "anonymous"],
@@ -300,7 +300,7 @@ default class {
         Assert.equal(result.aka, "anonymous");
     }
 
-    @test("resolveArguments(): should resolve integer values")
+    @Test("resolveArguments(): should resolve integer values")
     public async resolveArguments_resolveIntegers() {
         const result: any = await CommandParser.resolveArguments({
             arguments: ["100", "-13"],
@@ -329,7 +329,7 @@ default class {
         Assert.equal(result.leastFavoriteNumber, -13);
     }
 
-    @test("resolveArguments(): should resolve decimal values")
+    @Test("resolveArguments(): should resolve decimal values")
     public async resolveArguments_resolveDecimals() {
         const result: any = await CommandParser.resolveArguments({
             arguments: ["1.1", "1.0", "3.14", "-6.7890"],
@@ -370,7 +370,7 @@ default class {
         Assert.equal(result.forth, -6.7890);
     }
 
-    @test("resolveArguments(): should resolve boolean values")
+    @Test("resolveArguments(): should resolve boolean values")
     public async resolveArguments_resolveBooleans() {
         const result: any = await CommandParser.resolveArguments({
             arguments: ["false", "true", "false", "true"],

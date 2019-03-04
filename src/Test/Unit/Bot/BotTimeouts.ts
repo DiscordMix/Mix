@@ -1,14 +1,14 @@
-import {unit, test, Assert, Is} from "unit";
+import {Unit, Test, Assert, Is} from "unit";
 import {testBot} from "../TestBot";
 
-@unit("Bot Timeouts & Intervals")
+@Unit("Bot Timeouts & Intervals")
 default class {
-    @test("should have no attached timeouts")
+    @Test("should have no attached timeouts")
     public noTimeoutsSet() {
         Assert.that(testBot.timeouts, Is.emptyArray);
     }
 
-    @test("should set timeouts")
+    @Test("should set timeouts")
     public setTimeouts() {
         return new Promise((resolve) => {
             testBot.setTimeout(() => {
@@ -19,12 +19,12 @@ default class {
         });
     }
 
-    @test("should clear timeouts after executing")
+    @Test("should clear timeouts after executing")
     public clearTimeouts() {
         Assert.that(testBot.timeouts, Is.emptyArray);
     }
 
-    @test("should have no attached intervals")
+    @Test("should have no attached intervals")
     public noIntervalsSet() {
         Assert.that(testBot.intervals, Is.emptyArray);
     }

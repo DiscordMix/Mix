@@ -1,15 +1,15 @@
-import {unit, test, Assert, Is} from "unit";
+import {Unit, Test, Assert, Is} from "unit";
 import {testBot} from "../TestBot";
 import {TestStoreActionType, IStoreAction} from "../../../State/Store";
 
-@unit("Store")
+@Unit("Store")
 default class {
-    @test("should have undefined initial state")
+    @Test("should have undefined initial state")
     public initialState() {
         Assert.that(testBot.store.getState(), Is.undefined);
     }
 
-    @test("should dispatch events")
+    @Test("should dispatch events")
     public dispatchEvents() {
         return new Promise((resolve) => {
             testBot.store.subscribe((action: IStoreAction): void => {
@@ -22,7 +22,7 @@ default class {
         });
     }
 
-    @test("should not update state without payloads")
+    @Test("should not update state without payloads")
     public noUpdateWithoutPayload() {
         Assert.that(testBot.store.getState(), Is.undefined);
     }

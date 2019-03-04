@@ -1,11 +1,11 @@
-import {unit, test, Assert, Is, Does} from "unit";
+import {Unit, Test, Assert, Is, Does} from "unit";
 import {testBot} from "../TestBot";
 import TestData from "../TestData";
 import {Bot} from "../../../Index";
 
-@unit("Bot Dispose")
+@Unit("Bot Dispose")
 default class {
-    @test("reconnect(): should reconnect the bot without throwing")
+    @Test("reconnect(): should reconnect the bot without throwing")
     public reconnect_doesNotThrow() {
         return new Promise(async (resolve) => {
             let resultError: Error | null = null;
@@ -23,14 +23,14 @@ default class {
         });
     }
 
-    @test("reload(): should reload modules")
+    @Test("reload(): should reload modules")
     public async reload_reloadModules() {
         await testBot.reload();
 
         // TODO: Verify modules were re-loaded.
     }
 
-    @test("disconnect(): should disconnect the bot and dispose resources")
+    @Test("disconnect(): should disconnect the bot and dispose resources")
     public async disconnect_shouldDisconnect() {
         const result: Bot = await testBot.disconnect();
 

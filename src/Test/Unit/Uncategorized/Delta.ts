@@ -1,9 +1,9 @@
-import {unit, test, Assert, Is} from "unit";
+import {Unit, Test, Assert, Is} from "unit";
 import Delta from "../../../State/Delta";
 
-@unit("Delta")
+@Unit("Delta")
 default class {
-    @test("should compare two objects")
+    @Test("should compare two objects")
     public compare() {
         const result: string[] = Delta.compare(
             {

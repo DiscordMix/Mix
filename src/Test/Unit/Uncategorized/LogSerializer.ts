@@ -1,10 +1,10 @@
-import {unit, test, feed, Assert, Is, JsType, Does} from "unit";
+import {Unit, Test, Feed, Assert, Is, JsType, Does} from "unit";
 import LogSerializer, {ILogMsg} from "../../../Serializers/LogSerializer";
 
-@unit("Log Serializer")
+@Unit("Log Serializer")
 default class {
-    @test("serialize(): should serialize log messages")
-    @feed({
+    @Test("serialize(): should serialize log messages")
+    @Feed({
         message: "Hello world",
         time: "Today",
 
@@ -13,7 +13,7 @@ default class {
             extra: "doe"
         }
     }, "{Today} [World.doe] Hello world")
-    @feed({
+    @Feed({
         message: "{[Hello world]}",
         time: "{Tomorrow}",
 
@@ -28,19 +28,19 @@ default class {
         Assert.equal(serializer.serialize(msg), expected);
     }
 
-    @test("serialize(): should not serialize when provided invalid arguments")
-    @feed(undefined)
-    @feed("")
-    @feed("hello world")
-    @feed(3)
+    @Test("serialize(): should not serialize when provided invalid arguments")
+    @Feed(undefined)
+    @Feed("")
+    @Feed("hello world")
+    @Feed(3)
     public serialize_returnNullOnInvalidParams(input: any) {
         const serializer: LogSerializer = new LogSerializer();
 
         Assert.that(serializer.serialize(input), Is.null);
     }
 
-    @test("deserialize(): should deserialize serialized log messages")
-    @feed("{Today} [Some.where] Hello world")
+    @Test("deserialize(): should deserialize serialized log messages")
+    @Feed("{Today} [Some.where] Hello world")
     public deserialize(msg: string) {
         const serializer: LogSerializer = new LogSerializer();
         const result: ILogMsg = serializer.deserialize(msg) as ILogMsg;
@@ -58,8 +58,8 @@ default class {
         Assert.equal(result.time, "Today");
     }
 
-    @test("deserialize(): should deserialize serialized log messages with one source")
-    @feed("{Today} [Some] Hello world")
+    @Test("deserialize(): should deserialize serialized log messages with one source")
+    @Feed("{Today} [Some] Hello world")
     public deserialize_OneSource(msg: string) {
         const serializer: LogSerializer = new LogSerializer();
         const result: ILogMsg = serializer.deserialize(msg) as ILogMsg;

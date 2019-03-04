@@ -1,13 +1,3 @@
-<p align="center">
-  <img alt="Mix Logo" src="https://raw.githubusercontent.com/discord-mix/mix/dev-2.0/logo-large.png">
-  <br />
-  <br />
-  <img alt="Build Status" src="https://travis-ci.com/discord-mix/mix.svg?branch=dev-2.0">
-  <img alt="NPM Package" src="https://badge.fury.io/js/%40cloudrex%2Fforge.svg">
-</p>
-
-<br />
-
 Mix (previously known as Forge) is a powerful, modular and extensible Discord bot framework for serious bot development.
 
 **Note**: Mix is a library to create bots and not a Discord API wrapper library.

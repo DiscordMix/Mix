@@ -4,7 +4,7 @@ import Task from "../../../Tasks/Task";
 
 @Unit("Tasks")
 default class {
-    @Test("should contain registered tasks")
+    @Test("Should contain registered tasks")
     public containRegistered() {
         const actualTasks: string[] = ["do-nothing"];
         const fakeTasks: string[] = ["doe", "john"];
@@ -37,7 +37,7 @@ default class {
         Assert.false(testBot.tasks.contains("" as any));
     }
 
-    @Test("should trigger tasks")
+    @Test("Should trigger tasks")
     public async trigger() {
         const triggerResult: boolean = await testBot.tasks.trigger("do-nothing");
 
@@ -52,7 +52,7 @@ default class {
         Assert.false(await testBot.tasks.trigger([] as any));
     }
 
-    @Test("should update tasks after triggering")
+    @Test("Should update tasks after triggering")
     public updateAfterTrigger() {
         const task: Task = testBot.tasks.get("do-nothing") as Task;
         const now: number = Date.now();

@@ -5,12 +5,12 @@ import TestData from "../TestData";
 
 @Unit("Bot")
 default class {
-    @Test("should be initially suspended")
+    @Test("Should be initially suspended")
     public beSuspended() {
         Assert.true(testBot.suspended);
     }
 
-    @Test("should init and login")
+    @Test("Should init and login")
     public async initAndLogin() {
         // Mock Discord.JS' client login.
         testBot.client.login = Mock.fn(testBot.client.login)
@@ -32,7 +32,7 @@ default class {
         Assert.that(testBot.client.user, Is.object);
     }
 
-    @Test("should have correct options")
+    @Test("Should have correct options")
     public haveCorrectOptions() {
         Assert.false(testBot.options.showAsciiTitle);
         Assert.false(testBot.options.useConsoleInterface);
@@ -40,18 +40,18 @@ default class {
         // TODO: Add more.
     }
 
-    @Test("should have no owner")
+    @Test("Should have no owner")
     public haveNoOwner() {
         Assert.that(testBot.owner, Is.undefined);
     }
 
-    @Test("should have default argument resolvers")
+    @Test("Should have default argument resolvers")
     public defaultArgResolvers() {
         // TODO: Comparing these objects will not work since testBot's argumentResolvers are united using spread operator.
         // Assert.equal(testBot.argumentResolvers, DefaultArgResolvers);
     }
 
-    @Test("should not handle invalid messages")
+    @Test("Should not handle invalid messages")
     @Feed(undefined)
     @Feed(null)
     @Feed("")
@@ -61,7 +61,7 @@ default class {
         Assert.false(await testBot.handle.message(input));
     }
 
-    @Test("should have correct internal commands")
+    @Test("Should have correct internal commands")
     public haveCorrectInternalCmds() {
         Assert.that(testBot.internalCommands,
             Is.array,

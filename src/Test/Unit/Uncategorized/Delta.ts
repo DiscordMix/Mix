@@ -3,7 +3,7 @@ import Delta from "../../../State/Delta";
 
 @Unit("Delta")
 default class {
-    @Test("should compare two objects")
+    @Test("Should compare two objects")
     public compare() {
         const result: string[] = Delta.compare(
             {

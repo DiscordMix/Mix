@@ -530,13 +530,13 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             useConsoleInterface: false,
             showAsciiTitle: false,
             internalCommands: [InternalCommand.Help, InternalCommand.Usage, InternalCommand.Ping],
-            languages: ["test-language"],
+            languages: ["TestLanguage"],
 
             paths: {
-                commands: path.resolve(path.join(__dirname, "../", "test", "test-commands")),
-                languages: path.resolve(path.join("src", "test", "test-languages")),
-                services: path.resolve(path.join(__dirname, "../", "test", "test-services")),
-                tasks: path.resolve(path.join(__dirname, "../", "test", "test-tasks")),
+                commands: path.resolve(path.join(__dirname, "../", "test", "TestCommands")),
+                languages: path.resolve(path.join("src", "Test", "TestLanguages")),
+                services: path.resolve(path.join(__dirname, "../", "test", "TestServices")),
+                tasks: path.resolve(path.join(__dirname, "../", "test", "TestTasks")),
             }
         };
     }

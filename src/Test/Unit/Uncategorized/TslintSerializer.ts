@@ -6,12 +6,12 @@ const serializer: TslintSerializer = new TslintSerializer();
 @Unit("Tslint Serializer")
 default class {
     // TODO: Feed data.
-    @Test("should serialize tslint warning messages")
+    @Test("Should serialize tslint warning messages")
     public serialize(input: ITslintWarning) {
         Assert.equal(serializer.serialize(input), JSON.stringify(input));
     }
 
-    @Test("should deserialize tslint warning objects")
+    @Test("Should deserialize tslint warning objects")
     @Feed("WARNING: /test/path/:15:5 - hello world", {
         message: "hello world",
         line: 15,

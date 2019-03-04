@@ -4,7 +4,7 @@ import TestUtils, {ExcludeParam} from "../TestUtils";
 
 @Unit("Services")
 default class {
-    @Test("should register services")
+    @Test("Should register services")
     public register() {
         Assert.true(testBot.services.contains("test"));
 
@@ -15,14 +15,14 @@ default class {
         Assert.equal(testBot.services.getAll().size, 3);
     }
 
-    @Test("should not register invalid services")
+    @Test("Should not register invalid services")
     public notRegisterInvalid() {
         for (const param of TestUtils.makeParams([ExcludeParam.Object])) {
             Assert.false(testBot.services.register(param));
         }
     }
 
-    @Test("should not enable invalid services")
+    @Test("Should not enable invalid services")
     public async notEnableInvalid() {
         // TODO: Append another string that is not 'test'.
         for (const param of TestUtils.makeParams(["test"])) {
@@ -30,12 +30,12 @@ default class {
         }
     }
 
-    @Test("should be able to retrieve services")
+    @Test("Should be able to retrieve services")
     public retrieve() {
         Assert.that(testBot.services.getService("test"), Is.object);
     }
 
-    @Test("should not be able to retrieve invalid services")
+    @Test("Should not be able to retrieve invalid services")
     public notRetrieveInvalid() {
         // TODO: Append another string that is not 'test'.
         for (const param of TestUtils.makeParams(["test"])) {

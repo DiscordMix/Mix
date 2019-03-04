@@ -1,6 +1,6 @@
-import {Unit, Test, Assert} from "unit";
+import {Unit, Test, Assert, Target} from "unit";
 import {testBot} from "../TestBot";
-import {ITestState, Reducer, IStoreAction, TestStoreActionType} from "../../../State/Store";
+import Store, {ITestState, Reducer, IStoreAction, TestStoreActionType} from "../../../State/Store";
 import TestUtils, {ExcludeParam} from "../TestUtils";
 
 const testReducer: Reducer<ITestState> = (action: IStoreAction, state?: ITestState): ITestState | null => {
@@ -16,24 +16,28 @@ const testReducer: Reducer<ITestState> = (action: IStoreAction, state?: ITestSta
 
 @Unit("Store Reducers")
 default class {
-    @Test("add(): should add reducers")
+    @Test("Should add reducers")
+    @Target(Store.prototype.addReducer)
     public add_addReducers() {
         Assert.true(testBot.store.addReducer(testReducer));
     }
 
-    @Test("add(): should not add existing reducers")
+    @Test("Should not add existing reducers")
+    @Target(Store.prototype.addReducer)
     public add_notAddExisting() {
         Assert.false(testBot.store.addReducer(testReducer));
     }
 
-    @Test("add(): throw when passed invalid reducers")
+    @Test("Should throw when passed invalid reducers")
+    @Target(Store.prototype.addReducer)
     public add_throwOnInvalidReducers() {
         for (const param of TestUtils.makeParams()) {
             Assert.throws(() => testBot.store.addReducer(param));
         }
     }
 
-    @Test("dispatch(): should throw on invalid parameters")
+    @Test("Should throw on invalid parameters")
+    @Target(Store.prototype.dispatch)
     public dispatch_throwsOnInvalidParams() {
         // TODO: Takes 2 arguments.
         for (const param of TestUtils.makeParams([ExcludeParam.Number])) {
@@ -41,7 +45,8 @@ default class {
         }
     }
 
-    @Test("subscribe(): should subscribe handlers")
+    @Test("Should subscribe handlers")
+    @Target(Store.prototype.subscribe)
     public subscribe_subscribeHandlers() {
         return new Promise((resolve, reject) => {
             Assert.true(testBot.store.subscribe((action: IStoreAction) => {
@@ -58,19 +63,22 @@ default class {
         });
     }
 
-    @Test("subscribe(): should throw on invalid parameters")
+    @Test("Should throw on invalid parameters")
+    @Target(Store.prototype.subscribe)
     public subscribe_throwOnInvalidParams() {
         for (const param of TestUtils.makeParams()) {
             Assert.throws(() => testBot.store.subscribe(param));
         }
     }
 
-    @Test("isSubscribed(): should determine if a handler is subscribed")
+    @Test("Should determine if a handler is subscribed")
+    @Target(Store.prototype.isSubscribed)
     public isSubscribed_determineIfSubscribed() {
         // TODO
     }
 
-    @Test("isSubscribed(): should throw on invalid parameters")
+    @Test("Should throw on invalid parameters")
+    @Target(Store.prototype.isSubscribed)
     public isSubscribed_throwOnInvalidParams() {
         for (const param of TestUtils.makeParams()) {
             Assert.throws(() => testBot.store.isSubscribed(param));

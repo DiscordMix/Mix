@@ -12,7 +12,7 @@ const result7 = FlagParser.getFlags(TestSubjects.flags.multipleQuotedValues);
 
 @Unit("Flag Parser")
 default class {
-    @Test("should parse command flags into objects")
+    @Test("Should parse command flags into objects")
     public getSwitches_parseIntoObjs() {
         for (const item of result1) {
             Assert.that(item, Is.object);
@@ -20,7 +20,7 @@ default class {
     }
 
     // Short.
-    @Test("should parse short flags")
+    @Test("Should parse short flags")
     public getSwitches_parseShort() {
         Assert.equal(result1[0].key, "h");
         Assert.true(result1[0].short);
@@ -28,7 +28,7 @@ default class {
     }
 
     // Long.
-    @Test("should parse long flags")
+    @Test("Should parse long flags")
     public getSwitches_parseLong() {
         Assert.equal(result2[0].key, "help");
         Assert.false(result2[0].short);
@@ -36,7 +36,7 @@ default class {
     }
 
     // Long value.
-    @Test("should parse long flags's values")
+    @Test("Should parse long flags's values")
     public getSwitches_longValue() {
         Assert.equal(result3[0].key, "help");
         Assert.false(result3[0].short);
@@ -44,7 +44,7 @@ default class {
     }
 
     // Long quoted value.
-    @Test("should parse long flags's quoted values")
+    @Test("Should parse long flags's quoted values")
     public getSwitches_longQuotedValue() {
         Assert.equal(result4[0].key, "help");
         Assert.false(result4[0].short);
@@ -52,7 +52,7 @@ default class {
     }
 
     // Multiple flags short.
-    @Test("should parse multiple short flags")
+    @Test("Should parse multiple short flags")
     public getSwitches_multipleShort() {
         // Multiple -> -h.
         Assert.equal(result5[0].key, "h");
@@ -66,7 +66,7 @@ default class {
     }
 
     // Multiple flags long.
-    @Test("should parse multiple long flags")
+    @Test("Should parse multiple long flags")
     public getSwitches_multipleLong() {
         // Multiple -> --hello.
         Assert.equal(result5[2].key, "hello");
@@ -80,7 +80,7 @@ default class {
     }
 
     // Multiple values short.
-    @Test("should parse multiple short flags' values")
+    @Test("Should parse multiple short flags' values")
     public getSwitches_multipleValuesShort() {
         // Multiple values -> -h.
         Assert.equal(result6[0].key, "h");
@@ -94,7 +94,7 @@ default class {
     }
 
     // Multiple values long.
-    @Test("should parse multiple long flags' values")
+    @Test("Should parse multiple long flags' values")
     public getSwitches_multipleValuesLong() {
         // Multiple values -> --hello.
         Assert.equal(result6[2].key, "hello");
@@ -108,7 +108,7 @@ default class {
     }
 
     // Multiple quoted values short.
-    @Test("should parse multiple short flags' quoted values")
+    @Test("Should parse multiple short flags' quoted values")
     public getSwitches_multipleQuotedValuesShort() {
         // Multiple Quoted Values -> -h.
         Assert.equal(result7[0].key, "h");
@@ -122,7 +122,7 @@ default class {
     }
 
     // Multiple quoted values long.
-    @Test("should parse multiple long flags' quoted values")
+    @Test("Should parse multiple long flags' quoted values")
     public getSwitches_multipleQuotedValuesLong() {
         // Multiple quoted values -> --hello="world hello".
         Assert.equal(result7[2].key, "hello");

@@ -72,24 +72,24 @@ default class {
         );
     }
 
-    @Test("should register commands with helper decorators")
+    @Test("Should register commands with helper decorators")
     public registerCommandsWithDecorators() {
         Assert.equal(testBot.registry.contains("test-decorator-command"), true);
     }
 
-    @Test("should have a meta property")
+    @Test("Should have a meta property")
     public haveMeta() {
         Assert.that(instance.meta, Is.object);
         Assert.equal(Object.keys(instance.meta).length, 2);
     }
 
-    @Test("should have a constraints property")
+    @Test("Should have a constraints property")
     public haveConstraints() {
         Assert.that(instance.constraints, Is.object);
         Assert.that(instance.constraints.userGroups, Is.array);
     }
 
-    @Test("should have a connections property")
+    @Test("Should have a connections property")
     public haveConnections() {
         Assert.that(instance.connections, Is.arrayWithLength(2));
     }

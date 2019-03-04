@@ -4,7 +4,7 @@ import Language, {LanguageSource} from "../../../Localization/Language";
 
 @Unit("Languages")
 default class {
-    @Test("should register languages")
+    @Test("Should register languages")
     public register() {
         Assert.that(testBot.i18n, Is.object);
 
@@ -16,7 +16,7 @@ default class {
         Assert.that((language as any).default, Is.object);
     }
 
-    @Test("should retrieve language values")
+    @Test("Should retrieve language values")
     public retrieveValues() {
         const language: Language = testBot.i18n as Language;
 
@@ -24,7 +24,7 @@ default class {
         Assert.equal(language.get("occupation"), "tester");
     }
 
-    @Test("should not retrieve invalid language keys")
+    @Test("Should not retrieve invalid language keys")
     public notRetrieveInvalid() {
         const language: Language = testBot.i18n as Language;
 
@@ -37,7 +37,7 @@ default class {
         Assert.that(language.get(3 as any), Is.null);
     }
 
-    @Test("should not set invalid default languages")
+    @Test("Should not set invalid default languages")
     public notSetInvalid() {
         const language: Language = testBot.i18n as Language;
 

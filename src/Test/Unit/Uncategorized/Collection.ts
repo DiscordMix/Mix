@@ -3,13 +3,13 @@ import {TestSubjects} from "../TestBot";
 
 @Unit("Collection")
 default class {
-    @Test("at(): should return the item located in the specified index")
+    @Test("at(): Should return the item located in the specified index")
     public at_returnAtSpecified() {
         Assert.equal(TestSubjects.collection.at(0), "hello");
         Assert.equal(TestSubjects.collection.at(1), "it's me");
     }
 
-    @Test("removeAt(): should remove the item located in the specified index")
+    @Test("removeAt(): Should remove the item located in the specified index")
     public removeAt_removeAtSpecified() {
         const result1: boolean = TestSubjects.collection.removeAt(0);
         const result2: boolean = TestSubjects.collection.removeAt(5);
@@ -19,7 +19,7 @@ default class {
         Assert.false(result2);
     }
 
-    @Test("add(): should add an item to the collection")
+    @Test("add(): Should add an item to the collection")
     public add_addItem() {
         TestSubjects.collection.add("test");
 
@@ -27,19 +27,19 @@ default class {
         Assert.that(TestSubjects.collection.at(1), Is.object);
     }
 
-    @Test("addUnique(): should add an unique item")
+    @Test("addUnique(): Should add an unique item")
     public addUnique_addItem() {
         Assert.true(TestSubjects.collection.addUnique("doe"));
         Assert.false(TestSubjects.collection.addUnique("doe"));
     }
 
-    @Test("contains(): should determine whether the collection contains an item")
+    @Test("contains(): Should determine whether the collection contains an item")
     public contains_determineWhetherExists() {
         Assert.true(TestSubjects.collection.contains("doe"));
         Assert.false(TestSubjects.collection.contains("nope"));
     }
 
-    @Test("find(): should find an item by its property")
+    @Test("find(): Should find an item by its property")
     public find_findByProp() {
         const result: any = TestSubjects.collection.find("name", "John Doe");
 

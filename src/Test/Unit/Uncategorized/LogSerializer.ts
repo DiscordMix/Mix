@@ -3,7 +3,7 @@ import LogSerializer, {ILogMsg} from "../../../Serializers/LogSerializer";
 
 @Unit("Log Serializer")
 default class {
-    @Test("serialize(): should serialize log messages")
+    @Test("serialize(): Should serialize log messages")
     @Feed({
         message: "Hello world",
         time: "Today",
@@ -28,7 +28,7 @@ default class {
         Assert.equal(serializer.serialize(msg), expected);
     }
 
-    @Test("serialize(): should not serialize when provided invalid arguments")
+    @Test("serialize(): Should not serialize when provided invalid arguments")
     @Feed(undefined)
     @Feed("")
     @Feed("hello world")
@@ -39,7 +39,7 @@ default class {
         Assert.that(serializer.serialize(input), Is.null);
     }
 
-    @Test("deserialize(): should deserialize serialized log messages")
+    @Test("deserialize(): Should deserialize serialized log messages")
     @Feed("{Today} [Some.where] Hello world")
     public deserialize(msg: string) {
         const serializer: LogSerializer = new LogSerializer();
@@ -58,7 +58,7 @@ default class {
         Assert.equal(result.time, "Today");
     }
 
-    @Test("deserialize(): should deserialize serialized log messages with one source")
+    @Test("deserialize(): Should deserialize serialized log messages with one source")
     @Feed("{Today} [Some] Hello world")
     public deserialize_OneSource(msg: string) {
         const serializer: LogSerializer = new LogSerializer();

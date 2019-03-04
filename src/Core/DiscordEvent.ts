@@ -140,7 +140,7 @@ enum DiscordEvent {
     MessageUpdated = "messageUpdate",
 
     /**
-     * A member's presence and information was updated. 
+     * A member's presence and information was updated.
      */
     PresenceUpdated = "presenceUpdate",
 

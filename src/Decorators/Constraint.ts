@@ -59,7 +59,7 @@ export abstract class Constraint {
             DecoratorUtils.ensureFunc(target);
 
             return DecoratorUtils.overrideConstraint(target, "exclusive", exclusive);
-        }
+        };
     }
 
     /**

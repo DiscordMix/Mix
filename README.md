@@ -69,10 +69,6 @@ Make sure that you have installed the project dependencies (`npm install` or `ya
 
 Thanks for your interest in helping in the project. To contribute to this project, you will be required to use pull requests.
 
-#### Versioning
-
-When contributing, please follow the [Semantic Versioning](https://semver.org/) guidelines.
-
 #### Helpful Snippets
 
 * Commands

@@ -3,9 +3,7 @@ require("dotenv").config();
 import path from "path";
 import Bot from "../../Core/Bot";
 import {BotEvent} from "../../Core/BotExtra";
-import RGBA from "../../Misc/RGBA";
 import List from "../../Collections/List";
-import Rgb from "../../Misc/RGB";
 
 export const TestSubjects = {
     ids: [
@@ -17,15 +15,6 @@ export const TestSubjects = {
 
     // Note: This is a regenerated token just for pattern matching!
     token: "NDMzMzg0MzM1MjExNjI2NDk4.DqrIbQ.cC0MAvHKTwbOVrPEa-Xddz356vc",
-
-    rgb: new Rgb(5, 10, 15),
-
-    rgba: new RGBA({
-        red: 5,
-        green: 10,
-        blue: 15,
-        alpha: 1
-    }),
 
     collection: new List<any>(["hello", "it's me", {
         name: "John Doe"

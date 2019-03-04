@@ -14,8 +14,6 @@ import "./Prepare";
 import "./Uncategorized/Util";
 import "./Uncategorized/LogSerializer";
 import "./Uncategorized/TslintSerializer";
-import "./Colors/RGB";
-import "./Colors/RGBA";
 import "./Bot/Bot";
 import "./Uncategorized/Tasks";
 import "./Store/Store";

@@ -125,7 +125,7 @@ export {
     Log,
     LogLevel,
     Rgb,
-    RGBA as Rgba,
+    RGBA,
     TimeParser,
     TimeSuffixType,
     Util,

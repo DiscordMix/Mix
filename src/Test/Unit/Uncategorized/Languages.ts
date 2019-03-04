@@ -1,6 +1,6 @@
 import {unit, test, Assert, Is} from "unit";
 import {testBot} from "../TestBot";
-import Language, {LanguageSource} from "../../../Language/Language";
+import Language, {LanguageSource} from "../../../Localization/Language";
 
 @unit("Languages")
 default class {

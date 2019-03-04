@@ -2,7 +2,7 @@
     "name": "d.mix",
     "version": "1.6.0-0",
     "description": "The elegant bot framework",
-    "main": "./dist/index.js",
+    "main": "./dist/Index.js",
     "keywords": [
         "discord",
         "discord-bot",
@@ -27,10 +27,9 @@
         "watch": "tsc --watch",
         "build": "node build.js",
         "check": "tsc --noEmit",
-        "test": "npm run build && node dist/test/unit/runner.js",
-        "webhook-test": "npm run build && node dist/test/webhook-test.js",
-        "prepublishOnly": "npm test",
-        "dec-test": "npm run build && node dist/test/decorators.test.js"
+        "test": "npm run build && node dist/Test/Unit/Runner.js",
+        "webhook-test": "npm run build && node dist/Test/WebhookTest.js",
+        "prepublishOnly": "npm test"
     },
     "author": "Atlas <cloudrex@outlook.com>",
     "license": "MIT",

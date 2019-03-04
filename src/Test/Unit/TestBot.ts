@@ -4,7 +4,7 @@ import path from "path";
 import Bot from "../../Core/Bot";
 import {BotEvent} from "../../Core/BotExtra";
 import RGBA from "../../Misc/RGBA";
-import List from "../../collections/List";
+import List from "../../Collections/List";
 import Rgb from "../../Misc/RGB";
 
 export const TestSubjects = {

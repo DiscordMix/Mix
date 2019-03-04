@@ -1,5 +1,5 @@
-import EmbedBuilder from "../../builders/EmbedBuilder";
-import MsgBuilder from "../../builders/MsgBuilder";
+import EmbedBuilder from "../../Builders/EmbedBuilder";
+import MsgBuilder from "../../Builders/MsgBuilder";
 import Command from "../../Commands/Command";
 import Context from "../../Commands/Context";
 import Util from "../../Core/Util";

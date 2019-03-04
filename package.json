@@ -25,7 +25,7 @@
     },
     "scripts": {
         "watch": "tsc --watch",
-        "build": "node build.js",
+        "build": "npx act build",
         "check": "tsc --noEmit",
         "test": "npm run build && node dist/Test/Unit/Runner.js",
         "webhook-test": "npm run build && node dist/Test/WebhookTest.js",

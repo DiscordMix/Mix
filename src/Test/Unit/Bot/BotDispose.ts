@@ -5,7 +5,7 @@ import {Bot} from "../../../Index";
 
 @Unit("Bot Dispose")
 default class {
-    @Test("reconnect(): Should reconnect the bot without throwing")
+    @Test("Should reconnect the bot without throwing")
     @Target(Bot.prototype.reconnect)
     public reconnect_doesNotThrow() {
         return new Promise(async (resolve) => {
@@ -24,7 +24,7 @@ default class {
         });
     }
 
-    @Test("reload(): Should reload modules")
+    @Test("Should reload modules")
     @Target(Bot.prototype.reload)
     public async reload_reloadModules() {
         await testBot.reload();
@@ -32,7 +32,7 @@ default class {
         // TODO: Verify modules were re-loaded.
     }
 
-    @Test("disconnect(): Should disconnect the bot and dispose resources")
+    @Test("Should disconnect the bot and dispose resources")
     @Target(Bot.prototype.disconnect)
     public async disconnect_shouldDisconnect() {
         const result: Bot = await testBot.disconnect();

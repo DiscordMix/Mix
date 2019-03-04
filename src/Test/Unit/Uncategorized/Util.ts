@@ -125,7 +125,7 @@ default class {
         Assert.that([0, 1], Does.include(result));
     }
 
-    @Test("getRandomInt(): Should throw on invalid parameters")
+    @Test("Should throw on invalid parameters")
     @Target(Util.getRandomInt)
     public getRandomInt_throwOnInvalidParams() {
         Assert.throws(() => Util.getRandomInt(0, 0));

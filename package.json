@@ -46,7 +46,7 @@
         "minimist": "^1.2.0",
         "reflect-metadata": "^0.1.12",
         "require-main-filename": "^1.0.1",
-        "tusk": "^1.2.3"
+        "tusk": "^1.2.4"
     },
     "devDependencies": {
         "@babel/cli": "^7.1.5",

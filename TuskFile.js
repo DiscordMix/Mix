@@ -7,7 +7,7 @@ const versionLock = [8, 11];
 const buildOps = [
     {
         name: "env",
-        description: "Verify the environment.",
+        desc: "Verify the environment.",
 
         callback: () => {
             const nodeJsVersion = process.version.substr(1).split(".")[0];
@@ -22,17 +22,17 @@ const buildOps = [
     },
     {
         name: "clean",
-        description: "Clean output directory.",
+        desc: "Clean output directory.",
         callback: () => tusk.FileOps.forceRemove(buildDir)
     },
     {
         name: "build",
-        description: "Build the project.",
+        desc: "Build the project.",
         callback: () => tusk.ScriptOps.execute("tsc", undefined, true)
     },
     {
         name: "lint",
-        description: "Apply linter.",
+        desc: "Apply linter.",
         callback: () => tusk.ScriptOps.npx("tslint", ["-c", "tslint.json", "'src/**/*.ts'"], true)
     }
 ];
@@ -44,7 +44,7 @@ Task("deploy", "Publish package to the NPM registry.", [
 
     {
         name: "deploy",
-        description: "Publish package to the NPM registry.",
+        desc: "Publish package to the NPM registry.",
         callback: () => tusk.ScriptOps.npm("publish")
     }
 ]);

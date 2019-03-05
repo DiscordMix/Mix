@@ -22,23 +22,23 @@ const githubPort: number = coordinator.githubWebhook(secret, async (event: Githu
     }
 
     const result: ITaskResult = await coordinator
-        .then(() => GitOps.branch(masterBranch))
-        .then(() => GitOps.deleteBranch(deployBranch), true)
-        .then(() => GitOps.createBranch(deployBranch), true)
-        .then(() => GitOps.branch(deployBranch))
-        .then(() => GitOps.setUpstream(masterBranch))
-        .then(GitOps.pull)
-        .then(() => FileOps.forceRemove(buildDir), true)
-        .then(ScriptOps.npmInstall)
-        .then(ScriptOps.npmBuild)
-        .then(ScriptOps.npmTest)
+        .queue(() => GitOps.branch(masterBranch))
+        .queue(() => GitOps.deleteBranch(deployBranch), true)
+        .queue(() => GitOps.createBranch(deployBranch), true)
+        .queue(() => GitOps.branch(deployBranch))
+        .queue(() => GitOps.setUpstream(masterBranch))
+        .queue(GitOps.pull)
+        .queue(() => FileOps.forceRemove(buildDir), true)
+        .queue(ScriptOps.npmInstall)
+        .queue(ScriptOps.npmBuild)
+        .queue(ScriptOps.npmTest)
 
         .fallback(async () => {
             Log.verbose("Github | Fallback sequence initiated");
 
             const fallbackResult: ITaskResult = await coordinator
-                .then(() => GitOps.branch(masterBranch))
-                .then(() => GitOps.deleteBranch(deployBranch), true)
+                .queue(() => GitOps.branch(masterBranch))
+                .queue(() => GitOps.deleteBranch(deployBranch), true)
 
                 .run();
 

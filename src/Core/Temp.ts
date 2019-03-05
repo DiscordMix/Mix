@@ -1,4 +1,4 @@
-import {FileOps} from "@atlas/automata";
+import {FileOps} from "tusk";
 import {Snowflake} from "discord.js";
 import fs from "fs";
 import path from "path";

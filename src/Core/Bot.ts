@@ -21,7 +21,7 @@ import PathResolver from "./PathResolver";
 import {DefaultArgResolvers, DefaultBotOptions} from "./Constants";
 import Store from "../State/Store";
 import {InternalCommand, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./BotExtra";
-import {Action} from "@atlas/automata";
+import {Action} from "tusk";
 import BotConnector from "./BotConnector";
 import CommandRegistry from "../Commands/CommandRegistry";
 import BotHandler from "./BotHandler";

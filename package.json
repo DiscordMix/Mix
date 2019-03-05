@@ -34,7 +34,6 @@
     "author": "Atlas <cloudrex@outlook.com>",
     "license": "MIT",
     "dependencies": {
-        "@atlas/automata": "^1.2.3",
         "@atlas/xlib": "^1.0.0-alpha.3",
         "axios": "^0.18.0",
         "babel-polyfill": "^6.26.0",
@@ -46,7 +45,8 @@
         "lodash": "^4.17.11",
         "minimist": "^1.2.0",
         "reflect-metadata": "^0.1.12",
-        "require-main-filename": "^1.0.1"
+        "require-main-filename": "^1.0.1",
+        "tusk": "^1.2.3"
     },
     "devDependencies": {
         "@babel/cli": "^7.1.5",

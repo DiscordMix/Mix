@@ -1,4 +1,4 @@
-const Automata = require("@atlas/automata");
+const tusk = require("tusk");
 
 // Options.
 const buildDir = process.env.BUILD_DIR ? process.env.BUILD_DIR.toLocaleLowerCase() : "./dist";
@@ -23,17 +23,17 @@ const buildOps = [
     {
         name: "clean",
         description: "Clean output directory.",
-        callback: () => Automata.FileOps.forceRemove(buildDir)
+        callback: () => tusk.FileOps.forceRemove(buildDir)
     },
     {
         name: "build",
         description: "Build the project.",
-        callback: () => Automata.ScriptOps.execute("tsc", undefined, true)
+        callback: () => tusk.ScriptOps.execute("tsc", undefined, true)
     },
     {
         name: "lint",
         description: "Apply linter.",
-        callback: () => Automata.ScriptOps.npx("tslint", ["-c", "tslint.json", "'src/**/*.ts'"], true)
+        callback: () => tusk.ScriptOps.npx("tslint", ["-c", "tslint.json", "'src/**/*.ts'"], true)
     }
 ];
 
@@ -45,6 +45,6 @@ Task("deploy", "Publish package to the NPM registry.", [
     {
         name: "deploy",
         description: "Publish package to the NPM registry.",
-        callback: () => Automata.ScriptOps.npm("publish")
+        callback: () => tusk.ScriptOps.npm("publish")
     }
 ]);

@@ -1,4 +1,4 @@
-import {FileOps, Coordinator, GitOps, ScriptOps, GithubEvent, ITaskResult, RunState} from "@atlas/automata";
+import {FileOps, Coordinator, GitOps, ScriptOps, GithubEvent, ITaskResult, RunState} from "tusk";
 import Util from "../Core/Util";
 import Log from "../Core/Log";
 import colors from "colors";

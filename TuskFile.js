@@ -40,7 +40,8 @@ const buildOps = [
 Task("build", "Build the project.", buildOps);
 
 Task("deploy", "Publish package to the NPM registry.", [
-    ...buildOps,
+    // Remove 'lint' step.
+    ...buildOps.slice(0, buildOps.length - 1),
 
     {
         name: "deploy",

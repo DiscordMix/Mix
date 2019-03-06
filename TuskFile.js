@@ -6,6 +6,18 @@ const buildDir = process.env.BUILD_DIR ? process.env.BUILD_DIR.toLocaleLowerCase
 const backupDir = `.${buildDir}.backup`;
 const versionLock = [8, 11];
 
+const backupOp = {
+    name: "backup",
+    desc: "Backup existing built files.",
+
+    callback: () => {
+        // Backup output directory (if applicable).
+        if (fs.existsSync(buildDir)) {
+            return tusk.FileOps.move(buildDir, backupDir);
+        }
+    }
+};
+
 const buildOps = [
     {
         name: "verify",
@@ -33,17 +45,9 @@ const buildOps = [
             }
         }
     },
-    {
-        name: "backup",
-        desc: "Backup existing built files.",
 
-        callback: () => {
-            // Backup output directory (if applicable).
-            if (fs.existsSync(buildDir)) {
-                return tusk.FileOps.move(buildDir, backupDir);
-            }
-        }
-    },
+    backupOp,
+
     {
         name: "prepare",
         desc: "Install depedencies if applicable.",
@@ -100,4 +104,19 @@ Task("restore", "Restore output directory from a backup.", [
         desc: "Restore output directory from a backup.",
         callback: () => tusk.FileOps.move(backupDir, buildDir)
     }
+]);
+
+Task("backup", "Backup existing built files.", [
+    {
+        name: "verify",
+        desc: "Verify that the output directory exists.",
+        callback: () => fs.existsSync(buildDir)
+    },
+    {
+        name: "clean",
+        desc: "Remove existing backups if applicable.",
+        callback: () => tusk.FileOps.forceRemove(backupDir)
+    },
+
+    backupOp
 ]);

@@ -1,9 +1,9 @@
 require("dotenv").config();
 
 import path from "path";
-import Bot from "../../Core/Bot";
-import {BotEvent} from "../../Core/BotExtra";
-import List from "../../Collections/List";
+import Bot from "../Core/Bot";
+import {BotEvent} from "../Core/BotExtra";
+import List from "../Collections/List";
 
 export const TestSubjects = {
     ids: [
@@ -19,9 +19,6 @@ export const TestSubjects = {
     collection: new List<any>(["hello", "it's me", {
         name: "John Doe"
     }]),
-
-    settingsPath: path.resolve(path.join(__dirname, "../../../src/Test/TestSettings.json")),
-    settingsPathTwo: path.resolve(path.join(__dirname, "../../../src/Test/TestSettings2.json")),
 
     flags: {
         short: "base arg -h",

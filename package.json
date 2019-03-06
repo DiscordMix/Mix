@@ -27,7 +27,7 @@
         "watch": "tsc --watch",
         "build": "npx tusk build",
         "check": "tsc --noEmit",
-        "test": "npm run build && node dist/Test/Unit/Runner.js",
+        "test": "npm run build && node dist/Test/Runner.js",
         "webhook-test": "npm run build && node dist/Test/WebhookTest.js",
         "prepublishOnly": "npm test"
     },

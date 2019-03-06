@@ -25,7 +25,7 @@
     },
     "scripts": {
         "watch": "tsc --watch",
-        "build": "npx tusk build",
+        "build": "tsc",
         "check": "tsc --noEmit",
         "test": "npm run build && node dist/Test/Runner.js",
         "webhook-test": "npm run build && node dist/Test/WebhookTest.js",
@@ -66,7 +66,6 @@
         "dotenv": "^6.1.0",
         "mocha": "^5.2.0",
         "tslint": "^5.12.1",
-        "tusk-cli": "^1.0.1",
         "typedoc": "^0.14.2",
         "typescript": "^3.2.2",
         "unit": "^1.4.0"

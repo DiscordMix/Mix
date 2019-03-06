@@ -1,4 +1,5 @@
 const tusk = require("tusk");
+const fs = require("fs");
 
 // Options.
 const buildDir = process.env.BUILD_DIR ? process.env.BUILD_DIR.toLocaleLowerCase() : "./dist";
@@ -6,7 +7,7 @@ const versionLock = [8, 11];
 
 const buildOps = [
     {
-        name: "env",
+        name: "verify",
         desc: "Verify the environment.",
 
         callback: () => {
@@ -21,9 +22,19 @@ const buildOps = [
         }
     },
     {
-        name: "clean",
-        desc: "Clean output directory.",
-        callback: () => tusk.FileOps.forceRemove(buildDir)
+        name: "prepare",
+        desc: "Clean output directory, and install depedencies if applicable.",
+        
+        callback: async () => {
+            // Remove existing output directory (if applicable).
+            await tusk.FileOps.forceRemove(buildDir);
+
+            // Depedencies are not installed yet.
+            if (!fs.existsSync("node_modules")) {
+                // So let's install them.
+                return tusk.ScriptOps.npmInstall;
+            }
+        }
     },
     {
         name: "build",

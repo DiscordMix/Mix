@@ -1,6 +1,5 @@
-import Command from "../../Commands/Command";
-import {RestrictGroup} from "../../Index";
-import Context from "../../Commands/Context";
+import Command, {RestrictGroup} from "../../../Commands/Command";
+import Context from "../../../Commands/Context";
 
 export default class extends Command {
     public readonly meta = {

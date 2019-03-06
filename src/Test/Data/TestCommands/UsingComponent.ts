@@ -1,5 +1,5 @@
-import {Command} from "../../Index";
-import Component from "../../Decorators/Component";
+import Component from "../../../Decorators/Component";
+import Command from "../../../Commands/Command";
 
 @Component.command("test-component-command", {
     description: "A test component command"

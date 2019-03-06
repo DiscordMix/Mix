@@ -1,15 +1,15 @@
 import {Unit, Test, Assert, Is, Target} from "unit";
-import Command, {CommandRunner, RestrictGroup} from "../../../Commands/Command";
+import Command, {CommandRunner, RestrictGroup} from "../../Commands/Command";
 import {Message} from "discord.js";
-import Permission from "../../../Core/Permission";
-import {DependsOn, Guard, Connect, AttachedLoggerFn, AttachedLogger} from "../../../Decorators/Other";
-import {Args, Description, Name, Meta} from "../../../Decorators/General";
-import {Constraint} from "../../../Decorators/Constraint";
-import {Type} from "../../../Commands/Type";
-import {Deprecated} from "../../../Decorators/Utility";
-import DiscordEvent from "../../../Core/DiscordEvent";
-import {On} from "../../../Decorators/Events";
-import {IMeta} from "../../../Fragments/Fragment";
+import Permission from "../../Core/Permission";
+import {DependsOn, Guard, Connect, AttachedLoggerFn, AttachedLogger} from "../../Decorators/Other";
+import {Args, Description, Name, Meta} from "../../Decorators/General";
+import {Constraint} from "../../Decorators/Constraint";
+import {Type} from "../../Commands/Type";
+import {Deprecated} from "../../Decorators/Utility";
+import DiscordEvent from "../../Core/DiscordEvent";
+import {On} from "../../Decorators/Events";
+import {IMeta} from "../../Fragments/Fragment";
 import {testBot} from "../TestBot";
 
 const testConnection: CommandRunner = (): void => {

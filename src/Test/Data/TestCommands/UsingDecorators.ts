@@ -1,5 +1,5 @@
-import {Name, Description} from "../../Decorators/General";
-import Command from "../../Commands/Command";
+import {Name, Description} from "../../../Decorators/General";
+import Command from "../../../Commands/Command";
 
 @Name("test-decorator-command")
 @Description("A command for testing decorators")

@@ -1,6 +1,6 @@
 import {Unit, Test, Assert, Is, Does, Feed, Mock} from "unit";
 import {init, testBot} from "../TestBot";
-import DiscordEvent from "../../../Core/DiscordEvent";
+import DiscordEvent from "../../Core/DiscordEvent";
 import TestData from "../TestData";
 
 @Unit("Bot")

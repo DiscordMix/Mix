@@ -1,5 +1,5 @@
-import {IMeta} from "../../Fragments/Fragment";
-import Task from "../../Tasks/Task";
+import {IMeta} from "../../../Fragments/Fragment";
+import Task from "../../../Tasks/Task";
 
 export default class extends Task {
     public readonly meta: IMeta = {

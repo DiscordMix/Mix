@@ -1,6 +1,6 @@
 import {Unit, Test, Assert, Is, Target} from "unit";
 import {testBot} from "../TestBot";
-import Store, {TestStoreActionType, IStoreAction} from "../../../State/Store";
+import Store, {TestStoreActionType, IStoreAction} from "../../State/Store";
 
 @Unit("Store")
 default class {

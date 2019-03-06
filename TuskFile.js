@@ -1,8 +1,9 @@
-const tusk = require("tusk");
 const fs = require("fs");
+const tusk = require("tusk");
 
 // Options.
-const buildDir = process.env.BUILD_DIR ? process.env.BUILD_DIR.toLocaleLowerCase() : "./dist";
+const buildDir = process.env.BUILD_DIR ? process.env.BUILD_DIR.toLocaleLowerCase() : "dist";
+const backupDir = `.${buildDir}.backup`;
 const versionLock = [8, 11];
 
 const buildOps = [
@@ -22,9 +23,31 @@ const buildOps = [
         }
     },
     {
+        name: "clean",
+        desc: "Clean project and directories.",
+
+        callback: () => {
+            // Remove previous backups (if applicable).
+            if (fs.existsSync(backupDir)) {
+                return tusk.FileOps.forceRemove(backupDir);
+            }
+        }
+    },
+    {
+        name: "backup",
+        desc: "Backup existing built files.",
+
+        callback: () => {
+            // Backup output directory (if applicable).
+            if (fs.existsSync(buildDir)) {
+                return tusk.FileOps.move(buildDir, backupDir);
+            }
+        }
+    },
+    {
         name: "prepare",
-        desc: "Clean output directory, and install depedencies if applicable.",
-        
+        desc: "Install depedencies if applicable.",
+
         callback: async () => {
             // Remove existing output directory (if applicable).
             await tusk.FileOps.forceRemove(buildDir);
@@ -50,13 +73,31 @@ const buildOps = [
 
 Task("build", "Build the project.", buildOps);
 
-Task("deploy", "Publish package to the NPM registry.", [
+Task("deploy", "Build and publish package to the NPM registry.", [
     // Remove 'lint' step.
     ...buildOps.slice(0, buildOps.length - 1),
 
     {
         name: "deploy",
-        desc: "Publish package to the NPM registry.",
+        desc: "Build and publish package to the NPM registry.",
         callback: () => tusk.ScriptOps.npm("publish")
+    }
+]);
+
+Task("restore", "Restore output directory from a backup.", [
+    {
+        name: "verify",
+        desc: "Verify backup exists.",
+        callback: () => fs.existsSync(backupDir)
+    },
+    {
+        name: "clean",
+        desc: "Remove existing output directory.",
+        callback: () => tusk.FileOps.forceRemove(buildDir)
+    },
+    {
+        name: "restore",
+        desc: "Restore output directory from a backup.",
+        callback: () => tusk.FileOps.move(backupDir, buildDir)
     }
 ]);

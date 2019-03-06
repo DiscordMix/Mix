@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-import path from "path";
 import Bot from "../Core/Bot";
 import {BotEvent} from "../Core/BotExtra";
 import List from "../Collections/List";

@@ -533,10 +533,10 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
             languages: ["TestLanguage"],
 
             paths: {
-                commands: path.resolve(path.join(__dirname, "../", "test", "TestCommands")),
-                languages: path.resolve(path.join("src", "Test", "TestLanguages")),
-                services: path.resolve(path.join(__dirname, "../", "test", "TestServices")),
-                tasks: path.resolve(path.join(__dirname, "../", "test", "TestTasks")),
+                commands: path.resolve(path.join(__dirname, "../", "Test", "Data", "TestCommands")),
+                languages: path.resolve(path.join("src", "Test", "Data", "TestLanguages")),
+                services: path.resolve(path.join(__dirname, "../", "Test", "Data", "TestServices")),
+                tasks: path.resolve(path.join(__dirname, "../", "Test", "Data", "TestTasks")),
             }
         };
     }

@@ -70,7 +70,7 @@ const buildOps = [
     },
     {
         name: "lint",
-        desc: "Apply linter.",
+        desc: "Run TSLint.",
         callback: () => tusk.ScriptOps.npx("tslint", ["-c", "tslint.json", "'src/**/*.ts'"], true)
     }
 ];

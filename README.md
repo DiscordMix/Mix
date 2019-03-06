@@ -82,6 +82,6 @@ Mix is intended for both serious, large scale and simple, elegant bot developmen
 
 If such is the case, it may be worth considering the following fine alternatives:
 
-[Klasa](https://github.com/dirigeants/klasa) by [Dirigeants](https://github.com/dirigeants)<br />
-[Commando](https://github.com/discordjs/Commando) by [discordjs](https://github.com/discordjs)<br />
-[yamdbf core](https://github.com/yamdbf/core) by [yamdbf team](https://github.com/yamdbf)<br />
+📦 [Klasa](https://github.com/dirigeants/klasa) by [Dirigeants](https://github.com/dirigeants)<br />
+📦 [Commando](https://github.com/discordjs/Commando) by [discordjs](https://github.com/discordjs)<br />
+📦 [yamdbf core](https://github.com/yamdbf/core) by [yamdbf team](https://github.com/yamdbf)<br />

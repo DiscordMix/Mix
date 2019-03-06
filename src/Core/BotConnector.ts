@@ -28,6 +28,7 @@ export default class BotConnector implements IBotConnector {
     public async setup(): Promise<this> {
         this.bot.emit(BotEvent.SetupStart);
 
+        // Display the project title (if applicable).
         if (this.bot.options.showAsciiTitle) {
             console.log("\n" + Title.replace("{version}", "beta") + "\n");
         }
@@ -36,6 +37,7 @@ export default class BotConnector implements IBotConnector {
             Log.info("Debug mode is enabled");
         }
 
+        // Begin measuring performance.
         this.setupStart = performance.now();
 
         // Load languages.
@@ -51,6 +53,7 @@ export default class BotConnector implements IBotConnector {
         // Load & enable internal fragments.
         const internalFragmentCandidates: string[] | null = await Loader.scan(InternalFragmentsPath);
 
+        // The scan process failed for some reason.
         if (!internalFragmentCandidates) {
             throw Log.error(BotMessages.SETUP_FAIL_LOAD_FRAGMENTS);
         }
@@ -134,7 +137,7 @@ export default class BotConnector implements IBotConnector {
             }
         }
 
-        // Load & enable tasks.
+        // Begin loading & enabling tasks. First, unregister all existing ones.
         await this.bot.tasks.unregisterAll();
         Log.verbose(BotMessages.SETUP_LOADING_TASKS);
 
@@ -158,7 +161,7 @@ export default class BotConnector implements IBotConnector {
 
         this.bot.emit(BotEvent.LoadedCommands);
 
-        // Start optimizer if applicable.
+        // Start the optimizer (if applicable).
         if (this.bot.options.useOptimizer) {
             Log.verbose(BotMessages.SETUP_START_OPTIMIZER);
             this.bot.optimizer.start();

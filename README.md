@@ -1,6 +1,7 @@
 Mix (previously known as Forge) is a powerful, modular and extensible Discord bot framework for serious bot development.
 
 **Note**: Mix is a library to create bots and not a Discord API wrapper library.
+
 **Note**: This project has not yet reached a stable point, and not all functionality will work as expected.
 
 #### Useful Links

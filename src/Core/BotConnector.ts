@@ -30,7 +30,7 @@ export default class BotConnector implements IBotConnector {
 
         // Display the project title (if applicable).
         if (this.bot.options.showAsciiTitle) {
-            console.log("\n" + Title.replace("{version}", "beta") + "\n");
+            console.log("\n%s\n", Title.replace("{version}", "beta"));
         }
 
         if (DebugMode) {

@@ -258,8 +258,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Suspend or unsuspend the bot.
-     * @param {boolean} suspended Whether to suspend the bot.
+     * Suspend or unsuspend the bot from input.
      */
     public setSuspended(suspended: boolean): this {
         this.isSuspended = suspended;
@@ -403,7 +402,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     }
 
     /**
-     * Connect the Discord client.
+     * Connect and login the Discord client.
      */
     public async connect(): Promise<this> {
         this.setState(BotState.Connecting);

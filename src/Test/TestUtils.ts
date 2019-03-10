@@ -13,6 +13,9 @@ const ComplexTypes: string[] = [
     "number"
 ];
 
+/**
+ * Utility class with tools used in tests.
+ */
 export default abstract class TestUtils {
     public static randomString(): string {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -33,6 +36,9 @@ export default abstract class TestUtils {
     }
 
     // TODO: Make use of the paramAmount argument
+    /**
+     * Create an array containing various types of entities.
+     */
     public static makeParams(exclude?: any[], paramAmount: number = 1): any[] {
         const params: any[] = [
             [],

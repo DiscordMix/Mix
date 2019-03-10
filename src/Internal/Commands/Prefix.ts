@@ -12,7 +12,7 @@ export default class extends Command {
     }; */
 
     public async run($: Context): Promise<void> {
-        // TODO: Implement
+        // TODO: Implement.
 
         throw Log.notImplemented;
     }

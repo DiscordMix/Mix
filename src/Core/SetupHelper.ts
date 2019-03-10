@@ -46,6 +46,9 @@ export interface ISetupHelper {
 }
 
 export default class SetupHelper implements ISetupHelper {
+    /**
+     * Create a SetupHelper class instance from a command context.
+     */
     public static fromContext(options: IFromContextOptions): SetupHelper | null {
         if (options.context.msg.channel instanceof TextChannel) {
             // context.bot.client, context.message.channel, context.sender.id, title, timeout, embed

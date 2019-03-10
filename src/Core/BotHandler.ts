@@ -31,7 +31,7 @@ export default class BotHandler implements IBotHandler {
      * @param {boolean} [edited=false] Whether the message was previously edited.
      */
     public async message(msg: Message, edited: boolean = false): Promise<boolean> {
-        if (Util.isEmpty(msg) || typeof msg !== "object" || !(msg instanceof Message) || Array.isArray(msg)) {
+        if (Util.isEmpty(msg) || (typeof msg !== "object" || msg === null) || !(msg instanceof Message) || Array.isArray(msg)) {
             return false;
         }
 
@@ -91,7 +91,8 @@ export default class BotHandler implements IBotHandler {
                 await this.command(msg, msg.content, this.bot.argumentResolvers);
             }
         }
-        // TODO: ?prefix should also be chain-able.
+        // TODO: '?prefix' should also be chain-able.
+        // TODO: '?prefix' should be customizable.
         else if (!msg.author.bot && msg.content === "?prefix" && this.bot.usePrefixCommand) {
             await msg.channel.send(new RichEmbed()
                 .setDescription(`Command prefix(es): **${this.bot.options.prefixes.join(", ")}**`)
@@ -100,6 +101,7 @@ export default class BotHandler implements IBotHandler {
         // TODO: There should be an option to disable this.
         // TODO: Use embeds.
         // TODO: Verify that it was done in the same environment and that the user still has perms.
+        // TODO: '?undo' should be also customizable.
         else if (!msg.author.bot && msg.content === "?undo") {
             if (!this.bot.commandHandler.undoMemory.has(msg.author.id)) {
                 await msg.reply(BotMessages.UNDO_NO_ACTIONS);
@@ -141,9 +143,6 @@ export default class BotHandler implements IBotHandler {
             message
         });
 
-        // TODO: Debugging.
-        Log.debug("Raw arguments are", rawArgs);
-
         await this.bot.commandHandler.handle(
             this.createContext(message),
             command,
@@ -160,7 +159,6 @@ export default class BotHandler implements IBotHandler {
         return new Context({
             bot: this.bot,
             msg,
-            // args: CommandParser.resolveArguments(CommandParser.getArguments(content), this.commandHandler.argumentTypes, resolvers, message),
 
             // TODO: CRITICAL: Possibly messing up private messages support, hotfixed to use null (no auth) in DMs (old comment: review).
 

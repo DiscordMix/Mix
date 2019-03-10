@@ -8,7 +8,7 @@ import {Constraint} from "../../Decorators/Constraint";
 @Constraint.cooldown(1)
 export default class extends Command {
     public async run($: Context): Promise<void> {
-        // TODO: Missing heartbeat
+        // TODO: Missing heartbeat.
         await $.send(`:ping_pong: Beep Boop! ${Math.round($.bot.client.ping)}ms`);
     }
 }

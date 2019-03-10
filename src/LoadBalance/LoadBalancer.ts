@@ -41,17 +41,17 @@ export default class LoadBalancer extends EventEmitter implements ILoadBalancer 
         return this;
     }
 
-    // TODO
+    // TODO: Implement.
     public get requestsPerSecond(): number {
         return 0;
     }
 
-    // TODO
+    // TODO: Implement.
     public get requestsPerMinute(): number {
         return 0;
     }
 
-    // TODO
+    // TODO: Implement.
     public get requestsPerHour(): number {
         return 0;
     }

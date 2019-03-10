@@ -94,7 +94,7 @@ export default class BotHandler implements IBotHandler {
         // TODO: ?prefix should also be chain-able.
         else if (!msg.author.bot && msg.content === "?prefix" && this.bot.usePrefixCommand) {
             await msg.channel.send(new RichEmbed()
-                .setDescription(`Command prefix(es): **${this.bot.options.prefixes.join(", ")}** | Powered by [The Mix Framework](https://github.com/discord-mix/mix)`)
+                .setDescription(`Command prefix(es): **${this.bot.options.prefixes.join(", ")}**`)
                 .setColor("GREEN"));
         }
         // TODO: There should be an option to disable this.

@@ -31,7 +31,7 @@ export interface IUrl<T = any> {
 }
 
 export default class UrlSerializer<ParametersType = any, UrlType extends IUrl = IUrl<ParametersType>> implements ISerializer<UrlType> {
-    // TODO: Validate data object
+    // TODO: Validate data object.
     public serialize(data: IUrl): string {
         let result: string = `${data.protocol}://${data.domain.subdomain ? data.domain.subdomain + "." : ""}${data.domain.name}${data.domain.extension}`;
 
@@ -55,7 +55,7 @@ export default class UrlSerializer<ParametersType = any, UrlType extends IUrl = 
     }
 
     public deserialize(serializedData: string): UrlType | null {
-        // TODO: Implement
+        // TODO: Implement.
         throw Log.notImplemented;
     }
 }

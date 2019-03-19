@@ -15,14 +15,12 @@ interface IArgs {
 @name("cli")
 @description("Access the local machine's CLI")
 @aliases("exec", "exe")
-@args(
-    {
-        name: "command",
-        description: "The command to execute",
-        type: Type.string,
-        required: true
-    }
-)
+@args({
+    name: "command",
+    description: "The command to execute",
+    type: Type.string,
+    required: true
+})
 @Constraint.ownerOnly
 export default class extends Command<IArgs> {
     public async run($: Context, args: IArgs): Promise<void> {

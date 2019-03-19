@@ -13,14 +13,12 @@ const delimiter: string = ", ";
 
 @name("usage")
 @description("View the usage of a command")
-@args(
-    {
-        name: "command",
-        type: Type.string,
-        required: true,
-        description: "The command to inspect"
-    }
-)
+@args({
+    name: "command",
+    type: Type.string,
+    required: true,
+    description: "The command to inspect"
+})
 @Constraint.cooldown(1)
 export default class extends Command<IArgs> {
     // TODO: Finish implementing

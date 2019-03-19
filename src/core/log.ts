@@ -155,7 +155,7 @@ export default abstract class Log {
             prefix: "sucs"
         };
 
-        Log.compose(options);
+        Log.pipe(options);
     }
 
     /**
@@ -171,7 +171,7 @@ export default abstract class Log {
             prefix: "warn"
         };
 
-        Log.compose(options);
+        Log.pipe(options);
     }
 
     /**
@@ -186,7 +186,7 @@ export default abstract class Log {
             prefix: "dang"
         };
 
-        Log.compose(options);
+        Log.pipe(options);
 
         return new Error(message);
     }
@@ -203,7 +203,7 @@ export default abstract class Log {
             prefix: "fatal"
         };
 
-        Log.compose(options);
+        Log.pipe(options);
         process.exit(1);
 
         return new Error(message);
@@ -221,7 +221,7 @@ export default abstract class Log {
             prefix: "verb"
         };
 
-        Log.compose(options);
+        Log.pipe(options);
     }
 
     /**
@@ -236,7 +236,7 @@ export default abstract class Log {
             prefix: "dbug"
         };
 
-        Log.compose(options);
+        Log.pipe(options);
     }
 
     /**

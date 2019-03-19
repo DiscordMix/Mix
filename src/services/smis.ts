@@ -4,8 +4,7 @@ import Log from "../core/log";
 import {IProcessMsg, ProcessMsgType} from "./genericService";
 
 /**
- * Service Messages Interchange System
- * @extends EventEmitter
+ * Service Messages Interchange System.
  */
 export default class SMIS extends EventEmitter {
     protected readonly child: ChildProcess;

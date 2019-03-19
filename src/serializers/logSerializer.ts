@@ -16,7 +16,8 @@ export interface ILogSource {
 
 // TODO: Add support for custom patterns.
 /**
- * Serializes log messages from strings into objects and vise versa.
+ * Serializes log messages from strings
+ * into objects and vise versa.
  */
 export default class LogSerializer implements ISerializer<ILogMsg> {
     public serialize(msg: ILogMsg): string | null {

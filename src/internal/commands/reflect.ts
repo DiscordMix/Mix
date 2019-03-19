@@ -15,15 +15,13 @@ enum ReflectDataType {
 
 @name("reflect")
 @description("Access the bot's internal state")
-@args(
-    {
-        name: "type",
-        description: "The data to inspect",
-        required: true,
-        flagShortName: "t",
-        type: Type.string
-    }
-)
+@args({
+    name: "type",
+    description: "The data to inspect",
+    required: true,
+    flagShortName: "t",
+    type: Type.string
+})
 @Constraint.cooldown(1)
 @Constraint.ownerOnly
 @notImplemented()

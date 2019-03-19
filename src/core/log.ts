@@ -22,6 +22,12 @@ export interface IComposeOptions {
 }
 
 /**
+ * Callback to which logging actions will be
+ * redirected to.
+ */
+export type LogPipe = (options: IComposeOptions) => void;
+
+/**
  * Utility class for logging output into the console.
  */
 export default abstract class Log {
@@ -54,6 +60,12 @@ export default abstract class Log {
      * Whether to record messages.
      */
     public static record: boolean = true;
+
+    /**
+    * Callback to which logging actions will be
+    * redirected to.
+    */
+    public static pipe: LogPipe = Log.compose;
 
     /**
      * Compose a message to be shown in the console.
@@ -110,7 +122,7 @@ export default abstract class Log {
      */
     public static playback(history: IComposeOptions[]): void {
         for (const options of history) {
-            this.compose(options);
+            Log.pipe(options);
         }
     }
 
@@ -127,7 +139,7 @@ export default abstract class Log {
             prefix: "info"
         };
 
-        Log.compose(options);
+        Log.pipe(options);
     }
 
     /**

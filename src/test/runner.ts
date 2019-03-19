@@ -11,22 +11,20 @@ Log.write = false;
 import "./prepare";
 
 // Import units.
-import "./Uncategorized/Util";
-import "./Uncategorized/logSerializer";
-import "./Uncategorized/TslintSerializer";
+import "./uncategorized/util";
+import "./uncategorized/logSerializer";
+import "./uncategorized/tslintSerializer";
 import "./bot/bot";
-import "./Uncategorized/tasks";
-import "./Store/Store";
-import "./Store/StoreReducers";
-import "./Uncategorized/languages";
-import "./Uncategorized/commands";
-import "./Uncategorized/Collection";
-import "./Uncategorized/services";
-import "./Uncategorized/TimeMachine";
-import "./Uncategorized/TimeConvert";
-import "./Uncategorized/FlagParser";
-import "./Uncategorized/CommandParser";
-import "./Uncategorized/decorators";
+import "./uncategorized/tasks";
+import "./uncategorized/languages";
+import "./uncategorized/commands";
+import "./uncategorized/collection";
+import "./uncategorized/services";
+import "./uncategorized/timeMachine";
+import "./uncategorized/timeConvert";
+import "./uncategorized/flagParser";
+import "./uncategorized/commandParser";
+import "./uncategorized/decorators";
 import "./bot/botDispose";
 
 // Run tests.

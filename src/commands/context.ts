@@ -5,7 +5,6 @@ import BotMessages from "../core/messages";
 import ResponseHelper from "../core/responseHelper";
 import Util from "../core/util";
 import EditableMessage from "../message/editableMessage";
-import {IStore} from "../state/store";
 import {PromiseOr} from "@atlas/xlib";
 import {ChannelType} from "../core/botExtra";
 
@@ -23,7 +22,6 @@ export type TextBasedChannel = TextChannel | DMChannel;
 export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper {
     readonly msg: Message;
     readonly label: string | null;
-    readonly store: IStore;
     readonly g: Guild;
     readonly c: T;
     readonly triggeringMessageId: Snowflake;
@@ -73,13 +71,6 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
          * @readonly
          */
         this.label = options.label;
-    }
-
-    /**
-     * Access the bot's store.
-     */
-    public get store(): IStore {
-        return this.bot.store;
     }
 
     /**

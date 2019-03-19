@@ -26,11 +26,6 @@ enum BotMessages {
     CFG_EXPECT_GENERAL = "Expecting general settings",
     CFG_FILE_NO_EXIST = "Could not load settings: File does not exist",
 
-    STORE_EXPECT_HANDLER_FUNC = "Expecting handler to be a function",
-    STORE_INVALID_ACTION = "Expecting type to be a number or string",
-    STORE_EXPECT_REDUCER_FUNC = "Expecting reducer to be a function",
-    STORE_REDUCER_NO_UNDEFINED = "Reducer must return a state, otherwise return null to indicate no changes",
-
     CMD_PARSE_FAIL = "Failed parsing command | Command is null",
 
     UNDO_NO_ACTIONS = "You haven't performed any undoable action",

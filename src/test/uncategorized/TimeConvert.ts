@@ -1,5 +1,5 @@
 import {Assert, Test, Unit} from "unit";
-import TimeConvert from "../../Time/TimeConvert";
+import TimeConvert from "../../time/timeConvert";
 
 @Unit("Time Convert")
 default class {

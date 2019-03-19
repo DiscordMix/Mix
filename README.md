@@ -48,7 +48,7 @@ $ npm install --save d.mix
 This will add Mix to your project's dependencies. You may now proceed to import/require Mix's classes and utilities:
 
 ```ts
-import {Bot, Util, Store} from "d.mix";
+import {Bot, Util} from "d.mix";
 ```
 
 #### Building

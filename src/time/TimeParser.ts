@@ -1,4 +1,4 @@
-import TimeSuffixType from "./TimeSuffixType";
+import TimeSuffixType from "./timeSuffixType";
 import Util from "../core/Util";
 import Log from "../core/log";
 

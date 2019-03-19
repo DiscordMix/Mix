@@ -13,7 +13,6 @@ import {ITemp} from "./temp";
 import {ICommandRegistry} from "../commands/commandRegistry";
 import {IConsoleInterface} from "../console/consoleInterface";
 import {ITaskManager} from "../tasks/taskManager";
-import {Reducer, IStore} from "../state/Store";
 import {PromiseOr} from "@atlas/xlib";
 import {IBotHandler} from "./botHandler";
 import {ArgumentType, ArgumentResolver} from "../commands/type";
@@ -27,7 +26,7 @@ export enum ChannelType {
 /**
  * Options to create a new bot instance.
  */
-export interface IBotOptions<T = any> {
+export interface IBotOptions {
     /**
      * The prefix(es) that will trigger commands.
      */
@@ -95,8 +94,6 @@ export interface IBotOptions<T = any> {
     readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
     readonly argumentTypes: ICustomArgType[];
     readonly languages: string[];
-    readonly initialState: T;
-    readonly reducers: Reducer<T>[];
 }
 
 export interface IBotKeys {
@@ -221,7 +218,6 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly optimizer: IOptimizer;
     readonly fragments: IFragmentManager;
     readonly paths: IPathResolver;
-    readonly store: IStore<TState, TActionType>;
     readonly analytics: IBotAnalytics;
     readonly handle: IBotHandler;
 

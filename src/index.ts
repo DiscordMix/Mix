@@ -52,13 +52,10 @@ import {
 
 import Service from "./services/service";
 import SMIS from "./services/smis";
-import Delta from "./state/Delta";
-import Store, {IStore, IStoreAction, ITestState, Reducer, TestStoreActionType} from "./state/Store";
-import {ITimeMachine, TimeMachine} from "./state/TimeMachine";
 import Task, {ITask} from "./tasks/Task";
 import TaskManager, {ITaskManager} from "./tasks/taskManager";
-import TimeParser from "./Time/TimeParser";
-import TimeSuffixType from "./Time/TimeSuffixType";
+import TimeParser from "./time/timeParser";
+import TimeSuffixType from "./time/timeSuffixType";
 import List from "./Collections/List";
 import DiscordEvent from "./core/DiscordEvent";
 import {Constraint, constraints} from "./decorators/Constraint";
@@ -201,16 +198,5 @@ export {
     LogSerializer,
     StateSerializer,
     UrlSerializer,
-    UserSerializer,
-
-    // Store.
-    Store,
-    IStore,
-    TestStoreActionType,
-    IStoreAction,
-    TimeMachine,
-    ITimeMachine,
-    Reducer,
-    ITestState,
-    Delta
+    UserSerializer
 };

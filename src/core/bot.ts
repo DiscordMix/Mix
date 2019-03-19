@@ -19,7 +19,6 @@ import Optimizer from "../optimization/optimizer";
 import FragmentManager from "../fragments/fragmentManager";
 import PathResolver from "./pathResolver";
 import {DefaultArgResolvers, DefaultBotOptions} from "./constants";
-import Store from "../state/Store";
 import {InternalCommand, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./botExtra";
 import {Action} from "tusk";
 import BotConnector from "./botConnector";
@@ -132,11 +131,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly paths: PathResolver;
 
     /**
-     * Stores immutable data and handles events.
-     */
-    public readonly store: Store<TState, TActionType>;
-
-    /**
      * Used for measuring interaction with the bot.
      */
     public readonly analytics: Analytics;
@@ -175,7 +169,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * @param {BotToken} token The bot token required to login to Discord.
      * @param {boolean} [testMode=false] Whether the bot is being used in testing. For internal use only.
      */
-    public constructor(token: BotToken, options: Partial<IBotOptions<TState>>, testMode: boolean = false) {
+    public constructor(token: BotToken, options: Partial<IBotOptions>, testMode: boolean = false) {
         super();
 
         this.token = token;
@@ -191,7 +185,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         }
 
         this.isSuspended = true;
-        this.store = new Store<TState, TActionType>(this.options.initialState, this.options.reducers);
         this.state = BotState.Disconnected;
         this.paths = new PathResolver(this.options.paths);
         this.temp = new Temp();

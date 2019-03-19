@@ -44,9 +44,6 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
     public readonly msg: Message;
     public readonly label: string | null;
 
-    /**
-     * @param {IContextOptions} options
-     */
     public constructor(options: IContextOptions) {
         if (options.msg.channel.type !== "text") {
             throw Log.error(BotMessages.CONTEXT_EXPECT_TEXT_CHANNEL);
@@ -54,22 +51,8 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
 
         super(options.msg.channel as TextChannel, options.bot, options.msg.author);
 
-        /**
-         * @type {Message}
-         * @readonly
-         */
         this.msg = options.msg;
-
-        /**
-         * @type {IBot}
-         * @readonly
-         */
         this.bot = options.bot;
-
-        /**
-         * @type {string}
-         * @readonly
-         */
         this.label = options.label;
     }
 

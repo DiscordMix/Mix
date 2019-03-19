@@ -124,25 +124,68 @@ export abstract class GenericCommand<T extends object = object> implements IGene
         name: ""
     };
 
+    /**
+     * Different aliases which the command can be
+     * identified by.
+     */
     public readonly aliases: string[] = [];
+
+    /**
+     * The arguments accepted and processed by the command.
+     */
     public readonly args: IArgument[] = [];
+
+    /**
+     * Limitations and restrictions by which the execution environment
+     * and the command issuer must abide to.
+     */
     public readonly constraints: IConstraints = Object.assign({}, DefaultCommandRestrict);
+
+    /**
+     * Specific environments on which the command is not
+     * allowed to execute.
+     */
     public readonly exclude: string[] = [];
+
+    /**
+     * Whether the command merges all provided arguments
+     * into a single argument.
+     */
     public readonly singleArg: boolean = false;
+
+    /**
+     * Whether the command is enabled and may be interacted
+     * with.
+     */
     public readonly isEnabled: boolean = true;
+
+    /**
+     * Whether the command provides the functionality to
+     * undo its actions.
+     */
     public readonly undoable: boolean = false;
+
+    /**
+     * Callback listeners invoked upon the command being
+     * executed.
+     */
     public readonly connections: CommandRelay[] = [];
-    public readonly dependsOn: string[] = [];
+
+    /**
+     * Middleware functions that determine whether the command
+     * can execute.
+     */
     public readonly guards: CommandGuard[] = [];
+
+    /**
+     * Dependencies that must be present for the command to
+     * be enabled.
+     */
+    public readonly dependsOn: string[] = [];
 
     protected readonly bot: Bot;
 
     protected constructor(bot: Bot) {
-        /**
-         * @type {Bot}
-         * @protected
-         * @readonly
-         */
         this.bot = bot;
     }
 

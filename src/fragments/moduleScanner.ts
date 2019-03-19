@@ -1,4 +1,5 @@
-import Log from "../core/log";
+import fs from "fs";
+import {Log} from "..";
 
 export interface IModuleScanner {
     match(...patterns: RegExp[]): this;
@@ -28,7 +29,15 @@ export default class ModuleScanner implements IModuleScanner {
      * @return {string[]} The matching files found.
      */
     public scan(): string[] {
-        // TODO
+        const queue: string[] = [this.basePath];
+
+        for (const entity of fs.readdirSync(queue[0])) {
+            if (entity is folder) {
+
+            }
+        }
+
+        // TODO: Finish implementing.
         throw Log.notImplemented;
     }
 }

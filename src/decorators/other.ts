@@ -67,7 +67,8 @@ export function guard(...guards: string[]): any {
 }
 
 /**
- * Informs the user that the requested command is not yet implemented. The run method will not be executed.
+ * Informs the user that the requested command is not yet implemented.
+ * The run method will not be executed.
  */
 export function notImplemented(): any {
     return function (target: any) {

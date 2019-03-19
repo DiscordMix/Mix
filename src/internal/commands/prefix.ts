@@ -6,7 +6,7 @@ import Log from "../../core/log";
 @name("prefix")
 @description("Manage bot prefixes")
 export default class extends Command {
-    // TODO: Update
+    // TODO: Update.
     /* readonly args = {
         prefix: "!string"
     }; */

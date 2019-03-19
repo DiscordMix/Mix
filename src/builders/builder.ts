@@ -1,5 +1,10 @@
-import {PromiseOr} from "@atlas/xlib";
+export default abstract class Builder<T = any> {
+    protected result!: T;
 
-export interface IBuilder<T> {
-    build(): PromiseOr<T>;
+    /**
+     * Retrieve the current result.
+     */
+    public build(): T {
+        return this.result;
+    }
 }

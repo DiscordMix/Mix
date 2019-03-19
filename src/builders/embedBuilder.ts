@@ -1,8 +1,8 @@
 import Discord, {RichEmbed} from "discord.js";
-import {IBuilder} from "./builder";
+import Builder from "./builder";
 import Log from "../core/log";
 
-export interface IEmbedBuilder extends IBuilder<RichEmbed> {
+export interface IEmbedBuilder extends Builder<RichEmbed> {
     color(color: string): this;
     title(title: string): this;
     titleIcon(url: string): this;
@@ -13,7 +13,7 @@ export interface IEmbedBuilder extends IBuilder<RichEmbed> {
     field(title: string, value: string): this;
 }
 
-export default class EmbedBuilder implements IEmbedBuilder {
+export default class EmbedBuilder extends Builder implements IEmbedBuilder {
     public static fromObject(obj: any): EmbedBuilder {
         const result = new EmbedBuilder();
 
@@ -68,6 +68,8 @@ export default class EmbedBuilder implements IEmbedBuilder {
     protected readonly embed: RichEmbed;
 
     public constructor() {
+        super();
+
         this.embed = new Discord.RichEmbed();
     }
 

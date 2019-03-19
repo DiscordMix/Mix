@@ -11,9 +11,6 @@ import Command, {
     RestrictGroup
 } from "./commands/command";
 
-import BotBuilder, {IBotBuilder} from "./Builders/botBuilder";
-import {IBuilder} from "./Builders/Builder";
-import ConfigBuilder, {IConfigBuilder} from "./Builders/ConfigBuilder";
 import EmbedBuilder from "./Builders/EmbedBuilder";
 import MsgBuilder, {IMsgBuilder} from "./Builders/MsgBuilder";
 import CommandParser from "./commands/CommandParser";
@@ -104,14 +101,9 @@ export {
     ConsoleCommand,
 
     // Builder.
-    BotBuilder,
-    IBotBuilder,
     EmbedBuilder,
-    ConfigBuilder,
-    IConfigBuilder,
     MsgBuilder,
     IMsgBuilder,
-    IBuilder,
 
     // Core.
     Bot,

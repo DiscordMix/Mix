@@ -1,6 +1,11 @@
 import {PromiseOr} from "@atlas/xlib";
 
 /**
+ * Allows writing to read-only properties.
+ */
+export type Writeable<T> = {-readonly [P in keyof T]-?: T[P]};
+
+/**
  * Represents a generic callback delegate function.
  */
 export type Delegate<T = void> = (...args: any[]) => T;

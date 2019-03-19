@@ -241,8 +241,8 @@ export abstract class Subcommand<T extends object = object> extends GenericComma
 export default abstract class Command<T extends object = object> extends GenericCommand<T> {
     public readonly subcommands: Subcommand<T>[] = [];
 
+    // TODO: canExecute should default boolean, same concept as Service.
     /**
-     * @todo canExecute should default boolean, same concept as Service
      * @param {Context} context
      * @return {boolean} Whether this command may be executed
      */

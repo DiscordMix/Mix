@@ -60,9 +60,9 @@ export default abstract class Loader {
         }
     }
 
+    // TODO: Test and make sure it works.
     /**
      * Remove and reload a package from Node.js require cache.
-     * @todo Test and make sure it works.
      */
     public static async reload(file: string): Promise<IPackage | null> {
         // Delete path from Node's require cache

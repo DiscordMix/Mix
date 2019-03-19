@@ -124,9 +124,9 @@ export default class EmbedBuilder extends Builder implements IEmbedBuilder {
         return this;
     }
 
+    // TODO: Limit text to Discord's embed char limit (done, needs testing).
     /**
      * Set the text of the embed.
-     * @todo Limit text to Discord's embed char limit (done, needs testing).
      */
     public text(text: string): this {
         this.embed.setDescription(text.substr(0, 1024));

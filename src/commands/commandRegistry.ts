@@ -376,9 +376,9 @@ export default class CommandRegistry implements ICommandRegistry {
         return this;
     }
 
+    // TODO: 'args' type on docs (here).
     /**
      * Emulate a command invocation.
-     * @todo 'args' type on docs (here)
      * @param {string} base The base command name.
      * @param {Message} referer The triggering message.
      */

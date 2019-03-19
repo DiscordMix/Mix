@@ -28,7 +28,7 @@ import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./EmojiMenu/EmojiMenu";
 import {ICommandEvent} from "./Events/CommandEvent";
 import {IFragment, IMeta} from "./fragments/fragment";
 import Loader from "./fragments/Loader";
-import EditableMessage from "./Message/EditableMessage";
+import EditableMessage from "./message/editableMessage";
 import PaginatedMessage from "./Pagination/PaginatedMessage";
 import LogSerializer, {ILogMsg, ILogSource} from "./Serializers/logSerializer";
 import {ISerializer} from "./Serializers/Serializer";

@@ -304,7 +304,7 @@ default class {
         Assert.that(Util.timeAgo(Date.now()), Is.string);
     }
 
-    @Test("Should hash a snowflake")
+    @Test("Should hash a Snowflake")
     @Target(Util.hash)
     @Feed("285578743324606482", 78)
     @Feed("531932528131702785", 32)

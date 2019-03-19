@@ -66,7 +66,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly internalCommands: InternalCommand[];
 
     /**
-     * The owner of the bot's snowflake ID.
+     * The owner of the bot's Snowflake ID.
      */
     public readonly owner?: Snowflake;
 

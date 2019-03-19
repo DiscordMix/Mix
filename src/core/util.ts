@@ -18,6 +18,14 @@ import {IBot} from "./botExtra";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 
+TimeAgo.locale(en);
+
+const timeAgo: any = new TimeAgo("en-US");
+
+/**
+ * All permissions which only server staff
+ * and moderation roles can have access to.
+ */
 const moderationPermissions: PermissionResolvable[] = [
     "MANAGE_GUILD",
     "ADMINISTRATOR",
@@ -27,10 +35,6 @@ const moderationPermissions: PermissionResolvable[] = [
     "MANAGE_MESSAGES",
     "MANAGE_ROLES_OR_PERMISSIONS"
 ];
-
-TimeAgo.locale(en);
-
-const timeAgo: any = new TimeAgo("en-US");
 
 export interface ISendOptions {
     readonly avatarUrl: string;
@@ -58,7 +62,7 @@ export default abstract class Util {
     ];
 
     /**
-     * Strip a snowflake into it's bare ID.
+     * Strip a Snowflake into its bare ID.
      */
     public static resolveId(mention: string): string {
         if (typeof mention !== "string") {
@@ -106,11 +110,12 @@ export default abstract class Util {
             throw Log.error("Expecting parameters to be neutral or positive numbers");
         }
 
-        // Prevent overflows by dividing by zero
-        if (amount === 0 && max === 0) {
-            return 100;
-        }
-        else if (max === 0) {
+        // Prevent overflows by dividing by zero.
+        if (max === 0) {
+            if (amount === 0) {
+                return 100;
+            }
+
             return 0;
         }
 
@@ -430,15 +435,15 @@ export default abstract class Util {
      * Retrive Mix's current package version.
      */
     public static async getMixVersion(): Promise<string> {
-        // TODO:
+        // TODO
         // return (await this.readJson("package.json")).version;
 
-        // TODO: Hard coded
+        // TODO: Hard coded.
         return "1.2.5";
     }
 
     /**
-     * Determine if input text mentions input snowflake.
+     * Determine if input text mentions input Snowflake.
      */
     public static hasMentionPrefix(text: string, userId: Snowflake): boolean {
         if (!text || !userId || typeof text !== "string" || typeof userId !== "string") {
@@ -470,7 +475,8 @@ export default abstract class Util {
     }
 
     /**
-     * Determine if a guild member has moderation powers such as managing messages and/or kicking members.
+     * Determine if a guild member has moderation powers
+     * such as managing messages and/or kicking members.
      */
     public static hasModerationPowers(member: GuildMember): boolean {
         for (const perm of moderationPermissions) {
@@ -509,7 +515,8 @@ export default abstract class Util {
     }
 
     /**
-     * Attempt to find a default or general channel in the specified guild.
+     * Attempt to find a default or general
+     * channel in the specified guild.
      */
     public static findDefaultChannel(guild: Guild): TextChannel | null {
         let channel: TextChannel | null = guild.defaultChannel || null;
@@ -554,7 +561,8 @@ export default abstract class Util {
     }
 
     /**
-     * Determine the guild owner(s) by searching for members with the 'MANAGE_GUILD' permission.
+     * Determine the guild owner(s) by searching
+     * for members with the 'MANAGE_GUILD' permission.
      * @return {GuildMember[]} An array containing the owner(s) of the guild.
      */
     public static getOwners(guild: Guild): GuildMember[] {
@@ -636,7 +644,7 @@ export default abstract class Util {
     }
 
     /**
-     * Hash a snowflake into a unique, persistent number.
+     * Hash a Snowflake into a unique, persistent number.
      * @return {number} A number lower or equal to the max.
      */
     public static hash(id: Snowflake, max: number, precision: number = 6): number {

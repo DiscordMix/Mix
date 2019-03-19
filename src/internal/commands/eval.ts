@@ -3,7 +3,7 @@ import MsgBuilder from "../../Builders/MsgBuilder";
 import Command from "../../commands/command";
 import Context from "../../commands/context";
 import Util from "../../core/Util";
-import {name, description, args} from "../../decorators/general";
+import {name, desc, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/Constraint";
 import {Type} from "../../commands/type";
 
@@ -13,7 +13,7 @@ interface IArgs {
 }
 
 @name("eval")
-@description("Evaluate code")
+@desc("Evaluate code")
 @args(
     {
         name: "code",

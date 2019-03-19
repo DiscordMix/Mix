@@ -3,7 +3,7 @@ import Command, {CommandRunner, RestrictGroup} from "../../commands/command";
 import {Message} from "discord.js";
 import Permission from "../../core/permission";
 import {dependsOn, guard, connect, attachedLoggerFn, attachedLogger} from "../../decorators/other";
-import {args, description, name, meta} from "../../decorators/general";
+import {args, desc, name, meta} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraint";
 import {Type} from "../../commands/type";
 import {Deprecated} from "../../decorators/utility";
@@ -17,7 +17,7 @@ const testConnection: CommandRunner = (): void => {
 };
 
 @name("mycmd")
-@description("Used for testing")
+@desc("Used for testing")
 @attachedLogger()
 @args({
     name: "name",
@@ -101,7 +101,7 @@ default class {
     }
 
     @Test("Should bind command description")
-    @Target(description)
+    @Target(desc)
     public description_bind() {
         Assert.equal(instance.meta.description, "Used for testing");
     }

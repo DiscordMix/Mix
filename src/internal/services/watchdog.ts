@@ -1,11 +1,11 @@
-import {name, description} from "../../decorators/general";
+import {name, desc} from "../../decorators/general";
 import Service from "../../services/Service";
 
 @name("watchdog")
-@description("Bot state supervision service")
+@desc("Bot state supervision service")
 export default class extends Service {
     public start() {
         // Log.debug("Watchdog service started! Hello from watchdog!");
-        // TODO:
+        // TODO: Implement.
     }
 }

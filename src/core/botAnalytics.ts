@@ -3,7 +3,8 @@
  */
 export interface IBotStats {
     /**
-     * The amount of commands intercepted and handled by the command handler.
+     * The amount of commands intercepted
+     * and handled by the command handler.
      */
     commandsHandled: number;
 
@@ -13,7 +14,8 @@ export interface IBotStats {
     commandsFailed: number;
 
     /**
-     * The amount of messages that the bot has seen in the current session.
+     * The amount of messages that the bot has seen
+     * in the current session.
      */
     messagesSeen: number;
 
@@ -52,7 +54,8 @@ export interface IBotAnalytics {
 }
 
 /**
- * Allows detailed tracking of statistics and interactions of the bot.
+ * Allows detailed tracking of statistics and
+ * interactions of the bot.
  */
 export default class BotAnalytics implements IBotAnalytics {
     public stats: IBotStats;

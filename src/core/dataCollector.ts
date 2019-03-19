@@ -42,7 +42,7 @@ export default class DataCollector implements IDataCollector {
     }
 
     public collect(dataType: MemberDataType): this {
-        // TODO:
+        // TODO
 
         return this;
     }

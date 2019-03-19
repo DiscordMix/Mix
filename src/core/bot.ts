@@ -41,7 +41,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly services: ServiceManager;
 
     /**
-     * Command storage and retrival class.
+     * Contains all registered commands.
      */
     public readonly registry: CommandRegistry;
 
@@ -167,7 +167,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     protected readonly connector: BotConnector;
 
     /**
-     * An instance counter uniquely representing this
+     * An instance id uniquely representing this
      * bot instance.
      */
     public readonly instanceId: number;

@@ -58,7 +58,8 @@ export interface IBotOptions {
     readonly logMessages: boolean;
 
     /**
-     * Whether to send a DM (direct message) when the help command is invoked.
+     * Whether to send a DM (direct message) when
+     * the help command is invoked.
      */
     readonly dmHelp: boolean;
 
@@ -73,12 +74,14 @@ export interface IBotOptions {
     readonly useConsoleInterface: boolean;
 
     /**
-     * Whether to attempt to apply a green checkmark emoji on successfull commands.
+     * Whether to attempt to apply a green checkmark
+     * emoji on successfull commands.
      */
     readonly checkCommands: boolean;
 
     /**
-     * The directory location(s) to scan for various modules used by the bot, such as commands and services.
+     * The directory location(s) to scan for various
+     * modules used by the bot, such as commands and services.
      */
     readonly paths: IBotPaths;
 

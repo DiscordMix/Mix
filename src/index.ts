@@ -56,7 +56,7 @@ import TimeSuffixType from "./time/timeSuffixType";
 import List from "./Collections/List";
 import DiscordEvent from "./core/DiscordEvent";
 import {Constraint, constraints} from "./decorators/Constraint";
-import {description, name, aliases, args, meta} from "./decorators/general";
+import {desc, name, aliases, args, meta} from "./decorators/general";
 import Component from "./decorators/Component";
 import {DecoratorUtils} from "./decorators/DecoratorUtils";
 import {guard, dependsOn, connect, attachedLoggerFn, notImplemented} from "./decorators/other";
@@ -161,7 +161,7 @@ export {
 
     // Decorators.
     name,
-    description,
+    desc as description,
     aliases,
     args,
     Constraint,

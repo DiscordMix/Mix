@@ -35,7 +35,7 @@ export function name(value: string): DecoratorProxy {
  * Set the meta description property of a fragment.
  * @param {string} value The description of the fragment.
  */
-export function description(value: string): DecoratorProxy {
+export function desc(value: string): DecoratorProxy {
     return function (target: any) {
         DecoratorUtils.ensureFunc(target);
 

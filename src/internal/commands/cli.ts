@@ -1,5 +1,5 @@
 import {exec} from "child_process";
-import {name, description, aliases, args} from "../../decorators/general";
+import {name, desc, aliases, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraint";
 import {Type} from "../../commands/type";
 import Command from "../../commands/command";
@@ -13,7 +13,7 @@ interface IArgs {
 }
 
 @name("cli")
-@description("Access the local machine's CLI")
+@desc("Access the local machine's CLI")
 @aliases("exec", "exe")
 @args({
     name: "command",

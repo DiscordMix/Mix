@@ -1,6 +1,6 @@
 import Command from "../../commands/command";
 import Context from "../../commands/context";
-import {name, description, args} from "../../decorators/general";
+import {name, desc, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraint";
 import {Type} from "../../commands/type";
 import {notImplemented} from "../../decorators/other";
@@ -14,7 +14,7 @@ enum ReflectDataType {
 }
 
 @name("reflect")
-@description("Access the bot's internal state")
+@desc("Access the bot's internal state")
 @args({
     name: "type",
     description: "The data to inspect",

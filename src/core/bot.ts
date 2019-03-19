@@ -25,6 +25,7 @@ import BotConnector from "./botConnector";
 import CommandRegistry from "../commands/commandRegistry";
 import BotHandler from "./botHandler";
 import {ArgumentType, ArgumentResolver} from "../commands/type";
+import {InstanceTracker} from "../decorators/inject";
 
 // TODO: Should emit an event when state changes.
 export default class Bot<TState = any, TActionType = any> extends EventEmitter implements IBot<TState, TActionType> {
@@ -166,6 +167,12 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     protected readonly connector: BotConnector;
 
     /**
+     * An instance counter uniquely representing this
+     * bot instance.
+     */
+    public readonly instanceId: number;
+
+    /**
      * @param {BotToken} token The bot token required to login to Discord.
      * @param {boolean} [testMode=false] Whether the bot is being used in testing. For internal use only.
      */
@@ -183,6 +190,9 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         if (testMode) {
             this.applyTestMode();
         }
+
+        // Register this instance in the instance tracker.
+        this.instanceId = InstanceTracker.register(this);
 
         this.isSuspended = true;
         this.state = BotState.Disconnected;

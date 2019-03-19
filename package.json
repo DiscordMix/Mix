@@ -7,7 +7,8 @@
         "discord",
         "discord-bot",
         "discord-library",
-        "discord-framework"
+        "discord-framework",
+        "bot-framework"
     ],
     "presets": [
         "env",
@@ -17,7 +18,7 @@
         "node": ">=8.11.1 <=10.12.0"
     },
     "directories": {
-        "test": "src/Test"
+        "test": "src/test"
     },
     "repository": {
         "type": "git",
@@ -27,8 +28,8 @@
         "watch": "tsc --watch",
         "build": "tsc",
         "check": "tsc --noEmit",
-        "test": "npm run build && node dist/Test/Runner.js",
-        "webhook-test": "npm run build && node dist/Test/WebhookTest.js",
+        "test": "npm run build && node dist/test/Runner.js",
+        "webhook-test": "npm run build && node dist/test/webhookTest.js",
         "prepublishOnly": "npm test"
     },
     "author": "Atlas <cloudrex@outlook.com>",

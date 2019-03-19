@@ -15,9 +15,8 @@ import path from "path";
 import Pattern from "./pattern";
 import Log from "./log";
 import {IBot} from "./botExtra";
-
-const TimeAgo: any = require("javascript-time-ago");
-const en: any = require("javascript-time-ago/locale/en");
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
 
 const moderationPermissions: PermissionResolvable[] = [
     "MANAGE_GUILD",

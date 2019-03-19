@@ -20,7 +20,6 @@ import "./uncategorized/languages";
 import "./uncategorized/commands";
 import "./uncategorized/collection";
 import "./uncategorized/services";
-import "./uncategorized/timeMachine";
 import "./uncategorized/timeConvert";
 import "./uncategorized/flagParser";
 import "./uncategorized/commandParser";

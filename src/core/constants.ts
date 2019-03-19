@@ -110,12 +110,10 @@ export const DefaultBotOptions: IBotOptions = {
     keys: {},
     argumentResolvers: new Map(),
     argumentTypes: [],
-    initialState: undefined,
     internalCommands: [],
     languages: [],
     owner: undefined,
     prefixes: ["!"],
-    reducers: [],
     usePrefixCommand: true,
 
     paths: {

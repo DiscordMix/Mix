@@ -1,6 +1,6 @@
 import {default as Command} from "../../commands/command";
 import Context from "../../commands/context";
-import {Name, Description, Args} from "../../decorators/general";
+import {name, description, args} from "../../decorators/general";
 import MsgBuilder from "../../Builders/MsgBuilder";
 import {Constraint} from "../../decorators/Constraint";
 import {Type} from "../../commands/type";
@@ -11,9 +11,9 @@ interface IArgs {
 
 const delimiter: string = ", ";
 
-@Name("usage")
-@Description("View the usage of a command")
-@Args(
+@name("usage")
+@description("View the usage of a command")
+@args(
     {
         name: "command",
         type: Type.string,

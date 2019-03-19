@@ -3,16 +3,16 @@ import {DecoratorUtils} from "./decoratorUtils";
 import Context from "../commands/context";
 import Log from "../core/log";
 
-export const AttachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
+export const attachedLoggerFn: CommandRelay = ($: Context, args: any, cmd: IGenericCommand): void => {
     Log.debug(`Command '${cmd.meta.name}' executed | Issued by ${$.sender.tag}`);
 };
 
 /**
  * Attach an execution logger for debugging purposes.
  */
-export function AttachedLogger(...relays: CommandRelay[]): any {
+export function attachedLogger(...relays: CommandRelay[]): any {
     if (relays.length === 0) {
-        relays = [AttachedLoggerFn];
+        relays = [attachedLoggerFn];
     }
 
     return function (target: any) {
@@ -27,7 +27,7 @@ export function AttachedLogger(...relays: CommandRelay[]): any {
 /**
  * Methods that will be executed after successful command execution.
  */
-export function Connect(...relays: CommandRelay[]): any {
+export function connect(...relays: CommandRelay[]): any {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
@@ -40,7 +40,7 @@ export function Connect(...relays: CommandRelay[]): any {
 /**
  * Specify the required registered services required by this command.
  */
-export function DependsOn(...services: string[]): any {
+export function dependsOn(...services: string[]): any {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
@@ -53,7 +53,7 @@ export function DependsOn(...services: string[]): any {
 /**
  * Methods that serve as pre-requisites for execution.
  */
-export function Guard(...guards: string[]): any {
+export function guard(...guards: string[]): any {
     return function (target: any) {
         const instance: Command = DecoratorUtils.createInstance(target);
 
@@ -69,7 +69,7 @@ export function Guard(...guards: string[]): any {
 /**
  * Informs the user that the requested command is not yet implemented. The run method will not be executed.
  */
-export function NotImplemented(): any {
+export function notImplemented(): any {
     return function (target: any) {
         return class extends target {
             public async run($: Context) {

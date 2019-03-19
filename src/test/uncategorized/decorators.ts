@@ -2,8 +2,8 @@ import {Unit, Test, Assert, Is, Target} from "unit";
 import Command, {CommandRunner, RestrictGroup} from "../../commands/command";
 import {Message} from "discord.js";
 import Permission from "../../core/permission";
-import {DependsOn, Guard, Connect, AttachedLoggerFn, AttachedLogger} from "../../decorators/other";
-import {Args, Description, Name, Meta} from "../../decorators/general";
+import {dependsOn, guard, connect, attachedLoggerFn, attachedLogger} from "../../decorators/other";
+import {args, description, name, meta} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraint";
 import {Type} from "../../commands/type";
 import {Deprecated} from "../../decorators/utility";
@@ -16,16 +16,16 @@ const testConnection: CommandRunner = (): void => {
     //
 };
 
-@Name("mycmd")
-@Description("Used for testing")
-@AttachedLogger()
-@Args({
+@name("mycmd")
+@description("Used for testing")
+@attachedLogger()
+@args({
     name: "name",
     type: Type.string
 })
-@Connect(testConnection)
-@Guard("testGuard")
-@DependsOn("service-name-1", "service-name-2")
+@connect(testConnection)
+@guard("testGuard")
+@dependsOn("service-name-1", "service-name-2")
 @Constraint.cooldown(5)
 @Constraint.ownerOnly
 @Constraint.issuerPermissions(Permission.AddReactions)
@@ -49,7 +49,7 @@ export class MyCommand extends Command {
     }
 }
 
-@Meta({
+@meta({
     name: "meta-test",
     description: "Testing meta",
     author: "John Doe",
@@ -74,7 +74,7 @@ default class {
 
     @Test("Should register commands with helper decorators")
     public registerCommandsWithDecorators() {
-        Assert.equal(testBot.registry.contains("TestDecoratorCommand"), true);
+        Assert.equal(testBot.registry.contains("mycmd"), true);
     }
 
     @Test("Should have a meta property")
@@ -95,25 +95,25 @@ default class {
     }
 
     @Test("Should bind command name")
-    @Target(Name)
+    @Target(name)
     public name_bind() {
         Assert.equal(instance.meta.name, "mycmd");
     }
 
     @Test("Should bind command description")
-    @Target(Description)
+    @Target(description)
     public description_bind() {
         Assert.equal(instance.meta.description, "Used for testing");
     }
 
     @Test("Should bind command arguments")
-    @Target(Args)
+    @Target(args)
     public args_bind() {
         Assert.that(instance.args, Is.arrayWithLength(1));
     }
 
     @Test("Should bind fragment meta")
-    @Target(Meta)
+    @Target(meta)
     public meta_bind() {
         Assert.that(metaInstance.meta, Is.object);
         Assert.equal(Object.keys(metaInstance.meta).length, 4);
@@ -136,7 +136,7 @@ default class {
     }
 
     @Test("@Guard: Should bind command guards")
-    @Target(Guard)
+    @Target(guard)
     public guard_bind() {
         Assert.that(instance.guards, Is.arrayWithLength(1));
         Assert.equal(instance.guards[0], instance.testGuard);
@@ -158,7 +158,7 @@ default class {
     }
 
     @Test("Should append command dependencies")
-    @Target(DependsOn)
+    @Target(dependsOn)
     public dependsOn_bind() {
         Assert.that(instance.dependsOn, Is.arrayWithLength(2));
         Assert.equal(instance.dependsOn[0], "service-name-1");
@@ -166,15 +166,15 @@ default class {
     }
 
     @Test("Should append command connections")
-    @Target(Connect)
+    @Target(connect)
     public connect_bind() {
         Assert.equal(instance.connections[0], testConnection);
     }
 
     @Test("Should append the attached logger connection")
-    @Target(AttachedLogger)
+    @Target(attachedLogger)
     public attachedLogger_bind() {
-        Assert.equal(instance.connections[1], AttachedLoggerFn);
+        Assert.equal(instance.connections[1], attachedLoggerFn);
     }
 
     @Test("Should replace input with a proxy method")

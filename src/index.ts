@@ -59,10 +59,10 @@ import TimeSuffixType from "./time/timeSuffixType";
 import List from "./Collections/List";
 import DiscordEvent from "./core/DiscordEvent";
 import {Constraint, constraints} from "./decorators/Constraint";
-import {Description, Name, Aliases, Args, Meta} from "./decorators/general";
+import {description, name, aliases, args, meta} from "./decorators/general";
 import Component from "./decorators/Component";
 import {DecoratorUtils} from "./decorators/DecoratorUtils";
-import {Guard, DependsOn, Connect, AttachedLoggerFn, NotImplemented} from "./decorators/other";
+import {guard, dependsOn, connect, attachedLoggerFn, notImplemented} from "./decorators/other";
 import {Deprecated} from "./decorators/Utility";
 import {PromiseOr} from "@atlas/xlib";
 import {CmdHandlerEvent} from "./commands/commandHandler";
@@ -168,24 +168,24 @@ export {
     IDisposable,
 
     // Decorators.
-    Name,
-    Description,
-    Aliases,
-    Args,
+    name as Name,
+    description as Description,
+    aliases as Aliases,
+    args as Args,
     Constraint,
     constraints,
-    Guard,
+    guard as Guard,
     On,
     Once,
-    DependsOn,
-    Connect,
-    AttachedLoggerFn,
+    dependsOn as DependsOn,
+    connect as Connect,
+    attachedLoggerFn as AttachedLoggerFn,
     Component,
     DecoratorUtils,
     Deprecated,
-    Meta,
+    meta as Meta,
     ExclusiveConstraint,
-    NotImplemented,
+    notImplemented as NotImplemented,
 
     // Tasks.
     Task,

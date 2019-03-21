@@ -3,7 +3,7 @@ import {EventEmitter} from "events";
 import {ICustomArgType} from "../commands/command";
 import {ICommandHandler} from "../commands/commandHandler";
 import {IFragmentManager} from "../fragments/fragmentManager";
-import Language from "../localization/language";
+import Localisation from "./localisation";
 import {IOptimizer} from "../optimization/optimizer";
 import {IServiceManager} from "../services/serviceManager";
 import {ITimeoutAttachable, IDisposable} from "./helpers";
@@ -208,7 +208,7 @@ export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDi
     readonly usePrefixCommand: boolean;
     readonly internalCommands: InternalCommand[];
     readonly owner?: Snowflake;
-    readonly i18n?: Language;
+    readonly i18n?: Localisation;
     readonly argumentResolvers: Map<ArgumentType, ArgumentResolver>;
     readonly disposables: IDisposable[];
     readonly tasks: ITaskManager;

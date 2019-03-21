@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
-import BotMessages from "../core/Messages";
-import Util from "../core/Util";
+import BotMessages from "./Messages";
+import Util from "./Util";
 import {PromiseOr} from "@atlas/xlib";
-import Log from "../core/log";
+import Log from "./log";
 
 export type LanguageSource = Map<string, any>;
 
@@ -16,7 +16,7 @@ export interface ILanguage {
     load(name: string): PromiseOr<this>;
 }
 
-export default class Language implements ILanguage {
+export default class Localisation implements ILanguage {
     public readonly directory?: string;
 
     protected readonly languages: Map<string, LanguageSource>;

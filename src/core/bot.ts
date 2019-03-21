@@ -10,7 +10,7 @@ import axios from "axios";
 import CommandHandler from "../commands/commandHandler";
 import fs from "fs";
 import path from "path";
-import Translation from "../localization/language";
+import Translation from "./localisation";
 import Analytics from "./botAnalytics";
 import {IDisposable} from "./helpers";
 import TaskManager from "../tasks/taskManager";

@@ -1,6 +1,6 @@
 import {Unit, Test, Assert, Is} from "unit";
 import {testBot} from "../TestBot";
-import Language, {LanguageSource} from "../../localization/language";
+import Localisation, {LanguageSource} from "../../core/localisation";
 
 @Unit("Languages")
 default class {
@@ -8,7 +8,7 @@ default class {
     public register() {
         Assert.that(testBot.i18n, Is.object);
 
-        const language: Language = testBot.i18n as Language;
+        const language: Localisation = testBot.i18n as Localisation;
         const languages: ReadonlyMap<string, LanguageSource> = language.getLanguages();
 
         Assert.equal(languages.size, 1);
@@ -18,7 +18,7 @@ default class {
 
     @Test("Should retrieve language values")
     public retrieveValues() {
-        const language: Language = testBot.i18n as Language;
+        const language: Localisation = testBot.i18n as Localisation;
 
         Assert.equal(language.get("name"), "john doe");
         Assert.equal(language.get("occupation"), "tester");
@@ -26,7 +26,7 @@ default class {
 
     @Test("Should not retrieve invalid language keys")
     public notRetrieveInvalid() {
-        const language: Language = testBot.i18n as Language;
+        const language: Localisation = testBot.i18n as Localisation;
 
         Assert.that(language.get("fake"), Is.null);
         Assert.that(language.get(""), Is.null);
@@ -39,7 +39,7 @@ default class {
 
     @Test("Should not set invalid default languages")
     public notSetInvalid() {
-        const language: Language = testBot.i18n as Language;
+        const language: Localisation = testBot.i18n as Localisation;
 
         Assert.false(language.setDefault("f"));
         Assert.false(language.setDefault(""));

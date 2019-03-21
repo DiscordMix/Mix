@@ -6,9 +6,9 @@ import {dependsOn, guard, connect, attachedLoggerFn, attachedLogger} from "../..
 import {args, desc, name, meta} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraint";
 import {Type} from "../../commands/type";
-import {Deprecated} from "../../decorators/utility";
+import {deprecated} from "../../decorators/utility";
 import DiscordEvent from "../../core/discordEvent";
-import {On} from "../../decorators/events";
+import {on} from "../../decorators/events";
 import {IMeta} from "../../fragments/fragment";
 import {testBot} from "../testBot";
 
@@ -32,14 +32,14 @@ const testConnection: CommandRunner = (): void => {
 @Constraint.selfPermissions(Permission.Admin, Permission.BanMembers)
 @Constraint.userGroup(RestrictGroup.ServerModerator)
 export class MyCommand extends Command {
-    @Deprecated()
+    @deprecated()
     public testGuard(): boolean {
         //
 
         return false;
     }
 
-    @On(DiscordEvent.Message)
+    @on(DiscordEvent.Message)
     public onMessage(msg: Message): void {
         //
     }
@@ -178,7 +178,7 @@ default class {
     }
 
     @Test("Should replace input with a proxy method")
-    @Target(Deprecated)
+    @Target(deprecated)
     public deprecated_replace() {
         // TODO
     }

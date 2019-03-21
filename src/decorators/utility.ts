@@ -11,7 +11,7 @@ export interface IBotEvent {
  * Deprecate a function. Will display a warning every time target function is invoked.
  * @param {string | undefined} use The suggested alternative.
  */
-export function Deprecated(use?: string): any {
+export function deprecated(use?: string): any {
     return function (target: any) {
         const functionName: string = Object.keys(target)[0];
         const className: string = target.constructor.name;

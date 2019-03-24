@@ -1,6 +1,6 @@
 import {Unit, Test, Assert, Is} from "unit";
-import {testBot} from "../TestBot";
-import Task from "../../tasks/Task";
+import {testBot} from "../testBot";
+import Task from "../../tasks/task";
 
 @Unit("Tasks")
 default class {

@@ -1,6 +1,4 @@
-import ArgumentParser, {IArgumentParser} from "./commands/ArgumentParser";
 import Context, {IContext, IContextOptions, TextBasedChannel} from "./commands/context";
-import CommandRegistry, {ICommandRegistry} from "./commands/CommandRegistry";
 import Bot from "./core/bot";
 
 import Command, {
@@ -11,30 +9,16 @@ import Command, {
     RestrictGroup
 } from "./commands/command";
 
-import EmbedBuilder from "./Builders/EmbedBuilder";
-import MsgBuilder, {IMsgBuilder} from "./Builders/MsgBuilder";
-import CommandParser from "./commands/CommandParser";
 import ConsoleCommand from "./console/consoleCommand";
 import ConsoleInterface, {IConsoleInterface} from "./console/consoleInterface";
 import {BotEvent, IBot} from "./core/botExtra";
-import ChatEnv from "./core/ChatEnv";
 import {IDisposable} from "./core/helpers";
 import Log, {LogLevel} from "./core/log";
 import Pattern from "./core/pattern";
-import Permission from "./core/Permission";
-import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/SetupHelper";
-import Util from "./core/Util";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./core/emojiMenu";
 import {ICommandEvent} from "./core/commandEvent";
 import {IFragment, IMeta} from "./fragments/fragment";
-import Loader from "./fragments/Loader";
 import EditableMessage from "./message/editableMessage";
-import PaginatedMessage from "./Pagination/PaginatedMessage";
-import LogSerializer, {ILogMsg, ILogSource} from "./Serializers/logSerializer";
-import {ISerializer} from "./Serializers/Serializer";
-import StateSerializer from "./Serializers/stateSerializer";
-import UrlSerializer from "./Serializers/UrlSerializer";
-import UserSerializer from "./Serializers/UserSerializer";
 import {ForkedService} from "./services/forkedService";
 
 import {
@@ -49,24 +33,39 @@ import {
 
 import Service from "./services/service";
 import SMIS from "./services/smis";
-import Task, {ITask} from "./tasks/Task";
 import TaskManager, {ITaskManager} from "./tasks/taskManager";
-import TimeParser from "./time/timeParser";
-import TimeSuffixType from "./time/timeSuffixType";
-import List from "./Collections/List";
-import DiscordEvent from "./core/DiscordEvent";
-import {Constraint, constraints} from "./decorators/Constraint";
 import {desc, name, aliases, args, meta} from "./decorators/general";
-import Component from "./decorators/Component";
-import {DecoratorUtils} from "./decorators/DecoratorUtils";
 import {guard, dependsOn, connect, attachedLoggerFn, notImplemented} from "./decorators/other";
-import {Deprecated} from "./decorators/Utility";
-import {PromiseOr} from "@atlas/xlib";
+import {PromiseOr, List} from "@atlas/xlib";
 import {CmdHandlerEvent} from "./commands/commandHandler";
-import {Once, On} from "./decorators/Events";
 import BotConnector, {IBotConnector} from "./core/botConnector";
 import {TypeChecker, Type, ArgumentResolver} from "./commands/type";
-import ExclusiveConstraint from "./decorators/ExclusiveConstraint";
+import Loader from "./fragments/loader";
+import CommandParser from "./commands/commandParser";
+import EmbedBuilder from "./builders/embedBuilder";
+import MsgBuilder, {IMsgBuilder} from "./builders/msgBuilder";
+import TimeParser from "./time/timeParser";
+import TimeSuffixType from "./time/timeSuffixType";
+import Permission from "./core/permission";
+import ChatEnv from "./core/chatEnv";
+import DiscordEvent from "./core/discordEvent";
+import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setupHelper";
+import PaginatedMessage from "./pagination/paginatedMessage";
+import LogSerializer, {ILogMsg, ILogSource} from "./serializers/logSerializer";
+import {Constraint, constraints} from "./decorators/constraint";
+import Component from "./decorators/component";
+import {DecoratorUtils} from "./decorators/decoratorUtils";
+import ExclusiveConstraint from "./decorators/exclusiveConstraint";
+import Task, {ITask} from "./tasks/task";
+import {ISerializer} from "./serializers/serializer";
+import StateSerializer from "./serializers/stateSerializer";
+import UrlSerializer from "./serializers/urlSerializer";
+import UserSerializer from "./serializers/userSerializer";
+import ArgumentParser, {IArgumentParser} from "./commands/argumentParser";
+import CommandRegistry, {ICommandRegistry} from "./commands/commandRegistry";
+import {on, once} from "./decorators/events";
+import {deprecated} from "./decorators/utility";
+import Util from "./core/util";
 
 export {
     // Fragments.
@@ -167,14 +166,14 @@ export {
     Constraint,
     constraints,
     guard,
-    On,
-    Once,
+    on,
+    once,
     dependsOn,
     connect,
     attachedLoggerFn,
     Component,
     DecoratorUtils,
-    Deprecated,
+    deprecated,
     meta,
     ExclusiveConstraint,
     notImplemented,

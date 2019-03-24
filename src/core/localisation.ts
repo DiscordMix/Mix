@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import BotMessages from "./Messages";
-import Util from "./Util";
+import BotMessages from "./messages";
+import Util from "./util";
 import {PromiseOr} from "@atlas/xlib";
 import Log from "./log";
 

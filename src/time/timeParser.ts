@@ -1,5 +1,5 @@
 import TimeSuffixType from "./timeSuffixType";
-import Util from "../core/Util";
+import Util from "../core/util";
 import Log from "../core/log";
 
 export default class TimeParser {

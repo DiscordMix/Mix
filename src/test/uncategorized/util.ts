@@ -1,6 +1,6 @@
 import {Unit, Test, Assert, Feed, Is, Does, Target} from "unit";
-import Util, {IBinarySearchResult} from "../../core/Util";
-import {TestSubjects} from "../TestBot";
+import Util, {IBinarySearchResult} from "../../core/util";
+import {TestSubjects} from "../testBot";
 import {Snowflake} from "../../core/botExtra";
 
 const populated: number[] = Util.populate(50);

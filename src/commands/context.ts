@@ -4,9 +4,9 @@ import Log from "../core/log";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/responseHelper";
 import Util from "../core/util";
-import EditableMessage from "../message/editableMessage";
 import {PromiseOr} from "@atlas/xlib";
 import {ChannelType} from "../core/botExtra";
+import EditableMessage from "../message/editableMessage";
 
 export interface IContextOptions {
     readonly msg: Message;

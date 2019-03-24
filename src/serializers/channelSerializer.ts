@@ -1,6 +1,6 @@
 import {Channel, Snowflake, TextChannel} from "discord.js";
-import {Collection} from "../Collections/Collection";
-import {ISerializer} from "./Serializer";
+import {Collection} from "../collections/collection";
+import {ISerializer} from "./serializer";
 import Log from "../core/log";
 
 /**

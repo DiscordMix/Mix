@@ -1,7 +1,7 @@
 import {Message, RichEmbed, TextChannel, User} from "discord.js";
 import Discord from "discord.js";
-import EmbedBuilder from "../Builders/EmbedBuilder";
-import MsgBuilder from "../Builders/MsgBuilder";
+import EmbedBuilder from "../builders/embedBuilder";
+import MsgBuilder from "../builders/msgBuilder";
 import EditableMessage from "../message/editableMessage";
 import Log from "./log";
 import Util from "./util";

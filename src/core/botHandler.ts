@@ -3,7 +3,7 @@ import Util from "./util";
 import {BotEvent} from "./botExtra";
 import Log from "./log";
 import BotMessages from "./messages";
-import CommandParser from "../commands/CommandParser";
+import CommandParser from "../commands/commandParser";
 import Command, {RawArguments} from "../commands/command";
 import Context from "../commands/context";
 import {PromiseOr} from "@atlas/xlib";

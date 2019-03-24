@@ -1,6 +1,6 @@
 import {Collection, Snowflake, User} from "discord.js";
 import Pattern from "../core/pattern";
-import {ISerializer} from "./Serializer";
+import {ISerializer} from "./serializer";
 
 export default class UserSerializer<T extends User = User> implements ISerializer<T> {
     protected readonly source: Collection<Snowflake, T>;

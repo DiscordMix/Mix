@@ -59,17 +59,18 @@ export default abstract class Util {
         ["387812458661937152", "botlist.space"],
         ["483344253963993113", "automacord.xyz"],
         ["446425626988249089", "bots.ondiscord.xyz"],
-        ["528352472389910529", "botsparadiscord.xyz"]
+        ["528352472389910529", "botsparadiscord.xyz"],
+        ["112319935652298752", "carbonitex.net"],
+        ["402400730922876930", "dankbotlist.com"],
+        ["439866052684283905", "discord.boats"],
+        ["421630709585805312", "discordboats.club"],
+        ["450100127256936458", "discordbotlist.com"],
+        ["500658335217876997", "discordbotreviews.xyz"],
+        ["396440418507816960", "discordbot.world"],
+        ["110373943822540800", "discord.bots.gg"],
+        ["494311015484358687", "discordbotslist.us.to"],
+        ["501017909389295616", "discordbots.fr"]
     ]);
-
-    /**
-     * Determine whether a guild is registered
-     * as a botlist by comparing it with the built-in
-     * botlist 
-     */
-    public static isBotlist(guild: Guild): boolean {
-        return Util.botLists.has(guild.id);
-    }
 
     /**
      * Strip a Snowflake into its bare ID.

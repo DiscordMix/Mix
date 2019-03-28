@@ -42,7 +42,7 @@ export default class ResponseHelper implements IResponseHelper {
 
         const finalContent: EmbedBuilder | any = Object.assign({}, content);
 
-        if (typeof (finalContent as any).text === "string") {
+        if (typeof finalContent.text === "string") {
             if (finalContent.text.trim() === "" || finalContent.text === undefined || finalContent.text === null) {
                 finalContent.text = ":thinking: *Empty response*";
             }

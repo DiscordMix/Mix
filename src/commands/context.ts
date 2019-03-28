@@ -138,6 +138,10 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         return this.createRequest(await this.msg.author.createDM(), message, this.msg.author.id, timeout);
     }
 
+    /**
+     * Prompt the command issuer for input through their
+     * DMs.
+     */
     public async promptDM(message: string, timeout: number = 7500): Promise<boolean | null> {
         const response: EditableMessage | null = await this.send(message);
 

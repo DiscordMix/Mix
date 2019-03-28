@@ -1,18 +1,18 @@
-import {Unit, Test, Assert, Is, Target} from "unit";
+import {unit, test, Assert, Is, target} from "unit";
 import {TestSubjects} from "../TestBot";
 import List from "../../Collections/List";
 
-@Unit("Collection")
+@unit("Collection")
 default class {
-    @Test("Should return the item located in the specified index")
-    @Target(List.prototype.at)
+    @test("should return the item located in the specified index")
+    @target(List.prototype.at)
     public at_returnAtSpecified() {
         Assert.equal(TestSubjects.collection.at(0), "hello");
         Assert.equal(TestSubjects.collection.at(1), "it's me");
     }
 
-    @Test("Should remove the item located in the specified index")
-    @Target(List.prototype.removeAt)
+    @test("should remove the item located in the specified index")
+    @target(List.prototype.removeAt)
     public removeAt_removeAtSpecified() {
         const result1: boolean = TestSubjects.collection.removeAt(0);
         const result2: boolean = TestSubjects.collection.removeAt(5);
@@ -22,8 +22,8 @@ default class {
         Assert.false(result2);
     }
 
-    @Test("Should add an item to the collection")
-    @Target(List.prototype.add)
+    @test("should add an item to the collection")
+    @target(List.prototype.add)
     public add_addItem() {
         TestSubjects.collection.add("test");
 
@@ -31,22 +31,22 @@ default class {
         Assert.that(TestSubjects.collection.at(1), Is.object);
     }
 
-    @Test("Should add an unique item")
-    @Target(List.prototype.addUnique)
+    @test("should add an unique item")
+    @target(List.prototype.addUnique)
     public addUnique_addItem() {
         Assert.true(TestSubjects.collection.addUnique("doe"));
         Assert.false(TestSubjects.collection.addUnique("doe"));
     }
 
-    @Test("Should determine whether the collection contains an item")
-    @Target(List.prototype.contains)
+    @test("should determine whether the collection contains an item")
+    @target(List.prototype.contains)
     public contains_determineWhetherExists() {
         Assert.true(TestSubjects.collection.contains("doe"));
         Assert.false(TestSubjects.collection.contains("nope"));
     }
 
-    @Test("Should find an item by its property")
-    @Target(List.prototype.find)
+    @test("should find an item by its property")
+    @target(List.prototype.find)
     public find_findByProp() {
         const result: any = TestSubjects.collection.find("name", "John Doe");
 

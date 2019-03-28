@@ -1,16 +1,16 @@
-import {Unit, Test, Assert, Is, Does, Feed, Mock} from "unit";
+import {unit, test, Assert, Is, Does, feed, Mock} from "unit";
 import {init, testBot} from "../TestBot";
 import DiscordEvent from "../../core/DiscordEvent";
 import TestData from "../testData";
 
-@Unit("Bot")
+@unit("Bot")
 default class {
-    @Test("Should be initially suspended")
+    @test("should be initially suspended")
     public beSuspended() {
         Assert.true(testBot.suspended);
     }
 
-    @Test("Should init and login")
+    @test("should init and login")
     public async initAndLogin() {
         // Mock Discord.JS' client login.
         testBot.client.login = Mock.fn(testBot.client.login)
@@ -32,7 +32,7 @@ default class {
         Assert.that(testBot.client.user, Is.object);
     }
 
-    @Test("Should have correct options")
+    @test("should have correct options")
     public haveCorrectOptions() {
         Assert.false(testBot.options.showAsciiTitle);
         Assert.false(testBot.options.useConsoleInterface);
@@ -40,28 +40,28 @@ default class {
         // TODO: Add more.
     }
 
-    @Test("Should have no owner")
+    @test("should have no owner")
     public haveNoOwner() {
         Assert.that(testBot.owner, Is.undefined);
     }
 
-    @Test("Should have default argument resolvers")
+    @test("should have default argument resolvers")
     public defaultArgResolvers() {
         // TODO: Comparing these objects will not work since testBot's argumentResolvers are united using spread operator.
         // Assert.equal(testBot.argumentResolvers, DefaultArgResolvers);
     }
 
-    @Test("Should not handle invalid messages")
-    @Feed(undefined)
-    @Feed(null)
-    @Feed("")
-    @Feed("test")
-    @Feed([])
+    @test("should not handle invalid messages")
+    @feed(undefined)
+    @feed(null)
+    @feed("")
+    @feed("test")
+    @feed([])
     public async notHandleInvalidMsgs(input: any) {
         Assert.false(await testBot.handle.message(input));
     }
 
-    @Test("Should have correct internal commands")
+    @test("should have correct internal commands")
     public haveCorrectInternalCmds() {
         Assert.that(testBot.internalCommands,
             Is.array,

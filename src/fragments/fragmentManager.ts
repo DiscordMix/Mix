@@ -1,5 +1,5 @@
 import {EventEmitter} from "events";
-import Command, {DefaultCommandRestrict} from "../commands/command";
+import Command, {DefaultCommandRestrict, IConstraints} from "../commands/command";
 import Bot from "../core/bot";
 import {InternalCommand} from "../core/botExtra";
 import Log from "../core/log";
@@ -8,6 +8,7 @@ import Loader, {ILivePackage, IPackage} from "./loader";
 import {ForkedService} from "../services/forkedService";
 import Service from "../services/service";
 import {PromiseOr} from "@atlas/xlib";
+import {Writeable} from "../core/helpers";
 
 export interface IFragmentManager extends EventEmitter {
     enableMultiple(packages: IPackage[], internal: boolean): PromiseOr<number>;
@@ -105,7 +106,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
             }
 
             // Overwrite command restrict with default values.
-            (command.constraints as any) = {
+            (command.constraints as Writeable<IConstraints>) = {
                 ...DefaultCommandRestrict,
                 ...command.constraints
             };

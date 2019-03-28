@@ -64,7 +64,7 @@ const metaInstance: MetaTest = new MetaTest();
 
 @unit("Decorators")
 default class {
-    @test("Instance should be an object")
+    @test("instance should be an object")
     public instanceBeObj() {
         Assert.that(instance,
             Is.object,

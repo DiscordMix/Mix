@@ -6,7 +6,7 @@ import ResponseHelper from "../core/responseHelper";
 import Util from "../core/util";
 import {PromiseOr} from "@atlas/xlib";
 import {ChannelType} from "../core/botExtra";
-import EditableMessage from "../message/editableMessage";
+import EditableMessage from "../core/editableMessage";
 
 export interface IContextOptions {
     readonly msg: Message;

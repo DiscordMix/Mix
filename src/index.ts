@@ -18,7 +18,7 @@ import Pattern from "./core/pattern";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./core/emojiMenu";
 import {ICommandEvent} from "./core/commandEvent";
 import {IFragment, IMeta} from "./fragments/fragment";
-import EditableMessage from "./message/editableMessage";
+import EditableMessage from "./core/editableMessage";
 import {ForkedService} from "./services/forkedService";
 
 import {
@@ -50,7 +50,7 @@ import Permission from "./core/permission";
 import ChatEnv from "./core/chatEnv";
 import DiscordEvent from "./core/discordEvent";
 import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setupHelper";
-import PaginatedMessage from "./pagination/paginatedMessage";
+import PaginatedMessage from "./core/paginatedMessage";
 import LogSerializer, {ILogMsg, ILogSource} from "./serializers/logSerializer";
 import {Constraint, constraints} from "./decorators/constraint";
 import Component from "./decorators/component";

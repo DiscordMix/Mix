@@ -53,13 +53,23 @@ export interface IBinarySearchResult {
 }
 
 export default abstract class Util {
-    public static readonly botLists: Snowflake[] = [
-        "374071874222686211", // Bots for Discord (BFD).
-        "264445053596991498", // Discord Bot List (DBL).
-        "110373943822540800", // Discord Bots.
-        "387812458661937152", // Botlist.space.
-        "450100127256936458"  // Discord Bot List (2).
-    ];
+    public static readonly botLists: ReadonlyMap<Snowflake, string> = new Map([
+        ["374071874222686211", "botsfordiscord.com"],
+        ["264445053596991498", "discordbots.org"],
+        ["387812458661937152", "botlist.space"],
+        ["483344253963993113", "automacord.xyz"],
+        ["446425626988249089", "bots.ondiscord.xyz"],
+        ["528352472389910529", "botsparadiscord.xyz"]
+    ]);
+
+    /**
+     * Determine whether a guild is registered
+     * as a botlist by comparing it with the built-in
+     * botlist 
+     */
+    public static isBotlist(guild: Guild): boolean {
+        return Util.botLists.has(guild.id);
+    }
 
     /**
      * Strip a Snowflake into its bare ID.

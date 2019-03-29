@@ -1,11 +1,11 @@
-import {Unit, Test, Feed, Assert, Is, JsType, Does, Target} from "unit";
-import LogSerializer, {ILogMsg} from "../../Serializers/logSerializer";
+import {unit, test, feed, Assert, Is, JsType, Does, target} from "unit";
+import LogSerializer, {ILogMsg} from "../../serializers/logSerializer";
 
-@Unit("Log Serializer")
+@unit("Log Serializer")
 default class {
-    @Test("Should serialize log messages")
-    @Target(LogSerializer.prototype.serialize)
-    @Feed({
+    @test("should serialize log messages")
+    @target(LogSerializer.prototype.serialize)
+    @feed({
         message: "Hello world",
         time: "Today",
 
@@ -14,7 +14,7 @@ default class {
             extra: "doe"
         }
     }, "{Today} [World.doe] Hello world")
-    @Feed({
+    @feed({
         message: "{[Hello world]}",
         time: "{Tomorrow}",
 
@@ -29,21 +29,21 @@ default class {
         Assert.equal(serializer.serialize(msg), expected);
     }
 
-    @Test("Should not serialize when provided invalid arguments")
-    @Target(LogSerializer.prototype.serialize)
-    @Feed(undefined)
-    @Feed("")
-    @Feed("hello world")
-    @Feed(3)
+    @test("should not serialize when provided invalid arguments")
+    @target(LogSerializer.prototype.serialize)
+    @feed(undefined)
+    @feed("")
+    @feed("hello world")
+    @feed(3)
     public serialize_returnNullOnInvalidParams(input: any) {
         const serializer: LogSerializer = new LogSerializer();
 
         Assert.that(serializer.serialize(input), Is.null);
     }
 
-    @Test("Should deserialize serialized log messages")
-    @Target(LogSerializer.prototype.deserialize)
-    @Feed("{Today} [Some.where] Hello world")
+    @test("should deserialize serialized log messages")
+    @target(LogSerializer.prototype.deserialize)
+    @feed("{Today} [Some.where] Hello world")
     public deserialize(msg: string) {
         const serializer: LogSerializer = new LogSerializer();
         const result: ILogMsg = serializer.deserialize(msg) as ILogMsg;
@@ -61,9 +61,9 @@ default class {
         Assert.equal(result.time, "Today");
     }
 
-    @Test("Should deserialize serialized log messages with one source")
-    @Target(LogSerializer.prototype.deserialize)
-    @Feed("{Today} [Some] Hello world")
+    @test("should deserialize serialized log messages with one source")
+    @target(LogSerializer.prototype.deserialize)
+    @feed("{Today} [Some] Hello world")
     public deserialize_OneSource(msg: string) {
         const serializer: LogSerializer = new LogSerializer();
         const result: ILogMsg = serializer.deserialize(msg) as ILogMsg;

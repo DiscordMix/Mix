@@ -3,10 +3,11 @@ import {IBot} from "../core/botExtra";
 /**
  * Inject an instance into target.
  */
-export default function inject(instanceId: number = 0) {
-    return function (target: any) {
-        console.log("InjectTarget:", target);
-        console.log("InstanceTarget:", InstanceTracker.get(instanceId));
+export default function inject(instanceId: number = 0): any {
+    return function (target: any): any {
+        return class extends target {
+            public readonly bot: IBot = InstanceTracker.get(instanceId);
+        };
     };
 }
 

@@ -4,7 +4,7 @@ import {ICustomArgType} from "../commands/command";
 import {ICommandHandler} from "../commands/commandHandler";
 import {IFragmentManager} from "../fragments/fragmentManager";
 import Localisation from "./localisation";
-import {IOptimizer} from "../optimization/optimizer";
+import {IOptimizer} from "./optimizer";
 import {IServiceManager} from "../services/serviceManager";
 import {ITimeoutAttachable, IDisposable} from "./helpers";
 import {IPathResolver} from "./pathResolver";

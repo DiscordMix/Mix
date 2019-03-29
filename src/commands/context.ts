@@ -4,9 +4,9 @@ import Log from "../core/log";
 import BotMessages from "../core/messages";
 import ResponseHelper from "../core/responseHelper";
 import Util from "../core/util";
-import EditableMessage from "../message/editableMessage";
 import {PromiseOr} from "@atlas/xlib";
 import {ChannelType} from "../core/botExtra";
+import EditableMessage from "../core/editableMessage";
 
 export interface IContextOptions {
     readonly msg: Message;
@@ -138,6 +138,10 @@ export default class Context<T extends TextBasedChannel = TextBasedChannel> exte
         return this.createRequest(await this.msg.author.createDM(), message, this.msg.author.id, timeout);
     }
 
+    /**
+     * Prompt the command issuer for input through their
+     * DMs.
+     */
     public async promptDM(message: string, timeout: number = 7500): Promise<boolean | null> {
         const response: EditableMessage | null = await this.send(message);
 

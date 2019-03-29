@@ -1,7 +1,7 @@
-import Builder from "./builder";
 import Log from "../core/log";
+import IBuilder from "./builder";
 
-export interface IMsgBuilder<T> extends Builder<string> {
+export interface IMsgBuilder<T> extends IBuilder<string> {
     append(text: string): this;
     add(text: string): this;
     block(language?: string): this;
@@ -18,13 +18,11 @@ export interface IMsgBuilder<T> extends Builder<string> {
 
 export type FormatterCallback<T> = (item: T) => string;
 
-export default class MsgBuilder<T = any> extends Builder implements IMsgBuilder<T> {
+export default class MsgBuilder<T = any> implements IMsgBuilder<T> {
     protected message: string;
     protected formatter?: FormatterCallback<T>;
 
     public constructor(value = "") {
-        super();
-
         this.message = value;
     }
 

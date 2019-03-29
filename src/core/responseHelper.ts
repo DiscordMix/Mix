@@ -1,8 +1,8 @@
 import {Message, RichEmbed, TextChannel, User} from "discord.js";
 import Discord from "discord.js";
-import EmbedBuilder from "../Builders/EmbedBuilder";
-import MsgBuilder from "../Builders/MsgBuilder";
-import EditableMessage from "../message/editableMessage";
+import EmbedBuilder from "../builders/embedBuilder";
+import MsgBuilder from "../builders/msgBuilder";
+import EditableMessage from "./editableMessage";
 import Log from "./log";
 import Util from "./util";
 import {IBot} from "./botExtra";
@@ -42,7 +42,7 @@ export default class ResponseHelper implements IResponseHelper {
 
         const finalContent: EmbedBuilder | any = Object.assign({}, content);
 
-        if (typeof (finalContent as any).text === "string") {
+        if (typeof finalContent.text === "string") {
             if (finalContent.text.trim() === "" || finalContent.text === undefined || finalContent.text === null) {
                 finalContent.text = ":thinking: *Empty response*";
             }

@@ -32,7 +32,8 @@ export default class ModuleScanner implements IModuleScanner {
         const queue: string[] = [this.basePath];
 
         for (const entity of fs.readdirSync(queue[0])) {
-            if (entity is folder) {
+            // TODO: Finish implementing.
+            if (false/*entity is folder*/) {
 
             }
         }

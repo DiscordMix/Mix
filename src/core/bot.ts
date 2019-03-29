@@ -15,7 +15,7 @@ import Analytics from "./botAnalytics";
 import {IDisposable} from "./helpers";
 import TaskManager from "../tasks/taskManager";
 import {EventEmitter} from "events";
-import Optimizer from "../optimization/optimizer";
+import Optimizer from "./optimizer";
 import FragmentManager from "../fragments/fragmentManager";
 import PathResolver from "./pathResolver";
 import {DefaultArgResolvers, DefaultBotOptions} from "./constants";

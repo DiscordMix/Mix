@@ -1,4 +1,4 @@
-import {Unit, Test, Assert, Is, Target} from "unit";
+import {unit, test, Assert, Is, target} from "unit";
 import Command, {CommandRunner, RestrictGroup} from "../../commands/command";
 import {Message} from "discord.js";
 import Permission from "../../core/permission";
@@ -62,9 +62,9 @@ class MetaTest {
 const instance: MyCommand = new (MyCommand as any)(null as any);
 const metaInstance: MetaTest = new MetaTest();
 
-@Unit("Decorators")
+@unit("Decorators")
 default class {
-    @Test("Instance should be an object")
+    @test("instance should be an object")
     public instanceBeObj() {
         Assert.that(instance,
             Is.object,
@@ -72,48 +72,48 @@ default class {
         );
     }
 
-    @Test("Should register commands with helper decorators")
+    @test("should register commands with helper decorators")
     public registerCommandsWithDecorators() {
         Assert.equal(testBot.registry.contains("mycmd"), true);
     }
 
-    @Test("Should have a meta property")
+    @test("should have a meta property")
     public haveMeta() {
         Assert.that(instance.meta, Is.object);
         Assert.equal(Object.keys(instance.meta).length, 2);
     }
 
-    @Test("Should have a constraints property")
+    @test("should have a constraints property")
     public haveConstraints() {
         Assert.that(instance.constraints, Is.object);
         Assert.that(instance.constraints.userGroups, Is.array);
     }
 
-    @Test("Should have a connections property")
+    @test("should have a connections property")
     public haveConnections() {
         Assert.that(instance.connections, Is.arrayWithLength(2));
     }
 
-    @Test("Should bind command name")
-    @Target(name)
+    @test("should bind command name")
+    @target(name)
     public name_bind() {
         Assert.equal(instance.meta.name, "mycmd");
     }
 
-    @Test("Should bind command description")
-    @Target(desc)
+    @test("should bind command description")
+    @target(desc)
     public description_bind() {
         Assert.equal(instance.meta.description, "Used for testing");
     }
 
-    @Test("Should bind command arguments")
-    @Target(args)
+    @test("should bind command arguments")
+    @target(args)
     public args_bind() {
         Assert.that(instance.args, Is.arrayWithLength(1));
     }
 
-    @Test("Should bind fragment meta")
-    @Target(meta)
+    @test("should bind fragment meta")
+    @target(meta)
     public meta_bind() {
         Assert.that(metaInstance.meta, Is.object);
         Assert.equal(Object.keys(metaInstance.meta).length, 4);
@@ -123,62 +123,62 @@ default class {
         Assert.equal(metaInstance.meta.author, "John Doe");
     }
 
-    @Test("Should bind the specific bot owner only constraint")
-    @Target(Constraint.ownerOnly)
+    @test("should bind the specific bot owner only constraint")
+    @target(Constraint.ownerOnly)
     public ownerOnly_bind() {
         Assert.equal(instance.constraints.userGroups.includes(RestrictGroup.BotOwner), true);
     }
 
-    @Test("Should bind specific constraint")
-    @Target(Constraint.userGroup)
+    @test("should bind specific constraint")
+    @target(Constraint.userGroup)
     public userGroups_bind() {
         Assert.equal(instance.constraints.userGroups.includes(RestrictGroup.ServerModerator), true);
     }
 
-    @Test("@Guard: Should bind command guards")
-    @Target(guard)
+    @test("@Guard: Should bind command guards")
+    @target(guard)
     public guard_bind() {
         Assert.that(instance.guards, Is.arrayWithLength(1));
         Assert.equal(instance.guards[0], instance.testGuard);
     }
 
-    @Test("Should bind required issuer permissions")
-    @Target(Constraint.issuerPermissions)
+    @test("should bind required issuer permissions")
+    @target(Constraint.issuerPermissions)
     public issuerPermissions_bind() {
         Assert.that(instance.constraints.issuerPermissions, Is.arrayWithLength(1));
         Assert.equal(instance.constraints.issuerPermissions[0], Permission.AddReactions);
     }
 
-    @Test("Should bind required self permissions")
-    @Target(Constraint.selfPermissions)
+    @test("should bind required self permissions")
+    @target(Constraint.selfPermissions)
     public selfPermissions_bind() {
         Assert.that(instance.constraints.selfPermissions, Is.arrayWithLength(2));
         Assert.equal(instance.constraints.selfPermissions[0], Permission.Admin);
         Assert.equal(instance.constraints.selfPermissions[1], Permission.BanMembers);
     }
 
-    @Test("Should append command dependencies")
-    @Target(dependsOn)
+    @test("should append command dependencies")
+    @target(dependsOn)
     public dependsOn_bind() {
         Assert.that(instance.dependsOn, Is.arrayWithLength(2));
         Assert.equal(instance.dependsOn[0], "service-name-1");
         Assert.equal(instance.dependsOn[1], "service-name-2");
     }
 
-    @Test("Should append command connections")
-    @Target(connect)
+    @test("should append command connections")
+    @target(connect)
     public connect_bind() {
         Assert.equal(instance.connections[0], testConnection);
     }
 
-    @Test("Should append the attached logger connection")
-    @Target(attachedLogger)
+    @test("should append the attached logger connection")
+    @target(attachedLogger)
     public attachedLogger_bind() {
         Assert.equal(instance.connections[1], attachedLoggerFn);
     }
 
-    @Test("Should replace input with a proxy method")
-    @Target(deprecated)
+    @test("should replace input with a proxy method")
+    @target(deprecated)
     public deprecated_replace() {
         // TODO
     }

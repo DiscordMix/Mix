@@ -79,7 +79,7 @@ export default class ResponseHelper implements IResponseHelper {
         }
 
         let messageResult = await this.channel.send(embed.build()).catch((error: Error) => {
-            if (!Util.botLists.includes(this.channel.guild.id)) {
+            if (!Util.botLists.has(this.channel.guild.id)) {
                 // TODO: Commented out, this.privateReply method was moved.
                 // this.privateReply(`Oh no! For some reason, I was unable to reply to you in that channel. (${error.message})`);
             }

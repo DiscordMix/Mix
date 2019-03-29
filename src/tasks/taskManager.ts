@@ -7,7 +7,7 @@ import {PromiseOr} from "@atlas/xlib";
 import {Writeable} from "../core/helpers";
 
 export interface ITaskManager {
-    registerTask(task: Task): boolean;
+    register(task: Task): boolean;
     get(name: string): Task | null;
     unschedule(name: string): boolean;
     trigger(name: string): PromiseOr<boolean>;
@@ -37,7 +37,7 @@ export default class TaskManager implements ITaskManager {
      * @param {Task} task The task that will be registered.
      * @return {boolean} Whether the task was registered.
      */
-    public registerTask(task: Task): boolean {
+    public register(task: Task): boolean {
         if (this.tasks.has(task.meta.name)) {
             return false;
         }
@@ -206,7 +206,7 @@ export default class TaskManager implements ITaskManager {
 
         if (loaded !== null) {
             for (const loadedItem of loaded) {
-                this.registerTask(new (loadedItem.module as any)(this.bot));
+                this.register(new (loadedItem.module as any)(this.bot));
             }
 
             return loaded.length;

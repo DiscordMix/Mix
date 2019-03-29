@@ -152,6 +152,12 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
     public readonly token: BotToken;
 
     /**
+     * An instance id uniquely representing this
+     * bot instance.
+     */
+    public readonly instanceId: number;
+
+    /**
      * Whether the bot is currently suspended and ignoring all user input.
      */
     protected isSuspended: boolean;
@@ -165,12 +171,6 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
      * Handles the bot connection and setup sequence.
      */
     protected readonly connector: BotConnector;
-
-    /**
-     * An instance id uniquely representing this
-     * bot instance.
-     */
-    public readonly instanceId: number;
 
     /**
      * @param {BotToken} token The bot token required to login to Discord.

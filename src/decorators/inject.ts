@@ -15,11 +15,6 @@ export default function inject(instanceId: number = 0): any {
  * Keeps track of bot class instances.
  */
 export abstract class InstanceTracker {
-    // Start at -1 to initially increment to 0.
-    protected static counter: number = -1;
-
-    protected static readonly instances: any[] = [];
-
     /**
      * The amount of existing instances.
      */
@@ -44,4 +39,9 @@ export abstract class InstanceTracker {
     public static get(instanceId: number): IBot {
         return this.instances[instanceId];
     }
+
+    protected static readonly instances: any[] = [];
+
+    // Start at -1 to initially increment to 0.
+    protected static counter: number = -1;
 }

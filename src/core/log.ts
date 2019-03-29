@@ -62,9 +62,9 @@ export default abstract class Log {
     public static record: boolean = true;
 
     /**
-    * Callback to which logging actions will be
-    * redirected to.
-    */
+     * Callback to which logging actions will be
+     * redirected to.
+     */
     public static pipe: LogPipe = Log.compose;
 
     /**

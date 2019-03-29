@@ -46,6 +46,9 @@ export interface IArgument {
     readonly flagShortName?: string;
 }
 
+/**
+ * Possible string keys for constraints.
+ */
 export enum ConstraintProp {
     SelfPermissions = "selfPermissions",
     IssuerPermissions = "issuerPermissions",

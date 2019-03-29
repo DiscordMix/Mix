@@ -4,6 +4,7 @@ import BotMessages from "./messages";
 import Util from "./util";
 import {PromiseOr} from "@atlas/xlib";
 import Log from "./log";
+import JsonUtil from "./json";
 
 export type LanguageSource = Map<string, any>;
 
@@ -70,7 +71,7 @@ export default class Localisation implements ILanguage {
             throw Log.error(`Language file does not exist: ${filePath}`);
         }
 
-        const data: LanguageSource = await Util.readJson(filePath);
+        const data: LanguageSource = await JsonUtil.read(filePath);
 
         if (typeof data !== "object" || Object.keys(data).length === 0) {
             throw Log.error(`Language file is either not an object or empty: ${name}`);

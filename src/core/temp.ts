@@ -6,6 +6,7 @@ import {default as main} from "require-main-filename";
 import Log from "./log";
 import Util from "./util";
 import {PromiseOr} from "@atlas/xlib";
+import JsonUtil from "./json";
 
 export interface ITemp {
     setup(id: Snowflake): this;
@@ -90,7 +91,7 @@ export default class Temp implements ITemp {
             throw Log.error("Trying to store when the resolved path is undefined");
         }
 
-        await Util.writeJson(path.resolve(path.join(this.resolvedPath, file)), data);
+        await JsonUtil.write(path.resolve(path.join(this.resolvedPath, file)), data);
 
         return this;
     }

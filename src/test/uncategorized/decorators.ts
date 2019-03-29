@@ -5,7 +5,7 @@ import Permission from "../../core/permission";
 import {dependsOn, guard, connect, attachedLoggerFn, attachedLogger} from "../../decorators/other";
 import {args, desc, name, meta} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraint";
-import {Type} from "../../commands/type";
+import {type} from "../../commands/type";
 import {deprecated} from "../../decorators/utility";
 import DiscordEvent from "../../core/discordEvent";
 import {on} from "../../decorators/events";
@@ -21,7 +21,7 @@ const testConnection: CommandRunner = (): void => {
 @attachedLogger()
 @args({
     name: "name",
-    type: Type.string
+    type: type.string
 })
 @connect(testConnection)
 @guard("testGuard")

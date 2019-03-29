@@ -71,7 +71,11 @@ export interface IConstraints {
     [ConstraintProp.Cooldown]: number;
 }
 
-export const DefaultCommandRestrict: IConstraints = {
+/**
+ * Default command constraints which will be merged
+ * with provided constraints.
+ */
+export const defaultCommandConstraints: IConstraints = {
     [ConstraintProp.Auth]: 0,
     [ConstraintProp.Cooldown]: 0,
     [ConstraintProp.Environment]: ChatEnv.Anywhere,
@@ -151,7 +155,7 @@ export abstract class GenericCommand<T extends object = object> implements IGene
      * Limitations and restrictions by which the execution environment
      * and the command issuer must abide to.
      */
-    public readonly constraints: IConstraints = Object.assign({}, DefaultCommandRestrict);
+    public readonly constraints: IConstraints = Object.assign({}, defaultCommandConstraints);
 
     /**
      * Specific environments on which the command is not

@@ -1,5 +1,5 @@
 import {EventEmitter} from "events";
-import Command, {DefaultCommandRestrict, IConstraints} from "../commands/command";
+import Command, {defaultCommandConstraints, IConstraints} from "../commands/command";
 import Bot from "../core/bot";
 import {InternalCommand} from "../core/botExtra";
 import Log from "../core/log";
@@ -50,7 +50,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
 
             // Overwrite command restrict with default values.
             command.restrict = {
-                ...DefaultCommandRestrict,
+                ...defaultCommandConstraints,
                 ...command.restrict
             };
 
@@ -107,7 +107,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
 
             // Overwrite command restrict with default values.
             (command.constraints as Writeable<IConstraints>) = {
-                ...DefaultCommandRestrict,
+                ...defaultCommandConstraints,
                 ...command.constraints
             };
 

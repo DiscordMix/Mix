@@ -4,7 +4,7 @@ import {performance} from "perf_hooks";
 import readline from "readline";
 import {ReadonlyCommandMap} from "../commands/commandRegistry";
 import Bot from "../core/bot";
-import {DebugMode} from "../core/constants";
+import {debugMode} from "../core/constants";
 import Log from "../core/log";
 import Util from "../util/util";
 import {ReadonlyServiceMap} from "../services/serviceManager";
@@ -110,7 +110,7 @@ export default class ConsoleInterface {
     protected defaultCommands(bot: Bot): this {
         let using: Guild | null = null;
 
-        if (DebugMode) {
+        if (debugMode) {
             this.commands.set("bug", (args: string[]) => {
                 if (args[0] === "commands") {
                     const commands: ReadonlyCommandMap = bot.registry.getAll();

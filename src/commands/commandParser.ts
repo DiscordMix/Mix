@@ -2,7 +2,7 @@ import {ICommandRegistry} from "./commandRegistry";
 import Util from "../util/util";
 import Command, {DefaultValueResolver, IArgument, RawArguments} from "./command";
 import {Message} from "discord.js";
-import {FalseDelegates, TrueDelegates} from "../core/constants";
+import {falseDelegates, trueDelegates} from "../core/constants";
 import Log from "../core/log";
 import Pattern from "../core/pattern";
 import FlagParser, {ICommandFlag} from "./flagParser";
@@ -258,10 +258,10 @@ export default abstract class CommandParser {
     protected static parseBoolean(value: string): boolean | null {
         value = value.toString().toLowerCase();
 
-        if (TrueDelegates.includes(value)) {
+        if (trueDelegates.includes(value)) {
             return true;
         }
-        else if (FalseDelegates.includes(value)) {
+        else if (falseDelegates.includes(value)) {
             return false;
         }
 

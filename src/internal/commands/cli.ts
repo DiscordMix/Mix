@@ -1,7 +1,7 @@
 import {exec} from "child_process";
 import {name, desc, aliases, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraint";
-import {Type} from "../../commands/type";
+import {type} from "../../commands/type";
 import Command from "../../commands/command";
 import Context from "../../commands/context";
 import EmbedBuilder from "../../builders/embedBuilder";
@@ -18,7 +18,7 @@ interface IArgs {
 @args({
     name: "command",
     description: "The command to execute",
-    type: Type.string,
+    type: type.string,
     required: true
 })
 @Constraint.ownerOnly

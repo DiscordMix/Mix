@@ -2,7 +2,7 @@ import Command from "../../commands/command";
 import Context from "../../commands/context";
 import {name, desc, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/constraint";
-import {Type} from "../../commands/type";
+import {type} from "../../commands/type";
 import {notImplemented} from "../../decorators/other";
 
 interface IArgs {
@@ -20,7 +20,7 @@ enum ReflectDataType {
     description: "The data to inspect",
     required: true,
     flagShortName: "t",
-    type: Type.string
+    type: type.string
 })
 @Constraint.cooldown(1)
 @Constraint.ownerOnly

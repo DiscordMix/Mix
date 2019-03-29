@@ -14,7 +14,7 @@ export interface IEventListener {
     invoker(...args: any): void;
 }
 
-export const EventListeners: IEventListener[] = [];
+export const eventListeners: IEventListener[] = [];
 
 /**
  * Invoke target method once when the specified event occurs.
@@ -23,7 +23,7 @@ export function once(event: DiscordEvent): DecoratorProxy {
     return function (target: any, prop: string) {
         DecoratorUtils.ensureFunc(target[prop]);
 
-        EventListeners.push({
+        eventListeners.push({
             invoker: target[prop],
             type: EventListenerType.Once,
             event
@@ -38,7 +38,7 @@ export function on(event: DiscordEvent): DecoratorProxy {
     return function (target: any, prop: string) {
         DecoratorUtils.ensureFunc(target[prop]);
 
-        EventListeners.push({
+        eventListeners.push({
             invoker: target[prop],
             type: EventListenerType.Once,
             event

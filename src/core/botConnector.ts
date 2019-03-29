@@ -3,7 +3,7 @@ import DiscordEvent from "./discordEvent";
 import Bot from "./bot";
 import {BotState, BotEvent} from "./botExtra";
 import {Message} from "discord.js";
-import {Title, DebugMode, InternalFragmentsPath} from "./constants";
+import {title, debugMode, internalFragmentsPath} from "./constants";
 import BotMessages from "./messages";
 import Loader, {IPackage} from "../fragments/loader";
 import {PromiseOr} from "@atlas/xlib";
@@ -30,10 +30,10 @@ export default class BotConnector implements IBotConnector {
 
         // Display the project title (if applicable).
         if (this.bot.options.showAsciiTitle) {
-            console.log("\n%s\n", Title.replace("{version}", "beta"));
+            console.log("\n%s\n", title.replace("{version}", "beta"));
         }
 
-        if (DebugMode) {
+        if (debugMode) {
             Log.info("Debug mode is enabled");
         }
 
@@ -51,7 +51,7 @@ export default class BotConnector implements IBotConnector {
         this.bot.emit(BotEvent.LoadingInternalFragments);
 
         // Load & enable internal fragments.
-        const internalFragmentCandidates: string[] | null = await Loader.scan(InternalFragmentsPath);
+        const internalFragmentCandidates: string[] | null = await Loader.scan(internalFragmentsPath);
 
         // The scan process failed for some reason.
         if (!internalFragmentCandidates) {

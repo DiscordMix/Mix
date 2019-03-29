@@ -39,7 +39,7 @@ import {guard, dependsOn, connect, attachedLoggerFn, notImplemented} from "./dec
 import {PromiseOr, List} from "@atlas/xlib";
 import {CmdHandlerEvent} from "./commands/commandHandler";
 import BotConnector, {IBotConnector} from "./core/botConnector";
-import {TypeChecker, Type, ArgumentResolver} from "./commands/type";
+import {TypeChecker, type, ArgumentResolver} from "./commands/type";
 import Loader from "./fragments/loader";
 import CommandParser from "./commands/commandParser";
 import EmbedBuilder from "./builders/embedBuilder";
@@ -90,7 +90,7 @@ export {
     Command,
     GenericCommand,
     IGenericCommand,
-    Type,
+    type as Type,
     ArgumentResolver,
     RestrictGroup,
 

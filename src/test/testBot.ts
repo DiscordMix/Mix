@@ -4,7 +4,7 @@ import Bot from "../core/bot";
 import {BotEvent} from "../core/botExtra";
 import List from "../Collections/List";
 
-export const TestSubjects = {
+export const testSubjects = {
     ids: [
         "<@285578743324606482>",
         "<#432269407654248459>",

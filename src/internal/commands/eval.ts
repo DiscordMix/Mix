@@ -5,7 +5,7 @@ import Context from "../../commands/context";
 import Util from "../../util/util";
 import {name, desc, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/Constraint";
-import {Type} from "../../commands/type";
+import {type} from "../../commands/type";
 
 interface IArgs {
     readonly code: string;
@@ -18,13 +18,13 @@ interface IArgs {
     {
         name: "code",
         description: "The code to evaluate",
-        type: Type.string,
+        type: type.string,
         required: true
     },
     {
         name: "silent",
         description: "Send result or not",
-        type: Type.boolean,
+        type: type.boolean,
         required: false
     }
 )

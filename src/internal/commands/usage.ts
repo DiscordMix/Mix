@@ -3,7 +3,7 @@ import Context from "../../commands/context";
 import {name, desc, args} from "../../decorators/general";
 import MsgBuilder from "../../Builders/MsgBuilder";
 import {Constraint} from "../../decorators/Constraint";
-import {Type} from "../../commands/type";
+import {type} from "../../commands/type";
 
 interface IArgs {
     readonly command: string;
@@ -15,7 +15,7 @@ const delimiter: string = ", ";
 @desc("View the usage of a command")
 @args({
     name: "command",
-    type: Type.string,
+    type: type.string,
     required: true,
     description: "The command to inspect"
 })

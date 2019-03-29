@@ -18,7 +18,7 @@ import {EventEmitter} from "events";
 import Optimizer from "./optimizer";
 import FragmentManager from "../fragments/fragmentManager";
 import PathResolver from "./pathResolver";
-import {DefaultArgResolvers, DefaultBotOptions} from "./constants";
+import {defaultArgResolvers, defaultBotOptions} from "./constants";
 import {InternalCommand, BotState, IBotOptions, BotToken, BotEvent, IBot} from "./botExtra";
 import {Action} from "tusk";
 import BotConnector from "./botConnector";
@@ -182,7 +182,7 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.token = token;
 
         this.options = {
-            ...DefaultBotOptions,
+            ...defaultBotOptions,
             ...options
         };
 
@@ -204,8 +204,8 @@ export default class Bot<TState = any, TActionType = any> extends EventEmitter i
         this.registry = new CommandRegistry(this);
 
         this.argumentResolvers = this.options.argumentResolvers
-            ? new Map([...DefaultArgResolvers, ...this.options.argumentResolvers])
-            : DefaultArgResolvers;
+            ? new Map([...defaultArgResolvers, ...this.options.argumentResolvers])
+            : defaultArgResolvers;
 
         this.commandHandler = new CommandHandler({
             commandStore: this.registry,

@@ -1,6 +1,6 @@
 import {unit, test, Assert, feed, Is, Does, target} from "unit";
 import Util, {IBinarySearchResult} from "../../util/util";
-import {TestSubjects} from "../testBot";
+import {testSubjects} from "../testBot";
 import {Snowflake} from "../../core/botExtra";
 
 const populated: number[] = Util.populate(50);
@@ -47,10 +47,10 @@ default class {
 
     @test("should escape tokens")
     @target(Util.escapeText)
-    @feed(TestSubjects.token, TestSubjects.token, "[Token]")
+    @feed(testSubjects.token, testSubjects.token, "[Token]")
     @feed("hi world, hello world, john doe", "hello world", "hi world, [Token], john doe")
-    @feed(`hi world, ${TestSubjects.token}, john doe`, "hello world", "hi world, [Token], john doe")
-    @feed(`hi world, ${TestSubjects.token}, john doe, hello world, hi`, "hello world", "hi world, [Token], john doe, [Token], hi")
+    @feed(`hi world, ${testSubjects.token}, john doe`, "hello world", "hi world, [Token], john doe")
+    @feed(`hi world, ${testSubjects.token}, john doe, hello world, hi`, "hello world", "hi world, [Token], john doe, [Token], hi")
     public escapeText_escapeTokens(input: string, token: string, expected: string) {
         Assert.equal(Util.escapeText(input, token), expected);
     }
@@ -73,10 +73,10 @@ default class {
         Assert.equal(Util.escapeText("hello @here world", "empty"), "hello [Mention] world");
         Assert.equal(Util.escapeText("hello @here world @everyone john", "empty"), "hello [Mention] world [Mention] john");
         Assert.equal(Util.escapeText("@herehello @here world@everyonejohn", "empty"), "[Mention]hello [Mention] world[Mention]john");
-        Assert.equal(Util.escapeText(`hello ${TestSubjects.ids[0]} world`, "empty"), "hello [Mention] world");
-        Assert.equal(Util.escapeText(`hello ${TestSubjects.ids[1]} world`, "empty"), "hello [Mention] world");
-        Assert.equal(Util.escapeText(`hello ${TestSubjects.ids[2]} world`, "empty"), "hello [Mention] world");
-        Assert.equal(Util.escapeText(`hello ${TestSubjects.ids[3]} world`, "empty"), `hello ${TestSubjects.ids[3]} world`);
+        Assert.equal(Util.escapeText(`hello ${testSubjects.ids[0]} world`, "empty"), "hello [Mention] world");
+        Assert.equal(Util.escapeText(`hello ${testSubjects.ids[1]} world`, "empty"), "hello [Mention] world");
+        Assert.equal(Util.escapeText(`hello ${testSubjects.ids[2]} world`, "empty"), "hello [Mention] world");
+        Assert.equal(Util.escapeText(`hello ${testSubjects.ids[3]} world`, "empty"), `hello ${testSubjects.ids[3]} world`);
     }
 
     @test("should throw when provided invalid input")
@@ -94,7 +94,7 @@ default class {
     @target(Util.resolveId)
     public resolveId_returnResolvedIds() {
         // TODO: Review?
-        for (const id of TestSubjects.ids) {
+        for (const id of testSubjects.ids) {
             const result: any = Util.resolveId(id);
 
             Assert.that(result,
@@ -177,11 +177,11 @@ default class {
     @target(Util.getUserIdentifier)
     public getUserIdentifier_returnValidIdentifier() {
         const result1: string = Util.getUserIdentifier({
-            id: TestSubjects.ids[3],
+            id: testSubjects.ids[3],
             tag: "JohnDoe#1234"
         } as any);
 
-        Assert.equal(result1, `<@${TestSubjects.ids[3]}> (JohnDoe#1234:${TestSubjects.ids[3]})`);
+        Assert.equal(result1, `<@${testSubjects.ids[3]}> (JohnDoe#1234:${testSubjects.ids[3]})`);
     }
 
     @test("should throw when provided invalid input")
@@ -284,8 +284,8 @@ default class {
     @test("should return whether the text provided start with a mention")
     @target(Util.hasMentionPrefix)
     public hasMentionPrefix_determineIfStartsWithPrefix() {
-        Assert.true(Util.hasMentionPrefix(`<@${TestSubjects.ids[0]}> hello world`, TestSubjects.ids[0]));
-        Assert.false(Util.hasMentionPrefix(`hello world <@${TestSubjects.ids[0]}>`, TestSubjects.ids[0]));
+        Assert.true(Util.hasMentionPrefix(`<@${testSubjects.ids[0]}> hello world`, testSubjects.ids[0]));
+        Assert.false(Util.hasMentionPrefix(`hello world <@${testSubjects.ids[0]}>`, testSubjects.ids[0]));
     }
 
     @test("should throw an error when provided invalid input")

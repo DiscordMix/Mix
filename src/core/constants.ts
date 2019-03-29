@@ -1,15 +1,15 @@
 import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import path from "path";
 import Util from "../util/util";
-import {ArgumentResolver, ArgumentType, Type} from "../commands/type";
+import {ArgumentResolver, ArgumentType, type} from "../commands/type";
 import Pattern from "./pattern";
 import {InputArgument} from "../commands/command";
 import {IBotOptions} from "./botExtra";
 
 // TODO: Not working.
-export const DebugMode: boolean = process.env.MIX_DEBUG_MODE === "true";
+export const debugMode: boolean = process.env.MIX_DEBUG_MODE === "true";
 
-export const Title: string =
+export const title: string =
 
     "███╗   ███╗ ██╗ ██╗  ██╗\n" +
     "████╗ ████║ ██║ ╚██╗██╔╝\n" +
@@ -18,13 +18,13 @@ export const Title: string =
     "██║ ╚═╝ ██║ ██║ ██╔╝ ██╗ ██╗\n" +
     "╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚═╝ ╚═╝ {version}";
 
-export const BasePath: string = path.resolve(path.join(".."));
+export const basePath: string = path.resolve(path.join(".."));
 
-export const InternalFragmentsPath: string = path.resolve(path.join(__dirname, "..", "Internal"));
+export const internalFragmentsPath: string = path.resolve(path.join(__dirname, "..", "Internal"));
 
 // TODO: No longer required/used. Implement in the new Type rework system.
-export const DefaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map([
-    [Type.member, (input: InputArgument, msg: Message): GuildMember | null => {
+export const defaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map([
+    [type.member, (input: InputArgument, msg: Message): GuildMember | null => {
         // The input must be a Snowflake (string).
         if (typeof input !== "string") {
             return null;
@@ -39,7 +39,7 @@ export const DefaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map(
         return null;
     }],
     // TODO: Complaining without the ending '| any'.
-    [Type.role, (input: InputArgument, msg: Message): Role | null | any => {
+    [type.role, (input: InputArgument, msg: Message): Role | null | any => {
         // The input must be a Snowflake (string).
         if (typeof input !== "string") {
             return null;
@@ -49,7 +49,7 @@ export const DefaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map(
 
         return resolvedRole || null;
     }],
-    [Type.boolean, (input: InputArgument): boolean | null => {
+    [type.boolean, (input: InputArgument): boolean | null => {
         // Input is not a string, so fail right away.
         if (typeof input !== "string") {
             return null;
@@ -66,14 +66,14 @@ export const DefaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map(
         // Input was never a 'false' or 'true' string variant representation.
         return null;
     }],
-    [Type.snowflake, (input: InputArgument): Snowflake | null => {
+    [type.snowflake, (input: InputArgument): Snowflake | null => {
         if (typeof input !== "string") {
             return null;
         }
 
         return Util.resolveId(input);
     }],
-    [Type.integer, (input: InputArgument): number | null => {
+    [type.integer, (input: InputArgument): number | null => {
         if (typeof input !== "string") {
             return null;
         }
@@ -82,7 +82,7 @@ export const DefaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map(
 
         return isNaN(result) ? null : result;
     }],
-    [Type.decimal, (input: InputArgument): number | null => {
+    [type.decimal, (input: InputArgument): number | null => {
         if (typeof input !== "string") {
             return null;
         }
@@ -96,7 +96,7 @@ export const DefaultArgResolvers: Map<ArgumentType, ArgumentResolver> = new Map(
 /**
  * Default bot options which may be overriden by the user.
  */
-export const DefaultBotOptions: IBotOptions = {
+export const defaultBotOptions: IBotOptions = {
     allowCommandChain: true,
     showAsciiTitle: true,
     autoDeleteCommands: false,
@@ -127,9 +127,9 @@ export const DefaultBotOptions: IBotOptions = {
 /**
  * Entities representing the 'true' state.
  */
-export const TrueDelegates: string[] = ["true", "1", "yes"];
+export const trueDelegates: string[] = ["true", "1", "yes"];
 
 /**
  * Entities representing the 'false' state.
  */
-export const FalseDelegates: string[] = ["false", "0", "no"];
+export const falseDelegates: string[] = ["false", "0", "no"];

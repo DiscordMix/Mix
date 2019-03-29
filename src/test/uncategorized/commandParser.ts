@@ -1,8 +1,8 @@
 import {unit, test, Assert, feed, Is, JsType, Does, target} from "unit";
 import CommandParser from "../../commands/commandParser";
-import {Type} from "../../commands/type";
+import {type} from "../../commands/type";
 import {RawArguments, InputArgument} from "../../commands/command";
-import {DefaultArgResolvers} from "../../core/constants";
+import {defaultArgResolvers} from "../../core/constants";
 
 @unit("Command Parser")
 default class {
@@ -12,15 +12,15 @@ default class {
         const result: RawArguments = CommandParser.getArguments("[prefix] john_doe apples 100", [
             {
                 name: "name",
-                type: Type.string
+                type: type.string
             },
             {
                 name: "favoriteFood",
-                type: Type.string
+                type: type.string
             },
             {
                 name: "favoriteNumber",
-                type: Type.integer
+                type: type.integer
             }
         ]);
 
@@ -35,15 +35,15 @@ default class {
         const result: RawArguments = CommandParser.getArguments("[prefix] \"sir john doe\" apples 100", [
             {
                 name: "name",
-                type: Type.string
+                type: type.string
             },
             {
                 name: "favoriteFood",
-                type: Type.string
+                type: type.string
             },
             {
                 name: "favoriteNumber",
-                type: Type.integer
+                type: type.integer
             }
         ]);
 
@@ -63,15 +63,15 @@ default class {
         const result: RawArguments = CommandParser.getArguments("[prefix] \'sir john doe\' apples 100", [
             {
                 name: "name",
-                type: Type.string
+                type: type.string
             },
             {
                 name: "favoriteFood",
-                type: Type.string
+                type: type.string
             },
             {
                 name: "favoriteNumber",
-                type: Type.integer
+                type: type.integer
             }
         ]);
 
@@ -91,15 +91,15 @@ default class {
         const result: RawArguments = CommandParser.getArguments("[prefix] \`sir john doe\` apples 100", [
             {
                 name: "name",
-                type: Type.string
+                type: type.string
             },
             {
                 name: "favoriteFood",
-                type: Type.string
+                type: type.string
             },
             {
                 name: "favoriteNumber",
-                type: Type.integer
+                type: type.integer
             }
         ]);
 
@@ -119,15 +119,15 @@ default class {
         const result: RawArguments = CommandParser.getArguments("[prefix] \'sir john doe\' \"delicious apples\" \`more than 100\`", [
             {
                 name: "name",
-                type: Type.string
+                type: type.string
             },
             {
                 name: "favoriteFood",
-                type: Type.string
+                type: type.string
             },
             {
                 name: "favoriteNumber",
-                type: Type.string
+                type: type.string
             }
         ]);
 
@@ -147,11 +147,11 @@ default class {
         const result: InputArgument[] = CommandParser.getArguments("[prefix] --verbose --inspect", [
             {
                 name: "verbose",
-                type: Type.boolean
+                type: type.boolean
             },
             {
                 name: "inspect",
-                type: Type.boolean
+                type: type.boolean
             }
         ]);
 
@@ -170,15 +170,15 @@ default class {
         const result: InputArgument[] = CommandParser.getArguments("[prefix] --verbose=false --inspect=true --continue=false", [
             {
                 name: "verbose",
-                type: Type.boolean
+                type: type.boolean
             },
             {
                 name: "inspect",
-                type: Type.boolean
+                type: type.boolean
             },
             {
                 name: "continue",
-                type: Type.boolean
+                type: type.boolean
             }
         ]);
 
@@ -198,12 +198,12 @@ default class {
         const result: InputArgument[] = CommandParser.getArguments("[prefix] -v -i", [
             {
                 name: "verbose",
-                type: Type.boolean,
+                type: type.boolean,
                 flagShortName: "v"
             },
             {
                 name: "inspect",
-                type: Type.boolean,
+                type: type.boolean,
                 flagShortName: "i"
             }
         ]);
@@ -223,17 +223,17 @@ default class {
         const result: InputArgument[] = CommandParser.getArguments("[prefix] -v=false -i=true -c=false", [
             {
                 name: "verbose",
-                type: Type.boolean,
+                type: type.boolean,
                 flagShortName: "v"
             },
             {
                 name: "inspect",
-                type: Type.boolean,
+                type: type.boolean,
                 flagShortName: "i"
             },
             {
                 name: "continue",
-                type: Type.boolean,
+                type: type.boolean,
                 flagShortName: "c"
             }
         ]);
@@ -288,16 +288,16 @@ default class {
         const result: any = await CommandParser.resolveArguments({
             arguments: ["john doe", "anonymous"],
             message: null as any,
-            resolvers: DefaultArgResolvers,
+            resolvers: defaultArgResolvers,
 
             schema: [
                 {
                     name: "name",
-                    type: Type.string
+                    type: type.string
                 },
                 {
                     name: "aka",
-                    type: Type.string
+                    type: type.string
                 }
             ]
         });
@@ -318,16 +318,16 @@ default class {
         const result: any = await CommandParser.resolveArguments({
             arguments: ["100", "-13"],
             message: null as any,
-            resolvers: DefaultArgResolvers,
+            resolvers: defaultArgResolvers,
 
             schema: [
                 {
                     name: "favoriteNumber",
-                    type: Type.integer
+                    type: type.integer
                 },
                 {
                     name: "leastFavoriteNumber",
-                    type: Type.integer
+                    type: type.integer
                 }
             ]
         });
@@ -348,24 +348,24 @@ default class {
         const result: any = await CommandParser.resolveArguments({
             arguments: ["1.1", "1.0", "3.14", "-6.7890"],
             message: null as any,
-            resolvers: DefaultArgResolvers,
+            resolvers: defaultArgResolvers,
 
             schema: [
                 {
                     name: "first",
-                    type: Type.decimal
+                    type: type.decimal
                 },
                 {
                     name: "second",
-                    type: Type.decimal
+                    type: type.decimal
                 },
                 {
                     name: "third",
-                    type: Type.decimal
+                    type: type.decimal
                 },
                 {
                     name: "forth",
-                    type: Type.decimal
+                    type: type.decimal
                 }
             ]
         });
@@ -390,24 +390,24 @@ default class {
         const result: any = await CommandParser.resolveArguments({
             arguments: ["false", "true", "false", "true"],
             message: null as any,
-            resolvers: DefaultArgResolvers,
+            resolvers: defaultArgResolvers,
 
             schema: [
                 {
                     name: "cool",
-                    type: Type.boolean
+                    type: type.boolean
                 },
                 {
                     name: "hungry",
-                    type: Type.boolean
+                    type: type.boolean
                 },
                 {
                     name: "full",
-                    type: Type.boolean
+                    type: type.boolean
                 },
                 {
                     name: "funny",
-                    type: Type.boolean
+                    type: type.boolean
                 }
             ]
         });

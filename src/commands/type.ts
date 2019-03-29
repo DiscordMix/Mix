@@ -110,7 +110,7 @@ export interface ITypeDef {
     readonly custom: ArgumentType;
 }
 
-export const Type: ITypeDef = {
+export const type: ITypeDef = {
     string: (input: string): boolean => {
         return typeof input === "string";
     },

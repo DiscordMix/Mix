@@ -8,7 +8,7 @@ import EmbedBuilder from "../../builders/embedBuilder";
 import MsgBuilder from "../../builders/msgBuilder";
 import Util from "../../util/util";
 
-interface IArgs {
+type Args = {
     readonly command: string;
 }
 
@@ -22,12 +22,12 @@ interface IArgs {
     required: true
 })
 @Constraint.ownerOnly
-export default class extends Command<IArgs> {
-    public async run($: Context, args: IArgs): Promise<void> {
+export default class extends Command<Args> {
+    public async run($: Context, arg: Args) {
         const started: number = Date.now();
 
         // TODO: Consider returning a promise?
-        exec(args.command, (error, stdout: string, stderror: string) => {
+        exec(arg.command, (error, stdout: string, stderror: string) => {
             let result: string = stdout || stderror;
 
             result = stdout.toString().trim() === "" || !result ? stderror.toString().trim() === "" || !stderror ? "No output" : stderror : result.toString();
@@ -38,7 +38,7 @@ export default class extends Command<IArgs> {
 
             embed.field(`Input`, new MsgBuilder()
                 .block("js")
-                .append(args.command)
+                .append(arg.command)
                 .block()
                 .build());
 

@@ -11,7 +11,7 @@ export default class extends Command {
         prefix: "!string"
     }; */
 
-    public async run($: Context): Promise<void> {
+    public async run($: Context) {
         // TODO: Implement.
 
         throw Log.notImplemented;

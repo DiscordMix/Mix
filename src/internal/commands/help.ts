@@ -7,7 +7,7 @@ import {desc, name} from "../../decorators/general";
 @name("help")
 @desc("View available commands and their descriptions")
 export default class extends Command {
-    public async run($: Context): Promise<void> {
+    public async run($: Context) {
         // TODO: Decorator commands broke it (can't .map through a Map)
 
         const commandMap: ReadonlyCommandMap = $.bot.registry.getAll();

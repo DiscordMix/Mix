@@ -247,15 +247,28 @@ export abstract class GenericCommand<T extends object = object> implements IGene
     }
 }
 
-export abstract class Subcommand<T extends object = object> extends GenericCommand<T> {
+export abstract class Subcommand<T extends {} = {}> extends GenericCommand<T> {
     //
 }
 
 /**
  * Base command class. The 'meta.name' property must be set.
  */
-export default abstract class Command<T extends object = object> extends GenericCommand<T> {
+export default abstract class Command<T extends {} = {}> extends GenericCommand<T> {
     public readonly subcommands: Subcommand<T>[] = [];
+
+    // TODO: Finish implementing. Use this.arg similar to React this.state/props.
+    protected readonly arg: T = {};
+
+    /**
+     * Prepare the arguments for the command
+     * execution event.
+     */
+    public setArgs(arg: T): this {
+        this.arg = arg;
+
+        return this;
+    }
 
     // TODO: canExecute should default boolean, same concept as Service.
     /**

@@ -5,7 +5,7 @@ import {Constraint} from "../../decorators/constraint";
 import {type} from "../../commands/type";
 import {notImplemented} from "../../decorators/other";
 
-interface IArgs {
+type Arg = {
     readonly type: ReflectDataType;
 }
 
@@ -26,7 +26,7 @@ enum ReflectDataType {
 @Constraint.ownerOnly
 @notImplemented()
 export default class extends Command {
-    public run($: Context, args: IArgs) {
+    public run($: Context, arg: Arg) {
         // TODO: Require re-write.
     }
 }

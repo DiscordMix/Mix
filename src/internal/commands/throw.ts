@@ -8,7 +8,7 @@ import Log from "../../core/log";
 @desc("Throw an error")
 @Constraint.ownerOnly
 export default class extends Command {
-    public async run(): Promise<void> {
+    public async run() {
         throw Log.error(BotMessages.INTENTIONAL_ERROR);
     }
 }

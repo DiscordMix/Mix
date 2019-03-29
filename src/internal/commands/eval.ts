@@ -7,7 +7,7 @@ import {name, desc, args} from "../../decorators/general";
 import {Constraint} from "../../decorators/Constraint";
 import {type} from "../../commands/type";
 
-interface IArgs {
+type Args = {
     readonly code: string;
     readonly silent: boolean;
 }
@@ -29,21 +29,21 @@ interface IArgs {
     }
 )
 @Constraint.ownerOnly
-export default class extends Command<IArgs> {
-    public async run($: Context, args: IArgs): Promise<void> {
+export default class extends Command<Args> {
+    public async run($: Context, arg: Args) {
         const started: number = Date.now();
 
         let result: string;
 
         try {
             // tslint:disable-next-line:no-eval
-            result = await eval(args.code);
+            result = await eval(arg.code);
         } catch (err) {
             // TODO: Should prefix with 'Error: '?
             result = err.message;
         }
 
-        if (args.silent) {
+        if (arg.silent) {
             return;
         }
 
@@ -53,7 +53,7 @@ export default class extends Command<IArgs> {
 
         embed.field(`Input`, new MsgBuilder()
             .block("js")
-            .append(args.code)
+            .append(arg.code)
             .block()
             .build());
 

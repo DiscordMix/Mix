@@ -5,7 +5,7 @@ import MsgBuilder from "../../Builders/MsgBuilder";
 import {Constraint} from "../../decorators/Constraint";
 import {type} from "../../commands/type";
 
-interface IArgs {
+type Args = {
     readonly command: string;
 }
 
@@ -20,9 +20,9 @@ const delimiter: string = ", ";
     description: "The command to inspect"
 })
 @Constraint.cooldown(1)
-export default class extends Command<IArgs> {
+export default class extends Command<Args> {
     // TODO: Finish implementing
-    public async run($: Context, args: IArgs): Promise<void> {
+    public async run($: Context, args: Args) {
         const targetCommand: Command | null = await $.bot.registry.get(args.command);
 
         if (!targetCommand) {

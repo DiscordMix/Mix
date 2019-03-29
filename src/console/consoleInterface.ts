@@ -6,7 +6,7 @@ import {ReadonlyCommandMap} from "../commands/commandRegistry";
 import Bot from "../core/bot";
 import {DebugMode} from "../core/constants";
 import Log from "../core/log";
-import Util from "../core/util";
+import Util from "../util/util";
 import {ReadonlyServiceMap} from "../services/serviceManager";
 
 // TODO: Export in index.

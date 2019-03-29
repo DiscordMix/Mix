@@ -2,10 +2,10 @@ import {Message, RichEmbed, TextChannel, User} from "discord.js";
 import Discord from "discord.js";
 import EmbedBuilder from "../builders/embedBuilder";
 import MsgBuilder from "../builders/msgBuilder";
-import EditableMessage from "./editableMessage";
-import Log from "./log";
+import EditableMessage from "../core/editableMessage";
+import Log from "../core/log";
 import Util from "./util";
-import {IBot} from "./botExtra";
+import {IBot} from "../core/botExtra";
 
 export interface IResponseHelper {
     readonly channel: TextChannel;

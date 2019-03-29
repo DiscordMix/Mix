@@ -12,7 +12,7 @@ import Command, {
 import ConsoleCommand from "./console/consoleCommand";
 import ConsoleInterface, {IConsoleInterface} from "./console/consoleInterface";
 import {BotEvent, IBot} from "./core/botExtra";
-import {IDisposable} from "./core/helpers";
+import {IDisposable} from "./util/helpers";
 import Log, {LogLevel} from "./core/log";
 import Pattern from "./core/pattern";
 import EmojiMenu, {IEmojiButton, IEmojiMenu} from "./core/emojiMenu";
@@ -49,7 +49,7 @@ import TimeSuffixType from "./time/timeSuffixType";
 import Permission from "./core/permission";
 import ChatEnv from "./core/chatEnv";
 import DiscordEvent from "./core/discordEvent";
-import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./core/setupHelper";
+import SetupHelper, {ISetupHelper, ISetupHelperResult} from "./util/setupHelper";
 import PaginatedMessage from "./core/paginatedMessage";
 import LogSerializer, {ILogMsg, ILogSource} from "./serializers/logSerializer";
 import {Constraint, constraints} from "./decorators/constraint";
@@ -65,7 +65,7 @@ import ArgumentParser, {IArgumentParser} from "./commands/argumentParser";
 import CommandRegistry, {ICommandRegistry} from "./commands/commandRegistry";
 import {on, once} from "./decorators/events";
 import {deprecated} from "./decorators/utility";
-import Util from "./core/util";
+import Util from "./util/util";
 
 export {
     // Fragments.

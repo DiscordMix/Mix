@@ -1,5 +1,5 @@
 import {unit, test, Assert, feed, Is, Does, target} from "unit";
-import Util, {IBinarySearchResult} from "../../core/util";
+import Util, {IBinarySearchResult} from "../../util/util";
 import {TestSubjects} from "../testBot";
 import {Snowflake} from "../../core/botExtra";
 

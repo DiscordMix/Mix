@@ -1,5 +1,5 @@
 import {ICommandRegistry} from "./commandRegistry";
-import Util from "../core/util";
+import Util from "../util/util";
 import Command, {DefaultValueResolver, IArgument, RawArguments} from "./command";
 import {Message} from "discord.js";
 import {FalseDelegates, TrueDelegates} from "../core/constants";

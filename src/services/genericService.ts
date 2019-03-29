@@ -1,5 +1,5 @@
 import Bot from "../core/bot";
-import {IDisposable} from "../core/helpers";
+import {IDisposable} from "../util/helpers";
 import {IFragment, IMeta} from "../fragments/fragment";
 import DiscordEvent from "../core/discordEvent";
 

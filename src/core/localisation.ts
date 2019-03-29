@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
 import BotMessages from "./messages";
-import Util from "./util";
+import Util from "../util/util";
 import {PromiseOr} from "@atlas/xlib";
 import Log from "./log";
-import JsonUtil from "./json";
+import JsonUtil from "../util/json";
 
 export type LanguageSource = Map<string, any>;
 

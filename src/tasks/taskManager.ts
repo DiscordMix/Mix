@@ -1,10 +1,10 @@
 import Bot from "../core/bot";
 import Log from "../core/log";
-import Util from "../core/util";
+import Util from "../util/util";
 import Loader, {IPackage} from "../fragments/loader";
 import Task from "./task";
 import {PromiseOr} from "@atlas/xlib";
-import {Writeable} from "../core/helpers";
+import {Writeable} from "../util/helpers";
 
 export interface ITaskManager {
     register(task: Task): boolean;

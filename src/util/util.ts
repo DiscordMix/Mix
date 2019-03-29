@@ -12,9 +12,9 @@ import {
 
 import fs from "fs";
 import path from "path";
-import Pattern from "./pattern";
-import Log from "./log";
-import {IBot} from "./botExtra";
+import Pattern from "../core/pattern";
+import Log from "../core/log";
+import {IBot} from "../core/botExtra";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 

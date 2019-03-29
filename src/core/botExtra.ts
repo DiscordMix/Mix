@@ -6,7 +6,7 @@ import {IFragmentManager} from "../fragments/fragmentManager";
 import Localisation from "./localisation";
 import {IOptimizer} from "./optimizer";
 import {IServiceManager} from "../services/serviceManager";
-import {ITimeoutAttachable, IDisposable} from "./helpers";
+import {ITimeoutAttachable, IDisposable} from "../util/helpers";
 import {IPathResolver} from "./pathResolver";
 import {IBotAnalytics} from "./botAnalytics";
 import {ITemp} from "./temp";

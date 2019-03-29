@@ -3,7 +3,7 @@ import Command from "../commands/command";
 import {ReadonlyCommandMap} from "../commands/commandRegistry";
 import Bot from "./bot";
 import {BotEvent} from "./botExtra";
-import {IDisposable} from "./helpers";
+import {IDisposable} from "../util/helpers";
 import Log from "./log";
 
 export interface IOptimizer extends IDisposable {

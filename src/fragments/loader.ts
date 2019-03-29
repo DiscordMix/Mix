@@ -1,6 +1,6 @@
 import fs from "fs";
 import Log from "../core/log";
-import Util from "../core/util";
+import Util from "../util/util";
 import {IFragment} from "./fragment";
 import Pattern from "../core/pattern";
 

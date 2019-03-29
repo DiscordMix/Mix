@@ -6,7 +6,7 @@ import Command from "../../commands/command";
 import Context from "../../commands/context";
 import EmbedBuilder from "../../builders/embedBuilder";
 import MsgBuilder from "../../builders/msgBuilder";
-import Util from "../../core/util";
+import Util from "../../util/util";
 
 interface IArgs {
     readonly command: string;

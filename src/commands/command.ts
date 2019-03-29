@@ -3,7 +3,7 @@ import Context, {IContext} from "./context";
 import {IFragment, IMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
-import {IDisposable} from "../core/helpers";
+import {IDisposable} from "../util/helpers";
 import {PromiseOr} from "@atlas/xlib";
 import {TypeChecker, ArgumentType} from "./type";
 

@@ -1,6 +1,6 @@
 import {GuildMember, Message, Role, Snowflake} from "discord.js";
 import path from "path";
-import Util from "./util";
+import Util from "../util/util";
 import {ArgumentResolver, ArgumentType, Type} from "../commands/type";
 import Pattern from "./pattern";
 import {InputArgument} from "../commands/command";

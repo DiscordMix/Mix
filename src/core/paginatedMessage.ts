@@ -1,7 +1,7 @@
 import {Message} from "discord.js";
 import {EventEmitter} from "events";
 import Bot from "./bot";
-import {IDisposable} from "./helpers";
+import {IDisposable} from "../util/helpers";
 import Log from "./log";
 
 export enum PaginationEvent {

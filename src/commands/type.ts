@@ -1,4 +1,4 @@
-import Util from "../core/util";
+import Util from "../util/util";
 import Pattern from "../core/pattern";
 import {Message} from "discord.js";
 import {PromiseOr} from "@atlas/xlib";

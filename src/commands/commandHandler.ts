@@ -2,7 +2,7 @@ import {GuildMember, Message, Snowflake, TextChannel} from "discord.js";
 import {BotEvent} from "../core/botExtra";
 import ChatEnv from "../core/chatEnv";
 import Log from "../core/log";
-import Util from "../core/util";
+import Util from "../util/util";
 import Command, {RawArguments, RestrictGroup} from "./command";
 import Context from "./context";
 import CommandParser from "./commandParser";

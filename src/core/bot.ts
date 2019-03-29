@@ -12,7 +12,7 @@ import fs from "fs";
 import path from "path";
 import Translation from "./localisation";
 import Analytics from "./botAnalytics";
-import {IDisposable} from "./helpers";
+import {IDisposable} from "../util/helpers";
 import TaskManager from "../tasks/taskManager";
 import {EventEmitter} from "events";
 import Optimizer from "./optimizer";

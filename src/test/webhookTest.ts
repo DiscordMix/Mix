@@ -1,5 +1,5 @@
 import {FileOps, Coordinator, GitOps, ScriptOps, GithubEvent, ITaskResult, RunState} from "tusk";
-import Util from "../core/Util";
+import Util from "../util/util";
 import Log from "../core/log";
 import colors from "colors";
 

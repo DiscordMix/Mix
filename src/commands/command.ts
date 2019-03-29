@@ -3,11 +3,11 @@ import Context, {IContext} from "./context";
 import {IFragment, IMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
-import {IDisposable} from "../util/helpers";
+import {IDisposable, Writeable} from "../util/helpers";
 import {PromiseOr} from "@atlas/xlib";
 import {TypeChecker, ArgumentType} from "./type";
 
-export type CommandExeHandler<TArgs extends object = object, TReturn = any> = (context: Context, args: TArgs, api: any) => TReturn;
+export type CommandExeHandler<TArgs extends {} = {}, TReturn = any> = (context: Context, args: TArgs, api: any) => TReturn;
 
 /**
  * Restriction to common Discord groups.
@@ -113,7 +113,7 @@ export type CommandRelay<T = any> = (context: Context, args: T, command: IGeneri
  */
 export type CommandGuard<T = any> = (context: Context, args: T, command: IGenericCommand) => boolean;
 
-export interface IGenericCommand<T extends object = object> extends IFragment, IDisposable {
+export interface IGenericCommand<T extends {} = {}> extends IFragment, IDisposable {
     readonly minArguments: number;
     readonly maxArguments: number;
     readonly meta: IMeta;
@@ -134,7 +134,7 @@ export interface IGenericCommand<T extends object = object> extends IFragment, I
     isExcluded(query: string): boolean;
 }
 
-export abstract class GenericCommand<T extends object = object> implements IGenericCommand<T> {
+export abstract class GenericCommand<T extends {} = {}> implements IGenericCommand<T> {
     public readonly meta: IMeta = {
         // Leave empty intentionally so the fragment validator complains.
         name: ""
@@ -265,7 +265,7 @@ export default abstract class Command<T extends {} = {}> extends GenericCommand<
      * execution event.
      */
     public setArgs(arg: T): this {
-        this.arg = arg;
+        (this.arg as Writeable<T>) = arg;
 
         return this;
     }

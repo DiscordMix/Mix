@@ -244,7 +244,7 @@ export default abstract class Command<T extends object = object> extends Generic
     // TODO: canExecute should default boolean, same concept as Service.
     /**
      * @param {Context} context
-     * @return {boolean} Whether this command may be executed
+     * @return {boolean} Whether this command may be executed.
      */
     public canExecute(context: Context): boolean {
         return true;

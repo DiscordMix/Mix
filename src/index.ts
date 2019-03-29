@@ -160,7 +160,7 @@ export {
 
     // Decorators.
     name,
-    desc as description,
+    desc,
     aliases,
     args,
     Constraint,

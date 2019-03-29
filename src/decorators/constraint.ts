@@ -1,5 +1,5 @@
 import {DecoratorUtils} from "./decoratorUtils";
-import {IConstraints, RestrictGroup} from "../commands/command";
+import {IConstraints, RestrictGroup, ConstraintProp, ConstraintProp, ConstraintProp} from "../commands/command";
 import ChatEnv from "../core/chatEnv";
 import {DecoratorProxy} from "./component";
 import {ExclusiveConstraintDelegate} from "./exclusiveConstraint";
@@ -13,7 +13,7 @@ export abstract class Constraint {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
-            return DecoratorUtils.overrideConstraint(target, "environment", env);
+            return DecoratorUtils.overrideConstraint(target, ConstraintProp.Environment, env);
         };
     }
 
@@ -25,7 +25,7 @@ export abstract class Constraint {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
-            return DecoratorUtils.overrideConstraint(target, "cooldown", time);
+            return DecoratorUtils.overrideConstraint(target, ConstraintProp.Cooldown, time);
         };
     }
 
@@ -47,7 +47,7 @@ export abstract class Constraint {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
-            return DecoratorUtils.overrideConstraint(target, "userGroups", groups);
+            return DecoratorUtils.overrideConstraint(target, ConstraintProp.UserGroups, groups);
         };
     }
 
@@ -59,6 +59,7 @@ export abstract class Constraint {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
+            // TODO: ConstraintProp is missing 'exclusive'?
             return DecoratorUtils.overrideConstraint(target, "exclusive", exclusive);
         };
     }
@@ -71,7 +72,7 @@ export abstract class Constraint {
         return function (target: any) {
             DecoratorUtils.ensureFunc(target);
 
-            return DecoratorUtils.overrideConstraint(target, "issuerPermissions", permissions);
+            return DecoratorUtils.overrideConstraint(target, ConstraintProp.IssuerPermissions, permissions);
         };
     }
 

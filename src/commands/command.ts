@@ -46,26 +46,35 @@ export interface IArgument {
     readonly flagShortName?: string;
 }
 
+export enum ConstraintProp {
+    SelfPermissions = "selfPermissions",
+    IssuerPermissions = "issuerPermissions",
+    Environment = "environment",
+    Auth = "auth",
+    UserGroups = "userGroups",
+    Cooldown = "cooldown"
+}
+
 /**
  * Limitations and restrictions by which the execution environment
  * and the command issuer must abide to.
  */
 export interface IConstraints {
-    selfPermissions: any[];
-    issuerPermissions: any[];
-    environment: ChatEnv;
-    auth: number;
-    userGroups: RestrictGroup[];
-    cooldown: number;
+    [ConstraintProp.SelfPermissions]: any[];
+    [ConstraintProp.IssuerPermissions]: any[];
+    [ConstraintProp.Environment]: ChatEnv;
+    [ConstraintProp.Auth]: number;
+    [ConstraintProp.UserGroups]: RestrictGroup[];
+    [ConstraintProp.Cooldown]: number;
 }
 
 export const DefaultCommandRestrict: IConstraints = {
-    auth: 0,
-    cooldown: 0,
-    environment: ChatEnv.Anywhere,
-    issuerPermissions: [],
-    selfPermissions: [],
-    userGroups: []
+    [ConstraintProp.Auth]: 0,
+    [ConstraintProp.Cooldown]: 0,
+    [ConstraintProp.Environment]: ChatEnv.Anywhere,
+    [ConstraintProp.IssuerPermissions]: [],
+    [ConstraintProp.SelfPermissions]: [],
+    [ConstraintProp.UserGroups]: []
 };
 
 /**

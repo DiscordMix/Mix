@@ -12,7 +12,7 @@ default class {
         const languages: ReadonlyMap<string, LanguageSource> = language.getLanguages();
 
         Assert.equal(languages.size, 1);
-        Assert.true(language.setDefault("test-language"));
+        Assert.true(language.setDefault("testLanguage"));
         Assert.that((language as any).default, Is.object);
     }
 

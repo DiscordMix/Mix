@@ -532,13 +532,13 @@ export default class Bot extends EventEmitter implements IBot {
             useConsoleInterface: false,
             showAsciiTitle: false,
             internalCommands: [InternalCommand.Help, InternalCommand.Usage, InternalCommand.Ping],
-            languages: ["TestLanguage"],
+            languages: ["testLanguage"],
 
             paths: {
-                commands: path.resolve(path.join(__dirname, "../", "Test", "Data", "TestCommands")),
-                languages: path.resolve(path.join("src", "Test", "Data", "TestLanguages")),
-                services: path.resolve(path.join(__dirname, "../", "Test", "Data", "TestServices")),
-                tasks: path.resolve(path.join(__dirname, "../", "Test", "Data", "TestTasks")),
+                commands: path.resolve(path.join(__dirname, "../", "test", "data", "testCommands")),
+                languages: path.resolve(path.join("src", "test", "data", "testLanguages")),
+                services: path.resolve(path.join(__dirname, "../", "test", "data", "testServices")),
+                tasks: path.resolve(path.join(__dirname, "../", "test", "data", "testTasks")),
             }
         };
     }

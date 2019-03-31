@@ -16,8 +16,13 @@ const testConnection: CommandRunner = (): void => {
     //
 };
 
-@name("mycmd")
-@desc("Used for testing")
+const testCommandMeta: IMeta = {
+    name: "testCommand",
+    description: "Dummy command for testing"
+};
+
+@name(testCommandMeta.name)
+@desc(testCommandMeta.description!)
 @attachedLogger()
 @args({
     name: "name",
@@ -31,7 +36,7 @@ const testConnection: CommandRunner = (): void => {
 @Constraint.issuerPermissions(Permission.AddReactions)
 @Constraint.selfPermissions(Permission.Admin, Permission.BanMembers)
 @Constraint.userGroup(RestrictGroup.ServerModerator)
-export class MyCommand extends Command {
+class TestCommand extends Command {
     @deprecated()
     public testGuard(): boolean {
         //
@@ -59,7 +64,7 @@ class MetaTest {
     public readonly meta!: IMeta;
 }
 
-const instance: MyCommand = new (MyCommand as any)(null as any);
+const instance: TestCommand = new (TestCommand as any)(null as any);
 const metaInstance: MetaTest = new MetaTest();
 
 @unit("Decorators")
@@ -68,13 +73,8 @@ default class {
     public instanceBeObj() {
         Assert.that(instance,
             Is.object,
-            Is.instanceOf(MyCommand)
+            Is.instanceOf(TestCommand)
         );
-    }
-
-    @test("should register commands with helper decorators")
-    public registerCommandsWithDecorators() {
-        Assert.equal(testBot.registry.contains("mycmd"), true);
     }
 
     @test("should have a meta property")
@@ -97,13 +97,13 @@ default class {
     @test("should bind command name")
     @target(name)
     public name_bind() {
-        Assert.equal(instance.meta.name, "mycmd");
+        Assert.equal(instance.meta.name, testCommandMeta.name);
     }
 
     @test("should bind command description")
     @target(desc)
     public description_bind() {
-        Assert.equal(instance.meta.description, "Used for testing");
+        Assert.equal(instance.meta.description, testCommandMeta.description);
     }
 
     @test("should bind command arguments")
@@ -135,7 +135,7 @@ default class {
         Assert.equal(instance.constraints.userGroups.includes(RestrictGroup.ServerModerator), true);
     }
 
-    @test("@Guard: Should bind command guards")
+    @test("should bind command guards")
     @target(guard)
     public guard_bind() {
         Assert.that(instance.guards, Is.arrayWithLength(1));
@@ -175,6 +175,11 @@ default class {
     @target(attachedLogger)
     public attachedLogger_bind() {
         Assert.equal(instance.connections[1], attachedLoggerFn);
+    }
+
+    @test("should register commands with helper decorators")
+    public registerCommandsWithDecorators() {
+        Assert.equal(testBot.registry.contains("test-decorator-command"), true);
     }
 
     @test("should replace input with a proxy method")

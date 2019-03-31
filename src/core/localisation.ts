@@ -30,7 +30,7 @@ export default class Localisation implements ILanguage {
     }
 
     public getLanguages(): ReadonlyMap<string, LanguageSource> {
-        return this.languages as ReadonlyMap<string, any>;
+        return this.languages;
     }
 
     public setDefault(name: string): boolean {

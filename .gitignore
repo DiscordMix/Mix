@@ -14,5 +14,5 @@ yarn-error.log
 docs/
 .env
 yarn.lock
-.TuskCache.json
+.tuskCache.json
 .dist.backup

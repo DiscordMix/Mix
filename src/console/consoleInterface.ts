@@ -3,12 +3,12 @@ import {Guild, GuildMember} from "discord.js";
 import {performance} from "perf_hooks";
 import readline from "readline";
 import {ReadonlyCommandMap} from "../commands/commandRegistry";
-import Bot from "../core/bot";
 import {debugMode} from "../core/constants";
 import Log from "../core/log";
 import Util from "../util/util";
 import {ReadonlyServiceMap} from "../services/serviceManager";
 import {IBot} from "../core/botExtra";
+import os from "os";
 
 // TODO: Export in index.
 export type ConsoleCommandHandler = (args: string[]) => void;
@@ -36,7 +36,9 @@ export default class ConsoleInterface implements IConsoleInterface {
         this.bot = bot;
         this.ready = false;
         this.commands = new Map();
-        this.prompt = `${chalk.cyan.bold(bot.client.user.tag)} > `;
+
+        // At this point, the client has not logged in.
+        this.prompt = `${os.userInfo().username} > `;
     }
 
     /**
@@ -45,6 +47,9 @@ export default class ConsoleInterface implements IConsoleInterface {
      */
     public setup(registerDefaults: boolean = true): this {
         Log.verbose("Setting up console interface");
+
+        // Update prompt with the bot's user tag.
+        this.prompt = `${chalk.cyan.bold(this.bot.client.user.tag)} > `;
 
         this.ci = readline.createInterface({
             input: process.stdin,
@@ -55,7 +60,7 @@ export default class ConsoleInterface implements IConsoleInterface {
         this.ci.prompt(true);
 
         if (registerDefaults) {
-            this.defaultCommands(this.bot);
+            this.defaultCommands();
         }
 
         // Prompt setup.
@@ -121,27 +126,27 @@ export default class ConsoleInterface implements IConsoleInterface {
         this.ci.prompt();
     }
 
-    protected defaultCommands(bot: IBot): this {
+    protected defaultCommands(): this {
         let using: Guild | null = null;
 
         if (debugMode) {
             this.commands.set("bug", (args: string[]) => {
                 if (args[0] === "commands") {
-                    const commands: ReadonlyCommandMap = bot.registry.getAll();
+                    const commands: ReadonlyCommandMap = this.bot.registry.getAll();
 
                     for (const [base, command] of commands) {
                         console.log(`\n\nCommand: ${base}\n\n`, command);
                     }
                 }
                 else if (args[0] === "services") {
-                    const services: ReadonlyServiceMap = bot.services.getAll();
+                    const services: ReadonlyServiceMap = this.bot.services.getAll();
 
                     for (const [name, service] of services) {
                         console.log(`\n\nService: ${name}\n\n`, service);
                     }
                 }
                 else if (args[0] === "opts") {
-                    console.log("Using bot options:\n\n", bot.options);
+                    console.log("Using bot options:\n\n", this.bot.options);
                 }
                 else {
                     console.log("Unknown subcommand");
@@ -150,25 +155,25 @@ export default class ConsoleInterface implements IConsoleInterface {
         }
 
         this.commands.set("ping", () => {
-            console.log(`${Math.round(bot.client.ping)}ms`);
+            console.log(`${Math.round(this.bot.client.ping)}ms`);
         });
 
         this.commands.set("restart", async () => {
-            await bot.reconnect(true);
+            await this.bot.reconnect(true);
         });
 
         this.commands.set("stop", async () => {
-            await bot.disconnect();
+            await this.bot.disconnect();
             process.exit(0);
         });
 
         this.commands.set("uptime", () => {
             // TODO: Time is getting capitalized.
-            console.log(`Started ${Util.timeAgoFromNow(bot.client.uptime)}`);
+            console.log(`Started ${Util.timeAgoFromNow(this.bot.client.uptime)}`);
         });
 
         this.commands.set("guilds", () => {
-            console.log(bot.client.guilds.map((guild: Guild) => `${guild.name} ${guild.id}`));
+            console.log(this.bot.client.guilds.map((guild: Guild) => `${guild.name} ${guild.id}`));
         });
 
         this.commands.set("pid", () => {
@@ -178,8 +183,8 @@ export default class ConsoleInterface implements IConsoleInterface {
         this.commands.set("use", (args: string[]) => {
             const guild: string = args[0];
 
-            if (bot.client.guilds.has(guild)) {
-                using = bot.client.guilds.get(guild) || null;
+            if (this.bot.client.guilds.has(guild)) {
+                using = this.bot.client.guilds.get(guild) || null;
 
                 if (using !== null) {
                     console.log(`Using ${using.name} (${using.id})`);
@@ -195,25 +200,25 @@ export default class ConsoleInterface implements IConsoleInterface {
 
         this.commands.set("poststats", async () => {
             // TODO: Some way to check if NO key is set.
-            if (Object.keys(bot.options.keys).length === 0) {
+            if (Object.keys(this.bot.options.keys).length === 0) {
                 console.log("You haven't set any keys!");
 
                 return;
             }
 
             console.log("Posting stats ...");
-            await bot.postStats();
+            await this.bot.postStats();
             console.log("Posted stats");
         });
 
         this.commands.set("id", () => {
-            if (!bot.client.user) {
+            if (!this.bot.client.user) {
                 console.log("Not logged in");
 
                 return;
             }
 
-            console.log(bot.client.user.id);
+            console.log(this.bot.client.user.id);
         });
 
         this.commands.set("membercount", () => {
@@ -246,7 +251,7 @@ export default class ConsoleInterface implements IConsoleInterface {
         this.commands.set("reload", async () => {
             const startTime: number = performance.now();
 
-            await bot.reload();
+            await this.bot.reload();
 
             // TODO: New fragment system.
             // await bot.commandLoader.reloadAll();

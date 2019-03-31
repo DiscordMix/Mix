@@ -103,7 +103,7 @@ export default class BotConnector implements IBotConnector {
 
             if (this.bot.options.useConsoleInterface && !this.bot.console.ready) {
                 // Setup the console command interface.
-                this.bot.console.setup(this.bot);
+                this.bot.console.setup();
             }
 
             Log.info(`Logged in as ${this.bot.client.user.tag} | ${this.bot.client.guilds.size} guild(s)`);

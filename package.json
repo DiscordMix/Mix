@@ -15,7 +15,7 @@
         "es2015"
     ],
     "engines": {
-        "node": ">=8.11.1 <=10.12.0"
+        "node": ">=8.11.1 <=10.15.0"
     },
     "directories": {
         "test": "src/test"

@@ -17,13 +17,13 @@ type Args = {
 @args(
     {
         name: "code",
-        description: "The code to evaluate",
+        desc: "The code to evaluate",
         type: type.string,
         required: true
     },
     {
         name: "silent",
-        description: "Send result or not",
+        desc: "Send result or not",
         type: type.boolean,
         required: false
     }

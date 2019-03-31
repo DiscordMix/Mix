@@ -17,7 +17,7 @@ enum ReflectDataType {
 @desc("Access the bot's internal state")
 @args({
     name: "type",
-    description: "The data to inspect",
+    desc: "The data to inspect",
     required: true,
     flagShortName: "t",
     type: type.string

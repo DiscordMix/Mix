@@ -17,7 +17,7 @@ type Args = {
 @aliases("exec", "exe")
 @args({
     name: "command",
-    description: "The command to execute",
+    desc: "The command to execute",
     type: type.string,
     required: true
 })

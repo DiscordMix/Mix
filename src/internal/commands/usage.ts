@@ -17,7 +17,7 @@ const delimiter: string = ", ";
     name: "command",
     type: type.string,
     required: true,
-    description: "The command to inspect"
+    desc: "The command to inspect"
 })
 @Constraint.cooldown(1)
 export default class extends Command<Args> {
@@ -78,7 +78,7 @@ export default class extends Command<Args> {
                 const flag: string = argument.flagShortName ? ` {-${argument.flagShortName}}` : "";
 
                 // TODO: Missing argument's type
-                usage.add(`${argument.name}${argument.required ? "!" : "?"}${flag}${def} : ${argument.description}`);
+                usage.add(`${argument.name}${argument.required ? "!" : "?"}${flag}${def} : ${argument.desc}`);
             }
         }
 

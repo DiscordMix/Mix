@@ -35,11 +35,33 @@ export type RawArguments = string[];
  */
 export type InputArgument = string | number | boolean;
 
+/**
+ * A command argument.
+ */
 export interface IArgument {
-    readonly name: string;
     readonly type: ArgumentType;
-    readonly description?: string;
+
+    /**
+     * The uniquely identifying name of this
+     * argument.
+     */
+    readonly name: string;
+
+    /**
+     * Optional argument description.
+     */
+    readonly desc?: string;
+
+    /**
+     * Default value to use when no value
+     * is provided by the user.
+     */
     readonly defaultValue?: InputArgument | DefaultValueResolver;
+
+    /**
+     * Whether this argument is required for command
+     * execution.
+     */
     readonly required?: boolean;
 
     // TODO: CRTICAL: X2 : Must verify that the same short flag isn't already being used by another argument of the same command.

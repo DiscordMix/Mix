@@ -226,6 +226,7 @@ export interface IBot extends EventEmitter, IDisposable, ITimeoutAttachable {
     readonly analytics: IBotAnalytics;
     readonly handle: IBotHandler;
 
+    reload(): PromiseOr<this>;
     setState(state: BotState): this;
     postStats(): PromiseOr<void>;
     setSuspended(suspend: boolean): this;

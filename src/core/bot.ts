@@ -212,7 +212,7 @@ export default class Bot extends EventEmitter implements IBot {
             errorHandlers: [] // TODO: Is this like it was? Is it ok?
         });
 
-        this.console = new ConsoleInterface();
+        this.console = new ConsoleInterface(this);
         this.usePrefixCommand = this.options.usePrefixCommand || true;
 
         this.internalCommands = this.options.internalCommands || [

@@ -8,6 +8,7 @@ import {debugMode} from "../core/constants";
 import Log from "../core/log";
 import Util from "../util/util";
 import {ReadonlyServiceMap} from "../services/serviceManager";
+import {IBot} from "../core/botExtra";
 
 // TODO: Export in index.
 export type ConsoleCommandHandler = (args: string[]) => void;
@@ -15,88 +16,58 @@ export type ConsoleCommandHandler = (args: string[]) => void;
 export interface IConsoleInterface {
     readonly ready: boolean;
 
-    setup(bot: Bot, registerDefaults: boolean): this;
+    setup(registerDefaults: boolean): this;
 }
 
-export default class ConsoleInterface {
+export default class ConsoleInterface implements IConsoleInterface {
     /**
-     * Whether the console interface has been successfully setup.
+     * Whether the console interface has been
+     * successfully setup.
      */
     public ready: boolean;
 
+    protected readonly bot: IBot;
     protected readonly commands: Map<string, ConsoleCommandHandler>;
 
-    public constructor() {
+    protected ci!: readline.Interface;
+    protected prompt: string;
+
+    public constructor(bot: IBot) {
+        this.bot = bot;
         this.ready = false;
         this.commands = new Map();
+        this.prompt = `${chalk.cyan.bold(bot.client.user.tag)} > `;
     }
 
-    public setup(bot: Bot, registerDefaults: boolean = true): this {
+    /**
+     * Setup and initialize the console interface
+     * module.
+     */
+    public setup(registerDefaults: boolean = true): this {
         Log.verbose("Setting up console interface");
 
-        const ci = readline.createInterface({
+        this.ci = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
 
-        ci.setPrompt(`${chalk.cyan.bold(bot.client.user.tag)} > `);
-        ci.prompt(true);
+        this.ci.setPrompt(`${chalk.cyan.bold(this.bot.client.user.tag)} > `);
+        this.ci.prompt(true);
 
         if (registerDefaults) {
-            this.defaultCommands(bot);
+            this.defaultCommands(this.bot);
         }
 
         // Prompt setup.
-        ci.on("line", async (input: string) => {
-            if (input.startsWith("#")) {
-                const id: number = parseInt(input.substr(1));
-
-                if (!isNaN(id)) {
-                    if (Log.history[id] !== undefined) {
-                        console.log(chalk.gray(input));
-                        Log.compose(Log.history[id]);
-                    }
-                    else {
-                        console.log("No such message has been recorded");
-                    }
-                }
-                else {
-                    console.log("Invalid input | Expecting number after '#'");
-                }
-
-                ci.prompt();
-
-                return;
-            }
-
-            const args: string[] = input.trim().split(" ");
-            const base: string = args[0].trim();
-
-            args.splice(0, 1);
-
-            if (base === "") {
-                ci.prompt();
-
-                return;
-            }
-
-            if (this.commands.has(base)) {
-                await this.commands.get(base)!(args);
-            }
-            else {
-                console.log(chalk.white(`Unknown command: ${input}`));
-            }
-
-            ci.prompt();
-        });
+        this.ci.on("line", this.handleLine.bind(this));
 
         // TODO
         /* ci.on("error", (error: Error) => {
             Log.error(error.message);
         }); */
 
-        ci.on("close", async () => {
-            await bot.disconnect();
+        this.ci.on("close", async () => {
+            await this.bot.disconnect();
             process.exit(0);
         });
 
@@ -107,7 +78,50 @@ export default class ConsoleInterface {
         return this;
     }
 
-    protected defaultCommands(bot: Bot): this {
+    protected async handleLine(input: string): Promise<void> {
+        if (input.startsWith("#")) {
+            const id: number = parseInt(input.substr(1));
+
+            if (!isNaN(id)) {
+                if (Log.history[id] !== undefined) {
+                    console.log(chalk.gray(input));
+                    Log.compose(Log.history[id]);
+                }
+                else {
+                    console.log("No such message has been recorded");
+                }
+            }
+            else {
+                console.log("Invalid input | Expecting number after '#'");
+            }
+
+            this.ci.prompt();
+
+            return;
+        }
+
+        const args: string[] = input.trim().split(" ");
+        const base: string = args[0].trim();
+
+        args.splice(0, 1);
+
+        if (base === "") {
+            this.ci.prompt();
+
+            return;
+        }
+
+        if (this.commands.has(base)) {
+            await this.commands.get(base)!(args);
+        }
+        else {
+            console.log(chalk.white(`Unknown command: ${input}`));
+        }
+
+        this.ci.prompt();
+    }
+
+    protected defaultCommands(bot: IBot): this {
         let using: Guild | null = null;
 
         if (debugMode) {
@@ -140,7 +154,7 @@ export default class ConsoleInterface {
         });
 
         this.commands.set("restart", async () => {
-            await bot.reconnect();
+            await bot.reconnect(true);
         });
 
         this.commands.set("stop", async () => {

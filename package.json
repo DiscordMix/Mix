@@ -28,7 +28,7 @@
         "watch": "tsc --watch",
         "build": "tsc",
         "check": "tsc --noEmit",
-        "test": "npm run build && node dist/test/Runner.js",
+        "test": "npm run build && node dist/test/runner.js",
         "webhook-test": "npm run build && node dist/test/webhookTest.js",
         "prepublishOnly": "npm test"
     },

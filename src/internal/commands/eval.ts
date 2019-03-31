@@ -10,7 +10,7 @@ import {type} from "../../commands/type";
 type Args = {
     readonly code: string;
     readonly silent: boolean;
-}
+};
 
 @name("eval")
 @desc("Evaluate code")

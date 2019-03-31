@@ -7,7 +7,7 @@ import {type} from "../../commands/type";
 
 type Args = {
     readonly command: string;
-}
+};
 
 const delimiter: string = ", ";
 
@@ -22,8 +22,8 @@ const delimiter: string = ", ";
 @Constraint.cooldown(1)
 export default class extends Command<Args> {
     // TODO: Finish implementing
-    public async run($: Context, args: Args) {
-        const targetCommand: Command | null = await $.bot.registry.get(args.command);
+    public async run($: Context, arg: Args) {
+        const targetCommand: Command | null = await $.bot.registry.get(arg.command);
 
         if (!targetCommand) {
             await $.fail("That command doesn't exist.");
@@ -33,8 +33,8 @@ export default class extends Command<Args> {
 
         const usage: MsgBuilder = new MsgBuilder().block().append(`# Usage\n${targetCommand.meta.name}`);
 
-        for (const arg of targetCommand.args) {
-            usage.append(" ").append(arg.required ? arg.name : `[${arg.name}]`);
+        for (const argument of targetCommand.args) {
+            usage.append(" ").append(argument.required ? argument.name : `[${argument.name}]`);
         }
 
         const dependencies: string = targetCommand.dependsOn.length > 0 ? targetCommand.dependsOn.join(delimiter) : "None";
@@ -73,12 +73,12 @@ export default class extends Command<Args> {
                 .add("# Argument details\n")
                 .line();
 
-            for (const arg of targetCommand.args) {
-                const def: string = arg.defaultValue ? ` (default: '${arg.defaultValue}')` : "";
-                const flag: string = arg.flagShortName ? ` {-${arg.flagShortName}}` : "";
+            for (const argument of targetCommand.args) {
+                const def: string = argument.defaultValue ? ` (default: '${argument.defaultValue}')` : "";
+                const flag: string = argument.flagShortName ? ` {-${argument.flagShortName}}` : "";
 
                 // TODO: Missing argument's type
-                usage.add(`${arg.name}${arg.required ? "!" : "?"}${flag}${def} : ${arg.description}`);
+                usage.add(`${argument.name}${argument.required ? "!" : "?"}${flag}${def} : ${argument.description}`);
             }
         }
 

@@ -7,7 +7,7 @@ import {notImplemented} from "../../decorators/other";
 
 type Arg = {
     readonly type: ReflectDataType;
-}
+};
 
 enum ReflectDataType {
     Services = "services"

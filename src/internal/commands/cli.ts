@@ -10,7 +10,7 @@ import Util from "../../util/util";
 
 type Args = {
     readonly command: string;
-}
+};
 
 @name("cli")
 @desc("Access the local machine's CLI")

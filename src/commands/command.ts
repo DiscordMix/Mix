@@ -3,7 +3,7 @@ import Context, {IContext} from "./context";
 import {IFragment, IMeta} from "../fragments/fragment";
 import {Message, RichEmbed} from "discord.js";
 import Bot from "../core/bot";
-import {IDisposable, Writeable} from "../util/helpers";
+import {IDisposable, Mutable} from "../util/helpers";
 import {PromiseOr} from "@atlas/xlib";
 import {TypeChecker, ArgumentType} from "./type";
 
@@ -256,19 +256,6 @@ export abstract class Subcommand<T extends {} = {}> extends GenericCommand<T> {
  */
 export default abstract class Command<T extends {} = {}> extends GenericCommand<T> {
     public readonly subcommands: Subcommand<T>[] = [];
-
-    // TODO: Finish implementing. Use this.arg similar to React this.state/props.
-    protected readonly arg: T = {};
-
-    /**
-     * Prepare the arguments for the command
-     * execution event.
-     */
-    public setArgs(arg: T): this {
-        (this.arg as Writeable<T>) = arg;
-
-        return this;
-    }
 
     // TODO: canExecute should default boolean, same concept as Service.
     /**

@@ -8,7 +8,7 @@ import Loader, {ILivePackage, IPackage} from "./loader";
 import {ForkedService} from "../services/forkedService";
 import Service from "../services/service";
 import {PromiseOr} from "@atlas/xlib";
-import {Writeable} from "../util/helpers";
+import {Mutable} from "../util/helpers";
 
 export interface IFragmentManager extends EventEmitter {
     enableMultiple(packages: IPackage[], internal: boolean): PromiseOr<number>;
@@ -106,7 +106,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
             }
 
             // Overwrite command restrict with default values.
-            (command.constraints as Writeable<IConstraints>) = {
+            (command.constraints as Mutable<IConstraints>) = {
                 ...defaultCommandConstraints,
                 ...command.constraints
             };

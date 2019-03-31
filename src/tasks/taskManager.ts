@@ -4,7 +4,7 @@ import Util from "../util/util";
 import Loader, {IPackage} from "../fragments/loader";
 import Task from "./task";
 import {PromiseOr} from "@atlas/xlib";
-import {Writeable} from "../util/helpers";
+import {Mutable} from "../util/helpers";
 
 export interface ITaskManager {
     register(task: Task): boolean;
@@ -228,8 +228,8 @@ export default class TaskManager implements ITaskManager {
         const task: Task = this.tasks.get(name) as Task;
 
         task.run();
-        (task as Writeable<Task>).iterations++;
-        (task as Writeable<Task>).lastIteration = Date.now();
+        (task as Mutable<Task>).iterations++;
+        (task as Mutable<Task>).lastIteration = Date.now();
 
         return true;
     }

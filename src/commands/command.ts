@@ -99,6 +99,10 @@ export enum CommandStatus {
     Failed
 }
 
+/**
+ * A class with a runnable point. This is considered
+ * a command.
+ */
 export interface IRunnable<T extends {} = {}> {
     run(context: Context, args: T): void;
 }
@@ -143,6 +147,9 @@ export interface IGenericCommand<T extends {} = {}> extends IFragment, IDisposab
 }
 
 export abstract class GenericCommand<T extends {} = {}> implements IGenericCommand<T> {
+    /**
+     * General, uniquely identifying information of the command.
+     */
     public readonly meta: IMeta = {
         // Leave empty intentionally so the fragment validator complains.
         name: ""

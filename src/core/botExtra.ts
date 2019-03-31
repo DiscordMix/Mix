@@ -146,6 +146,8 @@ export enum BotEvent {
     LoadedServices = "loadedServices",
     LoadingCommands = "loadCommands",
     LoadedCommands = "loadedCommands",
+    LoadingTasks = "loadTasks",
+    LoadedTasks = "loadedTasks",
     Ready = "ready",
     HandleMessageStart = "handleMessageStart",
     HandleMessageEnd = "handleMessageEnd",
@@ -198,7 +200,7 @@ export type BotToken = string;
  */
 export type Snowflake = string;
 
-export interface IBot<TState = any, TActionType = any> extends EventEmitter, IDisposable, ITimeoutAttachable {
+export interface IBot extends EventEmitter, IDisposable, ITimeoutAttachable {
     readonly options: IBotOptions;
     readonly temp: ITemp;
     readonly services: IServiceManager;

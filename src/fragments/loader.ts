@@ -37,6 +37,7 @@ export default abstract class Loader {
         try {
             let module: any = require(filePath);
 
+            // Ensure module is not empty.
             if (module === undefined || module === null) {
                 return null;
             }

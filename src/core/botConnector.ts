@@ -3,12 +3,11 @@ import DiscordEvent from "./discordEvent";
 import Bot from "./bot";
 import {BotState, BotEvent} from "./botExtra";
 import {Message} from "discord.js";
-import {title, debugMode, internalFragmentsPath} from "./constants";
+import {title, debugMode} from "./constants";
 import BotMessages from "./messages";
-import Loader, {IPackage} from "../fragments/loader";
 import {PromiseOr} from "@atlas/xlib";
-import Util from "../util/util";
 import {performance} from "perf_hooks";
+import FragmentLoader from "../fragments/fragment";
 
 export interface IBotConnector {
     setup(): PromiseOr<this>;
@@ -47,119 +46,31 @@ export default class BotConnector implements IBotConnector {
             }
         }
 
-        Log.verbose("Attempting to load internal fragments");
         this.bot.emit(BotEvent.LoadingInternalFragments);
 
+        const fragmentLoader: FragmentLoader = new FragmentLoader(this.bot);
+
         // Load & enable internal fragments.
-        const internalFragmentCandidates: string[] | null = await Loader.scan(internalFragmentsPath);
-
-        // The scan process failed for some reason.
-        if (!internalFragmentCandidates) {
-            throw Log.error(BotMessages.SETUP_FAIL_LOAD_FRAGMENTS);
-        }
-
-        if (internalFragmentCandidates.length > 0) {
-            Log.verbose(`Loading ${internalFragmentCandidates.length} internal fragments`);
-        }
-        else {
-            Log.warn(BotMessages.SETUP_NO_FRAGMENTS_DETECTED);
-        }
-
-        const internalFragments: IPackage[] | null = await Loader.loadMultiple(internalFragmentCandidates);
-
-        if (!internalFragments || internalFragments.length === 0) {
-            Log.warn(BotMessages.SETUP_NO_FRAGMENTS_LOADED);
-        }
-        else {
-            const enabled: number = await this.bot.fragments.enableMultiple(internalFragments, true);
-
-            if (enabled === 0) {
-                Log.warn(BotMessages.SETUP_NO_FRAGMENTS_ENABLED);
-            }
-            else {
-                Log.success(`Enabled ${enabled}/${internalFragments.length} (${Util.percentOf(enabled, internalFragments.length)}%) internal fragments`);
-            }
-        }
+        const internalFragments = await fragmentLoader.loadInternal();
 
         this.bot.emit(BotEvent.LoadedInternalFragments, internalFragments || []);
         this.bot.emit(BotEvent.LoadingServices);
 
         // Load & enable services.
-        const consumerServiceCandidates: string[] | null = await Loader.scan(this.bot.options.paths.services);
-
-        if (!consumerServiceCandidates || consumerServiceCandidates.length === 0) {
-            Log.verbose(`No services were detected under '${this.bot.options.paths.services}'`);
-        }
-        else {
-            Log.verbose(`Loading ${consumerServiceCandidates.length} service(s)`);
-
-            const servicesLoaded: IPackage[] | null = await Loader.loadMultiple(consumerServiceCandidates);
-
-            if (!servicesLoaded || servicesLoaded.length === 0) {
-                Log.warn(BotMessages.SETUP_NO_SERVICES_LOADED);
-            }
-            else {
-                Log.success(`Loaded ${servicesLoaded.length} service(s)`);
-                await this.bot.fragments.enableMultiple(servicesLoaded);
-            }
-        }
-
-        // After loading services, enable all of them.
-        // TODO: Returns amount of enabled services.
-        await this.bot.services.startAll();
+        await fragmentLoader.loadServices();
 
         this.bot.emit(BotEvent.LoadedServices);
         this.bot.emit(BotEvent.LoadingCommands);
 
         // Load & enable consumer command fragments.
-        const consumerCommandCandidates: string[] | null = await Loader.scan(this.bot.options.paths.commands);
-
-        if (!consumerCommandCandidates || consumerCommandCandidates.length === 0) {
-            Log.warn(`No commands were detected under '${this.bot.options.paths.commands}'`);
-        }
-        else {
-            Log.verbose(`Loading ${consumerCommandCandidates.length} command(s)`);
-
-            const commandsLoaded: IPackage[] | null = await Loader.loadMultiple(consumerCommandCandidates);
-
-            if (!commandsLoaded || commandsLoaded.length === 0) {
-                Log.warn(BotMessages.SETUP_NO_COMMANDS_LOADED);
-            }
-            else {
-                const enabled: number = await this.bot.fragments.enableMultiple(commandsLoaded);
-
-                if (enabled > 0) {
-                    Log.success(`Enabled ${commandsLoaded.length}/${consumerCommandCandidates.length} (${Util.percentOf(commandsLoaded.length, consumerCommandCandidates.length)}%) command(s)`);
-                }
-                else {
-                    Log.warn(BotMessages.SETUP_NO_COMMANDS_ENABLED);
-                }
-            }
-        }
-
-        // Begin loading & enabling tasks. First, unregister all existing ones.
-        await this.bot.tasks.unregisterAll();
-        Log.verbose(BotMessages.SETUP_LOADING_TASKS);
-
-        const loaded: number = await this.bot.tasks.loadAll(this.bot.options.paths.tasks);
-
-        if (loaded > 0) {
-            Log.success(`Loaded ${loaded} task(s)`);
-
-            const enabled: number = this.bot.tasks.enableAll();
-
-            if (enabled > 0) {
-                Log.success(`Triggered ${enabled}/${loaded} task(s)`);
-            }
-            else if (enabled === 0 && loaded > 0) {
-                Log.warn(BotMessages.SETUP_NO_TASKS_TRIGGERED);
-            }
-        }
-        else {
-            Log.verbose(BotMessages.SETUP_NO_TASKS_FOUND);
-        }
+        await fragmentLoader.loadCommands();
 
         this.bot.emit(BotEvent.LoadedCommands);
+
+        // Begin loading & enabling tasks. First, unregister all existing ones.
+        await fragmentLoader.loadTasks();
+
+        this.bot.emit(BotEvent.LoadedTasks);
 
         // Start the optimizer (if applicable).
         if (this.bot.options.useOptimizer) {

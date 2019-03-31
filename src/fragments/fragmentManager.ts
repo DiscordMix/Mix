@@ -27,7 +27,7 @@ export default class FragmentManager extends EventEmitter implements IFragmentMa
 
     /**
      * Enable and register fragments.
-     * @param {boolean} [internal=false] Whether the fragments are internal.
+     * @param {boolean} [internal=false] Whether the provided fragments are internal.
      * @return {Promise<number>} The amount of enabled fragments.
      */
     public async enableMultiple(packages: IPackage[], internal: boolean = false): Promise<number> {

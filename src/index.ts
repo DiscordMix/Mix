@@ -6,7 +6,9 @@ import Command, {
     IArgument,
     ICustomArgType,
     IGenericCommand,
-    RestrictGroup
+    RestrictGroup,
+    IRunnable,
+    Runnable
 } from "./commands/command";
 
 import ConsoleCommand from "./console/consoleCommand";
@@ -90,9 +92,11 @@ export {
     Command,
     GenericCommand,
     IGenericCommand,
-    type as Type,
+    type,
     ArgumentResolver,
     RestrictGroup,
+    Runnable,
+    IRunnable,
 
     // Console.
     ConsoleInterface,

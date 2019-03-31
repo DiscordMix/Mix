@@ -1,9 +1,9 @@
 import ChatEnv from "../core/chatEnv";
 import Context, {IContext} from "./context";
 import {IFragment, IMeta} from "../fragments/fragment";
-import {Message, RichEmbed} from "discord.js";
+import {Message} from "discord.js";
 import Bot from "../core/bot";
-import {IDisposable, Mutable} from "../util/helpers";
+import {IDisposable} from "../util/helpers";
 import {PromiseOr} from "@atlas/xlib";
 import {TypeChecker, ArgumentType} from "./type";
 
@@ -99,21 +99,30 @@ export enum CommandStatus {
     Failed
 }
 
-export interface ICommandResult {
-    readonly responses: Array<string | RichEmbed>;
-    readonly status: CommandStatus | number;
+export interface IRunnable<T extends {} = {}> {
+    run(context: Context, args: T): void;
 }
 
-export type CommandRunner<T = ICommandResult | any> = (context: IContext, args: any) => T;
+/**
+ * Represents a runnable entity. This is considered
+ * a command.
+ */
+export type Runnable = CommandRunner | IRunnable;
 
-export type CommandRelay<T = any> = (context: Context, args: T, command: IGenericCommand) => void;
+/**
+ * The method to be invoked once the command
+ * is executed.
+ */
+export type CommandRunner<T extends {} = {}> = (context: IContext, args: T) => void;
+
+export type CommandRelay<T extends {} = {}> = (context: Context, args: T, command: IGenericCommand) => void;
 
 /**
  * Represents a command middleware function that will determine whether the command execution sequence may continue.
  */
 export type CommandGuard<T = any> = (context: Context, args: T, command: IGenericCommand) => boolean;
 
-export interface IGenericCommand<T extends {} = {}> extends IFragment, IDisposable {
+export interface IGenericCommand<T extends {} = {}> extends IFragment, IDisposable, IRunnable<T> {
     readonly minArguments: number;
     readonly maxArguments: number;
     readonly meta: IMeta;
@@ -130,7 +139,6 @@ export interface IGenericCommand<T extends {} = {}> extends IFragment, IDisposab
 
     undo(oldContext: Context, message: Message, args: T): PromiseOr<boolean>;
     enabled(): PromiseOr<boolean>;
-    run(context: Context, args: T): ICommandResult | any;
     isExcluded(query: string): boolean;
 }
 
@@ -199,6 +207,9 @@ export abstract class GenericCommand<T extends {} = {}> implements IGenericComma
      */
     public readonly dependsOn: string[] = [];
 
+    /**
+     * The bot instance linked to this command.
+     */
     protected readonly bot: Bot;
 
     protected constructor(bot: Bot) {
@@ -223,7 +234,7 @@ export abstract class GenericCommand<T extends {} = {}> implements IGenericComma
         return true;
     }
 
-    public abstract run(context: Context, args: T): ICommandResult | any;
+    public abstract run(context: Context, args: T): void;
 
     /**
      * @return {number} The minimum amount of required arguments that this command accepts.
@@ -259,7 +270,6 @@ export default abstract class Command<T extends {} = {}> extends GenericCommand<
 
     // TODO: canExecute should default boolean, same concept as Service.
     /**
-     * @param {Context} context
      * @return {boolean} Whether this command may be executed.
      */
     public canExecute(context: Context): boolean {

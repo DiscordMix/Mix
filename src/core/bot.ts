@@ -1,6 +1,3 @@
-// Load and apply environment variables.
-require("dotenv").config();
-
 import ConsoleInterface from "../console/consoleInterface";
 import Log from "./log";
 import Temp from "./temp";

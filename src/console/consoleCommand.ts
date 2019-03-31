@@ -1,20 +1,8 @@
-import {default as parseArgs, ParsedArgs} from "minimist";
-import Log from "../core/log";
-
 export interface IConsoleCommand {
     readonly base: string;
-    readonly arguments: ParsedArgs;
+    readonly args: any;
 }
 
 export default abstract class ConsoleCommand {
-    public static parse(consoleCommandString: string): IConsoleCommand {
-        const split: string[] = consoleCommandString.split(" ");
-
-        Log.info(split.join(" "));
-
-        return {
-            arguments: parseArgs(),
-            base: split[0]
-        };
-    }
+    // TODO
 }

@@ -32,7 +32,7 @@ export function connect(...relays: CommandRelay[]): any {
         const instance: Command = DecoratorUtils.createInstance(target);
 
         return class extends target {
-            public readonly connections: CommandRelay<void>[] = [...instance.connections, ...relays];
+            public readonly connections: CommandRelay[] = [...instance.connections, ...relays];
         };
     };
 }

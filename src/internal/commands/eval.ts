@@ -1,10 +1,10 @@
-import EmbedBuilder from "../../Builders/EmbedBuilder";
-import MsgBuilder from "../../Builders/MsgBuilder";
+import EmbedBuilder from "../../builders/embedBuilder";
+import MsgBuilder from "../../builders/msgBuilder";
 import Command from "../../commands/command";
 import Context from "../../commands/context";
 import Util from "../../util/util";
 import {name, desc, args} from "../../decorators/general";
-import {Constraint} from "../../decorators/Constraint";
+import {Constraint} from "../../decorators/constraint";
 import {type} from "../../commands/type";
 
 type Args = {

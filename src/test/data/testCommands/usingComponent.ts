@@ -1,4 +1,4 @@
-import Component from "../../../decorators/Component";
+import Component from "../../../decorators/component";
 import Command from "../../../commands/command";
 
 @Component.command("test-component-command", {

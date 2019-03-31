@@ -1,8 +1,8 @@
 import {default as Command} from "../../commands/command";
 import Context from "../../commands/context";
 import {name, desc, args} from "../../decorators/general";
-import MsgBuilder from "../../Builders/MsgBuilder";
-import {Constraint} from "../../decorators/Constraint";
+import MsgBuilder from "../../builders/msgBuilder";
+import {Constraint} from "../../decorators/constraint";
 import {type} from "../../commands/type";
 
 type Args = {

@@ -1,6 +1,6 @@
 import {unit, test, Assert, Is, target} from "unit";
-import {testSubjects} from "../TestBot";
-import List from "../../Collections/List";
+import {testSubjects} from "../testBot";
+import List from "../../collections/list";
 
 @unit("Collection")
 default class {

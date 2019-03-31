@@ -28,7 +28,7 @@ import {ArgumentType, ArgumentResolver} from "../commands/type";
 import {InstanceTracker} from "../decorators/inject";
 
 // TODO: Should emit an event when state changes.
-export default class Bot<TState = any, TActionType = any> extends EventEmitter implements IBot<TState, TActionType> {
+export default class Bot extends EventEmitter implements IBot {
     // TODO: Temporary hard-coded user ID.
     /**
      * Access the bot's temporary file storage.

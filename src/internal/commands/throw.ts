@@ -1,7 +1,7 @@
 import Command from "../../commands/command";
-import BotMessages from "../../core/Messages";
+import BotMessages from "../../core/messages";
 import {name, desc} from "../../decorators/general";
-import {Constraint} from "../../decorators/Constraint";
+import {Constraint} from "../../decorators/constraint";
 import Log from "../../core/log";
 
 @name("throw")

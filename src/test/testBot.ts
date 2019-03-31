@@ -2,7 +2,7 @@ require("dotenv").config();
 
 import Bot from "../core/bot";
 import {BotEvent} from "../core/botExtra";
-import List from "../Collections/List";
+import List from "../collections/list";
 
 export const testSubjects = {
     ids: [

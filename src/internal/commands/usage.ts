@@ -21,7 +21,7 @@ const delimiter: string = ", ";
 })
 @Constraint.cooldown(1)
 export default class extends Command<Args> {
-    // TODO: Finish implementing
+    // TODO: Finish implementing.
     public async run($: Context, arg: Args) {
         const targetCommand: Command | null = await $.bot.registry.get(arg.command);
 

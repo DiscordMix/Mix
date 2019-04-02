@@ -1,7 +1,7 @@
 import {unit, test, Assert, Is, Does, feed, Mock} from "unit";
 import {init, testBot} from "../testBot";
 import DiscordEvent from "../../core/discordEvent";
-import TestData from "../testData";
+import testData from "../testData";
 
 @unit("Bot")
 default class {
@@ -16,7 +16,7 @@ default class {
         testBot.client.login = Mock.fn(testBot.client.login)
             .once((): Promise<void> => {
                 (testBot.client.user as any) = {
-                    id: TestData.id
+                    id: testData.id
                 };
 
                 testBot.client.emit(DiscordEvent.Ready);

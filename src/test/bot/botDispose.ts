@@ -1,7 +1,7 @@
 import {unit, test, Assert, Is, Does, target} from "unit";
 import {testBot} from "../testBot";
-import TestData from "../testData";
-import {Bot} from "../..";
+import testData from "../testData";
+import Bot from "../../core/bot";
 
 @unit("Bot Dispose")
 default class {
@@ -46,6 +46,6 @@ default class {
             Does.haveProperty("id")
         );
 
-        Assert.equal(result.client.user.id, TestData.id);
+        Assert.equal(result.client.user.id, testData.id);
     }
 }

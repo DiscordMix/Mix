@@ -25,6 +25,9 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
         this.current = currentPage;
     }
 
+    /**
+     * Cycle pages.
+     */
     public next(pages: number = 1): this {
         if (this.current + pages >= 0 && this.current + pages <= this.maxPages) {
             this.current += pages;
@@ -34,6 +37,9 @@ export default class PaginatedMessage extends EventEmitter implements IDisposabl
         return this;
     }
 
+    /**
+     * The maximum amount of pages.
+     */
     public get maxPages(): number {
         if (this.content.length > this.maxLength) {
             return 1;

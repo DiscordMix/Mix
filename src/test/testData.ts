@@ -4,8 +4,8 @@ interface ITestData {
     readonly id: Snowflake;
 }
 
-const TestData: ITestData = {
+const testData: ITestData = {
     id: "86913608335773696"
 };
 
-export default TestData;
+export default testData;

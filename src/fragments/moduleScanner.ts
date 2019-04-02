@@ -1,5 +1,5 @@
 import fs from "fs";
-import {Log} from "..";
+import Log from "../core/log";
 
 export interface IModuleScanner {
     match(...patterns: RegExp[]): this;

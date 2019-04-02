@@ -103,6 +103,7 @@ export default class Optimizer implements IOptimizer {
     protected async process(): Promise<number> {
         const commands: ReadonlyCommandMap = this.bot.registry.getAll();
 
+        // Prepare result counter.
         let released: number = 0;
 
         for (const [name, command] of commands) {
@@ -113,6 +114,7 @@ export default class Optimizer implements IOptimizer {
             }
         }
 
+        // Only log if the counter is one or more.
         if (released > 0) {
             Log.verbose(`Released ${released} unused command(s)`);
         }

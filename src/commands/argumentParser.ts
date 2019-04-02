@@ -2,7 +2,7 @@ import Log from "../core/log";
 import {IArgument} from "./command";
 
 export interface IArgumentParser {
-    resolve(type: string, arg: string, resolvers: object): TemplateStringsArray;
+    resolve(type: string, arg: string, resolvers: {}): TemplateStringsArray;
     getRequiredArguments(schema: IArgument[]): IArgument[];
 }
 
@@ -10,7 +10,7 @@ export interface IArgumentParser {
  * Utility class for parsing command arguments.
  */
 export default class ArgumentParser {
-    public resolve(type: string, arg: string, resolvers: object): TemplateStringsArray {
+    public resolve(type: string, arg: string, resolvers: {}): TemplateStringsArray {
         const keys: string[] = Object.keys(resolvers);
 
         for (const key of keys) {

@@ -187,7 +187,7 @@ export default class MyRecurringTask extends Task {
         description: "A template recurring task"
     };
 
-    readonly interval: number = 10 * 1000; // Run every 10 seconds
+    readonly interval: number = 10 * 1000; // Run every 10 seconds.
 
     public run(): void {
         Log.success("MyRecurringTask has been executed");

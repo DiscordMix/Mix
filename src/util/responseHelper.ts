@@ -6,6 +6,7 @@ import EditableMessage from "../core/editableMessage";
 import Log from "../core/log";
 import Util from "./util";
 import {IBot} from "../core/botExtra";
+import {botLists} from "../core/constants";
 
 export interface IResponseHelper {
     readonly channel: TextChannel;
@@ -79,7 +80,7 @@ export default class ResponseHelper implements IResponseHelper {
         }
 
         let messageResult = await this.channel.send(embed.build()).catch((error: Error) => {
-            if (!Util.botLists.has(this.channel.guild.id)) {
+            if (!botLists.has(this.channel.guild.id)) {
                 // TODO: Commented out, this.privateReply method was moved.
                 // this.privateReply(`Oh no! For some reason, I was unable to reply to you in that channel. (${error.message})`);
             }

@@ -1,3 +1,5 @@
+import Util from "../util/util";
+
 export interface IBCodeDelimiters {
     readonly start: string;
     readonly end: string;
@@ -15,7 +17,12 @@ export interface IBCodeMatch {
 
 export default class BCodeParser {
     public static createMatcher(delimiters: IBCodeDelimiters): RegExp {
-        return new RegExp(`${delimiters.start}[^${delimiters.end}]+${delimiters.end}`, "gm");
+        const escapedDelimiters: IBCodeDelimiters = {
+            start: Util.escapeRegexString(delimiters.start),
+            end: Util.escapeRegexString(delimiters.end)
+        };
+
+        return new RegExp(`${escapedDelimiters.start}[^${escapedDelimiters.end}]+${escapedDelimiters.end}`, "gm");
     }
 
     public readonly delimiters: IBCodeDelimiters;

@@ -23,6 +23,7 @@ import CommandRegistry from "../commands/commandRegistry";
 import BotHandler from "./botHandler";
 import {ArgumentType, ArgumentResolver} from "../commands/type";
 import {InstanceTracker} from "../decorators/inject";
+import BCodeRegistry from "../bCode/bCodeRegistry";
 
 // TODO: Should emit an event when state changes.
 export default class Bot extends EventEmitter implements IBot {
@@ -155,6 +156,12 @@ export default class Bot extends EventEmitter implements IBot {
     public readonly instanceId: number;
 
     /**
+     * The BCode registry instance linked to this
+     * bot instance.
+     */
+    public readonly bCode: BCodeRegistry;
+
+    /**
      * Whether the bot is currently suspended and ignoring all user input.
      */
     protected isSuspended: boolean;
@@ -199,6 +206,7 @@ export default class Bot extends EventEmitter implements IBot {
         this.client = new Client();
         this.services = new ServiceManager(this);
         this.registry = new CommandRegistry(this);
+        this.bCode = new BCodeRegistry(this);
 
         this.argumentResolvers = this.options.argumentResolvers
             ? new Map([...defaultArgResolvers, ...this.options.argumentResolvers])

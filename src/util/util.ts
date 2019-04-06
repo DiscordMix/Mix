@@ -54,6 +54,13 @@ export interface IBinarySearchResult {
 
 export default abstract class Util {
     /**
+     * Escape Regex entities from a string.
+     */
+    public static escapeRegex(input: string): string {
+        return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    /**
      * Strip a Snowflake into its bare ID.
      */
     public static resolveId(mention: string): string {

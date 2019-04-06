@@ -68,6 +68,10 @@ import CommandRegistry, {ICommandRegistry} from "./commands/commandRegistry";
 import {on, once} from "./decorators/events";
 import {deprecated} from "./decorators/utility";
 import Util from "./util/util";
+import {BCodeAction} from "./bCode/bCodeAction";
+import BCodeRegistry, {IBCodeRegistry} from "./bCode/bCodeRegistry";
+import {IBCodeContext} from "./bCode/bCodeContext";
+import BCodeParser, {IBCodeMatch, IBCodeDelimiters} from "./bCode/bCodeParser";
 
 export {
     // Fragments.
@@ -193,5 +197,14 @@ export {
     LogSerializer,
     StateSerializer,
     UrlSerializer,
-    UserSerializer
+    UserSerializer,
+
+    // BCodes.
+    IBCodeContext,
+    IBCodeRegistry,
+    BCodeRegistry,
+    BCodeAction,
+    BCodeParser,
+    IBCodeMatch,
+    IBCodeDelimiters
 };

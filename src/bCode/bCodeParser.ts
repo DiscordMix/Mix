@@ -16,6 +16,10 @@ export interface IBCodeMatch {
 }
 
 export default class BCodeParser {
+    /**
+     * Create a static Regex pattern for
+     * matching the specified BCode delimiters.
+     */
     public static createMatcher(delimiters: IBCodeDelimiters): RegExp {
         const escapedDelimiters: IBCodeDelimiters = {
             start: Util.escapeRegexString(delimiters.start),

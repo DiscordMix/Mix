@@ -10,6 +10,31 @@ default class {
         Assert.true(testBot.suspended);
     }
 
+    @test("should have all modules initialized")
+    public haveModulesInit() {
+        Assert.object(testBot.analytics);
+        Assert.object(testBot.argumentResolvers);
+        Assert.object(testBot.bCode);
+        Assert.object(testBot.client);
+        Assert.object(testBot.commandHandler);
+        Assert.object(testBot.console);
+        Assert.object(testBot.disposables);
+        Assert.object(testBot.fragments);
+        Assert.object(testBot.handle);
+        Assert.object(testBot.i18n);
+        Assert.object(testBot.internalCommands);
+        Assert.object(testBot.intervals);
+        Assert.object(testBot.languages);
+        Assert.object(testBot.optimizer);
+        Assert.object(testBot.options);
+        Assert.object(testBot.paths);
+        Assert.object(testBot.registry);
+        Assert.object(testBot.services);
+        Assert.object(testBot.tasks);
+        Assert.object(testBot.temp);
+        Assert.object(testBot.timeouts);
+    }
+
     @test("should init and login")
     public async initAndLogin() {
         // Mock Discord.JS' client login.

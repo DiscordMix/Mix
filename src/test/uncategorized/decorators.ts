@@ -50,7 +50,7 @@ class TestCommand extends Command {
     }
 
     public run(): void {
-        // ...
+        //
     }
 }
 

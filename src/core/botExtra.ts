@@ -17,9 +17,23 @@ import {PromiseOr} from "@atlas/xlib";
 import {IBotHandler} from "./botHandler";
 import {ArgumentType, ArgumentResolver} from "../commands/type";
 
+/**
+ * Possible Discord text channel types.
+ */
 export enum ChannelType {
+    /**
+     * A normal text message channel.
+     */
     Text = "text",
+
+    /**
+     * Direct message channel (private channel).
+     */
     DM = "dm",
+
+    /**
+     * Group channel containing one or more members.
+     */
     Group = "group"
 }
 

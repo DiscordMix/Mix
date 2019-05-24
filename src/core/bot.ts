@@ -24,6 +24,7 @@ import BotHandler from "./botHandler";
 import {ArgumentType, ArgumentResolver} from "../commands/type";
 import {InstanceTracker} from "../decorators/inject";
 import BCodeRegistry from "../bCode/bCodeRegistry";
+import BotRepository from "../repository/botRepository";
 
 export default class Bot extends EventEmitter implements IBot {
     /**
@@ -195,6 +196,9 @@ export default class Bot extends EventEmitter implements IBot {
 
         // Register this instance in the instance tracker.
         this.instanceId = InstanceTracker.register(this);
+
+        // Register this instance in the global bot repository.
+        BotRepository.getGlobal().add(this);
 
         this.isSuspended = true;
         this.state = BotState.Disconnected;

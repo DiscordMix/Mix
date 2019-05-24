@@ -81,8 +81,7 @@ export default class SMIS extends EventEmitter {
 
                 return;
             }
-
-            if (this.timeoutSource) {
+            else if (this.timeoutSource) {
                 clearTimeout(this.timeoutSource);
             }
 

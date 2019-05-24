@@ -46,8 +46,6 @@ import Loader from "./fragments/loader";
 import CommandParser from "./commands/commandParser";
 import EmbedBuilder from "./builders/embedBuilder";
 import MsgBuilder, {IMsgBuilder} from "./builders/msgBuilder";
-import TimeParser from "./time/timeParser";
-import TimeSuffixType from "./time/timeSuffixType";
 import Permission from "./core/permission";
 import ChatEnv from "./core/chatEnv";
 import DiscordEvent from "./core/discordEvent";
@@ -118,8 +116,6 @@ export {
     EditableMessage,
     Log,
     LogLevel,
-    TimeParser,
-    TimeSuffixType,
     Util,
     Permission,
     ChatEnv,

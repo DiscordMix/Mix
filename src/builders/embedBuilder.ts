@@ -4,12 +4,19 @@ import Log from "../core/log";
 
 export interface IEmbedBuilder extends IObjBuilder<RichEmbed> {
     color(color: string): this;
+
     title(title: string): this;
+
     titleIcon(url: string): this;
+
     thumbnail(url: string): this;
+
     footer(text: string, icon?: string): this;
+
     image(url: string): this;
+
     text(text: string): this;
+
     field(title: string, value: string): this;
 }
 

@@ -8,17 +8,24 @@ import {desc, name} from "../../decorators/general";
 @desc("View available commands and their descriptions")
 export default class extends Command {
     public async run($: Context) {
-        // TODO: Decorator commands broke it (can't .map through a Map)
-
         const commandMap: ReadonlyCommandMap = $.bot.registry.getAll();
+
+        // Stop immediatly if no commands exist.
+        if (commandMap.size == 0) {
+            return $.fail("No commands exist.");
+        }
+
+        // Create the command buffer array.
         const commands: Command[] = [];
 
+        // Populate the buffer array from the map.
         for (const [base, command] of commandMap) {
             if (command instanceof Command) {
                 commands.push(command);
             }
         }
 
+        // Create the command listing string.
         const commandsString: string = commands
             .map((command: Command) => `**${command.meta.name}**: ${command.meta.description}`)
             .join("\n");

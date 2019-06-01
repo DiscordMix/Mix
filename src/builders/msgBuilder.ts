@@ -3,16 +3,27 @@ import IBuilder from "./builder";
 
 export interface IMsgBuilder<T> extends IBuilder<string> {
     append(text: string): this;
+
     add(text: string): this;
+
     block(language?: string): this;
+
     code(code: string): this;
+
     italic(text: string): this;
+
     bold(text: string): this;
+
     underline(text: string): this;
+
     strike(text: string): this;
+
     line(amount: number): this;
+
     emoji(emoji: string): this;
+
     format(callback: FormatterCallback<T>): this;
+
     feed(item: T): this;
 }
 

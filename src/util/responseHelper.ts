@@ -16,7 +16,7 @@ export interface IResponseHelper {
     fileStream(stream: any, name: string): Promise<EditableMessage | null>;
     respond(content: EmbedBuilder | any, autoDelete: boolean): Promise<EditableMessage | null>;
     sections(sections: any, color: string): Promise<EditableMessage | null>;
-    ok(text: string | MsgBuilder, title: string, clean: boolean): Promise<EditableMessage | null>;
+    pass(text: string | MsgBuilder, title: string, clean: boolean): Promise<EditableMessage | null>;
     send(text: string | RichEmbed | Message): Promise<EditableMessage | null>;
     loading(text: string): Promise<EditableMessage | null>;
     fail(text: string, autoDelete: boolean): Promise<EditableMessage | null>;
@@ -122,6 +122,17 @@ export default class ResponseHelper implements IResponseHelper {
     }
 
     /**
+     * @param {boolean} [clean = true] Whether to filter the message.
+     */
+    public async pass(text: string | MsgBuilder, title: string = "", clean: boolean = true): Promise<EditableMessage | null> {
+        return await this.respond({
+            text: typeof text === "string" ? `:white_check_mark: ${text}` : text.build(),
+            title
+        });
+    }
+
+    /**
+     * @deprecated Use pass() instead.
      * @param {boolean} [clean=true] Whether to filter the message.
      */
     public async ok(text: string | MsgBuilder, title: string = "", clean: boolean = true): Promise<EditableMessage | null> {

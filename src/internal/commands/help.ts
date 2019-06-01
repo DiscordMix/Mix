@@ -37,7 +37,7 @@ export default class extends Command {
                 });
         }
         else {
-            await $.ok(commandsString, "Help - Available Commands");
+            await $.pass(commandsString, "Help - Available Commands");
         }
     }
 }

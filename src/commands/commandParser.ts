@@ -10,22 +10,31 @@ import {TypeChecker, ArgumentType, ArgumentResolver} from "./type";
 
 export interface IResolveArgumentsOptions {
     readonly arguments: RawArguments;
+
     readonly schema: IArgument[];
+
     readonly resolvers: Map<ArgumentType, ArgumentResolver>;
+
     readonly message: Message;
 }
 
 export interface IResolveDefaultArgsOptions {
     readonly arguments: RawArguments;
+
     readonly schema: IArgument[];
+
     readonly message: Message;
+
     readonly command: Command;
 }
 
 export interface ICheckArgumentsOptions {
     readonly arguments: RawArguments;
+
     readonly schema: IArgument[];
+
     readonly message: Message;
+
     readonly command: Command;
 }
 

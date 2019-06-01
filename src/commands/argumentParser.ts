@@ -3,6 +3,7 @@ import {IArgument} from "./command";
 
 export interface IArgumentParser {
     resolve(type: string, arg: string, resolvers: {}): TemplateStringsArray;
+
     getRequiredArguments(schema: IArgument[]): IArgument[];
 }
 

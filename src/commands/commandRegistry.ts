@@ -13,7 +13,9 @@ import BotMessages from "../core/messages";
 
 export interface ICommandCooldown {
     readonly context: Context;
+
     readonly command: Command;
+
     readonly end: number;
 }
 
@@ -34,22 +36,39 @@ export interface ICommandRegistry {
     readonly size: number;
 
     reload(commandName: string): PromiseOr<boolean>;
+
     release(name: string): PromiseOr<boolean>;
+
     isReleased(name: string): boolean;
+
     getReleased(): ReadonlyMap<string, string>;
+
     reloadAll(): PromiseOr<number>;
+
     register(commandPackage: CommandPackage): PromiseOr<boolean>;
+
     remove(name: string, aliases: string[]): PromiseOr<boolean>;
+
     contains(name: string): boolean;
+
     get(name: string): PromiseOr<Command | null>;
+
     registerMultiple(commands: CommandPackage[]): PromiseOr<number>;
+
     getAll(): ReadonlyCommandMap;
+
     getCooldown(user: Snowflake, command: string): number | null;
+
     cooldownExpired(user: Snowflake, command: string): boolean;
+
     clearCooldown(user: Snowflake, command: string): boolean;
+
     setCooldown(user: Snowflake, cooldown: number, command: string): this;
+
     disposeAll(): PromiseOr<this>;
+
     unloadAll(): PromiseOr<this>;
+
     invoke(base: string, referer: Message, ...args: string[]): PromiseOr<any>;
 }
 

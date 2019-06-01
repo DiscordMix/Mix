@@ -2,6 +2,7 @@ import _ from "lodash";
 
 export class Collection<KeyType, ValueType> extends Map<KeyType, ValueType> {
     protected cachedValueArray: ValueType[] | null;
+
     protected cachedKeyArray: KeyType[] | null;
 
     public constructor(iterable?: any) {

@@ -66,11 +66,13 @@ export enum CmdHandlerEvent {
 
 export interface ICommandHandlerOptions {
     readonly commandStore: CommandRegistry;
+
     readonly errorHandlers: ICmdErrorHandlerOpt[];
 }
 
 export interface ICmdErrorHandlerOpt {
     readonly event: CmdHandlerEvent;
+
     readonly handler: CmdErrorHandler;
 }
 
@@ -78,17 +80,23 @@ export type CmdErrorHandler = (context: Context, command: Command, error?: Error
 
 export interface IUndoAction {
     readonly command: Command;
+
     readonly context: Context;
+
     readonly args?: any;
 }
 
 export interface ICommandHandler {
     readonly commandStore: ICommandRegistry;
+
     readonly errorHandlers: Map<CmdHandlerEvent, CmdErrorHandler>;
+
     readonly argumentTypes: any;
+
     readonly undoMemory: Map<Snowflake, IUndoAction>;
 
     undoAction(user: Snowflake, message: Message): PromiseOr<boolean>;
+    
     handle(context: Context, command: Command, rawArgs: RawArguments): PromiseOr<boolean>;
 }
 

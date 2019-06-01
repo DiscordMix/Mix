@@ -22,6 +22,7 @@ export type DefaultValueResolver = (message: Message) => string;
 
 export interface ICustomArgType {
     readonly name: string;
+
     readonly check: TypeChecker | RegExp;
 }
 

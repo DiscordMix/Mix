@@ -2,7 +2,9 @@ import Pattern from "../core/pattern";
 
 export interface ICommandFlag {
     readonly key: string;
+
     readonly value: string | null;
+    
     readonly short: boolean;
 }
 

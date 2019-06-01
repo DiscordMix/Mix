@@ -10,7 +10,9 @@ import EditableMessage from "../core/editableMessage";
 
 export interface IContextOptions {
     readonly msg: Message;
+
     readonly bot: Bot;
+
     readonly label: string | null;
 }
 
@@ -21,17 +23,27 @@ export type TextBasedChannel = TextChannel | DMChannel;
 
 export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper {
     readonly msg: Message;
+
     readonly label: string | null;
+
     readonly g: Guild;
+
     readonly c: T;
+
     readonly triggeringMessageId: Snowflake;
 
     joinArguments(): string;
+
     reply(message: string): PromiseOr<Message | Message[] | null>;
+
     privateReply(message: string): PromiseOr<Message | Message[]>;
+
     createRequest(channel: TextBasedChannel, message: string, from: Snowflake, timeout: number): PromiseOr<string | null>;
+
     request(message: string, timeout?: number): PromiseOr<string | null>;
+
     requestDM(message: string, timeout?: number): PromiseOr<string | null>;
+
     promptDM(message: string, timeout: number): PromiseOr<boolean | null>;
 }
 

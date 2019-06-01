@@ -15,6 +15,7 @@ export interface IBotConnector {
 
 export default class BotConnector implements IBotConnector {
     protected bot: Bot;
+
     protected setupStart!: number;
 
     public constructor(bot: Bot) {

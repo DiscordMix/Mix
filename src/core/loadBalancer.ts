@@ -4,8 +4,11 @@ import {Action} from "./botExtra";
 
 export interface ILoadBalancer extends EventEmitter {
     readonly threshold: number;
+
     readonly requestsPerSecond: number;
+
     readonly requestsPerMinute: number;
+    
     readonly requestsPerHour: number;
 
     next(action: Action): this;

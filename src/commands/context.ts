@@ -41,7 +41,9 @@ export interface IContext<T extends TextBasedChannel = TextBasedChannel> extends
  */
 export default class Context<T extends TextBasedChannel = TextBasedChannel> extends ResponseHelper implements IContext {
     public readonly bot: Bot;
+
     public readonly msg: Message;
+
     public readonly label: string | null;
 
     public constructor(options: IContextOptions) {

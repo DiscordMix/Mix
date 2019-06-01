@@ -9,6 +9,7 @@ export enum EventListenerType {
 
 export interface IEventListener {
     readonly type: EventListenerType;
+
     readonly event: DiscordEvent;
 
     invoker(...args: any): void;

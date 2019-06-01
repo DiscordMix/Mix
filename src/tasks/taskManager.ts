@@ -8,13 +8,21 @@ import {Mutable} from "../util/helpers";
 
 export interface ITaskManager {
     register(task: Task): boolean;
+
     get(name: string): Task | null;
+
     unschedule(name: string): boolean;
+
     trigger(name: string): PromiseOr<boolean>;
+
     unregisterAll(): PromiseOr<this>;
+
     disable(name: string): PromiseOr<boolean>;
+
     enableAll(): number;
+
     contains(name: string): boolean;
+
     loadAll(path: string): PromiseOr<number>;
 }
 
@@ -23,7 +31,9 @@ export interface ITaskManager {
  */
 export default class TaskManager implements ITaskManager {
     protected readonly bot: Bot;
+
     protected readonly tasks: Map<string, Task>;
+
     protected readonly scheduler: Map<string, NodeJS.Timeout>;
 
     public constructor(bot: Bot) {

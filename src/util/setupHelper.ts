@@ -13,27 +13,37 @@ export enum SetupHelperActionType {
 
 export interface IFromContextOptions {
     readonly context: Context;
+
     readonly title?: string;
+
     readonly embed?: boolean;
+
     readonly timeout?: number;
 }
 
 export interface ISetupHelperOptions {
     readonly client: Client;
+
     readonly channel: TextChannel;
+
     readonly userId: Snowflake;
+
     readonly title?: string;
+
     readonly timeout?: number;
+
     readonly embed?: boolean;
 }
 
 export interface ISetupHelperAction {
     readonly type: SetupHelperActionType;
+
     readonly text: string;
 }
 
 export interface ISetupHelperResult {
     readonly responses: string[];
+
     readonly expired: boolean;
 }
 
@@ -41,7 +51,9 @@ export type ResponseHandler = (response: string, index: number) => string;
 
 export interface ISetupHelper {
     input(text: string): this;
+
     question(text: string): this;
+
     finish(responseHandler?: ResponseHandler): PromiseOr<ISetupHelperResult>;
 }
 

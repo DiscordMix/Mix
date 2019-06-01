@@ -18,10 +18,13 @@ export interface IOptimizer extends IDisposable {
  */
 export default class Optimizer implements IOptimizer {
     protected readonly bot: Bot;
+
     protected readonly interval: number;
+
     protected readonly sizeThreshold: number;
 
     protected commandsUsed: string[];
+
     protected processInterval: NodeJS.Timeout | null;
 
     // TODO: Interval should be calculated based on amount of commands.

@@ -3,9 +3,13 @@ import Log from "./log";
 
 export interface IMessageEditOptions {
     readonly message: string;
+
     readonly title?: string;
+
     readonly color?: string;
+
     readonly thumbnailUrl?: string;
+
     readonly imageUrl?: string;
 }
 

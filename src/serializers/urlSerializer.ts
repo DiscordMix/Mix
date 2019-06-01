@@ -16,17 +16,25 @@ export enum CommonUrlProtocols {
 
 export interface IUrlDomain {
     readonly subdomain?: string;
+
     readonly name: string;
+
     readonly extension: string;
 }
 
 export interface IUrl<T = any> {
     readonly protocol: CommonUrlProtocols | string;
+
     readonly domain: IUrlDomain;
+
     readonly port?: number;
+
     readonly path?: string;
+
     readonly queryString?: string;
+
     readonly parameters?: T;
+
     readonly fragment?: string;
 }
 

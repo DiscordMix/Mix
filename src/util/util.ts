@@ -38,17 +38,25 @@ const moderationPermissions: PermissionResolvable[] = [
 
 export interface ISendOptions {
     readonly avatarUrl: string;
+
     readonly channel: TextChannel;
+
     readonly message: string;
+
     readonly color?: string;
+
     readonly footer?: string;
+
     readonly title?: string;
 }
 
 export interface IBinarySearchResult {
     readonly iterations: number;
+
     readonly index: number | null;
+
     readonly result: number | null;
+
     readonly found: boolean;
 }
 

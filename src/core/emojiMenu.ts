@@ -10,30 +10,40 @@ export type EmojiClickHandler = (reaction: MessageReaction, user: User) => void;
 
 export interface IEmojiButton {
     readonly emoji: Snowflake;
+
     readonly public?: boolean;
+
     readonly added?: EmojiClickHandler;
+
     readonly removed?: EmojiClickHandler;
+
     readonly clicked?: EmojiClickHandler;
+
     readonly add?: boolean;
 }
 
 export interface IEmojiMenu extends EventEmitter {
     readonly messageId: Snowflake;
+
     readonly ownerId: Snowflake;
+
     readonly buttons: IEmojiButton[];
 
     add(button: IEmojiButton): this;
+
     attach(context: Context): PromiseOr<this>;
 }
 
 export default class EmojiMenu extends EventEmitter implements IEmojiMenu, IDisposable {
     public readonly messageId: Snowflake;
+
     public readonly ownerId: Snowflake;
 
     // TODO: Should be more productive if using Map.
     public readonly buttons: IEmojiButton[];
 
     protected bot?: IBot;
+
     protected messageAttached?: Message;
 
     public constructor(messageId: Snowflake, ownerId: Snowflake, buttons: IEmojiButton[] = []) {

@@ -9,8 +9,11 @@ import JsonUtil from "../util/json";
 
 export interface ITemp {
     setup(id: Snowflake): this;
+
     create(): PromiseOr<this>;
+
     reset(): PromiseOr<this>;
+
     store(data: any, file: string): PromiseOr<this>;
 }
 
@@ -28,6 +31,7 @@ export default class Temp implements ITemp {
     }
 
     protected id?: string;
+
     protected resolvedPath?: string;
 
     public setup(id: Snowflake): this {

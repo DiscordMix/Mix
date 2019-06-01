@@ -3,6 +3,7 @@ import {EventEmitter} from "events";
 
 export default class GuildObserver extends EventEmitter {
     protected readonly client: Client;
+
     protected readonly guild: Guild;
 
     public constructor(client: Client, guild: Guild) {

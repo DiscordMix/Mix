@@ -3,6 +3,7 @@ import {EventEmitter} from "events";
 
 export default class UserObserver extends EventEmitter {
     protected readonly client: Client;
+
     protected readonly user: User;
 
     /**

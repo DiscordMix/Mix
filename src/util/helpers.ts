@@ -26,6 +26,7 @@ export interface IVolatile<T = any> {
 
 export interface ITimeoutAttachable {
     setTimeout(action: any, time: number): PromiseOr<NodeJS.Timeout>;
+
     setInterval(action: any, time: number): PromiseOr<NodeJS.Timeout>;
 }
 

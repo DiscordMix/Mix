@@ -3,8 +3,11 @@ import Pattern from "../core/pattern";
 
 export interface ITslintWarning {
     readonly path: string;
+
     readonly message: string;
+
     readonly line: number;
+
     readonly pos: number;
 }
 

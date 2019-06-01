@@ -19,8 +19,11 @@ export default abstract class Task implements ITask {
     public readonly abstract meta: IMeta;
 
     public readonly interval: number = -1;
+
     public readonly maxIterations: number = -1;
+
     public readonly iterations: number = 0;
+
     public readonly lastIteration: number = -1;
 
     protected readonly bot: Bot;

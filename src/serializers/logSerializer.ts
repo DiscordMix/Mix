@@ -5,12 +5,15 @@ const logMsgPattern: RegExp = /{([^}]+)} (?:\[([^\]]+)\.([^\]]+)\]|\[([^\]]+)\])
 
 export interface ILogMsg {
     readonly source: ILogSource;
+
     readonly message: string;
+
     readonly time: string;
 }
 
 export interface ILogSource {
     readonly main: string;
+
     readonly extra?: string;
 }
 

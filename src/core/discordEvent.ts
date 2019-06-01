@@ -28,6 +28,7 @@ enum DiscordEvent {
     ChannelUpdated = "channelUpdate",
 
     ClientUserGuildSettingsUpdated = "clientUserGuildSettingsUpdate",
+
     ClientUserSettingsUpdated = "clientUserSettingsUpdate",
 
     /**

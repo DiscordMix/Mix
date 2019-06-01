@@ -29,9 +29,11 @@ export interface IDataCollector {
 // TODO: Should also be able to call a callback function every X iterations.
 export default class DataCollector implements IDataCollector {
     protected readonly guild: Guild;
+
     protected readonly collectionType: MemberDataType;
 
     protected fromType: MemberType;
+
     protected whereCondition?: ConditionCallback;
 
     public constructor(guild: Guild) {

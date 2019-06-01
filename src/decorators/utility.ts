@@ -4,6 +4,7 @@ import Log from "../core/log";
 
 export interface IBotEvent {
     readonly name: string;
+
     readonly handler: any;
 }
 

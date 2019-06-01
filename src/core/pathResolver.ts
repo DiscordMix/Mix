@@ -3,8 +3,11 @@ import {IBotPaths} from "./botExtra";
 
 export interface IPathResolver {
     command(name: string): string;
+
     service(name: string): string;
+
     task(name: string): string;
+
     language(name: string): string;
 }
 

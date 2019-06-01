@@ -9,7 +9,9 @@ export type DecoratorProxy = ((target: any, key: string) => any) | any;
 
 export interface ICommandComponentOpts {
     readonly description: string;
+
     readonly cooldown: number;
+
     readonly env: ChatEnv;
 }
 

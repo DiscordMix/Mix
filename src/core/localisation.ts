@@ -12,8 +12,11 @@ export interface ILanguage {
     readonly directory?: string;
 
     getLanguages(): ReadonlyMap<string, LanguageSource>;
+
     setDefault(name: string): boolean;
+
     get(key: string): string | null;
+
     load(name: string): PromiseOr<this>;
 }
 

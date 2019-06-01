@@ -11,7 +11,9 @@ export enum PaginationEvent {
 // TODO: Implement break lines code.
 export default class PaginatedMessage extends EventEmitter implements IDisposable {
     public readonly content: string;
+
     public readonly maxLength: number;
+
     public readonly breakLines: boolean;
 
     protected current: number;

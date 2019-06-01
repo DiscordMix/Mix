@@ -8,6 +8,7 @@ export enum RequestType {
 
 export interface IRequest {
     readonly entity: string;
+
     readonly type: RequestType;
 }
 

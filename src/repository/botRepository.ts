@@ -9,6 +9,7 @@ export default class BotRepository {
     }
 
     protected readonly bots: Map<number, Bot>;
+
     protected readonly tags: Map<string, number[]>;
 
     public constructor() {

@@ -10,21 +10,31 @@ import {botLists} from "../core/constants";
 
 export interface IResponseHelper {
     readonly channel: TextChannel;
+
     readonly bot: IBot;
+
     readonly sender: User;
 
     fileStream(stream: any, name: string): Promise<EditableMessage | null>;
+
     respond(content: EmbedBuilder | any, autoDelete: boolean): Promise<EditableMessage | null>;
+
     sections(sections: any, color: string): Promise<EditableMessage | null>;
+
     pass(text: string | MsgBuilder, title: string, clean: boolean): Promise<EditableMessage | null>;
+
     send(text: string | RichEmbed | Message): Promise<EditableMessage | null>;
+
     loading(text: string): Promise<EditableMessage | null>;
+
     fail(text: string, autoDelete: boolean): Promise<EditableMessage | null>;
 }
 
 export default class ResponseHelper implements IResponseHelper {
     public readonly channel: TextChannel;
+
     public readonly bot: IBot;
+
     public readonly sender: User;
 
     public constructor(channel: TextChannel, bot: IBot, sender: User) {

@@ -3,6 +3,7 @@ import {EventEmitter} from "events";
 
 export default class ChannelObserver extends EventEmitter {
     protected readonly client: Client;
+
     protected readonly channel: TextChannel;
 
     public constructor(client: Client, channel: TextChannel) {

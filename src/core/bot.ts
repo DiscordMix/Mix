@@ -11,7 +11,6 @@ import Translation from "./localisation";
 import Analytics from "./botAnalytics";
 import {IDisposable} from "../util/helpers";
 import TaskManager from "../tasks/taskManager";
-import {EventEmitter} from "events";
 import Optimizer from "./optimizer";
 import FragmentManager from "../fragments/fragmentManager";
 import PathResolver from "./pathResolver";
@@ -24,8 +23,9 @@ import BotHandler from "./botHandler";
 import {ArgumentType, ArgumentResolver} from "../commands/type";
 import {InstanceTracker} from "../decorators/inject";
 import BCodeRegistry from "../bCode/bCodeRegistry";
+import BotCore from "./botCore";
 
-export default class Bot extends EventEmitter implements IBot {
+export default class Bot extends BotCore implements IBot {
     /**
      * Access the bot's temporary file storage.
      */
@@ -106,11 +106,6 @@ export default class Bot extends EventEmitter implements IBot {
      * The current state of connection of the bot.
      */
     public readonly state: BotState;
-
-    /**
-     * The internal Discord client.
-     */
-    public readonly client: Client;
 
     /**
      * Optimization engine for large bots.
@@ -201,7 +196,6 @@ export default class Bot extends EventEmitter implements IBot {
         this.paths = new PathResolver(this.options.paths);
         this.temp = new Temp();
         this.handle = new BotHandler(this);
-        this.client = new Client();
         this.services = new ServiceManager(this);
         this.registry = new CommandRegistry(this);
         this.bCode = new BCodeRegistry(this);
@@ -407,28 +401,6 @@ export default class Bot extends EventEmitter implements IBot {
         return cleared;
     }
 
-    /**
-     * Connect and login the Discord client.
-     */
-    public async connect(): Promise<this> {
-        this.setState(BotState.Connecting);
-        await this.connector.setup();
-        Log.verbose("Starting");
-
-        await this.client.login(this.token).catch(async (error: Error) => {
-            if (error.message === "Incorrect login details were provided.") {
-                Log.error("The provided token is invalid or has been regenerated");
-                await this.disconnect();
-                process.exit(0);
-            }
-            else {
-                throw error;
-            }
-        });
-
-        return this;
-    }
-
     // TODO: "Multiple instances" upon restarts may be caused because of listeners not getting removed (and re-attached)?
     /**
      * Restart the Discord client.
@@ -458,28 +430,6 @@ export default class Bot extends EventEmitter implements IBot {
         const reloaded: number = await this.registry.reloadAll();
 
         Log.success(`Reloaded ${reloaded}/${commands} command(s)`);
-
-        return this;
-    }
-
-    /**
-     * Disconnect the Discord client.
-     */
-    public async disconnect(): Promise<this> {
-        this.emit(BotEvent.Disconnecting);
-
-        const servicesStopped: number = this.services.size;
-
-        await this.services.stopAll();
-        Log.verbose(`Stopped ${servicesStopped} service(s)`);
-        await this.dispose();
-        await this.client.destroy();
-
-        // Re-create the client for complete reset.
-        (this.client as any) = new Client();
-
-        Log.info("Disconnected");
-        this.emit(BotEvent.Disconnected);
 
         return this;
     }

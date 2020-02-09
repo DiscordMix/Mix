@@ -1,7 +1,7 @@
 import ConsoleInterface from "../console/consoleInterface";
 import Log from "./log";
 import Temp from "./temp";
-import { Snowflake} from "discord.js";
+import {Snowflake} from "discord.js";
 import ServiceManager from "../services/serviceManager";
 import axios from "axios";
 import CommandHandler from "../commands/commandHandler";
@@ -284,12 +284,12 @@ export default class Bot extends BotCore implements IBot {
             await axios.post(dblUrl.replace("{botId}", this.client.user.id), {
                 server_count: serverCount
             }, {
-                    headers: {
-                        Authorization: this.options.keys.dbl
-                    }
-                }).catch((error: Error) => {
-                    Log.warn(`Could not post stats to discordbots.org (${error.message})`);
-                });
+                headers: {
+                    Authorization: this.options.keys.dbl
+                }
+            }).catch((error: Error) => {
+                Log.warn(`Could not post stats to discordbots.org (${error.message})`);
+            });
         }
 
         // Bots for Discord.com.
@@ -299,13 +299,13 @@ export default class Bot extends BotCore implements IBot {
             await axios.post(bfdUrl.replace("{botId}", this.client.user.id), {
                 server_count: serverCount
             }, {
-                    headers: {
-                        Authorization: this.options.keys.bfd,
-                        "Content-Type": "application/json"
-                    }
-                }).catch((error: Error) => {
-                    Log.warn(`Could not post stats to botsfordiscord.com (${error.message})`);
-                });
+                headers: {
+                    Authorization: this.options.keys.bfd,
+                    "Content-Type": "application/json"
+                }
+            }).catch((error: Error) => {
+                Log.warn(`Could not post stats to botsfordiscord.com (${error.message})`);
+            });
         }
     }
 

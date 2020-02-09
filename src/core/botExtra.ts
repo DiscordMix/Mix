@@ -179,6 +179,11 @@ export enum BotEvent {
     SuspensionStateChanged = "suspensionStateChanged"
 }
 
+export enum BotCoreEvent {
+    Connected = "connected",
+    Disconnected = "disconnected"
+}
+
 /**
  * Possible states of the bot.
  */
